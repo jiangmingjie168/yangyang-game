@@ -321,9 +321,6 @@
     42%, 70% { transform: rotate(90deg); }
     100% { transform: rotate(90deg); }
   }
-  @media (orientation: portrait) {
-    #rotate { display: flex; }
-  }
   @media (max-width: 740px) {
     #joy { width: 108px; height: 108px; }
     #joy-knob { width: 56px; height: 56px; margin: -28px 0 0 -28px; }
@@ -423,6 +420,8 @@
     <div class="phone" aria-hidden="true"></div>
     <p class="big">Please rotate your phone</p>
     <p class="zh-always">请把手机横过来</p>
+    <p style="font-size:16px;margin:4px 0 14px;color:#8a7360">转不过来？请在控制中心关掉「竖排方向锁定」</p>
+    <button id="play-portrait" type="button" style="font-size:22px;font-weight:900;padding:14px 26px;border-radius:18px;border:0;background:#4caf50;color:#fff;box-shadow:0 4px 0 #2e7d32">竖着玩 Play</button>
   </div>
 </div>
 <script>
@@ -2059,8 +2058,9 @@
   function isPortrait() {
     return portrait;
   }
+  var allowPortrait = false;
   function syncOrient() {
-    portrait = window.innerHeight > window.innerWidth + 8;
+    portrait = !allowPortrait && window.innerHeight > window.innerWidth + 8;
     document.body.classList.toggle('portrait', portrait);
   }
   function resize() {
@@ -2331,6 +2331,12 @@
     });
     document.addEventListener('selectstart', function (e) { e.preventDefault(); });
     document.addEventListener('dblclick', function (e) { e.preventDefault(); });
+    var pp = document.getElementById('play-portrait');
+    if (pp) {
+      var goPortrait = function (e) { if (e) e.preventDefault(); allowPortrait = true; resize(); };
+      pp.addEventListener('click', goPortrait);
+      pp.addEventListener('touchend', goPortrait);
+    }
     window.addEventListener('resize', resize);
     window.addEventListener('orientationchange', function () { setTimeout(resize, 60); });
     if (window.visualViewport) window.visualViewport.addEventListener('resize', resize);
