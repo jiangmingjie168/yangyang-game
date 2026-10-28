@@ -1968,6 +1968,31 @@
     g.fillStyle = '#8a5a24';
     g.fillRect(-16, -3, 32, 3);
   }
+  function drawUmbrella(g, handX, canopyY, handY) {
+    var R = 17;
+    g.save();
+    g.lineCap = 'round';
+    g.strokeStyle = '#8a5a24'; g.lineWidth = 2.4;
+    g.beginPath(); g.moveTo(handX, canopyY - 1); g.lineTo(handX, handY); g.stroke();
+    g.beginPath(); g.arc(handX - 2.4, handY, 2.4, 0, Math.PI); g.stroke();
+    g.fillStyle = '#e23b3b';
+    g.beginPath();
+    g.moveTo(handX - R, canopyY);
+    g.arc(handX, canopyY, R, Math.PI, 0);
+    var seg = (2 * R) / 4, i;
+    for (i = 0; i < 4; i++) {
+      g.arc(handX + R - seg * (i + 0.5), canopyY, seg / 2, 0, Math.PI, true);
+    }
+    g.closePath(); g.fill();
+    g.strokeStyle = 'rgba(255,255,255,0.55)'; g.lineWidth = 1.4;
+    g.beginPath(); g.moveTo(handX - 8.5, canopyY - 1); g.lineTo(handX - 5.2, canopyY - R + 3.4); g.stroke();
+    g.beginPath(); g.moveTo(handX + 8.5, canopyY - 1); g.lineTo(handX + 5.2, canopyY - R + 3.4); g.stroke();
+    g.strokeStyle = '#e23b3b'; g.lineWidth = 2.2;
+    g.beginPath(); g.moveTo(handX, canopyY - R); g.lineTo(handX, canopyY - R - 3.6); g.stroke();
+    g.fillStyle = '#ffd36a';
+    g.beginPath(); g.arc(handX, canopyY - R - 4.4, 1.7, 0, 6.3); g.fill();
+    g.restore();
+  }
   function drawBoatRide(g) {
     var bob = Math.sin(boatPhase) * 1.1;
     g.save();
@@ -2008,6 +2033,7 @@
       g.fillStyle = '#fff3a0';
       g.beginPath(); g.arc(2.4, -43.4, 1.6, 0, 6.3); g.fill();
     }
+    if (rainOn) drawUmbrella(g, 9, -48, -13);
     drawBoatShape(g);
     g.restore();
   }
@@ -2064,6 +2090,7 @@
       g.fillStyle = '#fff3a0';
       g.beginPath(); g.arc(2.4, -40.4 - bob, 1.6, 0, 6.3); g.fill();
     }
+    if (rainOn) drawUmbrella(g, 9, -45 - bob, -18 - bob);
     g.restore();
   }
   function drawWorld(g, sec) {
