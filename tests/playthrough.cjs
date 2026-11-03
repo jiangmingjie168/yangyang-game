@@ -35,7 +35,7 @@ async function fresh(data, { viewport = { width: 1180, height: 720 }, speech = t
       Object.defineProperty(window, 'webkitSpeechRecognition', { value: undefined, configurable: true });
     }
   }, { data, speech, fakeRecognition });
-  await p.goto(URL + '/#seed=42'); assert(!/[\u3400-\u9fff]/u.test(await p.locator('body').innerText())); if (await p.locator('#btn-portrait').isVisible()) await p.click('#btn-portrait'); await p.click('#btn-start'); if(await p.locator('#name-entry').isVisible())await p.click('#welcome-play'); await sleep(p, 250);
+  await p.goto(URL + '/#seed=42'); assert(!/[\u3400-\u9fff]/u.test(await p.locator('body').innerText())); await p.click('#btn-start'); if(await p.locator('#name-entry').isVisible())await p.click('#welcome-play'); await sleep(p, 250);
   assert.equal(await p.evaluate(() => BW.totalWords()), 42);
   return p;
 }
@@ -60,7 +60,7 @@ async function relocate(p, x, y = 511.9, companionX) {
   if (companionX !== undefined) d.animals.filter(a=>a[4]).forEach(a=>{a[1]=companionX;a[2]=y;});
   const mark = 'checkpoint-' + serial++;
   await p.addInitScript(({d,mark}) => { if (!sessionStorage.getItem(mark)) { localStorage.setItem('block-world-save-v1',JSON.stringify(d)); sessionStorage.setItem(mark,'1'); } }, {d,mark});
-  await p.reload(); if (await p.locator('#btn-portrait').isVisible()) await p.click('#btn-portrait'); await p.click('#btn-start'); if(await p.locator('#name-entry').isVisible())await p.click('#welcome-play'); await sleep(p, 240); await clear(p);
+  await p.reload(); await p.click('#btn-start'); if(await p.locator('#name-entry').isVisible())await p.click('#welcome-play'); await sleep(p, 240); await clear(p);
 }
 async function select(p,key) { await p.evaluate(key => BW.select(key),key); }
 async function mine(p,tx,ty) { await clickWorld(p,(tx+.5)*32,(ty+.5)*32); }

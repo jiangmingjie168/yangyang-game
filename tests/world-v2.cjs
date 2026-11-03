@@ -42,7 +42,6 @@ async function page(data, options={}) {
     window.voiceResult=text=>{const r=window.recognizer;r.onresult?.({resultIndex:0,results:[[{transcript:text}]]});r.onend?.();};
   },{data,NOW,audioOff:options.audioOff});
   await p.goto(URL+'/#seed=42');
-  if(await p.locator('#btn-portrait').isVisible())await p.click('#btn-portrait');
   await p.click('#btn-start'); if(await p.locator('#name-entry').isVisible())await p.click('#welcome-play'); await p.waitForTimeout(120);
   return p;
 }
@@ -51,7 +50,7 @@ async function relocate(p,x,y) {
   const d=await snapshot(p);d.px=x;d.py=y;
   const mark='checkpoint-'+serial++;
   await p.addInitScript(({d,mark})=>{if(!sessionStorage.getItem(mark)){localStorage.setItem('block-world-save-v1',JSON.stringify(d));sessionStorage.setItem(mark,'yes');}},{d,mark});
-  await p.reload(); if(await p.locator('#btn-portrait').isVisible())await p.click('#btn-portrait'); await p.click('#btn-start'); if(await p.locator('#name-entry').isVisible())await p.click('#welcome-play');
+  await p.reload(); await p.click('#btn-start'); if(await p.locator('#name-entry').isVisible())await p.click('#welcome-play');
   await p.evaluate(()=>BW.hideCard());
 }
 async function collect(p, id) {

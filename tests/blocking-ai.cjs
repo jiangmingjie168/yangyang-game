@@ -32,7 +32,7 @@ async function page({tier=1,voice='ok',endpoint='',reply,delay=0,timeout=6500,sh
     if(voice==='missing'){window.SpeechRecognition=undefined;window.webkitSpeechRecognition=undefined;}
     else window.SpeechRecognition=class {start(){if(voice==='throw')throw Error('unavailable');window.recognizer=this;}abort(){this.onend?.();}};
   },{data,voice});
-  await p.goto(URL+'/#seed=42');if(await p.locator('#btn-portrait').isVisible())await p.click('#btn-portrait');await p.click('#btn-start'); if(await p.locator('#name-entry').isVisible())await p.click('#welcome-play');await p.waitForTimeout(200);if(await p.locator('#welcome').isVisible())await p.click('#welcome-play');return p;
+  await p.goto(URL+'/#seed=42');await p.click('#btn-start'); if(await p.locator('#name-entry').isVisible())await p.click('#welcome-play');await p.waitForTimeout(200);if(await p.locator('#welcome').isVisible())await p.click('#welcome-play');return p;
 }
 async function trigger(p,wait=true){
   await p.evaluate(()=>BW.hideCard());const pos=await p.evaluate(()=>BW.worldToScreen(87.5*32,15.5*32));await p.mouse.click(pos.x,pos.y);await p.evaluate(()=>BW.hideCard());
@@ -48,7 +48,7 @@ async function done(p){assert.deepEqual(p.errors,[]);assert.equal(await p.evalua
   p=await page({tier:3,voice:'missing'});await trigger(p);
   await p.setViewportSize({width:390,height:844});await p.waitForTimeout(400);
   await p.locator('#btn-portrait').tap();
-  assert(!(await p.locator('#rotate').isVisible()),'portrait opt-in must work during unanswered dialogue');
+  assert(!(await p.locator('#rotate').isVisible()),'soft hint dismissal must work during unanswered dialogue');
   assert(await p.locator('#dialogue').isVisible());assert(!(await p.evaluate(()=>BW.adventure().active)).answered);
   await p.click('#chat-mic');await p.click('#chat-confirm');await done(p);
   report('rotating during a question permits portrait play without dismissing or answering it');

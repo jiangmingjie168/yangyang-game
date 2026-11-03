@@ -34,7 +34,6 @@ async function page({data,online=false,bad=false,hang=false,autoWeather=false,vi
   },data);
   if(file)await ctx.setOffline(true);
   await p.goto(file?'file://'+path.join(__dirname,'../index.html')+'#seed=42':origin+'/#seed=42');
-  if(await p.locator('#btn-portrait').isVisible())await p.click('#btn-portrait');
   await p.click('#btn-start');return p;
 }
 async function saved(p){return p.evaluate(()=>{BW.saveNow();return JSON.parse(localStorage.getItem('block-world-save-v1'));});}

@@ -36,7 +36,6 @@ async function page({ data, endpoint = '', response, timeout = 6500, tts = true,
   }, { data, tts });
   if (offline) await context.setOffline(true);
   await p.goto(file ? 'file://' + path.join(__dirname, '../index.html') + '#seed=42' : origin + '/#seed=42');
-  if (await p.locator('#btn-portrait').isVisible()) await p.click('#btn-portrait');
   await p.click('#btn-start');
   if (await p.locator('#name-entry').isVisible()) { await p.click('#welcome-play'); await p.evaluate(() => { spoken.length = 0; }); }
   return p;

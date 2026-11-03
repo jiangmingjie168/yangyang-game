@@ -466,3 +466,32 @@ synthetic dialogue, existing HTTPS endpoint).
 
 Client-only change: no brain rsync, service restart, secrets or nginx changes
 were needed. Only `codex-brain-v2` is committed and pushed.
+
+## iPhone landscape and soft rotate tip — 2026-11-03
+
+- Portrait play starts immediately. The animated English rotate tip is a small
+  floating card above the controls, dismissible by tapping the card or OK.
+  Dismissal lasts for the tab session; landscape automatically hides it.
+  It never pauses play or captures touches outside the card.
+- The app and canvas follow `visualViewport` size and offsets, with dynamic/small
+  viewport CSS fallbacks and immediate plus double-delayed resize updates.
+  Existing HUD/joystick/action safe-area margins remain in use.
+- Added a relative-path standalone manifest and local PNG icon for Add to Home
+  Screen, with a landscape orientation hint. iPhone Control Center Orientation
+  Lock can keep Safari tabs in portrait; turn it off to rotate the browser.
+  No `screen.orientation.lock()` is called. Installed-app orientation is a hint,
+  not a way to override the OS lock.
+- Added `tests/landscape.cjs`: portrait movement with the tip visible, reachable
+  HUD/controls, card/session dismissal, rotation, canvas DPR, viewport offsets,
+  served manifest/icon, and touch hit checks at 844×390 and 932×430 with simulated
+  notch/home-indicator insets. Captures: `screens/iphone-landscape-844.png`,
+  `screens/iphone-landscape-932.png`, and `screens/rotate-hint.png`.
+  Screenshots use CSS-pixel dimensions and were visually inspected. These are
+  Chromium touch/geometry checks; physical iPhone Safari was not available.
+
+Client/PWA only: no brain server changes or deployment.
+
+Validation: landscape, blocking-ai, world-v2, memory-chat, greeting, brain-v2,
+Chinese cleanup, and the full playthrough (17/17 checks) pass. The playthrough
+passed in isolation after an initial crop-growth deadline failure during
+concurrent runs. Inline/test JavaScript syntax and `git diff --check` pass.

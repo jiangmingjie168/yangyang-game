@@ -10,6 +10,8 @@
 <meta name="color-scheme" content="light">
 <meta name="google" content="notranslate">
 <title>Block World</title>
+<link rel="manifest" href="site.webmanifest">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='%2363c24a'/%3E%3C/svg%3E">
 <style>
   :root {
@@ -34,7 +36,7 @@
   html, body {
     margin: 0; padding: 0;
     width: 100%; height: 100%;
-    height: 100vh; height: 100dvh;
+    height: 100vh; height: 100svh; height: 100dvh;
     overflow: hidden; position: fixed; inset: 0;
     background: #8fd4ff;
     color: var(--ink);
@@ -45,7 +47,7 @@
   }
   button { font: inherit; border: none; background: none; color: var(--ink); padding: 0; touch-action: none; cursor: pointer; -webkit-appearance: none; appearance: none; }
   button:focus-visible { outline: 3px solid #3aa0e8; outline-offset: 2px; }
-  #app { position: fixed; inset: 0; overflow: hidden; touch-action: none; }
+  #app { position: fixed; left: 0; top: 0; width: 100%; height: 100vh; height: 100svh; height: 100dvh; overflow: hidden; touch-action: none; }
   #view { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; }
   /* Child-facing words, quests and narration stay English, even with parent help open. */
   #dialogue {
@@ -380,48 +382,34 @@
   .desktop-hint { margin: 8px 0 0; font-size: 14px; color: #8a7360; font-weight: 700; }
   @media (pointer: coarse) { .desktop-hint { display: none; } }
 
+  /* Advisory card only: the rest of the screen remains playable. */
   #rotate {
-    display: none;
-    position: absolute; inset: 0; z-index: 80;
-    background: #ffe3b8;
-    flex-direction: column; align-items: center; justify-content: center;
-    text-align: center;
-    padding: calc(24px + var(--sat)) calc(20px + var(--sar)) calc(24px + var(--sab)) calc(20px + var(--sal));
+    display: none; position: absolute; z-index: 35;
+    bottom: 50%; left: 50%; transform: translateX(-50%);
+    width: min(330px, calc(100% - 24px - var(--sal) - var(--sar)));
+    padding: 12px 16px; gap: 16px; align-items: center;
+    border: 2px solid #e4b64e; border-radius: 20px;
+    background: #fff8eeef; box-shadow: 0 4px 12px #71523233;
+    pointer-events: auto;
   }
-  body.portrait #rotate { display: flex; }
-  body.ok-portrait #rotate { display: none; }
-  #rotate .big { margin: 16px 0 6px; font-size: 32px; font-weight: 900; line-height: 1.15; }
-  #rotate .zh-always { font-size: 26px; }
+  body.portrait:not(.ok-portrait) #rotate { display: flex; }
+  #rotate .big { flex: 1; margin: 0; font-size: 17px; font-weight: 900; line-height: 1.2; }
   #btn-portrait {
-    margin-top: 26px; min-height: 64px; padding: 10px 22px;
-    border-radius: 18px; background: var(--leaf); color: #fff;
-    display: flex; flex-direction: column; align-items: center; gap: 2px;
-    box-shadow: 0 5px 0 var(--leaf-d);
+    min-width: 48px; min-height: 44px; padding: 8px;
+    border-radius: 14px; background: var(--leaf); color: #fff;
+    box-shadow: 0 3px 0 var(--leaf-d);
   }
-  #btn-portrait strong { font-size: 22px; font-weight: 900; line-height: 1.15; }
-  #btn-portrait .zh-always { font-size: 17px; color: #eaffdf; }
-  #btn-portrait:active { transform: translateY(3px); box-shadow: 0 2px 0 var(--leaf-d); }
+  #btn-portrait:active { transform: translateY(2px); }
   .phone {
-    width: 78px; height: 128px; border: 6px solid #3a2a1c; border-radius: 16px;
-    background: #fff; position: relative;
+    flex: 0 0 auto; width: 24px; height: 40px;
+    border: 3px solid #3a2a1c; border-radius: 6px;
+    background: linear-gradient(#8fd4ff, #b7f0c4); position: relative;
     animation: turn 2.4s ease-in-out infinite;
-  }
-  .phone:before {
-    content: ""; position: absolute; width: 28px; height: 5px; border-radius: 4px;
-    background: #3a2a1c; top: 8px; left: 19px;
-  }
-  .phone:after {
-    content: ""; position: absolute; left: 10px; right: 10px; top: 24px; bottom: 16px;
-    border-radius: 6px; background: linear-gradient(#8fd4ff, #b7f0c4);
   }
   @keyframes turn {
     0%, 18% { transform: rotate(0deg); }
     42%, 70% { transform: rotate(90deg); }
     100% { transform: rotate(90deg); }
-  }
-  @media (orientation: portrait) {
-    #rotate { display: flex; }
-    body.ok-portrait #rotate { display: none; }
   }
   @media (max-width: 740px) {
     #joy { width: 108px; height: 108px; }
@@ -612,11 +600,11 @@
     </div>
   </div>
 
-  <div id="rotate" role="dialog" aria-label="Please rotate your phone">
+  <div id="rotate" role="note" aria-label="Phone tip">
     <div class="phone" aria-hidden="true"></div>
-    <p class="big">Please rotate your phone</p>
+    <p class="big">Tip the phone sideways!</p>
     <button id="btn-portrait" type="button">
-      <strong>Play this way</strong>
+      <strong>OK</strong>
     </button>
   </div>
 </div>
@@ -731,6 +719,7 @@ const BRAIN_TIMEOUT_MS = 6500;
   var viewW = 800, viewH = 400, dpr = 1, tileScreen = 38;
   var timeOfDay = 0.30;
   var started = false, zhOn = false, portrait = false, portraitOk = false;
+  try { portraitOk = sessionStorage.getItem('ok-portrait') === '1'; } catch (err) { /* storage optional */ }
   var inv = {}, hotbar = [], sel = -1, invSig = '';
   var learned = [], progress = blankProgress(), intros = {};
   var lock = null, lockAge = 0;
@@ -3800,16 +3789,21 @@ function validConversation(value, p) {
     return portrait;
   }
   function rotateBlock() {
-    return portrait && !portraitOk;
+    // Rotation is optional, including when iOS Orientation Lock is on.
+    return false;
   }
   function syncOrient() {
-    portrait = window.innerHeight > window.innerWidth + 8;
+    portrait = viewH > viewW + 8;
     document.body.classList.toggle('portrait', portrait);
+    document.body.classList.toggle('ok-portrait', portraitOk);
   }
   function resize() {
     dpr = Math.min(window.devicePixelRatio || 1, 2);
-    viewW = window.innerWidth;
-    viewH = window.innerHeight;
+    var vv = window.visualViewport;
+    viewW = vv ? vv.width : window.innerWidth;
+    viewH = vv ? vv.height : window.innerHeight;
+    app.style.left = (vv ? vv.offsetLeft : 0) + 'px';
+    app.style.top = (vv ? vv.offsetTop : 0) + 'px';
     app.style.width = viewW + 'px';
     app.style.height = viewH + 'px';
     canvas.width = Math.max(1, Math.round(viewW * dpr));
@@ -4022,7 +4016,7 @@ function validConversation(value, p) {
     document.addEventListener('pointerdown', function (e) {
       chatLastInput = chatClock; socialLastInput = Date.now();
       if (welcome && !nameFlow && !e.target.closest('#welcome')) dismissGreeting();
-      if (chatBlocked() && !e.target.closest('#dialogue, #welcome, #parent-help, #btn-zh, #btn-portrait')) { e.preventDefault(); e.stopImmediatePropagation(); }
+      if (chatBlocked() && !e.target.closest('#dialogue, #welcome, #parent-help, #btn-zh, #rotate')) { e.preventDefault(); e.stopImmediatePropagation(); }
     }, true);
     tapButton(document.getElementById('btn-start'), beginGame);
     tapButton(document.getElementById('welcome-play'), function () { if (nameFlow) finishName(document.getElementById('name-input').value); else dismissGreeting(); });
@@ -4075,7 +4069,7 @@ function validConversation(value, p) {
     // not resume movement, hotbar selection, or crafting beneath the overlay.
     ['pointerup', 'click'].forEach(function (type) {
       document.addEventListener(type, function (e) {
-        if (chatBlocked() && !e.target.closest('#dialogue, #welcome, #parent-help, #btn-zh, #btn-portrait')) { e.preventDefault(); e.stopImmediatePropagation(); }
+        if (chatBlocked() && !e.target.closest('#dialogue, #welcome, #parent-help, #btn-zh, #rotate')) { e.preventDefault(); e.stopImmediatePropagation(); }
       }, true);
     });
     tapButton(document.getElementById('quest'), function () {
@@ -4094,10 +4088,11 @@ function validConversation(value, p) {
     tapButton(document.getElementById('btn-home'), goHome);
     function allowPortrait() {
       portraitOk = true;
+      try { sessionStorage.setItem('ok-portrait', '1'); } catch (err) { /* storage optional */ }
       document.body.classList.add('ok-portrait');
       resize();
     }
-    tapButton(document.getElementById('btn-portrait'), allowPortrait);
+    tapButton(document.getElementById('rotate'), allowPortrait);
     document.getElementById('btn-portrait').addEventListener('click', function (e) { if (e.detail === 0) allowPortrait(); });
     document.getElementById('btn-break').addEventListener('pointerdown', function (e) {
       e.preventDefault();
@@ -4184,7 +4179,7 @@ function validConversation(value, p) {
           e.preventDefault(); if (focusable.length) focusable[(at + (e.shiftKey ? -1 : 1) + focusable.length) % focusable.length].focus();
           return;
         }
-        if (/^(Enter|Space)$/.test(e.code) && e.target.closest('#dialogue, #welcome, #parent-help, #btn-zh, #btn-portrait')) return;
+        if (/^(Enter|Space)$/.test(e.code) && e.target.closest('#dialogue, #welcome, #parent-help, #btn-zh, #rotate')) return;
         if (e.target.closest('#parent-help')) return;
         e.preventDefault(); return;
       }
@@ -4215,12 +4210,22 @@ function validConversation(value, p) {
     });
     document.addEventListener('selectstart', function (e) { e.preventDefault(); });
     document.addEventListener('dblclick', function (e) { e.preventDefault(); });
-    window.addEventListener('resize', resize);
-    window.addEventListener('orientationchange', function () { setTimeout(resize, 60); setTimeout(resize, 350); });
-    if (window.screen && screen.orientation && screen.orientation.addEventListener) {
-      screen.orientation.addEventListener('change', function () { setTimeout(resize, 60); });
+    var resizeSoon, resizeLate;
+    function scheduleResize() {
+      resize();
+      clearTimeout(resizeSoon); clearTimeout(resizeLate);
+      resizeSoon = setTimeout(resize, 60);
+      resizeLate = setTimeout(resize, 350);
     }
-    if (window.visualViewport) window.visualViewport.addEventListener('resize', resize);
+    window.addEventListener('resize', scheduleResize);
+    window.addEventListener('orientationchange', scheduleResize);
+    if (window.screen && screen.orientation && screen.orientation.addEventListener) {
+      screen.orientation.addEventListener('change', scheduleResize);
+    }
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener('resize', scheduleResize);
+      window.visualViewport.addEventListener('scroll', scheduleResize);
+    }
     document.addEventListener('visibilitychange', function () { if (document.hidden) save(); });
     window.addEventListener('pagehide', save);
     if (window.speechSynthesis) {
