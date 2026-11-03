@@ -11,3 +11,6 @@
 ![开始](screenshots/start.png)
 ![白天](screenshots/day.png)
 ![单词卡](screenshots/animal_word.png)
+
+可选的英文伙伴脑服务与本地 mock 测试见 [brain/README.md](brain/README.md)。
+`index.html` 的 `BRAIN_URL` 默认留空，继续使用离线模板；启用服务后断网也会自动回落。

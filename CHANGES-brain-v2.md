@@ -1,0 +1,183 @@
+# Block World brain v2 — Run 1 + Run 2
+
+开发分支：`codex-brain-v2`，起点 `codex-upgrade` / `c3c3b98`。
+本轮范围：一「DeepSeek 脑」及二「对话梯度」。未部署、未使用真实 API Key，
+`BRAIN_URL` 保持空字符串；没有合并或推送 main。
+
+## 已实现
+
+- `brain/server.cjs`：Node 22+ 标准库独立服务，`POST /buddy`，官方 chat completions
+  JSON 模式；API 地址、模型、Key、超时及 CORS 来源均由服务端环境变量配置。
+  系统提示词固定在服务端；明确孩子原话不是指令，模型不能选词、判断成绩或改变进度。
+- 出站逐项校验：严格 JSON 字段、两个白名单选项（顺序固定）、固定目标答案、规则确定的
+  done、纯 ASCII 英文及整段最多 12 词；另有有限句式词表与三级题型结构校验，禁止新话题、
+  新内容词和 `wrong`。孩子回答后必须先夸。客户端也复核这些规则。
+- 无效返回带纠正提示重试一次，仍无效回落；HTTP/网络异常直接回落。
+  服务端整个调用（含重试和响应体读取）共用默认 6000 ms 期限；网页端默认 6500 ms，
+  覆盖传输时间。迟到响应不能复活已关闭的对话，移动/关闭会取消请求。
+- 本地模板与脑服务采用同一套规则：turn 从 0 开始，0/1/2 最多显示三道同锚点问题，
+  turn 3 强制友好收尾，答对也立即进入收尾。模型返回的 answer/done 不能越过规则。
+- 游戏的事件触发、安全停稳、章节词池、复习选词和奖励仍由原有游戏规则控制。
+  收到可用 say 后才显示/朗读；未配置地址或任何失败均使用本地模板。
+- 第一级二选一；某词累计两次一级成功后进入第二级看图说词；两次二级口述成功后进入
+  第三级 `I see a … . Say it!`。三级允许补词或整句；沿用近音、单复数、少量拼写差异匹配。
+  二/三级起初隐藏答案选项，始终可选 Show choices；识别不可用或未匹配时可回到点选，
+  不判错、不扣进度。恢复点选只记一级成功，不能误解锁口语等级。
+- 成功使用现有粒子/合成提示音，并显示三颗星；未新增外部音频或游戏运行依赖。
+- v1 存档 key、版本与原任务数据保持不变；新增 `adventure.levels` 与
+  `adventure.speaking`。每次对话调用保存时间、场景类别、目标词、练习级别、是否收到
+  孩子语音文本和匹配到的口述词；不在存档保存原始语音文本，保留最近 2000 条。
+  老存档缺字段按空数据处理，历史 reviews 不冒充口语成绩。孩子界面不显示统计。
+- `.env.example` 仅为空 Key/配置示例；`.gitignore` 忽略实际 env 文件。
+  `brain/README.md` 提供协议、测试及 Linux systemd + nginx + HTTPS 配置示例。
+
+## 实测：本地 HTTP mock（非真实 DeepSeek）
+
+运行：`node --test brain/server.test.cjs`，**26 项通过**（含子测试）。
+
+- 真实本地 HTTP：客户端请求 → 脑服务 → 假 DeepSeek，校验配置模型与 JSON 模式。
+- 正确返回、坏/空 JSON、中文、越白名单选项、改换已学选项、答案不在选项、
+  偷换目标答案、改变 done/类型、额外字段、超长、无英文、引入新词、wrong、偷换题型。
+- 每种无效输出都验证一次纠正成功及两次失败后模板回落。
+- HTTP 503、请求超时、响应体挂起均回落且不盲目重试；专门验证纠正重试共用总期限。
+  测试使用缩短的 120 ms 期限，生产默认 6 秒配置另做代码核对。
+- 三级 prompt/retry/success、42 个词的三级模板、turn 上限、无 Key 零外呼、坏输入拒绝。
+- OPTIONS/CORS 精确来源、路由、method、Content-Type 和请求体大小限制。
+
+## 实测：无头 Chromium（非真机）
+
+运行环境：本地静态服务器、Playwright、`/usr/bin/google-chrome`；语音能力标注如下。
+
+`tests/brain-v2.cjs`：
+
+- 用真实指针输入赚两次一级成功 → 进入二级；mock 识别两次口述成功 → 进入三级。
+- 看图题隐藏选项；单复数、近音、少量拼写差异、补词及整句回答接受；星光反馈。
+- 缺识别能力与不相关语音文本均提供点选；点选不增加二级口述成功次数。
+- 三次展示后的自动收尾，无任务惩罚；旧存档/坏可选字段/新级别与开口记录保存恢复。
+- 浏览器 → HTTP 脑服务 → HTTP 假 DeepSeek 的三级联通与纠正重试；最终文本用于气泡和
+  mock TTS 调用。仅本地 mock 联通测试授权 Chromium 的 loopback 网络权限。
+- 直接注入坏服务返回，验证客户端拒绝中文、越白名单、篡改答案/done、额外字段、新词、
+  坏 JSON；服务不可达与超时均回落；移动中关闭后迟到回复不能重开气泡。
+- `file://` + 离线浏览器上下文能开始游戏并显示模板对话，不依赖脑服务。
+
+`tests/playthrough.cjs`：**17 组全部通过**。
+
+- 三章全部 24 条任务，经真实指针/键盘操作触发任务条件；提供材料与移动检查点夹具，
+  不伪造任务完成标志。42 词总数、早期章节屏蔽后期词。
+- 树木/挖矿、制作、动物、实际作物生长与收获、钓鱼、乘船过河与下船、驯服与跟随。
+- 五类对话锚点、温和重问、复习轮换、收集礼物/图鉴、原有 quiz、游泳、英文朗读 API 调用、
+  三章进度/物品/宠物/探索存档恢复、横竖屏及 file 离线运行。
+- 识别相关使用 mock；无识别/无 TTS 的点选回落单独覆盖。这里的 TTS 检查仅证明调用英语
+  浏览器接口，不证明实际音色。
+- 测试辅助函数每次连续制作前隐藏教学词卡，避免词卡挡住下一次指针点击；识别错误后允许
+  已清理的 onend 回调，等待收尾时间按本轮 1800 ms 更新。这些只调整测试，不跳过任务判断。
+
+`tests/chinese-cleanup.cjs`：6 组全部通过。卡片、手持标签、制作、词汇册等孩子界面没有中文，
+家长说明仍正常打开关闭；无页面、console 或游戏循环错误。
+
+## 仅代码核对 / 尚未实测
+
+- 真实 DeepSeek 的模型可用性、网络延迟和生成效果：未测试，没有真实 Key；上线时配置模型。
+- 生产 6 秒超时、Linux systemd、nginx、HTTPS、域名/CORS：文档与代码核对，没有部署或公网验证。
+- 模型 Key 只在服务端配置读取；服务没有请求/原文/Key 日志语句；环境文件忽略规则已核对。
+- 真机语音三验（识别可用性、TTS 音色、触控手感）**本轮未做**，由团队合并后在真机验收。
+
+## Run 2：三「开口记录」＋四「视觉与反馈」＋五「探索长效性」
+
+日期：2026-11-03。继续在 `codex-brain-v2`、Run 1 提交 `57c40c3` 上开发。
+`brain/` 没有改动；未配置真实 Key、未部署，`BRAIN_URL` 仍为空。
+
+### 已实现
+
+- 家长说明增加「家长说明 / 开口记录」两页，支持点按与键盘切页。按本机时区周一
+  零点到当前时间汇总本周的单词、口述次数、任务/钓鱼/宠物/乘船/新场景各场景次数。
+  使用 Run 1 已随存档保存的 `adventure.speaking`；按实际匹配的 `spoken_word` 统计，
+  说出备选词也算说过该词，点选、未匹配语音、未来时间和上周事件不冒充本周词次数。
+  不保存原话/录音，不增加儿童界面统计；仍只保留最近 2000 条对话事件，面板说明该限制。
+- 记录为空时显示家长专用提示；窄屏和短横屏可滚动，长表格可以触控滚动并返回游戏。
+  中文仍只出现在家长面板及原有家长入口。没有增加儿童中文翻译或小字提示。
+- 42 个词的全部图画采用内嵌 Canvas 简笔描边、圆角线条和平涂色；动物九种、鱼、
+  世界花朵/家具/门/房屋方块/火把/成熟麦子/船/礼物与词卡、制作、背包、图鉴共用画法。
+  世界地形仍保持方块结构，物理碰撞、任务与合成规则不变。没有图片/字体/CDN 依赖。
+- 狗/猫/牛/马尾巴、鸡/鸭翅膀和动物眨眼采用小幅离散帧动作；对话及词卡里的动物/鱼
+  也有低频动画（图卡至多每秒更新 8 次）。系统减少动态效果时停用这些待机动作。
+- 礼物发现、伙伴答对、Treasure Quiz 成功共用星光与撒花；粒子池严格最多 90 个，
+  普通庆祝 20 个、集齐一轮 30 个，约 0.9–1.3 秒消失。减少动态效果时为短暂静态点缀。
+  使用现有 WebAudio 合成三音提示，集齐一轮增加两个高音；音频能力不可用时继续游戏。
+- 7 礼物集齐即封存上一轮图鉴、增加完成轮数、清空本轮收集并换藏点，显示英文收尾反馈。
+  新位置由种子与轮次决定，从干燥地表选取；连续轮次使用不同列，七个点彼此分开。
+  位置按基础世界确定，读档后不会因挖掘/建造改变藏点；不会触发无穷自动收集。
+  下一轮有 1.5 秒拾取缓冲。玩法支持持续轮换（布局会循环），不要求永久生成全新地图。
+- Word Book 增加本轮 7 格图鉴、累计完成标记、上一轮完整图鉴；上一轮不会被新轮空格覆盖。
+  `adventure` 仅新增 `rounds` / `lastRound`，存档 key、版本、42 词和三章 24 任务均保留。
+  原有部分收集保留；旧存档已经集齐的七个礼物（包括早期布尔记录）只迁移一次为已完成一轮，
+  缺失或不完整的新字段按初始轮次读取。最近一轮图鉴随存档保留，不无限堆积历史图画。
+
+### 实测：无头 Chromium（非真机）
+
+本地静态服务器、`/usr/bin/google-chrome`、Playwright；**没有使用真实 DeepSeek 或麦克风**。
+
+新增 `tests/world-v2.cjs`，**9 组通过**：
+
+1. 固定洛杉矶本地时间，跨夏令时后的周一边界：本周起点计入、前一毫秒排除、
+   五类场景次数、识别为备选词、点选/未匹配/未来记录排除；切页、键盘导航与存档恢复。
+2. 无记录的旧存档、竖屏家长页和空状态。
+3. mock 语音识别近音 `three` → 规则匹配 `tree` → 保存 → 家长页一次 Tree，验证完整记录链路。
+4. 通过移动存档检查点并让角色实际下落着陆，连续收集两轮各 7 个礼物，再收第三轮一个。
+   不注入 found 标志；验证干地、不同轮次藏点、完成标记、上一轮图画、当前空格与部分进度恢复。
+   逐次检查礼物星光/撒花和粒子上限；WebAudio 使用浏览器真实合成 API，检查音符调度调用。
+5. 旧完整/部分图鉴、布尔礼物标记迁移，反复读档不重复增加完成次数；坏可选轮次字段回落。
+6. 全部 42 张图画非空且有描边；狗等尾巴、鸟类翅膀、鱼尾和其他动物眨眼帧有变化；无外部请求。
+7. 真实 UI 开始 Treasure Quiz、在目标附近成功，检查星光/撒花、90 粒子上限、生命周期和合成音符；
+   减少动态效果与无 AudioContext 时仍能成功。此项只证明调度和回落，不证明实际听感。
+8. 42 行长记录表，在短横屏通过 Chromium CDP 触摸滑动实际滚动、返回按钮可达；**不是触控真机验收**。
+9. 真实 `file://`、离线浏览器上下文：开口记录、旧图鉴迁移与完成图鉴正常，关闭语音服务也可玩。
+
+回归也已通过：
+
+- `tests/playthrough.cjs`：17 组，原三章 24 任务、种植真实计时、钓鱼、乘船、驯宠、探索、
+  原 quiz、42 词总数、存档恢复、横竖屏、英语朗读 API 调用和 file 离线运行。
+- `tests/brain-v2.cjs`：三级解锁与口语/点选边界、浏览器→脑服务→假 DeepSeek、
+  校验/纠正/超时/断网回落、迟到回复取消、旧存档与离线模板全部通过。
+- `tests/chinese-cleanup.cjs`：6 组，孩子界面及属性无中文，家长入口正常，无运行错误。
+- `node --test brain/server.test.cjs`：26 项（含子测试），全部使用本地 HTTP mock，通过。
+- `node --check tests/world-v2.cjs` 与 `git diff --check` 通过。
+
+验收图片：`screens/brain-v2-art.png`（42 词画风）、`screens/brain-v2-parent-log.png`
+（合成记录夹具，日期固定为洛杉矶 11/4）、`screens/brain-v2-album.png`（一轮完成后）。
+新增浏览器测试会将这些图片的原始输出写在 `/tmp/bw-v2-*.png`，不影响游戏运行。
+
+### 仅代码核对 / 留给合并后验收
+
+- 小幅动画、8 Hz 图卡更新与有界粒子池的结构已核对；低端手机长时间性能、真实音量与音效听感
+  没有测试。无头截图已人工查看，不能替代真机视觉/手感验收。
+- 藏点按基础地形保存稳定；玩家后来挖空地面或在藏点盖房时，仍需自己走近/清理空间。
+  未穷举所有随机种子、所有玩家改造地图和长期多轮存档；没有声称无头覆盖了这些组合。
+- 无浏览器识别结果的语音不能知道具体说了哪个词，因此不会推断成目标词；2000 条保留上限之外
+  的历史不会出现在本周汇总中。两点在家长页与代码规则中明确，不把点选算口语成绩。
+- **真机语音三验（识别可用性、TTS 音色、触控手感）未做**，由团队合并后实测。
+- 未使用真实 API Key、未调用真实 DeepSeek、未部署；脑服务生产配置与公网表现仍按 Run 1 待验。
+- 本轮只提交并推送 `origin/codex-brain-v2`，不推送或合并 main。
+
+## Constraint review — 57c40c3 + 9294f62 against c3c3b98
+
+- Confirmed one violation of the rule-skeleton/AI-mouth boundary: both validators
+  checked sentence fragments, so `Fish or wood? What is wood?`,
+  `What's this? What can you say?`, `I see a fish. Say wood!`, and a closing
+  `Great! Say wood!` passed despite changing or adding an exercise.
+- Server and browser now validate the complete sentence against bounded,
+  rule-owned tier forms. Praise and phrasing variants remain available; the
+  model cannot append questions, redirect the answer, or restart a closed exercise.
+  The system prompt and protocol documentation describe the accepted forms.
+- Regression evidence: eight added rejection cases failed before the fix.
+  After the fix, all **36 server/mock tests** pass, including one corrective retry,
+  template fallback, accepted phrasing variants, and timeout/slow-body fallback.
+  `tests/brain-v2.cjs` passes with added browser rejection/TTS checks across all
+  three tiers and closing. `tests/chinese-cleanup.cjs`: **6 groups pass**.
+  `tests/playthrough.cjs`: **17 groups pass**, including all 24 tasks, save/resume,
+  42 words, and offline `file://` play. Syntax and `git diff --check` pass.
+- No other checklist violations found. Vocabulary, tasks, chapter boundaries,
+  save key/version, and the default empty `BRAIN_URL` remain unchanged. Only
+  `brain/.env.example` is tracked; credential-pattern scans of both reviewed
+  commits and workspace logs found no matches. Service logging contains no
+  credentials or request/response bodies. No real provider or microphone was used.
