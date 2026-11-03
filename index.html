@@ -47,7 +47,40 @@
   button:focus-visible { outline: 3px solid #3aa0e8; outline-offset: 2px; }
   #app { position: fixed; inset: 0; overflow: hidden; touch-action: none; }
   #view { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; }
-  body:not(.show-zh) .hint { display: none !important; }
+  /* Child-facing words, quests and narration stay English, even with parent help open. */
+  #dialogue {
+    position: absolute; z-index: 31; top: calc(80px + var(--sat)); left: 50%;
+    transform: translateX(-50%); width: min(430px, calc(100% - 24px));
+    padding: 12px; border: 3px solid #e4b64e; border-radius: 22px;
+    background: #fffaf0; box-shadow: 0 6px 0 #71523233;
+  }
+  #dialogue[hidden], #parent-help[hidden] { display: none; }
+  .chat-head { display: flex; align-items: center; gap: 8px; }
+  #chat-face { width: 44px; height: 44px; }
+  #chat-question { flex: 1; font-size: 23px; font-weight: 900; margin: 0; }
+  #chat-close { font-size: 26px; width: 44px; height: 44px; }
+  #chat-picture { width: 74px; height: 74px; display: block; margin: 2px auto; }
+  #chat-options { display: flex; gap: 10px; }
+  #chat-options button { flex: 1; min-height: 60px; border-radius: 14px; background: #dcf1d1; font-size: 21px; font-weight: 800; border: 2px solid #abd58f; }
+  #chat-options canvas { width: 38px; height: 38px; vertical-align: middle; margin-right: 4px; }
+  #chat-options button.hint-answer { border-color: #e7a62c; background: #ffe7ac; }
+  .chat-tools { display: flex; gap: 10px; margin-top: 10px; }
+  .chat-tools button { min-height: 44px; flex: 1; border-radius: 12px; background: #e7f1fb; font-size: 17px; font-weight: 800; }
+  #chat-status { min-height: 20px; margin: 8px 0 0; text-align: center; font-size: 16px; }
+  #trail-count { position: absolute; top: calc(72px + var(--sat)); right: calc(12px + var(--sar)); padding: 7px 12px; border-radius: 16px; background: #fff4c8e8; font-weight: 900; pointer-events: none; }
+  #trail-album { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+  #trail-album button { width: 54px; height: 54px; border-radius: 14px; background: #fff0bd; font-size: 28px; }
+  #trail-album canvas { width: 48px; height: 48px; }
+  #parent-help { position: absolute; z-index: 45; top: 72px; right: 12px; width: min(350px, calc(100% - 24px)); padding: 18px; border-radius: 18px; background: #fff8ee; box-shadow: 0 6px 24px #3a2a1c44; line-height: 1.6; }
+  #parent-help button { min-height: 44px; padding: 6px 14px; background: #dcf1d1; border-radius: 12px; }
+  body.portrait #dialogue { top: 82px; }
+  @media (max-height: 510px) {
+    #dialogue { top: 68px; width: 370px; padding: 8px; }
+    #chat-picture { float: left; width: 58px; height: 58px; margin-right: 8px; }
+    #chat-options button { min-height: 54px; }
+    .chat-tools { margin-top: 5px; }
+    #chat-status { margin: 3px 0 0; }
+  }
 
   #hud { position: absolute; inset: 0; pointer-events: none; z-index: 20; }
   #hud button, #hud #joy, #hud .hotbar, #hud .mid { pointer-events: auto; }
@@ -73,7 +106,6 @@
   #quest canvas { width: 40px; height: 40px; flex: 0 0 auto; }
   .qtext { min-width: 0; display: flex; flex-direction: column; }
   #quest-en { font-size: 18px; font-weight: 800; line-height: 1.15; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  #quest .hint { display: block; font-size: 14px; font-weight: 700; color: #8a623c; line-height: 1.2; }
   .topbtn {
     min-width: 76px; height: 56px; padding: 0 12px;
     border-radius: 16px; background: #fff;
@@ -120,7 +152,6 @@
     max-width: 100%;
   }
   #held-en { font-size: 18px; font-weight: 800; }
-  #held .hint { font-size: 15px; font-weight: 700; color: #8a623c; }
   .hotbar {
     width: 100%; max-width: 100%;
     display: flex; gap: 6px; align-items: center;
@@ -159,7 +190,6 @@
     box-shadow: 0 4px 0 rgba(58,42,28,0.2);
   }
   .act strong { font-size: 16px; }
-  .act .hint { font-size: 13px; font-weight: 800; opacity: 0.95; }
   .act:active { transform: translateY(3px); box-shadow: 0 1px 0 rgba(58,42,28,0.2); }
   .act.break { background: var(--coral); }
   .act.place { background: var(--sky); }
@@ -175,7 +205,6 @@
     display: flex; flex-direction: column; align-items: center; justify-content: center;
   }
   #btn-home strong { font-size: 18px; }
-  #btn-home .hint { font-size: 14px; color: #8a623c; font-weight: 700; }
 
   #wordcard {
     position: absolute; z-index: 60;
@@ -193,7 +222,6 @@
   }
   #wordcard canvas { width: 68px; height: 68px; display: block; margin: 0 auto; }
   #card-en { font-size: clamp(42px, 6.4vw, 64px); font-weight: 900; line-height: 1; letter-spacing: -0.5px; }
-  #card-zh { display: block; margin-top: 2px; font-size: 24px; font-weight: 800; color: #8a623c; font-style: normal; }
   @keyframes pop { from { transform: translateX(-50%) scale(0.86); } to { transform: translateX(-50%) scale(1); } }
 
   .panel {
@@ -205,7 +233,6 @@
   }
   .panel header { display: flex; align-items: center; gap: 10px; min-height: 60px; flex: 0 0 auto; }
   .panel h2 { margin: 0; flex: 1; font-size: 28px; line-height: 1.1; }
-  .panel h2 .hint { font-size: 18px; font-weight: 700; color: #8a623c; margin-left: 8px; }
   .back {
     min-width: 104px; min-height: 56px; padding: 0 14px;
     border-radius: 16px; background: #fff; font-size: 20px; font-weight: 800;
@@ -224,7 +251,6 @@
   .ing, .out { display: flex; flex-direction: column; align-items: center; min-width: 58px; }
   .ing canvas, .out canvas { width: 44px; height: 44px; }
   .ing b, .out b { font-size: 16px; line-height: 1.1; text-align: center; }
-  .ing .hint, .out .hint { font-size: 13px; font-style: normal; color: #8a623c; font-weight: 700; }
   .ing em { font-style: normal; font-size: 16px; font-weight: 800; color: #c4503a; }
   .ing em.ok { color: #207a38; }
   .arrow { font-size: 22px; font-weight: 900; color: #c4a27a; flex: 0 0 auto; }
@@ -239,7 +265,6 @@
   #book-bar { height: 14px; border-radius: 999px; background: #ead9c4; overflow: hidden; margin: 0 0 10px; }
   #book-bar-fill { height: 100%; width: 0%; border-radius: 999px; background: #34a853; transition: width 0.3s ease; }
   #book-empty { font-size: 22px; font-weight: 800; line-height: 1.35; margin: 12px 4px; }
-  #book-empty .hint { display: block; margin-top: 6px; font-size: 18px; color: #8a623c; }
   #wordgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 8px; }
   .wcard {
     display: flex; align-items: center; gap: 8px;
@@ -249,7 +274,6 @@
   .wcard canvas { width: 56px; height: 56px; flex: 0 0 auto; }
   .wcard .txt { flex: 1; min-width: 0; }
   .wcard .en { display: block; font-size: 22px; font-weight: 900; line-height: 1.1; }
-  .wcard .hint { display: block; font-size: 16px; font-style: normal; color: #8a623c; font-weight: 700; }
   .spk {
     width: 56px; height: 56px; flex: 0 0 auto; border-radius: 50%;
     background: #ffe7a8; font-size: 26px; font-weight: 900;
@@ -276,7 +300,6 @@
     max-width: min(92vw, 520px);
   }
   #toast-en { font-size: 22px; font-weight: 900; display: block; line-height: 1.15; }
-  #toast .hint { display: block; font-size: 16px; font-weight: 700; color: #8a623c; }
   #btn-quiz {
     width: 100%; min-height: 64px; margin: 0 0 10px;
     border-radius: 16px; background: var(--leaf); color: #fff;
@@ -284,7 +307,6 @@
     display: flex; flex-direction: column; align-items: center; justify-content: center;
     font-size: 22px; font-weight: 900; line-height: 1.15;
   }
-  #btn-quiz .hint { color: #eaffdf; font-size: 16px; }
   #btn-quiz:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--leaf-d); }
   .wcard .star { color: #f5a623; font-size: 20px; }
 
@@ -389,7 +411,7 @@
   }
 </style>
 </head>
-<body class="show-zh">
+<body>
 <div id="app">
   <canvas id="view" width="800" height="400"></canvas>
   <div id="hud">
@@ -398,7 +420,6 @@
         <canvas id="quest-icon" width="128" height="128"></canvas>
         <span class="qtext">
           <strong id="quest-en">Find a tree!</strong>
-          <span id="quest-zh" class="hint">找到一棵树！</span>
         </span>
       </button>
       <button id="btn-speak" type="button" aria-label="Listen to the quest">
@@ -406,11 +427,10 @@
       </button>
       <button id="btn-craft" class="topbtn" type="button">Craft</button>
       <button id="btn-words" class="topbtn" type="button">Words</button>
-      <button id="btn-zh" class="topbtn on" type="button" aria-pressed="true">中文</button>
+      <button id="btn-zh" class="topbtn" type="button" aria-expanded="false" aria-label="家长设置">⚙</button>
     </div>
     <button id="btn-home" type="button" hidden>
       <strong>Go home</strong>
-      <span class="hint">回家</span>
     </button>
     <div class="bottom">
       <div id="joy" aria-label="Move">
@@ -418,31 +438,42 @@
         <div id="joy-knob"></div>
       </div>
       <div class="mid">
-        <div id="held"><strong id="held-en">Tap a block</strong><span id="held-zh" class="hint">点方块</span></div>
+        <div id="held"><strong id="held-en">Tap a block</strong></div>
         <div id="hotbar" class="hotbar"></div>
       </div>
       <div class="acts">
-        <button id="btn-break" class="act break" type="button"><strong>Break</strong><span class="hint">挖</span></button>
-        <button id="btn-place" class="act place" type="button"><strong>Place</strong><span class="hint">放</span></button>
-        <button id="btn-jump" class="act jump" type="button"><strong>Jump</strong><span class="hint">跳</span></button>
+        <button id="btn-break" class="act break" type="button"><strong>Break</strong></button>
+        <button id="btn-place" class="act place" type="button"><strong>Place</strong></button>
+        <button id="btn-jump" class="act jump" type="button"><strong>Jump</strong></button>
       </div>
     </div>
   </div>
 
+  <div id="trail-count" aria-label="Discoveries">★ 0 / 7</div>
+  <section id="dialogue" hidden aria-label="Talk with your buddy">
+    <div class="chat-head"><canvas id="chat-face" width="128" height="128" aria-hidden="true"></canvas><p id="chat-question"></p><button id="chat-close" type="button" aria-label="Keep exploring">×</button></div>
+    <canvas id="chat-picture" width="128" height="128" role="img" aria-label="Picture to talk about"></canvas>
+    <div id="chat-options"></div>
+    <div class="chat-tools"><button id="chat-listen" type="button" aria-label="Listen again">▶</button><button id="chat-mic" type="button">🎤</button></div>
+    <p id="chat-status" role="status" aria-live="polite"></p>
+  </section>
+  <aside id="parent-help" hidden aria-label="家长设置">
+    <strong>家长说明</strong><p>游戏内只显示英语和图画。停稳后伙伴会提问；可点选或按麦克风回答，没有发音评分，也不影响通关。点 × 或继续走就能离开。</p>
+    <p>浏览器朗读可离线使用（需设备已有英语语音）。语音识别由浏览器提供，可能需要联网和麦克风权限；不可用时直接点图文选项。</p>
+    <button id="parent-close" type="button">返回游戏</button>
+  </aside>
   <div id="wordcard" hidden role="status" aria-live="polite">
     <canvas id="card-icon" width="256" height="256"></canvas>
     <div id="card-en">Hello</div>
-    <i id="card-zh" class="hint">你好</i>
   </div>
 
   <div id="toast" hidden role="status" aria-live="polite">
     <span id="toast-en"></span>
-    <span id="toast-zh" class="hint"></span>
   </div>
 
   <div id="craft" class="panel" hidden>
     <header>
-      <h2>Craft<span class="hint">制作</span></h2>
+      <h2>Craft</h2>
       <button id="craft-back" class="back" type="button">Back</button>
     </header>
     <div class="body" id="recipes"></div>
@@ -450,14 +481,15 @@
 
   <div id="book" class="panel" hidden>
     <header>
-      <h2>Word Book<span class="hint">单词本</span></h2>
+      <h2>Word Book</h2>
       <button id="book-back" class="back" type="button">Back</button>
     </header>
     <div class="body">
-      <button id="btn-quiz" type="button"><span id="quiz-btn-en">Treasure Quiz</span><span id="quiz-btn-zh" class="hint">寻宝测验</span></button>
+      <button id="btn-quiz" type="button"><span id="quiz-btn-en">Treasure Quiz</span></button>
+      <div id="trail-album" aria-label="Discovery pictures"></div>
       <p id="book-count"></p>
       <div id="book-bar" hidden><div id="book-bar-fill"></div></div>
-      <p id="book-empty">Tap animals and blocks.<span class="hint">点一点动物和方块，单词会记在这里。</span></p>
+      <p id="book-empty">Tap animals and blocks.</p>
       <div id="wordgrid"></div>
     </div>
   </div>
@@ -466,14 +498,12 @@
     <div class="card">
       <p class="brand">Block World</p>
       <h1>Learn English words!</h1>
-      <p class="zh-always">学英语单词</p>
       <button id="btn-start" type="button">
         <span class="big">Tap to Start</span>
-        <span class="zh-always">开始</span>
       </button>
-      <p class="soundnote">Tap once to turn sound on.<br><span class="zh-always">点一下，声音才会打开。</span></p>
-      <p id="save-note" hidden>Your world is saved. <span class="zh-always">可以接着玩。</span></p>
-      <button id="btn-new" type="button" hidden>New world · 新的世界</button>
+      <p class="soundnote">Tap once to turn sound on.</p>
+      <p id="save-note" hidden>Your world is saved.</p>
+      <button id="btn-new" type="button" hidden>New world</button>
       <p class="desktop-hint">Arrows move · Space jump · Click a block</p>
     </div>
   </div>
@@ -481,10 +511,8 @@
   <div id="rotate" role="dialog" aria-label="Please rotate your phone">
     <div class="phone" aria-hidden="true"></div>
     <p class="big">Please rotate your phone</p>
-    <p class="zh-always">请把手机横过来</p>
     <button id="btn-portrait" type="button">
       <strong>Play this way</strong>
-      <span class="zh-always">转不过来？点这里竖屏玩</span>
     </button>
   </div>
 </div>
@@ -500,21 +528,21 @@
   var DAY_LEN = 160;
 
   var WORD = {
-    grass: ['Grass', '草'], dirt: ['Dirt', '泥土'], stone: ['Stone', '石头'],
-    wood: ['Wood', '木头'], leaves: ['Leaves', '树叶'], sand: ['Sand', '沙子'],
-    water: ['Water', '水'], flower: ['Flower', '花'], planks: ['Planks', '木板'],
-    stick: ['Stick', '木棍'], table: ['Table', '桌子'], door: ['Door', '门'],
-    torch: ['Torch', '火把'], bed: ['Bed', '床'], house: ['House', '房子'],
-    wool: ['Wool', '羊毛'], tree: ['Tree', '树'],
-    cow: ['Cow', '奶牛'], pig: ['Pig', '猪'], sheep: ['Sheep', '绵羊'],
-    chicken: ['Chicken', '小鸡'], cat: ['Cat', '猫'], dog: ['Dog', '狗'],
-    duck: ['Duck', '鸭子'], horse: ['Horse', '马'], rabbit: ['Rabbit', '兔子'],
-    fence: ['Fence', '栅栏'], rain: ['Rain', '雨'], cloud: ['Cloud', '云'],
-    sun: ['Sun', '太阳'], moon: ['Moon', '月亮'], star: ['Star', '星星'],
-    hello: ['Hello', '你好'], jump: ['Jump', '跳'], home: ['Home', '家'],
-    wheat: ['Wheat', '小麦'], seed: ['Seed', '种子'], fish: ['Fish', '鱼'],
-    rod: ['Fishing Rod', '钓竿'], boat: ['Boat', '船'], pet: ['Pet', '宠物'],
-    follow: ['Follow', '跟随']
+    grass: ['Grass'], dirt: ['Dirt'], stone: ['Stone'],
+    wood: ['Wood'], leaves: ['Leaves'], sand: ['Sand'],
+    water: ['Water'], flower: ['Flower'], planks: ['Planks'],
+    stick: ['Stick'], table: ['Table'], door: ['Door'],
+    torch: ['Torch'], bed: ['Bed'], house: ['House'],
+    wool: ['Wool'], tree: ['Tree'],
+    cow: ['Cow'], pig: ['Pig'], sheep: ['Sheep'],
+    chicken: ['Chicken'], cat: ['Cat'], dog: ['Dog'],
+    duck: ['Duck'], horse: ['Horse'], rabbit: ['Rabbit'],
+    fence: ['Fence'], rain: ['Rain'], cloud: ['Cloud'],
+    sun: ['Sun'], moon: ['Moon'], star: ['Star'],
+    hello: ['Hello'], jump: ['Jump'], home: ['Home'],
+    wheat: ['Wheat'], seed: ['Seed'], fish: ['Fish'],
+    rod: ['Fishing Rod'], boat: ['Boat'], pet: ['Pet'],
+    follow: ['Follow']
   };
   var BLOCK_OF = {
     grass: GRASS, dirt: DIRT, stone: STONE, wood: WOOD, leaves: LEAVES, sand: SAND,
@@ -543,30 +571,30 @@
     { out: 'boat', n: 1, need: { planks: 5 } }
   ];
   var QUESTS = [
-    { en: 'Find a tree!', zh: '找到一棵树！', icon: 'tree', done: function (p) { return p.tree; } },
-    { en: 'Mine stone!', zh: '挖一块石头！', icon: 'stone', done: function (p) { return p.mined.stone; } },
-    { en: 'Find water!', zh: '找到水！', icon: 'water', done: function (p) { return p.water; } },
-    { en: 'Tap a sheep!', zh: '点一点绵羊！', icon: 'sheep', done: function (p) { return p.tapped.sheep; } },
-    { en: 'Craft planks!', zh: '做出木板！', icon: 'planks', done: function (p) { return p.crafted.planks; } },
-    { en: 'Craft a door!', zh: '做一扇门！', icon: 'door', done: function (p) { return p.crafted.door; } },
-    { en: 'Place a torch!', zh: '放一个火把！', icon: 'torch', done: function (p) { return p.placed.torch; } },
-    { en: 'Craft a bed!', zh: '做一张床！', icon: 'bed', done: function (p) { return p.crafted.bed; } },
-    { en: 'Craft a table!', zh: '做一张桌子！', icon: 'table', done: function (p) { return p.crafted.table; } },
-    { en: 'Tap a cow!', zh: '点一点奶牛！', icon: 'cow', done: function (p) { return p.tapped.cow; } },
-    { en: 'Tap a chicken!', zh: '点一点小鸡！', icon: 'chicken', done: function (p) { return p.tapped.chicken; } },
-    { en: 'Place a door!', zh: '放一扇门！', icon: 'door', done: function (p) { return p.placed.door; } },
-    { en: 'Craft a house!', zh: '做出房子方块！', icon: 'house', done: function (p) { return p.crafted.house; } },
-    { en: 'Place a fence!', zh: '放一个栅栏！', icon: 'fence', done: function (p) { return p.placed.fence; } },
-    { en: 'Place a torch at night!', zh: '夜里放一个火把！', icon: 'torch', done: function (p) { return p.nightTorch; } },
-    { en: 'Tap a duck!', zh: '点一点鸭子！', icon: 'duck', done: function (p) { return p.tapped.duck; } },
-    { en: 'Craft a fishing rod!', zh: '做一根钓竿！', icon: 'rod', done: function (p) { return p.crafted.rod; } },
-    { en: 'Catch a fish!', zh: '钓到一条鱼！', icon: 'fish', done: function (p) { return p.fish; } },
-    { en: 'Plant a seed!', zh: '种下一颗种子！', icon: 'seed', done: function (p) { return p.placed.seed; } },
-    { en: 'Wait for wheat to grow!', zh: '等小麦长大！', icon: 'wheat', done: function (p) { return p.wheatRipe; } },
-    { en: 'Harvest the wheat!', zh: '收获小麦！', icon: 'wheat', done: function (p) { return p.mined.wheat; } },
-    { en: 'Craft a boat!', zh: '做一艘小船！', icon: 'boat', done: function (p) { return p.crafted.boat; } },
-    { en: 'Ride the boat!', zh: '乘船过河！', icon: 'boat', done: function (p) { return p.boatRide; } },
-    { en: 'Tame a pet!', zh: '驯服一只宠物！', icon: 'pet', done: function (p) { return p.pet; } }
+    { en: 'Find a tree!', icon: 'tree', done: function (p) { return p.tree; } },
+    { en: 'Mine stone!', icon: 'stone', done: function (p) { return p.mined.stone; } },
+    { en: 'Find water!', icon: 'water', done: function (p) { return p.water; } },
+    { en: 'Tap a sheep!', icon: 'sheep', done: function (p) { return p.tapped.sheep; } },
+    { en: 'Craft planks!', icon: 'planks', done: function (p) { return p.crafted.planks; } },
+    { en: 'Craft a door!', icon: 'door', done: function (p) { return p.crafted.door; } },
+    { en: 'Place a torch!', icon: 'torch', done: function (p) { return p.placed.torch; } },
+    { en: 'Craft a bed!', icon: 'bed', done: function (p) { return p.crafted.bed; } },
+    { en: 'Craft a table!', icon: 'table', done: function (p) { return p.crafted.table; } },
+    { en: 'Tap a cow!', icon: 'cow', done: function (p) { return p.tapped.cow; } },
+    { en: 'Tap a chicken!', icon: 'chicken', done: function (p) { return p.tapped.chicken; } },
+    { en: 'Place a door!', icon: 'door', done: function (p) { return p.placed.door; } },
+    { en: 'Craft a house!', icon: 'house', done: function (p) { return p.crafted.house; } },
+    { en: 'Place a fence!', icon: 'fence', done: function (p) { return p.placed.fence; } },
+    { en: 'Place a torch at night!', icon: 'torch', done: function (p) { return p.nightTorch; } },
+    { en: 'Tap a duck!', icon: 'duck', done: function (p) { return p.tapped.duck; } },
+    { en: 'Craft a fishing rod!', icon: 'rod', done: function (p) { return p.crafted.rod; } },
+    { en: 'Catch a fish!', icon: 'fish', done: function (p) { return p.fish; } },
+    { en: 'Plant a seed!', icon: 'seed', done: function (p) { return p.placed.seed; } },
+    { en: 'Wait for wheat to grow!', icon: 'wheat', done: function (p) { return p.wheatRipe; } },
+    { en: 'Harvest the wheat!', icon: 'wheat', done: function (p) { return p.mined.wheat; } },
+    { en: 'Craft a boat!', icon: 'boat', done: function (p) { return p.crafted.boat; } },
+    { en: 'Ride the boat!', icon: 'boat', done: function (p) { return p.boatRide; } },
+    { en: 'Tame a pet!', icon: 'pet', done: function (p) { return p.pet; } }
   ];
   var CHAPTER1 = 8;
   var CHAPTER2 = 16;
@@ -595,7 +623,7 @@
   var camX = 0, camY = 0, drawCamX = 0, drawCamY = 0, camReady = false;
   var viewW = 800, viewH = 400, dpr = 1, tileScreen = 38;
   var timeOfDay = 0.30;
-  var started = false, zhOn = true, portrait = false, portraitOk = false;
+  var started = false, zhOn = false, portrait = false, portraitOk = false;
   var inv = {}, hotbar = [], sel = -1, invSig = '';
   var learned = [], progress = blankProgress(), intros = {};
   var lock = null, lockAge = 0;
@@ -612,6 +640,302 @@
   var fps = 0, fpsN = 0, fpsT = 0, frameErr = '';
   var armReset = false;
   var lastTs = 0;
+  var trail = { found: {}, reviews: {}, turns: 0, scenes: {} };
+  var trailSpots = [], dialogue = null, chatQueue = [], chatIdle = 0, chatCooldown = 0;
+  var chatClock = 0, chatRecognizer = null, chatTimer = null, recognitionTimer = null, chatLastInput = 0;
+  var taskSnapshot = null, followTravel = 0, followLastX = 0, followReady = false;
+  var boatStartX = null, boatLanding = false, sceneNow = '';
+  var CH3_WORDS = ['wheat', 'seed', 'fish', 'rod', 'boat', 'pet', 'follow'];
+  var CH2_WORDS = ['table', 'cow', 'chicken', 'house', 'fence', 'duck', 'horse', 'rabbit'];
+
+  // Small optional conversations: events queue ideas; only a safe idle opens one.
+  function allowedChatWord(key) {
+    if (learned.indexOf(key) < 0 || !WORD[key]) return false;
+    var qi = questIndex();
+    if (qi < CHAPTER2 && CH3_WORDS.indexOf(key) >= 0) return false;
+    if (qi < CHAPTER1 && CH2_WORDS.indexOf(key) >= 0) return false;
+    return key !== 'hello' && key !== 'jump' && key !== 'follow';
+  }
+  function chatWords() { return learned.filter(allowedChatWord); }
+  function oldWord(pool, except) {
+    return pool.filter(function (k) { return k !== except; }).sort(function (a, b) {
+      var ar = trail.reviews[a], br = trail.reviews[b];
+      return (ar ? ar.last + 1 : 0) - (br ? br.last + 1 : 0) || learned.indexOf(a) - learned.indexOf(b);
+    })[0];
+  }
+  function sceneAt(x) {
+    var dx = x / TILE - origin;
+    return dx < -8 ? 'meadow' : dx < 14 ? 'home' : dx < 44 ? 'trees' : dx < 64 ? 'water' : 'far';
+  }
+  function resetAdventure() {
+    closeChat();
+    trail = { found: {}, reviews: {}, turns: 0, scenes: {} };
+    chatQueue = []; chatIdle = 0; chatCooldown = 0; taskSnapshot = null;
+    boatStartX = null; boatLanding = false;
+    followTravel = 0; followLastX = player.x; followReady = false;
+    sceneNow = sceneAt(player.x); trail.scenes[sceneNow] = 1;
+    trailSpots = [-5, 20, 39, 48, 67, 82, -16].map(function (dx, i) {
+      var tx = Math.max(2, Math.min(W - 3, origin + dx)), y;
+      for (y = 2; y < H - 1; y++) {
+        var id = get(tx, y);
+        if ((id === GRASS || id === DIRT || id === SAND || id === STONE) && !solid(get(tx, y - 1)) && get(tx, y - 1) !== WATER) break;
+      }
+      return { id: String(i), x: (tx + 0.5) * TILE, y: y * TILE - 15 };
+    });
+    updateTrailCount();
+  }
+  function restoreAdventure(data) {
+    if (data && typeof data === 'object') {
+      trail.turns = Math.max(0, Math.min(1000000, Number(data.turns) || 0));
+      trailSpots.forEach(function (spot) {
+        var key = data.found && data.found[spot.id];
+        if (key === true || WORD[key]) trail.found[spot.id] = key;
+      });
+      Object.keys(WORD).forEach(function (key) {
+        var r = data.reviews && data.reviews[key];
+        if (r && isFinite(r.n) && isFinite(r.last)) trail.reviews[key] = { n: Math.max(0, Math.min(1000000, +r.n)), last: Math.max(0, Math.min(trail.turns, +r.last)) };
+      });
+      ['home', 'trees', 'water', 'far', 'meadow'].forEach(function (key) {
+        if (data.scenes && data.scenes[key]) trail.scenes[key] = 1;
+      });
+    }
+    sceneNow = sceneAt(player.x); trail.scenes[sceneNow] = 1;
+    followLastX = player.x;
+    updateTrailCount();
+  }
+  function updateTrailCount() {
+    document.getElementById('trail-count').textContent = '★ ' + Object.keys(trail.found).length + ' / ' + trailSpots.length;
+  }
+  function renderTrailAlbum() {
+    var album = document.getElementById('trail-album');
+    album.innerHTML = '';
+    trailSpots.forEach(function (spot) {
+      var key = trail.found[spot.id], b = document.createElement('button');
+      b.type = 'button';
+      if (WORD[key]) {
+        var cv = document.createElement('canvas'); cv.width = 128; cv.height = 128;
+        paintIcon(cv, key); b.appendChild(cv); b.setAttribute('aria-label', WORD[key][0]);
+        tapButton(b, function () { showWord(key); });
+      } else { b.textContent = key ? '★' : '☆'; b.setAttribute('aria-label', key ? 'Found' : 'Hidden'); }
+      album.appendChild(b);
+    });
+  }
+  function drawTrail(g, sec) {
+    trailSpots.forEach(function (spot) {
+      if (trail.found[spot.id] || Math.abs(spot.x - player.x) > 1000) return;
+      var y = spot.y + Math.sin(sec * 3 + Number(spot.id)) * 3;
+      g.save(); g.translate(spot.x, y);
+      g.fillStyle = '#fff3a060'; g.beginPath(); g.arc(0, 0, 21, 0, Math.PI * 2); g.fill();
+      g.fillStyle = '#d18c2f'; g.fillRect(-10, -7, 20, 16);
+      g.fillStyle = '#ffe08b'; g.fillRect(-11, -9, 22, 7);
+      g.fillStyle = '#fff9d6'; g.fillRect(-2, -9, 4, 18);
+      g.fillStyle = '#fff9b4'; g.fillRect(14, -16, 3, 3); g.fillRect(-18, -5, 3, 3);
+      g.restore();
+    });
+    // A companion visibly noses toward a nearby unopened nook.
+    var buddy = animals.filter(function (a) { return a.tamed; })[0];
+    if (buddy && trailSpots.some(function (s) { return !trail.found[s.id] && Math.abs(s.x - buddy.x) < TILE * 4; })) {
+      g.save();
+      g.fillStyle = '#ffe286'; g.font = 'bold 20px sans-serif'; g.textAlign = 'center';
+      g.fillText('★', buddy.x, buddy.y - 45 + Math.sin(sec * 4) * 3);
+      g.restore();
+    }
+  }
+  function noticeTasks() {
+    var next = QUESTS.map(function (q) { return !!q.done(progress); });
+    if (taskSnapshot && started && !quiz) {
+      next.forEach(function (done, i) { if (done && !taskSnapshot[i]) queueChat('task', QUESTS[i].icon); });
+    }
+    taskSnapshot = next;
+  }
+  function queueChat(anchor, key) {
+    if (!started || quiz) return;
+    // Specific moments take priority over a task celebration from the same action.
+    if (anchor === 'task' && chatQueue.some(function (q) { return q.key === key && q.anchor !== 'task'; })) return;
+    chatQueue = chatQueue.filter(function (q) { return q.anchor !== anchor && !(q.anchor === 'task' && q.key === key); });
+    chatQueue.push({ anchor: anchor, key: key, at: chatClock });
+    if (chatQueue.length > 2) chatQueue.shift();
+  }
+  function stopChatListening() {
+    if (recognitionTimer) { clearTimeout(recognitionTimer); recognitionTimer = null; }
+    if (chatRecognizer) {
+      var r = chatRecognizer; chatRecognizer = null;
+      r.onresult = r.onerror = r.onend = null;
+      try { r.abort(); } catch (err) { /* optional browser feature */ }
+    }
+  }
+  function closeChat() {
+    if (chatTimer) { clearTimeout(chatTimer); chatTimer = null; }
+    stopChatListening();
+    if (dialogue) {
+      chatCooldown = 12;
+      if (window.speechSynthesis) { try { speechSynthesis.cancel(); } catch (err) { /* optional */ } }
+    }
+    dialogue = null;
+    document.getElementById('dialogue').hidden = true;
+    chatIdle = 0;
+  }
+  function openChat(event) {
+    var pool = chatWords();
+    if (pool.length < 2) return;
+    var target = allowedChatWord(event.key) ? event.key : oldWord(pool);
+    // Every second task/scene revisits a less recently used word from earlier play.
+    if ((event.anchor === 'task' || event.anchor === 'scene') && trail.turns % 2) target = oldWord(pool);
+    var contexts = { fish: ['fish', 'water', 'rod', 'sand'], pet: [event.key, 'pet', 'grass', 'flower', 'tree'], boat: ['boat', 'water', 'sand', 'wood', 'planks'] };
+    if (contexts[event.anchor] && trail.reviews[target]) {
+      var nearby = contexts[event.anchor].filter(allowedChatWord);
+      target = oldWord(nearby) || target;
+    }
+    var other = oldWord(pool, target);
+    var options = trail.turns % 2 ? [other, target] : [target, other];
+    dialogue = { anchor: event.anchor, key: target, options: options, question: WORD[options[0]][0] + ' or ' + WORD[options[1]][0].toLowerCase() + '?', at: chatClock, answered: false };
+    document.getElementById('chat-question').textContent = dialogue.question;
+    document.getElementById('chat-status').textContent = '';
+    paintIcon(document.getElementById('chat-face'), 'dog');
+    paintIcon(document.getElementById('chat-picture'), target);
+    var root = document.getElementById('chat-options'); root.innerHTML = '';
+    options.forEach(function (key) {
+      var b = document.createElement('button'); b.type = 'button'; b.dataset.word = key;
+      var icon = document.createElement('canvas'); icon.width = 128; icon.height = 128; icon.setAttribute('aria-hidden', 'true'); paintIcon(icon, key);
+      b.appendChild(icon); b.appendChild(document.createTextNode(WORD[key][0])); tapButton(b, function () { answerChat(key); }); root.appendChild(b);
+    });
+    document.getElementById('chat-mic').textContent = '🎤';
+    document.getElementById('chat-mic').setAttribute('aria-label', 'Answer by voice');
+    document.getElementById('dialogue').hidden = false;
+    speakEn(dialogue.question);
+  }
+  function answerChat(key) {
+    if (!dialogue || dialogue.answered) return;
+    if (key !== dialogue.key) {
+      // A model and a gentle rephrasing, never an error mark or lost reward.
+      var model = WORD[dialogue.key][0] + '. ' + dialogue.question;
+      document.getElementById('chat-question').textContent = model;
+      document.getElementById('chat-status').textContent = '👇';
+      Array.prototype.forEach.call(document.querySelectorAll('#chat-options button'), function (b) { b.classList.toggle('hint-answer', b.dataset.word === dialogue.key); });
+      speakEn(model);
+      return;
+    }
+    stopChatListening();
+    dialogue.answered = true;
+    trail.turns++;
+    var r = trail.reviews[key] || { n: 0, last: 0 }; r.n++; r.last = trail.turns; trail.reviews[key] = r;
+    document.getElementById('chat-question').textContent = WORD[key][0] + '!';
+    document.getElementById('chat-status').textContent = '★';
+    burst(player.x, player.y - 40, '#ffe286', false); chime(); speakEn(WORD[key][0] + '!');
+    saveSoon(); chatTimer = setTimeout(closeChat, 1600);
+  }
+  function normalAnswer(text) { return String(text).toLowerCase().replace(/[^a-z ]/g, ' ').replace(/\s+/g, ' ').trim(); }
+  function nearWord(a, b) {
+    if (a === b) return true;
+    if (a.length < 3 || b.length < 3) return false;
+    var row = [], i, j;
+    for (j = 0; j <= b.length; j++) row[j] = j;
+    for (i = 1; i <= a.length; i++) {
+      var prev = row[0]; row[0] = i;
+      for (j = 1; j <= b.length; j++) { var old = row[j]; row[j] = Math.min(row[j] + 1, row[j - 1] + 1, prev + (a[i - 1] === b[j - 1] ? 0 : 1)); prev = old; }
+    }
+    return row[b.length] <= (b.length > 5 ? 2 : 1);
+  }
+  function voiceChoice(text) {
+    if (!dialogue) return '';
+    var said = normalAnswer(text), tokens = said.split(' ');
+    var aliases = { fish: ['fishes', 'fesh'], sheep: ['ship', 'shep'], wood: ['would'], flower: ['flour'], water: ['wata', 'woter'], cow: ['kow'], boat: ['bote'], cat: ['kat'], tree: ['three'], leaves: ['leaf'], planks: ['plank'], rod: ['fishing rod', 'rod'] };
+    function exact(k) { return [normalAnswer(WORD[k][0])].concat(aliases[k] || []).some(function (a) { return said === a || (a.indexOf(' ') < 0 && tokens.indexOf(a) >= 0); }); }
+    var matches = dialogue.options.filter(exact);
+    if (matches.length === 1) return matches[0];
+    if (matches.length > 1) return '';
+    matches = dialogue.options.filter(function (k) { return tokens.some(function (t) { return nearWord(t, normalAnswer(WORD[k][0])); }); });
+    return matches.length === 1 ? matches[0] : '';
+  }
+  function listenChat() {
+    if (!dialogue || dialogue.answered || chatRecognizer) return;
+    var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    var status = document.getElementById('chat-status');
+    if (!SR) { status.textContent = '👇'; return; }
+    if (window.speechSynthesis) { try { speechSynthesis.cancel(); } catch (err) { /* optional */ } }
+    try {
+      var active = dialogue, r = new SR(); chatRecognizer = r;
+      r.lang = 'en-US'; r.interimResults = false; r.continuous = false; r.maxAlternatives = 3;
+      status.textContent = '🎤 …';
+      r.onresult = function (e) {
+        if (dialogue !== active) return;
+        var result = e.results[e.resultIndex || 0], choice = '';
+        for (var i = 0; result && i < result.length; i++) { choice = voiceChoice(result[i].transcript); if (choice) break; }
+        if (choice) answerChat(choice);
+        else { status.textContent = '👇'; speakEn(active.question); }
+      };
+      r.onerror = function () { if (dialogue === active) status.textContent = '👇'; };
+      r.onend = function () { if (chatRecognizer === r) { if (recognitionTimer) { clearTimeout(recognitionTimer); recognitionTimer = null; } chatRecognizer = null; if (dialogue === active && !active.answered) status.textContent = '👇'; } };
+      r.start();
+      // Some engines never fire onend after permission or network problems.
+      recognitionTimer = setTimeout(function () { recognitionTimer = null; if (chatRecognizer === r) { chatRecognizer = null; try { r.abort(); } catch (err) { /* optional */ } if (dialogue === active && !active.answered) status.textContent = '👇'; } }, 8000);
+    } catch (err) { chatRecognizer = null; status.textContent = '👇'; }
+  }
+  function bindDialogue() {
+    tapButton(document.getElementById('chat-close'), closeChat);
+    tapButton(document.getElementById('chat-listen'), function () { if (dialogue) speakEn(dialogue.question); });
+    tapButton(document.getElementById('chat-mic'), listenChat);
+    // Keyboard activation is provided only for these standard buttons; pointer taps already use tapButton.
+    document.getElementById('dialogue').addEventListener('click', function (e) {
+      if (e.detail !== 0) return;
+      var b = e.target.closest('button');
+      if (!b) return;
+      if (b.dataset.word) answerChat(b.dataset.word);
+      else if (b.id === 'chat-close') closeChat();
+      else if (b.id === 'chat-listen' && dialogue) speakEn(dialogue.question);
+      else if (b.id === 'chat-mic') listenChat();
+    });
+  }
+  function adventureStep(dt) {
+    chatCooldown = Math.max(0, chatCooldown - dt);
+    var moving = axis() !== 0 || !onGround || riding || inWater() || fishing || jumpBuf > 0;
+    var safe = !moving && !quiz && !(window.speechSynthesis && speechSynthesis.speaking) && chatClock - chatLastInput > 0.9;
+    chatIdle = safe ? chatIdle + dt : 0;
+    if (dialogue && (moving || quiz || chatClock - dialogue.at > 24)) closeChat();
+    // Arriving means a real crossing followed by standing on dry ground, never boarding.
+    if (boatLanding && onGround && !riding && !inWater()) {
+      boatLanding = false; boatStartX = null; queueChat('boat', 'boat');
+    }
+    var buddy = animals.filter(function (a) { return a.tamed; })[0];
+    if (buddy) {
+      if (!riding && Math.abs(player.x - followLastX) < TILE * 2) followTravel += Math.abs(player.x - followLastX);
+      followLastX = player.x;
+      if (followTravel > TILE * 6) followReady = true;
+      if (followReady && safe && Math.abs(buddy.x - player.x) < TILE * 3) {
+        queueChat('pet', buddy.type); followReady = false; followTravel = 0;
+      }
+    }
+    var scene = sceneAt(player.x);
+    if (scene !== sceneNow) {
+      sceneNow = scene;
+      if (!trail.scenes[scene]) {
+        trail.scenes[scene] = 1;
+        queueChat('scene', scene === 'water' ? 'water' : scene === 'trees' ? 'tree' : 'flower'); saveSoon();
+      }
+    }
+    trailSpots.forEach(function (spot) {
+      if (trail.found[spot.id] || !onGround || riding || Math.abs(player.x - spot.x) > 29 || Math.abs(player.y - spot.y - 15) > 45) return;
+      var pool = chatWords(), collected = Object.keys(trail.found).map(function (id) { return trail.found[id]; });
+      var fresh = pool.filter(function (key) { return collected.indexOf(key) < 0; });
+      var sticker = oldWord(fresh.length ? fresh : pool);
+      trail.found[spot.id] = sticker || true;
+      var rewards = ['wood', 'stone', 'planks', 'wool', 'seed'].filter(allowedChatWord);
+      if (rewards.length) {
+        var reward = rewards[Number(spot.id) % rewards.length], count = 1 + Number(spot.id) % 3;
+        addItem(reward, count, true); showToast('★ +' + count + ' ' + WORD[reward][0], 2);
+      }
+      burst(spot.x, spot.y, '#ffe286', false); chime(); updateTrailCount();
+      // Discoveries are scene-entry stops, with the same safety/cooldown as every other chat.
+      queueChat('scene', sticker); saveSoon();
+    });
+    chatQueue = chatQueue.filter(function (e) { return chatClock - e.at < 18; });
+    if (!dialogue && chatIdle > 0.8 && chatCooldown <= 0 && cardLeft <= 0 && chatQueue.length) {
+      var priority = { fish: 4, boat: 4, pet: 3, task: 2, scene: 1 };
+      chatQueue.sort(function (a, b) { return priority[b.anchor] - priority[a.anchor] || b.at - a.at; });
+      var event = chatQueue.shift();
+      if (chatWords().length >= 2) { openChat(event); chatQueue = []; }
+    }
+  }
 
   function blankProgress() {
     return { mined: {}, crafted: {}, placed: {}, tapped: {}, tree: 0, water: 0, nightTorch: 0, fish: 0, wheatRipe: 0, boatRide: 0, pet: 0 };
@@ -1004,6 +1328,7 @@
     onGround = true;
     camReady = false;
     crops = []; boat = null; riding = false; fishing = null;
+    resetAdventure();
   }
 
   function collides(px, py) {
@@ -1400,6 +1725,7 @@
       parts.push({ x: fx + (Math.random() - 0.5) * 14, y: fy + 2, vx: (Math.random() - 0.5) * 90, vy: -50 - Math.random() * 80, life: 0.45, age: 0, color: Math.random() < 0.5 ? '#ffffff' : '#aee9ff', s: 2.5 + Math.random() * 2, heart: false });
     }
     addItem('fish', 1);
+    queueChat('fish', 'fish');
     chime();
     updateQuest();
     saveSoon();
@@ -1416,6 +1742,8 @@
   function boardBoat() {
     if (!boat || riding) return;
     riding = true;
+    boatStartX = boat.x;
+    boatLanding = false;
     player.x = boat.x;
     player.y = boat.y + 4;
     player.vy = 0;
@@ -1428,6 +1756,7 @@
   function disembark() {
     if (!riding || !boat) return;
     riding = false;
+    boatLanding = boatStartX !== null && Math.abs(boat.x - boatStartX) >= TILE * 4;
     player.x = boat.x + player.dir * 42;
     player.y = boat.y - 2;
     if (collides(player.x, player.y)) {
@@ -1468,12 +1797,13 @@
         if (!quiz) progress.pet = 1;
         learn('pet');
         learn('follow');
+        followLastX = player.x; followTravel = 0; followReady = false;
         showWord('pet');
         cry(a.type);
         burst(a.x, a.y - 24, '#ff6b8a', true);
         burst(a.x, a.y - 42, '#ffc53d', false);
         chime();
-        showToast('Your pet follows you!', '宠物会跟着你跑啦！', 2.6);
+        showToast('Your pet follows you!', 2.6);
         updateQuest();
         saveSoon();
         return;
@@ -1495,6 +1825,12 @@
       }
     }
     if (riding) return;
+    var cropX = Math.floor(wx / TILE), cropY = Math.floor(wy / TILE), cropId = get(cropX, cropY);
+    // A direct tap on a crop should reach it even when a pet stands in front.
+    if (cropId === WHEAT1 || cropId === WHEAT2 || cropId === WHEAT3) {
+      lock = { tx: cropX, ty: cropY }; lockAge = 0;
+      mine(cropX, cropY); return;
+    }
     var best = null, bd = 38 * 38, i;
     for (i = 0; i < animals.length; i++) {
       var a = animals[i];
@@ -2407,6 +2743,7 @@
       }
     }
     ctx.setTransform(dpr * z, 0, 0, dpr * z, -drawCamX * dpr * z, -drawCamY * dpr * z);
+    drawTrail(ctx, sec);
     if (started && !panelOpen()) drawHighlight(ctx);
     if (rainOn) {
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -2461,7 +2798,6 @@
     var card = document.getElementById('wordcard');
     card.hidden = false;
     document.getElementById('card-en').textContent = w[0];
-    document.getElementById('card-zh').textContent = w[1];
     paintIcon(document.getElementById('card-icon'), key);
     cardLeft = 2.15;
     speak(w[0]);
@@ -2526,32 +2862,13 @@
     } catch (err) { /* speech is optional */ }
   }
   function speakTask() {
+    if (dialogue) { speakEn(dialogue.question); return; }
     if (quiz) { speakEn('Find the ' + WORD[quiz.key][0] + '!'); return; }
-    if (!speechOn || !window.speechSynthesis) return;
     var q = currentQuest();
-    var zhText = q ? q.zh : '第三章完成！去探险吧！';
-    var enText = q ? q.en : 'Level 3 Complete! Explore and play!';
-    try {
-      speechSynthesis.cancel();
-      var uz = new SpeechSynthesisUtterance(zhText);
-      uz.lang = 'zh-CN';
-      uz.rate = 1;
-      uz.volume = 1;
-      var zv = pickVoiceZh();
-      if (zv) { uz.voice = zv; uz.lang = zv.lang; }
-      speechSynthesis.speak(uz);
-      var ue = new SpeechSynthesisUtterance(enText);
-      ue.lang = 'en-GB';
-      ue.rate = 1;
-      ue.volume = 1;
-      var ev = pickVoiceGB() || pickVoice();
-      if (ev) { ue.voice = ev; ue.lang = ev.lang; }
-      speechSynthesis.speak(ue);
-    } catch (err) { /* speech is optional */ }
+    speakEn(q ? q.en : 'Level 3 Complete! Explore and play!');
   }
-  function showToast(en, zh, secs) {
+  function showToast(en, secs) {
     document.getElementById('toast-en').textContent = en;
-    document.getElementById('toast-zh').textContent = zh;
     document.getElementById('toast').hidden = false;
     toastLeft = secs || 2.2;
   }
@@ -2657,7 +2974,7 @@
     var now = Date.now();
     if (now - wrongAt < 1500) return;
     wrongAt = now;
-    showToast('Try again!', '再找找！', 1.6);
+    showToast('Try again!', 1.6);
     tone(220, 0.12, 'sine', 0, 0.03, 180);
   }
   function quizWin() {
@@ -2672,14 +2989,14 @@
     chime();
     showWord(key);
     speakEn(WORD[key][0]);
-    showToast('Great job!', '太棒了！找到啦！', 2.4);
+    showToast('Great job!', 2.4);
     saveSoon();
   }
   function startQuiz() {
     var pool = quizPool().filter(targetExists);
     if (!pool.length) {
-      if (!quizPool().length) showToast('Collect words first!', '先去玩一玩，收集单词再来测验！', 3);
-      else showToast('Hidden too well!', '这个词藏起来了，先去探险吧！', 3);
+      if (!quizPool().length) showToast('Collect words first!', 3);
+      else showToast('Hidden too well!', 3);
       return false;
     }
     var key = pool[Math.floor(Math.random() * pool.length)];
@@ -2710,12 +3027,11 @@
     return QUESTS.length;
   }
   function updateQuest() {
+    noticeTasks();
     var en = document.getElementById('quest-en');
-    var zh = document.getElementById('quest-zh');
     var questBtn = document.getElementById('quest');
     if (quiz) {
       en.textContent = 'Find the ' + WORD[quiz.key][0].toUpperCase() + '!';
-      zh.textContent = '寻宝测验 · Treasure Hunt';
       paintIcon(document.getElementById('quest-icon'), 'star');
       questBtn.classList.add('quiz');
       return;
@@ -2725,24 +3041,20 @@
     var qi = questIndex();
     if (!q) {
       en.textContent = '★ Level 3 Complete!';
-      zh.textContent = '第三章完成！去探险吧！';
       paintIcon(document.getElementById('quest-icon'), 'star');
     } else if (qi >= CHAPTER2) {
       en.textContent = '★ Level 3 · ' + q.en;
-      zh.textContent = '第三章 · ' + q.zh;
       paintIcon(document.getElementById('quest-icon'), q.icon);
     } else if (qi >= CHAPTER1) {
       en.textContent = '★ Level 2 · ' + q.en;
-      zh.textContent = '第二章 · ' + q.zh;
       paintIcon(document.getElementById('quest-icon'), q.icon);
     } else {
       en.textContent = q.en;
-      zh.textContent = q.zh;
       paintIcon(document.getElementById('quest-icon'), q.icon);
     }
     if (hasPack() && !packSeen) {
       packSeen = true;
-      showToast('You got a backpack!', '你得到一个小背包！', 3);
+      showToast('You got a backpack!', 3);
       chime();
       saveSoon();
     }
@@ -2761,10 +3073,6 @@
         var empty = document.createElement('div');
         empty.className = 'emptybar';
         empty.textContent = 'Tap a block';
-        var hint = document.createElement('span');
-        hint.className = 'hint';
-        hint.textContent = '点方块';
-        empty.appendChild(hint);
         bar.appendChild(empty);
       }
       hotbar.forEach(function (key, i) {
@@ -2790,7 +3098,6 @@
     }
     var key = hotbar[sel];
     document.getElementById('held-en').textContent = key && WORD[key] ? WORD[key][0] : 'Tap a block';
-    document.getElementById('held-zh').textContent = key && WORD[key] ? WORD[key][1] : '点方块';
   }
   function canCraft(r) {
     var k;
@@ -2813,13 +3120,10 @@
         paintIcon(cv, k);
         var name = document.createElement('b');
         name.textContent = WORD[k][0];
-        var zh = document.createElement('i');
-        zh.className = 'hint';
-        zh.textContent = WORD[k][1];
         var ct = document.createElement('em');
         ct.dataset.need = k;
         ct.dataset.n = String(r.need[k]);
-        ing.appendChild(cv); ing.appendChild(name); ing.appendChild(zh); ing.appendChild(ct);
+        ing.appendChild(cv); ing.appendChild(name); ing.appendChild(ct);
         tapButton(ing, function () { showWord(k); });
         needs.appendChild(ing);
       });
@@ -2833,10 +3137,7 @@
       paintIcon(ocv, r.out);
       var nm = document.createElement('b');
       nm.textContent = WORD[r.out][0] + (r.n > 1 ? ' ×' + r.n : '');
-      var ozh = document.createElement('i');
-      ozh.className = 'hint';
-      ozh.textContent = WORD[r.out][1];
-      out.appendChild(ocv); out.appendChild(nm); out.appendChild(ozh);
+      out.appendChild(ocv); out.appendChild(nm);
       tapButton(out, function () { showWord(r.out); });
       var btn = document.createElement('button');
       btn.type = 'button';
@@ -2888,6 +3189,7 @@
     saveSoon();
   }
   function renderBook() {
+    renderTrailAlbum();
     var grid = document.getElementById('wordgrid');
     var empty = document.getElementById('book-empty');
     var count = document.getElementById('book-count');
@@ -2915,10 +3217,7 @@
         star.textContent = ' ★';
         en.appendChild(star);
       }
-      var zh = document.createElement('i');
-      zh.className = 'hint';
-      zh.textContent = WORD[key][1];
-      txt.appendChild(en); txt.appendChild(zh);
+      txt.appendChild(en);
       var spk = document.createElement('button');
       spk.type = 'button';
       spk.className = 'spk';
@@ -2931,9 +3230,10 @@
     });
   }
   function panelOpen() {
-    return !document.getElementById('craft').hidden || !document.getElementById('book').hidden;
+    return !document.getElementById('craft').hidden || !document.getElementById('book').hidden || !document.getElementById('parent-help').hidden;
   }
   function openCraft() {
+    closeChat();
     closeBook();
     document.getElementById('craft').hidden = false;
     updateRecipeCounts();
@@ -2941,22 +3241,19 @@
   }
   function closeCraft() { document.getElementById('craft').hidden = true; }
   function openBook() {
+    closeChat();
     closeCraft();
     renderBook();
     document.getElementById('quiz-btn-en').textContent = quiz ? 'Stop Quiz' : 'Treasure Quiz';
-    document.getElementById('quiz-btn-zh').textContent = quiz ? '结束测验' : '寻宝测验';
     document.getElementById('book').hidden = false;
     speak('Word book');
   }
   function closeBook() { document.getElementById('book').hidden = true; }
-  function closePanels() { closeCraft(); closeBook(); }
-  function setZh(on) {
-    zhOn = !!on;
-    document.body.classList.toggle('show-zh', zhOn);
-    var btn = document.getElementById('btn-zh');
-    btn.classList.toggle('on', zhOn);
-    btn.setAttribute('aria-pressed', zhOn ? 'true' : 'false');
-    saveSoon();
+  function closePanels() { closeCraft(); closeBook(); document.getElementById('parent-help').hidden = true; document.getElementById('btn-zh').setAttribute('aria-expanded', 'false'); }
+  function setZh() {
+    // Legacy save setting cannot turn on translations in child-facing UI.
+    zhOn = false;
+    document.body.classList.remove('show-zh');
   }
   function isPortrait() {
     return portrait;
@@ -2992,6 +3289,7 @@
       mods: mods, inv: inv, hotbar: hotbar, sel: sel,
       words: learned, stars: quizStars, progress: progress, intros: intros, zh: zhOn,
       crops: crops.map(function (c) { return [c.tx, c.ty, Math.round(c.age * 10) / 10]; }),
+      adventure: trail,
       boat: boat ? [Math.round(boat.x), Math.round(boat.y)] : null,
       animals: animals.map(function (a) { return [a.type, Math.round(a.x * 10) / 10, Math.round(a.y * 10) / 10, a.dir, a.tamed ? 1 : 0]; })
     };
@@ -3086,8 +3384,10 @@
       progress.boatRide = data.progress.boatRide ? 1 : 0;
       progress.pet = data.progress.pet ? 1 : 0;
     }
+    restoreAdventure(data.adventure);
     intros = data.intros || {};
     setZh(data.zh !== false);
+    taskSnapshot = QUESTS.map(function (q) { return !!q.done(progress); });
     packSeen = hasPack();
     camReady = false;
     invSig = '';
@@ -3099,10 +3399,12 @@
     packSeen = false;
     timeOfDay = 0.30;
     generate(newSeed);
+    taskSnapshot = QUESTS.map(function () { return false; });
     invSig = '';
     setZh(true);
   }
   function goHome() {
+    closeChat(); chatQueue = []; boatLanding = false; boatStartX = null;
     riding = false; fishing = null;
     player.x = homeX; player.y = homeY; player.vy = 0; player.dir = 1;
     onGround = true; deepTime = 0; camReady = false;
@@ -3135,7 +3437,7 @@
     document.getElementById('save-note').hidden = true;
     document.getElementById('btn-new').hidden = true;
     armReset = false;
-    document.getElementById('btn-new').textContent = 'New world · 新的世界';
+    document.getElementById('btn-new').textContent = 'New world';
   }
 
   function tapButton(el, fn) {
@@ -3160,18 +3462,29 @@
   }
 
   function bind() {
+    document.addEventListener('pointerdown', function (e) {
+      chatLastInput = chatClock;
+      if (!e.target.closest('#dialogue') && dialogue) closeChat();
+    }, true);
     tapButton(document.getElementById('btn-start'), beginGame);
     tapButton(document.getElementById('btn-new'), function () {
       if (!armReset) {
         armReset = true;
-        document.getElementById('btn-new').textContent = 'Tap again · 再点一次';
+        document.getElementById('btn-new').textContent = 'Tap again';
         return;
       }
       hardReset();
     });
     tapButton(document.getElementById('btn-craft'), openCraft);
     tapButton(document.getElementById('btn-words'), openBook);
-    tapButton(document.getElementById('btn-zh'), function () { setZh(!zhOn); });
+    bindDialogue();
+    tapButton(document.getElementById('btn-zh'), function () {
+      closeChat(); closeCraft(); closeBook();
+      var help = document.getElementById('parent-help');
+      help.hidden = !help.hidden;
+      document.getElementById('btn-zh').setAttribute('aria-expanded', help.hidden ? 'false' : 'true');
+    });
+    tapButton(document.getElementById('parent-close'), closePanels);
     tapButton(document.getElementById('quest'), function () {
       if (quiz) { speakEn('Find the ' + WORD[quiz.key][0] + '!'); return; }
       var q = currentQuest();
@@ -3264,10 +3577,13 @@
     joy.addEventListener('pointerup', joyEnd);
     joy.addEventListener('pointercancel', joyEnd);
     window.addEventListener('keydown', function (e) {
-      if (e.code === 'Escape') { closePanels(); return; }
+      chatLastInput = chatClock;
+      if (dialogue && !/^(Tab|Enter|Space)$/.test(e.code)) closeChat();
+      if (e.code === 'Escape') { closeChat(); closePanels(); return; }
       if (!started || rotateBlock()) return;
       if (e.code === 'KeyE') { if (panelOpen()) closePanels(); else openCraft(); e.preventDefault(); return; }
       if (e.code === 'KeyB') { if (document.getElementById('book').hidden) openBook(); else closeBook(); e.preventDefault(); return; }
+      if (panelOpen() || (dialogue && /^(Enter|Space)$/.test(e.code) && document.activeElement.closest('#dialogue'))) return;
       keys[e.code] = 1;
       if (e.code === 'ArrowLeft' || e.code === 'ArrowRight' || e.code === 'ArrowUp' || e.code === 'Space') e.preventDefault();
       if (e.code === 'Space' || e.code === 'ArrowUp' || e.code === 'KeyW') requestJump();
@@ -3313,6 +3629,7 @@
       toastLeft -= dt;
       if (toastLeft <= 0) document.getElementById('toast').hidden = true;
     }
+    chatClock += dt;
     var playing = started && !rotateBlock() && !panelOpen();
     if (playing) {
       rainTimer -= dt;
@@ -3391,11 +3708,13 @@
       if (depth >= GROUND + 4) deepTime += dt;
       else deepTime = 0;
       document.getElementById('btn-home').hidden = !(deepTime > 1.15);
+      adventureStep(dt);
       if (dirtySave) {
         saveIn -= dt;
         if (saveIn <= 0) { save(); saveIn = 2.5; }
       }
     }
+    if (!playing && dialogue) closeChat();
     updateCamera(playing ? dt : 1);
     if (invSignature() !== invSig) renderHotbar();
     drawFrame(sec);
@@ -3434,6 +3753,10 @@
     });
     window.BW = {
       ready: true,
+      adventure: function () {
+        return JSON.parse(JSON.stringify({ trail: trail, spots: trailSpots, active: dialogue, queue: chatQueue,
+          idle: chatIdle, cooldown: chatCooldown, scene: sceneNow }));
+      },
       setTime: function (t) { timeOfDay = ((t % 1) + 1) % 1; },
       getTime: function () { return timeOfDay; },
       animals: function () { return animals.map(function (a) { return { type: a.type, x: a.x, y: a.y }; }); },
@@ -3450,9 +3773,7 @@
       card: function () {
         return document.getElementById('wordcard').hidden ? '' : document.getElementById('card-en').textContent;
       },
-      cardZh: function () {
-        return document.getElementById('wordcard').hidden ? '' : document.getElementById('card-zh').textContent;
-      },
+      cardZh: function () { return ''; },
       find: function (id) {
         var px = Math.floor(player.x / TILE), py = Math.floor((player.y - 8) / TILE);
         var best = null, bd = 1e9, x, y;
