@@ -1,3 +1,17 @@
+## Final conversation review — 2026-11-03
+
+- Found one scope gap: preferences were visible in the parent panel, but could
+  only be cleared by deleting the whole world. Added a parent-only preference
+  reset that clears preferences and their ask timestamps, persists immediately,
+  and refreshes the displayed values. Name, world progress, speech records and
+  daily chat/weather limits are preserved.
+- Added a browser regression covering the reset, preservation and reload.
+  Server tests (49), memory/chat, greeting, blocking and Chinese UI checks pass.
+  All 17 playthrough checks pass on isolated rerun; the initial concurrent run
+  timed out waiting for the final repeated-fishing encounter. Vocabulary and
+  quest definitions are byte-for-byte unchanged from f33e85b.
+  Speech/recording checks use synthetic browser APIs, not a physical microphone.
+
 # Warm Mario welcome — 2026-11-03
 
 - Default name is Mario, including missing/empty legacy saves; parent edits still

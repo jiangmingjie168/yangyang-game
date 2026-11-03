@@ -556,6 +556,7 @@
       <p>以本机时间每周一零点起算；只统计麦克风识别到的具体单词，不保存语音和原话。点选、未匹配的语音不计入词次数。记录保存在本设备存档中（最多最近 2000 条对话事件）；清空存档会删除记录。</p>
     </div>
     <p id="parent-memory"></p>
+    <button id="parent-reset-prefs" type="button">重置喜好（保留姓名和游戏进度）</button>
     <label for="parent-name">孩子的英文昵称（默认 Mario，最多两词）</label>
     <input id="parent-name" type="text" maxlength="33" autocomplete="off" placeholder="Mario" aria-describedby="parent-name-note">
     <p id="parent-name-note">只用英文字母和空格。昵称随存档保存在本机；启用在线伙伴时，昵称和最近游戏活动、识别文字会发给伙伴服务用于回应。识别原话不写入存档。</p>
@@ -4058,6 +4059,11 @@ function validConversation(value, p) {
     });
     tapButton(document.getElementById('parent-close'), closePanels);
     document.getElementById('parent-close').addEventListener('click', function (e) { if (e.detail === 0) closePanels(); });
+    document.getElementById('parent-reset-prefs').addEventListener('click', function () {
+      closeAmbient();
+      memory.prefs = blankMemory().prefs; memory.prefsLearnedAt = {};
+      save(); showParentPage(document.getElementById('parent-info').hidden);
+    });
     document.getElementById('parent-name').addEventListener('input', function (e) { childName = cleanName(e.target.value) || 'Mario'; if (childName !== 'Mario') { memory.name_asked = true; if (nameFlow) finishName(childName); } saveSoon(); });
     function parentSkip() {
       if (document.getElementById('parent-help').hidden) return;
