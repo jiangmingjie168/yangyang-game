@@ -221,15 +221,15 @@ async function heldMove(p,dir,ms) { await p.keyboard.down(dir); await sleep(p,ms
   await heldMove(offline,'ArrowLeft',450);assert(await offline.evaluate(()=>BW.layout().started));
   await photo(offline,'offline-landscape');await check(offline);await offlineContext.close();
   report('Offline file:// start and movement; short landscape layout');
-  // Repeated fishing must naturally retrieve an older word from the same setting.
+  // Repeated fishing keeps the event noun; older words remain distractors.
   const repeat=await fresh(chapter3);await relocate(repeat,3830);await select(repeat,'rod');await mine(repeat,121,16);
   let first=await waitChat(repeat,'fish');assert.equal(first.key,'fish');
   await repeat.locator('#chat-options [data-word="fish"]').click();await sleep(repeat,1900);
   const reviewSave=await snapshot(repeat);assert.equal(reviewSave.adventure.reviews.fish.n,1);
   await repeat.reload();await repeat.click('#btn-start'); if(await repeat.locator('#name-entry').isVisible())await repeat.click('#welcome-play');await sleep(repeat,250);await select(repeat,'rod');await mine(repeat,121,16);
-  let second=await waitChat(repeat,'fish');assert.equal(second.key,'water');
+  let second=await waitChat(repeat,'fish');assert.equal(second.key,'fish');
   assert(second.options.some(k=>['wood','stone','tree'].includes(k)));await check(repeat);await repeat.context().close();
-  report('Spiral recurrence: fish encounter revisits earlier water/wood after save/resume');
+  report('Repeated fish encounter keeps fish as target and earlier words as distractors after save/resume');
   fs.writeFileSync(path.join(SCREEN,'test-results.json'),JSON.stringify({browser:'Headless Chromium',fixtures:'Seed 42; tools/materials and travel checkpoints supplied; mission flags earned by inputs; fake recognition explicitly marked',results},null,2)+'\n');
   console.log('ALL',results.length,'CHECKS PASSED');
 })().catch(async e=>{console.error(e);for(const context of browser?.contexts()||[]){for(const p of context.pages()){await p.screenshot({path:'/tmp/bw-failure-'+serial+++'.png'}).catch(()=>{});console.error(await p.evaluate(()=>({ch:window.BW?.ch3(),adventure:window.BW?.adventure(),player:window.BW?.player()})).catch(()=>({})));}}process.exitCode=1}).finally(async()=>{await browser?.close()});

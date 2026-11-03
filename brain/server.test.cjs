@@ -26,7 +26,9 @@ async function scenario(replies, request = input, config = {}) {
   try {
     const start = Date.now();
     const response = await fetch(base + '/buddy', { method: 'POST', headers: { 'Content-Type': 'application/json', Origin: 'https://game.example' }, body: JSON.stringify(request) });
-    return { value: response.status === 200 ? await response.json() : null, status: response.status, calls, elapsed: Date.now() - start, cors: response.headers.get('access-control-allow-origin'), source: response.headers.get('x-buddy-source'), expose: response.headers.get('access-control-expose-headers') };
+    const body = response.status === 200 ? await response.json() : null;
+    const audio_url = body && body.audio_url; if (body) delete body.audio_url;
+    return { audio_url, value: body, status: response.status, calls, elapsed: Date.now() - start, cors: response.headers.get('access-control-allow-origin'), source: response.headers.get('x-buddy-source'), expose: response.headers.get('access-control-expose-headers') };
   } finally { await close(server); await close(upstream); }
 }
 test('valid JSON uses configured model, JSON mode, prompt and CORS', async () => {
@@ -138,8 +140,8 @@ test('HTTP route, media type, method, body limit, and exact origin policy', asyn
 });
 
 test('context leads use validated facts, name and matched speech; provider provenance is exposed', async () => {
-  const p = normalize({ ...input, child_name: 'Alex', recent_events: [{action:'caught',word:'fish'}], last_answer:'wood', recent_lines:['Fish or wood?'] });
-  for (const say of ['Alex, you caught a fish! Fish or wood?', 'Remember wood? Fish or wood?']) {
+  const p = normalize({ ...input, child_name: 'Alex', recent_events: [{action:'caught',word:'fish'}], last_answer:'fish', recent_lines:['Fish or wood?'] });
+  for (const say of ['Alex, you caught a fish! Fish or wood?', 'Remember fish? Fish or wood?']) {
     const v = {...template(p),say}; assert(validOutput(v,p));
     const r = await scenario([v],p);assert.deepEqual(r.value,v);assert.equal(r.source,'brain');assert.match(r.expose,/X-Buddy-Source/);
     const sent=JSON.parse(r.calls[0].messages[1].content);assert(sent.context_leads.includes('Alex, you caught a fish!'));assert.deepEqual(sent.recent_lines,['Fish or wood?']);
@@ -261,4 +263,33 @@ test('recasts frame only nouns and use fishing rod in both coached tiers', async
     const result = await scenario([expected], p);
     assert.equal(result.source, 'brain'); assert.deepEqual(result.value, expected);
   }
+});
+
+test('context action and remembered noun must match the exercise target', () => {
+  const { contextLeads } = require('./server.cjs');
+  const p = normalize({...input, target_word:'wood', recent_events:[{action:'met',word:'fish'}],last_answer:'fish'});
+  assert.deepEqual(contextLeads(p),[]);
+  assert.equal(validOutput({...template(p),say:'You met a fish! Wood or fish?'},p),false);
+  const match=normalize({...input,recent_events:[{action:'caught',word:'fish'}]});
+  assert.deepEqual(contextLeads(match),['You caught a fish!']);
+});
+
+test('voice metadata uses stable text hashes; static audio, HEAD, CORS and missing files', async () => {
+  const {audioHash,withAudio}=require('./server.cjs');
+  const {createHash}=require('node:crypto');
+  assert.equal(audioHash(' Dog '),createHash('sha256').update('dog').digest('hex').slice(0,20));
+  const p=normalize({event:'name_ask'}),r=withAudio(template(p));
+  assert.match(r.audio_url,/^https:\/\/brain\.yydriver\.cn\/audio\/[a-f0-9]{20}\.mp3$/);
+  assert.equal(withAudio({say:'A completely unknown name line.'}).audio_url,undefined);
+  const s=createServer({key:'',origins:['https://game.example']}),base=await listen(s);
+  try {
+    const audio=await fetch(base+new URL(r.audio_url).pathname,{headers:{Origin:'https://game.example'}});
+    assert.equal(audio.status,200);assert.equal(audio.headers.get('content-type'),'audio/mpeg');
+    assert.equal(audio.headers.get('access-control-allow-origin'),'https://game.example');assert((await audio.arrayBuffer()).byteLength>1000);
+    const head=await fetch(base+new URL(r.audio_url).pathname,{method:'HEAD'});assert.equal(head.status,200);assert.equal((await head.arrayBuffer()).byteLength,0);
+    assert.equal((await fetch(base+'/audio/'+'0'.repeat(20)+'.mp3')).status,404);
+    assert.equal((await fetch(base+'/audio/../server.cjs')).status,404);
+    const reply=await fetch(base+'/buddy',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(p)});
+    assert.equal((await reply.json()).audio_url,r.audio_url);
+  } finally {await close(s);}
 });

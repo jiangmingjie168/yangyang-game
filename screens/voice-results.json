@@ -1,0 +1,107 @@
+{
+  "status": "PASS",
+  "decoded": [
+    {
+      "text": "grass",
+      "seconds": 1.872
+    },
+    {
+      "text": "dirt",
+      "seconds": 1.872
+    },
+    {
+      "text": "stone",
+      "seconds": 1.872
+    },
+    {
+      "text": "wood",
+      "seconds": 1.872
+    },
+    {
+      "text": "leaves",
+      "seconds": 1.872
+    },
+    {
+      "text": "sand",
+      "seconds": 1.872
+    },
+    {
+      "text": "water",
+      "seconds": 1.872
+    },
+    {
+      "text": "flower",
+      "seconds": 1.872
+    },
+    {
+      "text": "planks",
+      "seconds": 1.872
+    },
+    {
+      "text": "stick",
+      "seconds": 1.872
+    },
+    {
+      "text": "table",
+      "seconds": 1.872
+    },
+    {
+      "text": "door",
+      "seconds": 1.872
+    },
+    {
+      "text": "torch",
+      "seconds": 1.872
+    },
+    {
+      "text": "bed",
+      "seconds": 1.872
+    },
+    {
+      "text": "house",
+      "seconds": 1.872
+    },
+    {
+      "text": "wool",
+      "seconds": 1.872
+    },
+    {
+      "text": "tree",
+      "seconds": 1.872
+    },
+    {
+      "text": "cow",
+      "seconds": 1.872
+    },
+    {
+      "text": "pig",
+      "seconds": 1.872
+    },
+    {
+      "text": "sheep",
+      "seconds": 1.872
+    }
+  ],
+  "stats": {
+    "brain": 0,
+    "template": 0,
+    "unknown": 2,
+    "requests": 2,
+    "limited": 0,
+    "audio": 4,
+    "tts": 3,
+    "reasons": {
+      "no-provenance": 2
+    }
+  },
+  "checks": [
+    "actual MP3 playback before TTS",
+    "20 MP3 decode checks",
+    "404 fallback once at rate .82",
+    "dynamic name fallback",
+    "off-origin rejection",
+    "late rejection canceled",
+    "context + L1 prompt audio metadata accepted",
+    "parent source counters"
+  ]
+}

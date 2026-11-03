@@ -114,11 +114,11 @@ function report(text) { console.log('PASS', text); }
     const seed=next(fixture); seed.adventure.levels.tree={t1:tier>=2?2:0,t2:tier===3?2:0,t3:0};
     p=await page(seed,{endpoint:brainURL+'/buddy'}); const d=await chat(p); assert.equal(d.tier,tier);
     assert((await p.locator('#chat-question').innerText()).startsWith('Nice!'), JSON.stringify({tier, say: await p.locator('#chat-question').innerText(), calls: upstreamCalls.slice(-2),network:p.network,endpoint:await p.evaluate(()=>BRAIN_URL)}));
-    assert((await p.evaluate(()=>spoken)).some(s=>s.startsWith('Nice!')));
+    await p.waitForFunction(()=>spoken.some(s=>s.startsWith('Nice!')) || BW.adventure().brain.audio>0);
     await voice(p,'tree'); assert.equal((await snapshot(p)).adventure.levels.tree['t'+tier],1); await checkClose(p);
   }
   assert.match(upstreamCalls[1].messages.at(-1).content,/Correction/);
-  report('all tiers browser -> HTTP buddy -> mock DeepSeek, corrective retry, validated bubble and TTS');
+  report('all tiers browser -> HTTP buddy -> mock DeepSeek, corrective retry, validated bubble and audio/TTS');
   const invalid = [p=>({...template(normalize(p)),say:'你好'}), p=>({...template(normalize(p)),options:['tree','cat']}), p=>({...template(normalize(p)),answer:'wood'}), p=>({...template(normalize(p)),done:true}), p=>({...template(normalize(p)),say:'Tree or wood? rocket'}), p=>({...template(normalize(p)),reward:100}), '{bad json'];
   for(const reply of invalid) { p=await page(next(fixture),{endpoint:URL+'/mock-buddy',reply}); await chat(p); assert.equal(await p.locator('#chat-question').innerText(),'Tree or wood?'); await checkClose(p); }
   p=await page(next(fixture),{endpoint:'http://127.0.0.1:1/buddy'}); await chat(p); assert.equal(await p.locator('#chat-question').innerText(),'Tree or wood?'); await checkClose(p);

@@ -1,0 +1,78 @@
+{
+  "before": {
+    "revision": "cbfe256",
+    "expectedResult": "FAIL",
+    "evidence": "real-pointer fresh name entry: KeyD dx=0"
+  },
+  "after": [
+    {
+      "suite": "real-pointer",
+      "status": "PASS",
+      "seconds": 15.21
+    },
+    {
+      "suite": "voice",
+      "status": "PASS",
+      "seconds": 4.4
+    },
+    {
+      "suite": "landscape",
+      "status": "PASS",
+      "seconds": 4.87
+    },
+    {
+      "suite": "memory-chat",
+      "status": "PASS",
+      "seconds": 19.06
+    },
+    {
+      "suite": "greeting",
+      "status": "PASS",
+      "seconds": 8.17
+    },
+    {
+      "suite": "blocking-ai",
+      "status": "PASS",
+      "seconds": 43.88
+    },
+    {
+      "suite": "brain-v2",
+      "status": "PASS",
+      "rerun": "Updated integration assertion to accept actual audio playback or TTS; rerun passed."
+    },
+    {
+      "suite": "chinese-cleanup",
+      "status": "PASS",
+      "seconds": 4.76
+    },
+    {
+      "suite": "world-v2",
+      "status": "PASS",
+      "seconds": 16.47
+    },
+    {
+      "suite": "playthrough",
+      "status": "PASS",
+      "seconds": 84.11
+    },
+    {
+      "suite": "baseline",
+      "status": "PASS",
+      "seconds": 11.42
+    }
+  ],
+  "backend": {
+    "status": "PASS",
+    "tests": 51,
+    "local": true,
+    "deploymentHost": true
+  },
+  "live": {
+    "suite": "brain-ratio",
+    "status": "PASS",
+    "brain": 11,
+    "template": 2,
+    "ratio": "11/13",
+    "evidence": "screens/fix-v3-brain-ratio.json"
+  }
+}

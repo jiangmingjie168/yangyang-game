@@ -111,16 +111,16 @@ async function done(p){assert.deepEqual(p.errors,[]);assert.equal(await p.evalua
   p=await page({endpoint:URL+'/mock-buddy',delay:300,timeout:80});await trigger(p);assert.equal((await p.evaluate(()=>BW.adventure().brain)).reasons.timeout,1);await p.locator('[data-word=tree]').click();await p.waitForFunction(()=>!BW.adventure().active?.pending);assert((await p.evaluate(()=>BW.adventure().active)).answered);await done(p);
   report('pending prompts already block; parent skip cancels late replies; timeout restores usable local answer buttons');
   p=await page({endpoint:URL+'/mock-buddy',reply:q=>{
-    const v=template(normalize(q)),lead=q.feedback==='success'?'You said tree!':'Alex, you found wood!';return {...v,say:(v.done?'Nice! ':'')+lead+' '+v.say.replace(/^Great! /,'')};
+    const v=template(normalize(q)),lead=q.feedback==='success'?'You said tree!':'Alex!';return {...v,say:(v.done?'Nice! ':'')+lead+' '+v.say.replace(/^Great! /,'')};
   }});
   await p.click('#btn-zh');await p.fill('#parent-name','Alex');await p.click('#parent-close');await trigger(p);
-  assert.match(await p.locator('#chat-question').innerText(),/Alex, you found wood!/);assert.equal(p.calls[0].child_name,'Alex');assert(p.calls[0].recent_events.some(e=>e.action==='found'&&e.word==='wood'));
+  assert.match(await p.locator('#chat-question').innerText(),/Alex!/);assert.equal(p.calls[0].child_name,'Alex');assert(p.calls[0].recent_events.some(e=>e.action==='found'&&e.word==='wood'));assert(!contextLeads(normalize(p.calls[0])).some(line=>/found wood/.test(line)));
   await p.screenshot({path:'screens/ai-context-line.png'});
   await p.click('#chat-mic');await p.evaluate(()=>recognizer.onresult({resultIndex:0,results:[[{transcript:'I see a tree'}]]}));await p.waitForFunction(()=>!BW.adventure().active.pending);
   assert.match(await p.locator('#chat-question').innerText(),/You said tree!/);assert.equal(p.calls[1].child_said,'I see a tree');assert.equal(p.calls[1].spoken_word,'tree');assert.equal(p.calls[1].recent_lines.length,1);
   const persisted=await snapshot(p);assert.equal(persisted.child_name,'Alex');assert(!JSON.stringify(persisted).includes('I see a tree'));assert.equal((await p.evaluate(()=>BW.adventure().brain)).brain,2);
   await p.reload();await p.click('#btn-start'); if(await p.locator('#name-entry').isVisible())await p.click('#welcome-play');await p.click('#btn-zh');assert.equal(await p.inputValue('#parent-name'),'Alex');await done(p);
-  report('name + real mined block + recognized answer reach brain, validated contextual bubble/TTS and accurate provenance; raw transcript stays out of saves');
+  report('name + real mined block + recognized answer reach brain without mismatched wood lead, validated contextual bubble/TTS and accurate provenance; raw transcript stays out of saves');
   // Exhaust the per-minute budget using repeated encounters in the same session.
   // Test-only opening hook is injected below; production exposes no mutation hook.
   const budgetHTML=source.replace("ready: true,","ready: true, testOpen: () => openChat({anchor:'task',key:'tree'}),");

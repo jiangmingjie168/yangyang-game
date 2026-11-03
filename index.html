@@ -504,7 +504,7 @@
     <canvas id="welcome-face" width="128" height="128" aria-hidden="true"></canvas>
     <p id="welcome-line" role="status" aria-live="polite"></p>
     <div id="name-entry" hidden>
-      <form id="name-form"><label for="name-input">Your name</label><input id="name-input" type="text" maxlength="33" autocomplete="off" placeholder="Mario"><button id="name-mic" type="button" aria-label="Say your name"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="2" width="6" height="12" rx="3" fill="currentColor"/><path d="M5 10v2a7 7 0 0 0 14 0v-2M12 19v3m-4 0h8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button><button type="submit">Hi!</button></form>
+      <form id="name-form"><label for="name-input">Your name</label><input id="name-input" type="text" maxlength="33" autocomplete="off" placeholder="Your name"><button id="name-mic" type="button" aria-label="Say your name"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="2" width="6" height="12" rx="3" fill="currentColor"/><path d="M5 10v2a7 7 0 0 0 14 0v-2M12 19v3m-4 0h8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button><button type="submit">Hi!</button></form>
       <p id="name-hint" role="status" hidden>You can say it or tap!</p>
       <div id="name-letters" aria-label="Tap letters"></div>
     </div>
@@ -545,7 +545,7 @@
     </div>
     <p id="parent-memory"></p>
     <button id="parent-reset-prefs" type="button">重置喜好（保留姓名和游戏进度）</button>
-    <label for="parent-name">孩子的英文昵称（默认 Mario，最多两词）</label>
+    <label for="parent-name">孩子的英文昵称（可留空，最多两词）</label>
     <input id="parent-name" type="text" maxlength="33" autocomplete="off" placeholder="Mario" aria-describedby="parent-name-note">
     <p id="parent-name-note">只用英文字母和空格。昵称随存档保存在本机；启用在线伙伴时，昵称和最近游戏活动、识别文字会发给伙伴服务用于回应。识别原话不写入存档。</p>
     <p id="brain-status"></p>
@@ -739,13 +739,14 @@ const BRAIN_TIMEOUT_MS = 6500;
   var trail = { found: {}, reviews: {}, turns: 0, scenes: {}, levels: {}, speaking: [], rounds: 0, lastRound: {} };
   var trailPickupDelay = 0;
   var reducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var seek = null, joyId = null;
   var trailSpots = [], dialogue = null, chatQueue = [], chatIdle = 0, chatCooldown = 0;
   var chatClock = 0, chatRecognizer = null, chatTimer = null, recognitionTimer = null, chatLastInput = 0;
   var taskSnapshot = null, followTravel = 0, followLastX = 0, followReady = false;
   var boatStartX = null, boatLanding = false, sceneNow = '';
-  var childName = 'Mario', recentEvents = [], recentLines = [], lastAnswer = '';
+  var childName = '', recentEvents = [], recentLines = [], lastAnswer = '';
   var welcome = null, lastGreeting = { id: -1, text: '' }, returningVisit = false;
-  var brainStats = { brain: 0, template: 0, unknown: 0, requests: 0, limited: 0, reasons: {} };
+  var brainStats = { brain: 0, template: 0, unknown: 0, requests: 0, limited: 0, audio: 0, tts: 0, reasons: {} };
   var brainWindowAt = 0, brainWindowCalls = 0, brainSessionCalls = 0;
   try {
     var budget = JSON.parse(sessionStorage.getItem('block-world-brain-session-v1') || '{}');
@@ -782,7 +783,7 @@ function conversationLines(p) {
 }
 function conversationTemplate(p) { return { say: conversationLines(p)[0], options: [], answer: null, done: true }; }
 function validConversation(value, p) {
-  return !!value && Object.keys(value).sort().join(',') === 'answer,done,options,say' &&
+  return !!value && Object.keys(value).filter(function (key) { return key !== 'audio_url'; }).sort().join(',') === 'answer,done,options,say' &&
     Array.isArray(value.options) && value.options.length === 0 && value.answer === null && value.done === true &&
     typeof value.say === 'string' && value.say.length <= 160 && !/[^\x20-\x7e]/.test(value.say) &&
     (value.say.match(/[A-Za-z]+/g) || []).length >= 3 &&
@@ -790,7 +791,7 @@ function validConversation(value, p) {
 }
 
   var memory = blankMemory(), ambient = null, nameFlow = null, socialRecognizer = null, socialWatchdog = null;
-  var socialLastInput = Date.now(), weatherPending = false;
+  var socialLastInput = Date.now(), weatherPending = false, startedAt = 0;
   function blankMemory() { return { prefs: { color: null, animal: null, food: null, build: null }, prefsLearnedAt: {}, name_asked: false, chat_day: '', small_talk_count: 0, weather_chat_done: false }; }
   function localChatDay() { var d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
   function resetChatDay() {
@@ -798,7 +799,7 @@ function validConversation(value, p) {
     if (memory.chat_day !== today) { memory.chat_day = today; memory.small_talk_count = 0; memory.weather_chat_done = false; saveSoon(); }
   }
   function restoreMemory(data) {
-    memory = blankMemory(); memory.name_asked = data.name_asked === true || childName !== 'Mario';
+    memory = blankMemory(); memory.name_asked = data.name_asked === true || !!childName;
     Object.keys(PREF_VALUES).forEach(function (slot) {
       var value = data.prefs && data.prefs[slot], at = data.prefsLearnedAt && data.prefsLearnedAt[slot];
       if (PREF_VALUES[slot].indexOf(value) >= 0) memory.prefs[slot] = value;
@@ -819,7 +820,7 @@ function validConversation(value, p) {
     if (trigger === 'speech') return 'recast';
     return 'idle';
   }
-  function socialPayload(event) { return { event: event, child_name: childName, scene: sceneNow || 'grass', prefs: Object.assign({}, memory.prefs), recent_events: recentEvents.slice(-6) }; }
+  function socialPayload(event) { return { event: event, child_name: childName || undefined, scene: sceneNow || 'grass', prefs: Object.assign({}, memory.prefs), recent_events: recentEvents.slice(-6) }; }
   function micRecording(id, active) { document.getElementById(id).classList.toggle('mic-recording', active); }
   function stopSocialListening() {
     clearTimeout(socialWatchdog); socialWatchdog = null;
@@ -829,6 +830,7 @@ function validConversation(value, p) {
   }
   function cancelSocial(w) { if (!w) return; clearTimeout(w.timer); clearTimeout(w.hintTimer); clearTimeout(w.deadline); if (w.controller) w.controller.abort(); }
   function closeAmbient() {
+    if (ambient) cancelEnAudio();
     var active = ambient; cancelSocial(ambient); ambient = null; stopSocialListening();
     if (active && window.speechSynthesis) { try { speechSynthesis.cancel(); } catch (err) { /* optional */ } }
     document.getElementById('buddy-chat').hidden = true;
@@ -867,17 +869,18 @@ function validConversation(value, p) {
     fetchSocial(socialPayload('name_ask'), w, function () { return nameFlow === w; }, function (reply, voice) {
       if (nameFlow !== w) return;
       document.getElementById('welcome-line').textContent = reply.say;
-      if (voice) speakEn(reply.say, { soft: true });
+      if (voice) speakEn(reply.say, { audio_url: reply.audio_url, soft: true });
     });
     armNameTimer();
     w.hintTimer = setTimeout(function () { if (nameFlow === w) document.getElementById('name-hint').hidden = false; }, 10000);
   }
   function finishName(value) {
     if (!nameFlow) return;
-    childName = cleanName(value) || cleanName(document.getElementById('name-input').value) || childName || 'Mario'; memory.name_asked = true;
+    childName = cleanName(value); memory.name_asked = true;
+    releaseChatInput();
     cancelSocial(nameFlow); nameFlow = null; stopSocialListening();
     document.getElementById('name-entry').hidden = true; document.getElementById('welcome').hidden = true;
-    document.getElementById('parent-name').value = childName; save(); openGreeting();
+    document.getElementById('parent-name').value = childName; save(); if (childName) openGreeting();
   }
   function showAmbient(p) {
     if (dialogue || quiz || nameFlow) return false;
@@ -897,7 +900,7 @@ function validConversation(value, p) {
       if (!voice) return;
       var practiceMs = p.event === 'recast' && p.target_tier === 1 ? 9000 : 3000;
       clearTimeout(w.timer); w.timer = setTimeout(closeAmbient, 14000);
-      var utterance = speakEn(reply.say, { soft: true, onend: function () { if (ambient === w) { clearTimeout(w.timer); w.timer = setTimeout(closeAmbient, practiceMs); } } });
+      var utterance = speakEn(reply.say, { audio_url: reply.audio_url, soft: true, onend: function () { if (ambient === w) { clearTimeout(w.timer); w.timer = setTimeout(closeAmbient, practiceMs); } } });
       if (!utterance) { clearTimeout(w.timer); w.timer = setTimeout(closeAmbient, practiceMs); }
     });
     return true;
@@ -925,7 +928,7 @@ function validConversation(value, p) {
     return showAmbient(p);
   }
   function weatherChat() {
-    if (determineMode('weather') !== 'weather_chat' || welcome || ambient) return false;
+    if (Date.now() - startedAt < 60000 || determineMode('weather') !== 'weather_chat' || welcome || ambient) return false;
     var p = socialPayload('weather_chat');
     p.weather = weatherKey();
     p.time_of_day = nightFactor(timeOfDay) >= 0.6 ? 'evening' : timeOfDay < 0.5 ? 'morning' : 'afternoon';
@@ -947,6 +950,7 @@ function validConversation(value, p) {
       var r = new SR(); socialRecognizer = r; r.lang = 'en-US'; r.interimResults = false; r.continuous = false;
       document.getElementById(n ? 'name-mic' : 'buddy-mic').disabled = true;
       r.onstart = function () { if (socialRecognizer === r) micRecording(n ? 'name-mic' : 'buddy-mic', true); };
+      cancelEnAudio();
       if (window.speechSynthesis) speechSynthesis.cancel();
       r.onresult = function (e) {
         var result = e.results[e.resultIndex || 0], said = result && result[0] && result[0].transcript;
@@ -1011,7 +1015,7 @@ function validConversation(value, p) {
     return { say: text, options: [], answer: null, done: true };
   }
   function safeGreeting(reply, p) {
-    return !!reply && Object.keys(reply).sort().join(',') === 'answer,done,options,say' &&
+    return !!reply && Object.keys(reply).filter(function (key) { return key !== 'audio_url'; }).sort().join(',') === 'answer,done,options,say' &&
       Array.isArray(reply.options) && reply.options.length === 0 && reply.answer === null && reply.done === true &&
       typeof reply.say === 'string' && reply.say.length <= 200 && !/[^\x20-\x7e]/.test(reply.say) &&
       (reply.say.match(/[A-Za-z]+(?:'[A-Za-z]+)?/g) || []).length <= 20 &&
@@ -1028,6 +1032,7 @@ function validConversation(value, p) {
   function dismissGreeting() {
     if (nameFlow) return;
     var w = welcome; welcome = null;
+    if (w) cancelEnAudio();
     document.getElementById('welcome').hidden = true;
     if (!w) return;
     if (weatherPending) { weatherPending = false; setTimeout(weatherChat, 500); }
@@ -1037,9 +1042,9 @@ function validConversation(value, p) {
   }
   function openGreeting() {
     dismissGreeting();
-    resetChatDay(); weatherPending = !memory.weather_chat_done && Math.random() < 0.3;
-    childName = cleanName(childName) || 'Mario';
-    var hour = new Date().getHours(), p = { event: 'greet', child_name: childName,
+    resetChatDay(); weatherPending = false;
+    childName = cleanName(childName);
+    var hour = new Date().getHours(), p = { event: 'greet', child_name: childName || undefined,
       time_of_day: hour < 12 ? 'morning' : hour < 18 ? 'afternoon' : 'evening', returning: returningVisit,
       greeting_id: (lastGreeting.id + 1) % 4, last_greeting: lastGreeting.text };
     var expected = greetingTemplate(p), w = { controller: typeof AbortController !== 'undefined' ? new AbortController() : null };
@@ -1053,7 +1058,7 @@ function validConversation(value, p) {
       clearTimeout(w.timer);
       // A fixed deadline also covers missing speech events and unsupported TTS.
       w.timer = setTimeout(dismissGreeting, 14000);
-      w.utterance = speakEn(reply.say, { soft: true, onend: function () {
+      w.utterance = speakEn(reply.say, { audio_url: reply.audio_url, soft: true, onend: function () {
         if (welcome !== w) return;
         clearTimeout(w.timer); w.timer = setTimeout(dismissGreeting, 900);
       } });
@@ -1097,7 +1102,7 @@ function validConversation(value, p) {
     var leads = [], name = d.context.child_name;
     if (name) leads.push(name + '!');
     var events = d.context.recent_events, e = events[events.length - 1];
-    if (e) {
+    if (e && e.word === d.key) {
       var verbs = { found: 'found', made: 'made', built: 'built', met: 'met', caught: 'caught', rode: 'rode', task: 'got', scene: 'see' };
       var label = WORD[e.word][0].toLowerCase(), mass = ['grass','dirt','stone','wood','leaves','sand','water','planks','wool','rain','wheat'];
       var noun = mass.indexOf(e.word) >= 0 ? label : (/^[aeiou]/.test(label) ? 'an ' : 'a ') + label;
@@ -1105,15 +1110,20 @@ function validConversation(value, p) {
       leads.push(phrase);
       if (name) leads.push(name + ', ' + phrase[0].toLowerCase() + phrase.slice(1));
     }
-    if (d.context.last_answer) leads.push('Remember ' + WORD[d.context.last_answer][0].toLowerCase() + '?');
+    if (d.context.last_answer === d.key) leads.push('Remember ' + WORD[d.context.last_answer][0].toLowerCase() + '?');
     if (d.feedback === 'success' && d.spokenKey) leads.push('You said ' + WORD[d.spokenKey][0].toLowerCase() + '!');
     return leads;
   }
   function countChatSource(source, reason) {
     brainStats[source]++; brainStats.reasons[reason] = (brainStats.reasons[reason] || 0) + 1;
   }
-  function chatBlocked() { return !!dialogue || !!nameFlow; }
+  function chatBlocked() { return !!dialogue; }
   function releaseChatInput() {
+    cancelEnAudio();
+    if (window.speechSynthesis) { try { speechSynthesis.cancel(); } catch (err) { /* optional */ } }
+    seek = null;
+    var joy = document.getElementById('joy');
+    if (joyId !== null) { try { joy.releasePointerCapture(joyId); } catch (err) { /* already released */ } joyId = null; }
     keys = {}; joyX = joyY = 0; jumpBuf = 0; joyJumpLatch = false;
     document.getElementById('joy-knob').style.transform = 'translate(0px,0px)';
   }
@@ -1319,13 +1329,7 @@ function validConversation(value, p) {
     var pool = chatWords();
     if (pool.length < 2) return;
     var target = allowedChatWord(event.key) ? event.key : oldWord(pool);
-    // Every second task/scene revisits a less recently used word from earlier play.
-    if ((event.anchor === 'task' || event.anchor === 'scene') && trail.turns % 2) target = oldWord(pool);
-    var contexts = { fish: ['fish', 'water', 'rod', 'sand'], pet: [event.key, 'pet', 'grass', 'flower', 'tree'], boat: ['boat', 'water', 'sand', 'wood', 'planks'] };
-    if (contexts[event.anchor] && trail.reviews[target]) {
-      var nearby = contexts[event.anchor].filter(allowedChatWord);
-      target = oldWord(nearby) || target;
-    }
+    // The first question stays with the event's anchor word.
     var other = oldWord(pool, target);
     var options = trail.turns % 2 ? [other, target] : [target, other];
     var level = trail.levels[target] || {};
@@ -1334,7 +1338,8 @@ function validConversation(value, p) {
     dialogue = { context: { child_name: childName || undefined, recent_events: recentEvents.filter(function (e) { return allowedChatWord(e.word); }).slice(-6), last_answer: allowedChatWord(lastAnswer) ? lastAnswer : undefined }, misses: 0, anchor: event.anchor, scene: sceneNow, key: target, options: options, tier: tier,
       turn: 0, at: chatClock, answered: false, pending: false, choices: tier === 1, sequence: 0 };
     paintIcon(document.getElementById('chat-face'), 'dog');
-    paintIcon(document.getElementById('chat-picture'), target);
+    document.getElementById('chat-picture').hidden = tier === 1;
+    if (tier !== 1) paintIcon(document.getElementById('chat-picture'), target);
     requestChat(dialogue, 'prompt');
   }
   function chatTemplate(d, feedback) {
@@ -1350,7 +1355,7 @@ function validConversation(value, p) {
     return { say: say, options: d.options.slice(), answer: d.key, done: done };
   }
   function safeBrainReply(reply, expected, d, feedback) {
-    if (!reply || Object.keys(reply).sort().join(',') !== 'answer,done,options,say' || typeof reply.say !== 'string' || typeof reply.done !== 'boolean' ||
+    if (!reply || Object.keys(reply).filter(function (key) { return key !== 'audio_url'; }).sort().join(',') !== 'answer,done,options,say' || typeof reply.say !== 'string' || typeof reply.done !== 'boolean' ||
         reply.done !== expected.done || reply.answer !== d.key || !Array.isArray(reply.options) ||
         JSON.stringify(reply.options) !== JSON.stringify(d.options) || !reply.options.every(allowedChatWord)) return false;
     var tokens = reply.say.toLowerCase().match(/[a-z]+(?:'[a-z]+)?/g) || [];
@@ -1375,6 +1380,9 @@ function validConversation(value, p) {
   }
   function renderChat(d, reply, quiet) {
     if (dialogue !== d) return;
+    document.getElementById('chat-picture').hidden = d.choices || d.tier === 1;
+    document.getElementById('chat-face').hidden = d.choices || d.tier === 1;
+    d.audio_url = reply.audio_url;
     d.pending = false; d.controller = null; d.question = d.reveal && !reply.done ? "Let's say " + WORD[d.key][0].toLowerCase() + ' together!' : reply.say; d.at = chatClock;
     document.getElementById('chat-question').textContent = d.question;
     document.getElementById('chat-status').textContent = d.answered ? '★ ★ ★' : (d.reveal ? 'Tap ' + WORD[d.key][0] + ' or say it with me.' : d.hint ? 'Good try! Look at the glowing answer.' : '');
@@ -1399,7 +1407,7 @@ function validConversation(value, p) {
     document.body.classList.add('chat-blocked');
     document.getElementById('parent-skip').hidden = d.answered;
     if (reply.done) { d.answered = true; chatTimer = setTimeout(closeChat, 1800); }
-    if (!quiet) speakEn(d.question);
+    if (!quiet) speakEn(d.question, { audio_url: !d.reveal ? d.audio_url : undefined });
   }
   function requestChat(d, feedback, childSaid, spokenKey) {
     d.feedback = feedback; d.spokenKey = spokenKey;
@@ -1511,6 +1519,7 @@ function validConversation(value, p) {
     var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
     var status = document.getElementById('chat-status');
     if (!SR) { speechFallback(); return; }
+    cancelEnAudio();
     if (window.speechSynthesis) { try { speechSynthesis.cancel(); } catch (err) { /* optional */ } }
     try {
       var active = dialogue, r = new SR(); chatRecognizer = r;
@@ -1545,7 +1554,7 @@ function validConversation(value, p) {
   }
   function bindDialogue() {
     tapButton(document.getElementById('chat-close'), closeChat);
-    tapButton(document.getElementById('chat-listen'), function () { if (dialogue) speakEn(dialogue.question); });
+    tapButton(document.getElementById('chat-listen'), function () { if (dialogue) speakEn(dialogue.question, { audio_url: !dialogue.reveal ? dialogue.audio_url : undefined }); });
     tapButton(document.getElementById('chat-mic'), listenChat);
     tapButton(document.getElementById('chat-choices'), showChatChoices);
     tapButton(document.getElementById('chat-confirm'), confirmChat);
@@ -1556,7 +1565,7 @@ function validConversation(value, p) {
       if (!b) return;
       if (b.dataset.word) answerChat(b.dataset.word);
       else if (b.id === 'chat-close') closeChat();
-      else if (b.id === 'chat-listen' && dialogue) speakEn(dialogue.question);
+      else if (b.id === 'chat-listen' && dialogue) speakEn(dialogue.question, { audio_url: !dialogue.reveal ? dialogue.audio_url : undefined });
       else if (b.id === 'chat-mic') listenChat();
       else if (b.id === 'chat-choices') showChatChoices();
       else if (b.id === 'chat-confirm') confirmChat();
@@ -1565,7 +1574,7 @@ function validConversation(value, p) {
   function adventureStep(dt) {
     chatCooldown = Math.max(0, chatCooldown - dt);
     trailPickupDelay = Math.max(0, trailPickupDelay - dt);
-    var moving = axis() !== 0 || !onGround || riding || inWater() || fishing || jumpBuf > 0;
+    var moving = !!seek || !!enAudio || axis() !== 0 || !onGround || riding || inWater() || fishing || jumpBuf > 0;
     var safe = !moving && !quiz && !(window.speechSynthesis && speechSynthesis.speaking) && chatClock - chatLastInput > 0.9;
     chatIdle = safe ? chatIdle + dt : 0;
     // Unanswered dialogue is dismissed only by an answer or explicit parent skip.
@@ -2018,6 +2027,8 @@ function validConversation(value, p) {
     if (riding) { player.anim += dt * 2; return; }
     var water = inWater();
     var ax = axis();
+    if (ax) seek = null; // Direct movement always takes over from a tap.
+    else if (seek) ax = seekStep(dt);
     if (ax) player.dir = ax > 0 ? 1 : -1;
     if (!onGround) {
       player.vy += (water ? GRAV * 0.42 : GRAV) * dt;
@@ -2444,6 +2455,27 @@ function validConversation(value, p) {
     updateQuest();
     saveSoon();
   }
+  function petReach(a) { return Math.hypot(a.x - player.x, a.y - player.y) <= 64; }
+  function seekMine(tx, ty) {
+    if (inReach(tx, ty)) mine(tx, ty);
+    else seek = { kind: 'mine', tx: tx, ty: ty, left: 6 };
+  }
+  // A bounded horizontal seek uses the same collision and step-up path as keys.
+  // Unreachable heights/obstacles time out; no teleporting or identify-only success.
+  function seekStep(dt) {
+    var s = seek; s.left -= dt;
+    if (s.left <= 0 || (s.kind === 'mine' && !mineable(get(s.tx, s.ty)))) { seek = null; return 0; }
+    var reached = s.kind === 'pet' ? petReach(s.animal) : inReach(s.tx, s.ty);
+    if (reached) {
+      seek = null;
+      if (s.kind === 'pet') pet(s.animal); else mine(s.tx, s.ty);
+      return 0;
+    }
+    var x = s.kind === 'pet' ? s.animal.x : (s.tx + 0.5) * TILE;
+    if (Math.abs(x - player.x) < 4) return 0;
+    if (onGround && collides(player.x + Math.sign(x - player.x) * 8, player.y)) jumpBuf = 0.16;
+    return x > player.x ? 1 : -1;
+  }
   function tapWorld(wx, wy, sx, sy) {
     if (boat) {
       var bdx = wx - boat.x, bdy = wy - (boat.y - 8);
@@ -2454,11 +2486,12 @@ function validConversation(value, p) {
       }
     }
     if (riding) return;
+    seek = null;
     var cropX = Math.floor(wx / TILE), cropY = Math.floor(wy / TILE), cropId = get(cropX, cropY);
     // A direct tap on a crop should reach it even when a pet stands in front.
     if (cropId === WHEAT1 || cropId === WHEAT2 || cropId === WHEAT3) {
       lock = { tx: cropX, ty: cropY }; lockAge = 0;
-      mine(cropX, cropY); return;
+      seekMine(cropX, cropY); return;
     }
     var best = null, bd = 38 * 38, i;
     for (i = 0; i < animals.length; i++) {
@@ -2466,13 +2499,17 @@ function validConversation(value, p) {
       var dx = a.x - wx, dy = (a.y - 16) - wy, d = dx * dx + dy * dy;
       if (d < bd) { bd = d; best = a; }
     }
-    if (best) { pet(best); return; }
+    if (best) {
+      if (petReach(best)) pet(best);
+      else seek = { kind: 'pet', animal: best, left: 6 };
+      return;
+    }
     var tx = Math.floor(wx / TILE), ty = Math.floor(wy / TILE);
     var id = get(tx, ty);
     if (id !== AIR) {
       lock = { tx: tx, ty: ty };
       lockAge = 0;
-      if (mineable(id)) mine(tx, ty);
+      if (mineable(id)) seekMine(tx, ty);
       return;
     }
     if (sy < viewH * 0.48) {
@@ -3338,24 +3375,82 @@ function validConversation(value, p) {
     } catch (err) { /* ignore */ }
     return null;
   }
+  var voiceIndex = {}, enAudio = null, speechSerial = 0;
+  function cancelEnAudio() {
+    speechSerial++;
+    if (enAudio) { clearTimeout(enAudio.voiceTimer); enAudio.onended = enAudio.onerror = null; enAudio.pause(); enAudio = null; }
+  }
+  function loadVoiceIndex() {
+    if (!BRAIN_URL) return;
+    fetch(new URL('/audio/index.json', BRAIN_URL).href, { credentials: 'omit' }).then(function (r) { return r.ok ? r.json() : {}; }).then(function (map) {
+      if (map && typeof map === 'object' && !Array.isArray(map)) voiceIndex = map;
+    }).catch(function () { /* Offline speech stays available. */ });
+  }
   function speakEn(text, params) {
+    if (!speechOn) return;
+    params = params || {};
+    cancelEnAudio();
+    if (window.speechSynthesis) speechSynthesis.cancel();
+    var serial = speechSerial;
+    var normalized = text.trim().toLowerCase(), urls = [], remainder = normalized;
+    if (params.audio_url) urls = [params.audio_url];
+    else if (BRAIN_URL) {
+      // Greedy rule-owned atoms cover praise + matching context + exercise without
+      // generating their combinatorial cross-product. Names use whole-line TTS.
+      var atoms = Object.keys(voiceIndex).sort(function (a, b) { return b.length - a.length; });
+      while (remainder) {
+        var atom = atoms.find(function (line) { return remainder === line || remainder.indexOf(line + ' ') === 0; });
+        if (!atom || !/^[a-f0-9]{20}$/.test(voiceIndex[atom])) { urls = []; break; }
+        urls.push(new URL('/audio/' + voiceIndex[atom] + '.mp3', BRAIN_URL).href);
+        remainder = remainder.slice(atom.length).trim();
+      }
+    }
+    // Only the configured brain origin may supply audio; validation still owns say.
+    var safe = false;
+    try { safe = urls.length > 0 && !!BRAIN_URL && urls.every(function (url) { return new URL(url).origin === new URL(BRAIN_URL).origin && /^\/audio\/[a-f0-9]{20}\.mp3$/.test(new URL(url).pathname); }); } catch (err) { /* no URL */ }
+    if (safe) {
+      var failed = false;
+      function fallback() {
+        if (failed || serial !== speechSerial) return;
+        failed = true;
+        if (enAudio) { clearTimeout(enAudio.voiceTimer); enAudio.onended = enAudio.onerror = null; enAudio.pause(); enAudio = null; }
+        speakEnTTS(text, params);
+      }
+      function playNext() {
+        if (serial !== speechSerial) return;
+        if (!urls.length) { enAudio = null; if (params.onend) params.onend(); return; }
+        try {
+          var a = new Audio(urls.shift()); enAudio = a; a.volume = params.soft ? 0.75 : 1;
+          a.onended = function () { clearTimeout(a.voiceTimer); playNext(); };
+          a.onerror = fallback;
+          a.voiceTimer = setTimeout(fallback, 4000); // stalled network/autoplay
+          var played = a.play();
+          if (played && played.then) played.then(function () { clearTimeout(a.voiceTimer); if (!failed && serial === speechSerial) brainStats.audio++; }).catch(fallback);
+          return a;
+        } catch (err) { fallback(); }
+      }
+      return playNext();
+    }
+    return speakEnTTS(text, params);
+  }
+  function speakEnTTS(text, params) {
     if (!speechOn || !window.speechSynthesis) return;
     try {
       var u = new SpeechSynthesisUtterance(text);
       u.lang = 'en-GB';
-      u.rate = params && params.soft ? 0.82 : 1;
+      u.rate = 0.82;
       u.volume = params && params.soft ? 0.75 : 1;
       u.pitch = params && params.soft ? 1.03 : 1;
       if (params && params.onend) { u.onend = params.onend; u.onerror = params.onend; }
       var v = pickVoiceGB() || pickVoice();
       if (v) { u.voice = v; u.lang = v.lang; }
       speechSynthesis.cancel();
-      speechSynthesis.speak(u);
+      brainStats.tts++; speechSynthesis.speak(u);
       return u;
     } catch (err) { /* speech is optional */ }
   }
   function speakTask() {
-    if (dialogue) { if (!dialogue.pending && dialogue.question) speakEn(dialogue.question); return; }
+    if (dialogue) { if (!dialogue.pending && dialogue.question) speakEn(dialogue.question, { audio_url: !dialogue.reveal ? dialogue.audio_url : undefined }); return; }
     if (quiz) { speakEn('Find the ' + WORD[quiz.key][0] + '!'); return; }
     var q = currentQuest();
     speakEn(q ? q.en : 'Level 3 Complete! Explore and play!');
@@ -3482,7 +3577,7 @@ function validConversation(value, p) {
     saveSoon();
   }
   function startQuiz() {
-    if (chatBlocked()) return false;
+    if (chatBlocked() || nameFlow) return false;
     closeAmbient(); dismissGreeting();
     var pool = quizPool().filter(targetExists);
     if (!pool.length) {
@@ -3756,7 +3851,7 @@ function validConversation(value, p) {
     document.getElementById('parent-memory').textContent = '喜好：颜色 ' + (memory.prefs.color || '未知') + '；动物 ' + (memory.prefs.animal || '未知') + '；食物 ' + (memory.prefs.food || '未知') + '；建造 ' + (memory.prefs.build || '未知') + '。今日闲聊 ' + memory.small_talk_count + '/5；天气聊天：' + (memory.weather_chat_done ? '已完成' : '未完成') + '。';
     document.getElementById('parent-name').value = childName;
     document.getElementById('parent-skip').hidden = !dialogue || dialogue.answered;
-    document.getElementById('brain-status').textContent = '本次伙伴回应：AI ' + brainStats.brain + '，模板 ' + brainStats.template + '，来源未标注 ' + brainStats.unknown + '。最多每分钟 8 次、每个标签页会话 60 次请求（刷新不重置）；重试使用本地提示。';
+    document.getElementById('brain-status').textContent = '本次伙伴回应：AI ' + brainStats.brain + '，模板 ' + brainStats.template + '，预生成音频 ' + brainStats.audio + '，合成回落 ' + brainStats.tts + '，来源未标注 ' + brainStats.unknown + '。最多每分钟 8 次、每个标签页会话 60 次请求（刷新不重置）；重试使用本地提示。';
     if (log) renderSpeakingLog();
   }
   function panelOpen() {
@@ -3824,7 +3919,7 @@ function validConversation(value, p) {
       mods: mods, inv: inv, hotbar: hotbar, sel: sel,
       words: learned, stars: quizStars, progress: progress, intros: intros, zh: zhOn,
       crops: crops.map(function (c) { return [c.tx, c.ty, Math.round(c.age * 10) / 10]; }),
-      adventure: trail, child_name: cleanName(childName) || 'Mario', last_greeting: lastGreeting,
+      adventure: trail, child_name: cleanName(childName), last_greeting: lastGreeting,
       prefs: memory.prefs, prefsLearnedAt: memory.prefsLearnedAt, name_asked: memory.name_asked,
       chat_day: memory.chat_day, small_talk_count: memory.small_talk_count, weather_chat_done: memory.weather_chat_done,
       boat: boat ? [Math.round(boat.x), Math.round(boat.y)] : null,
@@ -3921,7 +4016,7 @@ function validConversation(value, p) {
       progress.boatRide = data.progress.boatRide ? 1 : 0;
       progress.pet = data.progress.pet ? 1 : 0;
     }
-    childName = cleanName(data.child_name) || 'Mario';
+    childName = cleanName(data.child_name);
     restoreMemory(data);
     var greeting = data.last_greeting;
     lastGreeting = greeting && Number.isInteger(greeting.id) && greeting.id >= 0 && greeting.id <= 3 &&
@@ -3965,13 +4060,13 @@ function validConversation(value, p) {
     if (window.speechSynthesis) {
       try { speechSynthesis.getVoices(); } catch (err) { /* ignore */ }
     }
-    started = true;
+    started = true; startedAt = Date.now(); loadVoiceIndex();
     document.getElementById('start').hidden = true;
     learn('hello');
     if (determineMode('gameLoad') === 'name_ask') openNameAsk(); else openGreeting();
   }
   function hardReset() {
-    cancelSocial(nameFlow); nameFlow = null; closeAmbient(); memory = blankMemory(); childName = 'Mario'; weatherPending = false; socialLastInput = Date.now();
+    cancelSocial(nameFlow); nameFlow = null; closeAmbient(); memory = blankMemory(); childName = ''; weatherPending = false; socialLastInput = Date.now();
     document.getElementById('name-entry').hidden = true;
     dismissGreeting();
     lastGreeting = { id: -1, text: '' }; returningVisit = false;
@@ -4058,7 +4153,7 @@ function validConversation(value, p) {
       memory.prefs = blankMemory().prefs; memory.prefsLearnedAt = {};
       save(); showParentPage(document.getElementById('parent-info').hidden);
     });
-    document.getElementById('parent-name').addEventListener('input', function (e) { childName = cleanName(e.target.value) || 'Mario'; if (childName !== 'Mario') { memory.name_asked = true; if (nameFlow) finishName(childName); } saveSoon(); });
+    document.getElementById('parent-name').addEventListener('input', function (e) { childName = cleanName(e.target.value); if (childName) { memory.name_asked = true; if (nameFlow) finishName(childName); } saveSoon(); });
     function parentSkip() {
       if (document.getElementById('parent-help').hidden) return;
       closeChat(true); closePanels(); saveSoon();
@@ -4096,17 +4191,17 @@ function validConversation(value, p) {
     document.getElementById('btn-portrait').addEventListener('click', function (e) { if (e.detail === 0) allowPortrait(); });
     document.getElementById('btn-break').addEventListener('pointerdown', function (e) {
       e.preventDefault();
-      if (!started || rotateBlock() || panelOpen()) return;
+      if (!started || rotateBlock() || panelOpen() || chatBlocked()) return;
       doBreak();
     });
     document.getElementById('btn-place').addEventListener('pointerdown', function (e) {
       e.preventDefault();
-      if (!started || rotateBlock() || panelOpen()) return;
+      if (!started || rotateBlock() || panelOpen() || chatBlocked()) return;
       doPlace();
     });
     document.getElementById('btn-jump').addEventListener('pointerdown', function (e) {
       e.preventDefault();
-      if (!started || rotateBlock() || panelOpen()) return;
+      if (!started || rotateBlock() || panelOpen() || chatBlocked()) return;
       requestJump();
     });
     var card = document.getElementById('wordcard');
@@ -4117,7 +4212,7 @@ function validConversation(value, p) {
     });
     canvas.addEventListener('contextmenu', function (e) { e.preventDefault(); });
     canvas.addEventListener('pointerdown', function (e) {
-      if (!started || rotateBlock() || panelOpen()) return;
+      if (!started || rotateBlock() || panelOpen() || chatBlocked()) return;
       if (e.button && e.button !== 0 && e.button !== 2) return;
       e.preventDefault();
       var rect = canvas.getBoundingClientRect();
@@ -4133,7 +4228,6 @@ function validConversation(value, p) {
     });
     var joy = document.getElementById('joy');
     var knob = document.getElementById('joy-knob');
-    var joyId = null;
     function joyPoint(e) {
       var r = joy.getBoundingClientRect();
       var cx = r.left + r.width / 2, cy = r.top + r.height / 2;
@@ -4150,12 +4244,13 @@ function validConversation(value, p) {
     }
     function joyEnd(e) {
       if (joyId !== null && e.pointerId !== joyId) return;
+      try { joy.releasePointerCapture(e.pointerId); } catch (err) { /* optional */ }
       joyId = null; joyX = 0; joyY = 0; joyJumpLatch = false;
       knob.style.transform = 'translate(0px,0px)';
     }
     joy.addEventListener('pointerdown', function (e) {
-      if (!started || rotateBlock() || panelOpen()) return;
-      joyId = e.pointerId;
+      if (!started || rotateBlock() || panelOpen() || chatBlocked()) return;
+      seek = null; joyId = e.pointerId;
       joy.setPointerCapture(e.pointerId);
       e.preventDefault();
       joyPoint(e);

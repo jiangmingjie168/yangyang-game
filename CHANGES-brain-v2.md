@@ -495,3 +495,134 @@ Validation: landscape, blocking-ai, world-v2, memory-chat, greeting, brain-v2,
 Chinese cleanup, and the full playthrough (17/17 checks) pass. The playthrough
 passed in isolation after an initial crop-growth deadline failure during
 concurrent runs. Inline/test JavaScript syntax and `git diff --check` pass.
+
+## fix-brief-v3 — world input, short entry, neural voice and listening design
+
+2026-11-03, based on `cbfe256`, branch `codex-brain-v2` only.
+
+### Cause and behavior
+
+- Production's older portrait hard gate was one cause of dead input. The soft
+  rotate hint from `cbfe256` stays intact. A separate name-flow gate paused
+  physics/input; a far block tap only ran `showWord`, never moved or gathered.
+  Animal hit testing was about the tapped sprite, with no approach behavior.
+- Canvas taps now arm a six-second horizontal seek for far mineable blocks,
+  crops and animals. It uses normal collision, step-up and jump physics, executes
+  `mine`/`pet` exactly once in reach, and times out for inaccessible targets.
+  Direct keyboard/joystick movement takes over. No identify-only success is
+  emitted when gather intent arms a seek. Nearby gathering, empty-ground place
+  attempts, sky identification and the discovery trail keep their existing rules.
+- Active exercises still lock the world. Opening/closing exercises and name
+  entry clear the seek, held keys, jump buffer, joystick axis and pointer capture.
+  Pointer capture lives in shared input state instead of a bind-local variable.
+  Automatic exercises also wait until a seek/audio playback finishes.
+- Name entry allows physics, joystick and canvas input immediately. One tap on
+  “Let's play!” accepts an empty name and enters the world without another card.
+  A supplied name can still get a one-tap welcome. Weather never auto-stacks
+  after welcome, and `weatherChat` rejects calls during the first 60 seconds.
+- The unnamed value is `''` in memory/saves, and `child_name` is omitted from
+  requests. Only greeting slots substitute `friend`. Mario remains solely a
+  parent-field placeholder, never a fallback child's name. Explicit names persist.
+- Event prompts retain the anchor word. Both validators construct action leads
+  only when the last event noun equals the exercise target; mismatched remembered
+  nouns are omitted too. Spoken-success acknowledgement remains tied to the actual
+  recognized option. L1/choice prompts hide the large answer picture and buddy
+  avatar; option icons stay visible. L2/L3 picture exercises retain their picture.
+
+### Voice pipeline and scope
+
+- `brain/scripts/build-lines.cjs` enumerates **4,515 unique text atoms/full lines**
+  in `brain/lines-manifest.json`: all 42 labels, all ordered L1 option pairs and
+  both forms, L2/L3 forms, praise, closing/reveal/context patterns, all friend
+  greeting slot combinations, social/weather/name/recast slots, and 24 spoken
+  quests plus completion/quiz narration. Toasts are not spoken. Optional praise,
+  matching context and exercise are enumerated as atoms to avoid their enormous
+  cross-product. Runtime client playback composes generated atoms in order.
+- Names are intentionally unbounded. Named lines use whole-line browser TTS
+  when a generated full line is unavailable. No invented default personal name.
+- Reproducible generator: `python3 -m venv /tmp/bw-voice`; install
+  `brain/requirements-voice.txt`; run `node brain/scripts/build-lines.cjs`, then
+  `/tmp/bw-voice/bin/python brain/scripts/generate-voice.py` for every entry, or
+  append `--limit 120` for the committed sample. Uses `edge-tts==7.3.1`, warm
+  **en-US-JennyNeural**, rate **-15%**, SHA-256 of trimmed lowercase text, first
+  20 hex characters. Existing nonempty MP3s are reused; the generated index maps
+  normalized text to available audio hashes. This normalization makes sentence
+  capitalization variants share one recording.
+- Committed/deployed sample: **120 MP3 files, 1,759,392 bytes**. It includes all
+  labels and over 20 main dialogue/weather/quest/context lines. The full manifest
+  is much larger (about 66 MB projected at this sample's mean size), so the rest
+  can be generated on deploy; absent audio deliberately uses browser speech.
+- Brain HTTP replies add `audio_url` only for a present full-line file. `/audio/`
+  serves hashed MP3s and the availability index with CORS and correct MIME types.
+  Provider validation stays strict; audio metadata is attached after validation.
+- Client prefers a validated reply URL or the availability map; fixed atoms may
+  play sequentially. Missing/failed/stalled audio falls back once to TTS, rate
+  0.82. Closing cards/starting recognition cancels media; late rejected play
+  promises cannot resurrect speech. Parent panel shows `brainStats.audio` and
+  `brainStats.tts`, separately from brain/template provenance. Offline templates
+  require no audio network dependency.
+- `brain/voice-review.html` provides **20 main lines with audio controls** for
+  listening review. Automated Chromium playback and decoding are verified;
+  **human 20-line listening quality and physical iPad/iPhone checks remain
+  unperformed**. Decoding is not claimed as human listening acceptance.
+
+### Evidence and acceptance checklist (§1–4)
+
+The before probe uses `git show cbfe256:index.html` through test-side routing,
+without changing branches: `tests/real-pointer.cjs` fails `KeyD dx=0` while name
+entry is open. The after probe passes eight scenarios with real canvas
+`pointerdown`, mouse drag and keyboard events. Only exercise opening and
+read-only observations are injected; no mine/pet/position shortcuts are used.
+
+| Acceptance | Result | Evidence |
+| --- | --- | --- |
+| Keyboard and joystick move after entry/cards | PASS | real-pointer entry/drag, answer-close and parent-skip recovery |
+| Far animal walks into range, then hearts/tap progress | PASS | real-pointer animal, both recovery paths |
+| Near/far tree gathers, cell AIR and inventory +1 | PASS | real-pointer near/far wood; far seek moves ~37 world px before mining |
+| Gather seek avoids identify-only fake success | PASS | far cell remains non-AIR with active seek, then AIR and wood +1 |
+| Crop/quest/inventory and original sky/place rules | PASS | playthrough crop timer/harvest and all 24 tasks; world-v2/unchanged tap branches |
+| Exercise lock lasts only for its card | PASS | real-pointer locked-x, answer close, parent skip; blocking-ai |
+| Opening/closing resets held input/capture/seek | PASS | real-pointer held joystick across open, capture ID cleared, recovery |
+| Portrait hint never hard-gates input | PASS | real-pointer 768×1024 with hint visible; landscape suite |
+| Real-pointer suite added; previous suites retained | PASS | tests/real-pointer.cjs; screens/fix-v3-regressions.json |
+| Fresh start permits movement in ≤10 seconds | PASS | real-pointer: ~0.93 s for both movement probes plus skip; first input works during name entry |
+| Empty-name skip, one-tap welcome, saved unnamed state | PASS | real-pointer reload, greeting and memory-chat |
+| No weather during first 60 seconds/no welcome stack | PASS | real-pointer early rejection; memory-chat clock probes |
+| Finite lines enumerated, counts documented | PASS | lines-manifest.json; reproducible build-lines.cjs |
+| Neural generator + ≥20 committed main samples | PASS | 120 MP3 / 1,759,392 bytes; pinned requirements; 20-line review page |
+| Brain audio metadata/static serving/missing omission | PASS | backend voice metadata/GET/HEAD/CORS/missing tests |
+| Audio first, TTS error/offline fallback, parent stats | PASS | voice actual playback/404/cancellation/composition; offline suites; voice-parent-sources.png |
+| Dynamic names fall back safely | PASS | voice named-line fallback and greeting named-slot tests |
+| Human listens to 20 main lines | FAIL — pending human review | brain/voice-review.html; 20 MP3 decoding checks do not replace listening |
+| Context noun matches question; dog anchor stays dog | PASS | real-pointer dog anchor/mismatch; backend mismatch test; blocking-ai rejects wood lead for tree |
+| L1 hides answer image, options remain; L2/L3 retain picture | PASS | l1-no-answer-picture.png; real-pointer; tier tests in brain-v2/blocking-ai |
+| Unnamed speech/rendering never addresses child as Mario | PASS | real-pointer spoken-line scan, saved empty name/reload; greeting and memory-chat |
+| Save compatibility, three tiers, 42 words, quests unchanged | PASS | brain-v2, world-v2, playthrough, memory-chat |
+
+New screenshots (Chromium desktop/touch emulation, not physical device photos):
+`screens/real-pointer-mid-move.png`, `screens/l1-no-answer-picture.png`,
+`screens/unnamed-greeting.png`, `screens/voice-parent-sources.png`.
+Structured traces: `screens/real-pointer-results.json`, `screens/voice-results.json`,
+`screens/fix-v3-regressions.json`, `screens/fix-v3-smoke.json`.
+
+Validation completed: all 51 backend tests pass locally and on the deployment
+host; all 11 retained/new local browser suites pass (including historical
+baseline, 17 playthrough checks, actual audio playback and eight real-pointer
+scenarios). The old TTS-only integration assertion now accepts actual audio
+playback as well as speech fallback. New backend tests cover target-mismatched
+context, audio hashing/metadata, static GET/HEAD/CORS and missing media.
+
+Brain deployment is backed up at
+`/root/backups/yangyang-brain-fix-v3-20261103T142546Z/app`. Service is active,
+nginx config tests pass, and only the brain vhost gained `/audio/` proxying.
+Public HTTPS smoke passes 13/13 validated brain replies, eight with audio;
+served MP3s match committed bytes, 120 index entries are present and preflight
+is 204. Protected 欢蕊/shared nginx files and `.env` are unchanged. See
+`DEPLOY-brain.md` for exact deploy/regeneration/rollback steps. The older
+production frontend is separate; this change's frontend is the pinned preview.
+
+The retained live `tests/brain-ratio.cjs` also passes: **11 brain / 2 template
+responses** over four encounters plus entry/welcomes. Its helper now accepts the
+single response when an unnamed skip omits the second greeting card; it still
+waits for every displayed reply and verifies client provenance counts. Evidence:
+`screens/fix-v3-brain-ratio.json`. Previous ratio/screenshot artifacts are kept.

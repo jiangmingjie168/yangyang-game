@@ -54,7 +54,8 @@ async function main() {
       await p.waitForFunction(()=>{const s=BW.adventure().brain;return s.brain+s.template+s.unknown>=1;});
       await p.click('#welcome-play');
     }
-    await p.waitForFunction(n=>{const s=BW.adventure().brain;return s.brain+s.template+s.unknown>=n;},naming?2:1);
+    const entryReplies = naming && await p.locator('#welcome').isVisible() ? 2 : 1;
+    await p.waitForFunction(n=>{const s=BW.adventure().brain;return s.brain+s.template+s.unknown>=n;},entryReplies);
     if(i===0) {
       fixture=await p.evaluate(()=>{BW.saveNow();return JSON.parse(localStorage.getItem('block-world-save-v1'));});
       fixture.words=['tree','wood'];if(!before)fixture.child_name='Alex';fixture.adventure={found:{},reviews:{},turns:0,scenes:{},levels:{},speaking:[]};
@@ -74,7 +75,7 @@ async function main() {
   }
   const brain=records.filter(r=>r.source==='brain').length, template=records.length-brain;
   const summary={mode:before?'before':'after',encounters:4,brain,template,ratio:`${brain}/${records.length}`,brainPercent:100*brain/records.length,records};
-  fs.mkdirSync('screens',{recursive:true});fs.writeFileSync(`screens/brain-ratio-${summary.mode}.json`,JSON.stringify(summary,null,2)+'\n');
+  fs.mkdirSync('screens',{recursive:true});fs.writeFileSync(process.env.BW_RATIO_OUTPUT || `screens/brain-ratio-${summary.mode}.json`,JSON.stringify(summary,null,2)+'\n');
   console.log(JSON.stringify(summary,null,2));
 }
 main().catch(e=>{console.error(e);process.exitCode=1;}).finally(async()=>{ssh?.stdin.end();ssh?.kill();await browser?.close();});
