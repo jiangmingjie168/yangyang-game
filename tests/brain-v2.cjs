@@ -18,7 +18,7 @@ async function page(data, { endpoint = '', reply, voice = true, timeout = 6500, 
   p.on('pageerror', e => p.errors.push(String(e)));
   p.network = []; p.on('console',m=>{if(m.type()==='error')p.network.push({console:m.text()});}); p.on('requestfailed', r => { if (r.url().includes('buddy')) p.network.push({url:r.url(),error:r.failure()}); });
   p.on('response', r => { if (r.url().includes('buddy')) p.network.push({url:r.url(),status:r.status(),body:r.request().postData()}); });
-  await p.route(URL + '/', r => r.fulfill({ contentType: 'text/html', body: html.replace("const BRAIN_URL = '';", 'const BRAIN_URL = ' + JSON.stringify(endpoint) + ';').replace('const BRAIN_TIMEOUT_MS = 6500;', 'const BRAIN_TIMEOUT_MS = ' + timeout + ';') }));
+  await p.route(URL + '/', r => r.fulfill({ contentType: 'text/html', body: html.replace(/^const BRAIN_URL = '[^']*';$/m, 'const BRAIN_URL = ' + JSON.stringify(endpoint) + ';').replace('const BRAIN_TIMEOUT_MS = 6500;', 'const BRAIN_TIMEOUT_MS = ' + timeout + ';') }));
   if (reply) await p.route('**/mock-buddy', async r => {
     const payload = r.request().postDataJSON(); p.calls.push(payload);
     await new Promise(r => setTimeout(r, delay));
@@ -141,9 +141,9 @@ function report(text) { console.log('PASS', text); }
   p=await page(malformed); assert.equal((await chat(p)).tier,1); assert.equal((await snapshot(p)).adventure.speaking.length,1); await checkClose(p);
   p=await page(next(data)); const restored=await snapshot(p); assert.deepEqual(restored.adventure.levels,data.adventure.levels); assert.deepEqual(restored.adventure.speaking,data.adventure.speaking); await checkClose(p);
   report('legacy/malformed optional data and new mastery/speaking records save compatibility');
-  // File URL + offline context proves no server is needed with empty BRAIN_URL.
+  // File URL + offline context proves the configured brain still has local fallback.
   const offline=await browser.newContext({offline:true,viewport:{width:1180,height:720}}); const f=await offline.newPage();
   await f.addInitScript(data=>localStorage.setItem('block-world-save-v1',JSON.stringify(data)),next(fixture));
   await f.goto('file://'+require('node:path').resolve(__dirname,'../index.html')); await f.click('#btn-start'); assert(await f.evaluate(()=>BW.layout().started)); await chat(f); assert.equal(await f.locator('#chat-question').innerText(),'Tree or wood?'); await offline.close();
-  report('default empty BRAIN_URL starts and runs template dialogue offline from file://');
+  report('configured BRAIN_URL starts and falls back to template dialogue offline from file://');
 })().catch(e=>{console.error(e);process.exitCode=1;}).finally(async()=>{await browser?.close();await close(brain);await close(upstream);});
