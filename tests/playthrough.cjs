@@ -63,7 +63,7 @@ async function animal(p,type,times=1) {
 async function craft(p,key,n=1) {
   const keys=['planks','stick','table','door','torch','bed','house','fence','rod','boat'];
   await clear(p); await p.click('#btn-craft');
-  for(let i=0;i<n;i++) await p.locator('.recipe').nth(keys.indexOf(key)).locator('.craftbtn').click();
+  for(let i=0;i<n;i++) { await p.evaluate(()=>BW.hideCard()); await p.locator('.recipe').nth(keys.indexOf(key)).locator('.craftbtn').click(); }
   await p.click('#craft-back');
 }
 async function waitChat(p,anchor) {
@@ -188,7 +188,7 @@ async function heldMove(p,dir,ms) { await p.keyboard.down(dir); await sleep(p,ms
   const early=structuredClone(chapter3); early.progress={mined:{},crafted:{},placed:{},tapped:{},tree:0,water:0,nightTorch:0,fish:0,wheatRipe:0,boatRide:0,pet:0};early.mods=[];early.px=2544;early.py=512;delete early.adventure;
   const v=await fresh(early,{fakeRecognition:true});await mine(v,87,15);d=await waitChat(v,'task');
   assert(!d.options.some(k=>['fish','boat','rod','wheat','seed','pet','follow','table','cow','chicken','house','fence','duck','horse','rabbit'].includes(k)));
-  await v.click('#chat-mic'); await v.evaluate(()=>{testRecognizer.onerror({error:'not-allowed'});testRecognizer.onend();});assert.equal(await v.locator('#chat-status').textContent(),'👇');
+  await v.click('#chat-mic'); await v.evaluate(()=>{testRecognizer.onerror({error:'not-allowed'});testRecognizer.onend?.();});assert.equal(await v.locator('#chat-status').textContent(),'👇');
   await v.click('#chat-mic'); await v.evaluate(()=>voiceResult('unrelated words'));assert(!(await v.evaluate(()=>BW.adventure().active)).answered);
   // A one-character recognition error is accepted without scoring pronunciation.
   const typo=d.key==='tree'?'tre':d.key==='wood'?'wod':d.key.slice(0,-1);
@@ -212,7 +212,7 @@ async function heldMove(p,dir,ms) { await p.keyboard.down(dir); await sleep(p,ms
   // Repeated fishing must naturally retrieve an older word from the same setting.
   const repeat=await fresh(chapter3);await relocate(repeat,3830);await select(repeat,'rod');await mine(repeat,121,16);
   let first=await waitChat(repeat,'fish');assert.equal(first.key,'fish');
-  await repeat.locator('#chat-options [data-word="fish"]').click();await sleep(repeat,1700);
+  await repeat.locator('#chat-options [data-word="fish"]').click();await sleep(repeat,1900);
   const reviewSave=await snapshot(repeat);assert.equal(reviewSave.adventure.reviews.fish.n,1);
   await repeat.reload();await repeat.click('#btn-start');await sleep(repeat,250);await select(repeat,'rod');await mine(repeat,121,16);
   let second=await waitChat(repeat,'fish');assert.equal(second.key,'water');

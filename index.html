@@ -60,6 +60,7 @@
   #chat-question { flex: 1; font-size: 23px; font-weight: 900; margin: 0; }
   #chat-close { font-size: 26px; width: 44px; height: 44px; }
   #chat-picture { width: 74px; height: 74px; display: block; margin: 2px auto; }
+  #chat-options[hidden], #chat-choices[hidden] { display: none; }
   #chat-options { display: flex; gap: 10px; }
   #chat-options button { flex: 1; min-height: 60px; border-radius: 14px; background: #dcf1d1; font-size: 21px; font-weight: 800; border: 2px solid #abd58f; }
   #chat-options canvas { width: 38px; height: 38px; vertical-align: middle; margin-right: 4px; }
@@ -454,7 +455,7 @@
     <div class="chat-head"><canvas id="chat-face" width="128" height="128" aria-hidden="true"></canvas><p id="chat-question"></p><button id="chat-close" type="button" aria-label="Keep exploring">×</button></div>
     <canvas id="chat-picture" width="128" height="128" role="img" aria-label="Picture to talk about"></canvas>
     <div id="chat-options"></div>
-    <div class="chat-tools"><button id="chat-listen" type="button" aria-label="Listen again">▶</button><button id="chat-mic" type="button">🎤</button></div>
+    <div class="chat-tools"><button id="chat-listen" type="button" aria-label="Listen again">▶</button><button id="chat-mic" type="button">🎤</button><button id="chat-choices" type="button" hidden>Show choices</button></div>
     <p id="chat-status" role="status" aria-live="polite"></p>
   </section>
   <aside id="parent-help" hidden aria-label="家长设置">
@@ -518,6 +519,9 @@
 </div>
 <script>
 'use strict';
+// Optional enhancement: full HTTPS /buddy endpoint. Empty keeps the game offline.
+const BRAIN_URL = '';
+const BRAIN_TIMEOUT_MS = 6500;
 (function () {
   var AIR = 0, GRASS = 1, DIRT = 2, STONE = 3, WOOD = 4, LEAVES = 5, SAND = 6, WATER = 7;
   var FLOWER = 8, PLANKS = 9, TORCH = 10, DOOR = 11, BED = 12, TABLE = 13, HOUSE = 14, BEDROCK = 15, FENCE = 16;
@@ -640,7 +644,7 @@
   var fps = 0, fpsN = 0, fpsT = 0, frameErr = '';
   var armReset = false;
   var lastTs = 0;
-  var trail = { found: {}, reviews: {}, turns: 0, scenes: {} };
+  var trail = { found: {}, reviews: {}, turns: 0, scenes: {}, levels: {}, speaking: [] };
   var trailSpots = [], dialogue = null, chatQueue = [], chatIdle = 0, chatCooldown = 0;
   var chatClock = 0, chatRecognizer = null, chatTimer = null, recognitionTimer = null, chatLastInput = 0;
   var taskSnapshot = null, followTravel = 0, followLastX = 0, followReady = false;
@@ -669,7 +673,7 @@
   }
   function resetAdventure() {
     closeChat();
-    trail = { found: {}, reviews: {}, turns: 0, scenes: {} };
+    trail = { found: {}, reviews: {}, turns: 0, scenes: {}, levels: {}, speaking: [] };
     chatQueue = []; chatIdle = 0; chatCooldown = 0; taskSnapshot = null;
     boatStartX = null; boatLanding = false;
     followTravel = 0; followLastX = player.x; followReady = false;
@@ -694,6 +698,20 @@
       Object.keys(WORD).forEach(function (key) {
         var r = data.reviews && data.reviews[key];
         if (r && isFinite(r.n) && isFinite(r.last)) trail.reviews[key] = { n: Math.max(0, Math.min(1000000, +r.n)), last: Math.max(0, Math.min(trail.turns, +r.last)) };
+      });
+      Object.keys(WORD).forEach(function (key) {
+        var level = data.levels && data.levels[key];
+        if (level && typeof level === 'object') {
+          trail.levels[key] = {};
+          ['t1', 't2', 't3'].forEach(function (t) { trail.levels[key][t] = Math.max(0, Math.min(1000000, Math.floor(Number(level[t]) || 0))); });
+        }
+      });
+      if (Array.isArray(data.speaking)) trail.speaking = data.speaking.filter(function (r) {
+        return r && isFinite(r.time) && r.time > 0 && WORD[r.word] &&
+          ['task', 'fish', 'pet', 'boat', 'scene'].indexOf(r.scene) >= 0 && typeof r.spoke === 'boolean';
+      }).slice(-2000).map(function (r) {
+        return { time: +r.time, scene: r.scene, word: r.word, spoke: r.spoke,
+          spoken_word: WORD[r.spoken_word] ? r.spoken_word : null, tier: [1, 2, 3].indexOf(r.tier) >= 0 ? r.tier : 1 };
       });
       ['home', 'trees', 'water', 'far', 'meadow'].forEach(function (key) {
         if (data.scenes && data.scenes[key]) trail.scenes[key] = 1;
@@ -768,6 +786,7 @@
     if (chatTimer) { clearTimeout(chatTimer); chatTimer = null; }
     stopChatListening();
     if (dialogue) {
+      if (dialogue.controller) dialogue.controller.abort();
       chatCooldown = 12;
       if (window.speechSynthesis) { try { speechSynthesis.cancel(); } catch (err) { /* optional */ } }
     }
@@ -788,41 +807,119 @@
     }
     var other = oldWord(pool, target);
     var options = trail.turns % 2 ? [other, target] : [target, other];
-    dialogue = { anchor: event.anchor, key: target, options: options, question: WORD[options[0]][0] + ' or ' + WORD[options[1]][0].toLowerCase() + '?', at: chatClock, answered: false };
-    document.getElementById('chat-question').textContent = dialogue.question;
-    document.getElementById('chat-status').textContent = '';
+    var level = trail.levels[target] || {};
+    var tier = level.t1 >= 2 ? (level.t2 >= 2 ? 3 : 2) : 1;
+    dialogue = { anchor: event.anchor, scene: sceneNow, key: target, options: options, tier: tier,
+      turn: 0, at: chatClock, answered: false, pending: false, choices: tier === 1, sequence: 0 };
     paintIcon(document.getElementById('chat-face'), 'dog');
     paintIcon(document.getElementById('chat-picture'), target);
-    var root = document.getElementById('chat-options'); root.innerHTML = '';
-    options.forEach(function (key) {
+    requestChat(dialogue, 'prompt');
+  }
+  function chatTemplate(d, feedback) {
+    var done = d.turn >= 3 || feedback === 'success', say;
+    if (done) say = 'Great! Keep exploring!';
+    else if (d.tier === 2 && !d.choices) say = "What's this?";
+    else if (d.tier === 3 && !d.choices) {
+      var mass = ['grass', 'dirt', 'stone', 'wood', 'leaves', 'sand', 'water', 'planks', 'wool', 'rain', 'wheat'];
+      var word = WORD[d.key][0].toLowerCase();
+      say = 'I see ' + (mass.indexOf(d.key) >= 0 ? 'the ' : /^[aeiou]/.test(word) ? 'an ' : 'a ') + word + '. Say it!';
+    } else say = WORD[d.options[0]][0] + ' or ' + WORD[d.options[1]][0].toLowerCase() + '?';
+    if (!done && feedback === 'retry') say = 'Great! ' + say;
+    return { say: say, options: d.options.slice(), answer: d.key, done: done };
+  }
+  function safeBrainReply(reply, expected, d, feedback) {
+    if (!reply || Object.keys(reply).sort().join(',') !== 'answer,done,options,say' || typeof reply.say !== 'string' || typeof reply.done !== 'boolean' ||
+        reply.done !== expected.done || reply.answer !== d.key || !Array.isArray(reply.options) ||
+        JSON.stringify(reply.options) !== JSON.stringify(d.options) || !reply.options.every(allowedChatWord)) return false;
+    var tokens = reply.say.toLowerCase().match(/[a-z]+(?:'[a-z]+)?/g) || [];
+    var scaffold = "a an the i you we it this is see got can say what what's or great nice thanks thank good job well done let's keep exploring try look at again your turn".split(' ');
+    var vocabulary = scaffold.concat(d.options.reduce(function (all, key) { return all.concat(WORD[key][0].toLowerCase().split(' ')); }, []));
+    if (!/^[A-Za-z ,.!?'’-]+$/.test(reply.say) || /[^\x20-\x7e]/.test(reply.say) || reply.say.length > 160 ||
+        tokens.length < 1 || tokens.length > 12 || !tokens.every(function (w) { return vocabulary.indexOf(w) >= 0; })) return false;
+    if (feedback !== 'prompt' && !/^(great!|nice!|good job!|well done!)/i.test(reply.say)) return false;
+    if (expected.done) return reply.say.indexOf('?') < 0;
+    if (d.choices || d.tier === 1) return /\bor\b/i.test(reply.say) && reply.say.indexOf('?') >= 0 && d.options.every(function (k) { return reply.say.toLowerCase().indexOf(WORD[k][0].toLowerCase()) >= 0; });
+    if (d.tier === 2) return /\b(what's this|what is this)\?/i.test(reply.say) && !d.options.some(function (k) { return tokens.indexOf(k) >= 0; });
+    return new RegExp('\\bi see (?:a |an |the )?' + WORD[d.key][0].toLowerCase() + '\\b', 'i').test(reply.say) && reply.say.indexOf('?') < 0 && tokens.indexOf('or') < 0;
+  }
+  function renderChat(d, reply) {
+    if (dialogue !== d) return;
+    d.pending = false; d.controller = null; d.question = reply.say; d.at = chatClock;
+    document.getElementById('chat-question').textContent = d.question;
+    document.getElementById('chat-status').textContent = d.answered ? '★ ★ ★' : (d.hint ? '👇' : '');
+    var root = document.getElementById('chat-options'); root.innerHTML = ''; root.hidden = !d.choices || reply.done;
+    d.options.forEach(function (key) {
       var b = document.createElement('button'); b.type = 'button'; b.dataset.word = key;
+      b.disabled = reply.done;
+      b.classList.toggle('hint-answer', !!d.hint && key === d.key);
       var icon = document.createElement('canvas'); icon.width = 128; icon.height = 128; icon.setAttribute('aria-hidden', 'true'); paintIcon(icon, key);
       b.appendChild(icon); b.appendChild(document.createTextNode(WORD[key][0])); tapButton(b, function () { answerChat(key); }); root.appendChild(b);
     });
     document.getElementById('chat-mic').textContent = '🎤';
     document.getElementById('chat-mic').setAttribute('aria-label', 'Answer by voice');
+    document.getElementById('chat-mic').disabled = reply.done;
+    document.getElementById('chat-choices').disabled = false;
+    document.getElementById('chat-listen').disabled = false;
+    document.getElementById('chat-choices').hidden = d.choices || reply.done;
     document.getElementById('dialogue').hidden = false;
-    speakEn(dialogue.question);
+    if (reply.done) { d.answered = true; chatTimer = setTimeout(closeChat, 1800); }
+    speakEn(d.question);
   }
-  function answerChat(key) {
-    if (!dialogue || dialogue.answered) return;
-    if (key !== dialogue.key) {
-      // A model and a gentle rephrasing, never an error mark or lost reward.
-      var model = WORD[dialogue.key][0] + '. ' + dialogue.question;
-      document.getElementById('chat-question').textContent = model;
-      document.getElementById('chat-status').textContent = '👇';
-      Array.prototype.forEach.call(document.querySelectorAll('#chat-options button'), function (b) { b.classList.toggle('hint-answer', b.dataset.word === dialogue.key); });
-      speakEn(model);
-      return;
-    }
+  function requestChat(d, feedback, childSaid, spokenKey) {
+    var expected = chatTemplate(d, feedback), sequence = ++d.sequence;
+    d.pending = true;
+    trail.speaking.push({ time: Date.now(), scene: d.anchor, word: d.key, spoke: !!childSaid,
+      spoken_word: childSaid && spokenKey ? spokenKey : null, tier: d.choices ? 1 : d.tier });
+    trail.speaking = trail.speaking.slice(-2000); saveSoon();
+    if (!BRAIN_URL) { renderChat(d, expected); return; }
+    if (d.controller) d.controller.abort();
+    var controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
+    d.controller = controller;
+    ['chat-mic', 'chat-listen', 'chat-choices'].forEach(function (id) { document.getElementById(id).disabled = true; });
+    Array.prototype.forEach.call(document.querySelectorAll('#chat-options button'), function (b) { b.disabled = true; });
+    var timer, payload = { event: d.anchor, scene: d.scene, chapter: questIndex() < CHAPTER1 ? 1 : questIndex() < CHAPTER2 ? 2 : 3,
+      target_word: d.key, options: d.options.slice(), learned_words: chatWords(), turn: d.turn,
+      tier: d.choices ? 1 : d.tier, feedback: feedback };
+    if (childSaid) payload.child_said = String(childSaid).slice(0, 160);
+    var timeout = new Promise(function (resolve) { timer = setTimeout(function () { if (controller) controller.abort(); resolve(expected); }, BRAIN_TIMEOUT_MS); });
+    var remote = Promise.resolve().then(function () {
+      return fetch(BRAIN_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload), signal: controller ? controller.signal : undefined, credentials: 'omit', cache: 'no-store' });
+    }).then(function (r) { if (!r.ok) throw new Error('Buddy unavailable'); return r.text(); })
+      .then(function (raw) { if (raw.length > 4096) throw new Error('Buddy response too large'); var reply = JSON.parse(raw); return safeBrainReply(reply, expected, d, feedback) ? reply : expected; })
+      .catch(function () { return expected; });
+    Promise.race([remote, timeout]).then(function (reply) {
+      clearTimeout(timer);
+      if (dialogue === d && d.sequence === sequence) renderChat(d, reply);
+    });
+  }
+  function showChatChoices() {
+    if (!dialogue || dialogue.pending || dialogue.answered) return;
     stopChatListening();
-    dialogue.answered = true;
+    dialogue.choices = true;
+    renderChat(dialogue, chatTemplate(dialogue, 'prompt'));
+  }
+  function retryChat(childSaid, spokenKey) {
+    if (!dialogue || dialogue.pending || dialogue.answered) return;
+    stopChatListening();
+    var d = dialogue; d.turn++; d.choices = true; d.hint = true;
+    requestChat(d, 'retry', childSaid, spokenKey);
+  }
+  function answerChat(key, childSaid) {
+    if (!dialogue || dialogue.pending || dialogue.answered) return;
+    if (key !== dialogue.key) { retryChat(childSaid, key); return; }
+    stopChatListening();
+    var d = dialogue;
+    d.answered = true; d.turn++;
     trail.turns++;
     var r = trail.reviews[key] || { n: 0, last: 0 }; r.n++; r.last = trail.turns; trail.reviews[key] = r;
-    document.getElementById('chat-question').textContent = WORD[key][0] + '!';
-    document.getElementById('chat-status').textContent = '★';
-    burst(player.x, player.y - 40, '#ffe286', false); chime(); speakEn(WORD[key][0] + '!');
-    saveSoon(); chatTimer = setTimeout(closeChat, 1600);
+    var level = trail.levels[key] || { t1: 0, t2: 0, t3: 0 };
+    // Only spoken successes at the actual practice tier unlock a higher tier.
+    var credit = d.choices ? 1 : d.tier;
+    if (credit === 1 || childSaid) level['t' + credit]++;
+    trail.levels[key] = level;
+    burst(player.x, player.y - 40, '#ffe286', false); chime();
+    requestChat(d, 'success', childSaid, key);
   }
   function normalAnswer(text) { return String(text).toLowerCase().replace(/[^a-z ]/g, ' ').replace(/\s+/g, ' ').trim(); }
   function nearWord(a, b) {
@@ -848,10 +945,10 @@
     return matches.length === 1 ? matches[0] : '';
   }
   function listenChat() {
-    if (!dialogue || dialogue.answered || chatRecognizer) return;
+    if (!dialogue || dialogue.pending || dialogue.answered || chatRecognizer) return;
     var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
     var status = document.getElementById('chat-status');
-    if (!SR) { status.textContent = '👇'; return; }
+    if (!SR) { showChatChoices(); status.textContent = '👇'; return; }
     if (window.speechSynthesis) { try { speechSynthesis.cancel(); } catch (err) { /* optional */ } }
     try {
       var active = dialogue, r = new SR(); chatRecognizer = r;
@@ -859,22 +956,23 @@
       status.textContent = '🎤 …';
       r.onresult = function (e) {
         if (dialogue !== active) return;
-        var result = e.results[e.resultIndex || 0], choice = '';
-        for (var i = 0; result && i < result.length; i++) { choice = voiceChoice(result[i].transcript); if (choice) break; }
-        if (choice) answerChat(choice);
-        else { status.textContent = '👇'; speakEn(active.question); }
+        var result = e.results[e.resultIndex || 0], choice = '', said = '';
+        for (var i = 0; result && i < result.length; i++) { said = result[i].transcript; choice = voiceChoice(said); if (choice) break; }
+        if (choice) answerChat(choice, said);
+        else retryChat(said);
       };
-      r.onerror = function () { if (dialogue === active) status.textContent = '👇'; };
+      r.onerror = function () { if (dialogue === active) { showChatChoices(); status.textContent = '👇'; } };
       r.onend = function () { if (chatRecognizer === r) { if (recognitionTimer) { clearTimeout(recognitionTimer); recognitionTimer = null; } chatRecognizer = null; if (dialogue === active && !active.answered) status.textContent = '👇'; } };
       r.start();
       // Some engines never fire onend after permission or network problems.
       recognitionTimer = setTimeout(function () { recognitionTimer = null; if (chatRecognizer === r) { chatRecognizer = null; try { r.abort(); } catch (err) { /* optional */ } if (dialogue === active && !active.answered) status.textContent = '👇'; } }, 8000);
-    } catch (err) { chatRecognizer = null; status.textContent = '👇'; }
+    } catch (err) { chatRecognizer = null; showChatChoices(); status.textContent = '👇'; }
   }
   function bindDialogue() {
     tapButton(document.getElementById('chat-close'), closeChat);
     tapButton(document.getElementById('chat-listen'), function () { if (dialogue) speakEn(dialogue.question); });
     tapButton(document.getElementById('chat-mic'), listenChat);
+    tapButton(document.getElementById('chat-choices'), showChatChoices);
     // Keyboard activation is provided only for these standard buttons; pointer taps already use tapButton.
     document.getElementById('dialogue').addEventListener('click', function (e) {
       if (e.detail !== 0) return;
@@ -884,6 +982,7 @@
       else if (b.id === 'chat-close') closeChat();
       else if (b.id === 'chat-listen' && dialogue) speakEn(dialogue.question);
       else if (b.id === 'chat-mic') listenChat();
+      else if (b.id === 'chat-choices') showChatChoices();
     });
   }
   function adventureStep(dt) {
@@ -2862,7 +2961,7 @@
     } catch (err) { /* speech is optional */ }
   }
   function speakTask() {
-    if (dialogue) { speakEn(dialogue.question); return; }
+    if (dialogue) { if (!dialogue.pending && dialogue.question) speakEn(dialogue.question); return; }
     if (quiz) { speakEn('Find the ' + WORD[quiz.key][0] + '!'); return; }
     var q = currentQuest();
     speakEn(q ? q.en : 'Level 3 Complete! Explore and play!');
