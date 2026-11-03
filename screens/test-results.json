@@ -1,0 +1,76 @@
+{
+  "browser": "Headless Chromium",
+  "fixtures": "Seed 42; tools/materials and travel checkpoints supplied; mission flags earned by inputs; fake recognition explicitly marked",
+  "results": [
+    {
+      "name": "Task completion dialogue and gentle retry",
+      "status": "passed",
+      "details": "Tree or wood?"
+    },
+    {
+      "name": "Chapter 1: all 8 tasks and hat earned",
+      "status": "passed"
+    },
+    {
+      "name": "Chapter 2: all 8 tasks, including night torch",
+      "status": "passed"
+    },
+    {
+      "name": "Fishing: real cast, wait, catch and fish dialogue; missing recognition tap fallback",
+      "status": "passed"
+    },
+    {
+      "name": "Plant → actual growth timer → harvest",
+      "status": "passed"
+    },
+    {
+      "name": "Boat: place → board → cross → disembark → dry-land arrival dialogue",
+      "status": "passed"
+    },
+    {
+      "name": "Pet: actual three taps to tame, follow movement, stop and pet dialogue",
+      "status": "passed"
+    },
+    {
+      "name": "Treasure Quiz proximity win, star, and unchanged mission progress",
+      "status": "passed"
+    },
+    {
+      "name": "Existing Say-It task narration invokes English browser TTS",
+      "status": "passed"
+    },
+    {
+      "name": "Save/resume: all 24 tasks, backpack, pet, learned words, inventory and discovery state",
+      "status": "passed"
+    },
+    {
+      "name": "Swimming: enter water, move with swimming physics, no incoming dialogue",
+      "status": "passed"
+    },
+    {
+      "name": "Exploration: walk into hidden gift, gain picture/materials, persist album",
+      "status": "passed"
+    },
+    {
+      "name": "New scene: cross zone boundary and stop before dialogue",
+      "status": "passed"
+    },
+    {
+      "name": "Speech adapter: unrecognized retry + approximate answer; early chapter gates",
+      "status": "passed",
+      "details": "tree/wood"
+    },
+    {
+      "name": "Portrait, no TTS/no recognition fallback; child UI English and parent settings Chinese",
+      "status": "passed"
+    },
+    {
+      "name": "Offline file:// start and movement; short landscape layout",
+      "status": "passed"
+    },
+    {
+      "name": "Spiral recurrence: fish encounter revisits earlier water/wood after save/resume",
+      "status": "passed"
+    }
+  ]
+}
