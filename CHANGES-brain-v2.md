@@ -420,3 +420,35 @@ deployed hashes match, and `.env` / protected nginx configuration are unchanged.
 HTTPS smoke: **9/9 POSTs return 200, brain/validated**, covering name_ask,
 excluded non-nouns, fishing rod in both coached tiers and cat; preflight is 204.
 Evidence: [claude-top3-smoke.json](screens/claude-top3-smoke.json).
+
+## Weather pictures and recording feedback — 2026-11-03
+
+- All three microphones (exercise, Buddy and name entry) show a coral glow and
+  gentle scale pulse after recognition starts. Shared cleanup clears the state
+  on results, end, errors, start failures, watchdog timeout and dismissal.
+  Existing pressed feedback remains; reduced motion keeps a static coral glow.
+- Weather chat now pairs its existing 3–6 word line with a small `paintIcon`
+  canvas for rain, sun, cloud, moon or star. Rain takes priority; visible stars
+  lead the alternating star/moon night topics. Daytime clouds count when they
+  cross the sun instead of relying on the formerly unreachable daytime check.
+- Clearing rain draws seven soft outlined rainbow arcs in the world sky, fading
+  in and out over 18 seconds. Night hides the rainbow; new rain clears it.
+  Rainbow is visual only: the 42-word set, offline phrase slots, daily chat
+  limits, memory and coaching behavior are unchanged.
+- Updated `screens/chat-buttons.png` with synthetic recording active and
+  `screens/weather-chat.png` with its rain icon; added
+  `screens/weather-rainbow.png`. Inspected all three captures. No physical
+  microphone or device was used.
+
+Validation: 49 backend tests, expanded `tests/memory-chat.cjs`, greeting,
+blocking-ai, brain-v2, world-v2, Chinese cleanup, playthrough and baseline
+suites pass. The memory/chat additions cover all three recording lifecycles,
+reduced motion, five weather pictures, vocabulary membership, short unchanged
+weather templates, and rainbow drawing, fading and rain/night suppression.
+The world suite passed on rerun after one timed gift-collection failure during
+concurrent browser runs. Syntax checks and `git diff --check` pass. The live
+brain-ratio suite also passes (12/14 brain responses, 2 template responses;
+synthetic dialogue, existing HTTPS endpoint).
+
+Client-only change: no brain rsync, service restart, secrets or nginx changes
+were needed. Only `codex-brain-v2` is committed and pushed.

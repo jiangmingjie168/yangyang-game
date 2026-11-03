@@ -450,6 +450,9 @@
   #chat-listen svg, #chat-mic svg, #buddy-mic svg, #name-mic svg { width: 25px; height: 25px; flex-shrink: 0; }
   #chat-listen:active, #chat-mic:active, #buddy-mic:active, #name-mic:active { transform: translateY(2px); box-shadow: none; }
   #chat-listen:disabled, #chat-mic:disabled, #buddy-mic:disabled, #name-mic:disabled { opacity: .5; box-shadow: none; }
+  #chat-mic.mic-recording, #buddy-mic.mic-recording, #name-mic.mic-recording { opacity: 1; background: #ffc6b5; border-color: #d96b57; box-shadow: 0 0 0 4px #f2877040; animation: mic-pulse 1.3s ease-in-out infinite; }
+  @keyframes mic-pulse { 50% { scale: 1.045; box-shadow: 0 0 0 9px #f2877015, 0 0 16px #ef826580; } }
+  #chat-mic.mic-recording:active, #buddy-mic.mic-recording:active, #name-mic.mic-recording:active { transform: translateY(2px); box-shadow: none !important; }
   #welcome { max-height: calc(100dvh - 90px - var(--sab)); overflow-y: auto; touch-action: pan-y; }
   #name-entry[hidden], #buddy-chat[hidden] { display: none; }
   #name-form { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
@@ -463,6 +466,8 @@
   @keyframes buddy-wave { 25%, 75% { transform: translateY(-8px) rotate(-12deg); } 50% { transform: translateY(-5px) rotate(12deg); } }
   #buddy-chat { position: absolute; z-index: 39; top: calc(78px + var(--sat)); left: 50%; transform: translateX(-50%); width: min(380px, calc(100% - 28px)); padding: 14px; border-radius: 22px; background: #fffaf2; border: 3px solid #e6bb70; box-shadow: 0 5px 18px #5a39152b; text-align: center; max-height: calc(100dvh - 90px); overflow-y: auto; }
   #buddy-line { margin: 0 0 10px; font-size: 23px; font-weight: bold; }
+  #buddy-picture { display: block; width: 76px; height: 76px; margin: 0 auto 8px; }
+  #buddy-picture[hidden] { display: none; }
   #buddy-chat button { min-height: 48px; min-width: 64px; border-radius: 13px; padding: 8px 14px; font: inherit; background: #dcf1d1; margin: 3px; }
   #buddy-options { display: flex; justify-content: center; gap: 10px; }
   @media (max-height: 450px) { #name-letters { grid-template-columns: repeat(13, 1fr); } #name-letters button { min-height: 28px; } #btn-buddy { top: calc(110px + var(--sat)); } }
@@ -519,6 +524,7 @@
   </section>
   <button id="btn-buddy" type="button" aria-label="Chat with Buddy">Buddy</button>
   <section id="buddy-chat" hidden aria-label="Buddy chat">
+    <canvas id="buddy-picture" width="128" height="128" hidden role="img" aria-label="Weather picture"></canvas>
     <p id="buddy-line" role="status" aria-live="polite"></p><div id="buddy-options"></div>
     <button id="buddy-mic" type="button" aria-label="Speak to Buddy"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="2" width="6" height="12" rx="3" fill="currentColor"/><path d="M5 10v2a7 7 0 0 0 14 0v-2M12 19v3m-4 0h8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>Speak</span></button><button id="buddy-close" type="button" aria-label="Keep playing">OK!</button>
   </section>
@@ -736,7 +742,7 @@ const BRAIN_TIMEOUT_MS = 6500;
   var swimPhase = 0, wasSwim = false, splashT = 0;
   var crops = [], boat = null, riding = false, fishing = null, boatPhase = 0, packSeen = false;
   var sunPos = { x: 0, y: 0 }, moonPos = { x: 0, y: 0 }, sunOn = false, moonOn = false, starPos = [], cloudPos = [];
-  var rainOn = false, rainTimer = 26;
+  var rainOn = false, rainTimer = 26, rainbowLeft = 0, nightWeatherCount = 0;
   var fps = 0, fpsN = 0, fpsT = 0, frameErr = '';
   var armReset = false;
   var lastTs = 0;
@@ -824,9 +830,11 @@ function validConversation(value, p) {
     return 'idle';
   }
   function socialPayload(event) { return { event: event, child_name: childName, scene: sceneNow || 'grass', prefs: Object.assign({}, memory.prefs), recent_events: recentEvents.slice(-6) }; }
+  function micRecording(id, active) { document.getElementById(id).classList.toggle('mic-recording', active); }
   function stopSocialListening() {
     clearTimeout(socialWatchdog); socialWatchdog = null;
-    if (socialRecognizer) { var r = socialRecognizer; socialRecognizer = null; r.onresult = r.onerror = r.onend = null; try { r.abort(); } catch (err) { /* optional */ } }
+    if (socialRecognizer) { var r = socialRecognizer; socialRecognizer = null; r.onstart = r.onresult = r.onerror = r.onend = null; try { r.abort(); } catch (err) { /* optional */ } }
+    micRecording('buddy-mic', false); micRecording('name-mic', false);
     document.getElementById('buddy-mic').disabled = false; document.getElementById('name-mic').disabled = false;
   }
   function cancelSocial(w) { if (!w) return; clearTimeout(w.timer); clearTimeout(w.hintTimer); clearTimeout(w.deadline); if (w.controller) w.controller.abort(); }
@@ -886,6 +894,9 @@ function validConversation(value, p) {
     dismissGreeting(); closeAmbient();
     var w = { payload: p }; ambient = w;
     document.getElementById('buddy-chat').hidden = false;
+    var picture = document.getElementById('buddy-picture');
+    picture.hidden = p.event !== 'weather_chat';
+    if (!picture.hidden) { paintIcon(picture, p.weather); picture.setAttribute('aria-label', WORD[p.weather][0]); }
     var root = document.getElementById('buddy-options'); root.replaceChildren();
     if (p.topic) PREF_VALUES[p.topic.slice(11)].slice(0, 2).forEach(function (word) {
       var b = document.createElement('button'); b.type = 'button'; b.textContent = word; b.dataset.pref = word;
@@ -926,9 +937,15 @@ function validConversation(value, p) {
   function weatherChat() {
     if (determineMode('weather') !== 'weather_chat' || welcome || ambient) return false;
     var p = socialPayload('weather_chat');
-    p.weather = rainOn ? 'rain' : nightFactor(timeOfDay) >= 0.6 ? 'moon' : cloudPos.length && !sunOn ? 'cloud' : 'sun';
+    p.weather = weatherKey();
     p.time_of_day = nightFactor(timeOfDay) >= 0.6 ? 'evening' : timeOfDay < 0.5 ? 'morning' : 'afternoon';
     memory.weather_chat_done = true; save(); return showAmbient(p);
+  }
+  function weatherKey() {
+    if (rainOn) return 'rain';
+    if (nightFactor(timeOfDay) >= 0.6) return starPos.length && nightWeatherCount++ % 2 === 0 ? 'star' : 'moon';
+    // Daylight clouds count when they cross the sun, rather than only at night.
+    return cloudPos.some(function (c) { return Math.abs(c.x - sunPos.x) < 42 * c.scale && Math.abs(c.y - sunPos.y) < 24 * c.scale; }) ? 'cloud' : 'sun';
   }
   function listenSocial() {
     if ((!nameFlow && determineMode('speech') !== 'recast') || socialRecognizer) return;
@@ -939,6 +956,7 @@ function validConversation(value, p) {
     try {
       var r = new SR(); socialRecognizer = r; r.lang = 'en-US'; r.interimResults = false; r.continuous = false;
       document.getElementById(n ? 'name-mic' : 'buddy-mic').disabled = true;
+      r.onstart = function () { if (socialRecognizer === r) micRecording(n ? 'name-mic' : 'buddy-mic', true); };
       if (window.speechSynthesis) speechSynthesis.cancel();
       r.onresult = function (e) {
         var result = e.results[e.resultIndex || 0], said = result && result[0] && result[0].transcript;
@@ -1277,10 +1295,11 @@ function validConversation(value, p) {
     if (chatQueue.length > 2) chatQueue.shift();
   }
   function stopChatListening() {
+    micRecording('chat-mic', false);
     if (recognitionTimer) { clearTimeout(recognitionTimer); recognitionTimer = null; }
     if (chatRecognizer) {
       var r = chatRecognizer; chatRecognizer = null;
-      r.onresult = r.onerror = r.onend = null;
+      r.onstart = r.onresult = r.onerror = r.onend = null;
       try { r.abort(); } catch (err) { /* optional browser feature */ }
     }
   }
@@ -1507,6 +1526,7 @@ function validConversation(value, p) {
       var active = dialogue, r = new SR(); chatRecognizer = r;
       r.lang = 'en-US'; r.interimResults = false; r.continuous = false; r.maxAlternatives = 3;
       status.textContent = '🎤 …';
+      r.onstart = function () { if (chatRecognizer === r) micRecording('chat-mic', true); };
       r.onresult = function (e) {
         if (dialogue !== active) return;
         var result = e.results[e.resultIndex || 0], choice = '', said = '';
@@ -1514,12 +1534,12 @@ function validConversation(value, p) {
         if (choice) answerChat(choice, said);
         else retryChat(said);
       };
-      r.onerror = function () { if (dialogue === active) speechFallback(); };
-      r.onend = function () { if (chatRecognizer === r) { if (recognitionTimer) { clearTimeout(recognitionTimer); recognitionTimer = null; } chatRecognizer = null; if (dialogue === active && !active.answered && !active.pending) speechFallback(); } };
+      r.onerror = function () { stopChatListening(); if (dialogue === active) speechFallback(); };
+      r.onend = function () { if (chatRecognizer === r) { stopChatListening(); if (dialogue === active && !active.answered && !active.pending) speechFallback(); } };
       r.start();
       // Some engines never fire onend after permission or network problems.
-      recognitionTimer = setTimeout(function () { recognitionTimer = null; if (chatRecognizer === r) { chatRecognizer = null; try { r.abort(); } catch (err) { /* optional */ } if (dialogue === active && !active.answered && !active.pending) speechFallback(); } }, 8000);
-    } catch (err) { chatRecognizer = null; speechFallback(); }
+      recognitionTimer = setTimeout(function () { if (chatRecognizer === r) { stopChatListening(); if (dialogue === active && !active.answered && !active.pending) speechFallback(); } }, 8000);
+    } catch (err) { stopChatListening(); speechFallback(); }
   }
   function speechFallback() {
     if (!dialogue || dialogue.answered || dialogue.pending) return;
@@ -2969,6 +2989,24 @@ function validConversation(value, p) {
     g.fillStyle = grd;
     g.beginPath(); g.arc(x, y, r, 0, 6.3); g.fill();
   }
+  function changeRain(on) {
+    if (rainOn && !on) rainbowLeft = 18;
+    if (on) rainbowLeft = 0;
+    rainOn = on;
+  }
+  function drawRainbow(g) {
+    if (rainbowLeft <= 0 || rainOn) return;
+    var alpha = Math.min(1, (18 - rainbowLeft) / 1.2, rainbowLeft / 4) * (1 - nightFactor(timeOfDay));
+    if (alpha <= 0) return;
+    var radius = Math.min(viewW * 0.32, viewH * 0.26, 180);
+    g.save(); g.globalAlpha = alpha * 0.65; g.lineWidth = 3; g.lineCap = 'round';
+    ['#e99891', '#e9b17d', '#e4ce88', '#a9c49a', '#95c3ce', '#aca5ca', '#c4a1c2'].forEach(function (color, i) {
+      g.strokeStyle = color; g.beginPath();
+      g.arc(viewW * (viewW > 600 ? 0.72 : 0.5), viewH * 0.34, radius - i * Math.min(6, radius / 10), Math.PI, Math.PI * 2);
+      g.stroke();
+    });
+    g.restore();
+  }
   function drawFrame(sec) {
     var z = tileScreen / TILE;
     var sky = skyColors(timeOfDay);
@@ -3055,7 +3093,7 @@ function validConversation(value, p) {
       var cx = ((hash2(ci, 2, 8) * 900 + sec * (8 + ci * 3) - drawCamX * 0.15) % (viewW + 180) + viewW + 180) % (viewW + 180) - 80;
       var cy = 28 + hash2(ci, 3, 8) * viewH * 0.22;
       var sc = 0.75 + hash2(ci, 4, 8) * 0.6;
-      cloudPos.push({ x: cx, y: cy });
+      cloudPos.push({ x: cx, y: cy, scale: sc });
       ctx.globalAlpha = (rainOn ? 0.75 : 0.92) - night * 0.72;
       ctx.fillStyle = rainOn ? '#dfe8f2' : '#fff';
       ctx.beginPath();
@@ -3065,6 +3103,7 @@ function validConversation(value, p) {
       ctx.fill();
       ctx.globalAlpha = 1;
     }
+    drawRainbow(ctx);
     var hill = mixc([112, 186, 104], [30, 48, 64], night);
     var hill2 = mixc([168, 214, 140], [46, 64, 84], night);
     function hillBand(color, parallax, amp, baseY) {
@@ -4198,12 +4237,13 @@ function validConversation(value, p) {
     animatePictures(sec);
     var playing = started && !rotateBlock() && !panelOpen() && !chatBlocked();
     if (playing) {
+      rainbowLeft = Math.max(0, rainbowLeft - dt);
       rainTimer -= dt;
       if (rainTimer <= 0) {
-        rainOn = !rainOn && nightFactor(timeOfDay) < 0.6;
+        changeRain(!rainOn && nightFactor(timeOfDay) < 0.6);
         rainTimer = rainOn ? (10 + Math.random() * 7) : (30 + Math.random() * 28);
       }
-      if (nightFactor(timeOfDay) >= 0.6 && rainOn) { rainOn = false; rainTimer = 24; }
+      if (nightFactor(timeOfDay) >= 0.6 && rainOn) { changeRain(false); rainTimer = 24; }
       timeOfDay = (timeOfDay + dt / DAY_LEN) % 1;
       var left = Math.min(dt, 0.05);
       while (left > 0) {
@@ -4389,7 +4429,7 @@ function validConversation(value, p) {
       grow: function () { crops.forEach(function (c) { c.age = 99; }); },
       saveNow: function () { save(); },
       rain: function () { return rainOn; },
-      setRain: function (on) { rainOn = !!on; rainTimer = on ? 999 : 999; },
+      setRain: function (on) { changeRain(!!on); rainTimer = 999; },
       totalWords: function () { return Object.keys(WORD).length; },
       fps: function () { return fps; },
       error: function () { return frameErr; },
