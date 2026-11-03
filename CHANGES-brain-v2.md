@@ -282,3 +282,22 @@ No nginx configuration change, no main update. Push destination: only
   `brain/.env.example` is tracked; credential-pattern scans of both reviewed
   commits and workspace logs found no matches. Service logging contains no
   credentials or request/response bodies. No real provider or microphone was used.
+
+## Review of f350bbd — mobile dialogue recovery
+
+- Fixed two reproduced input traps: rotating to portrait during an unanswered
+  question blocked the portrait opt-in button, and a short landscape viewport
+  could not touch-scroll the dialogue to its recovery controls.
+- Portrait opt-in now works through the blocking input guard, including keyboard
+  focus/activation. Dialogue touch scrolling is allowed inside the panel. Both
+  paths preserve the unanswered question and paused world.
+- Added browser regressions for rotation and a real CDP touch swipe in a
+  740 × 240 viewport; each failed before its fix. Existing answer, parent skip,
+  mic fallback, three-attempt reveal, AI validation and request budgets remain intact.
+- Validation: all 40 backend tests, the brain integration suite, six Chinese-UI
+  checks, and the expanded blocking suite passed using synthetic speech/HTTP.
+- Production audit: deployed `server.cjs` matches the repository SHA-256;
+  `huanrui.conf` matches the recorded deployment hash; `.env` is root-owned mode
+  600; service is active; HTTPS preflight returns 204. No redeploy was necessary.
+  `BRAIN_URL` remains `https://brain.yydriver.cn/buddy`, with nginx 30 requests/minute
+  per IP (burst 10) and client limits of 8/minute and 60/tab session.

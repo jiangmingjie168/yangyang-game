@@ -58,7 +58,8 @@
   #chat-shade[hidden], #chat-close[hidden], #chat-confirm[hidden] { display: none; }
   body.chat-blocked #hud { z-index: 32; }
   body.chat-blocked #btn-craft, body.chat-blocked #btn-words, body.chat-blocked #controls, body.chat-blocked #hotbar { opacity: .5; }
-  #dialogue { z-index: 41; max-height: calc(100dvh - 100px); overflow-y: auto; overscroll-behavior: contain; }
+  #dialogue { z-index: 41; max-height: calc(100dvh - 100px); overflow-y: auto; overscroll-behavior: contain; touch-action: pan-y; }
+  #dialogue button { touch-action: pan-y; }
   #parent-name { width: 100%; padding: 8px; border: 2px solid #abd58f; border-radius: 8px; font: inherit; user-select: text; touch-action: auto; }
   #parent-skip { margin: 10px 0; background: #ffe7ac !important; }
   #dialogue[hidden], #parent-help[hidden] { display: none; }
@@ -3582,7 +3583,7 @@ const BRAIN_TIMEOUT_MS = 6500;
   function bind() {
     document.addEventListener('pointerdown', function (e) {
       chatLastInput = chatClock;
-      if (chatBlocked() && !e.target.closest('#dialogue, #parent-help, #btn-zh')) { e.preventDefault(); e.stopImmediatePropagation(); }
+      if (chatBlocked() && !e.target.closest('#dialogue, #parent-help, #btn-zh, #btn-portrait')) { e.preventDefault(); e.stopImmediatePropagation(); }
     }, true);
     tapButton(document.getElementById('btn-start'), beginGame);
     tapButton(document.getElementById('btn-new'), function () {
@@ -3628,7 +3629,7 @@ const BRAIN_TIMEOUT_MS = 6500;
     // not resume movement, hotbar selection, or crafting beneath the overlay.
     ['pointerup', 'click'].forEach(function (type) {
       document.addEventListener(type, function (e) {
-        if (chatBlocked() && !e.target.closest('#dialogue, #parent-help, #btn-zh')) { e.preventDefault(); e.stopImmediatePropagation(); }
+        if (chatBlocked() && !e.target.closest('#dialogue, #parent-help, #btn-zh, #btn-portrait')) { e.preventDefault(); e.stopImmediatePropagation(); }
       }, true);
     });
     tapButton(document.getElementById('quest'), function () {
@@ -3645,11 +3646,13 @@ const BRAIN_TIMEOUT_MS = 6500;
     tapButton(document.getElementById('craft-back'), closeCraft);
     tapButton(document.getElementById('book-back'), closeBook);
     tapButton(document.getElementById('btn-home'), goHome);
-    tapButton(document.getElementById('btn-portrait'), function () {
+    function allowPortrait() {
       portraitOk = true;
       document.body.classList.add('ok-portrait');
       resize();
-    });
+    }
+    tapButton(document.getElementById('btn-portrait'), allowPortrait);
+    document.getElementById('btn-portrait').addEventListener('click', function (e) { if (e.detail === 0) allowPortrait(); });
     document.getElementById('btn-break').addEventListener('pointerdown', function (e) {
       e.preventDefault();
       if (!started || rotateBlock() || panelOpen()) return;
@@ -3728,13 +3731,13 @@ const BRAIN_TIMEOUT_MS = 6500;
       if (chatBlocked()) {
         if (e.code === 'Escape') { e.preventDefault(); closePanels(); return; }
         if (e.code === 'Tab') {
-          var scope = document.getElementById('parent-help').hidden ? '#dialogue button:not([hidden]):not(:disabled), #btn-zh' : '#parent-help button:not([hidden]):not(:disabled), #parent-help input';
+          var scope = rotateBlock() ? '#btn-portrait' : document.getElementById('parent-help').hidden ? '#dialogue button:not([hidden]):not(:disabled), #btn-zh' : '#parent-help button:not([hidden]):not(:disabled), #parent-help input';
           var focusable = Array.prototype.filter.call(document.querySelectorAll(scope), function (el) { return el.getClientRects().length; });
           var at = focusable.indexOf(document.activeElement);
           e.preventDefault(); if (focusable.length) focusable[(at + (e.shiftKey ? -1 : 1) + focusable.length) % focusable.length].focus();
           return;
         }
-        if (/^(Enter|Space)$/.test(e.code) && e.target.closest('#dialogue, #parent-help, #btn-zh')) return;
+        if (/^(Enter|Space)$/.test(e.code) && e.target.closest('#dialogue, #parent-help, #btn-zh, #btn-portrait')) return;
         if (e.target.closest('#parent-help')) return;
         e.preventDefault(); return;
       }
@@ -3757,7 +3760,7 @@ const BRAIN_TIMEOUT_MS = 6500;
     window.addEventListener('blur', function () { keys = {}; joyX = 0; });
     document.addEventListener('touchmove', function (e) {
       var t = e.target;
-      if (t && t.closest && t.closest('.body, .hotbar, #parent-help')) return;
+      if (t && t.closest && t.closest('.body, .hotbar, #parent-help, #dialogue')) return;
       e.preventDefault();
     }, { passive: false });
     ['gesturestart', 'gesturechange', 'gestureend'].forEach(function (ev) {
