@@ -67,7 +67,13 @@ Response (same in AI/template modes):
   target must be one. Model cannot change their order, answer, tier or done.
 - Output must be ASCII English, 1–12 words, with a small fixed scaffold plus
   the supplied option vocabulary. No new content vocabulary is allowed.
-  Tier-specific structure and praise after replies are checked too. Invalid
+  The entire sentence must match a rule-owned tier form, with optional praise:
+  tier 1 `<first label> or <second label>?` (optionally `Is this ...?`),
+  tier 2 `What's this?` or `What is this?`, tier 3 the template's `I see ... .`
+  sentence followed by `Say it!` or `Your turn!`. Closing allows only praise
+  and `Keep exploring!` or `Let's keep exploring!`. Praise is required after
+  replies and on closing. Extra questions or answer-redirection text are rejected
+  even when every word is in the vocabulary whitelist. Invalid
   **input** is HTTP 400; invalid **model output** is repaired or template HTTP 200.
 - Successful tier 1 answers (tap or speech) count toward `t1 >= 2`. Only spoken
   successes in tier 2 count toward `t2 >= 2`. Choosing recovery options counts

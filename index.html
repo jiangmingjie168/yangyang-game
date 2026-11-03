@@ -905,11 +905,18 @@ const BRAIN_TIMEOUT_MS = 6500;
     var vocabulary = scaffold.concat(d.options.reduce(function (all, key) { return all.concat(WORD[key][0].toLowerCase().split(' ')); }, []));
     if (!/^[A-Za-z ,.!?'’-]+$/.test(reply.say) || /[^\x20-\x7e]/.test(reply.say) || reply.say.length > 160 ||
         tokens.length < 1 || tokens.length > 12 || !tokens.every(function (w) { return vocabulary.indexOf(w) >= 0; })) return false;
-    if (feedback !== 'prompt' && !/^(great!|nice!|good job!|well done!)/i.test(reply.say)) return false;
-    if (expected.done) return reply.say.indexOf('?') < 0;
-    if (d.choices || d.tier === 1) return /\bor\b/i.test(reply.say) && reply.say.indexOf('?') >= 0 && d.options.every(function (k) { return reply.say.toLowerCase().indexOf(WORD[k][0].toLowerCase()) >= 0; });
-    if (d.tier === 2) return /\b(what's this|what is this)\?/i.test(reply.say) && !d.options.some(function (k) { return tokens.indexOf(k) >= 0; });
-    return new RegExp('\\bi see (?:a |an |the )?' + WORD[d.key][0].toLowerCase() + '\\b', 'i').test(reply.say) && reply.say.indexOf('?') < 0 && tokens.indexOf('or') < 0;
+    var praise = /^(great!|nice!|good job!|well done!)\s*/i;
+    if ((expected.done || feedback !== 'prompt') && !praise.test(reply.say.trim())) return false;
+    // Keep the complete exercise within the same rule-owned forms as the server.
+    var body = reply.say.trim().replace(praise, '').toLowerCase();
+    if (expected.done) return /^(let's )?keep exploring!$/.test(body);
+    if (d.choices || d.tier === 1) {
+      var question = d.options.map(function (k) { return WORD[k][0].toLowerCase(); }).join(' or ') + '?';
+      return body === question || body === 'is this ' + question;
+    }
+    if (d.tier === 2) return body === "what's this?" || body === 'what is this?';
+    var sentence = expected.say.replace(praise, '').toLowerCase().split('. ')[0];
+    return body === sentence + '. say it!' || body === sentence + '. your turn!';
   }
   function renderChat(d, reply) {
     if (dialogue !== d) return;

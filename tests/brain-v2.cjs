@@ -118,6 +118,17 @@ function report(text) { console.log('PASS', text); }
   p=await page(next(fixture),{endpoint:URL+'/mock-buddy',reply:q=>template(normalize(q)),delay:350,timeout:100}); await chat(p);
   assert.equal(await p.locator('#chat-question').innerText(),'Tree or wood?'); await checkClose(p);
   report('client rejects unsafe/stale rule fields and falls back on malformed JSON/network error/timeout');
+  for (const [tier, say] of [[1, 'Tree or wood? What is wood?'], [2, "What's this? What can you say?"], [3, 'I see a tree. Say wood!']]) {
+    const seed = next(fixture); seed.adventure.levels.tree = { t1: tier >= 2 ? 2 : 0, t2: tier === 3 ? 2 : 0, t3: 0 };
+    p = await page(seed, { endpoint: URL + '/mock-buddy', reply: q => ({ ...template(normalize(q)), say: q.feedback === 'success' ? 'Great! Say wood!' : say }) });
+    await chat(p);
+    assert.equal(await p.locator('#chat-question').innerText(), template(normalize(p.calls[0])).say);
+    await voice(p, 'tree');
+    assert.equal(await p.locator('#chat-question').innerText(), 'Great! Keep exploring!');
+    assert(!(await p.evaluate(() => spoken)).includes(say));
+    await checkClose(p);
+  }
+  report('client rejects added questions, redirected sentence practice, and exercises after closing');
   p=await page(next(fixture),{endpoint:URL+'/mock-buddy',reply:q=>template(normalize(q)),delay:350});
   await p.evaluate(()=>BW.hideCard()); const pos=await p.evaluate(()=>BW.worldToScreen(87.5*32,15.5*32)); await p.mouse.click(pos.x,pos.y);
   await p.waitForFunction(()=>BW.adventure().active?.pending); await p.keyboard.press('ArrowLeft');

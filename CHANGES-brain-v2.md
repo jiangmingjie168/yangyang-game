@@ -158,3 +158,26 @@
 - **真机语音三验（识别可用性、TTS 音色、触控手感）未做**，由团队合并后实测。
 - 未使用真实 API Key、未调用真实 DeepSeek、未部署；脑服务生产配置与公网表现仍按 Run 1 待验。
 - 本轮只提交并推送 `origin/codex-brain-v2`，不推送或合并 main。
+
+## Constraint review — 57c40c3 + 9294f62 against c3c3b98
+
+- Confirmed one violation of the rule-skeleton/AI-mouth boundary: both validators
+  checked sentence fragments, so `Fish or wood? What is wood?`,
+  `What's this? What can you say?`, `I see a fish. Say wood!`, and a closing
+  `Great! Say wood!` passed despite changing or adding an exercise.
+- Server and browser now validate the complete sentence against bounded,
+  rule-owned tier forms. Praise and phrasing variants remain available; the
+  model cannot append questions, redirect the answer, or restart a closed exercise.
+  The system prompt and protocol documentation describe the accepted forms.
+- Regression evidence: eight added rejection cases failed before the fix.
+  After the fix, all **36 server/mock tests** pass, including one corrective retry,
+  template fallback, accepted phrasing variants, and timeout/slow-body fallback.
+  `tests/brain-v2.cjs` passes with added browser rejection/TTS checks across all
+  three tiers and closing. `tests/chinese-cleanup.cjs`: **6 groups pass**.
+  `tests/playthrough.cjs`: **17 groups pass**, including all 24 tasks, save/resume,
+  42 words, and offline `file://` play. Syntax and `git diff --check` pass.
+- No other checklist violations found. Vocabulary, tasks, chapter boundaries,
+  save key/version, and the default empty `BRAIN_URL` remain unchanged. Only
+  `brain/.env.example` is tracked; credential-pattern scans of both reviewed
+  commits and workspace logs found no matches. Service logging contains no
+  credentials or request/response bodies. No real provider or microphone was used.

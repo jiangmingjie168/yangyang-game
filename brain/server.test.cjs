@@ -85,6 +85,38 @@ test('every vocabulary item has valid templates in all tiers', () => {
     assert(validOutput(template(p), p), word + ' tier ' + tier);
   }
 });
+test('bounded phrasing variants still use the model response', async () => {
+  for (const [tier, feedback, say] of [
+    [1, 'prompt', 'Nice! Is this fish or wood?'],
+    [2, 'retry', 'Well done! What is this?'],
+    [3, 'prompt', 'Good job! I see a fish. Your turn!'],
+    [1, 'success', "Nice! Let's keep exploring!"]
+  ]) {
+    const p = normalize({ ...input, tier, feedback }), value = { ...template(p), say };
+    const result = await scenario([value], p);
+    assert.deepEqual(result.value, value); assert.equal(result.calls.length, 1);
+  }
+});
+test('model phrasing cannot add exercises or redirect the rule-selected answer', async t => {
+  const cases = [
+    [1, 'prompt', 'Fish or wood? What is wood?'],
+    [1, 'prompt', 'What is fish or wood?'],
+    [2, 'prompt', "What's this? What can you say?"],
+    [2, 'prompt', "What's this? Say it or say this?"],
+    [3, 'prompt', 'I see a fish. Say wood!'],
+    [3, 'prompt', 'I see a fish.'],
+    [1, 'success', 'Great! Say wood!'],
+    [3, 'success', 'Nice! I see a wood. Say it!']
+  ];
+  for (const [tier, feedback, say] of cases) await t.test(say, async () => {
+    const p = normalize({ ...input, tier, feedback }), good = template(p), bad = { ...good, say };
+    assert.equal(validOutput(bad, p), false);
+    const repaired = await scenario([bad, good], p);
+    assert.deepEqual(repaired.value, good); assert.equal(repaired.calls.length, 2);
+    const failed = await scenario([bad], p);
+    assert.deepEqual(failed.value, good); assert.equal(failed.calls.length, 2);
+  });
+});
 test('untrusted input rejected; no key never calls provider', async () => {
   assert.equal((await scenario(['timeout'], input, { key: '' })).calls.length, 0);
   for (const patch of [{ options: ['fish','dragon'] }, { options: ['fish','fish'] }, { target_word: 'cat' }, { tier: 4 }, { turn: -1 }, { turn: 0.5 }, { child_said: 'x'.repeat(161) }, { chapter: 4 }, { scene: '<script>' }]) {
