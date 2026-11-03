@@ -1,0 +1,131 @@
+{
+  "mode": "after",
+  "encounters": 4,
+  "brain": 14,
+  "template": 1,
+  "ratio": "14/15",
+  "brainPercent": 93.33333333333333,
+  "records": [
+    {
+      "encounter": 0,
+      "event": "name_ask",
+      "source": "brain",
+      "ms": 2128,
+      "say": "Hi! What is your name?"
+    },
+    {
+      "encounter": 0,
+      "event": "greet",
+      "source": "brain",
+      "ms": 1252,
+      "say": "Good afternoon, Mario. It's so nice to see you. Let's find something fun!"
+    },
+    {
+      "encounter": 1,
+      "event": "greet",
+      "source": "brain",
+      "ms": 850,
+      "say": "Good afternoon, Alex. I'm happy you're back. Shall we play together?"
+    },
+    {
+      "encounter": 1,
+      "event": "task",
+      "tier": 1,
+      "feedback": "prompt",
+      "source": "brain",
+      "ms": 775,
+      "say": "Alex! Tree or wood?"
+    },
+    {
+      "encounter": 1,
+      "event": "task",
+      "tier": 1,
+      "feedback": "success",
+      "source": "brain",
+      "ms": 1415,
+      "say": "Great! You said tree! Keep exploring!"
+    },
+    {
+      "encounter": 2,
+      "event": "greet",
+      "source": "brain",
+      "ms": 1402,
+      "say": "Good afternoon, Alex. I'm happy you're back. Shall we play together?"
+    },
+    {
+      "encounter": 2,
+      "event": "task",
+      "tier": 2,
+      "feedback": "prompt",
+      "source": "brain",
+      "ms": 1291,
+      "say": "Alex! What's this?"
+    },
+    {
+      "encounter": 2,
+      "event": "task",
+      "tier": 2,
+      "feedback": "success",
+      "source": "template",
+      "ms": 1821,
+      "say": "Great! Keep exploring!"
+    },
+    {
+      "encounter": 3,
+      "event": "greet",
+      "source": "brain",
+      "ms": 1538,
+      "say": "Hello Alex. I'm glad we can play again. Let's build something together!"
+    },
+    {
+      "encounter": 3,
+      "event": "weather_chat",
+      "source": "brain",
+      "ms": 857,
+      "say": "Look! I see the sun!"
+    },
+    {
+      "encounter": 3,
+      "event": "task",
+      "tier": 3,
+      "feedback": "prompt",
+      "source": "brain",
+      "ms": 1365,
+      "say": "Alex! I see a tree. Say it!"
+    },
+    {
+      "encounter": 3,
+      "event": "task",
+      "tier": 3,
+      "feedback": "success",
+      "source": "brain",
+      "ms": 1006,
+      "say": "Great! You said tree! Keep exploring!"
+    },
+    {
+      "encounter": 4,
+      "event": "greet",
+      "source": "brain",
+      "ms": 1127,
+      "say": "Good afternoon, Alex. I'm happy you're back. Shall we play together?"
+    },
+    {
+      "encounter": 4,
+      "event": "task",
+      "tier": 3,
+      "feedback": "prompt",
+      "source": "brain",
+      "ms": 870,
+      "say": "Alex, you found wood! I see a tree. Say it!"
+    },
+    {
+      "encounter": 4,
+      "event": "task",
+      "tier": 3,
+      "feedback": "success",
+      "source": "brain",
+      "ms": 1980,
+      "say": "Great! You said tree! Keep exploring!"
+    }
+  ]
+}

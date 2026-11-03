@@ -18,9 +18,11 @@ async function page(data, { endpoint = '', reply, voice = true, timeout = 6500, 
   p.on('pageerror', e => p.errors.push(String(e)));
   p.network = []; p.on('console',m=>{if(m.type()==='error')p.network.push({console:m.text()});}); p.on('requestfailed', r => { if (r.url().includes('buddy')) p.network.push({url:r.url(),error:r.failure()}); });
   p.on('response', r => { if (r.url().includes('buddy')) p.network.push({url:r.url(),status:r.status(),body:r.request().postData()}); });
-  await p.route(URL + '/', r => r.fulfill({ contentType: 'text/html', body: html.replace("const BRAIN_URL = '';", 'const BRAIN_URL = ' + JSON.stringify(endpoint) + ';').replace('const BRAIN_TIMEOUT_MS = 6500;', 'const BRAIN_TIMEOUT_MS = ' + timeout + ';') }));
+  await p.route(URL + '/', r => r.fulfill({ contentType: 'text/html', body: html.replace(/^const BRAIN_URL = '[^']*';$/m, 'const BRAIN_URL = ' + JSON.stringify(endpoint) + ';').replace('const BRAIN_TIMEOUT_MS = 6500;', 'const BRAIN_TIMEOUT_MS = ' + timeout + ';') }));
   if (reply) await p.route('**/mock-buddy', async r => {
-    const payload = r.request().postDataJSON(); p.calls.push(payload);
+    const payload = r.request().postDataJSON();
+    if (['greet','name_ask','recast','weather_chat','small_talk'].includes(payload.event)) return r.fulfill({ contentType: 'application/json', body: JSON.stringify(template(normalize(payload))) });
+    p.calls.push(payload);
     await new Promise(r => setTimeout(r, delay));
     const value = typeof reply === 'function' ? reply(payload) : reply;
     await r.fulfill({ contentType: 'application/json', body: typeof value === 'string' ? value : JSON.stringify(value) }).catch(() => {});
@@ -35,7 +37,8 @@ async function page(data, { endpoint = '', reply, voice = true, timeout = 6500, 
     else { window.SpeechRecognition = undefined; window.webkitSpeechRecognition = undefined; }
     window.voiceResult = text => { const r = window.recognizer; r.onresult?.({ resultIndex: 0, results: [[{ transcript: text }]] }); r.onend?.(); };
   }, { data, voice });
-  await p.goto(URL + '/#seed=42'); await p.click('#btn-start'); await p.waitForTimeout(180);
+  await p.goto(URL + '/#seed=42'); await p.click('#btn-start'); if(await p.locator('#name-entry').isVisible())await p.click('#welcome-play'); await p.waitForTimeout(180);
+  if (await p.locator('#welcome').isVisible()) await p.click('#welcome-play');
   return p;
 }
 function next(data) {
@@ -90,14 +93,18 @@ function report(text) { console.log('PASS', text); }
   report('unavailable mic/unrecognized speech gives tap fallback without tier-two credit');
   p = await page(next(fixture)); await chat(p); const before = (await snapshot(p)).progress;
   for(let n=0;n<3;n++) await p.locator('[data-word="wood"]').click();
-  assert((await p.evaluate(() => BW.adventure().active)).answered); assert.equal(await p.locator('#chat-options button:visible').count(),0);
+  assert(!(await p.evaluate(() => BW.adventure().active)).answered); assert((await p.evaluate(() => BW.adventure().active)).reveal);
+  assert(await p.locator('[data-word=wood]').isDisabled()); await p.locator('[data-word=tree]').click();
   assert.deepEqual((await snapshot(p)).progress,before); await p.waitForFunction(() => !BW.adventure().active); await checkClose(p);
-  report('three displayed questions maximum, mandatory friendly close; no mission penalties');
+  report('three misses reveal answer and require confirmation before friendly close; no mission penalties');
   // Actual browser -> buddy service -> mock DeepSeek. Inject one invalid answer then a valid repair.
   upstream = http.createServer(async (req,res) => {
-    let raw=''; for await (const b of req) raw+=b; const call=JSON.parse(raw); upstreamCalls.push(call);
-    const expected = JSON.parse(call.messages[1].content).expected;
-    const value = upstreamCalls.length===1 ? {...expected, say:'你好'} : {...expected, say: expected.done ? 'Nice! Keep exploring!' : 'Nice! ' + expected.say};
+    let raw=''; for await (const b of req) raw+=b; const call=JSON.parse(raw);
+    const data = JSON.parse(call.messages[1].content), expected = data.expected;
+    if (data.event === 'greet' || data.allowed_lines) return res.end(JSON.stringify({ choices:[{message:{content:JSON.stringify(expected)}}] }));
+    upstreamCalls.push(call);
+    const lead = data.context_leads.length ? data.context_leads[0] + ' ' : '';
+    const value = upstreamCalls.length===1 ? {...expected, say:'你好'} : {...expected, say: 'Nice! ' + lead + expected.say.replace(/^Great! /,'')};
     res.end(JSON.stringify({ choices:[{message:{content:JSON.stringify(value)}}] }));
   });
   const upstreamURL=await listen(upstream);
@@ -132,8 +139,10 @@ function report(text) { console.log('PASS', text); }
   p=await page(next(fixture),{endpoint:URL+'/mock-buddy',reply:q=>template(normalize(q)),delay:350});
   await p.evaluate(()=>BW.hideCard()); const pos=await p.evaluate(()=>BW.worldToScreen(87.5*32,15.5*32)); await p.mouse.click(pos.x,pos.y);
   await p.waitForFunction(()=>BW.adventure().active?.pending); await p.keyboard.press('ArrowLeft');
+  assert(await p.locator('#dialogue').isVisible());
+  await p.click('#btn-zh'); await p.click('#parent-skip');
   await p.waitForTimeout(500); assert(!(await p.locator('#dialogue').isVisible())); assert.equal(await p.evaluate(()=>BW.adventure().active),null); await checkClose(p);
-  report('movement cancels pending dialogue; late response cannot reopen it');
+  report('movement cannot dismiss pending dialogue; parent skip cancels it and late response cannot reopen it');
   // Legacy v1 adventure has no levels/speaking. Malformed optional fields must remain harmless.
   const legacy=next(fixture); delete legacy.adventure.levels; delete legacy.adventure.speaking;
   p=await page(legacy); assert.equal((await chat(p)).tier,1); const saved=await snapshot(p); assert(saved.adventure.levels); assert(Array.isArray(saved.adventure.speaking)); await checkClose(p);
@@ -141,9 +150,9 @@ function report(text) { console.log('PASS', text); }
   p=await page(malformed); assert.equal((await chat(p)).tier,1); assert.equal((await snapshot(p)).adventure.speaking.length,1); await checkClose(p);
   p=await page(next(data)); const restored=await snapshot(p); assert.deepEqual(restored.adventure.levels,data.adventure.levels); assert.deepEqual(restored.adventure.speaking,data.adventure.speaking); await checkClose(p);
   report('legacy/malformed optional data and new mastery/speaking records save compatibility');
-  // File URL + offline context proves no server is needed with empty BRAIN_URL.
+  // File URL + offline context proves the configured brain still has local fallback.
   const offline=await browser.newContext({offline:true,viewport:{width:1180,height:720}}); const f=await offline.newPage();
   await f.addInitScript(data=>localStorage.setItem('block-world-save-v1',JSON.stringify(data)),next(fixture));
-  await f.goto('file://'+require('node:path').resolve(__dirname,'../index.html')); await f.click('#btn-start'); assert(await f.evaluate(()=>BW.layout().started)); await chat(f); assert.equal(await f.locator('#chat-question').innerText(),'Tree or wood?'); await offline.close();
-  report('default empty BRAIN_URL starts and runs template dialogue offline from file://');
+  await f.goto('file://'+require('node:path').resolve(__dirname,'../index.html')); await f.click('#btn-start'); if(await f.locator('#name-entry').isVisible())await f.click('#welcome-play'); assert(await f.evaluate(()=>BW.layout().started)); await chat(f); assert.equal(await f.locator('#chat-question').innerText(),'Tree or wood?'); await offline.close();
+  report('configured BRAIN_URL starts and falls back to template dialogue offline from file://');
 })().catch(e=>{console.error(e);process.exitCode=1;}).finally(async()=>{await browser?.close();await close(brain);await close(upstream);});

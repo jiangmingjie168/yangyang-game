@@ -1,0 +1,20 @@
+[
+  {
+    "tier": 1,
+    "status": 200,
+    "source": "brain",
+    "say": "Alex, you caught a fish! Fish or wood?"
+  },
+  {
+    "tier": 2,
+    "status": 200,
+    "source": "brain",
+    "say": "You caught a fish! What's this?"
+  },
+  {
+    "tier": 3,
+    "status": 200,
+    "source": "brain",
+    "say": "Alex, you caught a fish! I see a fish. Say it!"
+  }
+]

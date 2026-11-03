@@ -1,3 +1,143 @@
+## Final conversation review — 2026-11-03
+
+- Found one scope gap: preferences were visible in the parent panel, but could
+  only be cleared by deleting the whole world. Added a parent-only preference
+  reset that clears preferences and their ask timestamps, persists immediately,
+  and refreshes the displayed values. Name, world progress, speech records and
+  daily chat/weather limits are preserved.
+- Added a browser regression covering the reset, preservation and reload.
+  Server tests (49), memory/chat, greeting, blocking and Chinese UI checks pass.
+  All 17 playthrough checks pass on isolated rerun; the initial concurrent run
+  timed out waiting for the final repeated-fishing encounter. Vocabulary and
+  quest definitions are byte-for-byte unchanged from f33e85b.
+  Speech/recording checks use synthetic browser APIs, not a physical microphone.
+
+# Warm Mario welcome — 2026-11-03
+
+- Default name is Mario, including missing/empty legacy saves; parent edits still
+  persist locally. Start/resume now shows a warm named English welcome instead
+  of the bare Hello card (Hello remains in the existing 42-word pool).
+- Brain receives local morning/afternoon/evening and first/returning context.
+  Rules own three safe phrase slots; server and client validate complete English
+  greetings, exact name, no previous-line repeat, and at most 20 words/200 chars.
+  Exercise validation stays at 12 words. Offline fallbacks rotate four saved IDs;
+  both last ID and displayed text are saved immediately, including before a reply.
+- Welcome leaves play available, has one “Let's play!” button, yields to movement
+  and other taps, and closes 900 ms after speech (14-second final-line deadline
+  when speech events are missing). Dismissal cancels pending requests and prevents
+  late speech/reopening. English TTS uses rate 0.82, volume 0.75, pitch 1.03.
+- Validation: all 42 server tests passed locally and on the deployment host;
+  `tests/greeting.cjs` passed eight headless groups covering migration, saved edits,
+  repeated visits, soft synthetic TTS, offline/no speech, timeout/unsafe replies,
+  cancellation, HTTP brain integration, movement, keyboard continue and portrait.
+  Existing brain, blocking, playthrough (17 groups), Chinese UI (6 groups) and
+  world/save (9 groups) suites all passed. Real device voice quality is untested.
+- Backed up production, rsynced only server/tests, restarted `yangyang-brain`.
+  Four HTTPS greetings returned `brain/validated`; CORS, bad input and an existing
+  exercise also passed. `.env` matched the backup; huanrui hash is unchanged.
+  Evidence: `screens/greeting-mario.png`, `screens/greeting-smoke.json`.
+
+# Blocking dialogue + contextual DeepSeek voice — 2026-11-03
+
+Implemented on `codex-brain-v2`, starting from `5d26e5c`. Production brain remains
+`https://brain.yydriver.cn/buddy`; empty `BRAIN_URL` still runs entirely on local
+templates. No change to the three chapters, 24 tasks, 42-word pool or v1 save key.
+
+- Questions and speak-along now pause world physics and play input immediately,
+  including while waiting for the brain. Backdrop, swipe, ×, Esc, movement,
+  world controls and other child panels cannot dismiss an unanswered prompt.
+  No unanswered timer. After praise, successful prompts close in 1.8 seconds.
+- Gentle hint after a miss; after three misses, reveal/highlight the target and
+  disable the distractor. Require a repeat/tap confirmation, rather than closing.
+  Miss count is separate from the legacy server turn counter (capped at 2).
+- Missing/throwing/denied/empty/hanging recognition offers picture answers and
+  **I said it**, with an 8-second watchdog. Self-confirmation earns no recognized
+  speech or higher speaking-tier credit. These routes work without a brain.
+- Parent settings preserve the current question. **跳过本题**, visible near the
+  top of that panel, cancels it without reward. Pointer and keyboard skip both
+  work; a delayed network response cannot reopen a skipped prompt.
+- Optional English nickname in the parent panel persists as `child_name` in the
+  v1 save. Send up to six recent game actions, prior answer, matched spoken word
+  and four recent buddy lines with the rule-selected target/options/tier.
+  Real mining, crafting, building, discoveries, fishing and pets supply context.
+- AI may select one exact server-constructed context phrase, e.g.
+  `Alex, you found wood!`, `You made a table!`, `Remember wood?`, or
+  `You said tree!`, then phrase the fixed exercise. The client independently
+  validates those phrases. With available context, provider output must use a
+  context phrase and avoid recent-line repeats. One corrective retry, then
+  template; options/answer/done, ASCII, length and 12-word limit remain checked.
+- Opening and success call the brain in ordinary play. The pending picture preview
+  stays silent; only the final validated response (or final fallback) is read,
+  avoiding duplicate template + AI narration. Hints/retries stay local.
+  Eight requests/minute and sixty/tab session, preserved through refresh with
+  sessionStorage; max_tokens stays 180, upstream budget 6 seconds, client 6.5.
+  Existing nginx limits stay in place. Quotas always retain usable tap answers.
+- CORS-exposed `X-Buddy-Source` / `X-Buddy-Reason` identify validated provider
+  output versus server templates; the client separately counts local fallbacks,
+  failures and unknown provenance. Counts appear only in the parent panel and
+  `BW.adventure().brain`. Raw speech is not added to saves; parent help explains
+  the optional online nickname/context/recognition-text transfer.
+
+## Measured before/after — real DeepSeek, synthetic playthrough
+
+`tests/brain-ratio.cjs` uses four seeded encounters with real tree-mining input,
+then synthetic recognized answers, spanning tiers 1/2/3. Each has an opening and
+success, **8 replies** per run. BEFORE ran against the original deployed module
+via SSH, observing whether actual provider JSON passed its validator (no
+credentials logged). AFTER uses public HTTPS provenance and asserts the browser's
+accepted source counts match. These are controlled encounters, not production
+traffic analytics; each encounter starts a fresh page, so cross-encounter memory
+is reset. Mock tests separately verify memory/limits within one session.
+
+| Run | Brain | Template | Brain share | Distinct lines | Contextual lines |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Before | 8 | 0 | 100% | 4 / 8 | 0 / 8 |
+| After | 7 | 1 | 87.5% | 5 / 8 | 7 / 8 |
+
+The original brain was already being called, but all eight accepted replies were
+identical to local template text. The change makes its context visible. The final
+after trace includes one genuine fallback after provider output failed the stricter
+acceptance path; it is counted as a template, not hidden or called an AI response.
+Example live line: **Alex, you found wood! I see a tree. Say it!**
+Raw per-reply source, timing and synthetic text: `screens/brain-ratio-before.json`
+and `screens/brain-ratio-after.json`. No claim of a higher AI acceptance ratio.
+
+## Validation and screenshots
+
+- `node --test brain/server.test.cjs`: **40 passed**, also passed on the server.
+  Includes existing validation/retry/timeout/CORS tests, contextual phrase safety,
+  untrusted fields, explicit provenance, contextual/repetition repair and fallback.
+- `tests/playthrough.cjs`: **all original 17 checks passed**, including actual
+  task actions, crop growth, boat travel, pets, quiz, save/resume and offline file.
+  Harness now answers blocking questions before continuing; it does not bypass
+  the gate. Existing no-network fixtures explicitly disable the optional brain.
+- `tests/brain-v2.cjs`: all tier progression, pronunciation-tolerant matching,
+  local/HTTP fallback, stale-reply and save-compatibility checks passed. Old
+  three-miss auto-close and movement-dismiss expectations now assert the gate.
+- `tests/world-v2.cjs` and `tests/chinese-cleanup.cjs`: passed, including two
+  discovery rounds, parent logs, 42 pictures, effects, touch scroll and offline.
+- `tests/blocking-ai.cjs`: gate inputs, actual touch swipe, >24-second persistence,
+  parent pointer/keyboard skip, three-miss confirmation, five speech failure
+  modes, network timeout/cancellation, nickname/context/speech transfer,
+  source counters, transcript exclusion, session budgets/reload and phone layout.
+- Screens: `screens/blocking-dialogue.png`, `screens/blocking-reveal.png`,
+  `screens/parent-skip.png`, `screens/blocking-phone.png`,
+  `screens/ai-context-line.png` (mock assertion), `screens/ai-live-line.png` (HTTPS).
+  Headless Chromium and synthetic recognition; real-device mic/TTS not tested.
+
+## Deployment
+
+Brain redeployed **yes**, service `yangyang-brain` active. Backups:
+`/root/backups/yangyang-brain-gate-ai-20261103T110838Z/app` (original) and
+`/root/backups/yangyang-brain-gate-ai-context-v2/app` (before context quality gate).
+Only explicit code/docs/test files rsynced; `.env` compared byte-for-byte to the
+original backup and retained unchanged. `huanrui.conf` SHA-256 verified unchanged.
+HTTPS POSTs exercised all three tiers and the actual browser playthrough.
+No nginx configuration change, no main update. Push destination: only
+`origin/codex-brain-v2`.
+
+---
+
 # Block World brain v2 — Run 1 + Run 2
 
 开发分支：`codex-brain-v2`，起点 `codex-upgrade` / `c3c3b98`。
@@ -181,3 +321,148 @@
   `brain/.env.example` is tracked; credential-pattern scans of both reviewed
   commits and workspace logs found no matches. Service logging contains no
   credentials or request/response bodies. No real provider or microphone was used.
+
+## Review of f350bbd — mobile dialogue recovery
+
+- Fixed two reproduced input traps: rotating to portrait during an unanswered
+  question blocked the portrait opt-in button, and a short landscape viewport
+  could not touch-scroll the dialogue to its recovery controls.
+- Portrait opt-in now works through the blocking input guard, including keyboard
+  focus/activation. Dialogue touch scrolling is allowed inside the panel. Both
+  paths preserve the unanswered question and paused world.
+- Added browser regressions for rotation and a real CDP touch swipe in a
+  740 × 240 viewport; each failed before its fix. Existing answer, parent skip,
+  mic fallback, three-attempt reveal, AI validation and request budgets remain intact.
+- Validation: all 40 backend tests, the brain integration suite, six Chinese-UI
+  checks, and the expanded blocking suite passed using synthetic speech/HTTP.
+- Production audit: deployed `server.cjs` matches the repository SHA-256;
+  `huanrui.conf` matches the recorded deployment hash; `.env` is root-owned mode
+  600; service is active; HTTPS preflight returns 204. No redeploy was necessary.
+  `BRAIN_URL` remains `https://brain.yydriver.cn/buddy`, with nginx 30 requests/minute
+  per IP (burst 10) and client limits of 8/minute and 60/tab session.
+
+## Conversation memory, small talk, weather and coach — 2026-11-03
+
+Implemented Claude's conversation/state-machine and rule-owned slot design from
+`/workspace/yangyang-design/claude-design-out.md`, adapted to this repository:
+
+- Extended **block-world-save-v1** with validated preferences, ask timestamps,
+  name onboarding, local calendar day, five-per-day chat count, and once-per-day
+  weather flag. Kept all existing world/adventure/word/name/greeting data.
+  Added no profile/session localStorage keys and no new WORDS.
+- Welcome-card name question supports letters, keyboard and microphone; it
+  releases after 20 seconds with Mario/current parent name. Parent-set names
+  bypass first asking. Existing clear/new-world flow resets name and preferences.
+- Buddy taps and 60-second idle ask animal/build/food preferences once per slot;
+  taps and speech learn only whitelisted game words. Validated made/built events
+  infer a missing build slot. Color questions are skipped because none of the
+  proposed colors belong to WORDS. Food uses fish/wheat/seed only.
+- Added nonblocking weather and tiered recasts, success-path coaching, and
+  preference chips. Physics continues during social bubbles. Blocking exercises,
+  quizzes and name asking gate social chat; interruption aborts pending social
+  speech/network work. In-flight questions do not survive reload.
+- Brain adds strict typed `name_ask`, `small_talk`, `weather_chat`, `recast`
+  payloads, dedicated short prompts, exact safe phrase slots, 3–6 word ASCII
+  validation, one correction, and mirrored offline fallbacks. Existing greet,
+  exercise rules, quotas, deadlines, headers and transcript privacy remain.
+- Replaced the two dialogue tool emojis with blue speaker/coral mic SVG buttons,
+  48px targets, labels and pressed/disabled states. Kept short-screen scrolling.
+  Parent gear now shows saved preferences and daily counters.
+
+Claude adaptations: one existing save instead of two new keys; existing parent
+gear/name/reset instead of a password/new panel; existing 42 words instead of
+Claude's proposed extra colors/animals/foods/weather; 20-second onboarding
+escape; input-length coaching tiers; exact line slots for bounded phrasing.
+No free-typing chat IDE was added.
+
+Samples: first visit “Hi! What is your name?”; returning “Hi Sam. It's so nice
+to see you again. Let's build something together!”; preference “Do you like cat
+or dog?”; coach “Try: I see a dog!”; weather “Look! I see the rain!”.
+
+Screenshots: `screens/name-ask.png`, `screens/small-talk.png`,
+`screens/weather-chat.png`, `screens/chat-buttons.png`, `screens/coach.png`.
+Headless speech/touch tests use synthetic recognition/TTS and Chromium touch
+emulation, not a real microphone or physical phone.
+
+Validation: **48 backend tests pass** locally and on the deployment host.
+`tests/memory-chat.cjs`, `tests/greeting.cjs`, `tests/blocking-ai.cjs`,
+`tests/brain-v2.cjs`, `tests/chinese-cleanup.cjs` (6 groups),
+`tests/world-v2.cjs` (8 groups), and `tests/playthrough.cjs` (17 groups) pass.
+Syntax checks and `git diff --check` pass. New cases include clock rollback
+without duplicate questions, tamed buddy taps, actual full-sentence success
+coaching, no raw transcript save, social interruption, and existing reset.
+
+Production backup: `/root/backups/yangyang-brain-memory-chat-20261103T121319Z/app`.
+Rsync copied only `server.cjs` and `server.test.cjs`; remote tests passed before
+restarting `yangyang-brain`. Service is active. `.env` compares byte-for-byte
+with the backup and remains root:root 600. The protected `huanrui.conf` SHA-256
+is unchanged. Server SHA-256:
+`1fb742cd1fd9cff8d5853b647f04fd70047772723712e1b6cb3e8f6b25e677f8`.
+
+HTTPS smoke: **12/12 POSTs return 200, source brain, reason validated**, including
+all new modes, three recast lengths, return greeting, all exercise tiers and
+success closing. Outputs independently pass the local validator. Observed
+latency 0.83–1.82 seconds; jsDelivr preflight 204; invalid weather rejected 400.
+Evidence: `screens/memory-chat-smoke.json`. No nginx/env/provider configuration
+was changed, and no credentials were printed.
+
+The live `tests/brain-ratio.cjs` check also passes: 14 brain / 1 template
+response across four exercise encounters plus onboarding, welcomes and ambient
+weather. The fixture now waits for completed welcomes instead of counting
+canceled HTTP replies as accepted client output. Current evidence is preserved
+separately in `screens/memory-chat-ratio.json`; previous ratio artifacts remain.
+
+## Claude review: top three fixes — 2026-11-03
+
+Implemented only [Claude review, section C](/workspace/yangyang-design/claude-review-out.md):
+
+- Name entry now reads the current field before fallback, allows 30 seconds of
+  inactivity, and resets that timer on letters, typing and mic start. At 10 seconds
+  it shows “You can say it or tap!”. ASR fills the editable field and waits for
+  Hi! / Let's play! confirmation; timers cannot commit unconfirmed speech.
+- Gated or daily-limited Buddy taps replay a silent wave without adding text.
+- Client/server recasts share a noun allowlist, exclude hello/jump/follow/pet/home,
+  and label rod as “fishing rod”. Non-nouns use existing praise. Tier-1 bubbles
+  stay open nine seconds after TTS so the mic remains reachable.
+
+Validation: **49 server tests pass locally and on the host**; expanded
+`tests/memory-chat.cjs`, greeting, blocking-ai and brain-v2 suites pass, with
+synthetic TTS/ASR. Script syntax and `git diff --check` pass.
+Backup before rsync: `/root/backups/yangyang-brain-claude-top3-20261103T122823Z/app`.
+Only the two brain code/test files were copied; service restarted and is active,
+deployed hashes match, and `.env` / protected nginx configuration are unchanged.
+HTTPS smoke: **9/9 POSTs return 200, brain/validated**, covering name_ask,
+excluded non-nouns, fishing rod in both coached tiers and cat; preflight is 204.
+Evidence: [claude-top3-smoke.json](screens/claude-top3-smoke.json).
+
+## Weather pictures and recording feedback — 2026-11-03
+
+- All three microphones (exercise, Buddy and name entry) show a coral glow and
+  gentle scale pulse after recognition starts. Shared cleanup clears the state
+  on results, end, errors, start failures, watchdog timeout and dismissal.
+  Existing pressed feedback remains; reduced motion keeps a static coral glow.
+- Weather chat now pairs its existing 3–6 word line with a small `paintIcon`
+  canvas for rain, sun, cloud, moon or star. Rain takes priority; visible stars
+  lead the alternating star/moon night topics. Daytime clouds count when they
+  cross the sun instead of relying on the formerly unreachable daytime check.
+- Clearing rain draws seven soft outlined rainbow arcs in the world sky, fading
+  in and out over 18 seconds. Night hides the rainbow; new rain clears it.
+  Rainbow is visual only: the 42-word set, offline phrase slots, daily chat
+  limits, memory and coaching behavior are unchanged.
+- Updated `screens/chat-buttons.png` with synthetic recording active and
+  `screens/weather-chat.png` with its rain icon; added
+  `screens/weather-rainbow.png`. Inspected all three captures. No physical
+  microphone or device was used.
+
+Validation: 49 backend tests, expanded `tests/memory-chat.cjs`, greeting,
+blocking-ai, brain-v2, world-v2, Chinese cleanup, playthrough and baseline
+suites pass. The memory/chat additions cover all three recording lifecycles,
+reduced motion, five weather pictures, vocabulary membership, short unchanged
+weather templates, and rainbow drawing, fading and rain/night suppression.
+The world suite passed on rerun after one timed gift-collection failure during
+concurrent browser runs. Syntax checks and `git diff --check` pass. The live
+brain-ratio suite also passes (12/14 brain responses, 2 template responses;
+synthetic dialogue, existing HTTPS endpoint).
+
+Client-only change: no brain rsync, service restart, secrets or nginx changes
+were needed. Only `codex-brain-v2` is committed and pushed.

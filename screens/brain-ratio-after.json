@@ -1,0 +1,74 @@
+{
+  "mode": "after",
+  "encounters": 4,
+  "brain": 7,
+  "template": 1,
+  "ratio": "7/8",
+  "brainPercent": 87.5,
+  "records": [
+    {
+      "encounter": 1,
+      "tier": 1,
+      "feedback": "prompt",
+      "source": "brain",
+      "ms": 1850,
+      "say": "Alex! Tree or wood?"
+    },
+    {
+      "encounter": 1,
+      "tier": 1,
+      "feedback": "success",
+      "source": "brain",
+      "ms": 2000,
+      "say": "Great! You said tree! Keep exploring!"
+    },
+    {
+      "encounter": 2,
+      "tier": 2,
+      "feedback": "prompt",
+      "source": "brain",
+      "ms": 1509,
+      "say": "Nice! Alex, you found wood! What's this?"
+    },
+    {
+      "encounter": 2,
+      "tier": 2,
+      "feedback": "success",
+      "source": "brain",
+      "ms": 995,
+      "say": "Great! You said tree! Keep exploring!"
+    },
+    {
+      "encounter": 3,
+      "tier": 3,
+      "feedback": "prompt",
+      "source": "brain",
+      "ms": 1156,
+      "say": "Alex, you found wood! I see a tree. Say it!"
+    },
+    {
+      "encounter": 3,
+      "tier": 3,
+      "feedback": "success",
+      "source": "brain",
+      "ms": 843,
+      "say": "Great! You said tree! Keep exploring!"
+    },
+    {
+      "encounter": 4,
+      "tier": 3,
+      "feedback": "prompt",
+      "source": "brain",
+      "ms": 1118,
+      "say": "Alex, you found wood! I see a tree. Say it!"
+    },
+    {
+      "encounter": 4,
+      "tier": 3,
+      "feedback": "success",
+      "source": "template",
+      "ms": 1810,
+      "say": "Great! Keep exploring!"
+    }
+  ]
+}

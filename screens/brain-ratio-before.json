@@ -1,0 +1,74 @@
+{
+  "mode": "before",
+  "encounters": 4,
+  "brain": 8,
+  "template": 0,
+  "ratio": "8/8",
+  "brainPercent": 100.0,
+  "records": [
+    {
+      "encounter": 1,
+      "tier": 1,
+      "feedback": "prompt",
+      "source": "brain",
+      "ms": 617,
+      "say": "Tree or wood?"
+    },
+    {
+      "encounter": 1,
+      "tier": 1,
+      "feedback": "success",
+      "source": "brain",
+      "ms": 640,
+      "say": "Great! Keep exploring!"
+    },
+    {
+      "encounter": 2,
+      "tier": 2,
+      "feedback": "prompt",
+      "source": "brain",
+      "ms": 624,
+      "say": "What's this?"
+    },
+    {
+      "encounter": 2,
+      "tier": 2,
+      "feedback": "success",
+      "source": "brain",
+      "ms": 835,
+      "say": "Great! Keep exploring!"
+    },
+    {
+      "encounter": 3,
+      "tier": 3,
+      "feedback": "prompt",
+      "source": "brain",
+      "ms": 548,
+      "say": "I see a tree. Say it!"
+    },
+    {
+      "encounter": 3,
+      "tier": 3,
+      "feedback": "success",
+      "source": "brain",
+      "ms": 876,
+      "say": "Great! Keep exploring!"
+    },
+    {
+      "encounter": 4,
+      "tier": 3,
+      "feedback": "prompt",
+      "source": "brain",
+      "ms": 724,
+      "say": "I see a tree. Say it!"
+    },
+    {
+      "encounter": 4,
+      "tier": 3,
+      "feedback": "success",
+      "source": "brain",
+      "ms": 737,
+      "say": "Great! Keep exploring!"
+    }
+  ]
+}

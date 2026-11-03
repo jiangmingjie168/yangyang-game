@@ -1,0 +1,188 @@
+{
+  "at": "2026-11-03T12:15:19.238Z",
+  "endpoint": "https://brain.yydriver.cn/buddy",
+  "preflight": 204,
+  "invalid": 400,
+  "results": [
+    {
+      "event": "name_ask",
+      "tier": null,
+      "status": 200,
+      "source": "brain",
+      "reason": "validated",
+      "ms": 1818,
+      "reply": {
+        "say": "Hi! What is your name?",
+        "options": [],
+        "answer": null,
+        "done": true
+      }
+    },
+    {
+      "event": "small_talk",
+      "tier": null,
+      "status": 200,
+      "source": "brain",
+      "reason": "validated",
+      "ms": 1489,
+      "reply": {
+        "say": "Do you like cat or dog?",
+        "options": [],
+        "answer": null,
+        "done": true
+      }
+    },
+    {
+      "event": "small_talk",
+      "tier": null,
+      "status": 200,
+      "source": "brain",
+      "reason": "validated",
+      "ms": 946,
+      "reply": {
+        "say": "You like the dog!",
+        "options": [],
+        "answer": null,
+        "done": true
+      }
+    },
+    {
+      "event": "weather_chat",
+      "tier": null,
+      "status": 200,
+      "source": "brain",
+      "reason": "validated",
+      "ms": 828,
+      "reply": {
+        "say": "Look! I see the rain!",
+        "options": [],
+        "answer": null,
+        "done": true
+      }
+    },
+    {
+      "event": "recast",
+      "tier": 1,
+      "status": 200,
+      "source": "brain",
+      "reason": "validated",
+      "ms": 1061,
+      "reply": {
+        "say": "Try: I see a cat!",
+        "options": [],
+        "answer": null,
+        "done": true
+      }
+    },
+    {
+      "event": "recast",
+      "tier": 2,
+      "status": 200,
+      "source": "brain",
+      "reason": "validated",
+      "ms": 1231,
+      "reply": {
+        "say": "I can see a dog!",
+        "options": [],
+        "answer": null,
+        "done": true
+      }
+    },
+    {
+      "event": "recast",
+      "tier": 3,
+      "status": 200,
+      "source": "brain",
+      "reason": "validated",
+      "ms": 986,
+      "reply": {
+        "say": "Great! Good job!",
+        "options": [],
+        "answer": null,
+        "done": true
+      }
+    },
+    {
+      "event": "greet",
+      "tier": null,
+      "status": 200,
+      "source": "brain",
+      "reason": "validated",
+      "ms": 1254,
+      "reply": {
+        "say": "Hi Sam. It's so nice to see you again. Let's build something together!",
+        "options": [],
+        "answer": null,
+        "done": true
+      }
+    },
+    {
+      "event": "fish",
+      "tier": 1,
+      "status": 200,
+      "source": "brain",
+      "reason": "validated",
+      "ms": 1679,
+      "reply": {
+        "say": "Fish or wood?",
+        "options": [
+          "fish",
+          "wood"
+        ],
+        "answer": "fish",
+        "done": false
+      }
+    },
+    {
+      "event": "fish",
+      "tier": 2,
+      "status": 200,
+      "source": "brain",
+      "reason": "validated",
+      "ms": 1066,
+      "reply": {
+        "say": "What's this?",
+        "options": [
+          "fish",
+          "wood"
+        ],
+        "answer": "fish",
+        "done": false
+      }
+    },
+    {
+      "event": "fish",
+      "tier": 3,
+      "status": 200,
+      "source": "brain",
+      "reason": "validated",
+      "ms": 940,
+      "reply": {
+        "say": "I see a fish. Say it!",
+        "options": [
+          "fish",
+          "wood"
+        ],
+        "answer": "fish",
+        "done": false
+      }
+    },
+    {
+      "event": "fish",
+      "tier": 2,
+      "status": 200,
+      "source": "brain",
+      "reason": "validated",
+      "ms": 1049,
+      "reply": {
+        "say": "Great! Keep exploring!",
+        "options": [
+          "fish",
+          "wood"
+        ],
+        "answer": "fish",
+        "done": true
+      }
+    }
+  ]
+}

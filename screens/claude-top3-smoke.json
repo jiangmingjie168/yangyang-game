@@ -1,0 +1,159 @@
+{
+  "checked_at": "2026-11-03T12:39:13.834Z",
+  "endpoint": "https://brain.yydriver.cn/buddy",
+  "preflight": 204,
+  "checks": [
+    {
+      "input": {
+        "event": "name_ask",
+        "child_name": "Mario"
+      },
+      "status": 200,
+      "source": "brain",
+      "reason": "validated",
+      "elapsed_ms": 1894,
+      "value": {
+        "say": "Hi! What is your name?",
+        "options": [],
+        "answer": null,
+        "done": true
+      }
+    },
+    {
+      "input": {
+        "event": "recast",
+        "child_said": "hello",
+        "target_tier": 1
+      },
+      "status": 200,
+      "source": "brain",
+      "reason": "validated",
+      "elapsed_ms": 3177,
+      "value": {
+        "say": "Good try! Say it again!",
+        "options": [],
+        "answer": null,
+        "done": true
+      }
+    },
+    {
+      "input": {
+        "event": "recast",
+        "child_said": "jump",
+        "target_tier": 1
+      },
+      "status": 200,
+      "source": "brain",
+      "reason": "validated",
+      "elapsed_ms": 1168,
+      "value": {
+        "say": "Good try! Say it again!",
+        "options": [],
+        "answer": null,
+        "done": true
+      }
+    },
+    {
+      "input": {
+        "event": "recast",
+        "child_said": "follow",
+        "target_tier": 1
+      },
+      "status": 200,
+      "source": "brain",
+      "reason": "validated",
+      "elapsed_ms": 1097,
+      "value": {
+        "say": "Good try! Say it again!",
+        "options": [],
+        "answer": null,
+        "done": true
+      }
+    },
+    {
+      "input": {
+        "event": "recast",
+        "child_said": "pet",
+        "target_tier": 1
+      },
+      "status": 200,
+      "source": "brain",
+      "reason": "validated",
+      "elapsed_ms": 1812,
+      "value": {
+        "say": "Good try! Say it again!",
+        "options": [],
+        "answer": null,
+        "done": true
+      }
+    },
+    {
+      "input": {
+        "event": "recast",
+        "child_said": "home",
+        "target_tier": 1
+      },
+      "status": 200,
+      "source": "brain",
+      "reason": "validated",
+      "elapsed_ms": 908,
+      "value": {
+        "say": "Good try! Say it again!",
+        "options": [],
+        "answer": null,
+        "done": true
+      }
+    },
+    {
+      "input": {
+        "event": "recast",
+        "child_said": "rod",
+        "target_tier": 1
+      },
+      "status": 200,
+      "source": "brain",
+      "reason": "validated",
+      "elapsed_ms": 1178,
+      "value": {
+        "say": "Try: I see a fishing rod!",
+        "options": [],
+        "answer": null,
+        "done": true
+      }
+    },
+    {
+      "input": {
+        "event": "recast",
+        "child_said": "cat",
+        "target_tier": 1
+      },
+      "status": 200,
+      "source": "brain",
+      "reason": "validated",
+      "elapsed_ms": 1481,
+      "value": {
+        "say": "Try: I see a cat!",
+        "options": [],
+        "answer": null,
+        "done": true
+      }
+    },
+    {
+      "input": {
+        "event": "recast",
+        "child_said": "a rod",
+        "target_tier": 2
+      },
+      "status": 200,
+      "source": "brain",
+      "reason": "validated",
+      "elapsed_ms": 859,
+      "value": {
+        "say": "I can see a fishing rod!",
+        "options": [],
+        "answer": null,
+        "done": true
+      }
+    }
+  ]
+}

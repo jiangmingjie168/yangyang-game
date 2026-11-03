@@ -1,9 +1,8 @@
 # Optional Buddy brain
 
 Node **22+**, no npm dependencies. The game stays a single offline `index.html`.
-The service only phrases the game's exercise; the game chooses when to speak,
-words, chapter, tier, correctness, rewards and mastery. No deployment has been
-performed and no real DeepSeek credentials have been used.
+The service phrases rule-owned welcomes, conversations and exercises; the game chooses when to speak,
+words, chapter, tier, correctness, rewards and mastery. Production deployment details are in `../DEPLOY-brain.md`. Credentials remain server-only.
 
 ## Local use and tests
 
@@ -15,6 +14,7 @@ node --test brain/server.test.cjs
 python3 -m http.server 19273 --bind 127.0.0.1
 # In another shell, with Playwright + Chromium already installed:
 PLAYWRIGHT_MODULE=/path/to/node_modules/playwright node tests/brain-v2.cjs
+PLAYWRIGHT_MODULE=/path/to/node_modules/playwright node tests/greeting.cjs
 PLAYWRIGHT_MODULE=/path/to/node_modules/playwright node tests/chinese-cleanup.cjs
 PLAYWRIGHT_MODULE=/path/to/node_modules/playwright node tests/playthrough.cjs
 ```
@@ -30,6 +30,35 @@ JSON/content gets one corrective retry, then templates. There is no logging of
 credentials, child replies, model content or request bodies.
 
 ## Contract
+
+Start/resume welcomes use a separate rule-owned event (no vocabulary exercise):
+
+```json
+{"event":"greet","child_name":"Mario","time_of_day":"morning","returning":false,"greeting_id":0,"last_greeting":""}
+```
+
+`time_of_day` is `morning|afternoon|evening`, `returning` is a boolean,
+`greeting_id` is an optional 0–3 fallback selector, and `last_greeting` is optional
+ASCII text of at most 200 characters. The optional name uses the same two-word
+English-name validation as exercises. The game defaults empty/missing names to
+Mario and saves parent edits locally. The response keeps the JSON envelope:
+
+```json
+{"say":"Hi Mario. I'm so happy you're here. Let's build something together!","options":[],"answer":null,"done":true}
+```
+
+The AI combines exactly one supplied name/time lead, one first/returning warmth
+phrase, and one invitation. Both validators check the entire sentence, exact
+name, ASCII English, at most 20 words/200 characters, empty options, null answer,
+true done, and no repeat of `last_greeting` (case-insensitive). The greeting-only
+length allowance does not loosen the 12-word exercise rules. Greetings share
+existing request budgets, deadlines, one correction, and source headers.
+Offline templates rotate four IDs and exclude the previous saved line. The
+nonmodal welcome has a “Let's play!” button, dismisses after TTS plus 900 ms
+(14-second fallback deadline after the final line), and yields to movement or
+other game taps. Dismissal aborts its request and ignores late replies. Greeting
+TTS reuses the English voice path at rate 0.82, volume 0.75, pitch 1.03; real voice
+quality depends on the device. Welcomes do not create mastery or speaking credit.
 
 `POST /buddy`, `Content-Type: application/json`, max body 8 KiB:
 
@@ -59,19 +88,20 @@ Response (same in AI/template modes):
   decides success; the model cannot interpret a reply to award progress.
 - `child_said` optional, max 160 characters: recognition transcript for phrasing
   only, never trusted as instructions. No audio is uploaded by this service.
-- `turn` is zero-based: opening 0; rephrases 1 and 2; turn **3 always closes**
+- Legacy `turn` is zero-based: opening 0; rephrases 1 and 2; turn **3 always closes**
   (`done=true`, no provider call). Thus at most three displayed questions per
-  anchor. `success` also always closes. This service is stateless: the game's
+  anchor for legacy clients. The blocking client counts misses separately, caps request turns at 2, and reveals the answer locally after three misses. It requires a repeat/tap confirmation; it never sends turn 3 for an unanswered prompt. `success` always closes. This service is stateless: the game's
   dialogue instance owns the counter and rejects later/stale responses.
 - Options must be two distinct known words in the supplied learned whitelist;
   target must be one. Model cannot change their order, answer, tier or done.
 - Output must be ASCII English, 1–12 words, with a small fixed scaffold plus
-  the supplied option vocabulary. No new content vocabulary is allowed.
-  The entire sentence must match a rule-owned tier form, with optional praise:
+  the supplied option vocabulary and exact context phrases. No other content
+  vocabulary is allowed.
+  The entire sentence must match a rule-owned tier form, with optional praise and one exact validated context lead:
   tier 1 `<first label> or <second label>?` (optionally `Is this ...?`),
   tier 2 `What's this?` or `What is this?`, tier 3 the template's `I see ... .`
   sentence followed by `Say it!` or `Your turn!`. Closing allows only praise
-  and `Keep exploring!` or `Let's keep exploring!`. Praise is required after
+  and an optional context lead followed by `Keep exploring!` or `Let's keep exploring!`. Praise is required after
   replies and on closing. Extra questions or answer-redirection text are rejected
   even when every word is in the vocabulary whitelist. Invalid
   **input** is HTTP 400; invalid **model output** is repaired or template HTTP 200.
@@ -146,7 +176,7 @@ location = /buddy {
    `OPTIONS` request with your game `Origin` and a template POST with an empty
    key first. Then set the server key and restart. In `index.html`, set only the
    **public full HTTPS endpoint** in the top-level `BRAIN_URL` constant, e.g.
-   `https://your-buddy-host.example/buddy`. It is empty by default. Never put the
+   `https://your-buddy-host.example/buddy`. This branch defaults to `https://brain.yydriver.cn/buddy`; an empty string disables requests. Never put the
    API key, provider URL or provider model into the webpage.
 
 CORS accepts exact `BRAIN_ALLOWED_ORIGINS`, with no wildcard. It is a browser
@@ -156,3 +186,162 @@ client templates. If nginx/service is down, the game uses local templates.
 Browser speech recognition may itself need internet/permissions, as before;
 taps remain available. Real-device recognition, voice quality and touch testing
 are separate merge-after checks for Hana/the team.
+
+## Blocking client and contextual voice (2026-11-03)
+
+The child cannot close an unanswered prompt. Physics, world controls, background
+clicks, keyboard play and the old 24-second dismissal are blocked. Parent settings
+preserve the prompt and provide **跳过本题** without reward or speech credit.
+Three misses reveal the target; confirmation is still required. Recognition
+failure, permission denial, empty results, unavailable APIs and the 8-second
+watchdog all offer picture choices and **I said it**. Self-confirmation never
+counts as recognized speech or unlocks spoken tiers. Success closes after praise.
+
+Additional optional request fields, bounded and checked before calling the model:
+
+- `child_name`: ASCII English nickname, one or two words, 1–16 letters per word.
+- `recent_events`: up to six `{action, word}` entries; action is
+  `found|made|built|met|caught|rode|task|scene`, and word must be learned.
+- `last_answer`: a previously answered learned word.
+- `spoken_word`: a matched word from the two current options; arbitrary transcript
+  content cannot become an acknowledgment or affect correctness.
+- `recent_lines`: up to four ASCII lines, each at most 160 characters.
+
+The server constructs exact context phrases from these facts, for example
+`Alex, you found wood!`, `You made a table!`, `Remember wood?`, and `You said fish!`.
+The client independently constructs and validates the same phrases. Arbitrary
+transcripts remain untrusted data. Provider output with available context must
+use one allowed phrase and avoid repeating any recent line; otherwise it receives
+one corrective retry and then the usual template fallback. Praise, exercise,
+answer, options, completion, ASCII and the **12-word total** limit remain checked.
+Legacy clients without these fields retain their existing exercise forms.
+
+JSON response fields remain exactly `say/options/answer/done`. The HTTP response
+adds CORS-exposed `X-Buddy-Source: brain|template` and `X-Buddy-Reason` headers.
+`brain` means actual provider output passed validation and contextual quality
+checks, even if its words happen to match a template. The client counts rejected
+JSON, offline, network errors, timeouts, local retries and budgets as templates;
+old servers without provenance count as unknown. `BW.adventure().brain` and the
+Chinese parent panel expose session counters without changing child UI.
+
+The client makes at most eight requests/minute and sixty requests per tab session,
+with budgets in `sessionStorage` so refresh does not reset them. Retries/hints are
+local. Pending previews stay silent so only the final response is read.
+Model output remains capped at 180 tokens; the whole upstream retry budget
+is still six seconds, with a 6.5-second client timeout. Existing nginx IP limits
+remain in force. All budgets keep usable local answer buttons.
+
+The English nickname is saved in the existing v1 save under optional `child_name`.
+Raw transcripts, recent activity and recent AI lines are not added to the save.
+The parent panel explains that the optional online brain receives the nickname,
+game context and recognition text. Audio is never uploaded by this service.
+
+Additional checks:
+
+```sh
+PLAYWRIGHT_MODULE=/path/to/playwright node tests/blocking-ai.cjs
+# Synthetic fixtures + actual game input; AFTER uses public HTTPS:
+PLAYWRIGHT_MODULE=/path/to/playwright node tests/brain-ratio.cjs
+# BEFORE must run before deployment; uses the deployed module via authorized SSH
+# and instruments accepted provider JSON without reading credentials into logs:
+PLAYWRIGHT_MODULE=/path/to/playwright node tests/brain-ratio.cjs --before
+```
+
+Ratio traces and screenshots are saved under `screens/`. These are synthetic
+headless tests; real microphone/voice quality still needs device testing.
+
+## Conversation memory and coaching (2026-11-03)
+
+Four additional events share the same `say/options/answer/done` response and
+`X-Buddy-Source` / `X-Buddy-Reason` provenance. Conversation responses always
+have `options: []`, `answer: null`, `done: true`; preference chips and blocking
+state belong to the client. No server-side profile or transcript is stored.
+
+```json
+{"event":"name_ask","child_name":"Mario","scene":"grass"}
+{"event":"small_talk","child_name":"Sam","prefs":{"animal":null,"build":null},"recent_events":[{"action":"made","word":"table"}],"topic":"learn_pref_animal"}
+{"event":"weather_chat","child_name":"Sam","weather":"rain","time_of_day":"morning"}
+{"event":"recast","child_name":"Sam","child_said":"cat","target_tier":1}
+```
+
+Common optional fields: `child_name` uses the existing English nickname rule;
+`scene` is a 1–24 character lowercase/hyphen slug; `recent_events` contains at
+most six validated `{action,word}` facts with the existing action set and WORDS.
+`prefs` is an object containing only these nullable slots:
+
+| Slot | Allowed values |
+| --- | --- |
+| color | null only (no proposed colors occur in WORDS) |
+| animal | cat, dog, cow, pig, sheep, chicken, duck, horse, rabbit |
+| food | fish, wheat, seed |
+| build | house, table, door, bed, fence, torch, boat |
+
+`small_talk.topic` is null/omitted or `learn_pref_animal`, `learn_pref_build`,
+`learn_pref_food`; a topic for an already filled slot is rejected. Rules supply
+two options (cat/dog, house/table, fish/wheat). Weather is exactly
+`rain|cloud|sun|moon|star`, with `morning|afternoon|evening` time. Recast requires
+nonempty `child_said` of at most 160 characters and the matching `target_tier`:
+one word → 1 (phrase scaffold), two/three → 2 (short sentence), four or more → 3
+(praise only). Unknown vocabulary uses a safe request to try again. Arbitrary
+transcript text never becomes generated content.
+
+Each mode has a short system prompt and rule-owned phrase alternatives. The
+model chooses one exact line; both server and browser check its envelope,
+ASCII English, 3–6 words, 160-character bound, and slot grammar. This also
+restricts all vocabulary to WORDS plus fixed scaffold. One corrective retry
+and the existing shared upstream deadline remain in force; failure uses the
+mirrored offline template. Greet retains its 20-word allowance and exercises
+retain their existing 12-word validation and scaffolding.
+
+The existing `block-world-save-v1` record adds `prefs`, `prefsLearnedAt`,
+`name_asked`, `chat_day` (local YYYY-MM-DD), `small_talk_count`, and
+`weather_chat_done`. No additional localStorage key is created. All values
+are clamped on load; valid positive learning timestamps survive clock changes.
+Only validated made/built events infer a missing build preference. Color is
+skipped. Asking stamps the slot even if unanswered, so it is never re-asked.
+Preference taps or recognized answers save a whitelist value; raw speech is
+never written to the save or counted as mastery by social coaching.
+
+First play asks the name using the welcome card, letters, short input and mic.
+After 20 seconds, or “Let's play!”, it accepts the current/default Mario name,
+saves `name_asked`, and gives the usual named greeting. A parent-set non-default
+name completes onboarding. `#parent-name` remains authoritative; the existing
+two-tap new-world reset clears name/preferences with the rest of the save.
+
+Name asking and exercises gate social chat. Buddy taps or 60 seconds idle
+start at most five small talks per local calendar day, persisted across reloads.
+A 30% opportunity after greeting dismissal gives matching ambient weather,
+at most once a day. Social bubbles let physics continue, dismiss by tap, and
+fade three seconds after TTS (bounded fallback for missing speech events).
+Recognition outside answer context and preference taps receive tiered recasts;
+exercise success also offers a word expansion after its blocking panel closes.
+Blocking starts abort pending social requests and recognition; late replies
+cannot reopen a bubble. In-flight dialogues remain transient on reload.
+
+The parent gear panel shows preferences and today's counts. Listen/Speak use
+48px SVG buttons with blue/coral colors and disabled/pressed states. The
+existing short-screen dialogue scrolling remains usable.
+
+```sh
+node --test brain/server.test.cjs
+PLAYWRIGHT_MODULE=/tmp/node_modules/playwright node tests/memory-chat.cjs
+```
+
+The new browser suite covers onboarding, parent naming, preference taps/speech,
+ask-once timestamps, inference, local daily limits, weather, idle, recast tiers,
+offline file play, valid/rejected/timed-out brain replies, interruption,
+reload/reset, client/server slot parity, and portrait touch buttons. Existing
+regression helpers now complete onboarding through the UI. Greeting-only tests
+isolate their existing contract; onboarding has its own suite. All recognition
+and TTS tests are synthetic, with real device voice quality still unmeasured.
+
+Production rollout: backup at
+`/root/backups/yangyang-brain-memory-chat-20261103T121319Z/app`, only server/test
+files copied, 48 remote tests passed, `yangyang-brain` restarted and active.
+Environment bytes and protected nginx config hash are unchanged. Twelve real
+HTTPS requests (all new events plus greeting and exercise tiers/closing) returned
+validated brain output with status 200; preflight 204 and invalid input 400.
+See `../screens/memory-chat-smoke.json` for synthetic sample outputs/provenance.
+The live browser ratio regression also passes (14 brain / 1 template across
+four exercise encounters plus welcomes/onboarding/weather); current trace is
+`../screens/memory-chat-ratio.json`.
