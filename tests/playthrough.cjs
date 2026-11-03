@@ -13,7 +13,10 @@ const sleep = (p, ms) => p.waitForTimeout(ms);
 async function snapshot(p) { return p.evaluate(() => { BW.saveNow(); return JSON.parse(localStorage.getItem('block-world-save-v1')); }); }
 async function fresh(data, { viewport = { width: 1180, height: 720 }, speech = true, fakeRecognition = false } = {}) {
   const context = await browser.newContext({ viewport });
-  await context.route('**/*', r => new global.URL(r.request().url()).origin === new global.URL(URL).origin ? r.continue() : r.abort());
+  await context.route('**/*', r => {
+    if (r.request().url() === URL + '/') return r.fulfill({contentType:'text/html',body:fs.readFileSync(path.resolve(__dirname,'../index.html'),'utf8').replace(/^const BRAIN_URL = '[^']*';$/m, "const BRAIN_URL = '';")});
+    return new global.URL(r.request().url()).origin === new global.URL(URL).origin ? r.continue() : r.abort();
+  });
   const p = await context.newPage(); p.errors = [];
   p.on('pageerror', e => p.errors.push(String(e)));
   await p.addInitScript(({ data, speech, fakeRecognition }) => {
@@ -38,7 +41,14 @@ async function fresh(data, { viewport = { width: 1180, height: 720 }, speech = t
 }
 async function check(p) { assert.deepEqual(p.errors, []); assert.equal(await p.evaluate(() => BW.error()), ''); }
 async function photo(p, name) { await p.screenshot({ path: path.join(SCREEN, name + '.png') }); }
-async function clear(p) { await p.keyboard.press('Escape'); await p.evaluate(() => BW.hideCard()); }
+async function clear(p) {
+  await p.keyboard.press('Escape'); await p.evaluate(() => BW.hideCard());
+  const d=await p.evaluate(()=>BW.adventure().active);
+  if(d) {
+    if(!d.answered) { if(!d.choices)await p.click('#chat-choices');await p.locator('[data-word="'+d.key+'"]').click(); }
+    await p.waitForFunction(()=>!BW.adventure().active);
+  }
+}
 async function clickWorld(p, x, y, button = 'left') {
   await clear(p);
   const s = await p.evaluate(([x,y]) => BW.worldToScreen(x,y), [x,y]);
@@ -116,12 +126,14 @@ async function heldMove(p,dir,ms) { await p.keyboard.down(dir); await sleep(p,ms
   await p.waitForFunction(()=>BW.ch3().fish===1); await assertQi(p,18);
   await waitChat(p,'fish'); await photo(p,'dialogue-fish');
   assert.equal((await p.evaluate(()=>BW.inv())).fish,1);
-  await p.click('#chat-mic'); assert.equal(await p.locator('#chat-status').textContent(),'👇');
+  await p.click('#chat-mic'); assert.match(await p.locator('#chat-status').textContent(),/Tap an answer/);
   report('Fishing: real cast, wait, catch and fish dialogue; missing recognition tap fallback');
   await clear(p); await relocate(p,2544);
   await p.evaluate(()=>BW.give('seed',2)); await place(p,'seed',75,15); await assertQi(p,19);
   // Wait for the actual 28-second crop growth; never call BW.grow().
-  await p.waitForFunction(()=>BW.ch3().wheatRipe===1,null,{timeout:36000}); await assertQi(p,20);
+  const growthDeadline=Date.now()+45000;
+  while(!(await p.evaluate(()=>BW.ch3().wheatRipe))) { assert(Date.now()<growthDeadline);await sleep(p,250);if(await p.evaluate(()=>BW.adventure().active))await clear(p); }
+  await assertQi(p,20);
   const overlappingCrop=await snapshot(p);const overlappingSheep=overlappingCrop.animals.find(a=>a[0]==='sheep');overlappingSheep[1]=75.5*32;overlappingSheep[2]=512;
   const cropCheck=await fresh(overlappingCrop);await mine(cropCheck,75,15);await assertQi(cropCheck,21);await check(cropCheck);await cropCheck.context().close();
   await mine(p,75,15); await assertQi(p,21); assert((await p.evaluate(()=>BW.inv())).wheat>=2);
@@ -188,7 +200,7 @@ async function heldMove(p,dir,ms) { await p.keyboard.down(dir); await sleep(p,ms
   const early=structuredClone(chapter3); early.progress={mined:{},crafted:{},placed:{},tapped:{},tree:0,water:0,nightTorch:0,fish:0,wheatRipe:0,boatRide:0,pet:0};early.mods=[];early.px=2544;early.py=512;delete early.adventure;
   const v=await fresh(early,{fakeRecognition:true});await mine(v,87,15);d=await waitChat(v,'task');
   assert(!d.options.some(k=>['fish','boat','rod','wheat','seed','pet','follow','table','cow','chicken','house','fence','duck','horse','rabbit'].includes(k)));
-  await v.click('#chat-mic'); await v.evaluate(()=>{testRecognizer.onerror({error:'not-allowed'});testRecognizer.onend?.();});assert.equal(await v.locator('#chat-status').textContent(),'👇');
+  await v.click('#chat-mic'); await v.evaluate(()=>{testRecognizer.onerror({error:'not-allowed'});testRecognizer.onend?.();});assert.match(await v.locator('#chat-status').textContent(),/Tap an answer/);
   await v.click('#chat-mic'); await v.evaluate(()=>voiceResult('unrelated words'));assert(!(await v.evaluate(()=>BW.adventure().active)).answered);
   // A one-character recognition error is accepted without scoring pronunciation.
   const typo=d.key==='tree'?'tre':d.key==='wood'?'wod':d.key.slice(0,-1);
@@ -199,7 +211,7 @@ async function heldMove(p,dir,ms) { await p.keyboard.down(dir); await sleep(p,ms
   await waitChat(silent,'task');await photo(silent,'portrait-no-audio');
   const box=await silent.locator('#dialogue').boundingBox();assert(box.x>=0&&box.x+box.width<=390);
   const text=await silent.locator('body').innerText(); assert(!/[\u3400-\u9fff]/u.test(text));
-  await silent.click('#chat-close');await silent.click('#btn-zh');assert(await silent.locator('#parent-help').isVisible());await silent.click('#parent-close');
+  assert(!(await silent.locator('#chat-close').isVisible()));await silent.click('#btn-zh');assert(await silent.locator('#parent-help').isVisible());await silent.click('#parent-close');
   report('Portrait, no TTS/no recognition fallback; child UI English and parent settings Chinese');
   await check(silent);await silent.context().close();
   // Real offline file load: no server, no external dependency and no speech service.

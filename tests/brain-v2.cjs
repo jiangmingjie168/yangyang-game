@@ -90,14 +90,16 @@ function report(text) { console.log('PASS', text); }
   report('unavailable mic/unrecognized speech gives tap fallback without tier-two credit');
   p = await page(next(fixture)); await chat(p); const before = (await snapshot(p)).progress;
   for(let n=0;n<3;n++) await p.locator('[data-word="wood"]').click();
-  assert((await p.evaluate(() => BW.adventure().active)).answered); assert.equal(await p.locator('#chat-options button:visible').count(),0);
+  assert(!(await p.evaluate(() => BW.adventure().active)).answered); assert((await p.evaluate(() => BW.adventure().active)).reveal);
+  assert(await p.locator('[data-word=wood]').isDisabled()); await p.locator('[data-word=tree]').click();
   assert.deepEqual((await snapshot(p)).progress,before); await p.waitForFunction(() => !BW.adventure().active); await checkClose(p);
-  report('three displayed questions maximum, mandatory friendly close; no mission penalties');
+  report('three misses reveal answer and require confirmation before friendly close; no mission penalties');
   // Actual browser -> buddy service -> mock DeepSeek. Inject one invalid answer then a valid repair.
   upstream = http.createServer(async (req,res) => {
     let raw=''; for await (const b of req) raw+=b; const call=JSON.parse(raw); upstreamCalls.push(call);
-    const expected = JSON.parse(call.messages[1].content).expected;
-    const value = upstreamCalls.length===1 ? {...expected, say:'你好'} : {...expected, say: expected.done ? 'Nice! Keep exploring!' : 'Nice! ' + expected.say};
+    const data = JSON.parse(call.messages[1].content), expected = data.expected;
+    const lead = data.context_leads.length ? data.context_leads[0] + ' ' : '';
+    const value = upstreamCalls.length===1 ? {...expected, say:'你好'} : {...expected, say: 'Nice! ' + lead + expected.say.replace(/^Great! /,'')};
     res.end(JSON.stringify({ choices:[{message:{content:JSON.stringify(value)}}] }));
   });
   const upstreamURL=await listen(upstream);
@@ -132,8 +134,10 @@ function report(text) { console.log('PASS', text); }
   p=await page(next(fixture),{endpoint:URL+'/mock-buddy',reply:q=>template(normalize(q)),delay:350});
   await p.evaluate(()=>BW.hideCard()); const pos=await p.evaluate(()=>BW.worldToScreen(87.5*32,15.5*32)); await p.mouse.click(pos.x,pos.y);
   await p.waitForFunction(()=>BW.adventure().active?.pending); await p.keyboard.press('ArrowLeft');
+  assert(await p.locator('#dialogue').isVisible());
+  await p.click('#btn-zh'); await p.click('#parent-skip');
   await p.waitForTimeout(500); assert(!(await p.locator('#dialogue').isVisible())); assert.equal(await p.evaluate(()=>BW.adventure().active),null); await checkClose(p);
-  report('movement cancels pending dialogue; late response cannot reopen it');
+  report('movement cannot dismiss pending dialogue; parent skip cancels it and late response cannot reopen it');
   // Legacy v1 adventure has no levels/speaking. Malformed optional fields must remain harmless.
   const legacy=next(fixture); delete legacy.adventure.levels; delete legacy.adventure.speaking;
   p=await page(legacy); assert.equal((await chat(p)).tier,1); const saved=await snapshot(p); assert(saved.adventure.levels); assert(Array.isArray(saved.adventure.speaking)); await checkClose(p);

@@ -8,7 +8,7 @@ const path = require('node:path');
 const URL = process.env.BW_URL || 'http://127.0.0.1:19273';
 const NOW = Date.parse('2026-11-04T20:00:00Z');
 const MONDAY = Date.parse('2026-11-02T08:00:00Z'); // Monday midnight in Los Angeles (after DST).
-const source = fs.readFileSync(path.resolve(__dirname,'../index.html'), 'utf8');
+const source = fs.readFileSync(path.resolve(__dirname,'../index.html'), 'utf8').replace(/^const BRAIN_URL = '[^']*';$/m, "const BRAIN_URL = '';");
 // Read-only probes exist only in the test response; production adds no testing controls.
 const html = source.replace('ready: true,', `ready: true,
   testEffects: () => JSON.parse(JSON.stringify(parts)),

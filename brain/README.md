@@ -2,8 +2,7 @@
 
 Node **22+**, no npm dependencies. The game stays a single offline `index.html`.
 The service only phrases the game's exercise; the game chooses when to speak,
-words, chapter, tier, correctness, rewards and mastery. No deployment has been
-performed and no real DeepSeek credentials have been used.
+words, chapter, tier, correctness, rewards and mastery. Production deployment details are in `../DEPLOY-brain.md`. Credentials remain server-only.
 
 ## Local use and tests
 
@@ -59,19 +58,20 @@ Response (same in AI/template modes):
   decides success; the model cannot interpret a reply to award progress.
 - `child_said` optional, max 160 characters: recognition transcript for phrasing
   only, never trusted as instructions. No audio is uploaded by this service.
-- `turn` is zero-based: opening 0; rephrases 1 and 2; turn **3 always closes**
+- Legacy `turn` is zero-based: opening 0; rephrases 1 and 2; turn **3 always closes**
   (`done=true`, no provider call). Thus at most three displayed questions per
-  anchor. `success` also always closes. This service is stateless: the game's
+  anchor for legacy clients. The blocking client counts misses separately, caps request turns at 2, and reveals the answer locally after three misses. It requires a repeat/tap confirmation; it never sends turn 3 for an unanswered prompt. `success` always closes. This service is stateless: the game's
   dialogue instance owns the counter and rejects later/stale responses.
 - Options must be two distinct known words in the supplied learned whitelist;
   target must be one. Model cannot change their order, answer, tier or done.
 - Output must be ASCII English, 1–12 words, with a small fixed scaffold plus
-  the supplied option vocabulary. No new content vocabulary is allowed.
-  The entire sentence must match a rule-owned tier form, with optional praise:
+  the supplied option vocabulary and exact context phrases. No other content
+  vocabulary is allowed.
+  The entire sentence must match a rule-owned tier form, with optional praise and one exact validated context lead:
   tier 1 `<first label> or <second label>?` (optionally `Is this ...?`),
   tier 2 `What's this?` or `What is this?`, tier 3 the template's `I see ... .`
   sentence followed by `Say it!` or `Your turn!`. Closing allows only praise
-  and `Keep exploring!` or `Let's keep exploring!`. Praise is required after
+  and an optional context lead followed by `Keep exploring!` or `Let's keep exploring!`. Praise is required after
   replies and on closing. Extra questions or answer-redirection text are rejected
   even when every word is in the vocabulary whitelist. Invalid
   **input** is HTTP 400; invalid **model output** is repaired or template HTTP 200.
@@ -146,7 +146,7 @@ location = /buddy {
    `OPTIONS` request with your game `Origin` and a template POST with an empty
    key first. Then set the server key and restart. In `index.html`, set only the
    **public full HTTPS endpoint** in the top-level `BRAIN_URL` constant, e.g.
-   `https://your-buddy-host.example/buddy`. It is empty by default. Never put the
+   `https://your-buddy-host.example/buddy`. This branch defaults to `https://brain.yydriver.cn/buddy`; an empty string disables requests. Never put the
    API key, provider URL or provider model into the webpage.
 
 CORS accepts exact `BRAIN_ALLOWED_ORIGINS`, with no wildcard. It is a browser
@@ -156,3 +156,66 @@ client templates. If nginx/service is down, the game uses local templates.
 Browser speech recognition may itself need internet/permissions, as before;
 taps remain available. Real-device recognition, voice quality and touch testing
 are separate merge-after checks for Hana/the team.
+
+## Blocking client and contextual voice (2026-11-03)
+
+The child cannot close an unanswered prompt. Physics, world controls, background
+clicks, keyboard play and the old 24-second dismissal are blocked. Parent settings
+preserve the prompt and provide **跳过本题** without reward or speech credit.
+Three misses reveal the target; confirmation is still required. Recognition
+failure, permission denial, empty results, unavailable APIs and the 8-second
+watchdog all offer picture choices and **I said it**. Self-confirmation never
+counts as recognized speech or unlocks spoken tiers. Success closes after praise.
+
+Additional optional request fields, bounded and checked before calling the model:
+
+- `child_name`: ASCII English nickname, one or two words, 1–16 letters per word.
+- `recent_events`: up to six `{action, word}` entries; action is
+  `found|made|built|met|caught|rode|task|scene`, and word must be learned.
+- `last_answer`: a previously answered learned word.
+- `spoken_word`: a matched word from the two current options; arbitrary transcript
+  content cannot become an acknowledgment or affect correctness.
+- `recent_lines`: up to four ASCII lines, each at most 160 characters.
+
+The server constructs exact context phrases from these facts, for example
+`Alex, you found wood!`, `You made a table!`, `Remember wood?`, and `You said fish!`.
+The client independently constructs and validates the same phrases. Arbitrary
+transcripts remain untrusted data. Provider output with available context must
+use one allowed phrase and avoid repeating any recent line; otherwise it receives
+one corrective retry and then the usual template fallback. Praise, exercise,
+answer, options, completion, ASCII and the **12-word total** limit remain checked.
+Legacy clients without these fields retain their existing exercise forms.
+
+JSON response fields remain exactly `say/options/answer/done`. The HTTP response
+adds CORS-exposed `X-Buddy-Source: brain|template` and `X-Buddy-Reason` headers.
+`brain` means actual provider output passed validation and contextual quality
+checks, even if its words happen to match a template. The client counts rejected
+JSON, offline, network errors, timeouts, local retries and budgets as templates;
+old servers without provenance count as unknown. `BW.adventure().brain` and the
+Chinese parent panel expose session counters without changing child UI.
+
+The client makes at most eight requests/minute and sixty requests per tab session,
+with budgets in `sessionStorage` so refresh does not reset them. Retries/hints are
+local. Pending previews stay silent so only the final response is read.
+Model output remains capped at 180 tokens; the whole upstream retry budget
+is still six seconds, with a 6.5-second client timeout. Existing nginx IP limits
+remain in force. All budgets keep usable local answer buttons.
+
+The English nickname is saved in the existing v1 save under optional `child_name`.
+Raw transcripts, recent activity and recent AI lines are not added to the save.
+The parent panel explains that the optional online brain receives the nickname,
+game context and recognition text. Audio is never uploaded by this service.
+
+Additional checks:
+
+```sh
+PLAYWRIGHT_MODULE=/path/to/playwright node tests/blocking-ai.cjs
+# Synthetic fixtures + actual game input; AFTER uses public HTTPS:
+PLAYWRIGHT_MODULE=/path/to/playwright node tests/brain-ratio.cjs
+# BEFORE must run before deployment; uses the deployed module via authorized SSH
+# and instruments accepted provider JSON without reading credentials into logs:
+PLAYWRIGHT_MODULE=/path/to/playwright node tests/brain-ratio.cjs --before
+```
+
+Ratio traces and screenshots are saved under `screens/`. These are synthetic
+headless tests; real microphone/voice quality still needs device testing.

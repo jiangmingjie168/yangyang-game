@@ -54,6 +54,13 @@
     padding: 12px; border: 3px solid #e4b64e; border-radius: 22px;
     background: #fffaf0; box-shadow: 0 6px 0 #71523233;
   }
+  #chat-shade { position: absolute; inset: 0; z-index: 30; background: #29452b55; touch-action: none; }
+  #chat-shade[hidden], #chat-close[hidden], #chat-confirm[hidden] { display: none; }
+  body.chat-blocked #hud { z-index: 32; }
+  body.chat-blocked #btn-craft, body.chat-blocked #btn-words, body.chat-blocked #controls, body.chat-blocked #hotbar { opacity: .5; }
+  #dialogue { z-index: 41; max-height: calc(100dvh - 100px); overflow-y: auto; overscroll-behavior: contain; }
+  #parent-name { width: 100%; padding: 8px; border: 2px solid #abd58f; border-radius: 8px; font: inherit; user-select: text; touch-action: auto; }
+  #parent-skip { margin: 10px 0; background: #ffe7ac !important; }
   #dialogue[hidden], #parent-help[hidden] { display: none; }
   .chat-head { display: flex; align-items: center; gap: 8px; }
   #chat-face { width: 44px; height: 44px; }
@@ -460,11 +467,12 @@
   </div>
 
   <div id="trail-count" aria-label="Discoveries">★ 0 / 7</div>
-  <section id="dialogue" hidden aria-label="Talk with your buddy">
-    <div class="chat-head"><canvas id="chat-face" width="128" height="128" aria-hidden="true"></canvas><p id="chat-question"></p><button id="chat-close" type="button" aria-label="Keep exploring">×</button></div>
+  <div id="chat-shade" hidden aria-hidden="true"></div>
+  <section id="dialogue" hidden role="dialog" aria-modal="true" aria-labelledby="chat-question">
+    <div class="chat-head"><canvas id="chat-face" width="128" height="128" aria-hidden="true"></canvas><p id="chat-question"></p><button id="chat-close" hidden type="button" aria-label="Keep exploring">×</button></div>
     <canvas id="chat-picture" width="128" height="128" role="img" aria-label="Picture to talk about"></canvas>
     <div id="chat-options"></div>
-    <div class="chat-tools"><button id="chat-listen" type="button" aria-label="Listen again">▶</button><button id="chat-mic" type="button">🎤</button><button id="chat-choices" type="button" hidden>Show choices</button></div>
+    <div class="chat-tools"><button id="chat-listen" type="button" aria-label="Listen again">▶</button><button id="chat-mic" type="button">🎤</button><button id="chat-choices" type="button" hidden>Show choices</button><button id="chat-confirm" type="button" hidden>I said it</button></div>
     <p id="chat-status" role="status" aria-live="polite"></p>
   </section>
   <aside id="parent-help" hidden aria-label="家长设置">
@@ -472,7 +480,8 @@
       <button id="parent-info-tab" type="button" role="tab" aria-selected="true" aria-controls="parent-info">家长说明</button>
       <button id="parent-log-tab" type="button" role="tab" aria-selected="false" aria-controls="parent-log" tabindex="-1">开口记录</button>
     </div>
-    <div id="parent-info" role="tabpanel" aria-labelledby="parent-info-tab"><strong>家长说明</strong><p>游戏内只显示英语和图画。停稳后伙伴会提问；可点选或按麦克风回答，没有发音评分，也不影响通关。点 × 或继续走就能离开。</p>
+    <button id="parent-skip" type="button" hidden>跳过本题</button>
+    <div id="parent-info" role="tabpanel" aria-labelledby="parent-info-tab"><strong>家长说明</strong><p>游戏内只显示英语和图画。停稳后伙伴会提问；作答时暂停探索。可点选或尝试开口，没有发音评分。三次尝试后会显示答案，孩子可跟读或点选确认。仅家长可跳过。</p>
     <p>浏览器朗读可离线使用（需设备已有英语语音）。语音识别由浏览器提供，可能需要联网和麦克风权限；不可用时直接点图文选项。</p>
     </div>
     <div id="parent-log" role="tabpanel" aria-labelledby="parent-log-tab" hidden>
@@ -485,6 +494,10 @@
       </table>
       <p>以本机时间每周一零点起算；只统计麦克风识别到的具体单词，不保存语音和原话。点选、未匹配的语音不计入词次数。记录保存在本设备存档中（最多最近 2000 条对话事件）；清空存档会删除记录。</p>
     </div>
+    <label for="parent-name">孩子的英文昵称（选填，最多两词）</label>
+    <input id="parent-name" type="text" maxlength="33" autocomplete="off" placeholder="例如 Alex" aria-describedby="parent-name-note">
+    <p id="parent-name-note">只用英文字母和空格。昵称随存档保存在本机；启用在线伙伴时，昵称和最近游戏活动、识别文字会发给伙伴服务用于回应。识别原话不写入存档。</p>
+    <p id="brain-status"></p>
     <button id="parent-close" type="button">返回游戏</button>
   </aside>
   <div id="wordcard" hidden role="status" aria-live="polite">
@@ -678,6 +691,45 @@ const BRAIN_TIMEOUT_MS = 6500;
   var chatClock = 0, chatRecognizer = null, chatTimer = null, recognitionTimer = null, chatLastInput = 0;
   var taskSnapshot = null, followTravel = 0, followLastX = 0, followReady = false;
   var boatStartX = null, boatLanding = false, sceneNow = '';
+  var childName = '', recentEvents = [], recentLines = [], lastAnswer = '';
+  var brainStats = { brain: 0, template: 0, unknown: 0, requests: 0, limited: 0, reasons: {} };
+  var brainWindowAt = 0, brainWindowCalls = 0, brainSessionCalls = 0;
+  try {
+    var budget = JSON.parse(sessionStorage.getItem('block-world-brain-session-v1') || '{}');
+    brainSessionCalls = Math.max(0, Math.min(60, Math.floor(Number(budget.calls) || 0)));
+    if (Date.now() >= budget.at && Date.now() - budget.at < 60000) {
+      brainWindowAt = +budget.at; brainWindowCalls = Math.max(0, Math.min(8, Math.floor(Number(budget.window) || 0)));
+    }
+  } catch (err) { /* Storage may be disabled; in-memory limits still apply. */ }
+  function cleanName(value) { return String(value || '').replace(/[^A-Za-z ]/g, '').trim().split(/\s+/).slice(0, 2).map(function (w) { return w.slice(0, 16); }).join(' '); }
+  function rememberEvent(action, word) {
+    if (!WORD[word]) return;
+    recentEvents.push({ action: action, word: word }); recentEvents = recentEvents.slice(-6);
+  }
+  function chatContextLeads(d) {
+    var leads = [], name = d.context.child_name;
+    if (name) leads.push(name + '!');
+    var events = d.context.recent_events, e = events[events.length - 1];
+    if (e) {
+      var verbs = { found: 'found', made: 'made', built: 'built', met: 'met', caught: 'caught', rode: 'rode', task: 'got', scene: 'see' };
+      var label = WORD[e.word][0].toLowerCase(), mass = ['grass','dirt','stone','wood','leaves','sand','water','planks','wool','rain','wheat'];
+      var noun = mass.indexOf(e.word) >= 0 ? label : (/^[aeiou]/.test(label) ? 'an ' : 'a ') + label;
+      var phrase = 'You ' + verbs[e.action] + ' ' + noun + '!';
+      leads.push(phrase);
+      if (name) leads.push(name + ', ' + phrase[0].toLowerCase() + phrase.slice(1));
+    }
+    if (d.context.last_answer) leads.push('Remember ' + WORD[d.context.last_answer][0].toLowerCase() + '?');
+    if (d.feedback === 'success' && d.spokenKey) leads.push('You said ' + WORD[d.spokenKey][0].toLowerCase() + '!');
+    return leads;
+  }
+  function countChatSource(source, reason) {
+    brainStats[source]++; brainStats.reasons[reason] = (brainStats.reasons[reason] || 0) + 1;
+  }
+  function chatBlocked() { return !!dialogue; }
+  function releaseChatInput() {
+    keys = {}; joyX = joyY = 0; jumpBuf = 0; joyJumpLatch = false;
+    document.getElementById('joy-knob').style.transform = 'translate(0px,0px)';
+  }
   var CH3_WORDS = ['wheat', 'seed', 'fish', 'rod', 'boat', 'pet', 'follow'];
   var CH2_WORDS = ['table', 'cow', 'chicken', 'house', 'fence', 'duck', 'horse', 'rabbit'];
 
@@ -701,7 +753,8 @@ const BRAIN_TIMEOUT_MS = 6500;
     return dx < -8 ? 'meadow' : dx < 14 ? 'home' : dx < 44 ? 'trees' : dx < 64 ? 'water' : 'far';
   }
   function resetAdventure() {
-    closeChat();
+    closeChat(true);
+    recentEvents = []; recentLines = []; lastAnswer = '';
     trail = { found: {}, reviews: {}, turns: 0, scenes: {}, levels: {}, speaking: [], rounds: 0, lastRound: {} };
     chatQueue = []; chatIdle = 0; chatCooldown = 0; taskSnapshot = null;
     boatStartX = null; boatLanding = false;
@@ -837,6 +890,7 @@ const BRAIN_TIMEOUT_MS = 6500;
   }
   function queueChat(anchor, key) {
     if (!started || quiz) return;
+    if (anchor !== 'task' || !recentEvents.length || recentEvents[recentEvents.length - 1].word !== key) rememberEvent(({ fish: 'caught', pet: 'met', boat: 'rode', task: 'task', scene: 'scene' })[anchor], key);
     // Specific moments take priority over a task celebration from the same action.
     if (anchor === 'task' && chatQueue.some(function (q) { return q.key === key && q.anchor !== 'task'; })) return;
     chatQueue = chatQueue.filter(function (q) { return q.anchor !== anchor && !(q.anchor === 'task' && q.key === key); });
@@ -851,7 +905,8 @@ const BRAIN_TIMEOUT_MS = 6500;
       try { r.abort(); } catch (err) { /* optional browser feature */ }
     }
   }
-  function closeChat() {
+  function closeChat(force) {
+    if (dialogue && !dialogue.answered && force !== true) return false;
     if (chatTimer) { clearTimeout(chatTimer); chatTimer = null; }
     stopChatListening();
     if (dialogue) {
@@ -861,6 +916,10 @@ const BRAIN_TIMEOUT_MS = 6500;
     }
     dialogue = null;
     document.getElementById('dialogue').hidden = true;
+    document.getElementById('chat-shade').hidden = true;
+    document.body.classList.remove('chat-blocked');
+    document.getElementById('parent-skip').hidden = true;
+    releaseChatInput();
     chatIdle = 0;
   }
   function openChat(event) {
@@ -878,7 +937,8 @@ const BRAIN_TIMEOUT_MS = 6500;
     var options = trail.turns % 2 ? [other, target] : [target, other];
     var level = trail.levels[target] || {};
     var tier = level.t1 >= 2 ? (level.t2 >= 2 ? 3 : 2) : 1;
-    dialogue = { anchor: event.anchor, scene: sceneNow, key: target, options: options, tier: tier,
+    releaseChatInput();
+    dialogue = { context: { child_name: childName || undefined, recent_events: recentEvents.filter(function (e) { return allowedChatWord(e.word); }).slice(-6), last_answer: allowedChatWord(lastAnswer) ? lastAnswer : undefined }, misses: 0, anchor: event.anchor, scene: sceneNow, key: target, options: options, tier: tier,
       turn: 0, at: chatClock, answered: false, pending: false, choices: tier === 1, sequence: 0 };
     paintIcon(document.getElementById('chat-face'), 'dog');
     paintIcon(document.getElementById('chat-picture'), target);
@@ -901,14 +961,16 @@ const BRAIN_TIMEOUT_MS = 6500;
         reply.done !== expected.done || reply.answer !== d.key || !Array.isArray(reply.options) ||
         JSON.stringify(reply.options) !== JSON.stringify(d.options) || !reply.options.every(allowedChatWord)) return false;
     var tokens = reply.say.toLowerCase().match(/[a-z]+(?:'[a-z]+)?/g) || [];
-    var scaffold = "a an the i you we it this is see got can say what what's or great nice thanks thank good job well done let's keep exploring try look at again your turn".split(' ');
-    var vocabulary = scaffold.concat(d.options.reduce(function (all, key) { return all.concat(WORD[key][0].toLowerCase().split(' ')); }, []));
+    var scaffold = "a an the i you we it this is see got can say what what's or great nice thanks thank good job well done let's keep exploring try look at again your turn found made built met caught rode said together ready remember friend more".split(' ');
+    var vocabulary = scaffold.concat(chatContextLeads(d).join(' ').toLowerCase().match(/[a-z]+(?:'[a-z]+)?/g) || []).concat(d.options.reduce(function (all, key) { return all.concat(WORD[key][0].toLowerCase().split(' ')); }, []));
     if (!/^[A-Za-z ,.!?'’-]+$/.test(reply.say) || /[^\x20-\x7e]/.test(reply.say) || reply.say.length > 160 ||
         tokens.length < 1 || tokens.length > 12 || !tokens.every(function (w) { return vocabulary.indexOf(w) >= 0; })) return false;
     var praise = /^(great!|nice!|good job!|well done!)\s*/i;
     if ((expected.done || feedback !== 'prompt') && !praise.test(reply.say.trim())) return false;
     // Keep the complete exercise within the same rule-owned forms as the server.
     var body = reply.say.trim().replace(praise, '').toLowerCase();
+    var lead = chatContextLeads(d).find(function (line) { return body.indexOf(line.toLowerCase() + ' ') === 0; });
+    if (lead) body = body.slice(lead.length + 1);
     if (expected.done) return /^(let's )?keep exploring!$/.test(body);
     if (d.choices || d.tier === 1) {
       var question = d.options.map(function (k) { return WORD[k][0].toLowerCase(); }).join(' or ') + '?';
@@ -918,15 +980,15 @@ const BRAIN_TIMEOUT_MS = 6500;
     var sentence = expected.say.replace(praise, '').toLowerCase().split('. ')[0];
     return body === sentence + '. say it!' || body === sentence + '. your turn!';
   }
-  function renderChat(d, reply) {
+  function renderChat(d, reply, quiet) {
     if (dialogue !== d) return;
-    d.pending = false; d.controller = null; d.question = reply.say; d.at = chatClock;
+    d.pending = false; d.controller = null; d.question = d.reveal && !reply.done ? "Let's say " + WORD[d.key][0].toLowerCase() + ' together!' : reply.say; d.at = chatClock;
     document.getElementById('chat-question').textContent = d.question;
-    document.getElementById('chat-status').textContent = d.answered ? '★ ★ ★' : (d.hint ? '👇' : '');
+    document.getElementById('chat-status').textContent = d.answered ? '★ ★ ★' : (d.reveal ? 'Tap ' + WORD[d.key][0] + ' or say it with me.' : d.hint ? 'Good try! Look at the glowing answer.' : '');
     var root = document.getElementById('chat-options'); root.innerHTML = ''; root.hidden = !d.choices || reply.done;
     d.options.forEach(function (key) {
       var b = document.createElement('button'); b.type = 'button'; b.dataset.word = key;
-      b.disabled = reply.done;
+      b.disabled = reply.done || (d.reveal && key !== d.key);
       b.classList.toggle('hint-answer', !!d.hint && key === d.key);
       var icon = document.createElement('canvas'); icon.width = 128; icon.height = 128; icon.setAttribute('aria-hidden', 'true'); paintIcon(icon, key);
       b.appendChild(icon); b.appendChild(document.createTextNode(WORD[key][0])); tapButton(b, function () { answerChat(key); }); root.appendChild(b);
@@ -937,36 +999,69 @@ const BRAIN_TIMEOUT_MS = 6500;
     document.getElementById('chat-choices').disabled = false;
     document.getElementById('chat-listen').disabled = false;
     document.getElementById('chat-choices').hidden = d.choices || reply.done;
+    document.getElementById('chat-confirm').hidden = !d.fallback || reply.done;
+    document.getElementById('chat-confirm').disabled = reply.done;
+    document.getElementById('chat-close').hidden = !d.answered;
     document.getElementById('dialogue').hidden = false;
+    document.getElementById('chat-shade').hidden = false;
+    document.body.classList.add('chat-blocked');
+    document.getElementById('parent-skip').hidden = d.answered;
     if (reply.done) { d.answered = true; chatTimer = setTimeout(closeChat, 1800); }
-    speakEn(d.question);
+    if (!quiet) speakEn(d.question);
   }
   function requestChat(d, feedback, childSaid, spokenKey) {
+    d.feedback = feedback; d.spokenKey = spokenKey;
     var expected = chatTemplate(d, feedback), sequence = ++d.sequence;
-    d.pending = true;
     trail.speaking.push({ time: Date.now(), scene: d.anchor, word: d.key, spoke: !!childSaid,
       spoken_word: childSaid && spokenKey ? spokenKey : null, tier: d.choices ? 1 : d.tier });
     trail.speaking = trail.speaking.slice(-2000); saveSoon();
-    if (!BRAIN_URL) { renderChat(d, expected); return; }
     if (d.controller) d.controller.abort();
+    var now = Date.now();
+    if (now - brainWindowAt >= 60000) { brainWindowAt = now; brainWindowCalls = 0; }
+    var limited = brainSessionCalls >= 60 || brainWindowCalls >= 8;
+    // Pause immediately with a picture preview. Read only the final validated
+    // line, so the child never hears a template followed by a second AI question.
+    renderChat(d, expected, !!BRAIN_URL && feedback !== 'retry' && !limited);
+    if (!BRAIN_URL || feedback === 'retry' || limited) {
+      if (limited) brainStats.limited++;
+      countChatSource('template', !BRAIN_URL ? 'offline-config' : feedback === 'retry' ? 'local-retry' : 'session-limit'); return;
+    }
+    // Success praise waits for the validated reply before starting its close timer.
+    if (chatTimer) { clearTimeout(chatTimer); chatTimer = null; }
+    d.pending = true;
+    if (!d.answered) document.getElementById('chat-status').textContent = 'Buddy is thinking...';
+    brainStats.requests++; brainWindowCalls++; brainSessionCalls++;
+    try { sessionStorage.setItem('block-world-brain-session-v1', JSON.stringify({ calls: brainSessionCalls, at: brainWindowAt, window: brainWindowCalls })); } catch (err) { /* optional storage */ }
     var controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
     d.controller = controller;
-    ['chat-mic', 'chat-listen', 'chat-choices'].forEach(function (id) { document.getElementById(id).disabled = true; });
+    ['chat-mic', 'chat-listen', 'chat-choices', 'chat-confirm'].forEach(function (id) { document.getElementById(id).disabled = true; });
     Array.prototype.forEach.call(document.querySelectorAll('#chat-options button'), function (b) { b.disabled = true; });
     var timer, payload = { event: d.anchor, scene: d.scene, chapter: questIndex() < CHAPTER1 ? 1 : questIndex() < CHAPTER2 ? 2 : 3,
       target_word: d.key, options: d.options.slice(), learned_words: chatWords(), turn: d.turn,
-      tier: d.choices ? 1 : d.tier, feedback: feedback };
+      tier: d.choices ? 1 : d.tier, feedback: feedback, child_name: d.context.child_name,
+      recent_events: d.context.recent_events, last_answer: d.context.last_answer, recent_lines: recentLines.slice(-4) };
     if (childSaid) payload.child_said = String(childSaid).slice(0, 160);
-    var timeout = new Promise(function (resolve) { timer = setTimeout(function () { if (controller) controller.abort(); resolve(expected); }, BRAIN_TIMEOUT_MS); });
+    if (childSaid && spokenKey) payload.spoken_word = spokenKey;
+    var timeout = new Promise(function (resolve) { timer = setTimeout(function () { if (controller) controller.abort(); resolve({ reply: expected, source: 'template', reason: 'timeout' }); }, BRAIN_TIMEOUT_MS); });
     var remote = Promise.resolve().then(function () {
       return fetch(BRAIN_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload), signal: controller ? controller.signal : undefined, credentials: 'omit', cache: 'no-store' });
-    }).then(function (r) { if (!r.ok) throw new Error('Buddy unavailable'); return r.text(); })
-      .then(function (raw) { if (raw.length > 4096) throw new Error('Buddy response too large'); var reply = JSON.parse(raw); return safeBrainReply(reply, expected, d, feedback) ? reply : expected; })
-      .catch(function () { return expected; });
-    Promise.race([remote, timeout]).then(function (reply) {
+    }).then(function (r) {
+      if (!r.ok) throw new Error('Buddy unavailable');
+      var source = r.headers.get('X-Buddy-Source'), reason = r.headers.get('X-Buddy-Reason');
+      return r.text().then(function (raw) {
+        if (raw.length > 4096) throw new Error('Buddy response too large');
+        var reply = JSON.parse(raw);
+        if (!safeBrainReply(reply, expected, d, feedback)) return { reply: expected, source: 'template', reason: 'client-validation' };
+        return { reply: reply, source: source === 'brain' || source === 'template' ? source : 'unknown', reason: reason || 'no-provenance' };
+      });
+    }).catch(function () { return { reply: expected, source: 'template', reason: 'network' }; });
+    Promise.race([remote, timeout]).then(function (result) {
       clearTimeout(timer);
-      if (dialogue === d && d.sequence === sequence) renderChat(d, reply);
+      if (dialogue !== d || d.sequence !== sequence) return;
+      countChatSource(result.source, result.reason);
+      recentLines.push(result.reply.say); recentLines = recentLines.slice(-4);
+      renderChat(d, result.reply);
     });
   }
   function showChatChoices() {
@@ -978,7 +1073,8 @@ const BRAIN_TIMEOUT_MS = 6500;
   function retryChat(childSaid, spokenKey) {
     if (!dialogue || dialogue.pending || dialogue.answered) return;
     stopChatListening();
-    var d = dialogue; d.turn++; d.choices = true; d.hint = true;
+    var d = dialogue; d.misses++; d.turn = Math.min(2, d.misses); d.choices = true; d.hint = true;
+    if (d.misses >= 3) { d.reveal = true; d.fallback = true; }
     requestChat(d, 'retry', childSaid, spokenKey);
   }
   function answerChat(key, childSaid) {
@@ -986,7 +1082,8 @@ const BRAIN_TIMEOUT_MS = 6500;
     if (key !== dialogue.key) { retryChat(childSaid, key); return; }
     stopChatListening();
     var d = dialogue;
-    d.answered = true; d.turn++;
+    d.answered = true; d.turn = Math.min(2, d.turn + 1);
+    lastAnswer = key;
     trail.turns++;
     var r = trail.reviews[key] || { n: 0, last: 0 }; r.n++; r.last = trail.turns; trail.reviews[key] = r;
     var level = trail.levels[key] || { t1: 0, t2: 0, t3: 0 };
@@ -1024,7 +1121,7 @@ const BRAIN_TIMEOUT_MS = 6500;
     if (!dialogue || dialogue.pending || dialogue.answered || chatRecognizer) return;
     var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
     var status = document.getElementById('chat-status');
-    if (!SR) { showChatChoices(); status.textContent = '👇'; return; }
+    if (!SR) { speechFallback(); return; }
     if (window.speechSynthesis) { try { speechSynthesis.cancel(); } catch (err) { /* optional */ } }
     try {
       var active = dialogue, r = new SR(); chatRecognizer = r;
@@ -1037,18 +1134,31 @@ const BRAIN_TIMEOUT_MS = 6500;
         if (choice) answerChat(choice, said);
         else retryChat(said);
       };
-      r.onerror = function () { if (dialogue === active) { showChatChoices(); status.textContent = '👇'; } };
-      r.onend = function () { if (chatRecognizer === r) { if (recognitionTimer) { clearTimeout(recognitionTimer); recognitionTimer = null; } chatRecognizer = null; if (dialogue === active && !active.answered) status.textContent = '👇'; } };
+      r.onerror = function () { if (dialogue === active) speechFallback(); };
+      r.onend = function () { if (chatRecognizer === r) { if (recognitionTimer) { clearTimeout(recognitionTimer); recognitionTimer = null; } chatRecognizer = null; if (dialogue === active && !active.answered && !active.pending) speechFallback(); } };
       r.start();
       // Some engines never fire onend after permission or network problems.
-      recognitionTimer = setTimeout(function () { recognitionTimer = null; if (chatRecognizer === r) { chatRecognizer = null; try { r.abort(); } catch (err) { /* optional */ } if (dialogue === active && !active.answered) status.textContent = '👇'; } }, 8000);
-    } catch (err) { chatRecognizer = null; showChatChoices(); status.textContent = '👇'; }
+      recognitionTimer = setTimeout(function () { recognitionTimer = null; if (chatRecognizer === r) { chatRecognizer = null; try { r.abort(); } catch (err) { /* optional */ } if (dialogue === active && !active.answered && !active.pending) speechFallback(); } }, 8000);
+    } catch (err) { chatRecognizer = null; speechFallback(); }
+  }
+  function speechFallback() {
+    if (!dialogue || dialogue.answered || dialogue.pending) return;
+    dialogue.fallback = true;
+    showChatChoices();
+    document.getElementById('chat-status').textContent = 'Tap an answer, or say it and tap "I said it".';
+  }
+  function confirmChat() {
+    if (!dialogue || !dialogue.fallback || dialogue.pending || dialogue.answered) return;
+    // Self-confirmation is a speaking attempt, never recognized speech/mastery credit.
+    dialogue.choices = true;
+    answerChat(dialogue.key);
   }
   function bindDialogue() {
     tapButton(document.getElementById('chat-close'), closeChat);
     tapButton(document.getElementById('chat-listen'), function () { if (dialogue) speakEn(dialogue.question); });
     tapButton(document.getElementById('chat-mic'), listenChat);
     tapButton(document.getElementById('chat-choices'), showChatChoices);
+    tapButton(document.getElementById('chat-confirm'), confirmChat);
     // Keyboard activation is provided only for these standard buttons; pointer taps already use tapButton.
     document.getElementById('dialogue').addEventListener('click', function (e) {
       if (e.detail !== 0) return;
@@ -1059,6 +1169,7 @@ const BRAIN_TIMEOUT_MS = 6500;
       else if (b.id === 'chat-listen' && dialogue) speakEn(dialogue.question);
       else if (b.id === 'chat-mic') listenChat();
       else if (b.id === 'chat-choices') showChatChoices();
+      else if (b.id === 'chat-confirm') confirmChat();
     });
   }
   function adventureStep(dt) {
@@ -1067,7 +1178,7 @@ const BRAIN_TIMEOUT_MS = 6500;
     var moving = axis() !== 0 || !onGround || riding || inWater() || fishing || jumpBuf > 0;
     var safe = !moving && !quiz && !(window.speechSynthesis && speechSynthesis.speaking) && chatClock - chatLastInput > 0.9;
     chatIdle = safe ? chatIdle + dt : 0;
-    if (dialogue && (moving || quiz || chatClock - dialogue.at > 24)) closeChat();
+    // Unanswered dialogue is dismissed only by an answer or explicit parent skip.
     // Arriving means a real crossing followed by standing on dry ground, never boarding.
     if (boatLanding && onGround && !riding && !inWater()) {
       boatLanding = false; boatStartX = null; queueChat('boat', 'boat');
@@ -1105,7 +1216,7 @@ const BRAIN_TIMEOUT_MS = 6500;
       if (completed) showToast('Seven gifts! New hiding places await!', 3);
       updateTrailCount();
       // Discoveries are scene-entry stops, with the same safety/cooldown as every other chat.
-      queueChat('scene', sticker); saveSoon();
+      queueChat('scene', sticker); rememberEvent('found', sticker); saveSoon();
     });
     chatQueue = chatQueue.filter(function (e) { return chatClock - e.at < 18; });
     if (!dialogue && chatIdle > 0.8 && chatCooldown <= 0 && cardLeft <= 0 && chatQueue.length) {
@@ -1751,6 +1862,7 @@ const BRAIN_TIMEOUT_MS = 6500;
     burst((tx + 0.5) * TILE, (ty + 0.5) * TILE, PCOL[id] || '#fff', false);
     tone(180, 0.07, 'triangle', 0, 0.04, 80);
     giveMined(id);
+    rememberEvent('found', KEY_OF[id]);
   }
   function tryPlace(tx, ty) {
     var key = selectedKey();
@@ -1781,7 +1893,7 @@ const BRAIN_TIMEOUT_MS = 6500;
     setCell(tx, ty, BLOCK_OF[key]);
     consume(key);
     if (!quiz) {
-      progress.placed[key] = 1;
+      progress.placed[key] = 1; rememberEvent('built', key);
       if (key === 'torch' && nightFactor(timeOfDay) > 0.5) progress.nightTorch = 1;
     }
     burst((tx + 0.5) * TILE, (ty + 0.4) * TILE, PCOL[BLOCK_OF[key]] || '#fff', false);
@@ -1907,7 +2019,7 @@ const BRAIN_TIMEOUT_MS = 6500;
     a.pet = 0.4;
     if (!quiz) progress.tapped[a.type] = 1;
     if (quiz && a.type !== quiz.key) quizWrong();
-    learn(a.type);
+    learn(a.type); rememberEvent('met', a.type);
     if (a.type === 'sheep') { addItem('wool', 1, true); learn('wool'); }
     if (a.tamed) {
       showWord('pet');
@@ -2959,6 +3071,7 @@ const BRAIN_TIMEOUT_MS = 6500;
     saveSoon();
   }
   function startQuiz() {
+    if (chatBlocked()) return false;
     var pool = quizPool().filter(targetExists);
     if (!pool.length) {
       if (!quizPool().length) showToast('Collect words first!', 3);
@@ -3144,7 +3257,7 @@ const BRAIN_TIMEOUT_MS = 6500;
         if (sel >= hotbar.length) sel = hotbar.length - 1;
       }
     });
-    if (!quiz) progress.crafted[r.out] = 1;
+    if (!quiz) { progress.crafted[r.out] = 1; rememberEvent('made', r.out); }
     addItem(r.out, r.n, true);
     showWord(r.out);
     chime();
@@ -3227,13 +3340,16 @@ const BRAIN_TIMEOUT_MS = 6500;
       var selected = log === (i === 1), tab = document.getElementById(id);
       tab.setAttribute('aria-selected', String(selected)); tab.tabIndex = selected ? 0 : -1;
     });
+    document.getElementById('parent-name').value = childName;
+    document.getElementById('parent-skip').hidden = !dialogue || dialogue.answered;
+    document.getElementById('brain-status').textContent = '本次伙伴回应：AI ' + brainStats.brain + '，模板 ' + brainStats.template + '，来源未标注 ' + brainStats.unknown + '。最多每分钟 8 次、每个标签页会话 60 次请求（刷新不重置）；重试使用本地提示。';
     if (log) renderSpeakingLog();
   }
   function panelOpen() {
     return !document.getElementById('craft').hidden || !document.getElementById('book').hidden || !document.getElementById('parent-help').hidden;
   }
   function openCraft() {
-    closeChat();
+    if (chatBlocked()) return;
     closeBook();
     document.getElementById('craft').hidden = false;
     updateRecipeCounts();
@@ -3241,7 +3357,7 @@ const BRAIN_TIMEOUT_MS = 6500;
   }
   function closeCraft() { document.getElementById('craft').hidden = true; }
   function openBook() {
-    closeChat();
+    if (chatBlocked()) return;
     closeCraft();
     renderBook();
     document.getElementById('quiz-btn-en').textContent = quiz ? 'Stop Quiz' : 'Treasure Quiz';
@@ -3289,7 +3405,7 @@ const BRAIN_TIMEOUT_MS = 6500;
       mods: mods, inv: inv, hotbar: hotbar, sel: sel,
       words: learned, stars: quizStars, progress: progress, intros: intros, zh: zhOn,
       crops: crops.map(function (c) { return [c.tx, c.ty, Math.round(c.age * 10) / 10]; }),
-      adventure: trail,
+      adventure: trail, child_name: childName,
       boat: boat ? [Math.round(boat.x), Math.round(boat.y)] : null,
       animals: animals.map(function (a) { return [a.type, Math.round(a.x * 10) / 10, Math.round(a.y * 10) / 10, a.dir, a.tamed ? 1 : 0]; })
     };
@@ -3384,6 +3500,7 @@ const BRAIN_TIMEOUT_MS = 6500;
       progress.boatRide = data.progress.boatRide ? 1 : 0;
       progress.pet = data.progress.pet ? 1 : 0;
     }
+    childName = cleanName(data.child_name);
     restoreAdventure(data.adventure);
     intros = data.intros || {};
     setZh(data.zh !== false);
@@ -3404,6 +3521,7 @@ const BRAIN_TIMEOUT_MS = 6500;
     setZh(true);
   }
   function goHome() {
+    if (chatBlocked()) return;
     closeChat(); chatQueue = []; boatLanding = false; boatStartX = null;
     riding = false; fishing = null;
     player.x = homeX; player.y = homeY; player.vy = 0; player.dir = 1;
@@ -3464,7 +3582,7 @@ const BRAIN_TIMEOUT_MS = 6500;
   function bind() {
     document.addEventListener('pointerdown', function (e) {
       chatLastInput = chatClock;
-      if (!e.target.closest('#dialogue') && dialogue) closeChat();
+      if (chatBlocked() && !e.target.closest('#dialogue, #parent-help, #btn-zh')) { e.preventDefault(); e.stopImmediatePropagation(); }
     }, true);
     tapButton(document.getElementById('btn-start'), beginGame);
     tapButton(document.getElementById('btn-new'), function () {
@@ -3478,13 +3596,15 @@ const BRAIN_TIMEOUT_MS = 6500;
     tapButton(document.getElementById('btn-craft'), openCraft);
     tapButton(document.getElementById('btn-words'), openBook);
     bindDialogue();
-    tapButton(document.getElementById('btn-zh'), function () {
-      closeChat(); closeCraft(); closeBook();
+    function toggleParent() {
+      stopChatListening(); releaseChatInput(); closeCraft(); closeBook();
       var help = document.getElementById('parent-help');
       help.hidden = !help.hidden;
       if (!help.hidden) showParentPage(false);
       document.getElementById('btn-zh').setAttribute('aria-expanded', help.hidden ? 'false' : 'true');
-    });
+    }
+    tapButton(document.getElementById('btn-zh'), toggleParent);
+    document.getElementById('btn-zh').addEventListener('click', function (e) { if (e.detail === 0) toggleParent(); });
     ['parent-info-tab', 'parent-log-tab'].forEach(function (id, i) {
       var tab = document.getElementById(id);
       tab.addEventListener('click', function () { showParentPage(i === 1); });
@@ -3496,6 +3616,21 @@ const BRAIN_TIMEOUT_MS = 6500;
       });
     });
     tapButton(document.getElementById('parent-close'), closePanels);
+    document.getElementById('parent-close').addEventListener('click', function (e) { if (e.detail === 0) closePanels(); });
+    document.getElementById('parent-name').addEventListener('input', function (e) { childName = cleanName(e.target.value); saveSoon(); });
+    function parentSkip() {
+      if (document.getElementById('parent-help').hidden) return;
+      closeChat(true); closePanels(); saveSoon();
+    }
+    tapButton(document.getElementById('parent-skip'), parentSkip);
+    document.getElementById('parent-skip').addEventListener('click', function (e) { if (e.detail === 0) parentSkip(); });
+    // Capture releases too: a finger held on the joystick before the prompt must
+    // not resume movement, hotbar selection, or crafting beneath the overlay.
+    ['pointerup', 'click'].forEach(function (type) {
+      document.addEventListener(type, function (e) {
+        if (chatBlocked() && !e.target.closest('#dialogue, #parent-help, #btn-zh')) { e.preventDefault(); e.stopImmediatePropagation(); }
+      }, true);
+    });
     tapButton(document.getElementById('quest'), function () {
       if (quiz) { speakEn('Find the ' + WORD[quiz.key][0] + '!'); return; }
       var q = currentQuest();
@@ -3582,14 +3717,27 @@ const BRAIN_TIMEOUT_MS = 6500;
       joyPoint(e);
     });
     joy.addEventListener('pointermove', function (e) {
-      if (e.pointerId !== joyId) return;
+      if (e.pointerId !== joyId || chatBlocked()) return;
       joyPoint(e);
     });
     joy.addEventListener('pointerup', joyEnd);
     joy.addEventListener('pointercancel', joyEnd);
     window.addEventListener('keydown', function (e) {
       chatLastInput = chatClock;
-      if (dialogue && !/^(Tab|Enter|Space)$/.test(e.code)) closeChat();
+      if (e.target.closest('input, textarea') && !(chatBlocked() && /^(Tab|Escape)$/.test(e.code))) return;
+      if (chatBlocked()) {
+        if (e.code === 'Escape') { e.preventDefault(); closePanels(); return; }
+        if (e.code === 'Tab') {
+          var scope = document.getElementById('parent-help').hidden ? '#dialogue button:not([hidden]):not(:disabled), #btn-zh' : '#parent-help button:not([hidden]):not(:disabled), #parent-help input';
+          var focusable = Array.prototype.filter.call(document.querySelectorAll(scope), function (el) { return el.getClientRects().length; });
+          var at = focusable.indexOf(document.activeElement);
+          e.preventDefault(); if (focusable.length) focusable[(at + (e.shiftKey ? -1 : 1) + focusable.length) % focusable.length].focus();
+          return;
+        }
+        if (/^(Enter|Space)$/.test(e.code) && e.target.closest('#dialogue, #parent-help, #btn-zh')) return;
+        if (e.target.closest('#parent-help')) return;
+        e.preventDefault(); return;
+      }
       if (e.code === 'Escape') { closeChat(); closePanels(); return; }
       if (!started || rotateBlock()) return;
       if (e.code === 'KeyE') { if (panelOpen()) closePanels(); else openCraft(); e.preventDefault(); return; }
@@ -3642,7 +3790,7 @@ const BRAIN_TIMEOUT_MS = 6500;
     }
     chatClock += dt;
     animatePictures(sec);
-    var playing = started && !rotateBlock() && !panelOpen();
+    var playing = started && !rotateBlock() && !panelOpen() && !chatBlocked();
     if (playing) {
       rainTimer -= dt;
       if (rainTimer <= 0) {
@@ -3726,7 +3874,7 @@ const BRAIN_TIMEOUT_MS = 6500;
         if (saveIn <= 0) { save(); saveIn = 2.5; }
       }
     }
-    if (!playing && dialogue) closeChat();
+    // Dialogue also pauses physics; opening a parent panel keeps it intact.
     updateCamera(playing ? dt : 1);
     if (invSignature() !== invSig) renderHotbar();
     drawFrame(sec);
@@ -3767,7 +3915,7 @@ const BRAIN_TIMEOUT_MS = 6500;
       ready: true,
       adventure: function () {
         return JSON.parse(JSON.stringify({ trail: trail, spots: trailSpots, active: dialogue, queue: chatQueue,
-          idle: chatIdle, cooldown: chatCooldown, scene: sceneNow }));
+          idle: chatIdle, cooldown: chatCooldown, scene: sceneNow, brain: brainStats }));
       },
       setTime: function (t) { timeOfDay = ((t % 1) + 1) % 1; },
       getTime: function () { return timeOfDay; },

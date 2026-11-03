@@ -67,3 +67,24 @@ Operations: `systemctl status yangyang-brain`, `systemctl restart yangyang-brain
 and `ss -lntp 'sport = :8787'`. To disable the optional frontend brain, set
 `BRAIN_URL` to an empty string on the feature branch; the game retains its local
 fallback. Stop the service with `systemctl disable --now yangyang-brain`.
+
+
+## Blocking/context voice deployment — 2026-11-03
+
+Updated `/opt/yangyang-brain/server.cjs` on `codex-brain-v2` with bounded recent
+context, contextual/non-repeating provider acceptance and CORS-exposed provenance.
+Response JSON remains `say/options/answer/done`; old clients remain compatible.
+All 40 server tests passed on the deployment host before restarting
+`yangyang-brain`, which reports active. Real HTTPS POSTs covered all three tiers;
+the recorded browser scenario accepted 7 brain responses and 1 template.
+
+Original application backup:
+`/root/backups/yangyang-brain-gate-ai-20261103T110838Z/app`.
+Additional pre-quality-gate backup:
+`/root/backups/yangyang-brain-gate-ai-context-v2/app`.
+Only named code/docs/test files were rsynced, excluding `.env`. The environment
+file was compared byte-for-byte with the original backup and is unchanged.
+`huanrui.conf` retained its previously recorded SHA-256. No nginx files changed.
+
+See `CHANGES-brain-v2.md`, `tests/brain-ratio.cjs`, and the two
+`screens/brain-ratio-*.json` traces for the measurement method and limitations.

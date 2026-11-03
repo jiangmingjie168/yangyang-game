@@ -1,3 +1,104 @@
+# Blocking dialogue + contextual DeepSeek voice — 2026-11-03
+
+Implemented on `codex-brain-v2`, starting from `5d26e5c`. Production brain remains
+`https://brain.yydriver.cn/buddy`; empty `BRAIN_URL` still runs entirely on local
+templates. No change to the three chapters, 24 tasks, 42-word pool or v1 save key.
+
+- Questions and speak-along now pause world physics and play input immediately,
+  including while waiting for the brain. Backdrop, swipe, ×, Esc, movement,
+  world controls and other child panels cannot dismiss an unanswered prompt.
+  No unanswered timer. After praise, successful prompts close in 1.8 seconds.
+- Gentle hint after a miss; after three misses, reveal/highlight the target and
+  disable the distractor. Require a repeat/tap confirmation, rather than closing.
+  Miss count is separate from the legacy server turn counter (capped at 2).
+- Missing/throwing/denied/empty/hanging recognition offers picture answers and
+  **I said it**, with an 8-second watchdog. Self-confirmation earns no recognized
+  speech or higher speaking-tier credit. These routes work without a brain.
+- Parent settings preserve the current question. **跳过本题**, visible near the
+  top of that panel, cancels it without reward. Pointer and keyboard skip both
+  work; a delayed network response cannot reopen a skipped prompt.
+- Optional English nickname in the parent panel persists as `child_name` in the
+  v1 save. Send up to six recent game actions, prior answer, matched spoken word
+  and four recent buddy lines with the rule-selected target/options/tier.
+  Real mining, crafting, building, discoveries, fishing and pets supply context.
+- AI may select one exact server-constructed context phrase, e.g.
+  `Alex, you found wood!`, `You made a table!`, `Remember wood?`, or
+  `You said tree!`, then phrase the fixed exercise. The client independently
+  validates those phrases. With available context, provider output must use a
+  context phrase and avoid recent-line repeats. One corrective retry, then
+  template; options/answer/done, ASCII, length and 12-word limit remain checked.
+- Opening and success call the brain in ordinary play. The pending picture preview
+  stays silent; only the final validated response (or final fallback) is read,
+  avoiding duplicate template + AI narration. Hints/retries stay local.
+  Eight requests/minute and sixty/tab session, preserved through refresh with
+  sessionStorage; max_tokens stays 180, upstream budget 6 seconds, client 6.5.
+  Existing nginx limits stay in place. Quotas always retain usable tap answers.
+- CORS-exposed `X-Buddy-Source` / `X-Buddy-Reason` identify validated provider
+  output versus server templates; the client separately counts local fallbacks,
+  failures and unknown provenance. Counts appear only in the parent panel and
+  `BW.adventure().brain`. Raw speech is not added to saves; parent help explains
+  the optional online nickname/context/recognition-text transfer.
+
+## Measured before/after — real DeepSeek, synthetic playthrough
+
+`tests/brain-ratio.cjs` uses four seeded encounters with real tree-mining input,
+then synthetic recognized answers, spanning tiers 1/2/3. Each has an opening and
+success, **8 replies** per run. BEFORE ran against the original deployed module
+via SSH, observing whether actual provider JSON passed its validator (no
+credentials logged). AFTER uses public HTTPS provenance and asserts the browser's
+accepted source counts match. These are controlled encounters, not production
+traffic analytics; each encounter starts a fresh page, so cross-encounter memory
+is reset. Mock tests separately verify memory/limits within one session.
+
+| Run | Brain | Template | Brain share | Distinct lines | Contextual lines |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Before | 8 | 0 | 100% | 4 / 8 | 0 / 8 |
+| After | 7 | 1 | 87.5% | 5 / 8 | 7 / 8 |
+
+The original brain was already being called, but all eight accepted replies were
+identical to local template text. The change makes its context visible. The final
+after trace includes one genuine fallback after provider output failed the stricter
+acceptance path; it is counted as a template, not hidden or called an AI response.
+Example live line: **Alex, you found wood! I see a tree. Say it!**
+Raw per-reply source, timing and synthetic text: `screens/brain-ratio-before.json`
+and `screens/brain-ratio-after.json`. No claim of a higher AI acceptance ratio.
+
+## Validation and screenshots
+
+- `node --test brain/server.test.cjs`: **40 passed**, also passed on the server.
+  Includes existing validation/retry/timeout/CORS tests, contextual phrase safety,
+  untrusted fields, explicit provenance, contextual/repetition repair and fallback.
+- `tests/playthrough.cjs`: **all original 17 checks passed**, including actual
+  task actions, crop growth, boat travel, pets, quiz, save/resume and offline file.
+  Harness now answers blocking questions before continuing; it does not bypass
+  the gate. Existing no-network fixtures explicitly disable the optional brain.
+- `tests/brain-v2.cjs`: all tier progression, pronunciation-tolerant matching,
+  local/HTTP fallback, stale-reply and save-compatibility checks passed. Old
+  three-miss auto-close and movement-dismiss expectations now assert the gate.
+- `tests/world-v2.cjs` and `tests/chinese-cleanup.cjs`: passed, including two
+  discovery rounds, parent logs, 42 pictures, effects, touch scroll and offline.
+- `tests/blocking-ai.cjs`: gate inputs, actual touch swipe, >24-second persistence,
+  parent pointer/keyboard skip, three-miss confirmation, five speech failure
+  modes, network timeout/cancellation, nickname/context/speech transfer,
+  source counters, transcript exclusion, session budgets/reload and phone layout.
+- Screens: `screens/blocking-dialogue.png`, `screens/blocking-reveal.png`,
+  `screens/parent-skip.png`, `screens/blocking-phone.png`,
+  `screens/ai-context-line.png` (mock assertion), `screens/ai-live-line.png` (HTTPS).
+  Headless Chromium and synthetic recognition; real-device mic/TTS not tested.
+
+## Deployment
+
+Brain redeployed **yes**, service `yangyang-brain` active. Backups:
+`/root/backups/yangyang-brain-gate-ai-20261103T110838Z/app` (original) and
+`/root/backups/yangyang-brain-gate-ai-context-v2/app` (before context quality gate).
+Only explicit code/docs/test files rsynced; `.env` compared byte-for-byte to the
+original backup and retained unchanged. `huanrui.conf` SHA-256 verified unchanged.
+HTTPS POSTs exercised all three tiers and the actual browser playthrough.
+No nginx configuration change, no main update. Push destination: only
+`origin/codex-brain-v2`.
+
+---
+
 # Block World brain v2 — Run 1 + Run 2
 
 开发分支：`codex-brain-v2`，起点 `codex-upgrade` / `c3c3b98`。
