@@ -6,7 +6,8 @@ const fs = require('node:fs');
 const path = require('node:path');
 const http = require('node:http');
 const { normalize, template, createServer, greetingLines } = require('../brain/server.cjs');
-const html = fs.readFileSync(path.join(__dirname, '../index.html'), 'utf8');
+// Isolate greeting regressions; first-visit onboarding is covered in memory-chat.cjs.
+const html = fs.readFileSync(path.join(__dirname, '../index.html'), 'utf8').replace("if (determineMode('gameLoad') === 'name_ask') openNameAsk(); else openGreeting();", 'openGreeting();');
 const origin = 'http://127.0.0.1:19273';
 let browser, upstream, brain;
 const samples = [];
@@ -37,6 +38,7 @@ async function page({ data, endpoint = '', response, timeout = 6500, tts = true,
   await p.goto(file ? 'file://' + path.join(__dirname, '../index.html') + '#seed=42' : origin + '/#seed=42');
   if (await p.locator('#btn-portrait').isVisible()) await p.click('#btn-portrait');
   await p.click('#btn-start');
+  if (await p.locator('#name-entry').isVisible()) { await p.click('#welcome-play'); await p.evaluate(() => { spoken.length = 0; }); }
   return p;
 }
 async function saved(p) { return p.evaluate(() => { BW.saveNow(); return JSON.parse(localStorage.getItem('block-world-save-v1')); }); }

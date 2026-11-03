@@ -12,9 +12,11 @@ const assert = require('node:assert/strict');
     const errors = [];
     page.on('pageerror', e => errors.push(String(e)));
     page.on('console', msg => { if (msg.type() === 'error') errors.push(msg.text()); });
+    // UI checks are offline and deterministic; API behavior has dedicated mock suites.
+    await page.route((process.env.BW_URL || 'http://127.0.0.1:19273') + '/', r => r.fulfill({ contentType: 'text/html', body: require('node:fs').readFileSync(require('node:path').join(__dirname, '../index.html'), 'utf8').replace(/^const BRAIN_URL = '[^']*';$/m, "const BRAIN_URL = '';") }));
     await page.goto((process.env.BW_URL || 'http://127.0.0.1:19273') + '/#seed=42');
     await page.waitForFunction(() => window.BW?.ready);
-    await page.click('#btn-start');
+    await page.click('#btn-start'); if(await page.locator('#name-entry').isVisible())await page.click('#welcome-play');
     await page.waitForTimeout(300);
     assert.equal(await page.evaluate(() => BW.layout().started), true);
     assert.equal(await page.evaluate(() => BW.totalWords()), 42);

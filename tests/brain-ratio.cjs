@@ -38,7 +38,7 @@ async function main() {
         result={reply:await res.json(),source:res.headers.get('x-buddy-source'),ms:Date.now()-start};
       }
       assert(['brain','template'].includes(result.source));
-      records.push({encounter:i,tier:payload.tier,feedback:payload.feedback,source:result.source,ms:result.ms,say:result.reply.say});
+      records.push({encounter:i,event:payload.event,tier:payload.tier,feedback:payload.feedback,source:result.source,ms:result.ms,say:result.reply.say});
       await r.fulfill({contentType:'application/json',headers:{'X-Buddy-Source':result.source,'Access-Control-Expose-Headers':'X-Buddy-Source'},body:JSON.stringify(result.reply)});
     });
     await p.addInitScript(data=>{
@@ -47,6 +47,14 @@ async function main() {
       window.SpeechRecognition=class {start(){window.recognizer=this;}abort(){this.onend?.();}};
     },fixture);
     await p.goto(origin+'/#seed=42'); await p.click('#btn-start');
+    // Measure completed, displayed welcomes too; don't count canceled onboarding
+    // HTTP replies as if the client had accepted them.
+    const naming=await p.locator('#name-entry').isVisible();
+    if(naming) {
+      await p.waitForFunction(()=>{const s=BW.adventure().brain;return s.brain+s.template+s.unknown>=1;});
+      await p.click('#welcome-play');
+    }
+    await p.waitForFunction(n=>{const s=BW.adventure().brain;return s.brain+s.template+s.unknown>=n;},naming?2:1);
     if(i===0) {
       fixture=await p.evaluate(()=>{BW.saveNow();return JSON.parse(localStorage.getItem('block-world-save-v1'));});
       fixture.words=['tree','wood'];if(!before)fixture.child_name='Alex';fixture.adventure={found:{},reviews:{},turns:0,scenes:{},levels:{},speaking:[]};

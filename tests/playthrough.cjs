@@ -35,7 +35,7 @@ async function fresh(data, { viewport = { width: 1180, height: 720 }, speech = t
       Object.defineProperty(window, 'webkitSpeechRecognition', { value: undefined, configurable: true });
     }
   }, { data, speech, fakeRecognition });
-  await p.goto(URL + '/#seed=42'); assert(!/[\u3400-\u9fff]/u.test(await p.locator('body').innerText())); if (await p.locator('#btn-portrait').isVisible()) await p.click('#btn-portrait'); await p.click('#btn-start'); await sleep(p, 250);
+  await p.goto(URL + '/#seed=42'); assert(!/[\u3400-\u9fff]/u.test(await p.locator('body').innerText())); if (await p.locator('#btn-portrait').isVisible()) await p.click('#btn-portrait'); await p.click('#btn-start'); if(await p.locator('#name-entry').isVisible())await p.click('#welcome-play'); await sleep(p, 250);
   assert.equal(await p.evaluate(() => BW.totalWords()), 42);
   return p;
 }
@@ -60,7 +60,7 @@ async function relocate(p, x, y = 511.9, companionX) {
   if (companionX !== undefined) d.animals.filter(a=>a[4]).forEach(a=>{a[1]=companionX;a[2]=y;});
   const mark = 'checkpoint-' + serial++;
   await p.addInitScript(({d,mark}) => { if (!sessionStorage.getItem(mark)) { localStorage.setItem('block-world-save-v1',JSON.stringify(d)); sessionStorage.setItem(mark,'1'); } }, {d,mark});
-  await p.reload(); if (await p.locator('#btn-portrait').isVisible()) await p.click('#btn-portrait'); await p.click('#btn-start'); await sleep(p, 240); await clear(p);
+  await p.reload(); if (await p.locator('#btn-portrait').isVisible()) await p.click('#btn-portrait'); await p.click('#btn-start'); if(await p.locator('#name-entry').isVisible())await p.click('#welcome-play'); await sleep(p, 240); await clear(p);
 }
 async function select(p,key) { await p.evaluate(key => BW.select(key),key); }
 async function mine(p,tx,ty) { await clickWorld(p,(tx+.5)*32,(ty+.5)*32); }
@@ -172,7 +172,7 @@ async function heldMove(p,dir,ms) { await p.keyboard.down(dir); await sleep(p,ms
   const speech=await p.evaluate(n=>spoken.slice(n),spokenBefore); assert(speech.some(u=>u.lang.startsWith('en')));assert(!speech.some(u=>u.lang.startsWith('zh')));
   report('Existing Say-It task narration invokes English browser TTS');
   // Save/resume all original progress, pet, inventory and optional exploration data.
-  await p.evaluate(()=>BW.saveNow());const saved=await snapshot(p);await p.reload();await p.click('#btn-start');
+  await p.evaluate(()=>BW.saveNow());const saved=await snapshot(p);await p.reload();await p.click('#btn-start'); if(await p.locator('#name-entry').isVisible())await p.click('#welcome-play');
   const resumed=await snapshot(p);assert.deepEqual(resumed.progress,saved.progress);assert.deepEqual(resumed.adventure,saved.adventure);assert.deepEqual(resumed.words,saved.words);assert.deepEqual(resumed.inv,saved.inv);
   assert.equal(await p.evaluate(()=>BW.questIndex()),24);assert((await p.evaluate(()=>BW.ch3())).pet.includes('dog'));
   report('Save/resume: all 24 tasks, backpack, pet, learned words, inventory and discovery state');
@@ -188,7 +188,7 @@ async function heldMove(p,dir,ms) { await p.keyboard.down(dir); await sleep(p,ms
   await heldMove(e,'ArrowLeft',650);await sleep(e,250);
   assert.equal((await e.evaluate(()=>BW.adventure())).trail.found['0']!==undefined,true);
   const count=(await e.evaluate(()=>BW.adventure())).trail.found;
-  await photo(e,'exploration-discovery'); await e.evaluate(()=>BW.saveNow()); await e.reload();await e.click('#btn-start');
+  await photo(e,'exploration-discovery'); await e.evaluate(()=>BW.saveNow()); await e.reload();await e.click('#btn-start'); if(await e.locator('#name-entry').isVisible())await e.click('#welcome-play');
   assert.deepEqual((await e.evaluate(()=>BW.adventure())).trail.found,count);
   await e.click('#btn-words');assert.equal(await e.locator('#trail-album button').count(),7);await e.click('#book-back');
   report('Exploration: walk into hidden gift, gain picture/materials, persist album');
@@ -217,7 +217,7 @@ async function heldMove(p,dir,ms) { await p.keyboard.down(dir); await sleep(p,ms
   // Real offline file load: no server, no external dependency and no speech service.
   const offlineContext=await browser.newContext({offline:true,viewport:{width:844,height:390}});
   const offline=await offlineContext.newPage();offline.errors=[];offline.on('pageerror',e=>offline.errors.push(String(e)));
-  await offline.goto('file://'+path.resolve(__dirname,'../index.html'));await offline.click('#btn-start');
+  await offline.goto('file://'+path.resolve(__dirname,'../index.html'));await offline.click('#btn-start'); if(await offline.locator('#name-entry').isVisible())await offline.click('#welcome-play');
   await heldMove(offline,'ArrowLeft',450);assert(await offline.evaluate(()=>BW.layout().started));
   await photo(offline,'offline-landscape');await check(offline);await offlineContext.close();
   report('Offline file:// start and movement; short landscape layout');
@@ -226,7 +226,7 @@ async function heldMove(p,dir,ms) { await p.keyboard.down(dir); await sleep(p,ms
   let first=await waitChat(repeat,'fish');assert.equal(first.key,'fish');
   await repeat.locator('#chat-options [data-word="fish"]').click();await sleep(repeat,1900);
   const reviewSave=await snapshot(repeat);assert.equal(reviewSave.adventure.reviews.fish.n,1);
-  await repeat.reload();await repeat.click('#btn-start');await sleep(repeat,250);await select(repeat,'rod');await mine(repeat,121,16);
+  await repeat.reload();await repeat.click('#btn-start'); if(await repeat.locator('#name-entry').isVisible())await repeat.click('#welcome-play');await sleep(repeat,250);await select(repeat,'rod');await mine(repeat,121,16);
   let second=await waitChat(repeat,'fish');assert.equal(second.key,'water');
   assert(second.options.some(k=>['wood','stone','tree'].includes(k)));await check(repeat);await repeat.context().close();
   report('Spiral recurrence: fish encounter revisits earlier water/wood after save/resume');

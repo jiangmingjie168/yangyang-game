@@ -442,6 +442,28 @@
   @media (prefers-reduced-motion: reduce) {
     * { animation: none !important; }
   }
+
+  .chat-tools { flex-wrap: wrap; }
+  #chat-listen, #chat-mic, #buddy-mic, #name-mic { display: inline-flex; align-items: center; justify-content: center; gap: 7px; min-width: 90px; min-height: 48px; padding: 8px 12px; border: 2px solid #81bad8; box-shadow: 0 3px 0 #7da8bd; color: #174962; background: #d5efff; }
+  #chat-mic, #buddy-mic, #name-mic { background: #ffe0d4; border-color: #dc9a80; color: #7d3c2a; box-shadow: 0 3px 0 #c28a74; }
+  #btn-speak { background: #d5efff; border: 2px solid #81bad8; }
+  #chat-listen svg, #chat-mic svg, #buddy-mic svg, #name-mic svg { width: 25px; height: 25px; flex-shrink: 0; }
+  #chat-listen:active, #chat-mic:active, #buddy-mic:active, #name-mic:active { transform: translateY(2px); box-shadow: none; }
+  #chat-listen:disabled, #chat-mic:disabled, #buddy-mic:disabled, #name-mic:disabled { opacity: .5; box-shadow: none; }
+  #welcome { max-height: calc(100dvh - 90px - var(--sab)); overflow-y: auto; touch-action: pan-y; }
+  #name-entry[hidden], #buddy-chat[hidden] { display: none; }
+  #name-form { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+  #name-input { width: 140px; min-height: 44px; border: 2px solid #abd58f; border-radius: 10px; padding: 5px 8px; font: inherit; user-select: text; touch-action: auto; }
+  #name-form button { min-height: 44px; min-width: 44px; border-radius: 12px; background: #d9edc8; }
+  #name-mic { min-width: 48px; }
+  #name-letters { display: grid; grid-template-columns: repeat(9, 1fr); gap: 3px; margin: 8px 0; }
+  #name-letters button { min-height: 32px; border-radius: 7px; background: #e3eff9; font-size: 16px; }
+  #btn-buddy { position: absolute; z-index: 12; right: 12px; top: calc(118px + var(--sat)); min-height: 48px; padding: 8px 16px; border-radius: 18px; background: #d9edc8; font-weight: bold; }
+  #buddy-chat { position: absolute; z-index: 39; top: calc(78px + var(--sat)); left: 50%; transform: translateX(-50%); width: min(380px, calc(100% - 28px)); padding: 14px; border-radius: 22px; background: #fffaf2; border: 3px solid #e6bb70; box-shadow: 0 5px 18px #5a39152b; text-align: center; max-height: calc(100dvh - 90px); overflow-y: auto; }
+  #buddy-line { margin: 0 0 10px; font-size: 23px; font-weight: bold; }
+  #buddy-chat button { min-height: 48px; min-width: 64px; border-radius: 13px; padding: 8px 14px; font: inherit; background: #dcf1d1; margin: 3px; }
+  #buddy-options { display: flex; justify-content: center; gap: 10px; }
+  @media (max-height: 450px) { #name-letters { grid-template-columns: repeat(13, 1fr); } #name-letters button { min-height: 28px; } #btn-buddy { top: calc(110px + var(--sat)); } }
 </style>
 </head>
 <body>
@@ -486,14 +508,23 @@
   <section id="welcome" hidden aria-label="Welcome">
     <canvas id="welcome-face" width="128" height="128" aria-hidden="true"></canvas>
     <p id="welcome-line" role="status" aria-live="polite"></p>
+    <div id="name-entry" hidden>
+      <form id="name-form"><label for="name-input">Your name</label><input id="name-input" type="text" maxlength="33" autocomplete="off" placeholder="Mario"><button id="name-mic" type="button" aria-label="Say your name"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="2" width="6" height="12" rx="3" fill="currentColor"/><path d="M5 10v2a7 7 0 0 0 14 0v-2M12 19v3m-4 0h8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button><button type="submit">Hi!</button></form>
+      <div id="name-letters" aria-label="Tap letters"></div>
+    </div>
     <button id="welcome-play" type="button">Let's play!</button>
+  </section>
+  <button id="btn-buddy" type="button" aria-label="Chat with Buddy">Buddy</button>
+  <section id="buddy-chat" hidden aria-label="Buddy chat">
+    <p id="buddy-line" role="status" aria-live="polite"></p><div id="buddy-options"></div>
+    <button id="buddy-mic" type="button" aria-label="Speak to Buddy"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="2" width="6" height="12" rx="3" fill="currentColor"/><path d="M5 10v2a7 7 0 0 0 14 0v-2M12 19v3m-4 0h8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>Speak</span></button><button id="buddy-close" type="button" aria-label="Keep playing">OK!</button>
   </section>
   <div id="chat-shade" hidden aria-hidden="true"></div>
   <section id="dialogue" hidden role="dialog" aria-modal="true" aria-labelledby="chat-question">
     <div class="chat-head"><canvas id="chat-face" width="128" height="128" aria-hidden="true"></canvas><p id="chat-question"></p><button id="chat-close" hidden type="button" aria-label="Keep exploring">×</button></div>
     <canvas id="chat-picture" width="128" height="128" role="img" aria-label="Picture to talk about"></canvas>
     <div id="chat-options"></div>
-    <div class="chat-tools"><button id="chat-listen" type="button" aria-label="Listen again">▶</button><button id="chat-mic" type="button">🎤</button><button id="chat-choices" type="button" hidden>Show choices</button><button id="chat-confirm" type="button" hidden>I said it</button></div>
+    <div class="chat-tools"><button id="chat-listen" type="button" aria-label="Listen again"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M3 9h4l6-4v14l-6-4H3z"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M16 9a4 4 0 0 1 0 6m3-9a8 8 0 0 1 0 12"/></svg><span>Listen</span></button><button id="chat-mic" type="button" aria-label="Answer by voice"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="2" width="6" height="12" rx="3" fill="currentColor"/><path d="M5 10v2a7 7 0 0 0 14 0v-2M12 19v3m-4 0h8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>Speak</span></button><button id="chat-choices" type="button" hidden>Show choices</button><button id="chat-confirm" type="button" hidden>I said it</button></div>
     <p id="chat-status" role="status" aria-live="polite"></p>
   </section>
   <aside id="parent-help" hidden aria-label="家长设置">
@@ -515,6 +546,7 @@
       </table>
       <p>以本机时间每周一零点起算；只统计麦克风识别到的具体单词，不保存语音和原话。点选、未匹配的语音不计入词次数。记录保存在本设备存档中（最多最近 2000 条对话事件）；清空存档会删除记录。</p>
     </div>
+    <p id="parent-memory"></p>
     <label for="parent-name">孩子的英文昵称（默认 Mario，最多两词）</label>
     <input id="parent-name" type="text" maxlength="33" autocomplete="off" placeholder="Mario" aria-describedby="parent-name-note">
     <p id="parent-name-note">只用英文字母和空格。昵称随存档保存在本机；启用在线伙伴时，昵称和最近游戏活动、识别文字会发给伙伴服务用于回应。识别原话不写入存档。</p>
@@ -723,6 +755,202 @@ const BRAIN_TIMEOUT_MS = 6500;
       brainWindowAt = +budget.at; brainWindowCalls = Math.max(0, Math.min(8, Math.floor(Number(budget.window) || 0)));
     }
   } catch (err) { /* Storage may be disabled; in-memory limits still apply. */ }
+  const WORDS = new Set(Object.keys(WORD));
+// Conversation slots are rule-owned and mirrored in the offline client.
+const CHAT_EVENTS = ['name_ask', 'small_talk', 'weather_chat', 'recast'];
+const PREF_VALUES = { color: [], animal: ['cat','dog','cow','pig','sheep','chicken','duck','horse','rabbit'], food: ['fish','wheat','seed'], build: ['house','table','door','bed','fence','torch','boat'] };
+function conversationLines(p) {
+  if (p.event === 'name_ask') return ['Hi! What is your name?', 'Hello! What is your name?'];
+  if (p.event === 'weather_chat') return ['Look! I see the ' + p.weather + '!', 'We can see the ' + p.weather + '!'];
+  if (p.event === 'recast') {
+    if (p.target_tier === 3) return ['Good job! Well done!', 'Great! Good job!'];
+    const word = p.child_said.toLowerCase().split(/[^a-z]+/).find(w => WORDS.has(w));
+    if (!word) return ['Good try! Say it again!'];
+    const mass = ['grass','dirt','stone','wood','leaves','sand','water','planks','wool','rain','wheat'];
+    const noun = (mass.includes(word) ? 'the ' : 'a ') + word;
+    return p.target_tier === 1 ? ['Try: I see ' + noun + '!', 'Say: I see ' + noun + '!'] : ['I can see ' + noun + '!', 'We can see ' + noun + '!'];
+  }
+  if (p.topic) {
+    const values = PREF_VALUES[p.topic.slice(11)];
+    return ['Do you like ' + values[0] + ' or ' + values[1] + '?', values[0][0].toUpperCase() + values[0].slice(1) + ' or ' + values[1] + '?'];
+  }
+  const favorite = p.prefs.build || p.prefs.animal || p.prefs.food;
+  if (favorite) return ['You like the ' + favorite + '!', 'You like ' + favorite + '!'];
+  const event = p.recent_events.at(-1), word = (event && event.word) || 'tree';
+  return ['Look! I see the ' + word + '!', 'We can see the ' + word + '!'];
+}
+function conversationTemplate(p) { return { say: conversationLines(p)[0], options: [], answer: null, done: true }; }
+function validConversation(value, p) {
+  return !!value && Object.keys(value).sort().join(',') === 'answer,done,options,say' &&
+    Array.isArray(value.options) && value.options.length === 0 && value.answer === null && value.done === true &&
+    typeof value.say === 'string' && value.say.length <= 160 && !/[^\x20-\x7e]/.test(value.say) &&
+    (value.say.match(/[A-Za-z]+/g) || []).length >= 3 &&
+    (value.say.match(/[A-Za-z]+/g) || []).length <= 6 && conversationLines(p).includes(value.say);
+}
+
+  var memory = blankMemory(), ambient = null, nameFlow = null, socialRecognizer = null, socialWatchdog = null;
+  var socialLastInput = Date.now(), weatherPending = false;
+  function blankMemory() { return { prefs: { color: null, animal: null, food: null, build: null }, prefsLearnedAt: {}, name_asked: false, chat_day: '', small_talk_count: 0, weather_chat_done: false }; }
+  function localChatDay() { var d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+  function resetChatDay() {
+    var today = localChatDay();
+    if (memory.chat_day !== today) { memory.chat_day = today; memory.small_talk_count = 0; memory.weather_chat_done = false; saveSoon(); }
+  }
+  function restoreMemory(data) {
+    memory = blankMemory(); memory.name_asked = data.name_asked === true || childName !== 'Mario';
+    Object.keys(PREF_VALUES).forEach(function (slot) {
+      var value = data.prefs && data.prefs[slot], at = data.prefsLearnedAt && data.prefsLearnedAt[slot];
+      if (PREF_VALUES[slot].indexOf(value) >= 0) memory.prefs[slot] = value;
+      if (typeof at === 'number' && Number.isSafeInteger(at) && at > 0) memory.prefsLearnedAt[slot] = at;
+      if (memory.prefs[slot] && !memory.prefsLearnedAt[slot]) memory.prefsLearnedAt[slot] = Date.now();
+    });
+    memory.chat_day = typeof data.chat_day === 'string' ? data.chat_day : '';
+    memory.small_talk_count = Number.isInteger(data.small_talk_count) ? Math.max(0, Math.min(5, data.small_talk_count)) : 0;
+    memory.weather_chat_done = data.weather_chat_done === true; resetChatDay();
+  }
+  function determineMode(trigger) {
+    resetChatDay();
+    if (dialogue || quiz || nameFlow) return 'gate';
+    if (trigger === 'gameLoad') return memory.name_asked ? 'greet' : 'name_ask';
+    if (!started || panelOpen() || rotateBlock()) return 'gate';
+    if (trigger === 'buddyTap' || trigger === 'idleTimeout') return memory.small_talk_count < 5 ? 'small_talk' : 'idle';
+    if (trigger === 'weather') return !memory.weather_chat_done ? 'weather_chat' : 'idle';
+    if (trigger === 'speech') return 'recast';
+    return 'idle';
+  }
+  function socialPayload(event) { return { event: event, child_name: childName, scene: sceneNow || 'grass', prefs: Object.assign({}, memory.prefs), recent_events: recentEvents.slice(-6) }; }
+  function stopSocialListening() {
+    clearTimeout(socialWatchdog); socialWatchdog = null;
+    if (socialRecognizer) { var r = socialRecognizer; socialRecognizer = null; r.onresult = r.onerror = r.onend = null; try { r.abort(); } catch (err) { /* optional */ } }
+    document.getElementById('buddy-mic').disabled = false; document.getElementById('name-mic').disabled = false;
+  }
+  function cancelSocial(w) { if (!w) return; clearTimeout(w.timer); clearTimeout(w.deadline); if (w.controller) w.controller.abort(); }
+  function closeAmbient() {
+    var active = ambient; cancelSocial(ambient); ambient = null; stopSocialListening();
+    if (active && window.speechSynthesis) { try { speechSynthesis.cancel(); } catch (err) { /* optional */ } }
+    document.getElementById('buddy-chat').hidden = true;
+  }
+  function fetchSocial(p, w, current, show) {
+    var expected = conversationTemplate(p), limited = brainLimited();
+    show(expected, !BRAIN_URL || limited);
+    if (!BRAIN_URL || limited) { if (limited) brainStats.limited++; countChatSource('template', limited ? 'session-limit' : 'offline-config'); return; }
+    spendBrainRequest(); w.controller = new AbortController();
+    var timeout = new Promise(function (resolve) { w.deadline = setTimeout(function () { w.controller.abort(); resolve({ reply: expected, source: 'template', reason: 'timeout' }); }, BRAIN_TIMEOUT_MS); });
+    var remote = fetch(BRAIN_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(p), signal: w.controller.signal, credentials: 'omit', cache: 'no-store' }).then(function (r) {
+      if (!r.ok) throw Error('Unavailable');
+      return r.text().then(function (raw) {
+        if (raw.length > 4096) throw Error('Too large');
+        var value = JSON.parse(raw);
+        if (!validConversation(value, p)) return { reply: expected, source: 'template', reason: 'client-validation' };
+        var source = r.headers.get('X-Buddy-Source');
+        return { reply: value, source: source === 'brain' || source === 'template' ? source : 'unknown', reason: r.headers.get('X-Buddy-Reason') || 'no-provenance' };
+      });
+    }).catch(function () { return { reply: expected, source: 'template', reason: 'network' }; });
+    Promise.race([timeout, remote]).then(function (result) { clearTimeout(w.deadline); if (!current()) return; countChatSource(result.source, result.reason); show(result.reply, true); });
+  }
+  function openNameAsk() {
+    dismissGreeting(); closeAmbient(); releaseChatInput();
+    var w = {}; nameFlow = w;
+    document.getElementById('name-entry').hidden = false;
+    document.getElementById('name-input').value = '';
+    paintIcon(document.getElementById('welcome-face'), 'dog');
+    document.getElementById('welcome').hidden = false;
+    fetchSocial(socialPayload('name_ask'), w, function () { return nameFlow === w; }, function (reply, voice) {
+      if (nameFlow !== w) return;
+      document.getElementById('welcome-line').textContent = reply.say;
+      if (voice) speakEn(reply.say, { soft: true });
+    });
+    w.timer = setTimeout(function () { finishName(''); }, 20000);
+  }
+  function finishName(value) {
+    if (!nameFlow) return;
+    childName = cleanName(value) || childName || 'Mario'; memory.name_asked = true;
+    cancelSocial(nameFlow); nameFlow = null; stopSocialListening();
+    document.getElementById('name-entry').hidden = true; document.getElementById('welcome').hidden = true;
+    document.getElementById('parent-name').value = childName; save(); openGreeting();
+  }
+  function showAmbient(p) {
+    if (dialogue || quiz || nameFlow) return false;
+    dismissGreeting(); closeAmbient();
+    var w = { payload: p }; ambient = w;
+    document.getElementById('buddy-chat').hidden = false;
+    var root = document.getElementById('buddy-options'); root.replaceChildren();
+    if (p.topic) PREF_VALUES[p.topic.slice(11)].slice(0, 2).forEach(function (word) {
+      var b = document.createElement('button'); b.type = 'button'; b.textContent = word; b.dataset.pref = word;
+      b.addEventListener('click', function () { if (ambient === w) learnPreference(p.topic.slice(11), word); }); root.appendChild(b);
+    });
+    fetchSocial(p, w, function () { return ambient === w && !chatBlocked() && !quiz; }, function (reply, voice) {
+      document.getElementById('buddy-line').textContent = reply.say;
+      if (!voice) return;
+      clearTimeout(w.timer); w.timer = setTimeout(closeAmbient, 14000);
+      speakEn(reply.say, { soft: true, onend: function () { if (ambient === w) { clearTimeout(w.timer); w.timer = setTimeout(closeAmbient, 3000); } } });
+      if (!window.speechSynthesis) { clearTimeout(w.timer); w.timer = setTimeout(closeAmbient, 3000); }
+    });
+    return true;
+  }
+  function smallTalk() {
+    if (determineMode('buddyTap') !== 'small_talk') return false;
+    var p = socialPayload('small_talk');
+    var slot = ['animal','build','food'].find(function (key) { return !memory.prefs[key] && !memory.prefsLearnedAt[key]; });
+    p.topic = slot ? 'learn_pref_' + slot : null;
+    if (slot) memory.prefsLearnedAt[slot] = Date.now(); // Asked once, even if the child walks away.
+    memory.small_talk_count++; socialLastInput = Date.now(); save(); return showAmbient(p);
+  }
+  function learnPreference(slot, word) {
+    if (determineMode('speech') === 'gate' || PREF_VALUES[slot].indexOf(word) < 0 || memory.prefs[slot]) return;
+    memory.prefs[slot] = word; memory.prefsLearnedAt[slot] = Date.now(); save(); recastSpeech(word);
+  }
+  function recastSpeech(said) {
+    if (determineMode('speech') !== 'recast' || typeof said !== 'string' || !said.trim()) return false;
+    var p = socialPayload('recast'); p.child_said = said.slice(0, 160);
+    var count = (p.child_said.match(/[A-Za-z]+/g) || []).length; p.target_tier = count <= 1 ? 1 : count <= 3 ? 2 : 3;
+    return showAmbient(p);
+  }
+  function weatherChat() {
+    if (determineMode('weather') !== 'weather_chat' || welcome || ambient) return false;
+    var p = socialPayload('weather_chat');
+    p.weather = rainOn ? 'rain' : nightFactor(timeOfDay) >= 0.6 ? 'moon' : cloudPos.length && !sunOn ? 'cloud' : 'sun';
+    p.time_of_day = nightFactor(timeOfDay) >= 0.6 ? 'evening' : timeOfDay < 0.5 ? 'morning' : 'afternoon';
+    memory.weather_chat_done = true; save(); return showAmbient(p);
+  }
+  function listenSocial() {
+    if ((!nameFlow && determineMode('speech') !== 'recast') || socialRecognizer) return;
+    var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SR) { if (nameFlow) document.getElementById('name-input').focus(); return; }
+    var n = nameFlow, a = ambient;
+    try {
+      var r = new SR(); socialRecognizer = r; r.lang = 'en-US'; r.interimResults = false; r.continuous = false;
+      document.getElementById(n ? 'name-mic' : 'buddy-mic').disabled = true;
+      if (window.speechSynthesis) speechSynthesis.cancel();
+      r.onresult = function (e) {
+        var result = e.results[e.resultIndex || 0], said = result && result[0] && result[0].transcript;
+        stopSocialListening(); if (!said) return;
+        if (n && nameFlow === n) { finishName(said.replace(/^(my name is|i am|i'm)\s+/i, '')); return; }
+        if (n || ambient !== a || determineMode('speech') !== 'recast') return;
+        if (a && a.payload.topic) {
+          var slot = a.payload.topic.slice(11), tokens = normalAnswer(said).split(' ');
+          var matches = PREF_VALUES[slot].slice(0, 2).filter(function (word) { return tokens.indexOf(word) >= 0; });
+          if (matches.length === 1) { learnPreference(slot, matches[0]); return; }
+        }
+        recastSpeech(said);
+      };
+      r.onend = r.onerror = stopSocialListening; r.start();
+      socialWatchdog = setTimeout(stopSocialListening, 8000);
+    } catch (err) { stopSocialListening(); }
+  }
+  function bindSocial() {
+    document.getElementById('btn-buddy').addEventListener('click', smallTalk);
+    document.getElementById('buddy-close').addEventListener('click', closeAmbient);
+    document.getElementById('buddy-mic').addEventListener('click', listenSocial);
+    document.getElementById('name-mic').addEventListener('click', listenSocial);
+    document.getElementById('name-form').addEventListener('submit', function (e) { e.preventDefault(); finishName(document.getElementById('name-input').value); });
+    var letters = document.getElementById('name-letters');
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').forEach(function (letter) {
+      var b = document.createElement('button'); b.type = 'button'; b.textContent = letter;
+      b.addEventListener('click', function () { var input = document.getElementById('name-input'); input.value = cleanName(input.value + letter); }); letters.appendChild(b);
+    });
+  }
+
   function cleanName(value) { return String(value || '').replace(/[^A-Za-z ]/g, '').trim().split(/\s+/).slice(0, 2).map(function (w) { return w.slice(0, 16); }).join(' '); }
   // Keep the greeting grammar in sync with brain/server.cjs. Every sentence is
   // rule-owned; the brain chooses warm phrasing and never creates an exercise.
@@ -762,15 +990,18 @@ const BRAIN_TIMEOUT_MS = 6500;
     try { sessionStorage.setItem('block-world-brain-session-v1', JSON.stringify({ calls: brainSessionCalls, at: brainWindowAt, window: brainWindowCalls })); } catch (err) { /* optional storage */ }
   }
   function dismissGreeting() {
+    if (nameFlow) return;
     var w = welcome; welcome = null;
     document.getElementById('welcome').hidden = true;
     if (!w) return;
+    if (weatherPending) { weatherPending = false; setTimeout(weatherChat, 500); }
     clearTimeout(w.timer); clearTimeout(w.deadline);
     if (w.controller) w.controller.abort();
     if (w.utterance && window.speechSynthesis) { try { speechSynthesis.cancel(); } catch (err) { /* optional */ } }
   }
   function openGreeting() {
     dismissGreeting();
+    resetChatDay(); weatherPending = !memory.weather_chat_done && Math.random() < 0.3;
     childName = cleanName(childName) || 'Mario';
     var hour = new Date().getHours(), p = { event: 'greet', child_name: childName,
       time_of_day: hour < 12 ? 'morning' : hour < 18 ? 'afternoon' : 'evening', returning: returningVisit,
@@ -824,6 +1055,7 @@ const BRAIN_TIMEOUT_MS = 6500;
   function rememberEvent(action, word) {
     if (!WORD[word]) return;
     recentEvents.push({ action: action, word: word }); recentEvents = recentEvents.slice(-6);
+    if (['made', 'built'].indexOf(action) >= 0 && !memory.prefs.build && PREF_VALUES.build.indexOf(word) >= 0) { memory.prefs.build = word; memory.prefsLearnedAt.build = Date.now(); saveSoon(); }
   }
   function chatContextLeads(d) {
     var leads = [], name = d.context.child_name;
@@ -844,7 +1076,7 @@ const BRAIN_TIMEOUT_MS = 6500;
   function countChatSource(source, reason) {
     brainStats[source]++; brainStats.reasons[reason] = (brainStats.reasons[reason] || 0) + 1;
   }
-  function chatBlocked() { return !!dialogue; }
+  function chatBlocked() { return !!dialogue || !!nameFlow; }
   function releaseChatInput() {
     keys = {}; joyX = joyY = 0; jumpBuf = 0; joyJumpLatch = false;
     document.getElementById('joy-knob').style.transform = 'translate(0px,0px)';
@@ -1033,7 +1265,9 @@ const BRAIN_TIMEOUT_MS = 6500;
       chatCooldown = 12;
       if (window.speechSynthesis) { try { speechSynthesis.cancel(); } catch (err) { /* optional */ } }
     }
+    var coach = dialogue && dialogue.answered && dialogue.feedback === 'success' ? (dialogue.coachSaid || dialogue.key) : '';
     dialogue = null;
+    if (coach) setTimeout(function () { recastSpeech(coach); }, 100);
     document.getElementById('dialogue').hidden = true;
     document.getElementById('chat-shade').hidden = true;
     document.body.classList.remove('chat-blocked');
@@ -1042,6 +1276,8 @@ const BRAIN_TIMEOUT_MS = 6500;
     chatIdle = 0;
   }
   function openChat(event) {
+    if (nameFlow || quiz) return;
+    closeAmbient();
     dismissGreeting();
     var pool = chatWords();
     if (pool.length < 2) return;
@@ -1113,7 +1349,6 @@ const BRAIN_TIMEOUT_MS = 6500;
       var icon = document.createElement('canvas'); icon.width = 128; icon.height = 128; icon.setAttribute('aria-hidden', 'true'); paintIcon(icon, key);
       b.appendChild(icon); b.appendChild(document.createTextNode(WORD[key][0])); tapButton(b, function () { answerChat(key); }); root.appendChild(b);
     });
-    document.getElementById('chat-mic').textContent = '🎤';
     document.getElementById('chat-mic').setAttribute('aria-label', 'Answer by voice');
     document.getElementById('chat-mic').disabled = reply.done;
     document.getElementById('chat-choices').disabled = false;
@@ -1199,7 +1434,7 @@ const BRAIN_TIMEOUT_MS = 6500;
     if (key !== dialogue.key) { retryChat(childSaid, key); return; }
     stopChatListening();
     var d = dialogue;
-    d.answered = true; d.turn = Math.min(2, d.turn + 1);
+    d.answered = true; d.coachSaid = childSaid || key; d.turn = Math.min(2, d.turn + 1);
     lastAnswer = key;
     trail.turns++;
     var r = trail.reviews[key] || { n: 0, last: 0 }; r.n++; r.last = trail.turns; trail.reviews[key] = r;
@@ -2143,7 +2378,7 @@ const BRAIN_TIMEOUT_MS = 6500;
       cry(a.type);
       burst(a.x, a.y - 24, '#ff6b8a', true);
       updateQuest();
-      saveSoon();
+      saveSoon(); smallTalk();
       return;
     }
     if ((a.type === 'dog' || a.type === 'cat') && !animals.some(function (o) { return o.tamed; })) {
@@ -3191,6 +3426,7 @@ const BRAIN_TIMEOUT_MS = 6500;
   }
   function startQuiz() {
     if (chatBlocked()) return false;
+    closeAmbient(); dismissGreeting();
     var pool = quizPool().filter(targetExists);
     if (!pool.length) {
       if (!quizPool().length) showToast('Collect words first!', 3);
@@ -3459,6 +3695,8 @@ const BRAIN_TIMEOUT_MS = 6500;
       var selected = log === (i === 1), tab = document.getElementById(id);
       tab.setAttribute('aria-selected', String(selected)); tab.tabIndex = selected ? 0 : -1;
     });
+    resetChatDay();
+    document.getElementById('parent-memory').textContent = '喜好：颜色 ' + (memory.prefs.color || '未知') + '；动物 ' + (memory.prefs.animal || '未知') + '；食物 ' + (memory.prefs.food || '未知') + '；建造 ' + (memory.prefs.build || '未知') + '。今日闲聊 ' + memory.small_talk_count + '/5；天气聊天：' + (memory.weather_chat_done ? '已完成' : '未完成') + '。';
     document.getElementById('parent-name').value = childName;
     document.getElementById('parent-skip').hidden = !dialogue || dialogue.answered;
     document.getElementById('brain-status').textContent = '本次伙伴回应：AI ' + brainStats.brain + '，模板 ' + brainStats.template + '，来源未标注 ' + brainStats.unknown + '。最多每分钟 8 次、每个标签页会话 60 次请求（刷新不重置）；重试使用本地提示。';
@@ -3525,6 +3763,8 @@ const BRAIN_TIMEOUT_MS = 6500;
       words: learned, stars: quizStars, progress: progress, intros: intros, zh: zhOn,
       crops: crops.map(function (c) { return [c.tx, c.ty, Math.round(c.age * 10) / 10]; }),
       adventure: trail, child_name: cleanName(childName) || 'Mario', last_greeting: lastGreeting,
+      prefs: memory.prefs, prefsLearnedAt: memory.prefsLearnedAt, name_asked: memory.name_asked,
+      chat_day: memory.chat_day, small_talk_count: memory.small_talk_count, weather_chat_done: memory.weather_chat_done,
       boat: boat ? [Math.round(boat.x), Math.round(boat.y)] : null,
       animals: animals.map(function (a) { return [a.type, Math.round(a.x * 10) / 10, Math.round(a.y * 10) / 10, a.dir, a.tamed ? 1 : 0]; })
     };
@@ -3620,6 +3860,7 @@ const BRAIN_TIMEOUT_MS = 6500;
       progress.pet = data.progress.pet ? 1 : 0;
     }
     childName = cleanName(data.child_name) || 'Mario';
+    restoreMemory(data);
     var greeting = data.last_greeting;
     lastGreeting = greeting && Number.isInteger(greeting.id) && greeting.id >= 0 && greeting.id <= 3 &&
       typeof greeting.text === 'string' && greeting.text.length <= 200 && !/[^\x20-\x7e]/.test(greeting.text) ?
@@ -3665,9 +3906,11 @@ const BRAIN_TIMEOUT_MS = 6500;
     started = true;
     document.getElementById('start').hidden = true;
     learn('hello');
-    openGreeting();
+    if (determineMode('gameLoad') === 'name_ask') openNameAsk(); else openGreeting();
   }
   function hardReset() {
+    cancelSocial(nameFlow); nameFlow = null; closeAmbient(); memory = blankMemory(); childName = 'Mario'; weatherPending = false; socialLastInput = Date.now();
+    document.getElementById('name-entry').hidden = true;
     dismissGreeting();
     lastGreeting = { id: -1, text: '' }; returningVisit = false;
     try { localStorage.removeItem(SAVE_KEY); } catch (err) { /* ignore */ }
@@ -3707,14 +3950,15 @@ const BRAIN_TIMEOUT_MS = 6500;
   }
 
   function bind() {
+    bindSocial();
     document.addEventListener('pointerdown', function (e) {
-      chatLastInput = chatClock;
-      if (welcome && !e.target.closest('#welcome')) dismissGreeting();
-      if (chatBlocked() && !e.target.closest('#dialogue, #parent-help, #btn-zh, #btn-portrait')) { e.preventDefault(); e.stopImmediatePropagation(); }
+      chatLastInput = chatClock; socialLastInput = Date.now();
+      if (welcome && !nameFlow && !e.target.closest('#welcome')) dismissGreeting();
+      if (chatBlocked() && !e.target.closest('#dialogue, #welcome, #parent-help, #btn-zh, #btn-portrait')) { e.preventDefault(); e.stopImmediatePropagation(); }
     }, true);
     tapButton(document.getElementById('btn-start'), beginGame);
-    tapButton(document.getElementById('welcome-play'), dismissGreeting);
-    document.getElementById('welcome-play').addEventListener('click', function (e) { if (e.detail === 0) dismissGreeting(); });
+    tapButton(document.getElementById('welcome-play'), function () { if (nameFlow) finishName(document.getElementById('name-input').value); else dismissGreeting(); });
+    document.getElementById('welcome-play').addEventListener('click', function (e) { if (e.detail === 0) { if (nameFlow) finishName(document.getElementById('name-input').value); else dismissGreeting(); } });
     tapButton(document.getElementById('btn-new'), function () {
       if (!armReset) {
         armReset = true;
@@ -3747,7 +3991,7 @@ const BRAIN_TIMEOUT_MS = 6500;
     });
     tapButton(document.getElementById('parent-close'), closePanels);
     document.getElementById('parent-close').addEventListener('click', function (e) { if (e.detail === 0) closePanels(); });
-    document.getElementById('parent-name').addEventListener('input', function (e) { childName = cleanName(e.target.value) || 'Mario'; saveSoon(); });
+    document.getElementById('parent-name').addEventListener('input', function (e) { childName = cleanName(e.target.value) || 'Mario'; if (childName !== 'Mario') { memory.name_asked = true; if (nameFlow) finishName(childName); } saveSoon(); });
     function parentSkip() {
       if (document.getElementById('parent-help').hidden) return;
       closeChat(true); closePanels(); saveSoon();
@@ -3758,7 +4002,7 @@ const BRAIN_TIMEOUT_MS = 6500;
     // not resume movement, hotbar selection, or crafting beneath the overlay.
     ['pointerup', 'click'].forEach(function (type) {
       document.addEventListener(type, function (e) {
-        if (chatBlocked() && !e.target.closest('#dialogue, #parent-help, #btn-zh, #btn-portrait')) { e.preventDefault(); e.stopImmediatePropagation(); }
+        if (chatBlocked() && !e.target.closest('#dialogue, #welcome, #parent-help, #btn-zh, #btn-portrait')) { e.preventDefault(); e.stopImmediatePropagation(); }
       }, true);
     });
     tapButton(document.getElementById('quest'), function () {
@@ -3855,19 +4099,19 @@ const BRAIN_TIMEOUT_MS = 6500;
     joy.addEventListener('pointerup', joyEnd);
     joy.addEventListener('pointercancel', joyEnd);
     window.addEventListener('keydown', function (e) {
-      if (welcome && /^(ArrowLeft|ArrowRight|ArrowUp|Space|KeyW|KeyA|KeyD|KeyE|KeyB|Escape)$/.test(e.code)) dismissGreeting();
-      chatLastInput = chatClock;
+      if (welcome && !nameFlow && /^(ArrowLeft|ArrowRight|ArrowUp|Space|KeyW|KeyA|KeyD|KeyE|KeyB|Escape)$/.test(e.code)) dismissGreeting();
+      chatLastInput = chatClock; socialLastInput = Date.now();
       if (e.target.closest('input, textarea') && !(chatBlocked() && /^(Tab|Escape)$/.test(e.code))) return;
       if (chatBlocked()) {
         if (e.code === 'Escape') { e.preventDefault(); closePanels(); return; }
         if (e.code === 'Tab') {
-          var scope = rotateBlock() ? '#btn-portrait' : document.getElementById('parent-help').hidden ? '#dialogue button:not([hidden]):not(:disabled), #btn-zh' : '#parent-help button:not([hidden]):not(:disabled), #parent-help input';
+          var scope = rotateBlock() ? '#btn-portrait' : document.getElementById('parent-help').hidden ? '#dialogue button:not([hidden]):not(:disabled), #welcome button, #welcome input, #btn-zh' : '#parent-help button:not([hidden]):not(:disabled), #parent-help input';
           var focusable = Array.prototype.filter.call(document.querySelectorAll(scope), function (el) { return el.getClientRects().length; });
           var at = focusable.indexOf(document.activeElement);
           e.preventDefault(); if (focusable.length) focusable[(at + (e.shiftKey ? -1 : 1) + focusable.length) % focusable.length].focus();
           return;
         }
-        if (/^(Enter|Space)$/.test(e.code) && e.target.closest('#dialogue, #parent-help, #btn-zh, #btn-portrait')) return;
+        if (/^(Enter|Space)$/.test(e.code) && e.target.closest('#dialogue, #welcome, #parent-help, #btn-zh, #btn-portrait')) return;
         if (e.target.closest('#parent-help')) return;
         e.preventDefault(); return;
       }
@@ -3890,7 +4134,7 @@ const BRAIN_TIMEOUT_MS = 6500;
     window.addEventListener('blur', function () { keys = {}; joyX = 0; });
     document.addEventListener('touchmove', function (e) {
       var t = e.target;
-      if (t && t.closest && t.closest('.body, .hotbar, #parent-help, #dialogue')) return;
+      if (t && t.closest && t.closest('.body, .hotbar, #parent-help, #dialogue, #welcome, #buddy-chat')) return;
       e.preventDefault();
     }, { passive: false });
     ['gesturestart', 'gesturechange', 'gestureend'].forEach(function (ev) {
@@ -3922,6 +4166,7 @@ const BRAIN_TIMEOUT_MS = 6500;
       if (toastLeft <= 0) document.getElementById('toast').hidden = true;
     }
     chatClock += dt;
+    if (!welcome && !ambient && Date.now() - socialLastInput >= 60000 && determineMode('idleTimeout') === 'small_talk') smallTalk();
     animatePictures(sec);
     var playing = started && !rotateBlock() && !panelOpen() && !chatBlocked();
     if (playing) {
@@ -4048,8 +4293,9 @@ const BRAIN_TIMEOUT_MS = 6500;
       ready: true,
       adventure: function () {
         return JSON.parse(JSON.stringify({ trail: trail, spots: trailSpots, active: dialogue, queue: chatQueue,
-          idle: chatIdle, cooldown: chatCooldown, scene: sceneNow, brain: brainStats }));
+          idle: chatIdle, cooldown: chatCooldown, scene: sceneNow, brain: brainStats, memory: memory, mode: nameFlow ? 'name_ask' : dialogue ? 'exercise' : ambient ? ambient.payload.event : welcome ? 'greet' : 'idle' }));
       },
+      smallTalk: smallTalk, weatherChat: weatherChat, recast: recastSpeech,
       setTime: function (t) { timeOfDay = ((t % 1) + 1) % 1; },
       getTime: function () { return timeOfDay; },
       animals: function () { return animals.map(function (a) { return { type: a.type, x: a.x, y: a.y }; }); },

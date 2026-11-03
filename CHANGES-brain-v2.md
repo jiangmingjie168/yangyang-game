@@ -326,3 +326,74 @@ No nginx configuration change, no main update. Push destination: only
   600; service is active; HTTPS preflight returns 204. No redeploy was necessary.
   `BRAIN_URL` remains `https://brain.yydriver.cn/buddy`, with nginx 30 requests/minute
   per IP (burst 10) and client limits of 8/minute and 60/tab session.
+
+## Conversation memory, small talk, weather and coach — 2026-11-03
+
+Implemented Claude's conversation/state-machine and rule-owned slot design from
+`/workspace/yangyang-design/claude-design-out.md`, adapted to this repository:
+
+- Extended **block-world-save-v1** with validated preferences, ask timestamps,
+  name onboarding, local calendar day, five-per-day chat count, and once-per-day
+  weather flag. Kept all existing world/adventure/word/name/greeting data.
+  Added no profile/session localStorage keys and no new WORDS.
+- Welcome-card name question supports letters, keyboard and microphone; it
+  releases after 20 seconds with Mario/current parent name. Parent-set names
+  bypass first asking. Existing clear/new-world flow resets name and preferences.
+- Buddy taps and 60-second idle ask animal/build/food preferences once per slot;
+  taps and speech learn only whitelisted game words. Validated made/built events
+  infer a missing build slot. Color questions are skipped because none of the
+  proposed colors belong to WORDS. Food uses fish/wheat/seed only.
+- Added nonblocking weather and tiered recasts, success-path coaching, and
+  preference chips. Physics continues during social bubbles. Blocking exercises,
+  quizzes and name asking gate social chat; interruption aborts pending social
+  speech/network work. In-flight questions do not survive reload.
+- Brain adds strict typed `name_ask`, `small_talk`, `weather_chat`, `recast`
+  payloads, dedicated short prompts, exact safe phrase slots, 3–6 word ASCII
+  validation, one correction, and mirrored offline fallbacks. Existing greet,
+  exercise rules, quotas, deadlines, headers and transcript privacy remain.
+- Replaced the two dialogue tool emojis with blue speaker/coral mic SVG buttons,
+  48px targets, labels and pressed/disabled states. Kept short-screen scrolling.
+  Parent gear now shows saved preferences and daily counters.
+
+Claude adaptations: one existing save instead of two new keys; existing parent
+gear/name/reset instead of a password/new panel; existing 42 words instead of
+Claude's proposed extra colors/animals/foods/weather; 20-second onboarding
+escape; input-length coaching tiers; exact line slots for bounded phrasing.
+No free-typing chat IDE was added.
+
+Samples: first visit “Hi! What is your name?”; returning “Hi Sam. It's so nice
+to see you again. Let's build something together!”; preference “Do you like cat
+or dog?”; coach “Try: I see a dog!”; weather “Look! I see the rain!”.
+
+Screenshots: `screens/name-ask.png`, `screens/small-talk.png`,
+`screens/weather-chat.png`, `screens/chat-buttons.png`, `screens/coach.png`.
+Headless speech/touch tests use synthetic recognition/TTS and Chromium touch
+emulation, not a real microphone or physical phone.
+
+Validation: **48 backend tests pass** locally and on the deployment host.
+`tests/memory-chat.cjs`, `tests/greeting.cjs`, `tests/blocking-ai.cjs`,
+`tests/brain-v2.cjs`, `tests/chinese-cleanup.cjs` (6 groups),
+`tests/world-v2.cjs` (8 groups), and `tests/playthrough.cjs` (17 groups) pass.
+Syntax checks and `git diff --check` pass. New cases include clock rollback
+without duplicate questions, tamed buddy taps, actual full-sentence success
+coaching, no raw transcript save, social interruption, and existing reset.
+
+Production backup: `/root/backups/yangyang-brain-memory-chat-20261103T121319Z/app`.
+Rsync copied only `server.cjs` and `server.test.cjs`; remote tests passed before
+restarting `yangyang-brain`. Service is active. `.env` compares byte-for-byte
+with the backup and remains root:root 600. The protected `huanrui.conf` SHA-256
+is unchanged. Server SHA-256:
+`1fb742cd1fd9cff8d5853b647f04fd70047772723712e1b6cb3e8f6b25e677f8`.
+
+HTTPS smoke: **12/12 POSTs return 200, source brain, reason validated**, including
+all new modes, three recast lengths, return greeting, all exercise tiers and
+success closing. Outputs independently pass the local validator. Observed
+latency 0.83–1.82 seconds; jsDelivr preflight 204; invalid weather rejected 400.
+Evidence: `screens/memory-chat-smoke.json`. No nginx/env/provider configuration
+was changed, and no credentials were printed.
+
+The live `tests/brain-ratio.cjs` check also passes: 14 brain / 1 template
+response across four exercise encounters plus onboarding, welcomes and ambient
+weather. The fixture now waits for completed welcomes instead of counting
+canceled HTTP replies as accepted client output. Current evidence is preserved
+separately in `screens/memory-chat-ratio.json`; previous ratio artifacts remain.

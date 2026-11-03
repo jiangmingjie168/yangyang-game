@@ -43,7 +43,7 @@ async function page(data, options={}) {
   },{data,NOW,audioOff:options.audioOff});
   await p.goto(URL+'/#seed=42');
   if(await p.locator('#btn-portrait').isVisible())await p.click('#btn-portrait');
-  await p.click('#btn-start'); await p.waitForTimeout(120);
+  await p.click('#btn-start'); if(await p.locator('#name-entry').isVisible())await p.click('#welcome-play'); await p.waitForTimeout(120);
   return p;
 }
 async function openLog(p) { await p.evaluate(()=>BW.hideCard()); await p.click('#btn-zh'); await p.click('#parent-log-tab'); }
@@ -51,7 +51,7 @@ async function relocate(p,x,y) {
   const d=await snapshot(p);d.px=x;d.py=y;
   const mark='checkpoint-'+serial++;
   await p.addInitScript(({d,mark})=>{if(!sessionStorage.getItem(mark)){localStorage.setItem('block-world-save-v1',JSON.stringify(d));sessionStorage.setItem(mark,'yes');}},{d,mark});
-  await p.reload(); if(await p.locator('#btn-portrait').isVisible())await p.click('#btn-portrait'); await p.click('#btn-start');
+  await p.reload(); if(await p.locator('#btn-portrait').isVisible())await p.click('#btn-portrait'); await p.click('#btn-start'); if(await p.locator('#name-entry').isVisible())await p.click('#welcome-play');
   await p.evaluate(()=>BW.hideCard());
 }
 async function collect(p, id) {
@@ -80,7 +80,7 @@ async function collect(p, id) {
   await p.keyboard.press('End');assert(await p.locator('#parent-log').isVisible());
   await p.screenshot({path:'/tmp/bw-v2-parent-log.png'});
   const saved=await snapshot(p);assert.deepEqual(saved.adventure.speaking,log.adventure.speaking);
-  await p.reload();await p.click('#btn-start');await openLog(p);assert.equal(await p.locator('#speaking-rows tr').count(),3);
+  await p.reload();await p.click('#btn-start'); if(await p.locator('#name-entry').isVisible())await p.click('#welcome-play');await openLog(p);assert.equal(await p.locator('#speaking-rows tr').count(),3);
   await p.click('#parent-close');assert(!/[\u3400-\u9fff]/u.test(await p.locator('body').innerText()));await check(p);await p.context().close();
   report('parent page: local Monday/DST boundary, all five scenes, exact counts, excludes taps/unmatched/old/future events, saves unchanged, keyboard tabs');
   const legacy=structuredClone(fixture);delete legacy.adventure.speaking;
@@ -104,19 +104,19 @@ async function collect(p, id) {
   await p.evaluate(()=>BW.hideCard());await p.click('#btn-words');assert.equal(await p.locator('#trail-album button').count(),7);assert.equal(await p.locator('#album-last button').count(),7);
   assert.equal(await p.locator('#album-completion').innerText(),'✓ 1 round complete!');assert.match(await p.locator('#album-round').innerText(),/Round 2/);assert.equal(await p.locator('#trail-album canvas').count(),0);
   await p.screenshot({path:'/tmp/bw-v2-album.png'});await p.click('#book-back');
-  await p.reload();await p.click('#btn-start');assert.deepEqual(await p.evaluate(()=>BW.adventure().spots),second);assert.equal((await snapshot(p)).adventure.rounds,1);
+  await p.reload();await p.click('#btn-start'); if(await p.locator('#name-entry').isVisible())await p.click('#welcome-play');assert.deepEqual(await p.evaluate(()=>BW.adventure().spots),second);assert.equal((await snapshot(p)).adventure.rounds,1);
   for(const {id} of second) await collect(p,id);
   after=await snapshot(p);assert.equal(after.adventure.rounds,2);assert.equal(Object.keys(after.adventure.lastRound).length,7);
   let third=await p.evaluate(()=>BW.adventure().spots);assert(third.every(s=>!second.some(old=>old.x===s.x)));
   await collect(p,'0');after=await snapshot(p);assert.equal(after.adventure.rounds,2);assert.equal(Object.keys(after.adventure.found).length,1);
   const notes=await p.evaluate(()=>audioNotes);assert(notes.some(n=>Math.round(n.freq)===523));assert(notes.every(n=>n.stop>=(n.time||0)));
-  const progress=after.progress;await p.reload();await p.click('#btn-start');assert.deepEqual((await snapshot(p)).adventure.found,after.adventure.found);assert.deepEqual((await snapshot(p)).progress,progress);
+  const progress=after.progress;await p.reload();await p.click('#btn-start'); if(await p.locator('#name-entry').isVisible())await p.click('#welcome-play');assert.deepEqual((await snapshot(p)).adventure.found,after.adventure.found);assert.deepEqual((await snapshot(p)).progress,progress);
   await check(p);await p.context().close();
   report('two full seven-gift rounds earned by landings, seven distinct dry hideouts, different next locations, preserved completed album/stamp, partial-round save restore, synthetic chime calls');
   // Old saves with all seven found migrate once, including boolean-only pre-picture discoveries.
   const full=structuredClone(fixture);full.adventure.found=Object.fromEntries(first.map((s,i)=>[s.id,i%2?'wood':true]));
   delete full.adventure.rounds;delete full.adventure.lastRound;
-  p=await page(full);assert.equal((await snapshot(p)).adventure.rounds,1);await p.reload();await p.click('#btn-start');assert.equal((await snapshot(p)).adventure.rounds,1);await check(p);await p.context().close();
+  p=await page(full);assert.equal((await snapshot(p)).adventure.rounds,1);await p.reload();await p.click('#btn-start'); if(await p.locator('#name-entry').isVisible())await p.click('#welcome-play');assert.equal((await snapshot(p)).adventure.rounds,1);await check(p);await p.context().close();
   const partial=structuredClone(fixture);partial.adventure.found={'0':'wood','4':true};
   p=await page(partial);assert.deepEqual((await snapshot(p)).adventure.found,partial.adventure.found);assert.equal((await snapshot(p)).adventure.rounds,0);await p.context().close();
   const malformed=structuredClone(fixture);malformed.adventure.rounds=99;malformed.adventure.lastRound={'0':'wood'};
@@ -158,7 +158,7 @@ async function collect(p, id) {
   const offline=await browser.newContext({offline:true,viewport:{width:844,height:390}}), f=await offline.newPage();
   const offData=structuredClone(full);offData.adventure.speaking=[{time:Date.now(),word:'tree',spoken_word:'tree',scene:'task',spoke:true,tier:2}];
   await f.addInitScript(data=>{localStorage.setItem('block-world-save-v1',JSON.stringify(data));Object.defineProperty(window,'speechSynthesis',{value:undefined});window.SpeechRecognition=undefined;window.webkitSpeechRecognition=undefined;},offData);
-  await f.goto('file://'+path.resolve(__dirname,'../index.html'));await f.click('#btn-start');await f.evaluate(()=>BW.hideCard());await openLog(f);
+  await f.goto('file://'+path.resolve(__dirname,'../index.html'));await f.click('#btn-start'); if(await f.locator('#name-entry').isVisible())await f.click('#welcome-play');await f.evaluate(()=>BW.hideCard());await openLog(f);
   assert.match(await f.locator('#speaking-rows').innerText(),/Tree\s+1\s+任务/);await f.click('#parent-close');await f.click('#btn-words');assert.equal(await f.locator('#album-completion').innerText(),'✓ 1 round complete!');assert.equal(await f.locator('#album-last button').count(),7);await offline.close();
   report('actual file:// offline: saved speaking log, legacy gift-round migration, completed album, no speech service');
 

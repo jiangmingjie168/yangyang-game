@@ -1,7 +1,7 @@
 # Optional Buddy brain
 
 Node **22+**, no npm dependencies. The game stays a single offline `index.html`.
-The service only phrases the game's exercise; the game chooses when to speak,
+The service phrases rule-owned welcomes, conversations and exercises; the game chooses when to speak,
 words, chapter, tier, correctness, rewards and mastery. Production deployment details are in `../DEPLOY-brain.md`. Credentials remain server-only.
 
 ## Local use and tests
@@ -249,3 +249,99 @@ PLAYWRIGHT_MODULE=/path/to/playwright node tests/brain-ratio.cjs --before
 
 Ratio traces and screenshots are saved under `screens/`. These are synthetic
 headless tests; real microphone/voice quality still needs device testing.
+
+## Conversation memory and coaching (2026-11-03)
+
+Four additional events share the same `say/options/answer/done` response and
+`X-Buddy-Source` / `X-Buddy-Reason` provenance. Conversation responses always
+have `options: []`, `answer: null`, `done: true`; preference chips and blocking
+state belong to the client. No server-side profile or transcript is stored.
+
+```json
+{"event":"name_ask","child_name":"Mario","scene":"grass"}
+{"event":"small_talk","child_name":"Sam","prefs":{"animal":null,"build":null},"recent_events":[{"action":"made","word":"table"}],"topic":"learn_pref_animal"}
+{"event":"weather_chat","child_name":"Sam","weather":"rain","time_of_day":"morning"}
+{"event":"recast","child_name":"Sam","child_said":"cat","target_tier":1}
+```
+
+Common optional fields: `child_name` uses the existing English nickname rule;
+`scene` is a 1–24 character lowercase/hyphen slug; `recent_events` contains at
+most six validated `{action,word}` facts with the existing action set and WORDS.
+`prefs` is an object containing only these nullable slots:
+
+| Slot | Allowed values |
+| --- | --- |
+| color | null only (no proposed colors occur in WORDS) |
+| animal | cat, dog, cow, pig, sheep, chicken, duck, horse, rabbit |
+| food | fish, wheat, seed |
+| build | house, table, door, bed, fence, torch, boat |
+
+`small_talk.topic` is null/omitted or `learn_pref_animal`, `learn_pref_build`,
+`learn_pref_food`; a topic for an already filled slot is rejected. Rules supply
+two options (cat/dog, house/table, fish/wheat). Weather is exactly
+`rain|cloud|sun|moon|star`, with `morning|afternoon|evening` time. Recast requires
+nonempty `child_said` of at most 160 characters and the matching `target_tier`:
+one word → 1 (phrase scaffold), two/three → 2 (short sentence), four or more → 3
+(praise only). Unknown vocabulary uses a safe request to try again. Arbitrary
+transcript text never becomes generated content.
+
+Each mode has a short system prompt and rule-owned phrase alternatives. The
+model chooses one exact line; both server and browser check its envelope,
+ASCII English, 3–6 words, 160-character bound, and slot grammar. This also
+restricts all vocabulary to WORDS plus fixed scaffold. One corrective retry
+and the existing shared upstream deadline remain in force; failure uses the
+mirrored offline template. Greet retains its 20-word allowance and exercises
+retain their existing 12-word validation and scaffolding.
+
+The existing `block-world-save-v1` record adds `prefs`, `prefsLearnedAt`,
+`name_asked`, `chat_day` (local YYYY-MM-DD), `small_talk_count`, and
+`weather_chat_done`. No additional localStorage key is created. All values
+are clamped on load; valid positive learning timestamps survive clock changes.
+Only validated made/built events infer a missing build preference. Color is
+skipped. Asking stamps the slot even if unanswered, so it is never re-asked.
+Preference taps or recognized answers save a whitelist value; raw speech is
+never written to the save or counted as mastery by social coaching.
+
+First play asks the name using the welcome card, letters, short input and mic.
+After 20 seconds, or “Let's play!”, it accepts the current/default Mario name,
+saves `name_asked`, and gives the usual named greeting. A parent-set non-default
+name completes onboarding. `#parent-name` remains authoritative; the existing
+two-tap new-world reset clears name/preferences with the rest of the save.
+
+Name asking and exercises gate social chat. Buddy taps or 60 seconds idle
+start at most five small talks per local calendar day, persisted across reloads.
+A 30% opportunity after greeting dismissal gives matching ambient weather,
+at most once a day. Social bubbles let physics continue, dismiss by tap, and
+fade three seconds after TTS (bounded fallback for missing speech events).
+Recognition outside answer context and preference taps receive tiered recasts;
+exercise success also offers a word expansion after its blocking panel closes.
+Blocking starts abort pending social requests and recognition; late replies
+cannot reopen a bubble. In-flight dialogues remain transient on reload.
+
+The parent gear panel shows preferences and today's counts. Listen/Speak use
+48px SVG buttons with blue/coral colors and disabled/pressed states. The
+existing short-screen dialogue scrolling remains usable.
+
+```sh
+node --test brain/server.test.cjs
+PLAYWRIGHT_MODULE=/tmp/node_modules/playwright node tests/memory-chat.cjs
+```
+
+The new browser suite covers onboarding, parent naming, preference taps/speech,
+ask-once timestamps, inference, local daily limits, weather, idle, recast tiers,
+offline file play, valid/rejected/timed-out brain replies, interruption,
+reload/reset, client/server slot parity, and portrait touch buttons. Existing
+regression helpers now complete onboarding through the UI. Greeting-only tests
+isolate their existing contract; onboarding has its own suite. All recognition
+and TTS tests are synthetic, with real device voice quality still unmeasured.
+
+Production rollout: backup at
+`/root/backups/yangyang-brain-memory-chat-20261103T121319Z/app`, only server/test
+files copied, 48 remote tests passed, `yangyang-brain` restarted and active.
+Environment bytes and protected nginx config hash are unchanged. Twelve real
+HTTPS requests (all new events plus greeting and exercise tiers/closing) returned
+validated brain output with status 200; preflight 204 and invalid input 400.
+See `../screens/memory-chat-smoke.json` for synthetic sample outputs/provenance.
+The live browser ratio regression also passes (14 brain / 1 template across
+four exercise encounters plus welcomes/onboarding/weather); current trace is
+`../screens/memory-chat-ratio.json`.

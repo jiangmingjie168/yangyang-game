@@ -18,7 +18,7 @@ async function page({tier=1,voice='ok',endpoint='',reply,delay=0,timeout=6500,sh
   await p.route(URL+'/',r=>r.fulfill({contentType:'text/html',body:html}));
   if(endpoint)await p.route('**/mock-buddy',async r=>{
     const q=r.request().postDataJSON();
-    if(q.event==='greet'){p.greetingCalls.push(q);return r.fulfill({contentType:'application/json',headers:{'X-Buddy-Source':'template','X-Buddy-Reason':'test-greeting'},body:JSON.stringify(template(normalize(q)))});}
+    if(['greet','name_ask','recast','weather_chat','small_talk'].includes(q.event)){if(q.event==='greet')p.greetingCalls.push(q);return r.fulfill({contentType:'application/json',headers:{'X-Buddy-Source':'template','X-Buddy-Reason':'test-greeting'},body:JSON.stringify(template(normalize(q)))});}
     p.calls.push(q);await new Promise(resolve=>setTimeout(resolve,delay));
     await r.fulfill({contentType:'application/json',headers:{'X-Buddy-Source':'brain','X-Buddy-Reason':'validated'},body:JSON.stringify(reply?reply(q):template(normalize(q)))}).catch(()=>{});
   });
@@ -32,7 +32,7 @@ async function page({tier=1,voice='ok',endpoint='',reply,delay=0,timeout=6500,sh
     if(voice==='missing'){window.SpeechRecognition=undefined;window.webkitSpeechRecognition=undefined;}
     else window.SpeechRecognition=class {start(){if(voice==='throw')throw Error('unavailable');window.recognizer=this;}abort(){this.onend?.();}};
   },{data,voice});
-  await p.goto(URL+'/#seed=42');if(await p.locator('#btn-portrait').isVisible())await p.click('#btn-portrait');await p.click('#btn-start');await p.waitForTimeout(200);if(await p.locator('#welcome').isVisible())await p.click('#welcome-play');return p;
+  await p.goto(URL+'/#seed=42');if(await p.locator('#btn-portrait').isVisible())await p.click('#btn-portrait');await p.click('#btn-start'); if(await p.locator('#name-entry').isVisible())await p.click('#welcome-play');await p.waitForTimeout(200);if(await p.locator('#welcome').isVisible())await p.click('#welcome-play');return p;
 }
 async function trigger(p,wait=true){
   await p.evaluate(()=>BW.hideCard());const pos=await p.evaluate(()=>BW.worldToScreen(87.5*32,15.5*32));await p.mouse.click(pos.x,pos.y);await p.evaluate(()=>BW.hideCard());
@@ -119,14 +119,14 @@ async function done(p){assert.deepEqual(p.errors,[]);assert.equal(await p.evalua
   await p.click('#chat-mic');await p.evaluate(()=>recognizer.onresult({resultIndex:0,results:[[{transcript:'I see a tree'}]]}));await p.waitForFunction(()=>!BW.adventure().active.pending);
   assert.match(await p.locator('#chat-question').innerText(),/You said tree!/);assert.equal(p.calls[1].child_said,'I see a tree');assert.equal(p.calls[1].spoken_word,'tree');assert.equal(p.calls[1].recent_lines.length,1);
   const persisted=await snapshot(p);assert.equal(persisted.child_name,'Alex');assert(!JSON.stringify(persisted).includes('I see a tree'));assert.equal((await p.evaluate(()=>BW.adventure().brain)).brain,2);
-  await p.reload();await p.click('#btn-start');await p.click('#btn-zh');assert.equal(await p.inputValue('#parent-name'),'Alex');await done(p);
+  await p.reload();await p.click('#btn-start'); if(await p.locator('#name-entry').isVisible())await p.click('#welcome-play');await p.click('#btn-zh');assert.equal(await p.inputValue('#parent-name'),'Alex');await done(p);
   report('name + real mined block + recognized answer reach brain, validated contextual bubble/TTS and accurate provenance; raw transcript stays out of saves');
   // Exhaust the per-minute budget using repeated encounters in the same session.
   // Test-only opening hook is injected below; production exposes no mutation hook.
   const budgetHTML=source.replace("ready: true,","ready: true, testOpen: () => openChat({anchor:'task',key:'tree'}),");
   p=await page({endpoint:URL+'/mock-buddy'});
   await p.route(URL+'/',r=>r.fulfill({contentType:'text/html',body:budgetHTML.replace(/^const BRAIN_URL = '[^']*';$/m,'const BRAIN_URL = '+JSON.stringify(URL+'/mock-buddy')+';')}));
-  await p.reload();await p.click('#btn-start');await p.waitForTimeout(200);await p.click('#welcome-play');
+  await p.reload();await p.click('#btn-start'); if(await p.locator('#name-entry').isVisible())await p.click('#welcome-play');await p.waitForTimeout(200);await p.click('#welcome-play');
   for(let i=0;i<3;i++){
     await p.evaluate(()=>BW.testOpen());await p.waitForFunction(()=>!BW.adventure().active.pending);
     if(i===0){await p.locator('[data-word=tree]').click();await p.waitForFunction(()=>!BW.adventure().active);}
@@ -139,9 +139,9 @@ async function done(p){assert.deepEqual(p.errors,[]);assert.equal(await p.evalua
   }
   await p.evaluate(()=>BW.testOpen());await p.waitForFunction(()=>!BW.adventure().active.pending);
   assert.equal(p.calls.length+p.greetingCalls.length,8);assert.equal((await p.evaluate(()=>BW.adventure().brain)).limited,1);assert(await p.locator('#chat-options').isVisible());
-  await p.reload();await p.click('#btn-start');await p.evaluate(()=>BW.testOpen());assert.equal(p.calls.length,6);assert.equal((await p.evaluate(()=>BW.adventure().brain)).limited,2);
+  await p.reload();await p.click('#btn-start'); if(await p.locator('#name-entry').isVisible())await p.click('#welcome-play');await p.evaluate(()=>BW.testOpen());assert.equal(p.calls.length,6);assert.equal((await p.evaluate(()=>BW.adventure().brain)).limited,2);
   await p.addInitScript(()=>sessionStorage.setItem('block-world-brain-session-v1',JSON.stringify({calls:60,at:0,window:0})));
-  await p.reload();await p.click('#btn-start');await p.evaluate(()=>BW.testOpen());assert.equal(p.calls.length,6);assert.equal((await p.evaluate(()=>BW.adventure().brain)).limited,2);await done(p);
+  await p.reload();await p.click('#btn-start'); if(await p.locator('#name-entry').isVisible())await p.click('#welcome-play');await p.evaluate(()=>BW.testOpen());assert.equal(p.calls.length,6);assert.equal((await p.evaluate(()=>BW.adventure().brain)).limited,2);await done(p);
   report('last answer and recent lines reach the next prompt; minute/session budgets survive reload; ninth request in one minute uses an immediately answerable template; no additional provider request');
   await blocked.waitForTimeout(Math.max(0,26000-(Date.now()-started)));
   assert(await blocked.locator('#dialogue').isVisible());assert(!(await blocked.evaluate(()=>BW.adventure().active)).answered);assert.deepEqual(await blocked.evaluate(()=>BW.player()),player);

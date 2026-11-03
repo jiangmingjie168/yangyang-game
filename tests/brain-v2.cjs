@@ -21,7 +21,7 @@ async function page(data, { endpoint = '', reply, voice = true, timeout = 6500, 
   await p.route(URL + '/', r => r.fulfill({ contentType: 'text/html', body: html.replace(/^const BRAIN_URL = '[^']*';$/m, 'const BRAIN_URL = ' + JSON.stringify(endpoint) + ';').replace('const BRAIN_TIMEOUT_MS = 6500;', 'const BRAIN_TIMEOUT_MS = ' + timeout + ';') }));
   if (reply) await p.route('**/mock-buddy', async r => {
     const payload = r.request().postDataJSON();
-    if (payload.event === 'greet') return r.fulfill({ contentType: 'application/json', body: JSON.stringify(template(normalize(payload))) });
+    if (['greet','name_ask','recast','weather_chat','small_talk'].includes(payload.event)) return r.fulfill({ contentType: 'application/json', body: JSON.stringify(template(normalize(payload))) });
     p.calls.push(payload);
     await new Promise(r => setTimeout(r, delay));
     const value = typeof reply === 'function' ? reply(payload) : reply;
@@ -37,7 +37,7 @@ async function page(data, { endpoint = '', reply, voice = true, timeout = 6500, 
     else { window.SpeechRecognition = undefined; window.webkitSpeechRecognition = undefined; }
     window.voiceResult = text => { const r = window.recognizer; r.onresult?.({ resultIndex: 0, results: [[{ transcript: text }]] }); r.onend?.(); };
   }, { data, voice });
-  await p.goto(URL + '/#seed=42'); await p.click('#btn-start'); await p.waitForTimeout(180);
+  await p.goto(URL + '/#seed=42'); await p.click('#btn-start'); if(await p.locator('#name-entry').isVisible())await p.click('#welcome-play'); await p.waitForTimeout(180);
   if (await p.locator('#welcome').isVisible()) await p.click('#welcome-play');
   return p;
 }
@@ -101,7 +101,7 @@ function report(text) { console.log('PASS', text); }
   upstream = http.createServer(async (req,res) => {
     let raw=''; for await (const b of req) raw+=b; const call=JSON.parse(raw);
     const data = JSON.parse(call.messages[1].content), expected = data.expected;
-    if (data.event === 'greet') return res.end(JSON.stringify({ choices:[{message:{content:JSON.stringify(expected)}}] }));
+    if (data.event === 'greet' || data.allowed_lines) return res.end(JSON.stringify({ choices:[{message:{content:JSON.stringify(expected)}}] }));
     upstreamCalls.push(call);
     const lead = data.context_leads.length ? data.context_leads[0] + ' ' : '';
     const value = upstreamCalls.length===1 ? {...expected, say:'你好'} : {...expected, say: 'Nice! ' + lead + expected.say.replace(/^Great! /,'')};
@@ -153,6 +153,6 @@ function report(text) { console.log('PASS', text); }
   // File URL + offline context proves the configured brain still has local fallback.
   const offline=await browser.newContext({offline:true,viewport:{width:1180,height:720}}); const f=await offline.newPage();
   await f.addInitScript(data=>localStorage.setItem('block-world-save-v1',JSON.stringify(data)),next(fixture));
-  await f.goto('file://'+require('node:path').resolve(__dirname,'../index.html')); await f.click('#btn-start'); assert(await f.evaluate(()=>BW.layout().started)); await chat(f); assert.equal(await f.locator('#chat-question').innerText(),'Tree or wood?'); await offline.close();
+  await f.goto('file://'+require('node:path').resolve(__dirname,'../index.html')); await f.click('#btn-start'); if(await f.locator('#name-entry').isVisible())await f.click('#welcome-play'); assert(await f.evaluate(()=>BW.layout().started)); await chat(f); assert.equal(await f.locator('#chat-question').innerText(),'Tree or wood?'); await offline.close();
   report('configured BRAIN_URL starts and falls back to template dialogue offline from file://');
 })().catch(e=>{console.error(e);process.exitCode=1;}).finally(async()=>{await browser?.close();await close(brain);await close(upstream);});
