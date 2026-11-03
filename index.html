@@ -48,7 +48,6 @@
   #app { position: fixed; inset: 0; overflow: hidden; touch-action: none; }
   #view { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; }
   /* Child-facing words, quests and narration stay English, even with parent help open. */
-  .hint { display: none !important; }
   #dialogue {
     position: absolute; z-index: 31; top: calc(80px + var(--sat)); left: 50%;
     transform: translateX(-50%); width: min(430px, calc(100% - 24px));
@@ -107,7 +106,6 @@
   #quest canvas { width: 40px; height: 40px; flex: 0 0 auto; }
   .qtext { min-width: 0; display: flex; flex-direction: column; }
   #quest-en { font-size: 18px; font-weight: 800; line-height: 1.15; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  #quest .hint { display: block; font-size: 14px; font-weight: 700; color: #8a623c; line-height: 1.2; }
   .topbtn {
     min-width: 76px; height: 56px; padding: 0 12px;
     border-radius: 16px; background: #fff;
@@ -154,7 +152,6 @@
     max-width: 100%;
   }
   #held-en { font-size: 18px; font-weight: 800; }
-  #held .hint { font-size: 15px; font-weight: 700; color: #8a623c; }
   .hotbar {
     width: 100%; max-width: 100%;
     display: flex; gap: 6px; align-items: center;
@@ -193,7 +190,6 @@
     box-shadow: 0 4px 0 rgba(58,42,28,0.2);
   }
   .act strong { font-size: 16px; }
-  .act .hint { font-size: 13px; font-weight: 800; opacity: 0.95; }
   .act:active { transform: translateY(3px); box-shadow: 0 1px 0 rgba(58,42,28,0.2); }
   .act.break { background: var(--coral); }
   .act.place { background: var(--sky); }
@@ -209,7 +205,6 @@
     display: flex; flex-direction: column; align-items: center; justify-content: center;
   }
   #btn-home strong { font-size: 18px; }
-  #btn-home .hint { font-size: 14px; color: #8a623c; font-weight: 700; }
 
   #wordcard {
     position: absolute; z-index: 60;
@@ -227,7 +222,6 @@
   }
   #wordcard canvas { width: 68px; height: 68px; display: block; margin: 0 auto; }
   #card-en { font-size: clamp(42px, 6.4vw, 64px); font-weight: 900; line-height: 1; letter-spacing: -0.5px; }
-  #card-zh { display: block; margin-top: 2px; font-size: 24px; font-weight: 800; color: #8a623c; font-style: normal; }
   @keyframes pop { from { transform: translateX(-50%) scale(0.86); } to { transform: translateX(-50%) scale(1); } }
 
   .panel {
@@ -239,7 +233,6 @@
   }
   .panel header { display: flex; align-items: center; gap: 10px; min-height: 60px; flex: 0 0 auto; }
   .panel h2 { margin: 0; flex: 1; font-size: 28px; line-height: 1.1; }
-  .panel h2 .hint { font-size: 18px; font-weight: 700; color: #8a623c; margin-left: 8px; }
   .back {
     min-width: 104px; min-height: 56px; padding: 0 14px;
     border-radius: 16px; background: #fff; font-size: 20px; font-weight: 800;
@@ -258,7 +251,6 @@
   .ing, .out { display: flex; flex-direction: column; align-items: center; min-width: 58px; }
   .ing canvas, .out canvas { width: 44px; height: 44px; }
   .ing b, .out b { font-size: 16px; line-height: 1.1; text-align: center; }
-  .ing .hint, .out .hint { font-size: 13px; font-style: normal; color: #8a623c; font-weight: 700; }
   .ing em { font-style: normal; font-size: 16px; font-weight: 800; color: #c4503a; }
   .ing em.ok { color: #207a38; }
   .arrow { font-size: 22px; font-weight: 900; color: #c4a27a; flex: 0 0 auto; }
@@ -273,7 +265,6 @@
   #book-bar { height: 14px; border-radius: 999px; background: #ead9c4; overflow: hidden; margin: 0 0 10px; }
   #book-bar-fill { height: 100%; width: 0%; border-radius: 999px; background: #34a853; transition: width 0.3s ease; }
   #book-empty { font-size: 22px; font-weight: 800; line-height: 1.35; margin: 12px 4px; }
-  #book-empty .hint { display: block; margin-top: 6px; font-size: 18px; color: #8a623c; }
   #wordgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 8px; }
   .wcard {
     display: flex; align-items: center; gap: 8px;
@@ -283,7 +274,6 @@
   .wcard canvas { width: 56px; height: 56px; flex: 0 0 auto; }
   .wcard .txt { flex: 1; min-width: 0; }
   .wcard .en { display: block; font-size: 22px; font-weight: 900; line-height: 1.1; }
-  .wcard .hint { display: block; font-size: 16px; font-style: normal; color: #8a623c; font-weight: 700; }
   .spk {
     width: 56px; height: 56px; flex: 0 0 auto; border-radius: 50%;
     background: #ffe7a8; font-size: 26px; font-weight: 900;
@@ -310,7 +300,6 @@
     max-width: min(92vw, 520px);
   }
   #toast-en { font-size: 22px; font-weight: 900; display: block; line-height: 1.15; }
-  #toast .hint { display: block; font-size: 16px; font-weight: 700; color: #8a623c; }
   #btn-quiz {
     width: 100%; min-height: 64px; margin: 0 0 10px;
     border-radius: 16px; background: var(--leaf); color: #fff;
@@ -318,7 +307,6 @@
     display: flex; flex-direction: column; align-items: center; justify-content: center;
     font-size: 22px; font-weight: 900; line-height: 1.15;
   }
-  #btn-quiz .hint { color: #eaffdf; font-size: 16px; }
   #btn-quiz:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--leaf-d); }
   .wcard .star { color: #f5a623; font-size: 20px; }
 
@@ -432,7 +420,6 @@
         <canvas id="quest-icon" width="128" height="128"></canvas>
         <span class="qtext">
           <strong id="quest-en">Find a tree!</strong>
-          <span id="quest-zh" class="hint">找到一棵树！</span>
         </span>
       </button>
       <button id="btn-speak" type="button" aria-label="Listen to the quest">
@@ -444,7 +431,6 @@
     </div>
     <button id="btn-home" type="button" hidden>
       <strong>Go home</strong>
-      <span class="hint">回家</span>
     </button>
     <div class="bottom">
       <div id="joy" aria-label="Move">
@@ -452,13 +438,13 @@
         <div id="joy-knob"></div>
       </div>
       <div class="mid">
-        <div id="held"><strong id="held-en">Tap a block</strong><span id="held-zh" class="hint">点方块</span></div>
+        <div id="held"><strong id="held-en">Tap a block</strong></div>
         <div id="hotbar" class="hotbar"></div>
       </div>
       <div class="acts">
-        <button id="btn-break" class="act break" type="button"><strong>Break</strong><span class="hint">挖</span></button>
-        <button id="btn-place" class="act place" type="button"><strong>Place</strong><span class="hint">放</span></button>
-        <button id="btn-jump" class="act jump" type="button"><strong>Jump</strong><span class="hint">跳</span></button>
+        <button id="btn-break" class="act break" type="button"><strong>Break</strong></button>
+        <button id="btn-place" class="act place" type="button"><strong>Place</strong></button>
+        <button id="btn-jump" class="act jump" type="button"><strong>Jump</strong></button>
       </div>
     </div>
   </div>
@@ -479,17 +465,15 @@
   <div id="wordcard" hidden role="status" aria-live="polite">
     <canvas id="card-icon" width="256" height="256"></canvas>
     <div id="card-en">Hello</div>
-    <i id="card-zh" class="hint">你好</i>
   </div>
 
   <div id="toast" hidden role="status" aria-live="polite">
     <span id="toast-en"></span>
-    <span id="toast-zh" class="hint"></span>
   </div>
 
   <div id="craft" class="panel" hidden>
     <header>
-      <h2>Craft<span class="hint">制作</span></h2>
+      <h2>Craft</h2>
       <button id="craft-back" class="back" type="button">Back</button>
     </header>
     <div class="body" id="recipes"></div>
@@ -497,15 +481,15 @@
 
   <div id="book" class="panel" hidden>
     <header>
-      <h2>Word Book<span class="hint">单词本</span></h2>
+      <h2>Word Book</h2>
       <button id="book-back" class="back" type="button">Back</button>
     </header>
     <div class="body">
-      <button id="btn-quiz" type="button"><span id="quiz-btn-en">Treasure Quiz</span><span id="quiz-btn-zh" class="hint">寻宝测验</span></button>
+      <button id="btn-quiz" type="button"><span id="quiz-btn-en">Treasure Quiz</span></button>
       <div id="trail-album" aria-label="Discovery pictures"></div>
       <p id="book-count"></p>
       <div id="book-bar" hidden><div id="book-bar-fill"></div></div>
-      <p id="book-empty">Tap animals and blocks.<span class="hint">点一点动物和方块，单词会记在这里。</span></p>
+      <p id="book-empty">Tap animals and blocks.</p>
       <div id="wordgrid"></div>
     </div>
   </div>
@@ -544,21 +528,21 @@
   var DAY_LEN = 160;
 
   var WORD = {
-    grass: ['Grass', '草'], dirt: ['Dirt', '泥土'], stone: ['Stone', '石头'],
-    wood: ['Wood', '木头'], leaves: ['Leaves', '树叶'], sand: ['Sand', '沙子'],
-    water: ['Water', '水'], flower: ['Flower', '花'], planks: ['Planks', '木板'],
-    stick: ['Stick', '木棍'], table: ['Table', '桌子'], door: ['Door', '门'],
-    torch: ['Torch', '火把'], bed: ['Bed', '床'], house: ['House', '房子'],
-    wool: ['Wool', '羊毛'], tree: ['Tree', '树'],
-    cow: ['Cow', '奶牛'], pig: ['Pig', '猪'], sheep: ['Sheep', '绵羊'],
-    chicken: ['Chicken', '小鸡'], cat: ['Cat', '猫'], dog: ['Dog', '狗'],
-    duck: ['Duck', '鸭子'], horse: ['Horse', '马'], rabbit: ['Rabbit', '兔子'],
-    fence: ['Fence', '栅栏'], rain: ['Rain', '雨'], cloud: ['Cloud', '云'],
-    sun: ['Sun', '太阳'], moon: ['Moon', '月亮'], star: ['Star', '星星'],
-    hello: ['Hello', '你好'], jump: ['Jump', '跳'], home: ['Home', '家'],
-    wheat: ['Wheat', '小麦'], seed: ['Seed', '种子'], fish: ['Fish', '鱼'],
-    rod: ['Fishing Rod', '钓竿'], boat: ['Boat', '船'], pet: ['Pet', '宠物'],
-    follow: ['Follow', '跟随']
+    grass: ['Grass'], dirt: ['Dirt'], stone: ['Stone'],
+    wood: ['Wood'], leaves: ['Leaves'], sand: ['Sand'],
+    water: ['Water'], flower: ['Flower'], planks: ['Planks'],
+    stick: ['Stick'], table: ['Table'], door: ['Door'],
+    torch: ['Torch'], bed: ['Bed'], house: ['House'],
+    wool: ['Wool'], tree: ['Tree'],
+    cow: ['Cow'], pig: ['Pig'], sheep: ['Sheep'],
+    chicken: ['Chicken'], cat: ['Cat'], dog: ['Dog'],
+    duck: ['Duck'], horse: ['Horse'], rabbit: ['Rabbit'],
+    fence: ['Fence'], rain: ['Rain'], cloud: ['Cloud'],
+    sun: ['Sun'], moon: ['Moon'], star: ['Star'],
+    hello: ['Hello'], jump: ['Jump'], home: ['Home'],
+    wheat: ['Wheat'], seed: ['Seed'], fish: ['Fish'],
+    rod: ['Fishing Rod'], boat: ['Boat'], pet: ['Pet'],
+    follow: ['Follow']
   };
   var BLOCK_OF = {
     grass: GRASS, dirt: DIRT, stone: STONE, wood: WOOD, leaves: LEAVES, sand: SAND,
@@ -587,30 +571,30 @@
     { out: 'boat', n: 1, need: { planks: 5 } }
   ];
   var QUESTS = [
-    { en: 'Find a tree!', zh: '找到一棵树！', icon: 'tree', done: function (p) { return p.tree; } },
-    { en: 'Mine stone!', zh: '挖一块石头！', icon: 'stone', done: function (p) { return p.mined.stone; } },
-    { en: 'Find water!', zh: '找到水！', icon: 'water', done: function (p) { return p.water; } },
-    { en: 'Tap a sheep!', zh: '点一点绵羊！', icon: 'sheep', done: function (p) { return p.tapped.sheep; } },
-    { en: 'Craft planks!', zh: '做出木板！', icon: 'planks', done: function (p) { return p.crafted.planks; } },
-    { en: 'Craft a door!', zh: '做一扇门！', icon: 'door', done: function (p) { return p.crafted.door; } },
-    { en: 'Place a torch!', zh: '放一个火把！', icon: 'torch', done: function (p) { return p.placed.torch; } },
-    { en: 'Craft a bed!', zh: '做一张床！', icon: 'bed', done: function (p) { return p.crafted.bed; } },
-    { en: 'Craft a table!', zh: '做一张桌子！', icon: 'table', done: function (p) { return p.crafted.table; } },
-    { en: 'Tap a cow!', zh: '点一点奶牛！', icon: 'cow', done: function (p) { return p.tapped.cow; } },
-    { en: 'Tap a chicken!', zh: '点一点小鸡！', icon: 'chicken', done: function (p) { return p.tapped.chicken; } },
-    { en: 'Place a door!', zh: '放一扇门！', icon: 'door', done: function (p) { return p.placed.door; } },
-    { en: 'Craft a house!', zh: '做出房子方块！', icon: 'house', done: function (p) { return p.crafted.house; } },
-    { en: 'Place a fence!', zh: '放一个栅栏！', icon: 'fence', done: function (p) { return p.placed.fence; } },
-    { en: 'Place a torch at night!', zh: '夜里放一个火把！', icon: 'torch', done: function (p) { return p.nightTorch; } },
-    { en: 'Tap a duck!', zh: '点一点鸭子！', icon: 'duck', done: function (p) { return p.tapped.duck; } },
-    { en: 'Craft a fishing rod!', zh: '做一根钓竿！', icon: 'rod', done: function (p) { return p.crafted.rod; } },
-    { en: 'Catch a fish!', zh: '钓到一条鱼！', icon: 'fish', done: function (p) { return p.fish; } },
-    { en: 'Plant a seed!', zh: '种下一颗种子！', icon: 'seed', done: function (p) { return p.placed.seed; } },
-    { en: 'Wait for wheat to grow!', zh: '等小麦长大！', icon: 'wheat', done: function (p) { return p.wheatRipe; } },
-    { en: 'Harvest the wheat!', zh: '收获小麦！', icon: 'wheat', done: function (p) { return p.mined.wheat; } },
-    { en: 'Craft a boat!', zh: '做一艘小船！', icon: 'boat', done: function (p) { return p.crafted.boat; } },
-    { en: 'Ride the boat!', zh: '乘船过河！', icon: 'boat', done: function (p) { return p.boatRide; } },
-    { en: 'Tame a pet!', zh: '驯服一只宠物！', icon: 'pet', done: function (p) { return p.pet; } }
+    { en: 'Find a tree!', icon: 'tree', done: function (p) { return p.tree; } },
+    { en: 'Mine stone!', icon: 'stone', done: function (p) { return p.mined.stone; } },
+    { en: 'Find water!', icon: 'water', done: function (p) { return p.water; } },
+    { en: 'Tap a sheep!', icon: 'sheep', done: function (p) { return p.tapped.sheep; } },
+    { en: 'Craft planks!', icon: 'planks', done: function (p) { return p.crafted.planks; } },
+    { en: 'Craft a door!', icon: 'door', done: function (p) { return p.crafted.door; } },
+    { en: 'Place a torch!', icon: 'torch', done: function (p) { return p.placed.torch; } },
+    { en: 'Craft a bed!', icon: 'bed', done: function (p) { return p.crafted.bed; } },
+    { en: 'Craft a table!', icon: 'table', done: function (p) { return p.crafted.table; } },
+    { en: 'Tap a cow!', icon: 'cow', done: function (p) { return p.tapped.cow; } },
+    { en: 'Tap a chicken!', icon: 'chicken', done: function (p) { return p.tapped.chicken; } },
+    { en: 'Place a door!', icon: 'door', done: function (p) { return p.placed.door; } },
+    { en: 'Craft a house!', icon: 'house', done: function (p) { return p.crafted.house; } },
+    { en: 'Place a fence!', icon: 'fence', done: function (p) { return p.placed.fence; } },
+    { en: 'Place a torch at night!', icon: 'torch', done: function (p) { return p.nightTorch; } },
+    { en: 'Tap a duck!', icon: 'duck', done: function (p) { return p.tapped.duck; } },
+    { en: 'Craft a fishing rod!', icon: 'rod', done: function (p) { return p.crafted.rod; } },
+    { en: 'Catch a fish!', icon: 'fish', done: function (p) { return p.fish; } },
+    { en: 'Plant a seed!', icon: 'seed', done: function (p) { return p.placed.seed; } },
+    { en: 'Wait for wheat to grow!', icon: 'wheat', done: function (p) { return p.wheatRipe; } },
+    { en: 'Harvest the wheat!', icon: 'wheat', done: function (p) { return p.mined.wheat; } },
+    { en: 'Craft a boat!', icon: 'boat', done: function (p) { return p.crafted.boat; } },
+    { en: 'Ride the boat!', icon: 'boat', done: function (p) { return p.boatRide; } },
+    { en: 'Tame a pet!', icon: 'pet', done: function (p) { return p.pet; } }
   ];
   var CHAPTER1 = 8;
   var CHAPTER2 = 16;
@@ -938,7 +922,7 @@
       var rewards = ['wood', 'stone', 'planks', 'wool', 'seed'].filter(allowedChatWord);
       if (rewards.length) {
         var reward = rewards[Number(spot.id) % rewards.length], count = 1 + Number(spot.id) % 3;
-        addItem(reward, count, true); showToast('★ +' + count + ' ' + WORD[reward][0], '', 2);
+        addItem(reward, count, true); showToast('★ +' + count + ' ' + WORD[reward][0], 2);
       }
       burst(spot.x, spot.y, '#ffe286', false); chime(); updateTrailCount();
       // Discoveries are scene-entry stops, with the same safety/cooldown as every other chat.
@@ -1819,7 +1803,7 @@
         burst(a.x, a.y - 24, '#ff6b8a', true);
         burst(a.x, a.y - 42, '#ffc53d', false);
         chime();
-        showToast('Your pet follows you!', '宠物会跟着你跑啦！', 2.6);
+        showToast('Your pet follows you!', 2.6);
         updateQuest();
         saveSoon();
         return;
@@ -2814,7 +2798,6 @@
     var card = document.getElementById('wordcard');
     card.hidden = false;
     document.getElementById('card-en').textContent = w[0];
-    document.getElementById('card-zh').textContent = w[1];
     paintIcon(document.getElementById('card-icon'), key);
     cardLeft = 2.15;
     speak(w[0]);
@@ -2884,9 +2867,8 @@
     var q = currentQuest();
     speakEn(q ? q.en : 'Level 3 Complete! Explore and play!');
   }
-  function showToast(en, zh, secs) {
+  function showToast(en, secs) {
     document.getElementById('toast-en').textContent = en;
-    document.getElementById('toast-zh').textContent = zh;
     document.getElementById('toast').hidden = false;
     toastLeft = secs || 2.2;
   }
@@ -2992,7 +2974,7 @@
     var now = Date.now();
     if (now - wrongAt < 1500) return;
     wrongAt = now;
-    showToast('Try again!', '再找找！', 1.6);
+    showToast('Try again!', 1.6);
     tone(220, 0.12, 'sine', 0, 0.03, 180);
   }
   function quizWin() {
@@ -3007,14 +2989,14 @@
     chime();
     showWord(key);
     speakEn(WORD[key][0]);
-    showToast('Great job!', '太棒了！找到啦！', 2.4);
+    showToast('Great job!', 2.4);
     saveSoon();
   }
   function startQuiz() {
     var pool = quizPool().filter(targetExists);
     if (!pool.length) {
-      if (!quizPool().length) showToast('Collect words first!', '先去玩一玩，收集单词再来测验！', 3);
-      else showToast('Hidden too well!', '这个词藏起来了，先去探险吧！', 3);
+      if (!quizPool().length) showToast('Collect words first!', 3);
+      else showToast('Hidden too well!', 3);
       return false;
     }
     var key = pool[Math.floor(Math.random() * pool.length)];
@@ -3047,11 +3029,9 @@
   function updateQuest() {
     noticeTasks();
     var en = document.getElementById('quest-en');
-    var zh = document.getElementById('quest-zh');
     var questBtn = document.getElementById('quest');
     if (quiz) {
       en.textContent = 'Find the ' + WORD[quiz.key][0].toUpperCase() + '!';
-      zh.textContent = '寻宝测验 · Treasure Hunt';
       paintIcon(document.getElementById('quest-icon'), 'star');
       questBtn.classList.add('quiz');
       return;
@@ -3061,24 +3041,20 @@
     var qi = questIndex();
     if (!q) {
       en.textContent = '★ Level 3 Complete!';
-      zh.textContent = '第三章完成！去探险吧！';
       paintIcon(document.getElementById('quest-icon'), 'star');
     } else if (qi >= CHAPTER2) {
       en.textContent = '★ Level 3 · ' + q.en;
-      zh.textContent = '第三章 · ' + q.zh;
       paintIcon(document.getElementById('quest-icon'), q.icon);
     } else if (qi >= CHAPTER1) {
       en.textContent = '★ Level 2 · ' + q.en;
-      zh.textContent = '第二章 · ' + q.zh;
       paintIcon(document.getElementById('quest-icon'), q.icon);
     } else {
       en.textContent = q.en;
-      zh.textContent = q.zh;
       paintIcon(document.getElementById('quest-icon'), q.icon);
     }
     if (hasPack() && !packSeen) {
       packSeen = true;
-      showToast('You got a backpack!', '你得到一个小背包！', 3);
+      showToast('You got a backpack!', 3);
       chime();
       saveSoon();
     }
@@ -3097,10 +3073,6 @@
         var empty = document.createElement('div');
         empty.className = 'emptybar';
         empty.textContent = 'Tap a block';
-        var hint = document.createElement('span');
-        hint.className = 'hint';
-        hint.textContent = '点方块';
-        empty.appendChild(hint);
         bar.appendChild(empty);
       }
       hotbar.forEach(function (key, i) {
@@ -3126,7 +3098,6 @@
     }
     var key = hotbar[sel];
     document.getElementById('held-en').textContent = key && WORD[key] ? WORD[key][0] : 'Tap a block';
-    document.getElementById('held-zh').textContent = key && WORD[key] ? WORD[key][1] : '点方块';
   }
   function canCraft(r) {
     var k;
@@ -3149,13 +3120,10 @@
         paintIcon(cv, k);
         var name = document.createElement('b');
         name.textContent = WORD[k][0];
-        var zh = document.createElement('i');
-        zh.className = 'hint';
-        zh.textContent = WORD[k][1];
         var ct = document.createElement('em');
         ct.dataset.need = k;
         ct.dataset.n = String(r.need[k]);
-        ing.appendChild(cv); ing.appendChild(name); ing.appendChild(zh); ing.appendChild(ct);
+        ing.appendChild(cv); ing.appendChild(name); ing.appendChild(ct);
         tapButton(ing, function () { showWord(k); });
         needs.appendChild(ing);
       });
@@ -3169,10 +3137,7 @@
       paintIcon(ocv, r.out);
       var nm = document.createElement('b');
       nm.textContent = WORD[r.out][0] + (r.n > 1 ? ' ×' + r.n : '');
-      var ozh = document.createElement('i');
-      ozh.className = 'hint';
-      ozh.textContent = WORD[r.out][1];
-      out.appendChild(ocv); out.appendChild(nm); out.appendChild(ozh);
+      out.appendChild(ocv); out.appendChild(nm);
       tapButton(out, function () { showWord(r.out); });
       var btn = document.createElement('button');
       btn.type = 'button';
@@ -3252,10 +3217,7 @@
         star.textContent = ' ★';
         en.appendChild(star);
       }
-      var zh = document.createElement('i');
-      zh.className = 'hint';
-      zh.textContent = WORD[key][1];
-      txt.appendChild(en); txt.appendChild(zh);
+      txt.appendChild(en);
       var spk = document.createElement('button');
       spk.type = 'button';
       spk.className = 'spk';
@@ -3283,7 +3245,6 @@
     closeCraft();
     renderBook();
     document.getElementById('quiz-btn-en').textContent = quiz ? 'Stop Quiz' : 'Treasure Quiz';
-    document.getElementById('quiz-btn-zh').textContent = quiz ? '结束测验' : '寻宝测验';
     document.getElementById('book').hidden = false;
     speak('Word book');
   }
@@ -3812,9 +3773,7 @@
       card: function () {
         return document.getElementById('wordcard').hidden ? '' : document.getElementById('card-en').textContent;
       },
-      cardZh: function () {
-        return document.getElementById('wordcard').hidden ? '' : document.getElementById('card-zh').textContent;
-      },
+      cardZh: function () { return ''; },
       find: function (id) {
         var px = Math.floor(player.x / TILE), py = Math.floor((player.y - 8) / TILE);
         var best = null, bd = 1e9, x, y;
