@@ -1,6 +1,15 @@
 'use strict';
 // Node 22+, standard library only. Never log requests, responses or credentials.
 const http = require('node:http');
+const fs = require('node:fs');
+const path = require('node:path');
+const { createHash } = require('node:crypto');
+const AUDIO_DIR = path.join(__dirname, 'audio');
+function audioHash(text) { return createHash('sha256').update(text.trim().toLowerCase()).digest('hex').slice(0, 20); }
+function withAudio(result) {
+  const hash = audioHash(result.say);
+  return fs.existsSync(path.join(AUDIO_DIR, hash + '.mp3')) ? { ...result, audio_url: 'https://brain.yydriver.cn/audio/' + hash + '.mp3' } : result;
+}
 const WORDS = new Set('grass dirt stone wood leaves sand water flower planks stick table door torch bed house wool tree cow pig sheep chicken cat dog duck horse rabbit fence rain cloud sun moon star hello jump home wheat seed fish rod boat pet follow'.split(' '));
 const LABEL = key => key === 'rod' ? 'fishing rod' : key;
 const MAX_TURN = 3; // Legacy clients may still request a rule-owned closing at 3.
@@ -46,7 +55,7 @@ function contextLeads(p) {
   const leads = [], name = p.child_name;
   if (name) leads.push(name + '!');
   const e = (p.recent_events || []).at(-1);
-  if (e) {
+  if (e && e.word === p.target_word) {
     const verbs = { found: 'found', made: 'made', built: 'built', met: 'met', caught: 'caught', rode: 'rode', task: 'got', scene: 'see' };
     const label = LABEL(e.word), mass = ['grass','dirt','stone','wood','leaves','sand','water','planks','wool','rain','wheat'];
     const noun = mass.includes(e.word) ? label : (/^[aeiou]/.test(label) ? 'an ' : 'a ') + label;
@@ -54,7 +63,7 @@ function contextLeads(p) {
     leads.push(phrase);
     if (name) leads.push(name + ', ' + phrase[0].toLowerCase() + phrase.slice(1));
   }
-  if (p.last_answer) leads.push('Remember ' + LABEL(p.last_answer) + '?');
+  if (p.last_answer && p.last_answer === p.target_word) leads.push('Remember ' + LABEL(p.last_answer) + '?');
   if (p.feedback === 'success' && p.spoken_word) leads.push('You said ' + LABEL(p.spoken_word) + '!');
   return leads;
 }
@@ -236,6 +245,15 @@ function createServer(cfg = config()) {
     res.setHeader('Vary', 'Origin');
     if (origin && !cfg.origins.includes(origin)) { res.writeHead(403); return res.end(); }
     if (origin) res.setHeader('Access-Control-Allow-Origin', origin);
+    if ((req.method === 'GET' || req.method === 'HEAD') && /^\/audio\/(?:[a-f0-9]{20}\.mp3|index\.json)$/.test(req.url)) {
+      const file = path.join(AUDIO_DIR, req.url.slice(7));
+      try {
+        const stat = fs.statSync(file);
+        res.writeHead(200, { 'Content-Type': file.endsWith('.mp3') ? 'audio/mpeg' : 'application/json', 'Content-Length': stat.size, 'Cache-Control': 'public, max-age=3600' });
+        if (req.method === 'HEAD') return res.end();
+        return fs.createReadStream(file).pipe(res);
+      } catch { res.writeHead(404); return res.end(); }
+    }
     if (req.url !== '/buddy') { res.writeHead(404); return res.end(); }
     if (req.method === 'OPTIONS') {
       res.writeHead(204, { 'Access-Control-Allow-Methods': 'POST, OPTIONS', 'Access-Control-Allow-Headers': 'Content-Type', 'Access-Control-Max-Age': '600' }); return res.end();
@@ -254,7 +272,7 @@ function createServer(cfg = config()) {
       res.setHeader('Access-Control-Expose-Headers', 'X-Buddy-Source, X-Buddy-Reason');
       res.setHeader('X-Buddy-Source', diagnostics.source);
       res.setHeader('X-Buddy-Reason', diagnostics.reason);
-      res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' }); res.end(JSON.stringify(result));
+      res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' }); res.end(JSON.stringify(withAudio(result)));
     } catch { if (!res.headersSent) res.writeHead(400); res.end(); }
   });
 }
@@ -262,4 +280,4 @@ if (require.main === module) {
   const server = createServer(); server.requestTimeout = 10000; server.headersTimeout = 10000;
   server.listen(Number(process.env.PORT || 8787), process.env.HOST || '127.0.0.1', () => console.log('Buddy service listening'));
 }
-module.exports = { createServer, config, normalize, template, validOutput, buddy, SYSTEM, WORDS, contextLeads, greetingSlots, greetingLines, conversationLines, PREF_VALUES };
+module.exports = { createServer, config, normalize, template, validOutput, buddy, SYSTEM, WORDS, contextLeads, greetingSlots, greetingLines, conversationLines, PREF_VALUES, audioHash, withAudio };

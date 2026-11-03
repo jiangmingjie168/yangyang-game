@@ -112,3 +112,47 @@ was 400, and a legacy fish exercise returned a validated 200 response.
 `screens/greeting-smoke.json` records the actual greeting texts and provenance;
 no secrets or child recordings were included. Headless TTS is synthetic; device
 voice/touch acceptance remains a device check.
+
+## fix-brief-v3 voice/input release — 2026-11-03
+
+Deployed brain code and the 120-file audio sample from `codex-brain-v2`.
+The frontend fix is delivered by the commit-pinned preview; this deployment
+changes the brain endpoint, not the older frontend at tesla.yydriver.cn.
+
+- Backup before overwrite:
+  `/root/backups/yangyang-brain-fix-v3-20261103T142546Z/app`, plus the brain vhost
+  in its parent backup directory. Parent permissions are 700.
+- Copied only `server.cjs`, `server.test.cjs`, `lines-manifest.json`,
+  `requirements-voice.txt`, `voice-review.html`, `scripts/`, and `audio/` into
+  `/opt/yangyang-brain`. No `.env` was copied or printed.
+- All **51 backend tests pass on the deployment host**. Restarted
+  `yangyang-brain` (active). Added only `/audio/` proxying to the existing Node
+  process in `/etc/nginx/conf.d/brain.yydriver.cn.conf`; tested nginx, then reloaded.
+  This route serves hashed MP3s and `index.json` with the service's existing
+  origin allowlist. Existing `/buddy` request limits are unchanged.
+- Protected `huanrui.conf`, shared `/etc/nginx/nginx.conf` and `.env` compare
+  byte-for-byte by SHA-256 with their pre-deployment state. `.env` remains 600.
+  Nothing in 欢蕊 was modified.
+- Deployed server SHA-256:
+  `8b1502d50294519b6610abca2df41c64674c329cfd1e48691638ee3cd24205a5`.
+- Public HTTPS smoke: **13/13 validated brain replies**, including all exercise
+  tiers, matching/mismatching event context, unnamed/named greeting, social,
+  weather, recasts and closing. Eight replies include a playable `audio_url`;
+  fetched MP3 bytes equal the local files. All 120 index entries are available;
+  jsDelivr-origin preflight returns 204. Named greeting without a generated full
+  line omits audio metadata. Evidence: `screens/fix-v3-smoke.json`.
+
+To regenerate the full library on a deployment host, create a Python venv,
+install `requirements-voice.txt`, run `node scripts/build-lines.cjs` from a full
+repository checkout (the builder reads the client), and run
+`python scripts/generate-voice.py` with no limit. The committed manifest can
+also be used directly by the Python generator without the client checkout.
+`--limit 120` reproduces the sample. Generator output reports line count, MP3
+count and exact byte count. Keep `audio/index.json` with the MP3s when copying.
+The application can be backed up and updated with the same named-file rsync;
+repeat backend tests, restart the service, and check HTTPS audio/CORS. No further
+nginx changes are necessary. Missing MP3s continue to use browser speech.
+
+Rollback: restore only the backed-up application files/audio directory and brain
+vhost, test nginx, restart `yangyang-brain`, then reload nginx. Preserve `.env`
+and leave all other virtual hosts untouched.

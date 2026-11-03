@@ -1,0 +1,143 @@
+{
+  "status": "PASS",
+  "requests": 13,
+  "audioFileCount": 120,
+  "preflight": 204,
+  "records": [
+    {
+      "event": "name_ask",
+      "status": 200,
+      "source": "brain",
+      "reason": "validated",
+      "say": "Hi! What is your name?",
+      "audio": true,
+      "bytes": 22032,
+      "ms": 1923
+    },
+    {
+      "event": "greet",
+      "status": 200,
+      "source": "brain",
+      "reason": "validated",
+      "say": "Good morning, friend. It's so nice to see you. Let's go and see our world!",
+      "audio": false,
+      "bytes": 0,
+      "ms": 928
+    },
+    {
+      "event": "greet",
+      "status": 200,
+      "source": "brain",
+      "reason": "validated",
+      "say": "Hi Alex. It's so nice to see you again. Let's build something together!",
+      "audio": false,
+      "bytes": 0,
+      "ms": 1037
+    },
+    {
+      "event": "weather_chat",
+      "status": 200,
+      "source": "brain",
+      "reason": "validated",
+      "say": "Look! I see the sun!",
+      "audio": true,
+      "bytes": 23328,
+      "ms": 1697
+    },
+    {
+      "event": "small_talk",
+      "status": 200,
+      "source": "brain",
+      "reason": "validated",
+      "say": "Do you like cat or dog?",
+      "audio": true,
+      "bytes": 15984,
+      "ms": 1521
+    },
+    {
+      "event": "recast",
+      "status": 200,
+      "source": "brain",
+      "reason": "validated",
+      "say": "Try: I see a dog!",
+      "audio": true,
+      "bytes": 17568,
+      "ms": 971
+    },
+    {
+      "event": "recast",
+      "status": 200,
+      "source": "brain",
+      "reason": "validated",
+      "say": "I can see a dog!",
+      "audio": true,
+      "bytes": 14544,
+      "ms": 2040
+    },
+    {
+      "event": "recast",
+      "status": 200,
+      "source": "brain",
+      "reason": "validated",
+      "say": "Good job! Well done!",
+      "audio": true,
+      "bytes": 22032,
+      "ms": 1168
+    },
+    {
+      "event": "pet",
+      "tier": 1,
+      "status": 200,
+      "source": "brain",
+      "reason": "validated",
+      "say": "You met a dog! Dog or tree?",
+      "audio": false,
+      "bytes": 0,
+      "ms": 1238
+    },
+    {
+      "event": "pet",
+      "tier": 2,
+      "status": 200,
+      "source": "brain",
+      "reason": "validated",
+      "say": "You met a dog! What's this?",
+      "audio": false,
+      "bytes": 0,
+      "ms": 809
+    },
+    {
+      "event": "pet",
+      "tier": 3,
+      "status": 200,
+      "source": "brain",
+      "reason": "validated",
+      "say": "You met a dog! I see a dog. Say it!",
+      "audio": false,
+      "bytes": 0,
+      "ms": 867
+    },
+    {
+      "event": "pet",
+      "tier": 1,
+      "status": 200,
+      "source": "brain",
+      "reason": "validated",
+      "say": "Dog or tree?",
+      "audio": true,
+      "bytes": 12672,
+      "ms": 1521
+    },
+    {
+      "event": "pet",
+      "tier": 1,
+      "status": 200,
+      "source": "brain",
+      "reason": "validated",
+      "say": "Great! Keep exploring!",
+      "audio": true,
+      "bytes": 23616,
+      "ms": 1242
+    }
+  ]
+}
