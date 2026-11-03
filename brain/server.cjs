@@ -7,16 +7,17 @@ const MAX_TURN = 3; // Legacy clients may still request a rule-owned closing at 
 const SCAFFOLD = new Set("a an the i you we it this is see got can say what what's or great nice thanks thank good job well done let's keep exploring try look at again your turn found made built met caught rode said together ready remember friend more".split(' '));
 // Conversation slots are rule-owned and mirrored in the offline client.
 const CHAT_EVENTS = ['name_ask', 'small_talk', 'weather_chat', 'recast'];
+const NOUNS = new Set('grass dirt stone wood leaves sand water flower planks stick table door torch bed house wool tree cow pig sheep chicken cat dog duck horse rabbit fence rain cloud sun moon star wheat seed fish rod boat'.split(' '));
 const PREF_VALUES = { color: [], animal: ['cat','dog','cow','pig','sheep','chicken','duck','horse','rabbit'], food: ['fish','wheat','seed'], build: ['house','table','door','bed','fence','torch','boat'] };
 function conversationLines(p) {
   if (p.event === 'name_ask') return ['Hi! What is your name?', 'Hello! What is your name?'];
   if (p.event === 'weather_chat') return ['Look! I see the ' + p.weather + '!', 'We can see the ' + p.weather + '!'];
   if (p.event === 'recast') {
     if (p.target_tier === 3) return ['Good job! Well done!', 'Great! Good job!'];
-    const word = p.child_said.toLowerCase().split(/[^a-z]+/).find(w => WORDS.has(w));
+    const word = p.child_said.toLowerCase().split(/[^a-z]+/).find(w => NOUNS.has(w));
     if (!word) return ['Good try! Say it again!'];
     const mass = ['grass','dirt','stone','wood','leaves','sand','water','planks','wool','rain','wheat'];
-    const noun = (mass.includes(word) ? 'the ' : 'a ') + word;
+    const noun = (mass.includes(word) ? 'the ' : 'a ') + LABEL(word);
     return p.target_tier === 1 ? ['Try: I see ' + noun + '!', 'Say: I see ' + noun + '!'] : ['I can see ' + noun + '!', 'We can see ' + noun + '!'];
   }
   if (p.topic) {

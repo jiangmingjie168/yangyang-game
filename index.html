@@ -459,6 +459,8 @@
   #name-letters { display: grid; grid-template-columns: repeat(9, 1fr); gap: 3px; margin: 8px 0; }
   #name-letters button { min-height: 32px; border-radius: 7px; background: #e3eff9; font-size: 16px; }
   #btn-buddy { position: absolute; z-index: 12; right: 12px; top: calc(118px + var(--sat)); min-height: 48px; padding: 8px 16px; border-radius: 18px; background: #d9edc8; font-weight: bold; }
+  #btn-buddy.buddy-wave { animation: buddy-wave 650ms ease-in-out; }
+  @keyframes buddy-wave { 25%, 75% { transform: translateY(-8px) rotate(-12deg); } 50% { transform: translateY(-5px) rotate(12deg); } }
   #buddy-chat { position: absolute; z-index: 39; top: calc(78px + var(--sat)); left: 50%; transform: translateX(-50%); width: min(380px, calc(100% - 28px)); padding: 14px; border-radius: 22px; background: #fffaf2; border: 3px solid #e6bb70; box-shadow: 0 5px 18px #5a39152b; text-align: center; max-height: calc(100dvh - 90px); overflow-y: auto; }
   #buddy-line { margin: 0 0 10px; font-size: 23px; font-weight: bold; }
   #buddy-chat button { min-height: 48px; min-width: 64px; border-radius: 13px; padding: 8px 14px; font: inherit; background: #dcf1d1; margin: 3px; }
@@ -510,6 +512,7 @@
     <p id="welcome-line" role="status" aria-live="polite"></p>
     <div id="name-entry" hidden>
       <form id="name-form"><label for="name-input">Your name</label><input id="name-input" type="text" maxlength="33" autocomplete="off" placeholder="Mario"><button id="name-mic" type="button" aria-label="Say your name"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="2" width="6" height="12" rx="3" fill="currentColor"/><path d="M5 10v2a7 7 0 0 0 14 0v-2M12 19v3m-4 0h8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button><button type="submit">Hi!</button></form>
+      <p id="name-hint" role="status" hidden>You can say it or tap!</p>
       <div id="name-letters" aria-label="Tap letters"></div>
     </div>
     <button id="welcome-play" type="button">Let's play!</button>
@@ -756,18 +759,20 @@ const BRAIN_TIMEOUT_MS = 6500;
     }
   } catch (err) { /* Storage may be disabled; in-memory limits still apply. */ }
   const WORDS = new Set(Object.keys(WORD));
+const LABEL = key => key === 'rod' ? 'fishing rod' : key;
 // Conversation slots are rule-owned and mirrored in the offline client.
 const CHAT_EVENTS = ['name_ask', 'small_talk', 'weather_chat', 'recast'];
+const NOUNS = new Set('grass dirt stone wood leaves sand water flower planks stick table door torch bed house wool tree cow pig sheep chicken cat dog duck horse rabbit fence rain cloud sun moon star wheat seed fish rod boat'.split(' '));
 const PREF_VALUES = { color: [], animal: ['cat','dog','cow','pig','sheep','chicken','duck','horse','rabbit'], food: ['fish','wheat','seed'], build: ['house','table','door','bed','fence','torch','boat'] };
 function conversationLines(p) {
   if (p.event === 'name_ask') return ['Hi! What is your name?', 'Hello! What is your name?'];
   if (p.event === 'weather_chat') return ['Look! I see the ' + p.weather + '!', 'We can see the ' + p.weather + '!'];
   if (p.event === 'recast') {
     if (p.target_tier === 3) return ['Good job! Well done!', 'Great! Good job!'];
-    const word = p.child_said.toLowerCase().split(/[^a-z]+/).find(w => WORDS.has(w));
+    const word = p.child_said.toLowerCase().split(/[^a-z]+/).find(w => NOUNS.has(w));
     if (!word) return ['Good try! Say it again!'];
     const mass = ['grass','dirt','stone','wood','leaves','sand','water','planks','wool','rain','wheat'];
-    const noun = (mass.includes(word) ? 'the ' : 'a ') + word;
+    const noun = (mass.includes(word) ? 'the ' : 'a ') + LABEL(word);
     return p.target_tier === 1 ? ['Try: I see ' + noun + '!', 'Say: I see ' + noun + '!'] : ['I can see ' + noun + '!', 'We can see ' + noun + '!'];
   }
   if (p.topic) {
@@ -824,7 +829,7 @@ function validConversation(value, p) {
     if (socialRecognizer) { var r = socialRecognizer; socialRecognizer = null; r.onresult = r.onerror = r.onend = null; try { r.abort(); } catch (err) { /* optional */ } }
     document.getElementById('buddy-mic').disabled = false; document.getElementById('name-mic').disabled = false;
   }
-  function cancelSocial(w) { if (!w) return; clearTimeout(w.timer); clearTimeout(w.deadline); if (w.controller) w.controller.abort(); }
+  function cancelSocial(w) { if (!w) return; clearTimeout(w.timer); clearTimeout(w.hintTimer); clearTimeout(w.deadline); if (w.controller) w.controller.abort(); }
   function closeAmbient() {
     var active = ambient; cancelSocial(ambient); ambient = null; stopSocialListening();
     if (active && window.speechSynthesis) { try { speechSynthesis.cancel(); } catch (err) { /* optional */ } }
@@ -848,11 +853,17 @@ function validConversation(value, p) {
     }).catch(function () { return { reply: expected, source: 'template', reason: 'network' }; });
     Promise.race([timeout, remote]).then(function (result) { clearTimeout(w.deadline); if (!current()) return; countChatSource(result.source, result.reason); show(result.reply, true); });
   }
+  function armNameTimer() {
+    var w = nameFlow; if (!w) return;
+    clearTimeout(w.timer);
+    w.timer = setTimeout(function () { if (nameFlow === w && !w.awaitingConfirm) finishName(document.getElementById('name-input').value); }, 30000);
+  }
   function openNameAsk() {
     dismissGreeting(); closeAmbient(); releaseChatInput();
     var w = {}; nameFlow = w;
     document.getElementById('name-entry').hidden = false;
     document.getElementById('name-input').value = '';
+    document.getElementById('name-hint').hidden = true;
     paintIcon(document.getElementById('welcome-face'), 'dog');
     document.getElementById('welcome').hidden = false;
     fetchSocial(socialPayload('name_ask'), w, function () { return nameFlow === w; }, function (reply, voice) {
@@ -860,11 +871,12 @@ function validConversation(value, p) {
       document.getElementById('welcome-line').textContent = reply.say;
       if (voice) speakEn(reply.say, { soft: true });
     });
-    w.timer = setTimeout(function () { finishName(''); }, 20000);
+    armNameTimer();
+    w.hintTimer = setTimeout(function () { if (nameFlow === w) document.getElementById('name-hint').hidden = false; }, 10000);
   }
   function finishName(value) {
     if (!nameFlow) return;
-    childName = cleanName(value) || childName || 'Mario'; memory.name_asked = true;
+    childName = cleanName(value) || cleanName(document.getElementById('name-input').value) || childName || 'Mario'; memory.name_asked = true;
     cancelSocial(nameFlow); nameFlow = null; stopSocialListening();
     document.getElementById('name-entry').hidden = true; document.getElementById('welcome').hidden = true;
     document.getElementById('parent-name').value = childName; save(); openGreeting();
@@ -882,14 +894,19 @@ function validConversation(value, p) {
     fetchSocial(p, w, function () { return ambient === w && !chatBlocked() && !quiz; }, function (reply, voice) {
       document.getElementById('buddy-line').textContent = reply.say;
       if (!voice) return;
+      var practiceMs = p.event === 'recast' && p.target_tier === 1 ? 9000 : 3000;
       clearTimeout(w.timer); w.timer = setTimeout(closeAmbient, 14000);
-      speakEn(reply.say, { soft: true, onend: function () { if (ambient === w) { clearTimeout(w.timer); w.timer = setTimeout(closeAmbient, 3000); } } });
-      if (!window.speechSynthesis) { clearTimeout(w.timer); w.timer = setTimeout(closeAmbient, 3000); }
+      var utterance = speakEn(reply.say, { soft: true, onend: function () { if (ambient === w) { clearTimeout(w.timer); w.timer = setTimeout(closeAmbient, practiceMs); } } });
+      if (!utterance) { clearTimeout(w.timer); w.timer = setTimeout(closeAmbient, practiceMs); }
     });
     return true;
   }
   function smallTalk() {
-    if (determineMode('buddyTap') !== 'small_talk') return false;
+    if (determineMode('buddyTap') !== 'small_talk') {
+      var buddy = document.getElementById('btn-buddy');
+      buddy.classList.remove('buddy-wave'); void buddy.offsetWidth; buddy.classList.add('buddy-wave');
+      return false;
+    }
     var p = socialPayload('small_talk');
     var slot = ['animal','build','food'].find(function (key) { return !memory.prefs[key] && !memory.prefsLearnedAt[key]; });
     p.topic = slot ? 'learn_pref_' + slot : null;
@@ -915,6 +932,7 @@ function validConversation(value, p) {
   }
   function listenSocial() {
     if ((!nameFlow && determineMode('speech') !== 'recast') || socialRecognizer) return;
+    if (nameFlow) armNameTimer();
     var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SR) { if (nameFlow) document.getElementById('name-input').focus(); return; }
     var n = nameFlow, a = ambient;
@@ -925,7 +943,15 @@ function validConversation(value, p) {
       r.onresult = function (e) {
         var result = e.results[e.resultIndex || 0], said = result && result[0] && result[0].transcript;
         stopSocialListening(); if (!said) return;
-        if (n && nameFlow === n) { finishName(said.replace(/^(my name is|i am|i'm)\s+/i, '')); return; }
+        if (n && nameFlow === n) {
+          var name = cleanName(said.replace(/^(my name is|i am|i'm)\s+/i, ''));
+          if (!name) return;
+          document.getElementById('name-input').value = name;
+          // Speech is a suggestion: only Hi! / Let's play! may confirm it.
+          n.awaitingConfirm = true;
+          clearTimeout(n.timer);
+          return;
+        }
         if (n || ambient !== a || determineMode('speech') !== 'recast') return;
         if (a && a.payload.topic) {
           var slot = a.payload.topic.slice(11), tokens = normalAnswer(said).split(' ');
@@ -940,14 +966,16 @@ function validConversation(value, p) {
   }
   function bindSocial() {
     document.getElementById('btn-buddy').addEventListener('click', smallTalk);
+    document.getElementById('btn-buddy').addEventListener('animationend', function (e) { if (e.animationName === 'buddy-wave') e.currentTarget.classList.remove('buddy-wave'); });
     document.getElementById('buddy-close').addEventListener('click', closeAmbient);
     document.getElementById('buddy-mic').addEventListener('click', listenSocial);
     document.getElementById('name-mic').addEventListener('click', listenSocial);
     document.getElementById('name-form').addEventListener('submit', function (e) { e.preventDefault(); finishName(document.getElementById('name-input').value); });
+    document.getElementById('name-input').addEventListener('input', armNameTimer);
     var letters = document.getElementById('name-letters');
     'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').forEach(function (letter) {
       var b = document.createElement('button'); b.type = 'button'; b.textContent = letter;
-      b.addEventListener('click', function () { var input = document.getElementById('name-input'); input.value = cleanName(input.value + letter); }); letters.appendChild(b);
+      b.addEventListener('click', function () { var input = document.getElementById('name-input'); input.value = cleanName(input.value + letter); armNameTimer(); }); letters.appendChild(b);
     });
   }
 

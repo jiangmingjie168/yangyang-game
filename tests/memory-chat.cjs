@@ -52,11 +52,20 @@ const report=s=>console.log('PASS',s);
  assert.equal(await p.evaluate(()=>BW.adventure().mode),'greet');await done(p);
  p=await page({data});assert(await p.locator('#name-entry').isHidden());assert.match(await p.locator('#welcome-line').innerText(),/Sam/);await done(p);
  report('first visit blocks only the name flow; letter taps + keyboard save one name; return greet uses it');
- p=await page();await p.clock.fastForward(20001);assert.equal((await saved(p)).name_asked,true);assert.equal((await saved(p)).child_name,'Mario');assert.equal(await p.evaluate(()=>BW.adventure().mode),'greet');await done(p);
- p=await page();await p.click('#name-mic');await p.evaluate(()=>voiceResult('My name is Luca'));assert.equal((await saved(p)).child_name,'Luca');await done(p);
+ p=await page();await p.clock.fastForward(10001);assert.equal(await p.locator('#name-hint').innerText(),'You can say it or tap!');assert(await p.locator('#name-hint').isVisible());
+ await p.clock.fastForward(10000);assert.equal((await saved(p)).name_asked,false);await p.clock.fastForward(10000);assert.equal((await saved(p)).name_asked,true);assert.equal((await saved(p)).child_name,'Mario');assert.equal(await p.evaluate(()=>BW.adventure().mode),'greet');await done(p);
+ // Even a value changed without an input event must survive the timeout.
+ p=await page();await p.evaluate(()=>document.getElementById('name-input').value='Jo');await p.clock.fastForward(30001);assert.equal((await saved(p)).child_name,'Jo');await done(p);
+ p=await page();await p.clock.fastForward(25000);await p.getByRole('button',{name:'S',exact:true}).click();await p.clock.fastForward(10000);assert.equal((await saved(p)).name_asked,false);
+ await p.fill('#name-input','Sam');await p.clock.fastForward(25000);assert.equal((await saved(p)).name_asked,false);await p.clock.fastForward(5001);assert.equal((await saved(p)).child_name,'Sam');await done(p);
+ p=await page();await p.clock.fastForward(25000);await p.click('#name-mic');await p.clock.fastForward(10000);assert.equal((await saved(p)).name_asked,false);
+ await p.click('#name-mic');await p.evaluate(()=>voiceResult('My name is Luca'));assert.equal(await p.inputValue('#name-input'),'Luca');assert.equal((await saved(p)).child_name,'Mario');assert.equal((await saved(p)).name_asked,false);
+ // Neither the old timeout nor a failed second mic attempt may confirm ASR.
+ await p.click('#name-mic');await p.clock.fastForward(30001);assert.equal((await saved(p)).name_asked,false);assert(await p.locator('#name-entry').isVisible());
+ await p.fill('#name-input','Luka');await p.click('#name-form button[type=submit]');assert.equal((await saved(p)).child_name,'Luka');assert.equal((await saved(p)).name_asked,true);await done(p);
  p=await page();await p.click('#btn-zh');await p.fill('#parent-name','Alex');assert.equal((await saved(p)).name_asked,true);assert.match(await p.locator('#welcome-line').innerText(),/Alex/);await done(p);
  p=await page({data:{...data,child_name:'Emma',name_asked:false}});assert.equal(await p.evaluate(()=>BW.adventure().mode),'greet');await done(p);
- report('20-second default, microphone naming and authoritative parent naming all complete onboarding');
+ report('30-second default preserves typed names; letters, typing and mic reset it; 10-second hint and editable ASR require confirmation');
  p=await page({data});await dismiss(p);await p.click('#btn-buddy');
  assert.equal(await p.locator('#buddy-line').innerText(),'Do you like cat or dog?');
  assert.deepEqual(await p.locator('#buddy-options button').allTextContents(),['cat','dog']);
@@ -67,7 +76,9 @@ const report=s=>console.log('PASS',s);
  await p.click('#buddy-close');await p.click('#btn-buddy');assert.match(await p.locator('#buddy-line').innerText(),/house or table/);await p.click('#buddy-close');
  await p.click('#btn-buddy');assert.match(await p.locator('#buddy-line').innerText(),/fish or wheat/);await p.click('#buddy-close');
  await p.click('#btn-buddy');await p.click('#buddy-close');await p.click('#btn-buddy');await p.click('#buddy-close');
- assert.equal((await saved(p)).small_talk_count,5);await p.click('#btn-buddy');assert(await p.locator('#buddy-chat').isHidden());
+ assert.equal((await saved(p)).small_talk_count,5);const limitedSpoken=await p.evaluate(()=>spoken.length);await p.click('#btn-buddy');assert(await p.locator('#buddy-chat').isHidden());
+ assert.equal(await p.locator('#btn-buddy').evaluate(el=>getComputedStyle(el).animationName),'buddy-wave');assert.equal(await p.evaluate(()=>spoken.length),limitedSpoken);assert.equal((await saved(p)).small_talk_count,5);
+ await p.clock.fastForward(700);await p.click('#btn-buddy');assert.equal(await p.locator('#btn-buddy').evaluate(el=>getComputedStyle(el).animationName),'buddy-wave');
  data=await saved(p);await p.reload();await p.click('#btn-start');await dismiss(p);assert.equal(await p.evaluate(()=>BW.smallTalk()),false);
  await p.click('#btn-zh');assert.match(await p.locator('#parent-memory').innerText(),/dog.*5\/5/);await p.click('#parent-close');await done(p);
  report('preference chips save whitelist values and coach; unanswered slots never re-ask; chat stays nonblocking and caps at five across reload');
@@ -82,11 +93,16 @@ const report=s=>console.log('PASS',s);
  await p.click('#btn-buddy');assert.equal(await p.locator('#buddy-options button').count(),0);await p.click('#buddy-mic');await p.evaluate(()=>voiceResult('a cat'));assert.equal(await p.locator('#buddy-line').innerText(),'I can see a cat!');
  await p.evaluate(()=>BW.recast('I see a cat'));assert.equal(await p.locator('#buddy-line').innerText(),'Good job! Well done!');
  await p.evaluate(()=>BW.recast('dragon'));assert.equal(await p.locator('#buddy-line').innerText(),'Good try! Say it again!');
+ await p.evaluate(()=>lastUtterance.onend());await p.clock.fastForward(8001);assert(await p.locator('#buddy-chat').isVisible());await p.clock.fastForward(1000);assert(await p.locator('#buddy-chat').isHidden());
+ for(const word of ['hello','jump','follow','pet','home']) {await p.evaluate(word=>BW.recast(word),word);assert.equal(await p.locator('#buddy-line').innerText(),'Good try! Say it again!');}
+ await p.evaluate(()=>BW.recast('rod'));assert.equal(await p.locator('#buddy-line').innerText(),'Try: I see a fishing rod!');
+ await p.evaluate(()=>lastUtterance.onend());await p.clock.fastForward(8001);await p.click('#buddy-mic');await p.evaluate(()=>voiceResult('a cat'));assert.equal(await p.locator('#buddy-line').innerText(),'I can see a cat!');
  await p.evaluate(()=>lastUtterance.onend());await p.clock.fastForward(3001);assert(await p.locator('#buddy-chat').isHidden());
  await p.evaluate(()=>BW.give('tree',1));await p.evaluate(()=>BW.give('wood',1));await p.evaluate(()=>BW.testOpen());
  assert.equal(await p.evaluate(()=>BW.smallTalk()),false);assert.equal(await p.evaluate(()=>BW.weatherChat()),false);assert.equal(await p.evaluate(()=>BW.recast('cat')),false);assert(await p.locator('#buddy-chat').isHidden());
+ assert.equal(await p.locator('#btn-buddy').evaluate(el=>getComputedStyle(el).animationName),'buddy-wave');assert(await p.locator('#dialogue').isVisible());
  await p.reload();await p.click('#btn-start');assert.equal(await p.evaluate(()=>BW.adventure().active),null);await done(p);
- report('validated build inference, free speech coaching tiers, TTS fade and blocking gate; no quiz resumes on reload');
+ report('noun-only recasts label fishing rod; tier-1 mic works eight seconds after TTS, closes at nine; gated Buddy waves silently');
  const fresh={...data,small_talk_count:0,prefs:{},prefsLearnedAt:{}};
  p=await page({data:fresh,online:true});await dismiss(p);await p.click('#btn-buddy');await p.waitForFunction(()=>BW.adventure().brain.brain>=1);assert(p.calls.some(q=>q.event==='small_talk'));assert.equal(await p.locator('#buddy-line').innerText(),'Do you like cat or dog?');await done(p);
  p=await page({data:fresh,online:true,bad:true});await dismiss(p);await p.click('#btn-buddy');await p.waitForFunction(()=>BW.adventure().brain.reasons['client-validation']);assert.equal(await p.locator('#buddy-line').innerText(),'Do you like cat or dog?');await done(p);
@@ -101,7 +117,7 @@ const report=s=>console.log('PASS',s);
  const petData=structuredClone(fresh);petData.animals.forEach(a=>{if(a[0]==='dog'){a[1]=petData.px+32;a[2]=petData.py;a[4]=1;}else a[1]=7000;});
  p=await page({data:petData});await dismiss(p);const buddy=await p.evaluate(()=>BW.screenAnimal('dog'));await p.mouse.click(buddy.x,buddy.y);assert.equal((await saved(p)).small_talk_count,1);assert(await p.locator('#buddy-chat').isVisible());assert.equal(await p.evaluate(()=>spoken.at(-1)),'Do you like cat or dog?');await done(p);
  p=await page({data:fresh});await dismiss(p);await p.clock.fastForward(60001);assert.equal((await saved(p)).small_talk_count,1);
- for(const input of [{event:'name_ask'}, {event:'small_talk',topic:'learn_pref_animal'}, {event:'small_talk',topic:'learn_pref_build'}, {event:'small_talk',topic:'learn_pref_food'}, {event:'small_talk',prefs:{build:'house'}}, ...['rain','sun','cloud','moon','star'].map(weather=>({event:'weather_chat',weather,time_of_day:'evening'})), ...[['cat',1],['a cat',2],['I see a cat',3],['dragon',1]].map(([child_said,target_tier])=>({event:'recast',child_said,target_tier}))]) {
+ for(const input of [{event:'name_ask'}, {event:'small_talk',topic:'learn_pref_animal'}, {event:'small_talk',topic:'learn_pref_build'}, {event:'small_talk',topic:'learn_pref_food'}, {event:'small_talk',prefs:{build:'house'}}, ...['rain','sun','cloud','moon','star'].map(weather=>({event:'weather_chat',weather,time_of_day:'evening'})), ...[['cat',1],['a cat',2],['I see a cat',3],['dragon',1],['hello',1],['jump',1],['follow',1],['pet',1],['home',1],['rod',1],['a rod',2],['hello cat',2]].map(([child_said,target_tier])=>({event:'recast',child_said,target_tier}))]) {
    const q=normalize(input);assert.deepEqual(await p.evaluate(q=>BW.testLines(q),q),conversationLines(q));
  }
  await done(p);

@@ -397,3 +397,26 @@ response across four exercise encounters plus onboarding, welcomes and ambient
 weather. The fixture now waits for completed welcomes instead of counting
 canceled HTTP replies as accepted client output. Current evidence is preserved
 separately in `screens/memory-chat-ratio.json`; previous ratio artifacts remain.
+
+## Claude review: top three fixes — 2026-11-03
+
+Implemented only [Claude review, section C](/workspace/yangyang-design/claude-review-out.md):
+
+- Name entry now reads the current field before fallback, allows 30 seconds of
+  inactivity, and resets that timer on letters, typing and mic start. At 10 seconds
+  it shows “You can say it or tap!”. ASR fills the editable field and waits for
+  Hi! / Let's play! confirmation; timers cannot commit unconfirmed speech.
+- Gated or daily-limited Buddy taps replay a silent wave without adding text.
+- Client/server recasts share a noun allowlist, exclude hello/jump/follow/pet/home,
+  and label rod as “fishing rod”. Non-nouns use existing praise. Tier-1 bubbles
+  stay open nine seconds after TTS so the mic remains reachable.
+
+Validation: **49 server tests pass locally and on the host**; expanded
+`tests/memory-chat.cjs`, greeting, blocking-ai and brain-v2 suites pass, with
+synthetic TTS/ASR. Script syntax and `git diff --check` pass.
+Backup before rsync: `/root/backups/yangyang-brain-claude-top3-20261103T122823Z/app`.
+Only the two brain code/test files were copied; service restarted and is active,
+deployed hashes match, and `.env` / protected nginx configuration are unchanged.
+HTTPS smoke: **9/9 POSTs return 200, brain/validated**, covering name_ask,
+excluded non-nouns, fishing rod in both coached tiers and cat; preflight is 204.
+Evidence: [claude-top3-smoke.json](screens/claude-top3-smoke.json).

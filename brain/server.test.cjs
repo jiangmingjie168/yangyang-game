@@ -242,3 +242,23 @@ test('new events use one correction, provenance and offline fallback', async t =
     });
   }
 });
+
+test('recasts frame only nouns and use fishing rod in both coached tiers', async () => {
+  for (const word of ['hello', 'jump', 'follow', 'pet', 'home']) {
+    for (const child_said of [word, 'a ' + word]) {
+      const p = normalize({ event: 'recast', child_said, target_tier: child_said === word ? 1 : 2 });
+      const expected = template(p);
+      assert.equal(expected.say, 'Good try! Say it again!');
+      const bad = { ...expected, say: (p.target_tier === 1 ? 'Try: I see a ' : 'I can see a ') + word + '!' };
+      assert.equal(validOutput(bad, p), false);
+      const result = await scenario([bad, expected], p);
+      assert.equal(result.source, 'brain'); assert.equal(result.calls.length, 2); assert.deepEqual(result.value, expected);
+    }
+  }
+  for (const [child_said, target_tier, say] of [['rod', 1, 'Try: I see a fishing rod!'], ['a rod', 2, 'I can see a fishing rod!'], ['hello cat', 2, 'I can see a cat!']]) {
+    const p = normalize({ event: 'recast', child_said, target_tier }), expected = template(p);
+    assert.equal(expected.say, say); assert(validOutput(expected, p));
+    const result = await scenario([expected], p);
+    assert.equal(result.source, 'brain'); assert.deepEqual(result.value, expected);
+  }
+});
