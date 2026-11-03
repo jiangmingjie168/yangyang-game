@@ -224,6 +224,21 @@
   }
   #btn-home strong { font-size: 18px; }
 
+  #welcome {
+    position: absolute; z-index: 45; left: 50%; top: calc(78px + var(--sat));
+    transform: translateX(-50%); width: min(480px, calc(100% - 28px));
+    padding: 16px 20px; border: 3px solid #e6bb70; border-radius: 26px;
+    background: #fffaf2; box-shadow: 0 8px 24px #5a39152b; text-align: center;
+  }
+  #welcome-face { width: 60px; height: 60px; float: left; margin: 0 12px 4px 0; }
+  #welcome-line { margin: 0 0 12px; font-size: clamp(20px, 3vw, 26px); line-height: 1.35; font-weight: 700; }
+  #welcome-play { min-height: 48px; padding: 8px 24px; border-radius: 16px; background: #d9edc8; font-size: 20px; font-weight: 800; }
+  @media (max-height: 450px) {
+    #welcome { top: calc(66px + var(--sat)); padding: 10px 16px; }
+    #welcome-face { width: 44px; height: 44px; }
+    #welcome-line { font-size: 20px; margin-bottom: 6px; }
+  }
+
   #wordcard {
     position: absolute; z-index: 60;
     left: 50%; top: calc(72px + var(--sat));
@@ -468,6 +483,11 @@
   </div>
 
   <div id="trail-count" aria-label="Discoveries">★ 0 / 7</div>
+  <section id="welcome" hidden aria-label="Welcome">
+    <canvas id="welcome-face" width="128" height="128" aria-hidden="true"></canvas>
+    <p id="welcome-line" role="status" aria-live="polite"></p>
+    <button id="welcome-play" type="button">Let's play!</button>
+  </section>
   <div id="chat-shade" hidden aria-hidden="true"></div>
   <section id="dialogue" hidden role="dialog" aria-modal="true" aria-labelledby="chat-question">
     <div class="chat-head"><canvas id="chat-face" width="128" height="128" aria-hidden="true"></canvas><p id="chat-question"></p><button id="chat-close" hidden type="button" aria-label="Keep exploring">×</button></div>
@@ -495,8 +515,8 @@
       </table>
       <p>以本机时间每周一零点起算；只统计麦克风识别到的具体单词，不保存语音和原话。点选、未匹配的语音不计入词次数。记录保存在本设备存档中（最多最近 2000 条对话事件）；清空存档会删除记录。</p>
     </div>
-    <label for="parent-name">孩子的英文昵称（选填，最多两词）</label>
-    <input id="parent-name" type="text" maxlength="33" autocomplete="off" placeholder="例如 Alex" aria-describedby="parent-name-note">
+    <label for="parent-name">孩子的英文昵称（默认 Mario，最多两词）</label>
+    <input id="parent-name" type="text" maxlength="33" autocomplete="off" placeholder="Mario" aria-describedby="parent-name-note">
     <p id="parent-name-note">只用英文字母和空格。昵称随存档保存在本机；启用在线伙伴时，昵称和最近游戏活动、识别文字会发给伙伴服务用于回应。识别原话不写入存档。</p>
     <p id="brain-status"></p>
     <button id="parent-close" type="button">返回游戏</button>
@@ -692,7 +712,8 @@ const BRAIN_TIMEOUT_MS = 6500;
   var chatClock = 0, chatRecognizer = null, chatTimer = null, recognitionTimer = null, chatLastInput = 0;
   var taskSnapshot = null, followTravel = 0, followLastX = 0, followReady = false;
   var boatStartX = null, boatLanding = false, sceneNow = '';
-  var childName = '', recentEvents = [], recentLines = [], lastAnswer = '';
+  var childName = 'Mario', recentEvents = [], recentLines = [], lastAnswer = '';
+  var welcome = null, lastGreeting = { id: -1, text: '' }, returningVisit = false;
   var brainStats = { brain: 0, template: 0, unknown: 0, requests: 0, limited: 0, reasons: {} };
   var brainWindowAt = 0, brainWindowCalls = 0, brainSessionCalls = 0;
   try {
@@ -703,6 +724,103 @@ const BRAIN_TIMEOUT_MS = 6500;
     }
   } catch (err) { /* Storage may be disabled; in-memory limits still apply. */ }
   function cleanName(value) { return String(value || '').replace(/[^A-Za-z ]/g, '').trim().split(/\s+/).slice(0, 2).map(function (w) { return w.slice(0, 16); }).join(' '); }
+  // Keep the greeting grammar in sync with brain/server.cjs. Every sentence is
+  // rule-owned; the brain chooses warm phrasing and never creates an exercise.
+  function greetingSlots(p) {
+    var name = p.child_name || 'friend';
+    return [
+      ['Hi ' + name + '.', 'Good ' + p.time_of_day + ', ' + name + '.', 'Hello ' + name + '.'],
+      p.returning ? ["It's so nice to see you again.", "I'm happy you're back.", "I'm glad we can play again."] :
+        ["I'm so happy you're here.", "It's so nice to see you.", "I'm glad we can play together."],
+      ["Let's build something together!", 'Shall we play together?', "Let's go and see our world!", "Let's find something fun!"]
+    ];
+  }
+  function greetingLines(p) {
+    var slots = greetingSlots(p), lines = [];
+    slots[0].forEach(function (a) { slots[1].forEach(function (b) { slots[2].forEach(function (c) { lines.push(a + ' ' + b + ' ' + c); }); }); });
+    return lines;
+  }
+  function greetingTemplate(p) {
+    var slots = greetingSlots(p), id = p.greeting_id;
+    var text = slots[0][id % 3] + ' ' + slots[1][id % 3] + ' ' + slots[2][id];
+    if (text.toLowerCase() === p.last_greeting.toLowerCase()) text = greetingLines(p).filter(function (line) { return line.toLowerCase() !== p.last_greeting.toLowerCase(); })[0];
+    return { say: text, options: [], answer: null, done: true };
+  }
+  function safeGreeting(reply, p) {
+    return !!reply && Object.keys(reply).sort().join(',') === 'answer,done,options,say' &&
+      Array.isArray(reply.options) && reply.options.length === 0 && reply.answer === null && reply.done === true &&
+      typeof reply.say === 'string' && reply.say.length <= 200 && !/[^\x20-\x7e]/.test(reply.say) &&
+      (reply.say.match(/[A-Za-z]+(?:'[A-Za-z]+)?/g) || []).length <= 20 &&
+      reply.say.toLowerCase() !== p.last_greeting.toLowerCase() && greetingLines(p).indexOf(reply.say) >= 0;
+  }
+  function brainLimited() {
+    if (Date.now() - brainWindowAt >= 60000) { brainWindowAt = Date.now(); brainWindowCalls = 0; }
+    return brainSessionCalls >= 60 || brainWindowCalls >= 8;
+  }
+  function spendBrainRequest() {
+    brainStats.requests++; brainWindowCalls++; brainSessionCalls++;
+    try { sessionStorage.setItem('block-world-brain-session-v1', JSON.stringify({ calls: brainSessionCalls, at: brainWindowAt, window: brainWindowCalls })); } catch (err) { /* optional storage */ }
+  }
+  function dismissGreeting() {
+    var w = welcome; welcome = null;
+    document.getElementById('welcome').hidden = true;
+    if (!w) return;
+    clearTimeout(w.timer); clearTimeout(w.deadline);
+    if (w.controller) w.controller.abort();
+    if (w.utterance && window.speechSynthesis) { try { speechSynthesis.cancel(); } catch (err) { /* optional */ } }
+  }
+  function openGreeting() {
+    dismissGreeting();
+    childName = cleanName(childName) || 'Mario';
+    var hour = new Date().getHours(), p = { event: 'greet', child_name: childName,
+      time_of_day: hour < 12 ? 'morning' : hour < 18 ? 'afternoon' : 'evening', returning: returningVisit,
+      greeting_id: (lastGreeting.id + 1) % 4, last_greeting: lastGreeting.text };
+    var expected = greetingTemplate(p), w = { controller: typeof AbortController !== 'undefined' ? new AbortController() : null };
+    welcome = w; returningVisit = true;
+    function show(reply, speakLine) {
+      if (welcome !== w) return;
+      document.getElementById('welcome-line').textContent = reply.say;
+      document.getElementById('welcome').hidden = false;
+      lastGreeting = { id: p.greeting_id, text: reply.say }; save();
+      if (!speakLine) return;
+      clearTimeout(w.timer);
+      // A fixed deadline also covers missing speech events and unsupported TTS.
+      w.timer = setTimeout(dismissGreeting, 14000);
+      w.utterance = speakEn(reply.say, { soft: true, onend: function () {
+        if (welcome !== w) return;
+        clearTimeout(w.timer); w.timer = setTimeout(dismissGreeting, 900);
+      } });
+    }
+    paintIcon(document.getElementById('welcome-face'), 'dog');
+    var limited = brainLimited();
+    show(expected, !BRAIN_URL || limited);
+    if (!BRAIN_URL || limited) {
+      if (limited) brainStats.limited++;
+      countChatSource('template', limited ? 'session-limit' : 'offline-config'); return;
+    }
+    spendBrainRequest();
+    var timeout = new Promise(function (resolve) { w.deadline = setTimeout(function () {
+      if (w.controller) w.controller.abort(); resolve({ reply: expected, source: 'template', reason: 'timeout' });
+    }, BRAIN_TIMEOUT_MS); });
+    var remote = Promise.resolve().then(function () {
+      return fetch(BRAIN_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(p),
+        signal: w.controller ? w.controller.signal : undefined, credentials: 'omit', cache: 'no-store' });
+    }).then(function (r) {
+      if (!r.ok) throw Error('Buddy unavailable');
+      var source = r.headers.get('X-Buddy-Source'), reason = r.headers.get('X-Buddy-Reason');
+      return r.text().then(function (raw) {
+        if (raw.length > 4096) throw Error('Buddy response too large');
+        var reply = JSON.parse(raw);
+        if (!safeGreeting(reply, p)) return { reply: expected, source: 'template', reason: 'client-validation' };
+        return { reply: reply, source: source === 'brain' || source === 'template' ? source : 'unknown', reason: reason || 'no-provenance' };
+      });
+    }).catch(function () { return { reply: expected, source: 'template', reason: 'network' }; });
+    Promise.race([remote, timeout]).then(function (result) {
+      clearTimeout(w.deadline);
+      if (welcome !== w) return;
+      countChatSource(result.source, result.reason); show(result.reply, true);
+    });
+  }
   function rememberEvent(action, word) {
     if (!WORD[word]) return;
     recentEvents.push({ action: action, word: word }); recentEvents = recentEvents.slice(-6);
@@ -924,6 +1042,7 @@ const BRAIN_TIMEOUT_MS = 6500;
     chatIdle = 0;
   }
   function openChat(event) {
+    dismissGreeting();
     var pool = chatWords();
     if (pool.length < 2) return;
     var target = allowedChatWord(event.key) ? event.key : oldWord(pool);
@@ -1017,9 +1136,7 @@ const BRAIN_TIMEOUT_MS = 6500;
       spoken_word: childSaid && spokenKey ? spokenKey : null, tier: d.choices ? 1 : d.tier });
     trail.speaking = trail.speaking.slice(-2000); saveSoon();
     if (d.controller) d.controller.abort();
-    var now = Date.now();
-    if (now - brainWindowAt >= 60000) { brainWindowAt = now; brainWindowCalls = 0; }
-    var limited = brainSessionCalls >= 60 || brainWindowCalls >= 8;
+    var limited = brainLimited();
     // Pause immediately with a picture preview. Read only the final validated
     // line, so the child never hears a template followed by a second AI question.
     renderChat(d, expected, !!BRAIN_URL && feedback !== 'retry' && !limited);
@@ -1031,8 +1148,7 @@ const BRAIN_TIMEOUT_MS = 6500;
     if (chatTimer) { clearTimeout(chatTimer); chatTimer = null; }
     d.pending = true;
     if (!d.answered) document.getElementById('chat-status').textContent = 'Buddy is thinking...';
-    brainStats.requests++; brainWindowCalls++; brainSessionCalls++;
-    try { sessionStorage.setItem('block-world-brain-session-v1', JSON.stringify({ calls: brainSessionCalls, at: brainWindowAt, window: brainWindowCalls })); } catch (err) { /* optional storage */ }
+    spendBrainRequest();
     var controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
     d.controller = controller;
     ['chat-mic', 'chat-listen', 'chat-choices', 'chat-confirm'].forEach(function (id) { document.getElementById(id).disabled = true; });
@@ -2930,18 +3046,20 @@ const BRAIN_TIMEOUT_MS = 6500;
     } catch (err) { /* ignore */ }
     return null;
   }
-  function speakEn(text) {
+  function speakEn(text, params) {
     if (!speechOn || !window.speechSynthesis) return;
     try {
       var u = new SpeechSynthesisUtterance(text);
       u.lang = 'en-GB';
-      u.rate = 1;
-      u.volume = 1;
-      u.pitch = 1;
+      u.rate = params && params.soft ? 0.82 : 1;
+      u.volume = params && params.soft ? 0.75 : 1;
+      u.pitch = params && params.soft ? 1.03 : 1;
+      if (params && params.onend) { u.onend = params.onend; u.onerror = params.onend; }
       var v = pickVoiceGB() || pickVoice();
       if (v) { u.voice = v; u.lang = v.lang; }
       speechSynthesis.cancel();
       speechSynthesis.speak(u);
+      return u;
     } catch (err) { /* speech is optional */ }
   }
   function speakTask() {
@@ -3406,7 +3524,7 @@ const BRAIN_TIMEOUT_MS = 6500;
       mods: mods, inv: inv, hotbar: hotbar, sel: sel,
       words: learned, stars: quizStars, progress: progress, intros: intros, zh: zhOn,
       crops: crops.map(function (c) { return [c.tx, c.ty, Math.round(c.age * 10) / 10]; }),
-      adventure: trail, child_name: childName,
+      adventure: trail, child_name: cleanName(childName) || 'Mario', last_greeting: lastGreeting,
       boat: boat ? [Math.round(boat.x), Math.round(boat.y)] : null,
       animals: animals.map(function (a) { return [a.type, Math.round(a.x * 10) / 10, Math.round(a.y * 10) / 10, a.dir, a.tamed ? 1 : 0]; })
     };
@@ -3501,7 +3619,12 @@ const BRAIN_TIMEOUT_MS = 6500;
       progress.boatRide = data.progress.boatRide ? 1 : 0;
       progress.pet = data.progress.pet ? 1 : 0;
     }
-    childName = cleanName(data.child_name);
+    childName = cleanName(data.child_name) || 'Mario';
+    var greeting = data.last_greeting;
+    lastGreeting = greeting && Number.isInteger(greeting.id) && greeting.id >= 0 && greeting.id <= 3 &&
+      typeof greeting.text === 'string' && greeting.text.length <= 200 && !/[^\x20-\x7e]/.test(greeting.text) ?
+      { id: greeting.id, text: greeting.text } : { id: -1, text: '' };
+    returningVisit = true;
     restoreAdventure(data.adventure);
     intros = data.intros || {};
     setZh(data.zh !== false);
@@ -3541,9 +3664,12 @@ const BRAIN_TIMEOUT_MS = 6500;
     }
     started = true;
     document.getElementById('start').hidden = true;
-    showWord('hello');
+    learn('hello');
+    openGreeting();
   }
   function hardReset() {
+    dismissGreeting();
+    lastGreeting = { id: -1, text: '' }; returningVisit = false;
     try { localStorage.removeItem(SAVE_KEY); } catch (err) { /* ignore */ }
     started = false;
     quiz = null;
@@ -3583,9 +3709,12 @@ const BRAIN_TIMEOUT_MS = 6500;
   function bind() {
     document.addEventListener('pointerdown', function (e) {
       chatLastInput = chatClock;
+      if (welcome && !e.target.closest('#welcome')) dismissGreeting();
       if (chatBlocked() && !e.target.closest('#dialogue, #parent-help, #btn-zh, #btn-portrait')) { e.preventDefault(); e.stopImmediatePropagation(); }
     }, true);
     tapButton(document.getElementById('btn-start'), beginGame);
+    tapButton(document.getElementById('welcome-play'), dismissGreeting);
+    document.getElementById('welcome-play').addEventListener('click', function (e) { if (e.detail === 0) dismissGreeting(); });
     tapButton(document.getElementById('btn-new'), function () {
       if (!armReset) {
         armReset = true;
@@ -3618,7 +3747,7 @@ const BRAIN_TIMEOUT_MS = 6500;
     });
     tapButton(document.getElementById('parent-close'), closePanels);
     document.getElementById('parent-close').addEventListener('click', function (e) { if (e.detail === 0) closePanels(); });
-    document.getElementById('parent-name').addEventListener('input', function (e) { childName = cleanName(e.target.value); saveSoon(); });
+    document.getElementById('parent-name').addEventListener('input', function (e) { childName = cleanName(e.target.value) || 'Mario'; saveSoon(); });
     function parentSkip() {
       if (document.getElementById('parent-help').hidden) return;
       closeChat(true); closePanels(); saveSoon();
@@ -3726,6 +3855,7 @@ const BRAIN_TIMEOUT_MS = 6500;
     joy.addEventListener('pointerup', joyEnd);
     joy.addEventListener('pointercancel', joyEnd);
     window.addEventListener('keydown', function (e) {
+      if (welcome && /^(ArrowLeft|ArrowRight|ArrowUp|Space|KeyW|KeyA|KeyD|KeyE|KeyB|Escape)$/.test(e.code)) dismissGreeting();
       chatLastInput = chatClock;
       if (e.target.closest('input, textarea') && !(chatBlocked() && /^(Tab|Escape)$/.test(e.code))) return;
       if (chatBlocked()) {

@@ -88,3 +88,27 @@ file was compared byte-for-byte with the original backup and is unchanged.
 
 See `CHANGES-brain-v2.md`, `tests/brain-ratio.cjs`, and the two
 `screens/brain-ratio-*.json` traces for the measurement method and limitations.
+
+## Mario welcome deployment — 2026-11-03
+
+Added the validated `greet` event with first/returning and local time-of-day
+context; existing exercise contracts remain compatible. Before copying code,
+backed up `/opt/yangyang-brain` to
+`/root/backups/yangyang-brain-greeting-20261103T113906Z/app` (root-only parent).
+Rsync copied only `server.cjs` and `server.test.cjs`. All 42 server tests passed
+on the host before restarting `yangyang-brain`; the service is active.
+
+Deployed server SHA-256:
+`acd0df64f2ed824f1b59cac40bcf45e1b19815aee9586500645872cd11708f21`.
+`.env` was compared byte-for-byte to the backup and remains root:root mode 600.
+The huanrui.conf SHA-256 still matches the original recorded hash; no nginx
+configuration was changed.
+
+Four real HTTPS requests returned 200 with `X-Buddy-Source: brain` and
+`X-Buddy-Reason: validated`, each passing local server validation with Mario,
+first/returning context and morning/afternoon/evening. Observed latencies were
+0.75–2.44 seconds. HTTPS preflight was 204 for jsDelivr, invalid greeting input
+was 400, and a legacy fish exercise returned a validated 200 response.
+`screens/greeting-smoke.json` records the actual greeting texts and provenance;
+no secrets or child recordings were included. Headless TTS is synthetic; device
+voice/touch acceptance remains a device check.

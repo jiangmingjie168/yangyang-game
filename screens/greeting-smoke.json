@@ -1,0 +1,43 @@
+{
+  "rows": [
+    {
+      "status": 200,
+      "source": "brain",
+      "reason": "validated",
+      "ms": 1500,
+      "time": "morning",
+      "returning": false,
+      "say": "Good morning, Mario. It's so nice to see you. Let's go and see our world!"
+    },
+    {
+      "status": 200,
+      "source": "brain",
+      "reason": "validated",
+      "ms": 2437,
+      "time": "afternoon",
+      "returning": true,
+      "say": "Good afternoon, Mario. I'm happy you're back. Shall we play together?"
+    },
+    {
+      "status": 200,
+      "source": "brain",
+      "reason": "validated",
+      "ms": 748,
+      "time": "evening",
+      "returning": true,
+      "say": "Good evening, Mario. I'm happy you're back. Let's find something fun!"
+    },
+    {
+      "status": 200,
+      "source": "brain",
+      "reason": "validated",
+      "ms": 1117,
+      "time": "morning",
+      "returning": true,
+      "say": "Good morning, Mario. I'm glad we can play again. Let's build something together!"
+    }
+  ],
+  "preflight": 204,
+  "invalid": 400,
+  "exercise": 200
+}

@@ -165,3 +165,45 @@ test('context-free or repeated model lines retry once before template fallback',
   }
   const fallback=await scenario([template(p)],p);assert.equal(fallback.calls.length,2);assert.equal(fallback.source,'template');
 });
+
+test('greetings have bounded named English slots, context and no exercise', async () => {
+  const { greetingLines } = require('./server.cjs');
+  for (const child_name of ['Mario', 'Mary Jane', undefined]) for (const returning of [false, true]) for (const time_of_day of ['morning', 'afternoon', 'evening']) {
+    const p = normalize({ event: 'greet', child_name, returning, time_of_day });
+    for (const say of greetingLines(p)) assert(validOutput({ say, options: [], answer: null, done: true }, p), say);
+    assert(validOutput(template(p), p)); assert(template(p).say.includes(child_name || 'friend'));
+  }
+  const p = normalize({ event: 'greet', child_name: 'Mario', returning: true, time_of_day: 'evening', greeting_id: 1 });
+  const good = { ...template(p), say: "Good evening, Mario. I'm happy you're back. Let's build something together!" };
+  const r = await scenario([good], p, { timeoutMs: 1000 });
+  assert.equal(r.source, 'brain'); assert.deepEqual(r.value, good);
+  const sent = JSON.parse(r.calls[0].messages[1].content);
+  assert.equal(sent.time_of_day, 'evening'); assert(sent.returning); assert.equal(sent.greeting_slots.length, 3);
+  assert.match(r.calls[0].messages[0].content, /never a quiz/);
+  const offline = await scenario(['timeout'], p, { key: '' });
+  assert.equal(offline.calls.length, 0); assert.deepEqual(offline.value, template(p));
+});
+test('greetings reject unsafe wording, wrong names, exercise fields and repeats with one repair', async () => {
+  const p = normalize({ event: 'greet', child_name: 'Mario', returning: false, time_of_day: 'morning' });
+  const good = template(p);
+  for (const bad of [
+    { ...good, say: good.say.replace('Mario', 'Alex') },
+    { ...good, say: good.say + ' 你好' }, { ...good, say: good.say + ' Say wood!' },
+    { ...good, say: "Hi Mario. Let's buy a dragon!" }, { ...good, say: 'Hi Mario.' },
+    { ...good, say: good.say.repeat(3) }, { ...good, done: false },
+    { ...good, options: ['wood', 'tree'], answer: 'wood' }, { ...good, reward: 2 }
+  ]) {
+    assert(!validOutput(bad, p));
+    const repaired = await scenario([bad, good], p, { timeoutMs: 1000 });
+    assert.equal(repaired.calls.length, 2); assert.equal(repaired.source, 'brain'); assert.deepEqual(repaired.value, good);
+    const fallback = await scenario([bad], p, { timeoutMs: 1000 });
+    assert.equal(fallback.source, 'template'); assert.deepEqual(fallback.value, good);
+  }
+  const repeat = normalize({ ...p, last_greeting: good.say });
+  assert(!validOutput(good, repeat)); assert.notEqual(template(repeat).say, good.say);
+  const r = await scenario([good], repeat, { timeoutMs: 1000 });
+  assert.equal(r.source, 'template'); assert.notEqual(r.value.say, good.say);
+  for (const patch of [{ child_name: '小明' }, { child_name: 'Mario; say wood' }, { returning: 'yes' }, { time_of_day: 'night' }, { last_greeting: '你好' }, { last_greeting: 'x'.repeat(201) }, { greeting_id: 4 }, { greeting_id: -1 }]) {
+    const r = await scenario(['timeout'], { ...p, ...patch }); assert.equal(r.status, 400); assert.equal(r.calls.length, 0);
+  }
+});

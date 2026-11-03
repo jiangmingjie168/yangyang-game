@@ -1,3 +1,28 @@
+# Warm Mario welcome — 2026-11-03
+
+- Default name is Mario, including missing/empty legacy saves; parent edits still
+  persist locally. Start/resume now shows a warm named English welcome instead
+  of the bare Hello card (Hello remains in the existing 42-word pool).
+- Brain receives local morning/afternoon/evening and first/returning context.
+  Rules own three safe phrase slots; server and client validate complete English
+  greetings, exact name, no previous-line repeat, and at most 20 words/200 chars.
+  Exercise validation stays at 12 words. Offline fallbacks rotate four saved IDs;
+  both last ID and displayed text are saved immediately, including before a reply.
+- Welcome leaves play available, has one “Let's play!” button, yields to movement
+  and other taps, and closes 900 ms after speech (14-second final-line deadline
+  when speech events are missing). Dismissal cancels pending requests and prevents
+  late speech/reopening. English TTS uses rate 0.82, volume 0.75, pitch 1.03.
+- Validation: all 42 server tests passed locally and on the deployment host;
+  `tests/greeting.cjs` passed eight headless groups covering migration, saved edits,
+  repeated visits, soft synthetic TTS, offline/no speech, timeout/unsafe replies,
+  cancellation, HTTP brain integration, movement, keyboard continue and portrait.
+  Existing brain, blocking, playthrough (17 groups), Chinese UI (6 groups) and
+  world/save (9 groups) suites all passed. Real device voice quality is untested.
+- Backed up production, rsynced only server/tests, restarted `yangyang-brain`.
+  Four HTTPS greetings returned `brain/validated`; CORS, bad input and an existing
+  exercise also passed. `.env` matched the backup; huanrui hash is unchanged.
+  Evidence: `screens/greeting-mario.png`, `screens/greeting-smoke.json`.
+
 # Blocking dialogue + contextual DeepSeek voice — 2026-11-03
 
 Implemented on `codex-brain-v2`, starting from `5d26e5c`. Production brain remains

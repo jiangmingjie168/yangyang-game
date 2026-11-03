@@ -14,6 +14,7 @@ node --test brain/server.test.cjs
 python3 -m http.server 19273 --bind 127.0.0.1
 # In another shell, with Playwright + Chromium already installed:
 PLAYWRIGHT_MODULE=/path/to/node_modules/playwright node tests/brain-v2.cjs
+PLAYWRIGHT_MODULE=/path/to/node_modules/playwright node tests/greeting.cjs
 PLAYWRIGHT_MODULE=/path/to/node_modules/playwright node tests/chinese-cleanup.cjs
 PLAYWRIGHT_MODULE=/path/to/node_modules/playwright node tests/playthrough.cjs
 ```
@@ -29,6 +30,35 @@ JSON/content gets one corrective retry, then templates. There is no logging of
 credentials, child replies, model content or request bodies.
 
 ## Contract
+
+Start/resume welcomes use a separate rule-owned event (no vocabulary exercise):
+
+```json
+{"event":"greet","child_name":"Mario","time_of_day":"morning","returning":false,"greeting_id":0,"last_greeting":""}
+```
+
+`time_of_day` is `morning|afternoon|evening`, `returning` is a boolean,
+`greeting_id` is an optional 0–3 fallback selector, and `last_greeting` is optional
+ASCII text of at most 200 characters. The optional name uses the same two-word
+English-name validation as exercises. The game defaults empty/missing names to
+Mario and saves parent edits locally. The response keeps the JSON envelope:
+
+```json
+{"say":"Hi Mario. I'm so happy you're here. Let's build something together!","options":[],"answer":null,"done":true}
+```
+
+The AI combines exactly one supplied name/time lead, one first/returning warmth
+phrase, and one invitation. Both validators check the entire sentence, exact
+name, ASCII English, at most 20 words/200 characters, empty options, null answer,
+true done, and no repeat of `last_greeting` (case-insensitive). The greeting-only
+length allowance does not loosen the 12-word exercise rules. Greetings share
+existing request budgets, deadlines, one correction, and source headers.
+Offline templates rotate four IDs and exclude the previous saved line. The
+nonmodal welcome has a “Let's play!” button, dismisses after TTS plus 900 ms
+(14-second fallback deadline after the final line), and yields to movement or
+other game taps. Dismissal aborts its request and ignores late replies. Greeting
+TTS reuses the English voice path at rate 0.82, volume 0.75, pitch 1.03; real voice
+quality depends on the device. Welcomes do not create mastery or speaking credit.
 
 `POST /buddy`, `Content-Type: application/json`, max body 8 KiB:
 

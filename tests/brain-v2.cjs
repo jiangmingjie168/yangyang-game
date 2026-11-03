@@ -20,7 +20,9 @@ async function page(data, { endpoint = '', reply, voice = true, timeout = 6500, 
   p.on('response', r => { if (r.url().includes('buddy')) p.network.push({url:r.url(),status:r.status(),body:r.request().postData()}); });
   await p.route(URL + '/', r => r.fulfill({ contentType: 'text/html', body: html.replace(/^const BRAIN_URL = '[^']*';$/m, 'const BRAIN_URL = ' + JSON.stringify(endpoint) + ';').replace('const BRAIN_TIMEOUT_MS = 6500;', 'const BRAIN_TIMEOUT_MS = ' + timeout + ';') }));
   if (reply) await p.route('**/mock-buddy', async r => {
-    const payload = r.request().postDataJSON(); p.calls.push(payload);
+    const payload = r.request().postDataJSON();
+    if (payload.event === 'greet') return r.fulfill({ contentType: 'application/json', body: JSON.stringify(template(normalize(payload))) });
+    p.calls.push(payload);
     await new Promise(r => setTimeout(r, delay));
     const value = typeof reply === 'function' ? reply(payload) : reply;
     await r.fulfill({ contentType: 'application/json', body: typeof value === 'string' ? value : JSON.stringify(value) }).catch(() => {});
@@ -36,6 +38,7 @@ async function page(data, { endpoint = '', reply, voice = true, timeout = 6500, 
     window.voiceResult = text => { const r = window.recognizer; r.onresult?.({ resultIndex: 0, results: [[{ transcript: text }]] }); r.onend?.(); };
   }, { data, voice });
   await p.goto(URL + '/#seed=42'); await p.click('#btn-start'); await p.waitForTimeout(180);
+  if (await p.locator('#welcome').isVisible()) await p.click('#welcome-play');
   return p;
 }
 function next(data) {
@@ -96,8 +99,10 @@ function report(text) { console.log('PASS', text); }
   report('three misses reveal answer and require confirmation before friendly close; no mission penalties');
   // Actual browser -> buddy service -> mock DeepSeek. Inject one invalid answer then a valid repair.
   upstream = http.createServer(async (req,res) => {
-    let raw=''; for await (const b of req) raw+=b; const call=JSON.parse(raw); upstreamCalls.push(call);
+    let raw=''; for await (const b of req) raw+=b; const call=JSON.parse(raw);
     const data = JSON.parse(call.messages[1].content), expected = data.expected;
+    if (data.event === 'greet') return res.end(JSON.stringify({ choices:[{message:{content:JSON.stringify(expected)}}] }));
+    upstreamCalls.push(call);
     const lead = data.context_leads.length ? data.context_leads[0] + ' ' : '';
     const value = upstreamCalls.length===1 ? {...expected, say:'你好'} : {...expected, say: 'Nice! ' + lead + expected.say.replace(/^Great! /,'')};
     res.end(JSON.stringify({ choices:[{message:{content:JSON.stringify(value)}}] }));
