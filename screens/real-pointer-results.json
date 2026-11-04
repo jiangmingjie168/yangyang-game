@@ -2,27 +2,27 @@
   {
     "name": "entry <10s, name entry nonblocking, skip unnamed, no early weather",
     "status": "PASS",
-    "nameDx": 48.33719999999357,
-    "dx": 48.33719999999312,
-    "entryMs": 922
+    "nameDx": 50.262799999993604,
+    "dx": 50.26279999999224,
+    "entryMs": 904
   },
   {
     "name": "real joystick drag",
     "status": "PASS",
-    "dx": 65.72559999999066
+    "dx": -65.72559999999066
   },
   {
     "name": "far wood click seeks and gathers",
     "status": "PASS",
     "far": true,
-    "dx": 38.59319999999525,
+    "dx": 260.7563999999711,
     "wood": 1
   },
   {
-    "name": "near wood click gathers",
+    "name": "wood click uses actual approach distance",
     "status": "PASS",
-    "far": false,
-    "dx": 0,
+    "far": true,
+    "dx": 167.96799999997893,
     "wood": 1
   },
   {
@@ -33,26 +33,26 @@
   {
     "name": "exercise locks only its lifetime; immediate keyboard, gather, joystick and pet recovery",
     "status": "PASS",
-    "movementDx": 48.33719999999357,
-    "far": false,
-    "dx": 0,
+    "movementDx": 50.26279999999315,
+    "far": true,
+    "dx": 117.70519999998533,
     "wood": 1,
-    "joyDx": 65.73719999999184,
-    "animal": "sheep"
+    "joyDx": -65.73719999999366,
+    "animal": "dog"
   },
   {
     "name": "mismatched dog lead omitted; parent skip immediately restores all inputs",
     "status": "PASS",
-    "movementDx": 50.26279999999315,
-    "far": false,
-    "dx": 0,
+    "movementDx": 50.262799999993604,
+    "far": true,
+    "dx": 117.70519999998396,
     "wood": 1,
-    "joyDx": 65.72559999999157,
-    "animal": "sheep"
+    "joyDx": -65.71399999999267,
+    "animal": "dog"
   },
   {
     "name": "portrait soft hint permits keyboard without rotate OK",
     "status": "PASS",
-    "dx": 50.262799999993604
+    "dx": 50.26279999999315
   }
 ]

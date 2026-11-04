@@ -103,7 +103,7 @@
   }
 
   #hud { position: absolute; inset: 0; pointer-events: none; z-index: 20; }
-  #hud button, #hud #joy, #hud .hotbar, #hud .mid { pointer-events: auto; }
+  #hud button, #hud #joy { pointer-events: auto; }
 
   .topbar {
     position: absolute;
@@ -147,7 +147,8 @@
     display: flex; align-items: flex-end; gap: 8px;
     pointer-events: none;
   }
-  .bottom > * { pointer-events: auto; }
+  /* Transparent layout boxes must not eat taps on the world behind them. */
+  .bottom > * { pointer-events: none; }
   #joy { width: 124px; height: 124px; position: relative; flex: 0 0 auto; touch-action: none; }
   #joy-base {
     position: absolute; inset: 10px; border-radius: 50%;
@@ -173,7 +174,7 @@
   }
   #held-en { font-size: 18px; font-weight: 800; }
   .hotbar {
-    width: 100%; max-width: 100%;
+    width: max-content; max-width: 100%; align-self: flex-start;
     display: flex; gap: 6px; align-items: center;
     overflow-x: auto; overflow-y: hidden;
     padding: 2px 2px 4px;
@@ -335,6 +336,14 @@
     max-width: min(92vw, 520px);
   }
   #toast-en { font-size: 22px; font-weight: 900; display: block; line-height: 1.15; }
+  @media (max-height: 500px) {
+    /* Keep feedback above animals so a second pat cannot hit the word card. */
+    #wordcard { display: flex; align-items: center; gap: 8px; min-width: 0; padding: 6px 14px; border-width: 3px; border-radius: 18px; }
+    #wordcard canvas { width: 38px; height: 38px; margin: 0; }
+    #card-en { font-size: 32px; }
+    #toast { top: calc(140px + var(--sat)); bottom: auto; padding: 6px 14px; }
+    #toast-en { font-size: 18px; }
+  }
   #btn-quiz {
     width: 100%; min-height: 64px; margin: 0 0 10px;
     border-radius: 16px; background: var(--leaf); color: #fff;
@@ -1099,6 +1108,7 @@ function validConversation(value, p) {
     if (['made', 'built'].indexOf(action) >= 0 && !memory.prefs.build && PREF_VALUES.build.indexOf(word) >= 0) { memory.prefs.build = word; memory.prefsLearnedAt.build = Date.now(); saveSoon(); }
   }
   function chatContextLeads(d) {
+    if (d.tier === 1 && d.feedback !== 'success') return [];
     var leads = [], name = d.context.child_name;
     if (name) leads.push(name + '!');
     var events = d.context.recent_events, e = events[events.length - 1];
@@ -1384,15 +1394,16 @@ function validConversation(value, p) {
     document.getElementById('chat-face').hidden = d.choices || d.tier === 1;
     d.audio_url = reply.audio_url;
     d.pending = false; d.controller = null; d.question = d.reveal && !reply.done ? "Let's say " + WORD[d.key][0].toLowerCase() + ' together!' : reply.say; d.at = chatClock;
-    document.getElementById('chat-question').textContent = d.question;
-    document.getElementById('chat-status').textContent = d.answered ? '★ ★ ★' : (d.reveal ? 'Tap ' + WORD[d.key][0] + ' or say it with me.' : d.hint ? 'Good try! Look at the glowing answer.' : '');
+    var listening = d.tier === 1 && !reply.done;
+    document.getElementById('chat-question').textContent = listening ? 'Listen and choose!' : d.question;
+    document.getElementById('chat-status').textContent = listening ? '' : d.answered ? '★ ★ ★' : (d.reveal ? 'Tap ' + WORD[d.key][0] + ' or say it with me.' : d.hint ? 'Good try! Look at the glowing answer.' : '');
     var root = document.getElementById('chat-options'); root.innerHTML = ''; root.hidden = !d.choices || reply.done;
     d.options.forEach(function (key) {
       var b = document.createElement('button'); b.type = 'button'; b.dataset.word = key;
       b.disabled = reply.done || (d.reveal && key !== d.key);
       b.classList.toggle('hint-answer', !!d.hint && key === d.key);
       var icon = document.createElement('canvas'); icon.width = 128; icon.height = 128; icon.setAttribute('aria-hidden', 'true'); paintIcon(icon, key);
-      b.appendChild(icon); b.appendChild(document.createTextNode(WORD[key][0])); tapButton(b, function () { answerChat(key); }); root.appendChild(b);
+      b.appendChild(icon); b.setAttribute('aria-label', WORD[key][0]); if (!listening) b.appendChild(document.createTextNode(WORD[key][0])); tapButton(b, function () { answerChat(key); }); root.appendChild(b);
     });
     document.getElementById('chat-mic').setAttribute('aria-label', 'Answer by voice');
     document.getElementById('chat-mic').disabled = reply.done;
@@ -2038,7 +2049,8 @@ function validConversation(value, p) {
     if (jumpBuf > 0) {
       jumpBuf -= dt;
       if (onGround || coyote > 0) {
-        player.vy = -JUMP;
+        player.vy = -(seek && seek.jumpSpeed ? seek.jumpSpeed : JUMP);
+        if (seek) seek.jumpSpeed = 0;
         onGround = false;
         coyote = 0;
         jumpBuf = 0;
@@ -2066,11 +2078,14 @@ function validConversation(value, p) {
     if (Math.abs(a.x - player.x) > 1100 && !a.tamed) return;
     a.phase += dt * 6;
     if (a.pet > 0) a.pet -= dt;
+    if (a.wait > 0) a.wait -= dt;
     if (a.tamed) {
       var dxp = player.x - a.x;
       if (Math.abs(dxp) > 720) { a.x = player.x - player.dir * 38; a.y = player.y; dxp = player.x - a.x; }
       if (Math.abs(dxp) > 54) a.vx = (dxp > 0 ? 1 : -1) * Math.min(158, 66 + Math.abs(dxp) * 0.85);
       else a.vx = 0;
+    } else if (a.wait > 0 || (seek && seek.kind === 'pet' && seek.animal === a)) {
+      a.vx = 0; // Also pause after a pat so the next tap still lands on this animal.
     } else {
       a.timer -= dt;
       if (a.timer <= 0) {
@@ -2110,7 +2125,7 @@ function validConversation(value, p) {
   function inReach(tx, ty) {
     var dx = (tx + 0.5) * TILE - player.x;
     var dy = (ty + 0.5) * TILE - (player.y - PH * 0.4);
-    var lim = 10 * TILE;
+    var lim = 3 * TILE;
     return dx * dx + dy * dy <= lim * lim;
   }
   function overlapsPlayer(tx, ty) {
@@ -2417,7 +2432,8 @@ function validConversation(value, p) {
     }
   }
   function pet(a) {
-    a.pet = 0.4;
+    a.pet = 1.2;
+    a.wait = 4; a.vx = 0; a.timer = 2;
     if (!quiz) progress.tapped[a.type] = 1;
     if (quiz && a.type !== quiz.key) quizWrong();
     learn(a.type); rememberEvent('met', a.type);
@@ -2432,6 +2448,7 @@ function validConversation(value, p) {
     }
     if ((a.type === 'dog' || a.type === 'cat') && !animals.some(function (o) { return o.tamed; })) {
       a.love = (a.love || 0) + 1;
+      showToast(WORD[a.type][0] + ': ' + a.love + '/3 hearts', 2.2);
       if (a.love >= 3) {
         a.tamed = 1;
         if (!quiz) progress.pet = 1;
@@ -2456,15 +2473,25 @@ function validConversation(value, p) {
     saveSoon();
   }
   function petReach(a) { return Math.hypot(a.x - player.x, a.y - player.y) <= 64; }
+  function beginSeek(target) {
+    target.left = 12;
+    target.approachDir = Math.sign((target.kind === 'pet' ? target.animal.x : (target.tx + 0.5) * TILE) - player.x) || player.dir;
+    seek = target;
+    seekStep(0);
+    if (seek) {
+      var key = target.kind === 'pet' ? target.animal.type : KEY_OF[get(target.tx, target.ty)];
+      showToast('Walking to ' + (WORD[key] ? WORD[key][0].toLowerCase() : 'the block') + '!', 1.8);
+    }
+  }
   function seekMine(tx, ty) {
-    if (inReach(tx, ty)) mine(tx, ty);
-    else seek = { kind: 'mine', tx: tx, ty: ty, left: 6 };
+    beginSeek({ kind: 'mine', tx: tx, ty: ty });
   }
   // A bounded horizontal seek uses the same collision and step-up path as keys.
   // Unreachable heights/obstacles time out; no teleporting or identify-only success.
   function seekStep(dt) {
     var s = seek; s.left -= dt;
-    if (s.left <= 0 || (s.kind === 'mine' && !mineable(get(s.tx, s.ty)))) { seek = null; return 0; }
+    if (s.left <= 0) { seek = null; showToast('Try moving closer!', 2); return 0; }
+    if (s.kind === 'mine' && !mineable(get(s.tx, s.ty))) { seek = null; return 0; }
     var reached = s.kind === 'pet' ? petReach(s.animal) : inReach(s.tx, s.ty);
     if (reached) {
       seek = null;
@@ -2472,8 +2499,19 @@ function validConversation(value, p) {
       return 0;
     }
     var x = s.kind === 'pet' ? s.animal.x : (s.tx + 0.5) * TILE;
+    // Clear the canopy before descending to an animal underneath its edge.
+    if (s.kind === 'pet' && s.animal.y - player.y > 64 && Math.abs(x - player.x) < 3 * TILE) x += s.approachDir * 2 * TILE;
     if (Math.abs(x - player.x) < 4) return 0;
-    if (onGround && collides(player.x + Math.sign(x - player.x) * 8, player.y)) jumpBuf = 0.16;
+    if (onGround && collides(player.x + Math.sign(x - player.x) * 8, player.y)) {
+      // A natural tree is taller than the manual jump. Find a bounded clear ledge
+      // and jump over it using normal gravity/collision, without mining or warping.
+      var rise = TILE, aheadX = player.x + Math.sign(x - player.x) * 8;
+      while (rise <= 5 * TILE && collides(aheadX, player.y - rise)) rise += TILE;
+      if (rise <= 5 * TILE) {
+        s.jumpSpeed = Math.max(JUMP, Math.sqrt(2 * GRAV * (rise + 10)));
+        jumpBuf = 0.16;
+      }
+    }
     return x > player.x ? 1 : -1;
   }
   function tapWorld(wx, wy, sx, sy) {
@@ -2493,15 +2531,18 @@ function validConversation(value, p) {
       lock = { tx: cropX, ty: cropY }; lockAge = 0;
       seekMine(cropX, cropY); return;
     }
-    var best = null, bd = 38 * 38, i;
+    var best = null, bd = Infinity, i;
     for (i = 0; i < animals.length; i++) {
       var a = animals[i];
       var dx = a.x - wx, dy = (a.y - 16) - wy, d = dx * dx + dy * dy;
-      if (d < bd) { bd = d; best = a; }
+      // Cover the drawn head/ears, body and the foot cell a child selects.
+      var hit = Math.abs(dx) <= 32 && wy >= a.y - 54 && wy <= a.y + 8;
+      var footCell = Math.floor(a.x / TILE) === cropX && Math.floor((a.y - 1) / TILE) === cropY;
+      if ((hit || footCell) && d < bd) { bd = d; best = a; }
     }
     if (best) {
-      if (petReach(best)) pet(best);
-      else seek = { kind: 'pet', animal: best, left: 6 };
+      lock = null; lockAge = 0;
+      beginSeek({ kind: 'pet', animal: best });
       return;
     }
     var tx = Math.floor(wx / TILE), ty = Math.floor(wy / TILE);
@@ -2528,8 +2569,9 @@ function validConversation(value, p) {
     if (inReach(tx, ty)) {
       lock = { tx: tx, ty: ty };
       lockAge = 0;
-      tryPlace(tx, ty);
+      if (selectedKey()) { tryPlace(tx, ty); return; }
     }
+    showToast('Tap an animal or a block!', 1.6);
   }
 
   // One small canvas drawing kit for world animals, object sprites and all word pictures.
@@ -3163,6 +3205,17 @@ function validConversation(value, p) {
       ctx.beginPath(); ctx.ellipse(0, -1, 10, 3, 0, 0, 6.3); ctx.fill();
       drawAnimal(ctx, an.type, an.phase);
       ctx.restore();
+      if (an.pet > 0) {
+        ctx.save(); ctx.fillStyle = '#ed4978'; ctx.font = 'bold 20px sans-serif';
+        ctx.textAlign = 'center'; ctx.fillText('♥', an.x, an.y - 55);
+        ctx.restore();
+      }
+    }
+    if (seek) {
+      var targetX = seek.kind === 'pet' ? seek.animal.x : (seek.tx + 0.5) * TILE;
+      var targetY = seek.kind === 'pet' ? seek.animal.y : (seek.ty + 1) * TILE;
+      ctx.save(); ctx.strokeStyle = '#ffdc69'; ctx.lineWidth = 3 / z;
+      ctx.beginPath(); ctx.ellipse(targetX, targetY - 2, 22, 7, 0, 0, Math.PI * 2); ctx.stroke(); ctx.restore();
     }
     var pi;
     for (pi = parts.length - 1; pi >= 0; pi--) {
@@ -3923,7 +3976,7 @@ function validConversation(value, p) {
       prefs: memory.prefs, prefsLearnedAt: memory.prefsLearnedAt, name_asked: memory.name_asked,
       chat_day: memory.chat_day, small_talk_count: memory.small_talk_count, weather_chat_done: memory.weather_chat_done,
       boat: boat ? [Math.round(boat.x), Math.round(boat.y)] : null,
-      animals: animals.map(function (a) { return [a.type, Math.round(a.x * 10) / 10, Math.round(a.y * 10) / 10, a.dir, a.tamed ? 1 : 0]; })
+      animals: animals.map(function (a) { return [a.type, Math.round(a.x * 10) / 10, Math.round(a.y * 10) / 10, a.dir, a.tamed ? 1 : 0, a.love || 0]; })
     };
     try { localStorage.setItem(SAVE_KEY, JSON.stringify(data)); } catch (err) { /* private mode */ }
     dirtySave = false;
@@ -3950,7 +4003,7 @@ function validConversation(value, p) {
       var next = [];
       data.animals.forEach(function (row) {
         if (!row || !ANIMALS[row[0]] || !isFinite(row[1]) || !isFinite(row[2])) return;
-        var a = { type: row[0], x: +row[1], y: +row[2], dir: row[3] < 0 ? -1 : 1, vx: 0, timer: 2, phase: 0, pet: 0, tamed: row[4] ? 1 : 0, love: 0 };
+        var a = { type: row[0], x: +row[1], y: +row[2], dir: row[3] < 0 ? -1 : 1, vx: 0, timer: 2, phase: 0, pet: 0, tamed: row[4] ? 1 : 0, love: Math.max(0, Math.min(3, row[5] | 0)) };
         var guard = 0;
         while (guard++ < 6 && solid(get(Math.floor(a.x / TILE), Math.floor((a.y - 4) / TILE)))) a.y -= TILE;
         next.push(a);
@@ -4216,7 +4269,9 @@ function validConversation(value, p) {
       if (e.button && e.button !== 0 && e.button !== 2) return;
       e.preventDefault();
       var rect = canvas.getBoundingClientRect();
-      var sx = e.clientX - rect.left, sy = e.clientY - rect.top;
+      // Canvas input and drawing share CSS-pixel coordinates, including browser zoom.
+      var sx = (e.clientX - rect.left) * viewW / rect.width;
+      var sy = (e.clientY - rect.top) * viewH / rect.height;
       var w = screenToWorld(sx, sy);
       if (e.button === 2) {
         var tx = Math.floor(w.x / TILE), ty = Math.floor(w.y / TILE);
