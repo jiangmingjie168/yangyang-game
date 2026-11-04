@@ -64,7 +64,7 @@ function report(text) { console.log('PASS', text); }
   let data = next(fixture);
   for (let n=1;n<=2;n++) {
     p = await page(next(data)); const d = await chat(p); assert.equal(d.key,'tree'); assert.equal(d.tier,1);
-    await p.locator('[data-word="tree"]').click(); data = await snapshot(p);
+    await p.locator('[data-word="tree"]').click(); await p.waitForFunction(()=>BW.adventure().active?.answered); data = await snapshot(p);
     assert.equal(data.adventure.levels.tree.t1,n); assert.equal(data.adventure.levels.tree.t2,0);
     assert.equal(data.adventure.speaking.at(-1).spoke,false); await checkClose(p);
   }
@@ -85,14 +85,14 @@ function report(text) { console.log('PASS', text); }
   }
   report('tier three accepts the missing word, whole sentence, or small spelling difference');
   p = await page(next(unlocked2), { voice: false }); await chat(p); await p.click('#chat-mic');
-  assert(await p.locator('#chat-options').isVisible()); await p.locator('[data-word="tree"]').click();
+  assert(await p.locator('#chat-options').isVisible()); await p.locator('[data-word="tree"]').click(); await p.waitForFunction(()=>BW.adventure().active?.answered);
   assert.equal((await snapshot(p)).adventure.levels.tree.t2,0); await checkClose(p);
   p = await page(next(unlocked2)); await chat(p); await voice(p,'something unrelated');
-  assert(await p.locator('#chat-options').isVisible()); await p.locator('[data-word="tree"]').click();
+  assert(await p.locator('#chat-options').isVisible()); await p.locator('[data-word="tree"]').click(); await p.waitForFunction(()=>BW.adventure().active?.answered);
   const downgraded = await snapshot(p); assert.equal(downgraded.adventure.levels.tree.t2,0); assert.equal(downgraded.adventure.speaking.at(-2).spoke,true); await checkClose(p);
   report('unavailable mic/unrecognized speech gives tap fallback without tier-two credit');
   p = await page(next(fixture)); await chat(p); const before = (await snapshot(p)).progress;
-  for(let n=0;n<3;n++) await p.locator('[data-word="wood"]').click();
+  for(let n=0;n<3;n++) {await p.locator('[data-word="wood"]').click();await p.waitForFunction(n=>BW.adventure().active?.misses===n+1,n);}
   assert(!(await p.evaluate(() => BW.adventure().active)).answered); assert((await p.evaluate(() => BW.adventure().active)).reveal);
   assert(await p.locator('[data-word=wood]').isDisabled()); await p.locator('[data-word=tree]').click();
   assert.deepEqual((await snapshot(p)).progress,before); await p.waitForFunction(() => !BW.adventure().active); await checkClose(p);

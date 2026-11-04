@@ -1,0 +1,12 @@
+locator.waitFor: Timeout 500ms exceeded.
+Call log:
+  - waiting for locator('#buddy-chat:not([hidden]) #buddy-line').filter({ hasText: 'Nice start!' }) to be visible
+
+    at feedback (/tmp/bw-build/tests/build-v1-fix1.cjs:26:85)
+    at run (/tmp/bw-build/tests/build-v1-fix1.cjs:61:11)
+    at async /tmp/bw-build/tests/build-v1-fix1.cjs:177:35 {
+  log: [
+    "  - waiting for locator('#buddy-chat:not([hidden]) #buddy-line').filter({ hasText: 'Nice start!' }) to be visible"
+  ],
+  name: 'TimeoutError'
+}

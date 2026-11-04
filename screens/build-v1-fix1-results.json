@@ -1,0 +1,79 @@
+{
+  "results": [
+    {
+      "case": "A: first placement immediately replaces a natural plan",
+      "status": "PASS"
+    },
+    {
+      "case": "B: depletion and repeated empty taps immediately explain the result",
+      "status": "PASS"
+    },
+    {
+      "case": "C: harvested and crafted enclosure, cheer, Show and parent-selected levels 1/2/3",
+      "status": "PASS"
+    },
+    {
+      "case": "D: natural level-one encounter question",
+      "status": "PASS",
+      "prompt": "What is this?",
+      "options": [
+        "Tree",
+        "Wood"
+      ]
+    },
+    {
+      "case": "E: icon-only gear, Chinese confined to the parent panel",
+      "status": "PASS"
+    },
+    {
+      "case": "R: build radius +1, outer limit, wall occlusion and stock safety",
+      "status": "PASS"
+    },
+    {
+      "case": "R: ordinary radius +1, outer limit, wall occlusion and stock safety",
+      "status": "PASS"
+    }
+  ],
+  "frames": [
+    "screens/build-v1-fix1-A-01.png",
+    "screens/build-v1-fix1-A-02.png",
+    "screens/build-v1-fix1-A-03.png",
+    "screens/build-v1-fix1-A-04.png",
+    "screens/build-v1-fix1-A-05.png",
+    "screens/build-v1-fix1-B-01.png",
+    "screens/build-v1-fix1-B-02.png",
+    "screens/build-v1-fix1-B-03.png",
+    "screens/build-v1-fix1-B-04.png",
+    "screens/build-v1-fix1-B-05.png",
+    "screens/build-v1-fix1-B-06.png",
+    "screens/build-v1-fix1-C-01.png",
+    "screens/build-v1-fix1-C-02.png",
+    "screens/build-v1-fix1-C-03.png",
+    "screens/build-v1-fix1-C-04.png",
+    "screens/build-v1-fix1-C-05.png",
+    "screens/build-v1-fix1-C-06.png",
+    "screens/build-v1-fix1-C-07.png",
+    "screens/build-v1-fix1-C-08.png",
+    "screens/build-v1-fix1-C-09.png",
+    "screens/build-v1-fix1-C-10.png",
+    "screens/build-v1-fix1-C-11.png",
+    "screens/build-v1-fix1-C-12.png",
+    "screens/build-v1-fix1-C-13.png",
+    "screens/build-v1-fix1-C-14.png",
+    "screens/build-v1-fix1-C-15.png",
+    "screens/build-v1-fix1-D-01.png",
+    "screens/build-v1-fix1-D-02.png",
+    "screens/build-v1-fix1-D-03.png",
+    "screens/build-v1-fix1-D-04.png",
+    "screens/build-v1-fix1-E-01.png",
+    "screens/build-v1-fix1-E-02.png",
+    "screens/build-v1-fix1-E-03.png",
+    "screens/build-v1-fix1-R-01.png",
+    "screens/build-v1-fix1-R-02.png",
+    "screens/build-v1-fix1-R-03.png",
+    "screens/build-v1-fix1-R-04.png",
+    "screens/build-v1-fix1-R-05.png",
+    "screens/build-v1-fix1-R-06.png"
+  ],
+  "errors": []
+}

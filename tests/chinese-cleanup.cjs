@@ -20,6 +20,9 @@ const assert = require('node:assert/strict');
     await page.waitForTimeout(300);
     assert.equal(await page.evaluate(() => BW.layout().started), true);
     assert.equal(await page.evaluate(() => BW.totalWords()), 47);
+    assert.equal(await page.locator('#btn-zh').innerText(), '⚙');
+    assert.equal(await page.locator('#btn-zh').getAttribute('aria-label'), 'Parent settings');
+    assert(!/\p{Script=Han}/u.test(await page.locator('body').innerText()), 'child-visible UI, including the gear, has zero CJK');
     console.log('PASS game loads and starts');
 
     // Exercise an original bilingual toast through the real quiz button.
@@ -59,9 +62,9 @@ const assert = require('node:assert/strict');
     assert.deepEqual(await page.evaluate(() => {
       const remaining = [];
       for (const el of document.body.querySelectorAll('*')) {
-        if (el.closest('#parent-help') || el.id === 'btn-zh' || el.tagName === 'SCRIPT') continue;
-        if ([...el.childNodes].some(n => n.nodeType === Node.TEXT_NODE && /[\u4e00-\u9fff]/u.test(n.textContent)) ||
-            [...el.attributes].some(a => /[\u4e00-\u9fff]/u.test(a.value))) remaining.push(el.outerHTML);
+        if (el.closest('#parent-help') || el.tagName === 'SCRIPT') continue;
+        if ([...el.childNodes].some(n => n.nodeType === Node.TEXT_NODE && /\p{Script=Han}/u.test(n.textContent)) ||
+            [...el.attributes].some(a => /\p{Script=Han}/u.test(a.value))) remaining.push(el.outerHTML);
       }
       return remaining;
     }), []);

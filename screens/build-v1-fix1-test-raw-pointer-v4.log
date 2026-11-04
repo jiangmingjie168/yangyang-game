@@ -1,0 +1,59 @@
+[
+  { type: 'cow', status: 'PASS', walk: -148.7699999999786 },
+  { type: 'dog', status: 'PASS', walk: -148.76999999997906 },
+  { type: 'sheep', status: 'PASS', walk: -148.7815999999807 },
+  { type: 'rabbit', status: 'PASS', walk: -148.78159999998024 },
+  { harvest: 'wood', status: 'PASS' },
+  { harvest: 'stone', status: 'PASS' },
+  { harvest: 'wheat', status: 'PASS' },
+  {
+    question: 0,
+    target: 'sheep',
+    text: 'What is this?',
+    status: 'PASS'
+  },
+  { question: 1, target: 'dog', text: 'What is this?', status: 'PASS' },
+  {
+    question: 2,
+    target: 'tree',
+    text: 'What is this?',
+    status: 'PASS'
+  },
+  {
+    question: 3,
+    target: 'wool',
+    text: 'What is this?',
+    status: 'PASS'
+  },
+  { question: 4, target: 'dog', text: 'What is this?', status: 'PASS' },
+  {
+    question: 5,
+    target: 'wood',
+    text: 'What is this?',
+    status: 'PASS'
+  },
+  {
+    question: 6,
+    target: 'wood',
+    text: 'What is this?',
+    status: 'PASS'
+  },
+  {
+    question: 7,
+    target: 'tree',
+    text: 'What is this?',
+    status: 'PASS'
+  },
+  {
+    question: 8,
+    target: 'tree',
+    text: 'What is this?',
+    status: 'PASS'
+  },
+  {
+    question: 9,
+    target: 'tree',
+    text: 'What is this?',
+    status: 'PASS'
+  }
+]

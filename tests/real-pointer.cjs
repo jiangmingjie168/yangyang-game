@@ -73,7 +73,7 @@ async function finish(p){assert.deepEqual(p.errors,[]);assert.equal(await p.eval
   let r=await p.locator('#joy').boundingBox();await p.mouse.move(r.x+r.width*.8,r.y+r.height/2);await p.mouse.down();
   await p.evaluate(()=>BW.pointerOpen());assert.equal((await p.evaluate(()=>BW.pointerState())).joyId,null);assert.equal((await p.evaluate(()=>BW.pointerState())).seek,null);await p.mouse.up();
   const active=await p.evaluate(()=>BW.adventure().active);assert.equal(active.key,'dog');
-  assert(await p.locator('#chat-picture').isHidden());assert(await p.locator('#chat-options').isVisible());await photo(p,'l1-no-answer-picture');
+  assert(await p.locator('#chat-picture').isVisible());assert.equal(await p.locator('#chat-question').innerText(),'What is this?');assert(await p.locator('#chat-options').isVisible());await photo(p,'l1-safe-question-picture');
   const locked=await p.evaluate(()=>BW.player().x);await p.keyboard.down('KeyD');await p.waitForTimeout(300);await p.keyboard.up('KeyD');assert.equal(await p.evaluate(()=>BW.player().x),locked);
   await p.locator('[data-word="dog"]').click();await p.click('#chat-close');
   pass('exercise locks only its lifetime; immediate keyboard, gather, joystick and pet recovery',{movementDx:await move(p),...await gather(p),joyDx:await joy(p),animal:await animal(p)});

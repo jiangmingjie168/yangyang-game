@@ -1,73 +1,152 @@
 {
   "mode": "after",
   "encounters": 4,
-  "brain": 7,
-  "template": 1,
-  "ratio": "7/8",
-  "brainPercent": 87.5,
-  "records": [
+  "provenance": "transport counts; accepted includes client validation fallbacks and excludes canceled responses",
+  "brain": 10,
+  "template": 3,
+  "ratio": "10/13",
+  "brainPercent": 76.92307692307692,
+  "accepted": [
     {
       "encounter": 1,
+      "brain": 2,
+      "template": 1,
+      "reasons": {
+        "no-provenance": 2,
+        "client-validation": 1
+      }
+    },
+    {
+      "encounter": 2,
+      "brain": 2,
+      "template": 1,
+      "reasons": {
+        "no-provenance": 3
+      }
+    },
+    {
+      "encounter": 3,
+      "brain": 2,
+      "template": 1,
+      "reasons": {
+        "no-provenance": 3
+      }
+    },
+    {
+      "encounter": 4,
+      "brain": 2,
+      "template": 1,
+      "reasons": {
+        "no-provenance": 3
+      }
+    }
+  ],
+  "records": [
+    {
+      "encounter": 0,
+      "event": "name_ask",
+      "source": "brain",
+      "ms": 1629,
+      "say": "Hi! What is your name?"
+    },
+    {
+      "encounter": 1,
+      "event": "greet",
+      "source": "brain",
+      "ms": 1107,
+      "say": "Hi Alex. It's so nice to see you again. Let's build something together!"
+    },
+    {
+      "encounter": 1,
+      "event": "scene",
       "tier": 1,
       "feedback": "prompt",
       "source": "brain",
-      "ms": 1850,
+      "ms": 2478,
       "say": "Alex! Tree or wood?"
     },
     {
       "encounter": 1,
+      "event": "scene",
       "tier": 1,
       "feedback": "success",
       "source": "brain",
-      "ms": 2000,
-      "say": "Great! You said tree! Keep exploring!"
+      "ms": 1804,
+      "say": "Great! Alex! Keep exploring!"
     },
     {
       "encounter": 2,
-      "tier": 2,
-      "feedback": "prompt",
+      "event": "greet",
       "source": "brain",
-      "ms": 1509,
-      "say": "Nice! Alex, you found wood! What's this?"
+      "ms": 735,
+      "say": "Hi Alex. It's so nice to see you again. Let's build something together!"
     },
     {
       "encounter": 2,
+      "event": "scene",
+      "tier": 2,
+      "feedback": "prompt",
+      "source": "brain",
+      "ms": 1328,
+      "say": "Alex! What's this?"
+    },
+    {
+      "encounter": 2,
+      "event": "scene",
       "tier": 2,
       "feedback": "success",
-      "source": "brain",
-      "ms": 995,
-      "say": "Great! You said tree! Keep exploring!"
+      "source": "template",
+      "ms": 2481,
+      "say": "Great! Keep exploring!"
     },
     {
       "encounter": 3,
-      "tier": 3,
-      "feedback": "prompt",
+      "event": "greet",
       "source": "brain",
-      "ms": 1156,
-      "say": "Alex, you found wood! I see a tree. Say it!"
+      "ms": 902,
+      "say": "Hi Alex. It's so nice to see you again. Let's build something together!"
     },
     {
       "encounter": 3,
-      "tier": 3,
-      "feedback": "success",
-      "source": "brain",
-      "ms": 843,
-      "say": "Great! You said tree! Keep exploring!"
-    },
-    {
-      "encounter": 4,
+      "event": "scene",
       "tier": 3,
       "feedback": "prompt",
       "source": "brain",
-      "ms": 1118,
-      "say": "Alex, you found wood! I see a tree. Say it!"
+      "ms": 1655,
+      "say": "Alex! I see a tree. Say it!"
     },
     {
-      "encounter": 4,
+      "encounter": 3,
+      "event": "scene",
       "tier": 3,
       "feedback": "success",
       "source": "template",
-      "ms": 1810,
+      "ms": 1878,
+      "say": "Great! Keep exploring!"
+    },
+    {
+      "encounter": 4,
+      "event": "greet",
+      "source": "brain",
+      "ms": 1216,
+      "say": "Good morning, Alex. It's so nice to see you again. Let's build something together!"
+    },
+    {
+      "encounter": 4,
+      "event": "scene",
+      "tier": 3,
+      "feedback": "prompt",
+      "source": "brain",
+      "ms": 2275,
+      "say": "Alex! I see a tree. Say it!"
+    },
+    {
+      "encounter": 4,
+      "event": "scene",
+      "tier": 3,
+      "feedback": "success",
+      "source": "template",
+      "ms": 1774,
       "say": "Great! Keep exploring!"
     }
   ]

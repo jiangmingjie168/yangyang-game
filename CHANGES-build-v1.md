@@ -1,5 +1,75 @@
 # Block World 自由建造 v1 改动与验收
 
+## 家长复测 fix1，Round 2（2026-11-04）
+
+本节优先于下方原版历史记录。当前分支 `codex-build-v1`，修补基线 `1be5055`。本轮已验证 Chromium 和本地 HTTP/socket 可用；最终 18/18 套件通过，结果见 `screens/build-v1-fix1-regressions.json`。没有生成语音、修改 brain 服务代码或部署、合并 main。
+
+### 根因、真实复现与 false green
+
+- **P0 首块**：旧 `buildPlaced` 提前设置 `firstDone=true`，把喝彩放入最多两条、30 秒过期的低优先级队列。停手 2.5 秒、选材 4 秒、已有气泡、25 秒气泡间隔、20 秒夸赞间隔等条件会挡住反馈；丢失后不会重试。现在首块成功时直接显示 `Nice start!`，不走对话队列/冷却/提问额度。四块 Roof 作为一个操作，完成后统一显示，避免后续块收起首块反馈。
+- **P0 耗尽**：旧 `buildShort` 在背包仍有任何其他建材时直接返回，还受同材料一次、每天三次、45 秒间隔及排队限制。现在所选材料不足就立即显示 `No more planks!` 等陈述；重复点击也响应，不弹题卡、不请求语音。C-15 额外验证 Fence=0、Planks=2 时照样提示 Fence 耗尽。
+- **真实红/绿对照**：同一新档、844×390、真实 pointer 流程，先采集合成、等自然 plan，再点首块。`BW_SOURCE=/tmp/bw-build-before.html`（`git show 1be5055:index.html`）在 500ms 的首块反馈断言失败；当前实现通过。原版失败日志是 `screens/build-v1-fix1-original-red.log`，原版截图隔离在 `/tmp/bw-fix1-original`，不覆盖新证据。
+- **上一版 false green**：旧 `build-v1` 的主要场景预装 40 Planks / 20 Fence / 12 House / 6 Door，并在每次点格子前 `clearOverlay()`；它没有采集→合成→首块→耗尽，也没断言反馈。因此库存/存档全绿不等于真人反馈可见。现在 `build-v1` 先强制运行 fresh-save release gate；旧档部分只负责兼容、建筑、宠物、存档。旧档里的预置材料和内部观测不作为 A–E 证据。
+- **Round 1 脚本超时**：实际 DOM 的成品名是 `Planks ×4`，不是 `/^Planks$/`。已经在 Chromium 中检查真实 `#recipes .out b`，使用精确的 `Planks ×4` 行与可用 Craft 按钮。不是通过强制点击绕过失败。
+- **P1 漏测**：原 Chinese cleanup 显式豁免 `#btn-zh`，漏掉其中文 aria-label。按钮保持 `⚙`，aria 改为 `Parent settings`；测试现在检查孩子可见文本、所有非家长节点的文本和属性，没有齿轮豁免。
+
+### 本轮结果
+
+| 项目 | 行为及证据 |
+| --- | --- |
+| A 首块 | 新档采集→合成→自然 plan→首块立即 `Nice start!`；500ms 内可见 |
+| B 耗尽 | 连放至 0→点空地→立即 `No more planks!`，再次点击仍响应 |
+| 不打断、不遮挡 | 无 dialogue / chat-shade / wordcard；反馈在 HUD 上沿，底部 ≤164px，`pointer-events:none`；下一次放置收起，无选项/麦克风，4.5 秒自动消失 |
+| C 合围及 Show | 新档真实采三份 Wood，合成 Planks、Stick、8 Fence，逐格搭成围栏；合围后静止时直接喝彩，之后出现有文字的 `☝ Show`；依次展示 1/2/3 级 |
+| C 难度 | 第一级为默认自动选择；第二/三级均通过家长面板按钮设置。可选存档字段 `build_level`，旧档默认自动，不改已有掌握记录；二三级不记口语成绩 |
+| 建造点击 | 邀请期间空地点按继续放置；Build 模式的宠物不再抢占放置点击。主动 Show 走 Buddy 按钮，不等自动邀请冷却 |
+| D 自然一级题 | 原样 `What is this?`、大图、Tree / Wood 文字选项；问题本身无目标词泄题，没有内部打开题卡 |
+| E 家长入口 | 世界中只有齿轮；打开家长面板才显示中文，返回后孩子 UI 无中文 |
+
+### 放置距离：接受 +1，并限制视线
+
+- Build 原矩形范围水平 7 / 垂直 5 格，改成 **8 / 6 格**；普通放置欧氏半径 **3→4 格**。只改放置，不扩大采集或抚摸范围；Build 网格同步更新。
+- 放置与 Build Remove 都从玩家身体中心向目标格中心做逐格视线检查。实心墙、Fence、Window、树木挡住射线；碰到格子角时检查两侧，不能斜穿墙缝。Door 按现有可穿行门的规则允许视线通过。
+- 整段 Roof 在改世界/扣材料之前检查四个目标的空位、范围和视线，任一失败则全部拒绝。旧档浏览器用例验证远端被墙挡住的 Roof 不扣 House、也不产生半截屋顶。
+- **实测结论：可以放宽**。新档 R 组在两个入口分别验证新外圈能放、再外一格拒绝、墙后拒绝且库存不减；拆除遮挡后同一位置成功，并清除上次墙体警告；占用格重复点按不扣库存。几何测试覆盖水平/垂直、反向、斜角及目标格可拆等 14 项。
+- 不能再隔墙搭远侧，操作上需先搭远侧/屋顶或走到另一侧；旧兼容测试已调整搭建顺序，完整小屋/围栏和宠物进出仍通过。加一格不改变所点目标、不吸附到别格；自动化 844×390 评估可接受，未声称做过实体手机或儿童误触统计。
+
+### 测试与复跑
+
+新鲜存档用例 `tests/build-v1-fix1.cjs`：原始 HTML、844×390 mobile+touch context、独立空 origin，玩法只有 pointer。无 init script、BW 调用、内部变量写入、时钟快进、预置库存、强制点击或 blanket overlay dismissal。读取 DOM 检查库存和反馈；自然等待会话/题卡，不绕冷却。
+
+```sh
+node tests/run-build-v1-fix1.cjs
+python3 tests/build-v1-contact-sheets.py
+```
+
+Runner 自带临时本地静态服务器，每套测试独立进程；两个生成 A–E 的套件顺序执行，避免覆盖同一证据。最终机器结果：`screens/build-v1-fix1-regressions.json`；总日志：`screens/build-v1-fix1-validation.log`；每套日志：`screens/build-v1-fix1-test-<suite>.log`。
+
+**最终整套结果：18/18 PASS，0 失败。** 包含 build-v1-fix1、build-v1、build-placement、natural-pointer-v4r、chinese-cleanup、blocking-ai、brain-v2、greeting、landscape、memory-chat、playthrough、raw-pointer-v4、real-pointer、voice、world-v2、brain-ratio、历史 baseline、server（52/52，0 fail，0 skipped）。网页 inline JS、Node/Python 语法与 `git diff --check` 也通过。视觉复核后修正旧墙体 Toast 残留，`node tests/build-v1.cjs` 再跑通过（含完整新档 gate、距离和旧档兼容）；日志 `screens/build-v1-fix1-post-review.log`。
+
+旧测试的修正没有删除业务断言：等点选单词播放后实际结算答案/错误次数；一级题断言改为安全问题+大图+有文字选项；问候保留至少四秒可读时间；自然树木遭遇允许 scene/task 正常事件来源；围栏后侧火把与种植使用可达的旅行检查点。真实 live brain-ratio 区分 HTTP 响应来源和客户端实际显示来源：旧服务返回过时题面时，客户端校验回退模板，不能把该 HTTP 响应算成显示了 AI 题目；取消响应也不计为显示。原有 mock/server 校验仍严格验证来源和安全回退。没有升级线上 brain。
+
+### 提交与推送位置
+
+原 worktree 的 `git add` 仍报 `/workspace/yangyang-game/.git/worktrees/bw-build/index.lock: Read-only file system`。因此从同一远端分支基线克隆到 **`/tmp/bw-fix1-publish`**，复制已验证文件后 commit/push 到 `origin codex-build-v1`，不改分支历史、不 force push。该目录是提交后的可继续开发 checkout；原 `/tmp/bw-build` 保留相同已验证文件，但其只读 git 元数据无法更新。最终 SHA 见交付回复或发布 checkout 的 `git rev-parse HEAD`。
+
+### 新截图文件清单
+
+共 **39 张编号帧 + 6 张 contact sheet = 45 张**，每张 844×390 原帧，contact sheet 只缩放拼接，不改游戏画面。完整逐文件清单与步骤标题在 `screens/build-v1-fix1-evidence.json`。
+
+| 序列 | 编号帧 | Contact sheet |
+| --- | --- | --- |
+| A 首块 | `screens/build-v1-fix1-A-01.png` … `-A-05.png` | [A sheet](screens/build-v1-fix1-A-sheet.png) |
+| B 耗尽 | `screens/build-v1-fix1-B-01.png` … `-B-06.png` | [B sheet](screens/build-v1-fix1-B-sheet.png) |
+| C 合围 / Show / 三级 | `screens/build-v1-fix1-C-01.png` … `-C-15.png` | [C sheet](screens/build-v1-fix1-C-sheet.png) |
+| D 自然一级题 | `screens/build-v1-fix1-D-01.png` … `-D-04.png` | [D sheet](screens/build-v1-fix1-D-sheet.png) |
+| E 齿轮 | `screens/build-v1-fix1-E-01.png` … `-E-03.png` | [E sheet](screens/build-v1-fix1-E-sheet.png) |
+| R 距离 / 遮挡 | `screens/build-v1-fix1-R-01.png` … `-R-06.png` | [R sheet](screens/build-v1-fix1-R-sheet.png) |
+
+原版历史证据保留如下；其旧“全部通过”不替代上述 fresh-save gate。
+
+## 原版交付记录（以下为历史记录，不代表 fix1 通过）
+
 基线 `04abc8e7bcdb18bcd789faf0f77cb44734f27082`，工作树 `/tmp/bw-build`，分支 `codex-build-v1`。本地验收全部通过。实现与验收证据 commit：`d523a4e029e94a2c9193be30c82023ed578a2c09`；本文件在后续文档提交中记录此 SHA。未 push、合并、部署或生成语音。
 
 ## 建造

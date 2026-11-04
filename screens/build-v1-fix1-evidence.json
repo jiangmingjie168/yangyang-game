@@ -1,0 +1,182 @@
+[
+  {
+    "file": "screens/build-v1-fix1-A-01.png",
+    "caption": "Fresh save"
+  },
+  {
+    "file": "screens/build-v1-fix1-A-02.png",
+    "caption": "Pointer walk and harvest"
+  },
+  {
+    "file": "screens/build-v1-fix1-A-03.png",
+    "caption": "Craft Planks x4"
+  },
+  {
+    "file": "screens/build-v1-fix1-A-04.png",
+    "caption": "Natural plan appears"
+  },
+  {
+    "file": "screens/build-v1-fix1-A-05.png",
+    "caption": "First block: immediate cheer"
+  },
+  {
+    "file": "screens/build-v1-fix1-A-sheet.png",
+    "caption": "A contact sheet"
+  },
+  {
+    "file": "screens/build-v1-fix1-B-01.png",
+    "caption": "Continue from first block"
+  },
+  {
+    "file": "screens/build-v1-fix1-B-02.png",
+    "caption": "Place second block"
+  },
+  {
+    "file": "screens/build-v1-fix1-B-03.png",
+    "caption": "Place third block"
+  },
+  {
+    "file": "screens/build-v1-fix1-B-04.png",
+    "caption": "Place fourth: stock zero"
+  },
+  {
+    "file": "screens/build-v1-fix1-B-05.png",
+    "caption": "Empty-ground tap: depletion"
+  },
+  {
+    "file": "screens/build-v1-fix1-B-06.png",
+    "caption": "Repeat tap: immediate feedback"
+  },
+  {
+    "file": "screens/build-v1-fix1-B-sheet.png",
+    "caption": "B contact sheet"
+  },
+  {
+    "file": "screens/build-v1-fix1-C-01.png",
+    "caption": "Fresh save"
+  },
+  {
+    "file": "screens/build-v1-fix1-C-02.png",
+    "caption": "Harvested wood -> crafted fences"
+  },
+  {
+    "file": "screens/build-v1-fix1-C-03.png",
+    "caption": "Far side built"
+  },
+  {
+    "file": "screens/build-v1-fix1-C-04.png",
+    "caption": "One gap remains"
+  },
+  {
+    "file": "screens/build-v1-fix1-C-05.png",
+    "caption": "Last fence closes pen"
+  },
+  {
+    "file": "screens/build-v1-fix1-C-06.png",
+    "caption": "Companion closure cheer"
+  },
+  {
+    "file": "screens/build-v1-fix1-C-07.png",
+    "caption": "Show invitation"
+  },
+  {
+    "file": "screens/build-v1-fix1-C-08.png",
+    "caption": "Level 1: picture choices"
+  },
+  {
+    "file": "screens/build-v1-fix1-C-09.png",
+    "caption": "Parent chooses level 2"
+  },
+  {
+    "file": "screens/build-v1-fix1-C-10.png",
+    "caption": "Level 2: spoken word"
+  },
+  {
+    "file": "screens/build-v1-fix1-C-11.png",
+    "caption": "Level 2 response"
+  },
+  {
+    "file": "screens/build-v1-fix1-C-12.png",
+    "caption": "Parent chooses level 3"
+  },
+  {
+    "file": "screens/build-v1-fix1-C-13.png",
+    "caption": "Level 3: repeat sentence"
+  },
+  {
+    "file": "screens/build-v1-fix1-C-14.png",
+    "caption": "Level 3 response"
+  },
+  {
+    "file": "screens/build-v1-fix1-C-15.png",
+    "caption": "Fence depleted; Planks still available"
+  },
+  {
+    "file": "screens/build-v1-fix1-C-sheet.png",
+    "caption": "C contact sheet"
+  },
+  {
+    "file": "screens/build-v1-fix1-D-01.png",
+    "caption": "Fresh save"
+  },
+  {
+    "file": "screens/build-v1-fix1-D-02.png",
+    "caption": "Tap distant tree"
+  },
+  {
+    "file": "screens/build-v1-fix1-D-03.png",
+    "caption": "Walk and harvest"
+  },
+  {
+    "file": "screens/build-v1-fix1-D-04.png",
+    "caption": "Naturally opened level-1 question"
+  },
+  {
+    "file": "screens/build-v1-fix1-D-sheet.png",
+    "caption": "D contact sheet"
+  },
+  {
+    "file": "screens/build-v1-fix1-E-01.png",
+    "caption": "Child UI: icon-only gear"
+  },
+  {
+    "file": "screens/build-v1-fix1-E-02.png",
+    "caption": "Chinese inside parent panel"
+  },
+  {
+    "file": "screens/build-v1-fix1-E-03.png",
+    "caption": "Return to child UI"
+  },
+  {
+    "file": "screens/build-v1-fix1-E-sheet.png",
+    "caption": "E contact sheet"
+  },
+  {
+    "file": "screens/build-v1-fix1-R-01.png",
+    "caption": "Build: extra reach tile placed"
+  },
+  {
+    "file": "screens/build-v1-fix1-R-02.png",
+    "caption": "Build: wall blocks target"
+  },
+  {
+    "file": "screens/build-v1-fix1-R-03.png",
+    "caption": "Remove wall, same target succeeds"
+  },
+  {
+    "file": "screens/build-v1-fix1-R-04.png",
+    "caption": "Occupied tile: no stock loss"
+  },
+  {
+    "file": "screens/build-v1-fix1-R-05.png",
+    "caption": "Ordinary: extra reach tile placed"
+  },
+  {
+    "file": "screens/build-v1-fix1-R-06.png",
+    "caption": "Ordinary: wall blocks target"
+  },
+  {
+    "file": "screens/build-v1-fix1-R-sheet.png",
+    "caption": "R contact sheet"
+  }
+]

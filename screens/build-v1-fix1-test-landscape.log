@@ -1,0 +1,3 @@
+PASS 844×390: safe-area controls tappable, canvas DPR reset, hint hidden
+PASS 932×430: safe-area controls tappable, canvas DPR reset, hint hidden
+PASS portrait play with hint, card dismissal/session, rotation, visualViewport offsets and served PWA assets

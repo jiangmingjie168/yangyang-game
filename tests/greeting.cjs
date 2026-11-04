@@ -57,8 +57,10 @@ const report = s => console.log('PASS', s);
   samples.push(data.last_greeting.text);
   await p.screenshot({ path: path.join(__dirname, '../screens/unnamed-greeting.png') });
   await p.evaluate(() => lastUtterance.onend()); await p.clock.fastForward(901);
+  assert(await p.locator('#welcome').isVisible(),'welcome remains readable for at least four seconds');
+  await p.clock.fastForward(3100);
   assert(await p.locator('#welcome').isHidden());
-  await done(p); report('fresh unnamed welcome uses soft English TTS and dismisses after speech plus a beat');
+  await done(p); report('fresh unnamed welcome uses soft English TTS and dismisses after speech and its minimum reading time');
 
   for (let visit = 0; visit < 7; visit++) {
     p = await page({ data }); const next = await saved(p);

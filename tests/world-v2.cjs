@@ -91,7 +91,7 @@ async function collect(p, id) {
   p=await page(voice);await p.evaluate(()=>BW.hideCard());const pos=await p.evaluate(()=>BW.worldToScreen(87.5*32,15.5*32));await p.mouse.click(pos.x,pos.y);await p.evaluate(()=>BW.hideCard());
   await p.waitForFunction(()=>BW.adventure().active&&!BW.adventure().active.pending);
   await p.click('#chat-mic');await p.evaluate(()=>voiceResult('three'));await openLog(p);
-  assert.match(await p.locator('#speaking-rows').innerText(),/Tree\s+1\s+任务/);await check(p);await p.context().close();
+  assert.match(await p.locator('#speaking-rows').innerText(),/Tree\s+1\s+新场景/);await check(p);await p.context().close();
   report('mock recognition near-sound answer → saved event → parent speaking count');
   // Collect two complete sets through normal gravity/landing at travel checkpoints.
   const gifts=structuredClone(fixture);gifts.words=['tree','wood','stone','water'];gifts.animals.forEach(a=>a[1]=7000);

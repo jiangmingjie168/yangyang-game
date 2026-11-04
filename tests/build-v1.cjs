@@ -41,15 +41,29 @@ async function count(p,word) {return Number(await p.locator('#hotbar button[aria
 async function hold(p,code,ms){await p.keyboard.down(code);await p.waitForTimeout(ms);await p.keyboard.up(code);}
 (async()=>{
   browser=await chromium.launch({executablePath:process.env.CHROME||'/usr/bin/google-chrome',headless:true,args:['--no-sandbox']});
+  // Fresh-save feedback is a release gate; the stocked legacy fixture below
+  // only verifies compatibility and construction mechanics.
+  await require('./build-v1-fix1.cjs')(browser);
   let p=await fresh();await dismissWelcome(p);await p.locator('#btn-build').click();
   await snap(p,'01-main-save');
+  // An entire four-block roof must fail atomically when even its far end is
+  // occluded. No block or inventory changes may escape the preflight check.
+  await tool(p,'planks');await cell(p,430,224);
+  const beforeBlockedRoof=await saved(p);
+  await tool(p,'roof');await cell(p,468,148);
+  assert.equal(await count(p,'House'),12);
+  assert.deepEqual((await saved(p)).mods,beforeBlockedRoof.mods);
+  assert.equal(await p.locator('#toast').innerText(),'Move around the wall!');
+  await tool(p,'remove');await cell(p,430,224);assert.equal(await count(p,'Planks'),40);
+
   // Fixed CSS coordinates for the seed-42 main-format plot, at 844x390.
   // Home feet are at (354,281); grid spacing is 38. No runtime coordinate conversion.
   // House: columns 81..84, top row 12, floor is existing grass row 16.
+  // Place the roof and far wall before closing the near wall: no through-wall clicks.
+  await tool(p,'roof');await cell(p,430,148);
   await tool(p,'planks');
-  for(const [x,y] of [[430,186],[430,224],[544,186],[544,224],[544,262]])await cell(p,x,y);
+  for(const [x,y] of [[544,186],[544,224],[544,262],[430,186],[430,224]])await cell(p,x,y);
   await tool(p,'door');await cell(p,430,262);
-  await tool(p,'roof');await cell(p,430,148); // one click, four existing House blocks
   // Pen to the left, with a walk-through door on its right boundary.
   await tool(p,'fence');
   for(const [x,y] of [[164,186],[202,186],[240,186],[278,186],[164,224],[164,262],[278,224]])await cell(p,x,y);
@@ -59,16 +73,16 @@ async function hold(p,code,ms){await p.keyboard.down(code);await p.waitForTimeou
   await p.waitForTimeout(5500); await clearOverlay(p);
   let data=await saved(p);assert(data.builds.some(b=>b.kind==='house'));assert(data.builds.some(b=>b.kind==='pen'));
   pass(cases[0],{viewport:'844x390',house:'5 walls + door + whole roof',pen:'7 fence blocks + door',builds:data.builds});
-  const before=await count(p,'Planks');await clearOverlay(p);await tool(p,'remove');await cell(p,544,224);
+  const before=await count(p,'Planks');await clearOverlay(p);await tool(p,'remove');await cell(p,430,224);
   const after=await count(p,'Planks');assert.equal(after,before+1);await snap(p,'03-returned-material');
-  await tool(p,'planks');await cell(p,544,224);assert.equal(await count(p,'Planks'),before);
+  await tool(p,'planks');await cell(p,430,224);assert.equal(await count(p,'Planks'),before);
   pass(cases[1],{before,after});
   // Craft the one new block through the real recipe UI, then insert it in the wall.
   await p.locator('#btn-craft').click();
   await p.locator('#recipes .recipe').filter({has:p.locator('.out b', {hasText:'Window'})}).locator('.craftbtn').click();
   await p.locator('#craft-back').click();
-  await tool(p,'remove');await cell(p,544,224);
-  await tool(p,'window');await cell(p,544,224);assert.equal(await count(p,'Window'),1);
+  await tool(p,'remove');await cell(p,430,224);
+  await tool(p,'window');await cell(p,430,224);assert.equal(await count(p,'Window'),1);
   await snap(p,'10-window');
   // Walk through the house door. The dog chooses an interior destination.
   await hold(p,'KeyD',850);await p.waitForTimeout(4200);await snap(p,'04-house-room');

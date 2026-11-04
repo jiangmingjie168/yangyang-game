@@ -10,7 +10,7 @@ const before = process.argv.includes('--before');
 const html = fs.readFileSync(process.env.BW_HTML || require('node:path').resolve(__dirname,'../index.html'),'utf8');
 const origin = 'https://tesla.yydriver.cn';
 let ssh, browser, pending;
-const records=[];
+const records=[], accepted=[];
 async function main() {
   if (before) {
     const code = `process.loadEnvFile('/opt/yangyang-brain/.env');
@@ -68,13 +68,24 @@ async function main() {
       await p.click('#chat-mic');
       await p.evaluate(()=>window.recognizer.onresult({resultIndex:0,results:[[{transcript:'tree'}]]}));
       await p.waitForFunction(()=>BW.adventure().active?.answered&&!BW.adventure().active.pending,null,{timeout:30000});
-      if(!before){const stats=await p.evaluate(()=>BW.adventure().brain);const batch=records.filter(r=>r.encounter===i);assert.equal(stats.brain,batch.filter(r=>r.source==='brain').length);assert.equal(stats.template,batch.filter(r=>r.source==='template').length);}
+      if(!before){
+        // Transport provenance differs from displayed provenance when the
+        // deployed service returns a superseded prompt or a request is canceled.
+        const stats=await p.evaluate(()=>BW.adventure().brain), batch=records.filter(r=>r.encounter===i);
+        const local=['client-validation','timeout','network','session-limit','local-retry'].reduce((n,k)=>n+(stats.reasons[k]||0),0);
+        assert(stats.brain<=batch.filter(r=>r.source==='brain').length);
+        assert(stats.template<=batch.filter(r=>r.source==='template').length+local);
+        assert.equal(stats.unknown,0);
+        assert.equal(stats.brain+stats.template,Object.values(stats.reasons).reduce((n,v)=>n+v,0));
+        assert(stats.brain+stats.template>=2,'displayed prompt and answer counted');
+        accepted.push({encounter:i,brain:stats.brain,template:stats.template,reasons:stats.reasons});
+      }
       fixture.adventure.levels.tree={t1:2,t2:i>=2?2:0,t3:0};
     }
     await ctx.close();
   }
   const brain=records.filter(r=>r.source==='brain').length, template=records.length-brain;
-  const summary={mode:before?'before':'after',encounters:4,brain,template,ratio:`${brain}/${records.length}`,brainPercent:100*brain/records.length,records};
+  const summary={mode:before?'before':'after',encounters:4,provenance:'transport counts; accepted includes client validation fallbacks and excludes canceled responses',brain,template,ratio:`${brain}/${records.length}`,brainPercent:100*brain/records.length,accepted,records};
   fs.mkdirSync('screens',{recursive:true});fs.writeFileSync(process.env.BW_RATIO_OUTPUT || `screens/brain-ratio-${summary.mode}.json`,JSON.stringify(summary,null,2)+'\n');
   console.log(JSON.stringify(summary,null,2));
 }

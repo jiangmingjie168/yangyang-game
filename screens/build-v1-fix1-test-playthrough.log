@@ -1,0 +1,18 @@
+PASS Tree encounter dialogue and gentle retry What is this?
+PASS Chapter 1: all 8 tasks and hat earned
+PASS Chapter 2: all 8 tasks, including night torch
+PASS Fishing: real cast, wait, catch and fish dialogue; missing recognition tap fallback
+PASS Plant → actual growth timer → harvest
+PASS Boat: place → board → cross → disembark → dry-land arrival dialogue
+PASS Pet: actual three taps to tame, follow movement, stop and pet dialogue
+PASS Treasure Quiz proximity win, star, and unchanged mission progress
+PASS Existing Say-It task narration invokes English browser TTS
+PASS Save/resume: all 24 tasks, backpack, pet, learned words, inventory and discovery state
+PASS Swimming: enter water, move with swimming physics, no incoming dialogue
+PASS Exploration: walk into hidden gift, gain picture/materials, persist album
+PASS New scene: cross zone boundary and stop before dialogue
+PASS Speech adapter: unrecognized retry + approximate answer; early chapter gates tree/wood
+PASS Portrait, no TTS/no recognition fallback; child UI English and parent settings Chinese
+PASS Offline file:// start and movement; short landscape layout
+PASS Repeated fish encounter keeps fish as target and earlier words as distractors after save/resume
+ALL 17 CHECKS PASSED

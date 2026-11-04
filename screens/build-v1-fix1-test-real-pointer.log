@@ -1,0 +1,8 @@
+PASS entry <10s, name entry nonblocking, skip unnamed, no early weather {"nameDx":50.26279999999315,"dx":48.3255999999933,"entryMs":936}
+PASS real joystick drag {"dx":-65.72559999999157}
+PASS far wood click seeks and gathers {"far":true,"dx":260.75639999996565,"wood":1}
+PASS wood click uses actual approach distance {"far":true,"dx":167.95639999997684,"wood":1}
+PASS animal click walks and pets {"animal":"dog"}
+PASS exercise locks only its lifetime; immediate keyboard, gather, joystick and pet recovery {"movementDx":48.33719999999312,"far":true,"dx":117.70519999998623,"wood":1,"joyDx":-65.73719999999548,"animal":"dog"}
+PASS mismatched dog lead omitted; parent skip immediately restores all inputs {"movementDx":50.26279999999315,"far":true,"dx":117.69359999998233,"wood":1,"joyDx":-65.73719999999366,"animal":"dog"}
+PASS portrait soft hint permits keyboard without rotate OK {"dx":48.325599999992846}

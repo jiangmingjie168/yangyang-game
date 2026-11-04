@@ -1,0 +1,9 @@
+PASS fresh unnamed welcome uses soft English TTS and dismisses after speech and its minimum reading time
+PASS save/resume cycles rotate persisted greeting IDs/text without consecutive repeats; keyboard continue works
+PASS missing/empty/invalid legacy names remain unnamed; parent edits persist and appear in welcomes
+PASS no speech, offline file, fixed dismissal deadline, movement and one-tap continue all stay playable
+PASS client rejects malformed, Chinese, wrong-name, exercise and repeated replies before speech
+PASS brain timeout speaks fallback; dismissing a pending request prevents late speech or reopening
+PASS browser -> HTTP brain -> mock provider produces a validated contextual named greeting
+PASS portrait welcome and continue fit the viewport
+ACTUAL TEMPLATE SAMPLES ["Hi friend. I'm so happy you're here. Let's build something together!","Good morning, friend. I'm happy you're back. Shall we play together?","Hello friend. I'm glad we can play again. Let's go and see our world!"]
