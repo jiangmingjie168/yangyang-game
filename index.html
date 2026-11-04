@@ -468,6 +468,20 @@
   #buddy-chat button { min-height: 48px; min-width: 64px; border-radius: 13px; padding: 8px 14px; font: inherit; background: #dcf1d1; margin: 3px; }
   #buddy-options { display: flex; justify-content: center; gap: 10px; }
   @media (max-height: 450px) { #name-letters { grid-template-columns: repeat(13, 1fr); } #name-letters button { min-height: 28px; } #btn-buddy { top: calc(110px + var(--sat)); } }
+  #build-tools { position:absolute; z-index:15; top:76px; left:12px; right:100px; display:flex; gap:5px; overflow-x:auto; touch-action:pan-x; }
+  #build-tools[hidden], #build-status[hidden] { display:none; }
+  #build-tools button { flex:0 0 auto; min-width:64px; min-height:48px; padding:5px 9px; background:#fff8ee; border:2px solid #c6d9ad; border-radius:12px; font-weight:800; }
+  #build-tools button[aria-pressed="true"] { background:#ffe29a; border-color:#986c25; }
+  #build-tools small { display:block; font-size:12px; }
+  #build-status { position:absolute; left:16px; top:130px; font-size:14px; pointer-events:none; background:#fff8eedd; border-radius:8px; padding:4px 8px; }
+  #buddy-chat.build-bubble { left:auto; right:8px; top:164px; transform:none; width:210px; max-height:calc(100dvh - 285px); padding:7px; border-width:2px; }
+  #buddy-chat.build-bubble #buddy-line { font-size:16px; margin:0 0 4px; }
+  #buddy-chat.build-bubble #buddy-picture { width:48px; height:48px; float:left; margin:0; }
+  #buddy-chat.build-bubble #buddy-options { gap:2px; }
+  #buddy-chat.build-bubble button { min-width:48px; padding:3px 5px; margin:1px; font-size:13px; }
+  #buddy-options canvas { width:34px; height:34px; display:block; margin:auto; }
+  #btn-build[aria-pressed="true"] { background:#ffe29a; }
+  @media (max-width:600px) { .topbtn { min-width:48px; padding:0 7px; font-size:14px; } #btn-speak { width:48px; } #build-tools { right:12px; } }
 </style>
 </head>
 <body>
@@ -484,6 +498,7 @@
       <button id="btn-speak" type="button" aria-label="Listen to the quest">
         <svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true"><path fill="#3a2a1c" d="M4 9h4l5-4v14l-5-4H4z"/><path fill="none" stroke="#3a2a1c" stroke-width="2" stroke-linecap="round" d="M16 9.2a4 4 0 0 1 0 5.6M18.2 7a7 7 0 0 1 0 10"/></svg>
       </button>
+      <button id="btn-build" class="topbtn" type="button" aria-pressed="false">Build</button>
       <button id="btn-craft" class="topbtn" type="button">Craft</button>
       <button id="btn-words" class="topbtn" type="button">Words</button>
       <button id="btn-zh" class="topbtn" type="button" aria-expanded="false" aria-label="家长设置">⚙</button>
@@ -508,6 +523,8 @@
     </div>
   </div>
 
+  <div id="build-tools" hidden aria-label="Building tools"></div>
+  <div id="build-status" hidden role="status"></div>
   <div id="trail-count" aria-label="Discoveries">★ 0 / 7</div>
   <section id="welcome" hidden aria-label="Welcome">
     <canvas id="welcome-face" width="128" height="128" aria-hidden="true"></canvas>
@@ -556,6 +573,7 @@
     <button id="parent-reset-prefs" type="button">重置喜好（保留姓名和游戏进度）</button>
     <label for="parent-name">孩子的英文昵称（可留空，最多两词）</label>
     <input id="parent-name" type="text" maxlength="33" autocomplete="off" placeholder="Mario" aria-describedby="parent-name-note">
+    <p id="parent-name-voice"></p>
     <p id="parent-name-note">只用英文字母和空格。昵称随存档保存在本机；启用在线伙伴时，昵称和最近游戏活动、识别文字会发给伙伴服务用于回应。识别原话不写入存档。</p>
     <p id="brain-status"></p>
     <button id="parent-close" type="button">返回游戏</button>
@@ -625,7 +643,7 @@ const BRAIN_TIMEOUT_MS = 6500;
 (function () {
   var AIR = 0, GRASS = 1, DIRT = 2, STONE = 3, WOOD = 4, LEAVES = 5, SAND = 6, WATER = 7;
   var FLOWER = 8, PLANKS = 9, TORCH = 10, DOOR = 11, BED = 12, TABLE = 13, HOUSE = 14, BEDROCK = 15, FENCE = 16;
-  var WHEAT1 = 17, WHEAT2 = 18, WHEAT3 = 19;
+  var WHEAT1 = 17, WHEAT2 = 18, WHEAT3 = 19, WINDOW = 20;
   var TILE = 32, W = 240, H = 42, GROUND = 16;
   var PW = 8, PH = 28, MOVE = 116, JUMP = 520, GRAV = 1680;
   var SAVE_KEY = 'block-world-save-v1';
@@ -646,21 +664,21 @@ const BRAIN_TIMEOUT_MS = 6500;
     hello: ['Hello'], jump: ['Jump'], home: ['Home'],
     wheat: ['Wheat'], seed: ['Seed'], fish: ['Fish'],
     rod: ['Fishing Rod'], boat: ['Boat'], pet: ['Pet'],
-    follow: ['Follow']
+    follow: ['Follow'], wall: ['Wall'], roof: ['Roof'], window: ['Window'], room: ['Room'], gate: ['Gate']
   };
   var BLOCK_OF = {
     grass: GRASS, dirt: DIRT, stone: STONE, wood: WOOD, leaves: LEAVES, sand: SAND,
     water: WATER, flower: FLOWER, planks: PLANKS, torch: TORCH, door: DOOR,
-    bed: BED, table: TABLE, house: HOUSE, fence: FENCE
+    bed: BED, table: TABLE, house: HOUSE, fence: FENCE, window: WINDOW
   };
   var KEY_OF = {};
   Object.keys(BLOCK_OF).forEach(function (k) { KEY_OF[BLOCK_OF[k]] = k; });
   var SOLID = {};
-  [GRASS, DIRT, STONE, WOOD, LEAVES, SAND, PLANKS, TABLE, BED, HOUSE, BEDROCK, FENCE].forEach(function (id) { SOLID[id] = 1; });
+  [GRASS, DIRT, STONE, WOOD, LEAVES, SAND, PLANKS, TABLE, BED, HOUSE, BEDROCK, FENCE, WINDOW].forEach(function (id) { SOLID[id] = 1; });
   var PCOL = {
     1: '#5cbe45', 2: '#d09252', 3: '#b7c2cc', 4: '#d8a15a', 5: '#4eb85a', 6: '#f0d08a',
     7: '#3ec4dc', 8: '#ff7aa2', 9: '#e7b56a', 10: '#ffb703', 11: '#d08648', 12: '#f4b4c4',
-    13: '#e0a15a', 14: '#f4e4c8', 16: '#c48a3e'
+    13: '#e0a15a', 14: '#f4e4c8', 16: '#c48a3e', 20: '#acd9e5'
   };
   var RECIPES = [
     { out: 'planks', n: 4, need: { wood: 1 } },
@@ -672,7 +690,8 @@ const BRAIN_TIMEOUT_MS = 6500;
     { out: 'house', n: 4, need: { stone: 2, planks: 2 } },
     { out: 'fence', n: 2, need: { planks: 2, stick: 1 } },
     { out: 'rod', n: 1, need: { stick: 2, wool: 1 } },
-    { out: 'boat', n: 1, need: { planks: 5 } }
+    { out: 'boat', n: 1, need: { planks: 5 } },
+    { out: 'window', n: 2, need: { planks: 2, sand: 1 } }
   ];
   var QUESTS = [
     { en: 'Find a tree!', icon: 'tree', done: function (p) { return p.tree; } },
@@ -768,7 +787,7 @@ const BRAIN_TIMEOUT_MS = 6500;
 const LABEL = key => key === 'rod' ? 'fishing rod' : key;
 // Conversation slots are rule-owned and mirrored in the offline client.
 const CHAT_EVENTS = ['name_ask', 'small_talk', 'weather_chat', 'recast'];
-const NOUNS = new Set('grass dirt stone wood leaves sand water flower planks stick table door torch bed house wool tree cow pig sheep chicken cat dog duck horse rabbit fence rain cloud sun moon star wheat seed fish rod boat'.split(' '));
+const NOUNS = new Set('grass dirt stone wood leaves sand water flower planks stick table door torch bed house wool tree cow pig sheep chicken cat dog duck horse rabbit fence rain cloud sun moon star wheat seed fish rod boat wall roof window room gate'.split(' '));
 const PREF_VALUES = { color: [], animal: ['cat','dog','cow','pig','sheep','chicken','duck','horse','rabbit'], food: ['fish','wheat','seed'], build: ['house','table','door','bed','fence','torch','boat'] };
 function conversationLines(p) {
   if (p.event === 'name_ask') return ['Hi! What is your name?', 'Hello! What is your name?'];
@@ -821,7 +840,7 @@ function validConversation(value, p) {
   }
   function determineMode(trigger) {
     resetChatDay();
-    if (dialogue || quiz || nameFlow) return 'gate';
+    if (dialogue || quiz || nameFlow || (trigger !== 'gameLoad' && (welcome || buildSessionBusy() || (ambient && (ambient.build || trigger !== 'speech'))))) return 'gate';
     if (trigger === 'gameLoad') return memory.name_asked ? 'greet' : 'name_ask';
     if (!started || panelOpen() || rotateBlock()) return 'gate';
     if (trigger === 'buddyTap' || trigger === 'idleTimeout') return memory.small_talk_count < 5 ? 'small_talk' : 'idle';
@@ -843,6 +862,8 @@ function validConversation(value, p) {
     var active = ambient; cancelSocial(ambient); ambient = null; stopSocialListening();
     if (active && window.speechSynthesis) { try { speechSynthesis.cancel(); } catch (err) { /* optional */ } }
     document.getElementById('buddy-chat').hidden = true;
+    document.getElementById('buddy-chat').classList.remove('build-bubble');
+    document.getElementById('buddy-mic').hidden = false;
   }
   function fetchSocial(p, w, current, show) {
     var expected = conversationTemplate(p), limited = brainLimited();
@@ -878,7 +899,7 @@ function validConversation(value, p) {
     fetchSocial(socialPayload('name_ask'), w, function () { return nameFlow === w; }, function (reply, voice) {
       if (nameFlow !== w) return;
       document.getElementById('welcome-line').textContent = reply.say;
-      if (voice) speakEn(reply.say, { audio_url: reply.audio_url, soft: true });
+      if (voice) speakEn(reply.say, { named: !!(childName && reply.say.includes(childName)), audio_url: reply.audio_url, soft: true });
     });
     armNameTimer();
     w.hintTimer = setTimeout(function () { if (nameFlow === w) document.getElementById('name-hint').hidden = false; }, 10000);
@@ -909,12 +930,13 @@ function validConversation(value, p) {
       if (!voice) return;
       var practiceMs = p.event === 'recast' && p.target_tier === 1 ? 9000 : 3000;
       clearTimeout(w.timer); w.timer = setTimeout(closeAmbient, 14000);
-      var utterance = speakEn(reply.say, { audio_url: reply.audio_url, soft: true, onend: function () { if (ambient === w) { clearTimeout(w.timer); w.timer = setTimeout(closeAmbient, practiceMs); } } });
+      var utterance = speakEn(reply.say, { named: !!(childName && reply.say.includes(childName)), audio_url: reply.audio_url, soft: true, onend: function () { if (ambient === w) { clearTimeout(w.timer); w.timer = setTimeout(closeAmbient, practiceMs); } } });
       if (!utterance) { clearTimeout(w.timer); w.timer = setTimeout(closeAmbient, practiceMs); }
     });
     return true;
   }
   function smallTalk() {
+    if (buildSessionBusy()) { inviteBuildShow(true); return false; }
     if (determineMode('buddyTap') !== 'small_talk') {
       var buddy = document.getElementById('btn-buddy');
       buddy.classList.remove('buddy-wave'); void buddy.offsetWidth; buddy.classList.add('buddy-wave');
@@ -950,6 +972,7 @@ function validConversation(value, p) {
     return cloudPos.some(function (c) { return Math.abs(c.x - sunPos.x) < 42 * c.scale && Math.abs(c.y - sunPos.y) < 24 * c.scale; }) ? 'cloud' : 'sun';
   }
   function listenSocial() {
+    if (ambient && ambient.build) { listenBuild(); return; }
     if ((!nameFlow && determineMode('speech') !== 'recast') || socialRecognizer) return;
     if (nameFlow) armNameTimer();
     var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -1056,7 +1079,7 @@ function validConversation(value, p) {
     var hour = new Date().getHours(), p = { event: 'greet', child_name: childName || undefined,
       time_of_day: hour < 12 ? 'morning' : hour < 18 ? 'afternoon' : 'evening', returning: returningVisit,
       greeting_id: (lastGreeting.id + 1) % 4, last_greeting: lastGreeting.text };
-    var expected = greetingTemplate(p), w = { controller: typeof AbortController !== 'undefined' ? new AbortController() : null };
+    var expected = greetingTemplate(p), w = { shownAt: Date.now(), controller: typeof AbortController !== 'undefined' ? new AbortController() : null };
     welcome = w; returningVisit = true;
     function show(reply, speakLine) {
       if (welcome !== w) return;
@@ -1067,9 +1090,10 @@ function validConversation(value, p) {
       clearTimeout(w.timer);
       // A fixed deadline also covers missing speech events and unsupported TTS.
       w.timer = setTimeout(dismissGreeting, 14000);
-      w.utterance = speakEn(reply.say, { audio_url: reply.audio_url, soft: true, onend: function () {
+      w.utterance = speakEn(reply.say, { named: !!(childName && reply.say.includes(childName)), audio_url: reply.audio_url, soft: true, onend: function () {
         if (welcome !== w) return;
-        clearTimeout(w.timer); w.timer = setTimeout(dismissGreeting, 900);
+        // Missing named audio completes silently; leave time to read the greeting.
+        clearTimeout(w.timer); w.timer = setTimeout(dismissGreeting, Math.max(900, 4000 - (Date.now() - w.shownAt)));
       } });
     }
     paintIcon(document.getElementById('welcome-face'), 'dog');
@@ -1104,11 +1128,12 @@ function validConversation(value, p) {
   }
   function rememberEvent(action, word) {
     if (!WORD[word]) return;
+    if (action === 'built' && recentEvents.length && recentEvents[recentEvents.length - 1].action === action && recentEvents[recentEvents.length - 1].word === word) recentEvents.pop();
     recentEvents.push({ action: action, word: word }); recentEvents = recentEvents.slice(-6);
     if (['made', 'built'].indexOf(action) >= 0 && !memory.prefs.build && PREF_VALUES.build.indexOf(word) >= 0) { memory.prefs.build = word; memory.prefsLearnedAt.build = Date.now(); saveSoon(); }
   }
   function chatContextLeads(d) {
-    if (d.tier === 1 && d.feedback !== 'success') return [];
+    if ((d.tier === 1 || d.choices) && d.feedback !== 'success') return [];
     var leads = [], name = d.context.child_name;
     if (name) leads.push(name + '!');
     var events = d.context.recent_events, e = events[events.length - 1];
@@ -1118,7 +1143,7 @@ function validConversation(value, p) {
       var noun = mass.indexOf(e.word) >= 0 ? label : (/^[aeiou]/.test(label) ? 'an ' : 'a ') + label;
       var phrase = 'You ' + verbs[e.action] + ' ' + noun + '!';
       leads.push(phrase);
-      if (name) leads.push(name + ', ' + phrase[0].toLowerCase() + phrase.slice(1));
+
     }
     if (d.context.last_answer === d.key) leads.push('Remember ' + WORD[d.context.last_answer][0].toLowerCase() + '?');
     if (d.feedback === 'success' && d.spokenKey) leads.push('You said ' + WORD[d.spokenKey][0].toLowerCase() + '!');
@@ -1333,7 +1358,7 @@ function validConversation(value, p) {
     chatIdle = 0;
   }
   function openChat(event) {
-    if (nameFlow || quiz) return;
+    if (nameFlow || quiz || buildSessionBusy()) return;
     closeAmbient();
     dismissGreeting();
     var pool = chatWords();
@@ -1348,8 +1373,8 @@ function validConversation(value, p) {
     dialogue = { context: { child_name: childName || undefined, recent_events: recentEvents.filter(function (e) { return allowedChatWord(e.word); }).slice(-6), last_answer: allowedChatWord(lastAnswer) ? lastAnswer : undefined }, misses: 0, anchor: event.anchor, scene: sceneNow, key: target, options: options, tier: tier,
       turn: 0, at: chatClock, answered: false, pending: false, choices: tier === 1, sequence: 0 };
     paintIcon(document.getElementById('chat-face'), 'dog');
-    document.getElementById('chat-picture').hidden = tier === 1;
-    if (tier !== 1) paintIcon(document.getElementById('chat-picture'), target);
+    document.getElementById('chat-picture').hidden = false;
+    paintIcon(document.getElementById('chat-picture'), target);
     requestChat(dialogue, 'prompt');
   }
   function chatTemplate(d, feedback) {
@@ -1360,7 +1385,7 @@ function validConversation(value, p) {
       var mass = ['grass', 'dirt', 'stone', 'wood', 'leaves', 'sand', 'water', 'planks', 'wool', 'rain', 'wheat'];
       var word = WORD[d.key][0].toLowerCase();
       say = 'I see ' + (mass.indexOf(d.key) >= 0 ? 'the ' : /^[aeiou]/.test(word) ? 'an ' : 'a ') + word + '. Say it!';
-    } else say = WORD[d.options[0]][0] + ' or ' + WORD[d.options[1]][0].toLowerCase() + '?';
+    } else say = 'What is this?';
     if (!done && feedback === 'retry') say = 'Great! ' + say;
     return { say: say, options: d.options.slice(), answer: d.key, done: done };
   }
@@ -1370,7 +1395,7 @@ function validConversation(value, p) {
         JSON.stringify(reply.options) !== JSON.stringify(d.options) || !reply.options.every(allowedChatWord)) return false;
     var tokens = reply.say.toLowerCase().match(/[a-z]+(?:'[a-z]+)?/g) || [];
     var scaffold = "a an the i you we it this is see got can say what what's or great nice thanks thank good job well done let's keep exploring try look at again your turn found made built met caught rode said together ready remember friend more".split(' ');
-    var vocabulary = scaffold.concat(chatContextLeads(d).join(' ').toLowerCase().match(/[a-z]+(?:'[a-z]+)?/g) || []).concat(d.options.reduce(function (all, key) { return all.concat(WORD[key][0].toLowerCase().split(' ')); }, []));
+    var vocabulary = scaffold.concat(chatContextLeads(d).join(' ').toLowerCase().match(/[a-z]+(?:'[a-z]+)?/g) || []).concat((d.choices || d.tier === 1 ? [] : d.options).reduce(function (all, key) { return all.concat(WORD[key][0].toLowerCase().split(' ')); }, []));
     if (!/^[A-Za-z ,.!?'’-]+$/.test(reply.say) || /[^\x20-\x7e]/.test(reply.say) || reply.say.length > 160 ||
         tokens.length < 1 || tokens.length > 12 || !tokens.every(function (w) { return vocabulary.indexOf(w) >= 0; })) return false;
     var praise = /^(great!|nice!|good job!|well done!)\s*/i;
@@ -1381,8 +1406,7 @@ function validConversation(value, p) {
     if (lead) body = body.slice(lead.length + 1);
     if (expected.done) return /^(let's )?keep exploring!$/.test(body);
     if (d.choices || d.tier === 1) {
-      var question = d.options.map(function (k) { return WORD[k][0].toLowerCase(); }).join(' or ') + '?';
-      return body === question || body === 'is this ' + question;
+      return body === 'what is this?';
     }
     if (d.tier === 2) return body === "what's this?" || body === 'what is this?';
     var sentence = expected.say.replace(praise, '').toLowerCase().split('. ')[0];
@@ -1390,11 +1414,11 @@ function validConversation(value, p) {
   }
   function renderChat(d, reply, quiet) {
     if (dialogue !== d) return;
-    document.getElementById('chat-picture').hidden = d.choices || d.tier === 1;
+    document.getElementById('chat-picture').hidden = false;
     document.getElementById('chat-face').hidden = d.choices || d.tier === 1;
     d.audio_url = reply.audio_url;
     d.pending = false; d.controller = null; d.question = d.reveal && !reply.done ? "Let's say " + WORD[d.key][0].toLowerCase() + ' together!' : reply.say; d.at = chatClock;
-    var listening = d.tier === 1 && !reply.done;
+    var listening = false;
     document.getElementById('chat-question').textContent = listening ? 'Listen and choose!' : d.question;
     document.getElementById('chat-status').textContent = listening ? '' : d.answered ? '★ ★ ★' : (d.reveal ? 'Tap ' + WORD[d.key][0] + ' or say it with me.' : d.hint ? 'Good try! Look at the glowing answer.' : '');
     var root = document.getElementById('chat-options'); root.innerHTML = ''; root.hidden = !d.choices || reply.done;
@@ -1403,7 +1427,14 @@ function validConversation(value, p) {
       b.disabled = reply.done || (d.reveal && key !== d.key);
       b.classList.toggle('hint-answer', !!d.hint && key === d.key);
       var icon = document.createElement('canvas'); icon.width = 128; icon.height = 128; icon.setAttribute('aria-hidden', 'true'); paintIcon(icon, key);
-      b.appendChild(icon); b.setAttribute('aria-label', WORD[key][0]); if (!listening) b.appendChild(document.createTextNode(WORD[key][0])); tapButton(b, function () { answerChat(key); }); root.appendChild(b);
+      b.appendChild(icon); b.setAttribute('aria-label', WORD[key][0]); if (!listening) b.appendChild(document.createTextNode(WORD[key][0])); tapButton(b, function () {
+        if (d.answerPending) return;
+        d.answerPending = true;
+        var settled = false;
+        function finishChoice() { if (settled) return; settled = true; d.answerPending = false; if (dialogue === d && !d.answered) answerChat(key); }
+        speakEn(WORD[key][0], { onend: finishChoice });
+        setTimeout(finishChoice, 1400);
+      }); root.appendChild(b);
     });
     document.getElementById('chat-mic').setAttribute('aria-label', 'Answer by voice');
     document.getElementById('chat-mic').disabled = reply.done;
@@ -1418,7 +1449,7 @@ function validConversation(value, p) {
     document.body.classList.add('chat-blocked');
     document.getElementById('parent-skip').hidden = d.answered;
     if (reply.done) { d.answered = true; chatTimer = setTimeout(closeChat, 1800); }
-    if (!quiet) speakEn(d.question, { audio_url: !d.reveal ? d.audio_url : undefined });
+    if (!quiet) speakEn(d.question, { named: !!(childName && d.question.includes(childName)), audio_url: !d.reveal ? d.audio_url : undefined });
   }
   function requestChat(d, feedback, childSaid, spokenKey) {
     d.feedback = feedback; d.spokenKey = spokenKey;
@@ -1629,12 +1660,352 @@ function validConversation(value, p) {
       queueChat('scene', sticker); rememberEvent('found', sticker); saveSoon();
     });
     chatQueue = chatQueue.filter(function (e) { return chatClock - e.at < 18; });
-    if (!dialogue && chatIdle > 0.8 && chatCooldown <= 0 && cardLeft <= 0 && chatQueue.length) {
+    if (!buildSessionBusy() && !dialogue && chatIdle > 0.8 && chatCooldown <= 0 && cardLeft <= 0 && chatQueue.length) {
       var priority = { fish: 4, boat: 4, pet: 3, task: 2, scene: 1 };
       chatQueue.sort(function (a, b) { return priority[b.anchor] - priority[a.anchor] || b.at - a.at; });
       var event = chatQueue.shift();
       if (chatWords().length >= 2) { openChat(event); chatQueue = []; }
     }
+  }
+
+  // BUILD_LINES is the single source read by brain/scripts/build-lines.cjs.
+  const BUILD_LINES = ["Wow!","Let's build more!","What shall we build?","What can we build?","Ready? What shall we build?","A house!","A fence!","Let's build it!","Let's build a house!","Let's build a fence!","What do we need?","We need more planks.","Oops! We need planks.","Let's find more planks!","We need more wood.","Oops! We need wood.","Let's find more wood!","We need more stone.","Oops! We need stone.","Let's find more stone!","We need a stick.","Oops! We need a stick.","Let's find a stick!","Nice start!","You can build!","It's all closed!","The dog is inside!","The cat is inside!","Now it's a house!","It's a house!","Show me!","Can I see it?","Look at that!","I made a house.","I made a fence.","It's so big!","I like it!","It's so nice!","You made this!","Look!","Our house!","Our fence!","I remember our house!","I remember our fence!","Our house is here!","Our fence is here!","Shall we build a house?","Let's build a house together!"];
+  var buildMode = false, buildTool = 'planks', buildSavedIds = new Set(), builds = [], buildWords = {}, buildChat = {}, buildQueue = [];
+  var buildSession = newBuildSession(), buildRegions = [], buildDirty = false, buildShowingWord = false, buildWordPending = {}, buildGhost = null, buildArrow = null;
+  function newBuildSession() { return { active:false, placed:0, removed:0, lastActionAt:-100, selectedAt:-100, startedAt:0, asked:0, praised:0, closed:0, lastBubbleAt:-100, lastQuestionAt:-100, lastPraiseAt:-100, plan:null, firstDone:false, shorts:{}, roomAt:0, revisit:false }; }
+  function resetBuildDay() {
+    var day = localChatDay();
+    if (buildChat.day !== day) buildChat = { day:day, asked:0, plans:0, shorts:0, shows:0, revisits:0, offers:0, praised:0, manualShows:0, offerIgnored:buildChat.offerIgnored || 0, offerPausedUntil:buildChat.offerPausedUntil || 0 };
+  }
+  function restoreBuild(data) {
+    buildMode = false; buildSession = newBuildSession(); buildQueue = []; buildRegions = []; buildGhost = null; buildWordPending = {};
+    builds = Array.isArray(data.builds) ? data.builds.filter(function (b) { return b && ['house','pen'].includes(b.kind) && Number.isInteger(b.x) && Number.isInteger(b.y) && b.x >= 0 && b.x < W && b.y >= 0 && b.y < H && b.w > 0 && b.w <= 14 && b.h > 0 && b.h <= 10; }).slice(0,8).map(function (b) { return {id:String(b.id).slice(0,40),kind:b.kind,x:b.x,y:b.y,w:b.w,h:b.h,roofed:!!b.roofed,createdAt:Number(b.createdAt)||Date.now(),shown:!!b.shown,invited:!!b.invited,closed:!!b.closed,roofPraise:!!b.roofPraise}; }) : [];
+    buildSavedIds = new Set(builds.map(function(b){return b.id;}));
+    buildChat = {}; var raw = data.build_chat || {};
+    ['asked','plans','shorts','shows','revisits','offers','praised','manualShows','offerIgnored','offerPausedUntil'].forEach(function (k) { buildChat[k] = Number.isFinite(raw[k]) ? Math.max(0, Math.min(k === 'offerPausedUntil' ? Date.now()+7*86400000 : 100, Math.floor(raw[k]))) : 0; });
+    buildChat.day = typeof raw.day === 'string' ? raw.day : ''; resetBuildDay();
+    buildWords = {}; ['wall','roof','window','room','gate'].forEach(function (k) { buildWords[k] = data.build_words && data.build_words[k] ? 1 : 0; });
+    if(Array.isArray(data.mods)){buildSession.dirtyPoints=[];for(var mi=0;mi<data.mods.length;mi+=2)if([WOOD,STONE,PLANKS,HOUSE,FENCE,DOOR,WINDOW].includes(data.mods[mi+1])){var at=data.mods[mi];if(Number.isInteger(at)&&at>=0&&at<W*H)buildSession.dirtyPoints.push({x:at%W,y:Math.floor(at/W)});}buildSession.dirtyPoints=buildSession.dirtyPoints.slice(-512);}
+    buildDirty = true;
+    document.getElementById('btn-build').setAttribute('aria-pressed','false');document.getElementById('build-tools').hidden=true;document.getElementById('build-status').hidden=true;
+  }
+  function nameVoiceStatus() {
+    var node = document.getElementById('parent-name-voice');
+    if (node) node.textContent = childName ? "Voice for '" + childName + "': " + ([childName+'!','Hi '+childName+'.','Hello '+childName+'.','Good morning, '+childName+'.','Good afternoon, '+childName+'.','Good evening, '+childName+'.'].every(function(atom){return /^[a-f0-9]{20}$/.test(voiceIndex[atom.toLowerCase()]||'');}) ? 'Jenny 已预生成' : '未生成；省略名字，仅播放已有 Jenny 句干') : '未设名字，不称呼任何名字。';
+  }
+  function buildSessionBusy() { return buildMode || buildSession.active || chatClock - buildSession.lastActionAt < 30; }
+  function beginBuildSession() {
+    if (!buildSession.active) { var pendingPoints=buildSession.dirtyPoints;buildSession = newBuildSession();buildSession.dirtyPoints=pendingPoints; buildSession.active = true; buildSession.startedAt = chatClock; buildSession.lastActionAt = chatClock; }
+    resetBuildDay();
+  }
+  function buildAction(kind) {
+    beginBuildSession(); buildSession.lastActionAt = chatClock;
+    if (kind === 'select') buildSession.selectedAt = chatClock;
+    if (ambient && ambient.build) { closeAmbient(); document.getElementById('btn-buddy').classList.add('buddy-wave'); }
+    cancelEnAudio(); if (window.speechSynthesis) speechSynthesis.cancel(); hideCard();
+    buildQueue = buildQueue.filter(function (e) { return !['build_plan','build_offer','build_show'].includes(e.event); });
+  }
+  function toggleBuild() {
+    if (!started || dialogue || quiz || nameFlow || panelOpen()) return;
+    buildMode = !buildMode;
+    if (buildMode) { dismissGreeting(); closeAmbient(); beginBuildSession(); buildSession.lastActionAt = chatClock; seek = null; hideCard(); }
+    document.getElementById('btn-build').setAttribute('aria-pressed', String(buildMode));
+    document.getElementById('build-tools').hidden = !buildMode; document.getElementById('build-status').hidden = !buildMode;
+    renderBuildTools();
+  }
+  function buildMaterial() { return buildTool === 'roof' ? 'house' : buildTool; }
+  function buildStock() { return inv[buildMaterial()] || 0; }
+  function selectBuildTool(key) { buildTool = key; buildAction('select'); renderBuildTools(); }
+  function renderBuildTools() {
+    if (!buildMode) return;
+    var root = document.getElementById('build-tools'); root.replaceChildren();
+    ['planks','stone','wood','fence','door','roof','window','remove'].forEach(function (key) {
+      var b = document.createElement('button'); b.type = 'button'; b.dataset.build = key;
+      b.setAttribute('aria-pressed', String(buildTool === key));
+      b.textContent = key === 'remove' ? 'Remove' : WORD[key][0];
+      if (key !== 'remove') { var n = document.createElement('small'); n.textContent = key === 'roof' ? (inv.house || 0) + ' / 4 House' : String(inv[key] || 0); b.appendChild(n); }
+      b.addEventListener('click', function () { selectBuildTool(key); }); root.appendChild(b);
+    });
+    document.getElementById('build-status').textContent = buildTool === 'remove' ? 'Tap a placed block · Materials come back' : 'Tap an empty square · ' + (buildTool === 'roof' ? 'Roof: 4 House blocks' : WORD[buildTool][0]);
+  }
+  function buildOwned(x,y) { return x >= 0 && x < W && y >= 0 && y < H && get(x,y) !== AIR && get(x,y) !== base[idx(x,y)]; }
+  function buildingBlock(id) { return [PLANKS,HOUSE,STONE,WOOD].includes(id); }
+  function buildReach(x,y) { return Math.abs((x+.5)*TILE-player.x) <= 7*TILE && Math.abs((y+.5)*TILE-player.y) <= 5*TILE; }
+  function buildTap(x,y) {
+    if (ambient && ambient.build && ambient.build.stage === 'invite') { showBuildQuestion(ambient.build); return; }
+    buildAction('tap');
+    if (!buildReach(x,y) || x < 1 || x >= W-1 || y < 1 || y >= H-1) { showToast('Move a little closer!', 1.5); return; }
+    if (buildTool === 'remove') {
+      if (!buildOwned(x,y) || !KEY_OF[get(x,y)]) return;
+      var key = KEY_OF[get(x,y)];
+      // A full backpack must not silently destroy a returned material.
+      if ((inv[key] || 0) >= 99) { showToast('Use some materials first!', 2); return; }
+      setCell(x,y,AIR); addItem(key,1,true); buildSession.removed++; buildDirty = true;
+      save(); renderBuildTools(); return;
+    }
+    var material = buildMaterial(), width = buildTool === 'roof' ? 4 : 1;
+    if ((inv[material] || 0) < width) { buildShort(material); return; }
+    for (var i=0;i<width;i++) if (get(x+i,y) !== AIR || overlapsPlayer(x+i,y) || !buildReach(x+i,y)) { showToast('Choose empty squares!', 1.5); return; }
+    for (var j=0;j<width;j++) {
+      setCell(x+j,y,BLOCK_OF[material]); consume(material); progress.placed[material] = 1; buildPlaced(x+j,y,material);
+    }
+    updateQuest(); save(); renderHotbar(); renderBuildTools();
+  }
+  function buildPlaced(x,y,key) {
+    buildAction('place'); buildSession.placed++; buildSession.lastPoint = {x:x,y:y}; (buildSession.dirtyPoints || (buildSession.dirtyPoints=[])).push({x:x,y:y}); buildSession.dirtyPoints=buildSession.dirtyPoints.slice(-512); buildDirty = true;
+    if (buildGhost && chatClock < buildGhost.until && x >= buildGhost.x && x < buildGhost.x+4 && y >= buildGhost.y && y < buildGhost.y+3) { buildChat.offerIgnored = 0; buildSession.offerAnswered = true; buildGhost = null; queueBuild('build_first',{text:BUILD_LINES[23]}); }
+    if(buildSession.offerAt && chatClock-buildSession.offerAt<=8){buildSession.offerAnswered=true;buildChat.offerIgnored=0;}
+    rememberEvent('built',key);
+    if (!buildSession.firstDone) { buildSession.firstDone = true; queueBuild('build_first',{}); }
+    scanBuildWord(x,y);
+  }
+  function scanBuildWord(x,y) {
+    if(!buildOwned(x,y))return;
+    var key=KEY_OF[get(x,y)];
+    if (key === 'window') recognizeBuildWord('window','built');
+    // Recheck neighbours too: adding a fence beside an existing door makes a gate.
+    for (var gx=x-1;gx<=x+1;gx++) if (buildOwned(gx,y) && get(gx,y) === DOOR && [get(gx-1,y),get(gx+1,y)].includes(FENCE)) recognizeBuildWord('gate','built');
+    if (buildingBlock(get(x,y))) {
+      [[1,0],[0,1]].forEach(function (d) {
+        var count=1;
+        [-1,1].forEach(function (sign) { for (var n=1;n<14;n++) { var xx=x+d[0]*n*sign, yy=y+d[1]*n*sign; if (!buildOwned(xx,yy) || !buildingBlock(get(xx,yy))) break; count++; } });
+        if (count >= 3) recognizeBuildWord('wall','built');
+      });
+    }
+  }
+  function recognizeBuildWord(key,action) {
+    learn(key); rememberEvent(action,key);
+    if (buildWords[key] || buildWordPending[key]) return;
+    buildWordPending[key] = {key:key,action:action,card:true}; saveSoon();
+  }
+  function queueBuild(event,data) {
+    var priority = {build_show:9,build_revisit:8,build_word:7,build_closed:6,build_roof:6,build_short:5,build_offer:4,build_plan:3,build_first:2};
+    // Recognition cards share one queued event so simultaneous wall/gate finds are retained.
+    var old = buildQueue.find(function(e){return e.event === event;});
+    if (old) return;
+    buildQueue = buildQueue.filter(function(e){return e.event !== event;});
+    buildQueue.push({event:event,data:data,at:chatClock,priority:priority[event]});
+    buildQueue.sort(function(a,b){return b.priority-a.priority;}); buildQueue = buildQueue.slice(0,2);
+  }
+  function detectBuilds() {
+    buildDirty = false;
+    var centers = builds.map(function(b){return {x:b.x+Math.floor(b.w/2),y:b.y+Math.floor(b.h/2)};});
+    centers=centers.concat(buildSession.dirtyPoints||[]);buildSession.dirtyPoints=[];
+    if (buildSession.lastPoint) centers.push(buildSession.lastPoint);
+    var regions = [], known = new Set();
+    centers.forEach(function(c){
+      scanBuildWord(c.x,c.y);
+      var x0=Math.max(0,c.x-7),x1=Math.min(W-1,c.x+6),y0=Math.max(0,c.y-5),y1=Math.min(H-1,c.y+4),seen=new Set();
+      function sealed(x,y){return solid(get(x,y)) || get(x,y)===DOOR;}
+      for(var y=y0;y<=y1;y++) for(var x=x0;x<=x1;x++) {
+        var start=idx(x,y); if(sealed(x,y)||seen.has(start)) continue;
+        var todo=[[x,y]],inside=[],edge=false,boundary=new Set(); seen.add(start);
+        for(var q=0;q<todo.length;q++) {
+          var point=todo[q],xx=point[0],yy=point[1]; inside.push(idx(xx,yy));
+          if(xx===x0||xx===x1||yy===y0||yy===y1) edge=true;
+          [[1,0],[-1,0],[0,1],[0,-1]].forEach(function(d){var nx=xx+d[0],ny=yy+d[1],at=idx(nx,ny);if(nx<x0||nx>x1||ny<y0||ny>y1)return;if(sealed(nx,ny)){boundary.add(at);return;}if(!seen.has(at)){seen.add(at);todo.push([nx,ny]);}});
+        }
+        var owned=[...boundary].filter(function(at){return cells[at]!==base[at] && (buildingBlock(cells[at]) || [FENCE,DOOR,WINDOW].includes(cells[at]));});
+        if(edge||owned.length<6)continue;
+        var xs=inside.map(function(at){return at%W;}),ys=inside.map(function(at){return Math.floor(at/W);}),minX=Math.min(...xs),maxX=Math.max(...xs),minY=Math.min(...ys),maxY=Math.max(...ys);
+        var id=minX+':'+minY+':'+maxX+':'+maxY; if(known.has(id))continue; known.add(id);
+        var roofed=true;
+        for(var rx=minX;rx<=maxX;rx++) {
+          var cap=false;
+          for(var ry=minY-1;ry>=Math.max(0,minY-4);ry--) if(buildOwned(rx,ry) && solid(get(rx,ry)) && get(rx,ry)!==FENCE){cap=true;break;}
+          if(!cap)roofed=false;
+        }
+        var hasFence=owned.some(function(at){return cells[at]===FENCE;});
+        var kind=roofed?'house':hasFence?'pen':null;
+        if(!kind)continue;
+        var old=builds.find(function(b){return b.id===id;});
+        if(old && old.kind!==kind)old=Object.assign({},old,{shown:false,invited:false,roofPraise:false});
+        var b=Object.assign({id:id,x:minX,y:minY,w:maxX-minX+1,h:maxY-minY+1,createdAt:Date.now(),shown:false},old||{},{kind:kind,roofed:roofed});
+        regions.push({building:b,inside:inside});
+      }
+    });
+    buildRegions=regions.slice(0,8); builds=buildRegions.map(function(r){return r.building;}); saveSoon();
+  }
+  function buildQuiet() { return !dialogue && !quiz && !nameFlow && !welcome && !panelOpen() && !seek && !axis() && onGround && !inWater() && !riding && !fishing && !jumpBuf && joyId===null && chatClock-buildSession.lastActionAt>=2.5 && chatClock-buildSession.selectedAt>=4 && cardLeft<=0; }
+  function buildQuota() { return buildSession.asked<3 && buildChat.asked<6 && chatClock-buildSession.lastQuestionAt>=45; }
+  function spendBuildQuestion() { buildSession.asked++; buildChat.asked++; buildSession.lastQuestionAt=chatClock; saveSoon(); }
+  function lineVariant(lines) { return lines[(buildSession.praised+buildSession.asked) % lines.length]; }
+  function buildName() { if(!childName || (buildSession.nameCalls||0)>=2)return '';buildSession.nameCalls=(buildSession.nameCalls||0)+1;return childName+'! '; }
+  function buildNeedLine(key,variant) { var at={planks:11,wood:14,stone:17,stick:20}[key];return variant?lineVariant(BUILD_LINES.slice(at,at+3)):BUILD_LINES[at]; }
+  function buildTier(words) { return Math.min(...words.map(function(k){var l=trail.levels[k]||{};return l.t1>=2?(l.t2>=2?3:2):1;})); }
+  function buildSpeak(text,named) { speakEn(text,{soft:true,named:!!named}); }
+  function buildBubble(text,data) {
+    closeAmbient(); var a={build:data,payload:{event:data.event}}; ambient=a;
+    var box=document.getElementById('buddy-chat'); box.classList.add('build-bubble'); box.hidden=false;
+    document.getElementById('buddy-line').textContent=text;
+    document.getElementById('buddy-picture').hidden=true;
+    document.getElementById('buddy-options').replaceChildren();
+    document.getElementById('buddy-mic').hidden=!!data.praise;
+    a.timer=setTimeout(function(){if(ambient!==a)return;closeAmbient();if(['build_show','build_revisit'].includes(data.event)&&!data.praise&&!data.answered)buildBubble((BUILD_LINES[0] + ' ' + BUILD_LINES[38] + ' ' + BUILD_LINES[36] + ' Good job!'),{event:data.event,praise:true});},14000);
+    buildSession.lastBubbleAt=chatClock; if(!data.deferSpeech)buildSpeak(text,data.named);
+    return a;
+  }
+  function buildChoiceButton(word,fn) {
+    var b=document.createElement('button');b.type='button';b.dataset.word=word;b.setAttribute('aria-label',WORD[word][0]);
+    var cv=document.createElement('canvas');cv.width=128;cv.height=128;paintIcon(cv,word);b.appendChild(cv);b.appendChild(document.createTextNode(WORD[word][0]));b.onclick=fn;document.getElementById('buddy-options').appendChild(b);return b;
+  }
+  function buildChoices(d) {
+    document.getElementById('buddy-options').replaceChildren();
+    d.options.forEach(function(k){var b=buildChoiceButton(k,function(){answerBuild(d,k,true);}); if(d.misses)b.classList.toggle('hint-answer',k===d.key);});
+    if(d.misses>=3) {var b=document.createElement('button');b.textContent='I said it';b.onclick=function(){finishBuildAnswer(d,d.key,false);};document.getElementById('buddy-options').appendChild(b);}
+  }
+  function showBuildQuestion(d) {
+    if(d.building)buildSession.flash={building:d.building,until:chatClock+2};
+    d.stage='question';d.tier=buildTier(d.options);d.misses=0;
+    var text=d.event==='build_plan'?(d.tier===3?(BUILD_LINES[8] + ' Say it!'):lineVariant([BUILD_LINES[2],BUILD_LINES[3],BUILD_LINES[4]])):d.tier===1?(d.event==='build_short'?BUILD_LINES[10]:'What is this?'):d.tier===2?"What's this?":d.event==='build_short'?(d.key==='stick'?BUILD_LINES[20]:buildNeedLine(d.key))+' Say it!':(d.key==='house'?BUILD_LINES[33]:BUILD_LINES[34])+' Say it!';
+    if(d.event==='build_plan'){var prefix=buildName();d.named=!!prefix;text=prefix+text;}
+    var a=buildBubble(text,d), picture=document.getElementById('buddy-picture');
+    if(d.event!=='build_plan'){picture.hidden=false;paintIcon(picture,d.key);picture.setAttribute('aria-label',WORD[d.key][0]);}
+    if(d.tier===1 || d.event==='build_plan')buildChoices(d);
+    else a.hintTimer=setTimeout(function(){if(ambient===a)buildChoices(d);},8000);
+  }
+  function answerBuild(d,key,clicked) {
+    if(!ambient || ambient.build!==d || d.answered)return;
+    if(d.event!=='build_plan' && key!==d.key){
+      d.misses++;buildSpeak(WORD[key][0],false);buildChoices(d);
+      clearTimeout(ambient.hintTimer);ambient.hintTimer=setTimeout(function(){if(ambient&&ambient.build===d){var line=d.misses>=3?"Let's say "+d.key+" together!":'Great! What is this?';document.getElementById('buddy-line').textContent=line;buildSpeak(line,false);}},1200);return;
+    }
+    finishBuildAnswer(d,key,clicked);
+  }
+  function finishBuildAnswer(d,key,clicked) {
+    if(!ambient||ambient.build!==d||d.answered)return; d.answered=true;
+    if(d.event==='build_plan'){buildSession.plan=key;buildSession.planAnswered=true;}
+    else if(d.tier===1 && clicked){var l=trail.levels[key]||{t1:0,t2:0,t3:0};l.t1++;trail.levels[key]=l;}
+    if(d.building)d.building.shown=true;
+    var text=d.event==='build_plan'?(key==='house'?BUILD_LINES[5]:BUILD_LINES[6])+' '+BUILD_LINES[7]:d.event==='build_short'?(key==='stick'?'Great! '+BUILD_LINES[20]:'Great! '+buildNeedLine(key)):'You built a '+key+'! '+lineVariant([(BUILD_LINES[0] + ' ' + BUILD_LINES[35]),(BUILD_LINES[36] + ' Good job!'),(BUILD_LINES[37] + ' Well done!')]);
+    if(d.event==='build_short')pointBuildMaterial(key);
+    closeAmbient();buildBubble(text,{event:d.event,praise:true,deferSpeech:clicked});
+    if(clicked) {cancelEnAudio();buildSpeak(WORD[key][0],false);var a=ambient;a.hintTimer=setTimeout(function(){if(ambient===a)buildSpeak(text,false);},1200);}
+    saveSoon();
+  }
+  function listenBuild() {
+    var a=ambient,d=a&&a.build;if(!d||d.praise)return;
+    if(d.stage==='invite'){showBuildQuestion(d);return;}
+    var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+    if(!SR){buildChoices(d);return;}
+    stopSocialListening();cancelEnAudio();
+    try {var r=new SR();socialRecognizer=r;r.lang='en-US';r.interimResults=false;r.continuous=false;
+      r.onresult=function(e){var text=normalAnswer(e.results[0][0].transcript);stopSocialListening();if(ambient!==a)return;var key=d.options.find(function(k){return text.split(' ').includes(k);});if(key)answerBuild(d,key,false);else if(d.event==='build_plan'){buildSession.planAnswered=true;buildSession.plan=null;closeAmbient();buildBubble('Good job! '+BUILD_LINES[1],{event:'build_plan',praise:true});}else buildChoices(d);};
+      r.onerror=r.onend=function(){stopSocialListening();if(ambient===a)buildChoices(d);};r.start();
+      socialWatchdog=setTimeout(function(){stopSocialListening();if(ambient===a)buildChoices(d);},8000);
+    }catch(e){stopSocialListening();buildChoices(d);}
+  }
+  function pointBuildMaterial(key) {
+    var wanted=key==='stone'?STONE:WOOD,best=null,dist=Infinity;
+    for(var x=Math.max(0,Math.floor(player.x/TILE)-30);x<Math.min(W,Math.floor(player.x/TILE)+30);x++)for(var y=0;y<H;y++)if(get(x,y)===wanted){var dd=Math.hypot(x*TILE-player.x,y*TILE-player.y);if(dd<dist){dist=dd;best={x:x,y:y,until:chatClock+10};}}
+    buildArrow=best;
+  }
+  function buildShort(material) {
+    var key=material==='house'?'stone':material==='fence'?'stick':material==='door'||material==='window'?'planks':material;
+    if(!['wood','planks','stick','stone'].includes(key)||buildSession.shorts[key]||buildChat.shorts>=3)return;
+    if(Object.keys(BLOCK_OF).some(function(k){return (inv[k]||0)>0;}))return;
+    if(chatClock-(buildSession.shortAt||-100)<45)return;
+    buildSession.shorts[key]=true;buildSession.shortAt=chatClock;buildChat.shorts++;
+    pointBuildMaterial(key); queueBuild('build_short',{key:key,options:[key,key==='stone'?'wood':'stone']});
+  }
+  function inviteBuildShow(manual) {
+    var r=buildRegions.find(function(r){return Math.abs((r.building.x+r.building.w/2)*TILE-player.x)<14*TILE;});
+    if(!r || (manual && (buildSession.placed<6 || chatClock-buildSession.lastActionAt>30)))return;
+    var b=r.building;if(!manual && (b.invited||buildChat.shows>=2))return;
+    queueBuild('build_show',{building:b,key:b.kind==='house'?'house':'fence',options:['house','fence'],manual:manual});
+  }
+  function buildOutline() {
+    var px=Math.floor(player.x/TILE),floor=Math.floor((player.y+1)/TILE);
+    for(var n=1;n<=3;n++){
+      var x=player.dir>0?px+n:px-n-3,clear=x>0&&x+3<W-1;
+      for(var dx=0;dx<4;dx++){if(!solid(get(x+dx,floor)))clear=false;for(var dy=1;dy<=3;dy++)if(get(x+dx,floor-dy)!==AIR)clear=false;}
+      if(clear)return {x:x,y:floor-3,until:chatClock+6};
+    }
+    return null;
+  }
+  function showBuildEvent(e) {
+    var d=e.data,event=e.event;d.event=event;
+    if(event==='build_offer'){d.outline=buildOutline();if(!d.outline)return false;}
+    var question=['build_plan','build_offer','build_short','build_show','build_revisit'].includes(event) && !(event==='build_revisit'&&d.building.shown) && !(d.manual&&(buildChat.manualShows||0)>=2);
+    if(event==='build_short'&&!buildQuota()){d.praise=true;buildBubble(buildNeedLine(d.key,true),d);return true;}
+    if(question && !d.manual && !buildQuota())return false;
+    if(event==='build_word' && chatClock-buildSession.lastActionAt<12)return false;
+    if(!question && (buildSession.praised>=6 || chatClock-buildSession.lastPraiseAt<20))return false;
+    if(question && !d.manual)spendBuildQuestion();
+    if(!question){buildSession.praised++;buildChat.praised++;buildSession.lastPraiseAt=chatClock;}
+    if(event==='build_plan'){buildChat.plans++;buildSession.planAt=chatClock;d.options=['house','fence'];d.key='house';d.named=!!childName;showBuildQuestion(d);}
+    else if(event==='build_offer'){
+      buildChat.offers++;buildSession.offered=true;buildSession.offerAt=chatClock;
+      buildGhost=d.outline;
+      d.praise=true;d.named=false;buildBubble(lineVariant([BUILD_LINES[8],BUILD_LINES[46],BUILD_LINES[47]]),d);
+      clearTimeout(ambient.timer);ambient.timer=setTimeout(closeAmbient,6000);
+    } else if(event==='build_short')showBuildQuestion(d);
+    else if(event==='build_show'||event==='build_revisit'){
+      if(event==='build_show'){if(d.manual)buildChat.manualShows=(buildChat.manualShows||0)+1;else buildChat.shows++;d.building.invited=true;}
+      else {buildChat.revisits++;buildSession.revisit=true;}
+      var prefix=buildName();d.named=!!prefix;
+      if((d.manual && buildChat.manualShows>2) || (event==='build_revisit' && d.building.shown)) {d.praise=true;buildBubble(prefix+BUILD_LINES[39]+' '+BUILD_LINES[d.key==='house'?40:41]+' '+BUILD_LINES[1],d);}
+      else {d.stage='invite';buildBubble(prefix+(event==='build_revisit'?lineVariant([BUILD_LINES[39]+' '+BUILD_LINES[d.key==='house'?40:41],BUILD_LINES[d.key==='house'?42:43],BUILD_LINES[d.key==='house'?44:45]]):lineVariant([(BUILD_LINES[0] + ' ' + BUILD_LINES[30]),BUILD_LINES[31],(BUILD_LINES[32] + ' ' + BUILD_LINES[30])])),d);var b=document.createElement('button');b.textContent='☝';b.setAttribute('aria-label','Show my building');b.onclick=function(){showBuildQuestion(d);};document.getElementById('buddy-options').appendChild(b);}
+    } else if(event==='build_word') {
+      buildWords[d.key]=1;delete buildWordPending[d.key];
+      buildShowingWord=true;showWord(d.key);buildShowingWord=false;
+      // Word card, then a finite Jenny atom composition; interrupted work is discarded.
+      var actionAt=buildSession.lastActionAt;
+      var roofRecord=d.key==='roof'&&buildRegions.find(function(r){return r.building.roofed&&!r.building.roofPraise;});
+      if(roofRecord)roofRecord.building.roofPraise=true;
+      setTimeout(function(){
+        if(buildSession.lastActionAt!==actionAt || !buildQuiet())return;
+        var wordBubble=buildBubble(BUILD_LINES[0]+' You '+(d.action==='made'?'made':'built')+' a '+d.key+'!',{event:event,praise:true});
+        // The roof recognition is one two-part praise sequence, not another invitation.
+        if(roofRecord)wordBubble.hintTimer=setTimeout(function(){
+          if(ambient===wordBubble && buildSession.lastActionAt===actionAt && buildQuiet())buildBubble(BUILD_LINES[0]+' '+BUILD_LINES[28],{event:'build_roof',praise:true});
+        },3000);
+      },2400);
+
+    } else {
+      d.praise=true;var lines=event==='build_first'?[BUILD_LINES[23],('Good job! ' + BUILD_LINES[1]),('Great! ' + BUILD_LINES[24])]:event==='build_closed'?[(BUILD_LINES[0] + ' ' + BUILD_LINES[25]),('Nice! ' + BUILD_LINES[25]),('Good job! ' + BUILD_LINES[25])]:[(BUILD_LINES[0] + ' ' + BUILD_LINES[28]),('Nice! ' + BUILD_LINES[29]),('Good job! ' + BUILD_LINES[29])];
+      buildBubble(d.text||lineVariant(lines),d);
+    }
+    saveSoon();return true;
+  }
+  function buildStep(dt) {
+    resetBuildDay();
+    if(buildSession.active && chatClock-buildSession.lastActionAt>=30 && !buildMode) {buildSession.active=false;buildQueue=[];}
+    if(buildSessionBusy() && (axis() || joyId!==null || jumpBuf>0)) {buildAction('move');buildSession.moved=true;}
+    if(buildDirty && chatClock-buildSession.lastActionAt>=2.5)detectBuilds();
+    var quiet=buildQuiet();
+    if(buildSession.offerAt && !buildSession.offerChecked && chatClock-buildSession.offerAt>=8){buildSession.offerChecked=true;if(!buildSession.offerAnswered){buildChat.offerIgnored++;if(buildChat.offerIgnored>=2)buildChat.offerPausedUntil=Date.now()+7*86400000;}else buildChat.offerIgnored=0;saveSoon();}
+    buildRegions.forEach(function(r){
+      var b=r.building,inside=r.inside.includes(idx(Math.floor(player.x/TILE),Math.floor((player.y-10)/TILE)));
+      if(b.roofed && inside && b.w>=2 && b.h>=2){r.roomTime=(r.roomTime||0)+dt;if(r.roomTime>=1.5&&!r.roomEntered){r.roomEntered=true;recognizeBuildWord('room','made');}}
+      else {r.roomTime=0;r.roomEntered=false;}
+      if(!quiet)return;
+      if(b.roofed&&!buildWords.roof)recognizeBuildWord('roof','built');
+      if(!b.closed&&buildSession.closed<2){b.closed=true;buildSession.closed++;queueBuild('build_closed',{});}
+      if(b.roofed&&!b.roofPraise&&buildWords.roof&&!buildWordPending.roof){b.roofPraise=true;queueBuild('build_roof',{});}
+      animals.filter(function(a){return a.tamed&&['dog','cat'].includes(a.type);}).forEach(function(a){
+        if(r.inside.includes(idx(Math.floor(a.x/TILE),Math.floor((a.y-10)/TILE)))){r.petTime=(r.petTime||0)+dt;if(r.petTime>=4&&!r.petPraised){r.petPraised=true;queueBuild('build_closed',{text:BUILD_LINES[a.type==='dog'?26:27]});}}else r.petTime=0;
+      });
+      if(returningVisit && buildSavedIds.has(b.id) && !buildSession.revisit && buildChat.revisits<1 && Math.abs(player.x-(b.x+b.w/2)*TILE)<14*TILE)queueBuild('build_revisit',{building:b,key:b.kind==='house'?'house':'fence',options:['house','fence'],manual:b.shown});
+    });
+    if(ambient && ambient.build && ambient.build.event==='build_plan' && !buildSession.planAnswered && chatClock-buildSession.planAt>=8)closeAmbient();
+    if(!quiet || ambient)return;
+    var pendingWord=Object.keys(buildWordPending)[0]; if(pendingWord)queueBuild('build_word',buildWordPending[pendingWord]);
+    if(buildSession.active){
+      if(!buildSession.planConsidered && chatClock-buildSession.startedAt>=2.5){buildSession.planConsidered=true;if(!buildSession.placed&&!buildSession.moved&&buildChat.plans<2&&Object.keys(BLOCK_OF).some(function(k){return inv[k]>0;}))queueBuild('build_plan',{});}
+      var silent=(buildSession.planAt&&!buildSession.planAnswered&&chatClock-buildSession.planAt>=8)||chatClock-buildSession.startedAt>=90;
+      if(silent&&!buildSession.placed&&!buildSession.offered&&!builds.some(function(b){return b.kind==='house';})&&['wood','stone','planks','house'].reduce(function(n,k){return n+(inv[k]||0);},0)>=6&&buildChat.offers<1&&Date.now()>=buildChat.offerPausedUntil)queueBuild('build_offer',{});
+      if(chatClock-buildSession.lastActionAt>=4 && buildSession.placed)inviteBuildShow(false);
+    }
+    buildQueue=buildQueue.filter(function(e){return chatClock-e.at<30;});
+    if(chatClock-buildSession.lastBubbleAt<25)return;
+    for(var qi=0;qi<buildQueue.length;qi++){var e=buildQueue[qi];if(showBuildEvent(e)){var i=buildQueue.indexOf(e);if(i>=0)buildQueue.splice(i,1);break;}}
+  }
+  function drawBuildGuide(g) {
+    if(buildSession.flash && chatClock<buildSession.flash.until){var b=buildSession.flash.building;g.save();g.fillStyle='#fff3a555';g.fillRect((b.x-1)*TILE,(b.y-1)*TILE,(b.w+2)*TILE,(b.h+2)*TILE);g.restore();}
+    if(buildMode){g.save();g.strokeStyle='#ffffff44';g.lineWidth=0.7;var px=Math.floor(player.x/TILE),py=Math.floor(player.y/TILE);for(var x=px-7;x<=px+7;x++)for(var y=py-5;y<=py;y++)if(get(x,y)===AIR)g.strokeRect(x*TILE,y*TILE,TILE,TILE);g.restore();}
+    if(buildGhost&&chatClock<buildGhost.until){g.save();g.fillStyle='#fff8cc44';g.strokeStyle='#fff8cc';g.setLineDash([5,4]);g.fillRect(buildGhost.x*TILE,buildGhost.y*TILE,4*TILE,3*TILE);g.strokeRect(buildGhost.x*TILE,buildGhost.y*TILE,4*TILE,3*TILE);g.restore();}
+    if(buildArrow&&chatClock<buildArrow.until){g.save();g.fillStyle='#fff089';g.font='bold 28px sans-serif';g.fillText('↓',buildArrow.x*TILE,buildArrow.y*TILE-5);g.restore();}
   }
 
   function blankProgress() {
@@ -1805,7 +2176,7 @@ function validConversation(value, p) {
       g.beginPath(); g.ellipse(19, 13, 4, 2, 0.7, 0, 6.3); g.fill();
       g.beginPath(); g.ellipse(13, 20, 4, 2, -0.7, 0, 6.3); g.fill();
     })];
-    ['table', 'bed', 'door', 'fence', 'flower', 'torch', 'house'].forEach(function (key) {
+    ['table', 'bed', 'door', 'fence', 'flower', 'torch', 'house', 'window'].forEach(function (key) {
       sprites[BLOCK_OF[key]] = [makeSprite(function (g) { specialIcon(g, key, 32); })];
     });
     sprites[DOOR + 100] = [makeSprite(function (g) { g.translate(6, 0); g.scale(0.55, 1); specialIcon(g, 'door', 32); })];
@@ -2076,13 +2447,16 @@ function validConversation(value, p) {
   }
   function animalStep(a, dt) {
     if (Math.abs(a.x - player.x) > 1100 && !a.tamed) return;
+    var previousX = a.x, previousY = a.y;
     a.phase += dt * 6;
     if (a.pet > 0) a.pet -= dt;
     if (a.wait > 0) a.wait -= dt;
     if (a.tamed) {
-      var dxp = player.x - a.x;
+      var homeRegion = buildRegions.find(function(r) { return r.inside.includes(idx(Math.floor(player.x/TILE),Math.floor((player.y-10)/TILE))); });
+      var petTarget = homeRegion ? (homeRegion.building.x + homeRegion.building.w/2 + Math.sin(a.phase/8)*Math.max(0,homeRegion.building.w/2-.6)) * TILE : player.x;
+      var dxp = petTarget - a.x;
       if (Math.abs(dxp) > 720) { a.x = player.x - player.dir * 38; a.y = player.y; dxp = player.x - a.x; }
-      if (Math.abs(dxp) > 54) a.vx = (dxp > 0 ? 1 : -1) * Math.min(158, 66 + Math.abs(dxp) * 0.85);
+      if (Math.abs(dxp) > (homeRegion ? 10 : 54)) a.vx = (dxp > 0 ? 1 : -1) * Math.min(158, 66 + Math.abs(dxp) * 0.85);
       else a.vx = 0;
     } else if (a.wait > 0 || (seek && seek.kind === 'pet' && seek.animal === a)) {
       a.vx = 0; // Also pause after a pat so the next tap still lands on this animal.
@@ -2120,6 +2494,7 @@ function validConversation(value, p) {
       if (solid(get(Math.floor(a.x / TILE), gy))) a.y = gy * TILE - 0.01;
       else if (get(Math.floor(a.x / TILE), gy) === WATER && canSwim) a.y = gy * TILE - 0.01;
     }
+    if (a.tamed && (a.x !== previousX || a.y !== previousY)) saveSoon();
   }
 
   function inReach(tx, ty) {
@@ -2274,11 +2649,15 @@ function validConversation(value, p) {
       return;
     }
     if (id === WHEAT1 || id === WHEAT2 || id === WHEAT3) { harvestWheat(tx, ty, id); return; }
+    if (buildOwned(tx,ty)) {
+      var returned=KEY_OF[id]; if(returned && (inv[returned]||0)>=99)return;
+      buildAction('remove'); buildSession.removed++; buildDirty=true;
+    }
     setCell(tx, ty, AIR);
     burst((tx + 0.5) * TILE, (ty + 0.5) * TILE, PCOL[id] || '#fff', false);
     tone(180, 0.07, 'triangle', 0, 0.04, 80);
     giveMined(id);
-    rememberEvent('found', KEY_OF[id]);
+    rememberEvent(id===WINDOW?'built':'found', KEY_OF[id]);
   }
   function tryPlace(tx, ty) {
     var key = selectedKey();
@@ -2308,6 +2687,7 @@ function validConversation(value, p) {
     }
     setCell(tx, ty, BLOCK_OF[key]);
     consume(key);
+    if (!quiz) buildPlaced(tx, ty, key);
     if (!quiz) {
       progress.placed[key] = 1; rememberEvent('built', key);
       if (key === 'torch' && nightFactor(timeOfDay) > 0.5) progress.nightTorch = 1;
@@ -2423,6 +2803,7 @@ function validConversation(value, p) {
     saveSoon();
   }
   function requestJump() {
+    if (buildSessionBusy()) buildAction('jump');
     if (riding) { disembark(); return; }
     jumpBuf = 0.16;
     if (!intros.jump) {
@@ -2653,7 +3034,18 @@ function validConversation(value, p) {
   function specialIcon(g, key, S, phase) {
     g.save(); g.scale(S / 32, S / 32); inkStyle(g);
     var green = '#aed09b', wood = '#dfbc8a', blue = '#acd9e5', cream = '#fff5da', gold = '#f4d382';
-    if (key === 'tree') {
+    if (key === 'window') {
+      inkBox(g, 3, 3, 26, 26, wood); inkBox(g, 6, 6, 20, 20, blue);
+      inkPath(g, [[16, 6], [16, 26]]); inkPath(g, [[6, 16], [26, 16]]);
+    } else if (key === 'wall') {
+      for (var row = 0; row < 3; row++) for (var col = 0; col < 3; col++) inkBox(g, 2 + col * 9, 5 + row * 8, 9, 8, '#dba38b');
+    } else if (key === 'roof') {
+      inkPath(g, [[2, 24], [16, 5], [30, 24]], '#d88260'); inkPath(g, [[8, 19], [24, 19]]);
+    } else if (key === 'room') {
+      inkBox(g, 2, 3, 28, 27, cream); inkBox(g, 5, 6, 9, 8, blue); inkBox(g, 7, 20, 20, 6, '#f4b4c4'); inkBox(g, 7, 16, 6, 5, wood);
+    } else if (key === 'gate') {
+      inkBox(g, 3, 8, 4, 22, wood); inkBox(g, 25, 8, 4, 22, wood); inkBox(g, 8, 12, 16, 15, cream); inkPath(g, [[9, 25], [23, 14]]);
+    } else if (key === 'tree') {
       inkBox(g, 13, 17, 6, 13, wood);
       inkEllipse(g, 16, 12, 11, 10, green); inkPath(g, [[16, 19], [16, 11], [12, 8]]);
     } else if (['grass', 'dirt', 'stone', 'sand', 'wood', 'planks', 'leaves'].indexOf(key) >= 0) {
@@ -2973,6 +3365,7 @@ function validConversation(value, p) {
     g.restore();
   }
   function drawWorld(g, sec) {
+    drawBuildGuide(g);
     var zoom = tileScreen / TILE;
     var x0 = Math.max(0, Math.floor(drawCamX / TILE) - 1);
     var y0 = Math.max(0, Math.floor(drawCamY / TILE) - 1);
@@ -3016,8 +3409,21 @@ function validConversation(value, p) {
           g.beginPath(); g.ellipse(px + 16, py + 11, 2.4, 4 * fl, 0, 0, 6.3); g.fill();
           continue;
         }
+        if (id === HOUSE && buildOwned(x,y)) {
+          var left=x,right=x;
+          while(left>0 && get(left-1,y)===HOUSE && buildOwned(left-1,y))left--;
+          while(right<W-1 && get(right+1,y)===HOUSE && buildOwned(right+1,y))right++;
+          if(right-left+1>=3){
+            if(x===Math.max(left,x0)) {
+              g.save();g.fillStyle='#c96f51';g.strokeStyle='#784b39';g.lineWidth=2;
+              g.beginPath();g.moveTo(left*TILE,y*TILE+TILE);g.lineTo((left+right+1)*TILE/2,y*TILE+2);g.lineTo((right+1)*TILE,y*TILE+TILE);g.closePath();g.fill();g.stroke();
+              g.beginPath();g.moveTo((left+.65)*TILE,y*TILE+TILE*.72);g.lineTo((right+.35)*TILE,y*TILE+TILE*.72);g.stroke();g.restore();
+            }
+            continue;
+          }
+        }
         if (id === DOOR) {
-          var open = Math.abs(player.x - (x + 0.5) * TILE) < 28 && Math.abs(player.y - (y + 1) * TILE) < 40;
+          var open = (Math.abs(player.x - (x + 0.5) * TILE) < 28 && Math.abs(player.y - (y + 1) * TILE) < 40) || animals.some(function(a){return a.tamed && Math.abs(a.x-(x+.5)*TILE)<28 && Math.abs(a.y-(y+1)*TILE)<40;});
           g.drawImage(spr(open ? DOOR + 100 : DOOR, 0), px, py, TILE, TILE);
           continue;
         }
@@ -3375,6 +3781,7 @@ function validConversation(value, p) {
     var w = WORD[key];
     if (!w) return;
     learn(key);
+    if (buildSessionBusy() && !buildShowingWord) return;
     cardKey = key;
     var card = document.getElementById('wordcard');
     card.hidden = false;
@@ -3388,19 +3795,7 @@ function validConversation(value, p) {
     document.getElementById('wordcard').hidden = true;
     cardLeft = 0;
   }
-  function speak(text) {
-    if (!speechOn || !window.speechSynthesis) return;
-    try {
-      var u = new SpeechSynthesisUtterance(text);
-      u.lang = 'en-US';
-      u.rate = 0.8;
-      u.pitch = 1.05;
-      var v = pickVoice();
-      if (v) u.voice = v;
-      speechSynthesis.cancel();
-      speechSynthesis.speak(u);
-    } catch (err) { /* speech is optional */ }
-  }
+  function speak(text) { return speakEn(text); }
   function pickVoice() {
     try {
       var voices = speechSynthesis.getVoices() || [];
@@ -3436,20 +3831,28 @@ function validConversation(value, p) {
   function loadVoiceIndex() {
     if (!BRAIN_URL) return;
     fetch(new URL('/audio/index.json', BRAIN_URL).href, { credentials: 'omit' }).then(function (r) { return r.ok ? r.json() : {}; }).then(function (map) {
-      if (map && typeof map === 'object' && !Array.isArray(map)) voiceIndex = map;
+      if (map && typeof map === 'object' && !Array.isArray(map)) { voiceIndex = map; nameVoiceStatus(); }
     }).catch(function () { /* Offline speech stays available. */ });
   }
   function speakEn(text, params) {
     if (!speechOn) return;
-    params = params || {};
+    params = Object.assign({}, params || {});
+    // Defense in depth: every name-bearing call is Jenny-only, including replay.
+    if (childName && text.toLowerCase().includes(childName.toLowerCase())) params.named = true;
     cancelEnAudio();
     if (window.speechSynthesis) speechSynthesis.cancel();
     var serial = speechSerial;
     var normalized = text.trim().toLowerCase(), urls = [], remainder = normalized;
-    if (params.audio_url) urls = [params.audio_url];
+    if (params.named) {
+      var name = childName.toLowerCase();
+      [name + '!', 'hi ' + name + '.', 'hello ' + name + '.', 'good morning, ' + name + '.', 'good afternoon, ' + name + '.', 'good evening, ' + name + '.'].forEach(function (atom) {
+        if (name && !/^[a-f0-9]{20}$/.test(voiceIndex[atom] || '') && remainder.indexOf(atom) === 0) remainder = remainder.slice(atom.length).trim();
+      });
+    }
+    if (params.audio_url && !params.named) urls = [params.audio_url];
     else if (BRAIN_URL) {
       // Greedy rule-owned atoms cover praise + matching context + exercise without
-      // generating their combinatorial cross-product. Names use whole-line TTS.
+      // generating their combinatorial cross-product. Named playback is Jenny-only.
       var atoms = Object.keys(voiceIndex).sort(function (a, b) { return b.length - a.length; });
       while (remainder) {
         var atom = atoms.find(function (line) { return remainder === line || remainder.indexOf(line + ' ') === 0; });
@@ -3467,7 +3870,7 @@ function validConversation(value, p) {
         if (failed || serial !== speechSerial) return;
         failed = true;
         if (enAudio) { clearTimeout(enAudio.voiceTimer); enAudio.onended = enAudio.onerror = null; enAudio.pause(); enAudio = null; }
-        speakEnTTS(text, params);
+        params.named ? (params.onend && params.onend()) : speakEnTTS(text, params);
       }
       function playNext() {
         if (serial !== speechSerial) return;
@@ -3478,16 +3881,16 @@ function validConversation(value, p) {
           a.onerror = fallback;
           a.voiceTimer = setTimeout(fallback, 4000); // stalled network/autoplay
           var played = a.play();
-          if (played && played.then) played.then(function () { clearTimeout(a.voiceTimer); if (!failed && serial === speechSerial) brainStats.audio++; }).catch(fallback);
+          if (played && played.then) played.then(function () { clearTimeout(a.voiceTimer); if (!failed && serial === speechSerial) { brainStats.audio++; a.voiceTimer = setTimeout(fallback, 12000); } }).catch(fallback);
           return a;
         } catch (err) { fallback(); }
       }
       return playNext();
     }
-    return speakEnTTS(text, params);
+    return params.named ? (params.onend && params.onend()) : speakEnTTS(text, params);
   }
   function speakEnTTS(text, params) {
-    if (!speechOn || !window.speechSynthesis) return;
+    if (!speechOn || !window.speechSynthesis || (params && params.named)) return;
     try {
       var u = new SpeechSynthesisUtterance(text);
       u.lang = 'en-GB';
@@ -3727,6 +4130,8 @@ function validConversation(value, p) {
         b.appendChild(cv); b.appendChild(em);
         tapButton(b, function () {
           sel = i;
+          if (buildSessionBusy()) buildAction('select');
+          if (buildMode && BLOCK_OF[key]) { buildTool = key; renderBuildTools(); }
           invSig = '';
           showWord(key);
         });
@@ -3819,7 +4224,8 @@ function validConversation(value, p) {
     });
     if (!quiz) { progress.crafted[r.out] = 1; rememberEvent('made', r.out); }
     addItem(r.out, r.n, true);
-    showWord(r.out);
+    if (r.out === 'window') recognizeBuildWord('window', 'made');
+    else showWord(r.out);
     chime();
     invSig = '';
     renderHotbar();
@@ -3902,7 +4308,7 @@ function validConversation(value, p) {
     });
     resetChatDay();
     document.getElementById('parent-memory').textContent = '喜好：颜色 ' + (memory.prefs.color || '未知') + '；动物 ' + (memory.prefs.animal || '未知') + '；食物 ' + (memory.prefs.food || '未知') + '；建造 ' + (memory.prefs.build || '未知') + '。今日闲聊 ' + memory.small_talk_count + '/5；天气聊天：' + (memory.weather_chat_done ? '已完成' : '未完成') + '。';
-    document.getElementById('parent-name').value = childName;
+    document.getElementById('parent-name').value = childName; nameVoiceStatus();
     document.getElementById('parent-skip').hidden = !dialogue || dialogue.answered;
     document.getElementById('brain-status').textContent = '本次伙伴回应：AI ' + brainStats.brain + '，模板 ' + brainStats.template + '，预生成音频 ' + brainStats.audio + '，合成回落 ' + brainStats.tts + '，来源未标注 ' + brainStats.unknown + '。最多每分钟 8 次、每个标签页会话 60 次请求（刷新不重置）；重试使用本地提示。';
     if (log) renderSpeakingLog();
@@ -3968,6 +4374,7 @@ function validConversation(value, p) {
     for (i = 0; i < cells.length; i++) if (cells[i] !== base[i]) mods.push(i, cells[i]);
     var data = {
       v: 1, seed: seed, time: timeOfDay,
+      builds: builds, build_chat: buildChat, build_words: buildWords,
       px: player.x, py: player.y, dir: player.dir,
       mods: mods, inv: inv, hotbar: hotbar, sel: sel,
       words: learned, stars: quizStars, progress: progress, intros: intros, zh: zhOn,
@@ -3992,11 +4399,12 @@ function validConversation(value, p) {
   }
   function applySave(data) {
     generate(data.seed);
+    restoreBuild(data);
     if (Array.isArray(data.mods)) {
       var i;
       for (i = 0; i < data.mods.length; i += 2) {
         var at = data.mods[i], id = data.mods[i + 1];
-        if (at >= 0 && at < cells.length && id >= 0 && id <= WHEAT3) cells[at] = id;
+        if (at >= 0 && at < cells.length && id >= 0 && id <= WINDOW) cells[at] = id;
       }
     }
     if (data.animals && data.animals.length) {
@@ -4085,6 +4493,7 @@ function validConversation(value, p) {
     invSig = '';
   }
   function freshGame(newSeed) {
+    restoreBuild({});
     inv = {}; hotbar = []; sel = -1; learned = [];
     quizStars = {}; quiz = null;
     progress = blankProgress(); intros = {};
@@ -4206,7 +4615,8 @@ function validConversation(value, p) {
       memory.prefs = blankMemory().prefs; memory.prefsLearnedAt = {};
       save(); showParentPage(document.getElementById('parent-info').hidden);
     });
-    document.getElementById('parent-name').addEventListener('input', function (e) { childName = cleanName(e.target.value); if (childName) { memory.name_asked = true; if (nameFlow) finishName(childName); } saveSoon(); });
+    document.getElementById('btn-build').addEventListener('click', toggleBuild);
+    document.getElementById('parent-name').addEventListener('input', function (e) { childName = cleanName(e.target.value); nameVoiceStatus(); if (childName) { memory.name_asked = true; if (nameFlow) finishName(childName); } saveSoon(); });
     function parentSkip() {
       if (document.getElementById('parent-help').hidden) return;
       closeChat(true); closePanels(); saveSoon();
@@ -4245,12 +4655,12 @@ function validConversation(value, p) {
     document.getElementById('btn-break').addEventListener('pointerdown', function (e) {
       e.preventDefault();
       if (!started || rotateBlock() || panelOpen() || chatBlocked()) return;
-      doBreak();
+      if (buildMode) selectBuildTool('remove'); else doBreak();
     });
     document.getElementById('btn-place').addEventListener('pointerdown', function (e) {
       e.preventDefault();
       if (!started || rotateBlock() || panelOpen() || chatBlocked()) return;
-      doPlace();
+      if (buildMode) { if (!buildStock()) buildShort(buildMaterial()); else showToast('Tap an empty square!', 1.6); } else doPlace();
     });
     document.getElementById('btn-jump').addEventListener('pointerdown', function (e) {
       e.preventDefault();
@@ -4273,6 +4683,12 @@ function validConversation(value, p) {
       var sx = (e.clientX - rect.left) * viewW / rect.width;
       var sy = (e.clientY - rect.top) * viewH / rect.height;
       var w = screenToWorld(sx, sy);
+      if (buildMode) {
+        if (buildTool !== 'remove' && buildSession.placed >= 6 && animals.some(function(a){return a.tamed && Math.abs(a.x-w.x)<20 && w.y>=a.y-35 && w.y<=a.y+5;})) inviteBuildShow(true);
+        else buildTap(Math.floor(w.x / TILE), Math.floor(w.y / TILE));
+        return;
+      }
+      if (ambient && ambient.build && ambient.build.stage === 'invite') { showBuildQuestion(ambient.build); return; }
       if (e.button === 2) {
         var tx = Math.floor(w.x / TILE), ty = Math.floor(w.y / TILE);
         lock = { tx: tx, ty: ty }; lockAge = 0;
@@ -4398,6 +4814,8 @@ function validConversation(value, p) {
     animatePictures(sec);
     var playing = started && !rotateBlock() && !panelOpen() && !chatBlocked();
     if (playing) {
+      var previousPlayerX = player.x, previousPlayerY = player.y;
+      buildStep(dt);
       rainbowLeft = Math.max(0, rainbowLeft - dt);
       rainTimer -= dt;
       if (rainTimer <= 0) {
@@ -4476,6 +4894,9 @@ function validConversation(value, p) {
       else deepTime = 0;
       document.getElementById('btn-home').hidden = !(deepTime > 1.15);
       adventureStep(dt);
+      // Walking and pet following must persist even without a new world action.
+      // saveSoon uses the same 2.5-second throttle as inventory/build changes.
+      if (player.x !== previousPlayerX || player.y !== previousPlayerY) saveSoon();
       if (dirtySave) {
         saveIn -= dt;
         if (saveIn <= 0) { save(); saveIn = 2.5; }
@@ -4483,7 +4904,7 @@ function validConversation(value, p) {
     }
     // Dialogue also pauses physics; opening a parent panel keeps it intact.
     updateCamera(playing ? dt : 1);
-    if (invSignature() !== invSig) renderHotbar();
+    if (invSignature() !== invSig) { renderHotbar(); renderBuildTools(); }
     drawFrame(sec);
   }
 

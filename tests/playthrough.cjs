@@ -36,7 +36,7 @@ async function fresh(data, { viewport = { width: 1180, height: 720 }, speech = t
     }
   }, { data, speech, fakeRecognition });
   await p.goto(URL + '/#seed=42'); assert(!/[\u3400-\u9fff]/u.test(await p.locator('body').innerText())); await p.click('#btn-start'); if(await p.locator('#name-entry').isVisible())await p.click('#welcome-play'); await sleep(p, 250);
-  assert.equal(await p.evaluate(() => BW.totalWords()), 42);
+  assert.equal(await p.evaluate(() => BW.totalWords()), 47);
   return p;
 }
 async function check(p) { assert.deepEqual(p.errors, []); assert.equal(await p.evaluate(() => BW.error()), ''); }

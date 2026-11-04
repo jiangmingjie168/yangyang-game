@@ -19,7 +19,7 @@ const assert = require('node:assert/strict');
     await page.click('#btn-start'); if(await page.locator('#name-entry').isVisible())await page.click('#welcome-play');
     await page.waitForTimeout(300);
     assert.equal(await page.evaluate(() => BW.layout().started), true);
-    assert.equal(await page.evaluate(() => BW.totalWords()), 42);
+    assert.equal(await page.evaluate(() => BW.totalWords()), 47);
     console.log('PASS game loads and starts');
 
     // Exercise an original bilingual toast through the real quiz button.

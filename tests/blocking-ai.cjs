@@ -106,7 +106,7 @@ async function done(p){assert.deepEqual(p.errors,[]);assert.equal(await p.evalua
     await p.click('#chat-confirm');const data=await snapshot(p);assert.equal(data.adventure.levels.tree.t2,0);assert.equal(data.adventure.speaking.at(-1).spoke,false);assert((await p.evaluate(()=>BW.adventure().active)).answered);await done(p);
   }
   report('missing/throwing/denied/empty/hanging recognition all offer taps + I said it, without recognition credit');
-  p=await page({endpoint:URL+'/mock-buddy',delay:1000});await trigger(p,false);assert((await p.evaluate(()=>BW.adventure().active)).pending);assert(!(await p.evaluate(()=>spoken)).includes('Tree or wood?'));
+  p=await page({endpoint:URL+'/mock-buddy',delay:1000});await trigger(p,false);assert((await p.evaluate(()=>BW.adventure().active)).pending);assert(!(await p.evaluate(()=>spoken)).includes('What is this?'));
   await p.keyboard.press('ArrowRight');assert(await p.locator('#dialogue').isVisible());await p.click('#btn-zh');await p.click('#parent-skip');await p.waitForTimeout(1200);assert.equal(await p.evaluate(()=>BW.adventure().active),null);await done(p);
   p=await page({endpoint:URL+'/mock-buddy',delay:300,timeout:80});await trigger(p);assert.equal((await p.evaluate(()=>BW.adventure().brain)).reasons.timeout,1);await p.locator('[data-word=tree]').click();await p.waitForFunction(()=>!BW.adventure().active?.pending);assert((await p.evaluate(()=>BW.adventure().active)).answered);await done(p);
   report('pending prompts already block; parent skip cancels late replies; timeout restores usable local answer buttons');
@@ -114,7 +114,7 @@ async function done(p){assert.deepEqual(p.errors,[]);assert.equal(await p.evalua
     const v=template(normalize(q)),lead=q.feedback==='success'?'You said tree!':'Alex!';return {...v,say:(v.done?'Nice! ':'')+lead+' '+v.say.replace(/^Great! /,'')};
   }});
   await p.click('#btn-zh');await p.fill('#parent-name','Alex');await p.click('#parent-close');await trigger(p);
-  assert.match(await p.locator('#chat-question').innerText(),/Alex!/);assert.equal(p.calls[0].child_name,'Alex');assert(p.calls[0].recent_events.some(e=>e.action==='found'&&e.word==='wood'));assert(!contextLeads(normalize(p.calls[0])).some(line=>/found wood/.test(line)));
+  assert.equal(await p.locator('#chat-question').innerText(),'What is this?');assert.equal(p.calls[0].child_name,'Alex');assert(p.calls[0].recent_events.some(e=>e.action==='found'&&e.word==='wood'));assert(!contextLeads(normalize(p.calls[0])).some(line=>/found wood/.test(line)));
   await p.screenshot({path:'screens/ai-context-line.png'});
   await p.click('#chat-mic');await p.evaluate(()=>recognizer.onresult({resultIndex:0,results:[[{transcript:'I see a tree'}]]}));await p.waitForFunction(()=>!BW.adventure().active.pending);
   assert.match(await p.locator('#chat-question').innerText(),/You said tree!/);assert.equal(p.calls[1].child_said,'I see a tree');assert.equal(p.calls[1].spoken_word,'tree');assert.equal(p.calls[1].recent_lines.length,1);

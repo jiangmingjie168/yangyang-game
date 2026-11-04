@@ -113,7 +113,7 @@ const report=s=>console.log('PASS',s);
  await p.evaluate(()=>{BW.setTime(0.3);BW.setRain(false);});await p.clock.runFor(1400);
  assert((await p.evaluate(()=>BW.testRainbow())).pixels);await photo(p,'weather-rainbow');
  const weatherKeys=await p.evaluate(()=>[BW.testWeatherKey(false,false,true),BW.testWeatherKey(false,false,false),BW.testWeatherKey(true,true,false),BW.testWeatherKey(true,true,false),BW.testWeatherKey(true,false,false)]);
- assert.deepEqual(weatherKeys,['cloud','sun','star','moon','moon']);assert.equal(await p.evaluate(()=>BW.totalWords()),42);
+ assert.deepEqual(weatherKeys,['cloud','sun','star','moon','moon']);assert.equal(await p.evaluate(()=>BW.totalWords()),47);
  for(const weather of ['rain',...weatherKeys]){assert((await p.evaluate(()=>BW.testWords())).includes(weather));const q=normalize({event:'weather_chat',weather,time_of_day:'evening'});const lines=await p.evaluate(q=>BW.testLines(q),q);assert.deepEqual(lines,conversationLines(q));for(const line of lines){assert(line.split(/\s+/).length>=3&&line.split(/\s+/).length<=6);assert(!/rainbow/i.test(line));}}
  for(const weather of ['sun','cloud','moon','star']){await p.evaluate(weather=>BW.testWeatherPicture(weather),weather);assert(await p.locator('#buddy-picture').isVisible());assert.equal(await p.locator('#buddy-picture').getAttribute('aria-label'),weather[0].toUpperCase()+weather.slice(1));assert(await p.locator('#buddy-picture').evaluate(c=>c.getContext('2d').getImageData(0,0,128,128).data.some(v=>v!==0)));}
  await p.click('#buddy-close');

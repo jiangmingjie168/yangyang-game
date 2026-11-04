@@ -119,13 +119,13 @@ function report(text) { console.log('PASS', text); }
   }
   assert.match(upstreamCalls[1].messages.at(-1).content,/Correction/);
   report('all tiers browser -> HTTP buddy -> mock DeepSeek, corrective retry, validated bubble and audio/TTS');
-  const invalid = [p=>({...template(normalize(p)),say:'你好'}), p=>({...template(normalize(p)),options:['tree','cat']}), p=>({...template(normalize(p)),answer:'wood'}), p=>({...template(normalize(p)),done:true}), p=>({...template(normalize(p)),say:'Tree or wood? rocket'}), p=>({...template(normalize(p)),reward:100}), '{bad json'];
-  for(const reply of invalid) { p=await page(next(fixture),{endpoint:URL+'/mock-buddy',reply}); await chat(p); assert.equal(await p.locator('#chat-question').innerText(),'Tree or wood?'); await checkClose(p); }
-  p=await page(next(fixture),{endpoint:'http://127.0.0.1:1/buddy'}); await chat(p); assert.equal(await p.locator('#chat-question').innerText(),'Tree or wood?'); await checkClose(p);
+  const invalid = [p=>({...template(normalize(p)),say:'你好'}), p=>({...template(normalize(p)),options:['tree','cat']}), p=>({...template(normalize(p)),answer:'wood'}), p=>({...template(normalize(p)),done:true}), p=>({...template(normalize(p)),say:'What is this? rocket'}), p=>({...template(normalize(p)),reward:100}), '{bad json'];
+  for(const reply of invalid) { p=await page(next(fixture),{endpoint:URL+'/mock-buddy',reply}); await chat(p); assert.equal(await p.locator('#chat-question').innerText(),'What is this?'); await checkClose(p); }
+  p=await page(next(fixture),{endpoint:'http://127.0.0.1:1/buddy'}); await chat(p); assert.equal(await p.locator('#chat-question').innerText(),'What is this?'); await checkClose(p);
   p=await page(next(fixture),{endpoint:URL+'/mock-buddy',reply:q=>template(normalize(q)),delay:350,timeout:100}); await chat(p);
-  assert.equal(await p.locator('#chat-question').innerText(),'Tree or wood?'); await checkClose(p);
+  assert.equal(await p.locator('#chat-question').innerText(),'What is this?'); await checkClose(p);
   report('client rejects unsafe/stale rule fields and falls back on malformed JSON/network error/timeout');
-  for (const [tier, say] of [[1, 'Tree or wood? What is wood?'], [2, "What's this? What can you say?"], [3, 'I see a tree. Say wood!']]) {
+  for (const [tier, say] of [[1, 'What is this? What is wood?'], [2, "What's this? What can you say?"], [3, 'I see a tree. Say wood!']]) {
     const seed = next(fixture); seed.adventure.levels.tree = { t1: tier >= 2 ? 2 : 0, t2: tier === 3 ? 2 : 0, t3: 0 };
     p = await page(seed, { endpoint: URL + '/mock-buddy', reply: q => ({ ...template(normalize(q)), say: q.feedback === 'success' ? 'Great! Say wood!' : say }) });
     await chat(p);
@@ -153,6 +153,6 @@ function report(text) { console.log('PASS', text); }
   // File URL + offline context proves the configured brain still has local fallback.
   const offline=await browser.newContext({offline:true,viewport:{width:1180,height:720}}); const f=await offline.newPage();
   await f.addInitScript(data=>localStorage.setItem('block-world-save-v1',JSON.stringify(data)),next(fixture));
-  await f.goto('file://'+require('node:path').resolve(__dirname,'../index.html')); await f.click('#btn-start'); if(await f.locator('#name-entry').isVisible())await f.click('#welcome-play'); assert(await f.evaluate(()=>BW.layout().started)); await chat(f); assert.equal(await f.locator('#chat-question').innerText(),'Tree or wood?'); await offline.close();
+  await f.goto('file://'+require('node:path').resolve(__dirname,'../index.html')); await f.click('#btn-start'); if(await f.locator('#name-entry').isVisible())await f.click('#welcome-play'); assert(await f.evaluate(()=>BW.layout().started)); await chat(f); assert.equal(await f.locator('#chat-question').innerText(),'What is this?'); await offline.close();
   report('configured BRAIN_URL starts and falls back to template dialogue offline from file://');
 })().catch(e=>{console.error(e);process.exitCode=1;}).finally(async()=>{await browser?.close();await close(brain);await close(upstream);});

@@ -20,12 +20,12 @@ let browser,server;
   async function snap(p,name){await p.screenshot({path:path.join(root,'screens',(process.env.BW_EXPECT_FAILURE?'baseline-':'')+name+'.png')});}
   async function visibleText(p,selector,text){await p.locator(selector).filter({hasText:text}).waitFor({state:'visible',timeout:12000});}
   async function levelOne(p,name){
-    await visibleText(p,'#dialogue #chat-question','Listen and choose!');
-    assert.equal(await p.locator('#chat-question').innerText(),'Listen and choose!');
+    await visibleText(p,'#dialogue #chat-question','What is this?');
+    assert.equal(await p.locator('#chat-question').innerText(),'What is this?');
     const labels=await p.locator('#chat-options button').allInnerTexts();
-    assert.equal(labels.length,2);assert(labels.every(s=>s.trim()===''),'picture-only options');
+    assert.equal(labels.length,2);assert(labels.every(s=>s.trim().length>0),'picture and word options');
     const text=await p.locator('#dialogue').innerText();
-    assert(!/\b(tree|wood)\b/i.test(text),text);
+    assert(await p.locator('#chat-picture').isVisible(),'large target picture');
     await snap(p,name);results.push({case:name,status:'PASS',text});
   }
   let p=await fresh();

@@ -89,7 +89,7 @@ test('every vocabulary item has valid templates in all tiers', () => {
 });
 test('bounded phrasing variants still use the model response', async () => {
   for (const [tier, feedback, say] of [
-    [1, 'prompt', 'Nice! Is this fish or wood?'],
+    [1, 'prompt', 'Nice! What is this?'],
     [2, 'retry', 'Well done! What is this?'],
     [3, 'prompt', 'Good job! I see a fish. Your turn!'],
     [1, 'success', "Nice! Let's keep exploring!"]
@@ -140,11 +140,11 @@ test('HTTP route, media type, method, body limit, and exact origin policy', asyn
 });
 
 test('context leads use validated facts, name and matched speech; provider provenance is exposed', async () => {
-  const p = normalize({ ...input, child_name: 'Alex', recent_events: [{action:'caught',word:'fish'}], last_answer:'fish', recent_lines:['Fish or wood?'] });
-  for (const say of ['Alex, you caught a fish! Fish or wood?', 'Remember fish? Fish or wood?']) {
+  const p = normalize({ ...input, tier: 2, child_name: 'Alex', recent_events: [{action:'caught',word:'fish'}], last_answer:'fish', recent_lines:['Fish or wood?'] });
+  for (const say of ["Alex! What's this?", "You caught a fish! What's this?", "Remember fish? What's this?"]) {
     const v = {...template(p),say}; assert(validOutput(v,p));
     const r = await scenario([v],p);assert.deepEqual(r.value,v);assert.equal(r.source,'brain');assert.match(r.expose,/X-Buddy-Source/);
-    const sent=JSON.parse(r.calls[0].messages[1].content);assert(sent.context_leads.includes('Alex, you caught a fish!'));assert.deepEqual(sent.recent_lines,['Fish or wood?']);
+    const sent=JSON.parse(r.calls[0].messages[1].content);assert(sent.context_leads.includes('Alex!') && sent.context_leads.includes('You caught a fish!'));assert.deepEqual(sent.recent_lines,['Fish or wood?']);
   }
   const success=normalize({...p,feedback:'success',child_said:'I see fish',spoken_word:'fish'});
   assert(validOutput({...template(success),say:'Nice! You said fish! Keep exploring!'},success));
@@ -160,9 +160,9 @@ test('context cannot invent actions, names, speech or change the exercise', asyn
 });
 
 test('context-free or repeated model lines retry once before template fallback', async () => {
-  const p=normalize({...input,child_name:'Alex',recent_events:[{action:'caught',word:'fish'}],recent_lines:['Nice! You caught a fish! Fish or wood?']});
-  const good={...template(p),say:'Alex, you caught a fish! Fish or wood?'};
-  for(const say of ['Fish or wood?',p.recent_lines[0]]){
+  const p=normalize({...input,tier:2,child_name:'Alex',recent_events:[{action:'caught',word:'fish'}],recent_lines:["Nice! You caught a fish! What's this?"]});
+  const good={...template(p),say:"Alex! What's this?"};
+  for(const say of ["What's this?",p.recent_lines[0]]){
     const r=await scenario([{...template(p),say},good],p);assert.equal(r.calls.length,2);assert.equal(r.source,'brain');assert.equal(r.value.say,good.say);
   }
   const fallback=await scenario([template(p)],p);assert.equal(fallback.calls.length,2);assert.equal(fallback.source,'template');
@@ -230,7 +230,7 @@ test('conversation slots: strict normalization, whitelist, ASCII, tiers and enve
     {event:'weather_chat',weather:'snow',time_of_day:'morning'}, {event:'weather_chat',weather:'rain',time_of_day:1},
     {event:'recast',child_said:'cat',target_tier:3}, {event:'recast',child_said:4,target_tier:1}, {event:'recast',child_said:'',target_tier:1}
   ]) assert.throws(()=>normalize(input),JSON.stringify(input));
-  assert.equal(WORDS.size,42);
+  assert.equal(WORDS.size,47);
 });
 test('new events use one correction, provenance and offline fallback', async t => {
   for(const input of [{event:'name_ask'}, {event:'small_talk',topic:'learn_pref_build'}, {event:'weather_chat',weather:'rain',time_of_day:'morning'}, {event:'recast',child_said:'cat',target_tier:1}]) {
@@ -270,7 +270,7 @@ test('context action and remembered noun must match the exercise target', () => 
   const p = normalize({...input, target_word:'wood', recent_events:[{action:'met',word:'fish'}],last_answer:'fish'});
   assert.deepEqual(contextLeads(p),[]);
   assert.equal(validOutput({...template(p),say:'You met a fish! Wood or fish?'},p),false);
-  const match=normalize({...input,recent_events:[{action:'caught',word:'fish'}]});
+  const match=normalize({...input,tier:2,recent_events:[{action:'caught',word:'fish'}]});
   assert.deepEqual(contextLeads(match),['You caught a fish!']);
 });
 
@@ -292,4 +292,14 @@ test('voice metadata uses stable text hashes; static audio, HEAD, CORS and missi
     const reply=await fetch(base+'/buddy',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(p)});
     assert.equal((await reply.json()).audio_url,r.audio_url);
   } finally {await close(s);}
+});
+
+test('build vocabulary accepts all 47, rejects 48 and never discloses tier-one options', () => {
+  const all=[...WORDS]; assert.equal(all.length,47);
+  const p=normalize({...input,learned_words:all,tier:1,child_name:'Alex',recent_events:[{action:'built',word:'fish'}]});
+  assert.equal(template(p).say,'What is this?');
+  assert(validOutput(template(p),p));
+  assert(!validOutput({...template(p),say:'You built a fish! What is this?'},p));
+  assert(!validOutput({...template(p),say:'Fish or wood?'},p));
+  assert.throws(()=>normalize({...input,learned_words:[...all,'fish']}),/invalid vocabulary/);
 });
