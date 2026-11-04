@@ -699,7 +699,8 @@ const BRAIN_TIMEOUT_MS = 6500;
     { out: 'door', n: 1, need: { planks: 6 } },
     { out: 'torch', n: 4, need: { stick: 1, wood: 1 } },
     { out: 'bed', n: 1, need: { planks: 3, wool: 2 } },
-    { out: 'house', n: 4, need: { stone: 2, planks: 2 } },
+    // The starter clearing guarantees one surface stone. One harvest makes a roof affordable.
+    { out: 'house', n: 4, need: { stone: 1, planks: 2 } },
     { out: 'fence', n: 2, need: { planks: 2, stick: 1 } },
     { out: 'rod', n: 1, need: { stick: 2, wool: 1 } },
     { out: 'boat', n: 1, need: { planks: 5 } },
@@ -1683,7 +1684,7 @@ function validConversation(value, p) {
   // BUILD_LINES is the single source read by brain/scripts/build-lines.cjs.
   const BUILD_LINES = ["Wow!","Let's build more!","What shall we build?","What can we build?","Ready? What shall we build?","A house!","A fence!","Let's build it!","Let's build a house!","Let's build a fence!","What do we need?","We need more planks.","Oops! We need planks.","Let's find more planks!","We need more wood.","Oops! We need wood.","Let's find more wood!","We need more stone.","Oops! We need stone.","Let's find more stone!","We need a stick.","Oops! We need a stick.","Let's find a stick!","Nice start!","You can build!","It's all closed!","The dog is inside!","The cat is inside!","Now it's a house!","It's a house!","Show me!","Can I see it?","Look at that!","I made a house.","I made a fence.","It's so big!","I like it!","It's so nice!","You made this!","Look!","Our house!","Our fence!","I remember our house!","I remember our fence!","Our house is here!","Our fence is here!","Shall we build a house?","Let's build a house together!"];
   var buildMode = false, buildTool = 'planks', buildSavedIds = new Set(), builds = [], buildWords = {}, buildChat = {}, buildQueue = [], buildLevel = 0;
-  var buildSession = newBuildSession(), buildRegions = [], buildDirty = false, buildShowingWord = false, buildWordPending = {}, buildGhost = null, buildArrow = null;
+  var buildSession = newBuildSession(), buildRegions = [], buildClusters = [], buildClusterDirty = true, buildDirty = false, buildShowingWord = false, buildWordPending = {}, buildGhost = null, buildArrow = null;
   function newBuildSession() { return { active:false, placed:0, removed:0, lastActionAt:-100, selectedAt:-100, startedAt:0, asked:0, praised:0, closed:0, lastBubbleAt:-100, lastQuestionAt:-100, lastPraiseAt:-100, plan:null, firstDone:false, shorts:{}, roomAt:0, revisit:false }; }
   function resetBuildDay() {
     var day = localChatDay();
@@ -1691,8 +1692,8 @@ function validConversation(value, p) {
   }
   function restoreBuild(data) {
     buildLevel = [1,2,3].includes(data.build_level) ? data.build_level : 0;
-    buildMode = false; buildSession = newBuildSession(); buildQueue = []; buildRegions = []; buildGhost = null; buildWordPending = {};
-    builds = Array.isArray(data.builds) ? data.builds.filter(function (b) { return b && ['house','pen'].includes(b.kind) && Number.isInteger(b.x) && Number.isInteger(b.y) && b.x >= 0 && b.x < W && b.y >= 0 && b.y < H && b.w > 0 && b.w <= 14 && b.h > 0 && b.h <= 10; }).slice(0,8).map(function (b) { return {id:String(b.id).slice(0,40),kind:b.kind,x:b.x,y:b.y,w:b.w,h:b.h,roofed:!!b.roofed,createdAt:Number(b.createdAt)||Date.now(),shown:!!b.shown,invited:!!b.invited,closed:!!b.closed,roofPraise:!!b.roofPraise}; }) : [];
+    buildMode = false; buildSession = newBuildSession(); buildQueue = []; buildRegions = []; buildClusters = []; buildClusterDirty = true; buildGhost = null; buildWordPending = {};
+    builds = Array.isArray(data.builds) ? data.builds.filter(function (b) { return b && ['house','pen','free'].includes(b.kind) && Number.isInteger(b.x) && Number.isInteger(b.y) && b.x >= 0 && b.x < W && b.y >= 0 && b.y < H && b.w > 0 && b.w <= 14 && b.h > 0 && b.h <= 10; }).slice(0,8).map(function (b) { return {id:String(b.id).slice(0,40),kind:b.kind,x:b.x,y:b.y,w:b.w,h:b.h,roofed:!!b.roofed,createdAt:Number(b.createdAt)||Date.now(),shown:!!b.shown,invited:!!b.invited,closed:!!b.closed,roofPraise:!!b.roofPraise}; }) : [];
     buildSavedIds = new Set(builds.map(function(b){return b.id;}));
     buildChat = {}; var raw = data.build_chat || {};
     ['asked','plans','shorts','shows','revisits','offers','praised','manualShows','offerIgnored','offerPausedUntil'].forEach(function (k) { buildChat[k] = Number.isFinite(raw[k]) ? Math.max(0, Math.min(k === 'offerPausedUntil' ? Date.now()+7*86400000 : 100, Math.floor(raw[k]))) : 0; });
@@ -1871,7 +1872,42 @@ function validConversation(value, p) {
         regions.push({building:b,inside:inside});
       }
     });
-    buildRegions=regions.slice(0,8); builds=buildRegions.map(function(r){return r.building;}); saveSoon();
+    buildRegions=regions.slice(0,8);
+    scanFreeBuilds();
+    builds=buildRegions.concat(buildClusters.filter(function(r){return r.ready;})).slice(0,8).map(function(r){return r.building;}); saveSoon();
+  }
+  // Open creations are not enclosures. Count distinct, still-present placed
+  // blocks, with short gaps allowed for the two sides children naturally make.
+  function scanFreeBuilds() {
+    buildClusterDirty=false;
+    var claimed=new Set(), points=[], previous=buildClusters.map(function(r){return r.building;}).concat(builds);
+    buildRegions.forEach(function(r){var b=r.building;for(var y=b.y-1;y<=b.y+b.h;y++)for(var x=b.x-1;x<=b.x+b.w;x++)claimed.add(idx(x,y));});
+    for(var at=0;at<cells.length;at++)if(!claimed.has(at) && cells[at]!==base[at] && (buildingBlock(cells[at]) || [FENCE,DOOR,WINDOW].includes(cells[at])))points.push(at);
+    var remaining=new Set(points), clusters=[];
+    points.forEach(function(start){
+      if(!remaining.has(start))return;
+      var members=[start],x0=start%W,x1=x0,y0=Math.floor(start/W),y1=y0;remaining.delete(start);
+      for(var q=0;q<members.length;q++) {
+        var x=members[q]%W,y=Math.floor(members[q]/W);
+        for(var yy=Math.max(0,y-5);yy<=Math.min(H-1,y+5);yy++)for(var xx=Math.max(0,x-5);xx<=Math.min(W-1,x+5);xx++) {
+          var next=idx(xx,yy);if(!remaining.has(next))continue;
+          if(Math.max(x1,xx)-Math.min(x0,xx)>=14 || Math.max(y1,yy)-Math.min(y0,yy)>=10)continue;
+          remaining.delete(next);members.push(next);x0=Math.min(x0,xx);x1=Math.max(x1,xx);y0=Math.min(y0,yy);y1=Math.max(y1,yy);
+        }
+      }
+      var fences=members.filter(function(at){return cells[at]===FENCE;}).length;
+      var old=previous.find(function(b){return b.kind==='free' && members.some(function(at){var x=at%W,y=Math.floor(at/W);return x>=b.x&&x<b.x+b.w&&y>=b.y&&y<b.y+b.h;});});
+      var b=Object.assign({id:'free:'+start,kind:'free',createdAt:Date.now(),shown:false,invited:false,closed:false},old||{},{x:x0,y:y0,w:x1-x0+1,h:y1-y0+1,roofed:false});
+      clusters.push({building:b,inside:[],members:members,ready:members.length>=4||fences>=2,near:members.length>=2||fences>=1});
+    });
+    buildClusters=clusters;
+  }
+  function buildCompletion(r) {
+    var b=r.building;
+    b.closed=true;buildSession.closed++;buildSession.completionAt=chatClock;
+    buildFeedback(BUILD_LINES[0]+' '+BUILD_LINES[b.kind==='free'?38:25],b.kind==='free'?'build_free':'build_closed');
+    buildSession.flash={building:b,until:chatClock+2};
+    celebrate((b.x+b.w/2)*TILE,b.y*TILE,true);saveSoon();
   }
   function buildQuiet() { return !dialogue && !quiz && !nameFlow && !welcome && !panelOpen() && !seek && !axis() && onGround && !inWater() && !riding && !fishing && !jumpBuf && joyId===null && chatClock-buildSession.lastActionAt>=2.5 && chatClock-buildSession.selectedAt>=4 && cardLeft<=0; }
   function buildQuota() { return buildSession.asked<3 && buildChat.asked<6 && chatClock-buildSession.lastQuestionAt>=45; }
@@ -1913,6 +1949,15 @@ function validConversation(value, p) {
   }
   function showBuildQuestion(d) {
     if(d.building)buildSession.flash={building:d.building,until:chatClock+2};
+    if(d.stage==='invite' && d.event==='build_show') {
+      // An invitation is a lightweight action. Only the child's Show click
+      // opens a question, and free creations never get a false house/pen label.
+      if(d.building.kind==='free' || (!d.manual && !buildQuota())) {
+        d.building.shown=true;d.praise=true;d.stage='done';
+        buildBubble(BUILD_LINES[0]+' '+BUILD_LINES[38]+' '+BUILD_LINES[36]+' Good job!',d);saveSoon();return;
+      }
+      if(!d.manual)spendBuildQuestion();
+    }
     d.stage='question';d.tier=buildTier(d.options);d.misses=0;
     var text=d.event==='build_plan'?(d.tier===3?(BUILD_LINES[8] + ' Say it!'):lineVariant([BUILD_LINES[2],BUILD_LINES[3],BUILD_LINES[4]])):d.tier===1?(d.event==='build_short'?BUILD_LINES[10]:'What is this?'):d.tier===2?"What's this?":d.event==='build_short'?(d.key==='stick'?BUILD_LINES[20]:buildNeedLine(d.key))+' Say it!':(d.key==='house'?BUILD_LINES[33]:BUILD_LINES[34])+' Say it!';
     if(d.event==='build_plan'){var prefix=buildName();d.named=!!prefix;text=prefix+text;}
@@ -1966,13 +2011,13 @@ function validConversation(value, p) {
     buildFeedback(text,'build_short');
   }
   function inviteBuildShow(manual) {
-    var r=buildRegions.find(function(r){return Math.abs((r.building.x+r.building.w/2)*TILE-player.x)<14*TILE;});
-    if(!r || (manual && (buildSession.placed<6 || chatClock-buildSession.lastActionAt>30)))return;
-    var b=r.building;if(!manual && (b.invited||buildChat.shows>=2))return;
-    var data={building:b,key:b.kind==='house'?'house':'fence',options:['house','fence'],manual:manual};
-    // A child-requested Show is an explicit action, not an idle invitation.
-    if(manual && !dialogue && !quiz && !nameFlow && !welcome && !panelOpen())showBuildEvent({event:'build_show',data:data});
-    else queueBuild('build_show',data);
+    if(manual && (buildSession.placed<6 || chatClock-buildSession.lastActionAt>30))return;
+    if(manual && buildDirty)detectBuilds();
+    var candidates=buildRegions.concat(buildClusters.filter(function(r){return r.ready;}));
+    var r=candidates.find(function(r){return Math.abs((r.building.x+r.building.w/2)*TILE-player.x)<14*TILE && (manual||!r.building.invited);});
+    if(!r || (!manual && buildChat.shows>=2))return;
+    var b=r.building,data={building:b,key:b.kind==='house'?'house':'fence',options:['house','fence'],manual:manual};
+    if(!dialogue && !quiz && !nameFlow && !welcome && !panelOpen())showBuildEvent({event:'build_show',data:data});
   }
   function buildOutline() {
     var px=Math.floor(player.x/TILE),floor=Math.floor((player.y+1)/TILE);
@@ -1988,10 +2033,10 @@ function validConversation(value, p) {
     if(event==='build_offer'){d.outline=buildOutline();if(!d.outline)return false;}
     var question=['build_plan','build_offer','build_short','build_show','build_revisit'].includes(event) && !(event==='build_revisit'&&d.building.shown) && !(d.manual&&(buildChat.manualShows||0)>=2);
     if(event==='build_short'&&!buildQuota()){d.praise=true;buildBubble(buildNeedLine(d.key,true),d);return true;}
-    if(question && !d.manual && !buildQuota())return false;
+    if(question && event!=='build_show' && !d.manual && !buildQuota())return false;
     if(event==='build_word' && chatClock-buildSession.lastActionAt<12)return false;
-    if(!question && (buildSession.praised>=6 || chatClock-buildSession.lastPraiseAt<20))return false;
-    if(question && !d.manual)spendBuildQuestion();
+    if(event!=='build_show' && !question && (buildSession.praised>=6 || chatClock-buildSession.lastPraiseAt<20))return false;
+    if(question && event!=='build_show' && !d.manual)spendBuildQuestion();
     if(!question){buildSession.praised++;buildChat.praised++;buildSession.lastPraiseAt=chatClock;}
     if(event==='build_plan'){buildChat.plans++;buildSession.planAt=chatClock;d.options=['house','fence'];d.key='house';d.named=!!childName;showBuildQuestion(d);}
     else if(event==='build_offer'){
@@ -2004,7 +2049,7 @@ function validConversation(value, p) {
       if(event==='build_show'){if(d.manual)buildChat.manualShows=(buildChat.manualShows||0)+1;else buildChat.shows++;d.building.invited=true;}
       else {buildChat.revisits++;buildSession.revisit=true;}
       var prefix=buildName();d.named=!!prefix;
-      if((d.manual && buildChat.manualShows>2) || (event==='build_revisit' && d.building.shown)) {d.praise=true;buildBubble(prefix+BUILD_LINES[39]+' '+BUILD_LINES[d.key==='house'?40:41]+' '+BUILD_LINES[1],d);}
+      if((d.manual && buildChat.manualShows>2) || (event==='build_revisit' && d.building.shown)) {d.praise=true;buildBubble(d.building.kind==='free'?BUILD_LINES[0]+' '+BUILD_LINES[38]+' '+BUILD_LINES[1]:prefix+BUILD_LINES[39]+' '+BUILD_LINES[d.key==='house'?40:41]+' '+BUILD_LINES[1],d);}
       else {d.stage='invite';buildBubble(prefix+(event==='build_revisit'?lineVariant([BUILD_LINES[39]+' '+BUILD_LINES[d.key==='house'?40:41],BUILD_LINES[d.key==='house'?42:43],BUILD_LINES[d.key==='house'?44:45]]):lineVariant([(BUILD_LINES[0] + ' ' + BUILD_LINES[30]),BUILD_LINES[31],(BUILD_LINES[32] + ' ' + BUILD_LINES[30])])),d);var b=document.createElement('button');b.textContent='☝ Show';b.setAttribute('aria-label','Show my building');b.onclick=function(){showBuildQuestion(d);};document.getElementById('buddy-options').appendChild(b);}
     } else if(event==='build_word') {
       buildWords[d.key]=1;delete buildWordPending[d.key];
@@ -2033,6 +2078,7 @@ function validConversation(value, p) {
     if(buildSession.active && chatClock-buildSession.lastActionAt>=30 && !buildMode) {buildSession.active=false;buildQueue=[];}
     if(buildSessionBusy() && (axis() || joyId!==null || jumpBuf>0)) {buildAction('move');buildSession.moved=true;}
     if(buildDirty && chatClock-buildSession.lastActionAt>=2.5)detectBuilds();
+    if(buildClusterDirty)scanFreeBuilds();
     var quiet=buildQuiet();
     if(buildSession.offerAt && !buildSession.offerChecked && chatClock-buildSession.offerAt>=8){buildSession.offerChecked=true;if(!buildSession.offerAnswered){buildChat.offerIgnored++;if(buildChat.offerIgnored>=2)buildChat.offerPausedUntil=Date.now()+7*86400000;}else buildChat.offerIgnored=0;saveSoon();}
     buildRegions.forEach(function(r){
@@ -2041,14 +2087,16 @@ function validConversation(value, p) {
       else {r.roomTime=0;r.roomEntered=false;}
       if(!quiet)return;
       if(b.roofed&&!buildWords.roof)recognizeBuildWord('roof','built');
-      if(!b.closed&&buildSession.closed<2){b.closed=true;buildSession.closed++;buildFeedback(BUILD_LINES[0]+' '+BUILD_LINES[25],'build_closed');}
+      if(!b.closed&&buildSession.closed<2)buildCompletion(r);
       if(b.roofed&&!b.roofPraise&&buildWords.roof&&!buildWordPending.roof){b.roofPraise=true;queueBuild('build_roof',{});}
       animals.filter(function(a){return a.tamed&&['dog','cat'].includes(a.type);}).forEach(function(a){
         if(r.inside.includes(idx(Math.floor(a.x/TILE),Math.floor((a.y-10)/TILE)))){r.petTime=(r.petTime||0)+dt;if(r.petTime>=4&&!r.petPraised){r.petPraised=true;queueBuild('build_closed',{text:BUILD_LINES[a.type==='dog'?26:27]});}}else r.petTime=0;
       });
       if(returningVisit && buildSavedIds.has(b.id) && !buildSession.revisit && buildChat.revisits<1 && Math.abs(player.x-(b.x+b.w/2)*TILE)<14*TILE)queueBuild('build_revisit',{building:b,key:b.kind==='house'?'house':'fence',options:['house','fence'],manual:b.shown});
     });
+    if(quiet && buildSession.placed && buildSession.closed<2) {var free=buildClusters.find(function(r){return r.ready&&!r.building.closed;});if(free)buildCompletion(free);}
     if(ambient && ambient.build && ambient.build.event==='build_plan' && !buildSession.planAnswered && chatClock-buildSession.planAt>=8)closeAmbient();
+    if(quiet && ambient && ambient.build && ['build_closed','build_free'].includes(ambient.build.event) && chatClock-buildSession.completionAt>=1.5 && chatClock-buildSession.lastActionAt>=4)closeAmbient();
     if(!quiet || ambient)return;
     var pendingWord=Object.keys(buildWordPending)[0]; if(pendingWord)queueBuild('build_word',buildWordPending[pendingWord]);
     if(buildSession.active){
@@ -2062,6 +2110,11 @@ function validConversation(value, p) {
     for(var qi=0;qi<buildQueue.length;qi++){var e=buildQueue[qi];if(showBuildEvent(e)){var i=buildQueue.indexOf(e);if(i>=0)buildQueue.splice(i,1);break;}}
   }
   function drawBuildGuide(g) {
+    buildClusters.forEach(function(r){
+      if(!buildMode || !r.near || r.building.invited)return;
+      var b=r.building;g.save();g.strokeStyle=r.ready?'#ffe49c':'#fff8cc';g.globalAlpha=reducedMotion ? .65 : .55+.2*Math.sin(chatClock*3);g.lineWidth=2;g.shadowColor='#fff3ad';g.shadowBlur=9;g.setLineDash([6,5]);
+      g.strokeRect(b.x*TILE-3,b.y*TILE-3,b.w*TILE+6,b.h*TILE+6);g.restore();
+    });
     if(buildSession.flash && chatClock<buildSession.flash.until){var b=buildSession.flash.building;g.save();g.fillStyle='#fff3a555';g.fillRect((b.x-1)*TILE,(b.y-1)*TILE,(b.w+2)*TILE,(b.h+2)*TILE);g.restore();}
     if(buildMode){g.save();g.strokeStyle='#ffffff44';g.lineWidth=0.7;var px=Math.floor(player.x/TILE),py=Math.floor(player.y/TILE);for(var x=px-8;x<=px+8;x++)for(var y=py-6;y<=py;y++)if(get(x,y)===AIR)g.strokeRect(x*TILE,y*TILE,TILE,TILE);g.restore();}
     if(buildGhost&&chatClock<buildGhost.until){g.save();g.fillStyle='#fff8cc44';g.strokeStyle='#fff8cc';g.setLineDash([5,4]);g.fillRect(buildGhost.x*TILE,buildGhost.y*TILE,4*TILE,3*TILE);g.strokeRect(buildGhost.x*TILE,buildGhost.y*TILE,4*TILE,3*TILE);g.restore();}
@@ -2100,6 +2153,7 @@ function validConversation(value, p) {
     return cells[idx(x, y)];
   }
   function setCell(x, y, id) {
+    buildClusterDirty=true;
     if (x < 0 || y < 0 || x >= W || y >= H) return;
     cells[idx(x, y)] = id;
   }

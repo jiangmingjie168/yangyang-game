@@ -44,6 +44,8 @@ async function hold(p,code,ms){await p.keyboard.down(code);await p.waitForTimeou
   // Fresh-save feedback is a release gate; the stocked legacy fixture below
   // only verifies compatibility and construction mechanics.
   await require('./build-v1-fix1.cjs')(browser);
+  const retest=await require('./build-v1-fix2.cjs')(browser);
+  assert(retest.results.every(r=>r.status==='PASS'),JSON.stringify(retest.results));
   let p=await fresh();await dismissWelcome(p);await p.locator('#btn-build').click();
   await snap(p,'01-main-save');
   // An entire four-block roof must fail atomically when even its far end is
