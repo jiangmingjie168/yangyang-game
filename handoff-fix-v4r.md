@@ -2,7 +2,8 @@
 
 - 主实施：gpt-6-astra；工作分支：`codex-fix-v4r`。
 - 游戏提交：`ece751c84ae70f6a23867c373436ff2398e83a12`。
-- 可直接玩的 HTTPS 固定版本：[打开 Block World v4r](https://raw.githack.com/jiangmingjie168/yangyang-game/ece751c84ae70f6a23867c373436ff2398e83a12/index.html)。
+- 可直接玩的 HTTPS 预览（推荐，无源码页）：[https://tesla.yydriver.cn/yangyang-game-preview/](https://tesla.yydriver.cn/yangyang-game-preview/)（部署于 `jiangmingjie168.github.io` 的 `yangyang-game-preview/`，字节与 `ece751c` 一致；**未覆盖**正式 `/yangyang-game/`）。
+- 备份固定版本：[raw.githack ece751c](https://raw.githack.com/jiangmingjie168/yangyang-game/ece751c84ae70f6a23867c373436ff2398e83a12/index.html)（首次可能需点 **Open the page**）。
 - 首次用全新浏览器访问时，raw.githack 可能先显示站方确认页；点击 **Open the page** 即进入游戏。本轮已实际点击确认页并完成线上远树采集。
 - 预览验证：HTTP 200，`Content-Type: text/html; charset=utf-8`；下载文件与本地 index.html 完全相同，SHA-256 `d2be12d9d42826cca05b4a1f98463f528e32165b6689e7a12c5fc243fb1f3176`。独立新浏览器从欢迎入口进入，真实点远树后 Wood=1，见[线上预览截图](screens/v4r-https-preview.png)。
 

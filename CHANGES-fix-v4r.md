@@ -52,3 +52,7 @@ BW_SOURCE=/tmp/v4r-baseline.html BW_EXPECT_FAILURE=1 PLAYWRIGHT_MODULE=/workspac
 - 一级：`v4r-level1-short.png`、`v4r-level1-dpr2.png`；结果记录 `screens/natural-pointer-v4r-results.json`。
 
 边界：这不是任意地形的全局寻路器。超过5格的墙、封闭空间、低天花板仍可能无法到达；12秒后有明确提示。未取得家长原设备/存档，最终真人复测仍由家长关闭。本轮按最新收尾指令提供固定提交 raw.githack HTTPS 预览；不再探索 SSH，不修改正式站点或 main。
+
+## 预览补充
+
+另已把同字节 `index.html` 推到 `jiangmingjie168.github.io` 的 `yangyang-game-preview/`，对外 `https://tesla.yydriver.cn/yangyang-game-preview/`；正式 `/yangyang-game/` 与 `yangyang-game` 仓库 `main` 均未改。
