@@ -8,8 +8,8 @@
 | 项 | 值 |
 | --- | --- |
 | 分支 | `codex-fix-v4`（已 push） |
-| 修复 commit | `e29d05dd3f1cf718d33c188cc39229e55e8e72a4`（`e29d05d`） |
-| 最新 HEAD（含 astra 复查文档） | `PLACEHOLDER_FULL`（`ecce689`） |
+| 修复 commit（改 index.html） | `e29d05dd3f1cf718d33c188cc39229e55e8e72a4`（`e29d05d`） |
+| 分支 tip（含 astra 复查 + handoff） | `58c5628c0c0c3e4d602eca19d5ac312bc8237e42`（`58c5628`） |
 | origin/main | `a29022929a5aa8991e28b7fcd828b1c231544440`（`a290229`）**未动** |
 | 是否已 push | 是 → `origin/codex-fix-v4` |
 | 预览 URL | https://cdn.jsdelivr.net/gh/jiangmingjie168/yangyang-game@e29d05dd3f1cf718d33c188cc39229e55e8e72a4/index.html |
@@ -18,7 +18,7 @@
 
 ### P0 点动物真实互动 — PASS
 - **修了什么**：动物命中从身体中心 r=38 圆改为覆盖头/耳/身/脚边矩形 + 所在格；命中后 `beginSeek` 走近再 `pet`；靠近中目标动物停游走；清旧方块选中框；爱心反馈延至 1.2s 并画头顶 ♥；狗三次互动仍可跟随。
-- **如何验收**：`tests/raw-pointer-v4.cjs` 对**未改字节、无钩子**的 index.html 用真实 `mouse.click` 点脚边（旧圆外）；牛/狗/羊/兔走近+tapped；狗再点两次后跟随。对照生产/基线同用例首项失败。小黑豆独立复跑 exit 0。
+- **如何验收**：`tests/raw-pointer-v4.cjs` 对未改字节、无钩子的 index.html 用真实 `mouse.click` 点脚边（旧圆外）；牛/狗/羊/兔走近+tapped；狗再点两次后跟随。对照生产/基线同用例首项失败。小黑豆独立复跑 exit 0。
 - **判定**：PASS（合成回访存档；非家长原存档、非手机触摸）
 
 ### P1 一级题上下文不泄漏目标词 — PASS
@@ -29,11 +29,11 @@
 ### 采集选 B 先寻路再采 — PASS
 - **修了什么**：`inReach` 10 格 → 3 格；远处树/石/作物走 `beginSeek`（与动物共用），抵达再采；禁止远程点采；seek 超时 6s→12s。
 - **如何验收**：远处 wood/stone/wheat 点击瞬间库存不变，角色位移后再增加；raw-pointer + real-pointer 均 PASS。
-- **判定**：PASS（横向趋近+跳跃，非全图绕障 A\*）
+- **判定**：PASS（横向趋近+跳跃，非全图绕障 A*）
 
 ## 脚本假绿根因（一句话）
 
-旧 `real-pointer` 改写 HTML/注入探针，且动物用例只精确点身体中心（新档 seed=42），**漏测回访场景下点脚边/所在格落在旧圆外的真实命中路径**，故脚本绿、真人点脚边/格不绿。
+旧 `real-pointer` 改写 HTML/注入探针，且动物用例只精确点身体中心（新档 seed=42），漏测回访场景下点脚边/所在格落在旧圆外的真实命中路径，故脚本绿、真人点脚边/格不绿。
 
 ## 截图路径
 
@@ -59,5 +59,5 @@
 
 ## 编排备忘
 
-- 未手改 `index.html` 大段逻辑；Codex `gpt-6.1-sol` 完成修复并 push；astra 仅写复查文档后二次 push。
+- 未手改 `index.html` 大段逻辑；Codex `gpt-6.1-sol` 完成修复并 push；astra 仅写复查文档。
 - 未 push/merge main；未打印密钥。
