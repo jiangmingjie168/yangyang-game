@@ -1,0 +1,54 @@
+{
+  "source_sha256": "609b7c0a23b4700a7bbc71c192578f991ac6f19527d06e1aed35d647fced6137",
+  "results": [
+    {
+      "case": "G-mobile-clean",
+      "status": "PASS",
+      "video": "build-v1-fix3-video/page@4967f23eb1899e30f70976dad0565a73.webm"
+    }
+  ],
+  "frames": [
+    {
+      "case": "G-mobile-clean",
+      "t_ms": 1008,
+      "file": "build-v1-fix3-G-mobile-clean-955-fresh.png",
+      "label": "fresh"
+    },
+    {
+      "case": "G-mobile-clean",
+      "t_ms": 7201,
+      "file": "build-v1-fix3-G-mobile-clean-7159-crafted.png",
+      "label": "crafted"
+    },
+    {
+      "case": "G-mobile-clean",
+      "t_ms": 7672,
+      "file": "build-v1-fix3-G-mobile-clean-7619-G-one-build.png",
+      "label": "G-one-build"
+    },
+    {
+      "case": "G-mobile-clean",
+      "t_ms": 7823,
+      "file": "build-v1-fix3-G-mobile-clean-7770-G-one-normal.png",
+      "label": "G-one-normal"
+    },
+    {
+      "case": "G-mobile-clean",
+      "t_ms": 9339,
+      "file": "build-v1-fix3-G-mobile-clean-9287-G-two-build.png",
+      "label": "G-two-build"
+    },
+    {
+      "case": "G-mobile-clean",
+      "t_ms": 9490,
+      "file": "build-v1-fix3-G-mobile-clean-9439-G-two-normal.png",
+      "label": "G-two-normal"
+    },
+    {
+      "case": "G-mobile-clean",
+      "t_ms": 13639,
+      "file": "build-v1-fix3-G-mobile-clean-13583-G-praise-survives-movement.png",
+      "label": "G-praise-survives-movement"
+    }
+  ]
+}

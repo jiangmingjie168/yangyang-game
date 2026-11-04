@@ -1,0 +1,64 @@
+✔ valid JSON uses configured model, JSON mode, prompt and CORS (47.557521ms)
+▶ invalid model outputs get exactly one corrective retry, then template
+  ✔ bad JSON (24.405991ms)
+  ✔ empty JSON (17.040075ms)
+  ✔ Chinese (14.110201ms)
+  ✔ non-whitelisted options (8.893272ms)
+  ✔ different learned options (9.793896ms)
+  ✔ answer outside options (7.518929ms)
+  ✔ changed answer (7.187645ms)
+  ✔ changed done (8.560207ms)
+  ✔ non-boolean done (7.247277ms)
+  ✔ too long (12.031933ms)
+  ✔ new topic (7.309472ms)
+  ✔ wrong word (6.984702ms)
+  ✔ tier switch (7.329675ms)
+  ✔ extra fields (7.962997ms)
+  ✔ no English (7.320905ms)
+  ✔ numeric say (7.747758ms)
+✔ invalid model outputs get exactly one corrective retry, then template (163.350853ms)
+▶ HTTP error and hard timeouts (including slow body) fall back without retry
+  ✔ error (5.08069ms)
+  ✔ timeout (123.990869ms)
+  ✔ slow-body (124.934642ms)
+✔ HTTP error and hard timeouts (including slow body) fall back without retry (254.490439ms)
+✔ corrective retry shares the whole request deadline (123.649389ms)
+✔ all three rule tiers, feedback praise and mandatory max-turn closing (31.895659ms)
+✔ every vocabulary item has valid templates in all tiers (1.159488ms)
+✔ bounded phrasing variants still use the model response (11.169662ms)
+▶ model phrasing cannot add exercises or redirect the rule-selected answer
+  ✔ Fish or wood? What is wood? (7.44789ms)
+  ✔ What is fish or wood? (10.184985ms)
+  ✔ What's this? What can you say? (7.516749ms)
+  ✔ What's this? Say it or say this? (6.859696ms)
+  ✔ I see a fish. Say wood! (7.149629ms)
+  ✔ I see a fish. (7.124157ms)
+  ✔ Great! Say wood! (7.603085ms)
+  ✔ Nice! I see a wood. Say it! (9.8632ms)
+✔ model phrasing cannot add exercises or redirect the rule-selected answer (64.623088ms)
+✔ untrusted input rejected; no key never calls provider (12.402283ms)
+✔ HTTP route, media type, method, body limit, and exact origin policy (6.751256ms)
+✔ context leads use validated facts, name and matched speech; provider provenance is exposed (13.532545ms)
+✔ context cannot invent actions, names, speech or change the exercise (12.685623ms)
+✔ context-free or repeated model lines retry once before template fallback (11.941064ms)
+✔ greetings have bounded named English slots, context and no exercise (15.294412ms)
+✔ greetings reject unsafe wording, wrong names, exercise fields and repeats with one repair (82.188504ms)
+✔ conversation slots: strict normalization, whitelist, ASCII, tiers and envelope (1.282334ms)
+▶ new events use one correction, provenance and offline fallback
+  ✔ name_ask (8.44687ms)
+  ✔ small_talk (7.89305ms)
+  ✔ weather_chat (12.35033ms)
+  ✔ recast (8.148873ms)
+✔ new events use one correction, provenance and offline fallback (37.377931ms)
+✔ recasts frame only nouns and use fishing rod in both coached tiers (43.488624ms)
+✔ context action and remembered noun must match the exercise target (0.467737ms)
+✔ voice metadata uses stable text hashes; static audio, HEAD, CORS and missing files (7.307131ms)
+✔ build vocabulary accepts all 47, rejects 48 and never discloses tier-one options (0.563381ms)
+ℹ tests 52
+ℹ suites 0
+ℹ pass 52
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1024.764539

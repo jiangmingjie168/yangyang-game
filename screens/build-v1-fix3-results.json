@@ -1,0 +1,1883 @@
+{
+  "source_sha256": "609b7c0a23b4700a7bbc71c192578f991ac6f19527d06e1aed35d647fced6137",
+  "results": [
+    {
+      "case": "A-desktop-log",
+      "status": "PASS",
+      "idle_start_ms": 9292,
+      "cheer_ms": 2581,
+      "show_ms": 4032,
+      "video": "build-v1-fix3-video/page@9a89856b048999d0e5a36660a7fc0d0c.webm"
+    },
+    {
+      "case": "A2-desktop-log",
+      "status": "PASS",
+      "idle_start_ms": 51907,
+      "cheer_ms": null,
+      "show_ms": 4050,
+      "video": "build-v1-fix3-video/page@d7f20dd9e8a97ce79f0df9b28ce11ded.webm"
+    },
+    {
+      "case": "J-desktop-log",
+      "status": "PASS",
+      "idle_start_ms": 12331,
+      "cheer_ms": 2576,
+      "show_ms": 4072,
+      "video": "build-v1-fix3-video/page@7eaeb177d1abd50ff4367c1e5e90f7d3.webm"
+    },
+    {
+      "case": "S-desktop-log",
+      "status": "PASS",
+      "video": "build-v1-fix3-video/page@e2b135e795d7563c096dca53623d9417.webm"
+    },
+    {
+      "case": "B-desktop-log",
+      "status": "PASS",
+      "video": "build-v1-fix3-video/page@0328a714ad38cec9e906f9dc0d0a7ee9.webm"
+    },
+    {
+      "case": "M-desktop-log",
+      "status": "PASS",
+      "video": "build-v1-fix3-video/page@198dac578f3691f901d8231c24de3fe1.webm"
+    },
+    {
+      "case": "P-desktop-log",
+      "status": "PASS",
+      "video": "build-v1-fix3-video/page@42b366baa50284d6a7a1aeb2f64f20a8.webm"
+    },
+    {
+      "case": "G-desktop-log",
+      "status": "PASS",
+      "video": "build-v1-fix3-video/page@9f81125012aeeb56f1e41356434eec84.webm"
+    },
+    {
+      "case": "A-desktop-clean",
+      "status": "PASS",
+      "idle_start_ms": 8937,
+      "cheer_ms": 2554,
+      "show_ms": 4045,
+      "video": "build-v1-fix3-video/page@384be35f4756d5451964454545d194f4.webm"
+    },
+    {
+      "case": "A2-desktop-clean",
+      "status": "PASS",
+      "idle_start_ms": 51781,
+      "cheer_ms": null,
+      "show_ms": 4063,
+      "video": "build-v1-fix3-video/page@4d0e1f7669012030f2d622cfb1dd29d2.webm"
+    },
+    {
+      "case": "J-desktop-clean",
+      "status": "PASS",
+      "idle_start_ms": 6599,
+      "cheer_ms": 2746,
+      "show_ms": 4214,
+      "video": "build-v1-fix3-video/page@a540233f0b7a0c2a7f53df7b4eae4f45.webm"
+    },
+    {
+      "case": "S-desktop-clean",
+      "status": "PASS",
+      "video": "build-v1-fix3-video/page@3ee66ebd953f3514dae6b07ccde08eba.webm"
+    },
+    {
+      "case": "B-desktop-clean",
+      "status": "PASS",
+      "video": "build-v1-fix3-video/page@3375dd3aaefdec02bb8ef8ef44275d20.webm"
+    },
+    {
+      "case": "M-desktop-clean",
+      "status": "PASS",
+      "video": "build-v1-fix3-video/page@d7bffb5f931b381cb4b7447464dcd664.webm"
+    },
+    {
+      "case": "P-desktop-clean",
+      "status": "PASS",
+      "video": "build-v1-fix3-video/page@c6f00d248c54c7a7366cf1322907e620.webm"
+    },
+    {
+      "case": "G-desktop-clean",
+      "status": "PASS",
+      "video": "build-v1-fix3-video/page@f9ac85da339b7dd06c40b08fc62be16d.webm"
+    },
+    {
+      "case": "A-mobile-log",
+      "status": "PASS",
+      "idle_start_ms": 9905,
+      "cheer_ms": 2517,
+      "show_ms": 4034,
+      "video": "build-v1-fix3-video/page@e48af93c68c67e0205790228d17e3c22.webm"
+    },
+    {
+      "case": "A2-mobile-log",
+      "status": "PASS",
+      "idle_start_ms": 52807,
+      "cheer_ms": null,
+      "show_ms": 4052,
+      "video": "build-v1-fix3-video/page@65941017b96dca034343e285737a3e06.webm"
+    },
+    {
+      "case": "J-mobile-log",
+      "status": "PASS",
+      "idle_start_ms": 7626,
+      "cheer_ms": 2679,
+      "show_ms": 4264,
+      "video": "build-v1-fix3-video/page@eb8b59b8f73ba6e4a6042e9cfc3bbfc7.webm"
+    },
+    {
+      "case": "S-mobile-log",
+      "status": "PASS",
+      "video": "build-v1-fix3-video/page@37ce58fbad7d72f99e7f1012bdc06165.webm"
+    },
+    {
+      "case": "B-mobile-log",
+      "status": "PASS",
+      "video": "build-v1-fix3-video/page@38cf42ad66715886cce25f0a5ce114df.webm"
+    },
+    {
+      "case": "M-mobile-log",
+      "status": "PASS",
+      "video": "build-v1-fix3-video/page@8381ea8236b33c27f9c8a664a4697ed5.webm"
+    },
+    {
+      "case": "P-mobile-log",
+      "status": "PASS",
+      "video": "build-v1-fix3-video/page@b64631e7d220e55852fea4b1e6833a40.webm"
+    },
+    {
+      "case": "G-mobile-log",
+      "status": "PASS",
+      "video": "build-v1-fix3-video/page@790ca194fd9813035a0c42f7d0fb0fd9.webm"
+    },
+    {
+      "case": "A-mobile-clean",
+      "status": "PASS",
+      "idle_start_ms": 9911,
+      "cheer_ms": 2545,
+      "show_ms": 4071,
+      "video": "build-v1-fix3-video/page@9e3e86a40e64e1b14a018edb168c1796.webm"
+    },
+    {
+      "case": "A2-mobile-clean",
+      "status": "PASS",
+      "idle_start_ms": 52801,
+      "cheer_ms": null,
+      "show_ms": 4072,
+      "video": "build-v1-fix3-video/page@cc3e2aac23fba21b3e848aa0b6dfb522.webm"
+    },
+    {
+      "case": "J-mobile-clean",
+      "status": "PASS",
+      "idle_start_ms": 8973,
+      "cheer_ms": 2695,
+      "show_ms": 4226,
+      "video": "build-v1-fix3-video/page@9b2db5f79129695980079987908b40ac.webm"
+    },
+    {
+      "case": "S-mobile-clean",
+      "status": "PASS",
+      "video": "build-v1-fix3-video/page@06cf3e23fdfa45a36fc7ca7c8ca0c1ef.webm"
+    },
+    {
+      "case": "B-mobile-clean",
+      "status": "PASS",
+      "video": "build-v1-fix3-video/page@eb0d32278c13a967bf8f839353dbedb8.webm"
+    },
+    {
+      "case": "M-mobile-clean",
+      "status": "PASS",
+      "video": "build-v1-fix3-video/page@7b37f3d2426b435cf501d14332c092e7.webm"
+    },
+    {
+      "case": "P-mobile-clean",
+      "status": "PASS",
+      "video": "build-v1-fix3-video/page@b33bea51b94cfd38c4e246f120294114.webm"
+    },
+    {
+      "case": "G-mobile-clean",
+      "status": "PASS",
+      "video": "build-v1-fix3-video/page@4967f23eb1899e30f70976dad0565a73.webm"
+    }
+  ],
+  "frames": [
+    {
+      "case": "A-desktop-log",
+      "t_ms": 1082,
+      "file": "build-v1-fix3-A-desktop-log-1022-fresh.png",
+      "label": "fresh"
+    },
+    {
+      "case": "A-desktop-log",
+      "t_ms": 5910,
+      "file": "build-v1-fix3-A-desktop-log-5846-crafted.png",
+      "label": "crafted"
+    },
+    {
+      "case": "A-desktop-log",
+      "t_ms": 6509,
+      "file": "build-v1-fix3-A-desktop-log-6444-A-two-fences.png",
+      "label": "A-two-fences"
+    },
+    {
+      "case": "A-desktop-log",
+      "t_ms": 9701,
+      "file": "build-v1-fix3-A-desktop-log-9643-idle-0s.png",
+      "label": "idle-0s"
+    },
+    {
+      "case": "A-desktop-log",
+      "t_ms": 11959,
+      "file": "build-v1-fix3-A-desktop-log-11878-A-cheer.png",
+      "label": "A-cheer"
+    },
+    {
+      "case": "A-desktop-log",
+      "t_ms": 13441,
+      "file": "build-v1-fix3-A-desktop-log-13362-A-show.png",
+      "label": "A-show"
+    },
+    {
+      "case": "A-desktop-log",
+      "t_ms": 14407,
+      "file": "build-v1-fix3-A-desktop-log-14342-idle-5s.png",
+      "label": "idle-5s"
+    },
+    {
+      "case": "A-desktop-log",
+      "t_ms": 19396,
+      "file": "build-v1-fix3-A-desktop-log-19313-idle-10s.png",
+      "label": "idle-10s"
+    },
+    {
+      "case": "A-desktop-log",
+      "t_ms": 24382,
+      "file": "build-v1-fix3-A-desktop-log-24297-idle-15s.png",
+      "label": "idle-15s"
+    },
+    {
+      "case": "A-desktop-log",
+      "t_ms": 24999,
+      "file": "build-v1-fix3-A-desktop-log-24941-A-finale.png",
+      "label": "A-finale"
+    },
+    {
+      "case": "A-desktop-log",
+      "t_ms": 30889,
+      "file": "build-v1-fix3-A-desktop-log-30826-A-shared-limit.png",
+      "label": "A-shared-limit"
+    },
+    {
+      "case": "A2-desktop-log",
+      "t_ms": 913,
+      "file": "build-v1-fix3-A2-desktop-log-851-fresh.png",
+      "label": "fresh"
+    },
+    {
+      "case": "A2-desktop-log",
+      "t_ms": 5691,
+      "file": "build-v1-fix3-A2-desktop-log-5636-crafted.png",
+      "label": "crafted"
+    },
+    {
+      "case": "A2-desktop-log",
+      "t_ms": 6282,
+      "file": "build-v1-fix3-A2-desktop-log-6210-A-two-fences.png",
+      "label": "A-two-fences"
+    },
+    {
+      "case": "A2-desktop-log",
+      "t_ms": 46870,
+      "file": "build-v1-fix3-A2-desktop-log-46800-A2-far.png",
+      "label": "A2-far"
+    },
+    {
+      "case": "A2-desktop-log",
+      "t_ms": 52357,
+      "file": "build-v1-fix3-A2-desktop-log-52258-idle-0s.png",
+      "label": "idle-0s"
+    },
+    {
+      "case": "A2-desktop-log",
+      "t_ms": 56059,
+      "file": "build-v1-fix3-A2-desktop-log-55963-A-show.png",
+      "label": "A-show"
+    },
+    {
+      "case": "A2-desktop-log",
+      "t_ms": 57047,
+      "file": "build-v1-fix3-A2-desktop-log-56957-idle-5s.png",
+      "label": "idle-5s"
+    },
+    {
+      "case": "A2-desktop-log",
+      "t_ms": 62030,
+      "file": "build-v1-fix3-A2-desktop-log-61925-idle-10s.png",
+      "label": "idle-10s"
+    },
+    {
+      "case": "A2-desktop-log",
+      "t_ms": 67078,
+      "file": "build-v1-fix3-A2-desktop-log-66984-idle-15s.png",
+      "label": "idle-15s"
+    },
+    {
+      "case": "A2-desktop-log",
+      "t_ms": 67640,
+      "file": "build-v1-fix3-A2-desktop-log-67557-A-finale.png",
+      "label": "A-finale"
+    },
+    {
+      "case": "J-desktop-log",
+      "t_ms": 913,
+      "file": "build-v1-fix3-J-desktop-log-852-fresh.png",
+      "label": "fresh"
+    },
+    {
+      "case": "J-desktop-log",
+      "t_ms": 5794,
+      "file": "build-v1-fix3-J-desktop-log-5727-crafted.png",
+      "label": "crafted"
+    },
+    {
+      "case": "J-desktop-log",
+      "t_ms": 12582,
+      "file": "build-v1-fix3-J-desktop-log-12450-idle-0s.png",
+      "label": "idle-0s"
+    },
+    {
+      "case": "J-desktop-log",
+      "t_ms": 14990,
+      "file": "build-v1-fix3-J-desktop-log-14911-J-cheer.png",
+      "label": "J-cheer"
+    },
+    {
+      "case": "J-desktop-log",
+      "t_ms": 17437,
+      "file": "build-v1-fix3-J-desktop-log-17372-idle-5s.png",
+      "label": "idle-5s"
+    },
+    {
+      "case": "J-desktop-log",
+      "t_ms": 22452,
+      "file": "build-v1-fix3-J-desktop-log-22377-idle-10s.png",
+      "label": "idle-10s"
+    },
+    {
+      "case": "J-desktop-log",
+      "t_ms": 27454,
+      "file": "build-v1-fix3-J-desktop-log-27389-idle-15s.png",
+      "label": "idle-15s"
+    },
+    {
+      "case": "S-desktop-log",
+      "t_ms": 921,
+      "file": "build-v1-fix3-S-desktop-log-858-fresh.png",
+      "label": "fresh"
+    },
+    {
+      "case": "S-desktop-log",
+      "t_ms": 4619,
+      "file": "build-v1-fix3-S-desktop-log-4563-crafted.png",
+      "label": "crafted"
+    },
+    {
+      "case": "S-desktop-log",
+      "t_ms": 7323,
+      "file": "build-v1-fix3-S-desktop-log-7265-against-wall.png",
+      "label": "against-wall"
+    },
+    {
+      "case": "S-desktop-log",
+      "t_ms": 7489,
+      "file": "build-v1-fix3-S-desktop-log-7424-second-layer.png",
+      "label": "second-layer"
+    },
+    {
+      "case": "S-desktop-log",
+      "t_ms": 7656,
+      "file": "build-v1-fix3-S-desktop-log-7598-B-third-layer.png",
+      "label": "B-third-layer"
+    },
+    {
+      "case": "S-desktop-log",
+      "t_ms": 8039,
+      "file": "build-v1-fix3-S-desktop-log-7984-B-normal-place.png",
+      "label": "B-normal-place"
+    },
+    {
+      "case": "S-desktop-log",
+      "t_ms": 8304,
+      "file": "build-v1-fix3-S-desktop-log-8250-B-normal-top-stack.png",
+      "label": "B-normal-top-stack"
+    },
+    {
+      "case": "B-desktop-log",
+      "t_ms": 871,
+      "file": "build-v1-fix3-B-desktop-log-810-fresh.png",
+      "label": "fresh"
+    },
+    {
+      "case": "B-desktop-log",
+      "t_ms": 4583,
+      "file": "build-v1-fix3-B-desktop-log-4527-crafted.png",
+      "label": "crafted"
+    },
+    {
+      "case": "B-desktop-log",
+      "t_ms": 18040,
+      "file": "build-v1-fix3-B-desktop-log-17979-against-wall.png",
+      "label": "against-wall"
+    },
+    {
+      "case": "B-desktop-log",
+      "t_ms": 18213,
+      "file": "build-v1-fix3-B-desktop-log-18137-second-layer.png",
+      "label": "second-layer"
+    },
+    {
+      "case": "B-desktop-log",
+      "t_ms": 18388,
+      "file": "build-v1-fix3-B-desktop-log-18321-B-third-layer.png",
+      "label": "B-third-layer"
+    },
+    {
+      "case": "B-desktop-log",
+      "t_ms": 18753,
+      "file": "build-v1-fix3-B-desktop-log-18698-B-normal-place.png",
+      "label": "B-normal-place"
+    },
+    {
+      "case": "B-desktop-log",
+      "t_ms": 19019,
+      "file": "build-v1-fix3-B-desktop-log-18964-B-normal-top-stack.png",
+      "label": "B-normal-top-stack"
+    },
+    {
+      "case": "M-desktop-log",
+      "t_ms": 887,
+      "file": "build-v1-fix3-M-desktop-log-820-fresh.png",
+      "label": "fresh"
+    },
+    {
+      "case": "M-desktop-log",
+      "t_ms": 1172,
+      "file": "build-v1-fix3-M-desktop-log-1104-M-few.png",
+      "label": "M-few"
+    },
+    {
+      "case": "M-desktop-log",
+      "t_ms": 5148,
+      "file": "build-v1-fix3-M-desktop-log-5096-crafted.png",
+      "label": "crafted"
+    },
+    {
+      "case": "M-desktop-log",
+      "t_ms": 5705,
+      "file": "build-v1-fix3-M-desktop-log-5649-M-ready.png",
+      "label": "M-ready"
+    },
+    {
+      "case": "M-desktop-log",
+      "t_ms": 5891,
+      "file": "build-v1-fix3-M-desktop-log-5829-M-cheer.png",
+      "label": "M-cheer"
+    },
+    {
+      "case": "M-desktop-log",
+      "t_ms": 7306,
+      "file": "build-v1-fix3-M-desktop-log-7251-M-intro.png",
+      "label": "M-intro"
+    },
+    {
+      "case": "M-desktop-log",
+      "t_ms": 8864,
+      "file": "build-v1-fix3-M-desktop-log-8787-M-free-finale.png",
+      "label": "M-free-finale"
+    },
+    {
+      "case": "M-desktop-log",
+      "t_ms": 11789,
+      "file": "build-v1-fix3-M-desktop-log-11729-M-pen.png",
+      "label": "M-pen"
+    },
+    {
+      "case": "M-desktop-log",
+      "t_ms": 12058,
+      "file": "build-v1-fix3-M-desktop-log-11997-M-wall-blocked.png",
+      "label": "M-wall-blocked"
+    },
+    {
+      "case": "M-desktop-log",
+      "t_ms": 15230,
+      "file": "build-v1-fix3-M-desktop-log-15154-M-pen-question.png",
+      "label": "M-pen-question"
+    },
+    {
+      "case": "M-desktop-log",
+      "t_ms": 15395,
+      "file": "build-v1-fix3-M-desktop-log-15332-M-pen-answer.png",
+      "label": "M-pen-answer"
+    },
+    {
+      "case": "M-desktop-log",
+      "t_ms": 19380,
+      "file": "build-v1-fix3-M-desktop-log-19315-M-spent.png",
+      "label": "M-spent"
+    },
+    {
+      "case": "M-desktop-log",
+      "t_ms": 19955,
+      "file": "build-v1-fix3-M-desktop-log-19897-M-reloaded.png",
+      "label": "M-reloaded"
+    },
+    {
+      "case": "P-desktop-log",
+      "t_ms": 898,
+      "file": "build-v1-fix3-P-desktop-log-818-fresh.png",
+      "label": "fresh"
+    },
+    {
+      "case": "P-desktop-log",
+      "t_ms": 4594,
+      "file": "build-v1-fix3-P-desktop-log-4540-crafted.png",
+      "label": "crafted"
+    },
+    {
+      "case": "P-desktop-log",
+      "t_ms": 5067,
+      "file": "build-v1-fix3-P-desktop-log-5009-P-pulse.png",
+      "label": "P-pulse"
+    },
+    {
+      "case": "P-desktop-log",
+      "t_ms": 8300,
+      "file": "build-v1-fix3-P-desktop-log-8235-P-two-planks-show.png",
+      "label": "P-two-planks-show"
+    },
+    {
+      "case": "P-desktop-log",
+      "t_ms": 8466,
+      "file": "build-v1-fix3-P-desktop-log-8407-P-occupied.png",
+      "label": "P-occupied"
+    },
+    {
+      "case": "P-desktop-log",
+      "t_ms": 8652,
+      "file": "build-v1-fix3-P-desktop-log-8591-P-reach.png",
+      "label": "P-reach"
+    },
+    {
+      "case": "P-desktop-log",
+      "t_ms": 8925,
+      "file": "build-v1-fix3-P-desktop-log-8862-P-remove.png",
+      "label": "P-remove"
+    },
+    {
+      "case": "P-desktop-log",
+      "t_ms": 10200,
+      "file": "build-v1-fix3-P-desktop-log-10134-P-animal-refused.png",
+      "label": "P-animal-refused"
+    },
+    {
+      "case": "G-desktop-log",
+      "t_ms": 889,
+      "file": "build-v1-fix3-G-desktop-log-834-fresh.png",
+      "label": "fresh"
+    },
+    {
+      "case": "G-desktop-log",
+      "t_ms": 5654,
+      "file": "build-v1-fix3-G-desktop-log-5601-crafted.png",
+      "label": "crafted"
+    },
+    {
+      "case": "G-desktop-log",
+      "t_ms": 6144,
+      "file": "build-v1-fix3-G-desktop-log-6078-G-one-build.png",
+      "label": "G-one-build"
+    },
+    {
+      "case": "G-desktop-log",
+      "t_ms": 6309,
+      "file": "build-v1-fix3-G-desktop-log-6246-G-one-normal.png",
+      "label": "G-one-normal"
+    },
+    {
+      "case": "G-desktop-log",
+      "t_ms": 9690,
+      "file": "build-v1-fix3-G-desktop-log-9611-G-two-build.png",
+      "label": "G-two-build"
+    },
+    {
+      "case": "G-desktop-log",
+      "t_ms": 9860,
+      "file": "build-v1-fix3-G-desktop-log-9795-G-two-normal.png",
+      "label": "G-two-normal"
+    },
+    {
+      "case": "G-desktop-log",
+      "t_ms": 13952,
+      "file": "build-v1-fix3-G-desktop-log-13876-G-praise-survives-movement.png",
+      "label": "G-praise-survives-movement"
+    },
+    {
+      "case": "A-desktop-clean",
+      "t_ms": 890,
+      "file": "build-v1-fix3-A-desktop-clean-829-fresh.png",
+      "label": "fresh"
+    },
+    {
+      "case": "A-desktop-clean",
+      "t_ms": 5621,
+      "file": "build-v1-fix3-A-desktop-clean-5566-crafted.png",
+      "label": "crafted"
+    },
+    {
+      "case": "A-desktop-clean",
+      "t_ms": 6182,
+      "file": "build-v1-fix3-A-desktop-clean-6118-A-two-fences.png",
+      "label": "A-two-fences"
+    },
+    {
+      "case": "A-desktop-clean",
+      "t_ms": 9341,
+      "file": "build-v1-fix3-A-desktop-clean-9288-idle-0s.png",
+      "label": "idle-0s"
+    },
+    {
+      "case": "A-desktop-clean",
+      "t_ms": 11560,
+      "file": "build-v1-fix3-A-desktop-clean-11495-A-cheer.png",
+      "label": "A-cheer"
+    },
+    {
+      "case": "A-desktop-clean",
+      "t_ms": 13042,
+      "file": "build-v1-fix3-A-desktop-clean-12989-A-show.png",
+      "label": "A-show"
+    },
+    {
+      "case": "A-desktop-clean",
+      "t_ms": 14060,
+      "file": "build-v1-fix3-A-desktop-clean-14002-idle-5s.png",
+      "label": "idle-5s"
+    },
+    {
+      "case": "A-desktop-clean",
+      "t_ms": 18993,
+      "file": "build-v1-fix3-A-desktop-clean-18938-idle-10s.png",
+      "label": "idle-10s"
+    },
+    {
+      "case": "A-desktop-clean",
+      "t_ms": 24009,
+      "file": "build-v1-fix3-A-desktop-clean-23948-idle-15s.png",
+      "label": "idle-15s"
+    },
+    {
+      "case": "A-desktop-clean",
+      "t_ms": 24625,
+      "file": "build-v1-fix3-A-desktop-clean-24570-A-finale.png",
+      "label": "A-finale"
+    },
+    {
+      "case": "A-desktop-clean",
+      "t_ms": 30518,
+      "file": "build-v1-fix3-A-desktop-clean-30451-A-shared-limit.png",
+      "label": "A-shared-limit"
+    },
+    {
+      "case": "A2-desktop-clean",
+      "t_ms": 898,
+      "file": "build-v1-fix3-A2-desktop-clean-841-fresh.png",
+      "label": "fresh"
+    },
+    {
+      "case": "A2-desktop-clean",
+      "t_ms": 5602,
+      "file": "build-v1-fix3-A2-desktop-clean-5536-crafted.png",
+      "label": "crafted"
+    },
+    {
+      "case": "A2-desktop-clean",
+      "t_ms": 6171,
+      "file": "build-v1-fix3-A2-desktop-clean-6111-A-two-fences.png",
+      "label": "A-two-fences"
+    },
+    {
+      "case": "A2-desktop-clean",
+      "t_ms": 46746,
+      "file": "build-v1-fix3-A2-desktop-clean-46672-A2-far.png",
+      "label": "A2-far"
+    },
+    {
+      "case": "A2-desktop-clean",
+      "t_ms": 52202,
+      "file": "build-v1-fix3-A2-desktop-clean-52131-idle-0s.png",
+      "label": "idle-0s"
+    },
+    {
+      "case": "A2-desktop-clean",
+      "t_ms": 55936,
+      "file": "build-v1-fix3-A2-desktop-clean-55850-A-show.png",
+      "label": "A-show"
+    },
+    {
+      "case": "A2-desktop-clean",
+      "t_ms": 56886,
+      "file": "build-v1-fix3-A2-desktop-clean-56809-idle-5s.png",
+      "label": "idle-5s"
+    },
+    {
+      "case": "A2-desktop-clean",
+      "t_ms": 61994,
+      "file": "build-v1-fix3-A2-desktop-clean-61913-idle-10s.png",
+      "label": "idle-10s"
+    },
+    {
+      "case": "A2-desktop-clean",
+      "t_ms": 66920,
+      "file": "build-v1-fix3-A2-desktop-clean-66839-idle-15s.png",
+      "label": "idle-15s"
+    },
+    {
+      "case": "A2-desktop-clean",
+      "t_ms": 67552,
+      "file": "build-v1-fix3-A2-desktop-clean-67478-A-finale.png",
+      "label": "A-finale"
+    },
+    {
+      "case": "J-desktop-clean",
+      "t_ms": 881,
+      "file": "build-v1-fix3-J-desktop-clean-826-fresh.png",
+      "label": "fresh"
+    },
+    {
+      "case": "J-desktop-clean",
+      "t_ms": 5633,
+      "file": "build-v1-fix3-J-desktop-clean-5574-crafted.png",
+      "label": "crafted"
+    },
+    {
+      "case": "J-desktop-clean",
+      "t_ms": 6751,
+      "file": "build-v1-fix3-J-desktop-clean-6699-idle-0s.png",
+      "label": "idle-0s"
+    },
+    {
+      "case": "J-desktop-clean",
+      "t_ms": 9402,
+      "file": "build-v1-fix3-J-desktop-clean-9350-J-cheer.png",
+      "label": "J-cheer"
+    },
+    {
+      "case": "J-desktop-clean",
+      "t_ms": 11735,
+      "file": "build-v1-fix3-J-desktop-clean-11679-idle-5s.png",
+      "label": "idle-5s"
+    },
+    {
+      "case": "J-desktop-clean",
+      "t_ms": 16718,
+      "file": "build-v1-fix3-J-desktop-clean-16652-idle-10s.png",
+      "label": "idle-10s"
+    },
+    {
+      "case": "J-desktop-clean",
+      "t_ms": 21666,
+      "file": "build-v1-fix3-J-desktop-clean-21610-idle-15s.png",
+      "label": "idle-15s"
+    },
+    {
+      "case": "S-desktop-clean",
+      "t_ms": 869,
+      "file": "build-v1-fix3-S-desktop-clean-814-fresh.png",
+      "label": "fresh"
+    },
+    {
+      "case": "S-desktop-clean",
+      "t_ms": 4584,
+      "file": "build-v1-fix3-S-desktop-clean-4529-crafted.png",
+      "label": "crafted"
+    },
+    {
+      "case": "S-desktop-clean",
+      "t_ms": 7306,
+      "file": "build-v1-fix3-S-desktop-clean-7248-against-wall.png",
+      "label": "against-wall"
+    },
+    {
+      "case": "S-desktop-clean",
+      "t_ms": 7458,
+      "file": "build-v1-fix3-S-desktop-clean-7400-second-layer.png",
+      "label": "second-layer"
+    },
+    {
+      "case": "S-desktop-clean",
+      "t_ms": 7627,
+      "file": "build-v1-fix3-S-desktop-clean-7566-B-third-layer.png",
+      "label": "B-third-layer"
+    },
+    {
+      "case": "S-desktop-clean",
+      "t_ms": 7989,
+      "file": "build-v1-fix3-S-desktop-clean-7936-B-normal-place.png",
+      "label": "B-normal-place"
+    },
+    {
+      "case": "S-desktop-clean",
+      "t_ms": 8237,
+      "file": "build-v1-fix3-S-desktop-clean-8186-B-normal-top-stack.png",
+      "label": "B-normal-top-stack"
+    },
+    {
+      "case": "B-desktop-clean",
+      "t_ms": 882,
+      "file": "build-v1-fix3-B-desktop-clean-821-fresh.png",
+      "label": "fresh"
+    },
+    {
+      "case": "B-desktop-clean",
+      "t_ms": 4563,
+      "file": "build-v1-fix3-B-desktop-clean-4508-crafted.png",
+      "label": "crafted"
+    },
+    {
+      "case": "B-desktop-clean",
+      "t_ms": 8118,
+      "file": "build-v1-fix3-B-desktop-clean-8064-against-wall.png",
+      "label": "against-wall"
+    },
+    {
+      "case": "B-desktop-clean",
+      "t_ms": 8266,
+      "file": "build-v1-fix3-B-desktop-clean-8211-second-layer.png",
+      "label": "second-layer"
+    },
+    {
+      "case": "B-desktop-clean",
+      "t_ms": 8418,
+      "file": "build-v1-fix3-B-desktop-clean-8365-B-third-layer.png",
+      "label": "B-third-layer"
+    },
+    {
+      "case": "B-desktop-clean",
+      "t_ms": 8783,
+      "file": "build-v1-fix3-B-desktop-clean-8730-B-normal-place.png",
+      "label": "B-normal-place"
+    },
+    {
+      "case": "B-desktop-clean",
+      "t_ms": 9033,
+      "file": "build-v1-fix3-B-desktop-clean-8982-B-normal-top-stack.png",
+      "label": "B-normal-top-stack"
+    },
+    {
+      "case": "M-desktop-clean",
+      "t_ms": 868,
+      "file": "build-v1-fix3-M-desktop-clean-814-fresh.png",
+      "label": "fresh"
+    },
+    {
+      "case": "M-desktop-clean",
+      "t_ms": 1146,
+      "file": "build-v1-fix3-M-desktop-clean-1081-M-few.png",
+      "label": "M-few"
+    },
+    {
+      "case": "M-desktop-clean",
+      "t_ms": 5098,
+      "file": "build-v1-fix3-M-desktop-clean-5049-crafted.png",
+      "label": "crafted"
+    },
+    {
+      "case": "M-desktop-clean",
+      "t_ms": 5654,
+      "file": "build-v1-fix3-M-desktop-clean-5600-M-ready.png",
+      "label": "M-ready"
+    },
+    {
+      "case": "M-desktop-clean",
+      "t_ms": 5824,
+      "file": "build-v1-fix3-M-desktop-clean-5765-M-cheer.png",
+      "label": "M-cheer"
+    },
+    {
+      "case": "M-desktop-clean",
+      "t_ms": 7276,
+      "file": "build-v1-fix3-M-desktop-clean-7206-M-intro.png",
+      "label": "M-intro"
+    },
+    {
+      "case": "M-desktop-clean",
+      "t_ms": 8789,
+      "file": "build-v1-fix3-M-desktop-clean-8730-M-free-finale.png",
+      "label": "M-free-finale"
+    },
+    {
+      "case": "M-desktop-clean",
+      "t_ms": 9436,
+      "file": "build-v1-fix3-M-desktop-clean-9380-M-pen.png",
+      "label": "M-pen"
+    },
+    {
+      "case": "M-desktop-clean",
+      "t_ms": 9703,
+      "file": "build-v1-fix3-M-desktop-clean-9649-M-wall-blocked.png",
+      "label": "M-wall-blocked"
+    },
+    {
+      "case": "M-desktop-clean",
+      "t_ms": 12852,
+      "file": "build-v1-fix3-M-desktop-clean-12757-M-pen-question.png",
+      "label": "M-pen-question"
+    },
+    {
+      "case": "M-desktop-clean",
+      "t_ms": 13022,
+      "file": "build-v1-fix3-M-desktop-clean-12965-M-pen-answer.png",
+      "label": "M-pen-answer"
+    },
+    {
+      "case": "M-desktop-clean",
+      "t_ms": 16989,
+      "file": "build-v1-fix3-M-desktop-clean-16934-M-spent.png",
+      "label": "M-spent"
+    },
+    {
+      "case": "M-desktop-clean",
+      "t_ms": 17555,
+      "file": "build-v1-fix3-M-desktop-clean-17501-M-reloaded.png",
+      "label": "M-reloaded"
+    },
+    {
+      "case": "P-desktop-clean",
+      "t_ms": 874,
+      "file": "build-v1-fix3-P-desktop-clean-815-fresh.png",
+      "label": "fresh"
+    },
+    {
+      "case": "P-desktop-clean",
+      "t_ms": 4606,
+      "file": "build-v1-fix3-P-desktop-clean-4544-crafted.png",
+      "label": "crafted"
+    },
+    {
+      "case": "P-desktop-clean",
+      "t_ms": 5078,
+      "file": "build-v1-fix3-P-desktop-clean-5019-P-pulse.png",
+      "label": "P-pulse"
+    },
+    {
+      "case": "P-desktop-clean",
+      "t_ms": 8310,
+      "file": "build-v1-fix3-P-desktop-clean-8258-P-two-planks-show.png",
+      "label": "P-two-planks-show"
+    },
+    {
+      "case": "P-desktop-clean",
+      "t_ms": 8491,
+      "file": "build-v1-fix3-P-desktop-clean-8441-P-occupied.png",
+      "label": "P-occupied"
+    },
+    {
+      "case": "P-desktop-clean",
+      "t_ms": 8642,
+      "file": "build-v1-fix3-P-desktop-clean-8590-P-reach.png",
+      "label": "P-reach"
+    },
+    {
+      "case": "P-desktop-clean",
+      "t_ms": 8914,
+      "file": "build-v1-fix3-P-desktop-clean-8853-P-remove.png",
+      "label": "P-remove"
+    },
+    {
+      "case": "G-desktop-clean",
+      "t_ms": 867,
+      "file": "build-v1-fix3-G-desktop-clean-807-fresh.png",
+      "label": "fresh"
+    },
+    {
+      "case": "G-desktop-clean",
+      "t_ms": 5600,
+      "file": "build-v1-fix3-G-desktop-clean-5544-crafted.png",
+      "label": "crafted"
+    },
+    {
+      "case": "G-desktop-clean",
+      "t_ms": 6070,
+      "file": "build-v1-fix3-G-desktop-clean-6006-G-one-build.png",
+      "label": "G-one-build"
+    },
+    {
+      "case": "G-desktop-clean",
+      "t_ms": 6234,
+      "file": "build-v1-fix3-G-desktop-clean-6175-G-one-normal.png",
+      "label": "G-one-normal"
+    },
+    {
+      "case": "G-desktop-clean",
+      "t_ms": 7770,
+      "file": "build-v1-fix3-G-desktop-clean-7707-G-two-build.png",
+      "label": "G-two-build"
+    },
+    {
+      "case": "G-desktop-clean",
+      "t_ms": 7935,
+      "file": "build-v1-fix3-G-desktop-clean-7879-G-two-normal.png",
+      "label": "G-two-normal"
+    },
+    {
+      "case": "G-desktop-clean",
+      "t_ms": 12103,
+      "file": "build-v1-fix3-G-desktop-clean-12020-G-praise-survives-movement.png",
+      "label": "G-praise-survives-movement"
+    },
+    {
+      "case": "A-mobile-log",
+      "t_ms": 820,
+      "file": "build-v1-fix3-A-mobile-log-789-fresh.png",
+      "label": "fresh"
+    },
+    {
+      "case": "A-mobile-log",
+      "t_ms": 6627,
+      "file": "build-v1-fix3-A-mobile-log-6583-crafted.png",
+      "label": "crafted"
+    },
+    {
+      "case": "A-mobile-log",
+      "t_ms": 7171,
+      "file": "build-v1-fix3-A-mobile-log-7114-A-two-fences.png",
+      "label": "A-two-fences"
+    },
+    {
+      "case": "A-mobile-log",
+      "t_ms": 10304,
+      "file": "build-v1-fix3-A-mobile-log-10255-idle-0s.png",
+      "label": "idle-0s"
+    },
+    {
+      "case": "A-mobile-log",
+      "t_ms": 12471,
+      "file": "build-v1-fix3-A-mobile-log-12426-A-cheer.png",
+      "label": "A-cheer"
+    },
+    {
+      "case": "A-mobile-log",
+      "t_ms": 13987,
+      "file": "build-v1-fix3-A-mobile-log-13945-A-show.png",
+      "label": "A-show"
+    },
+    {
+      "case": "A-mobile-log",
+      "t_ms": 14970,
+      "file": "build-v1-fix3-A-mobile-log-14924-idle-5s.png",
+      "label": "idle-5s"
+    },
+    {
+      "case": "A-mobile-log",
+      "t_ms": 19969,
+      "file": "build-v1-fix3-A-mobile-log-19921-idle-10s.png",
+      "label": "idle-10s"
+    },
+    {
+      "case": "A-mobile-log",
+      "t_ms": 24987,
+      "file": "build-v1-fix3-A-mobile-log-24935-idle-15s.png",
+      "label": "idle-15s"
+    },
+    {
+      "case": "A-mobile-log",
+      "t_ms": 25570,
+      "file": "build-v1-fix3-A-mobile-log-25527-A-finale.png",
+      "label": "A-finale"
+    },
+    {
+      "case": "A-mobile-log",
+      "t_ms": 31422,
+      "file": "build-v1-fix3-A-mobile-log-31377-A-shared-limit.png",
+      "label": "A-shared-limit"
+    },
+    {
+      "case": "A2-mobile-log",
+      "t_ms": 837,
+      "file": "build-v1-fix3-A2-mobile-log-788-fresh.png",
+      "label": "fresh"
+    },
+    {
+      "case": "A2-mobile-log",
+      "t_ms": 6683,
+      "file": "build-v1-fix3-A2-mobile-log-6638-crafted.png",
+      "label": "crafted"
+    },
+    {
+      "case": "A2-mobile-log",
+      "t_ms": 7224,
+      "file": "build-v1-fix3-A2-mobile-log-7180-A-two-fences.png",
+      "label": "A-two-fences"
+    },
+    {
+      "case": "A2-mobile-log",
+      "t_ms": 47773,
+      "file": "build-v1-fix3-A2-mobile-log-47718-A2-far.png",
+      "label": "A2-far"
+    },
+    {
+      "case": "A2-mobile-log",
+      "t_ms": 53213,
+      "file": "build-v1-fix3-A2-mobile-log-53158-idle-0s.png",
+      "label": "idle-0s"
+    },
+    {
+      "case": "A2-mobile-log",
+      "t_ms": 56940,
+      "file": "build-v1-fix3-A2-mobile-log-56866-A-show.png",
+      "label": "A-show"
+    },
+    {
+      "case": "A2-mobile-log",
+      "t_ms": 57950,
+      "file": "build-v1-fix3-A2-mobile-log-57887-idle-5s.png",
+      "label": "idle-5s"
+    },
+    {
+      "case": "A2-mobile-log",
+      "t_ms": 62875,
+      "file": "build-v1-fix3-A2-mobile-log-62811-idle-10s.png",
+      "label": "idle-10s"
+    },
+    {
+      "case": "A2-mobile-log",
+      "t_ms": 67882,
+      "file": "build-v1-fix3-A2-mobile-log-67815-idle-15s.png",
+      "label": "idle-15s"
+    },
+    {
+      "case": "A2-mobile-log",
+      "t_ms": 68483,
+      "file": "build-v1-fix3-A2-mobile-log-68423-A-finale.png",
+      "label": "A-finale"
+    },
+    {
+      "case": "J-mobile-log",
+      "t_ms": 849,
+      "file": "build-v1-fix3-J-mobile-log-805-fresh.png",
+      "label": "fresh"
+    },
+    {
+      "case": "J-mobile-log",
+      "t_ms": 6689,
+      "file": "build-v1-fix3-J-mobile-log-6633-crafted.png",
+      "label": "crafted"
+    },
+    {
+      "case": "J-mobile-log",
+      "t_ms": 7769,
+      "file": "build-v1-fix3-J-mobile-log-7724-idle-0s.png",
+      "label": "idle-0s"
+    },
+    {
+      "case": "J-mobile-log",
+      "t_ms": 10353,
+      "file": "build-v1-fix3-J-mobile-log-10311-J-cheer.png",
+      "label": "J-cheer"
+    },
+    {
+      "case": "J-mobile-log",
+      "t_ms": 12722,
+      "file": "build-v1-fix3-J-mobile-log-12662-idle-5s.png",
+      "label": "idle-5s"
+    },
+    {
+      "case": "J-mobile-log",
+      "t_ms": 17702,
+      "file": "build-v1-fix3-J-mobile-log-17654-idle-10s.png",
+      "label": "idle-10s"
+    },
+    {
+      "case": "J-mobile-log",
+      "t_ms": 22753,
+      "file": "build-v1-fix3-J-mobile-log-22711-idle-15s.png",
+      "label": "idle-15s"
+    },
+    {
+      "case": "S-mobile-log",
+      "t_ms": 814,
+      "file": "build-v1-fix3-S-mobile-log-783-fresh.png",
+      "label": "fresh"
+    },
+    {
+      "case": "S-mobile-log",
+      "t_ms": 4458,
+      "file": "build-v1-fix3-S-mobile-log-4431-crafted.png",
+      "label": "crafted"
+    },
+    {
+      "case": "S-mobile-log",
+      "t_ms": 7132,
+      "file": "build-v1-fix3-S-mobile-log-7093-against-wall.png",
+      "label": "against-wall"
+    },
+    {
+      "case": "S-mobile-log",
+      "t_ms": 7265,
+      "file": "build-v1-fix3-S-mobile-log-7226-second-layer.png",
+      "label": "second-layer"
+    },
+    {
+      "case": "S-mobile-log",
+      "t_ms": 7402,
+      "file": "build-v1-fix3-S-mobile-log-7363-B-third-layer.png",
+      "label": "B-third-layer"
+    },
+    {
+      "case": "S-mobile-log",
+      "t_ms": 7731,
+      "file": "build-v1-fix3-S-mobile-log-7698-B-normal-place.png",
+      "label": "B-normal-place"
+    },
+    {
+      "case": "S-mobile-log",
+      "t_ms": 7967,
+      "file": "build-v1-fix3-S-mobile-log-7927-B-normal-top-stack.png",
+      "label": "B-normal-top-stack"
+    },
+    {
+      "case": "B-mobile-log",
+      "t_ms": 821,
+      "file": "build-v1-fix3-B-mobile-log-789-fresh.png",
+      "label": "fresh"
+    },
+    {
+      "case": "B-mobile-log",
+      "t_ms": 4481,
+      "file": "build-v1-fix3-B-mobile-log-4451-crafted.png",
+      "label": "crafted"
+    },
+    {
+      "case": "B-mobile-log",
+      "t_ms": 7989,
+      "file": "build-v1-fix3-B-mobile-log-7948-against-wall.png",
+      "label": "against-wall"
+    },
+    {
+      "case": "B-mobile-log",
+      "t_ms": 8123,
+      "file": "build-v1-fix3-B-mobile-log-8083-second-layer.png",
+      "label": "second-layer"
+    },
+    {
+      "case": "B-mobile-log",
+      "t_ms": 8254,
+      "file": "build-v1-fix3-B-mobile-log-8222-B-third-layer.png",
+      "label": "B-third-layer"
+    },
+    {
+      "case": "B-mobile-log",
+      "t_ms": 8587,
+      "file": "build-v1-fix3-B-mobile-log-8555-B-normal-place.png",
+      "label": "B-normal-place"
+    },
+    {
+      "case": "B-mobile-log",
+      "t_ms": 8820,
+      "file": "build-v1-fix3-B-mobile-log-8788-B-normal-top-stack.png",
+      "label": "B-normal-top-stack"
+    },
+    {
+      "case": "M-mobile-log",
+      "t_ms": 878,
+      "file": "build-v1-fix3-M-mobile-log-829-fresh.png",
+      "label": "fresh"
+    },
+    {
+      "case": "M-mobile-log",
+      "t_ms": 1132,
+      "file": "build-v1-fix3-M-mobile-log-1085-M-few.png",
+      "label": "M-few"
+    },
+    {
+      "case": "M-mobile-log",
+      "t_ms": 6174,
+      "file": "build-v1-fix3-M-mobile-log-6133-crafted.png",
+      "label": "crafted"
+    },
+    {
+      "case": "M-mobile-log",
+      "t_ms": 6717,
+      "file": "build-v1-fix3-M-mobile-log-6674-M-ready.png",
+      "label": "M-ready"
+    },
+    {
+      "case": "M-mobile-log",
+      "t_ms": 6865,
+      "file": "build-v1-fix3-M-mobile-log-6820-M-cheer.png",
+      "label": "M-cheer"
+    },
+    {
+      "case": "M-mobile-log",
+      "t_ms": 8348,
+      "file": "build-v1-fix3-M-mobile-log-8294-M-intro.png",
+      "label": "M-intro"
+    },
+    {
+      "case": "M-mobile-log",
+      "t_ms": 9831,
+      "file": "build-v1-fix3-M-mobile-log-9781-M-free-finale.png",
+      "label": "M-free-finale"
+    },
+    {
+      "case": "M-mobile-log",
+      "t_ms": 13600,
+      "file": "build-v1-fix3-M-mobile-log-13542-M-pen.png",
+      "label": "M-pen"
+    },
+    {
+      "case": "M-mobile-log",
+      "t_ms": 13849,
+      "file": "build-v1-fix3-M-mobile-log-13799-M-wall-blocked.png",
+      "label": "M-wall-blocked"
+    },
+    {
+      "case": "M-mobile-log",
+      "t_ms": 16933,
+      "file": "build-v1-fix3-M-mobile-log-16886-M-pen-question.png",
+      "label": "M-pen-question"
+    },
+    {
+      "case": "M-mobile-log",
+      "t_ms": 17082,
+      "file": "build-v1-fix3-M-mobile-log-17035-M-pen-answer.png",
+      "label": "M-pen-answer"
+    },
+    {
+      "case": "M-mobile-log",
+      "t_ms": 21032,
+      "file": "build-v1-fix3-M-mobile-log-20987-M-spent.png",
+      "label": "M-spent"
+    },
+    {
+      "case": "M-mobile-log",
+      "t_ms": 21549,
+      "file": "build-v1-fix3-M-mobile-log-21516-M-reloaded.png",
+      "label": "M-reloaded"
+    },
+    {
+      "case": "P-mobile-log",
+      "t_ms": 823,
+      "file": "build-v1-fix3-P-mobile-log-779-fresh.png",
+      "label": "fresh"
+    },
+    {
+      "case": "P-mobile-log",
+      "t_ms": 4485,
+      "file": "build-v1-fix3-P-mobile-log-4444-crafted.png",
+      "label": "crafted"
+    },
+    {
+      "case": "P-mobile-log",
+      "t_ms": 4929,
+      "file": "build-v1-fix3-P-mobile-log-4874-P-pulse.png",
+      "label": "P-pulse"
+    },
+    {
+      "case": "P-mobile-log",
+      "t_ms": 8195,
+      "file": "build-v1-fix3-P-mobile-log-8138-P-two-planks-show.png",
+      "label": "P-two-planks-show"
+    },
+    {
+      "case": "P-mobile-log",
+      "t_ms": 8345,
+      "file": "build-v1-fix3-P-mobile-log-8296-P-occupied.png",
+      "label": "P-occupied"
+    },
+    {
+      "case": "P-mobile-log",
+      "t_ms": 8494,
+      "file": "build-v1-fix3-P-mobile-log-8444-P-reach.png",
+      "label": "P-reach"
+    },
+    {
+      "case": "P-mobile-log",
+      "t_ms": 8745,
+      "file": "build-v1-fix3-P-mobile-log-8694-P-remove.png",
+      "label": "P-remove"
+    },
+    {
+      "case": "P-mobile-log",
+      "t_ms": 8995,
+      "file": "build-v1-fix3-P-mobile-log-8940-P-HUD-yields.png",
+      "label": "P-HUD-yields"
+    },
+    {
+      "case": "P-mobile-log",
+      "t_ms": 10245,
+      "file": "build-v1-fix3-P-mobile-log-10202-P-animal-refused.png",
+      "label": "P-animal-refused"
+    },
+    {
+      "case": "G-mobile-log",
+      "t_ms": 814,
+      "file": "build-v1-fix3-G-mobile-log-780-fresh.png",
+      "label": "fresh"
+    },
+    {
+      "case": "G-mobile-log",
+      "t_ms": 6637,
+      "file": "build-v1-fix3-G-mobile-log-6593-crafted.png",
+      "label": "crafted"
+    },
+    {
+      "case": "G-mobile-log",
+      "t_ms": 7079,
+      "file": "build-v1-fix3-G-mobile-log-7026-G-one-build.png",
+      "label": "G-one-build"
+    },
+    {
+      "case": "G-mobile-log",
+      "t_ms": 7227,
+      "file": "build-v1-fix3-G-mobile-log-7176-G-one-normal.png",
+      "label": "G-one-normal"
+    },
+    {
+      "case": "G-mobile-log",
+      "t_ms": 8731,
+      "file": "build-v1-fix3-G-mobile-log-8677-G-two-build.png",
+      "label": "G-two-build"
+    },
+    {
+      "case": "G-mobile-log",
+      "t_ms": 8876,
+      "file": "build-v1-fix3-G-mobile-log-8828-G-two-normal.png",
+      "label": "G-two-normal"
+    },
+    {
+      "case": "G-mobile-log",
+      "t_ms": 13012,
+      "file": "build-v1-fix3-G-mobile-log-12970-G-praise-survives-movement.png",
+      "label": "G-praise-survives-movement"
+    },
+    {
+      "case": "A-mobile-clean",
+      "t_ms": 827,
+      "file": "build-v1-fix3-A-mobile-clean-786-fresh.png",
+      "label": "fresh"
+    },
+    {
+      "case": "A-mobile-clean",
+      "t_ms": 6634,
+      "file": "build-v1-fix3-A-mobile-clean-6595-crafted.png",
+      "label": "crafted"
+    },
+    {
+      "case": "A-mobile-clean",
+      "t_ms": 7177,
+      "file": "build-v1-fix3-A-mobile-clean-7120-A-two-fences.png",
+      "label": "A-two-fences"
+    },
+    {
+      "case": "A-mobile-clean",
+      "t_ms": 10307,
+      "file": "build-v1-fix3-A-mobile-clean-10261-idle-0s.png",
+      "label": "idle-0s"
+    },
+    {
+      "case": "A-mobile-clean",
+      "t_ms": 12549,
+      "file": "build-v1-fix3-A-mobile-clean-12472-A-cheer.png",
+      "label": "A-cheer"
+    },
+    {
+      "case": "A-mobile-clean",
+      "t_ms": 14027,
+      "file": "build-v1-fix3-A-mobile-clean-13986-A-show.png",
+      "label": "A-show"
+    },
+    {
+      "case": "A-mobile-clean",
+      "t_ms": 15012,
+      "file": "build-v1-fix3-A-mobile-clean-14964-idle-5s.png",
+      "label": "idle-5s"
+    },
+    {
+      "case": "A-mobile-clean",
+      "t_ms": 19992,
+      "file": "build-v1-fix3-A-mobile-clean-19940-idle-10s.png",
+      "label": "idle-10s"
+    },
+    {
+      "case": "A-mobile-clean",
+      "t_ms": 24977,
+      "file": "build-v1-fix3-A-mobile-clean-24923-idle-15s.png",
+      "label": "idle-15s"
+    },
+    {
+      "case": "A-mobile-clean",
+      "t_ms": 25644,
+      "file": "build-v1-fix3-A-mobile-clean-25594-A-finale.png",
+      "label": "A-finale"
+    },
+    {
+      "case": "A-mobile-clean",
+      "t_ms": 31492,
+      "file": "build-v1-fix3-A-mobile-clean-31445-A-shared-limit.png",
+      "label": "A-shared-limit"
+    },
+    {
+      "case": "A2-mobile-clean",
+      "t_ms": 829,
+      "file": "build-v1-fix3-A2-mobile-clean-785-fresh.png",
+      "label": "fresh"
+    },
+    {
+      "case": "A2-mobile-clean",
+      "t_ms": 6659,
+      "file": "build-v1-fix3-A2-mobile-clean-6613-crafted.png",
+      "label": "crafted"
+    },
+    {
+      "case": "A2-mobile-clean",
+      "t_ms": 7218,
+      "file": "build-v1-fix3-A2-mobile-clean-7161-A-two-fences.png",
+      "label": "A-two-fences"
+    },
+    {
+      "case": "A2-mobile-clean",
+      "t_ms": 47762,
+      "file": "build-v1-fix3-A2-mobile-clean-47710-A2-far.png",
+      "label": "A2-far"
+    },
+    {
+      "case": "A2-mobile-clean",
+      "t_ms": 53209,
+      "file": "build-v1-fix3-A2-mobile-clean-53151-idle-0s.png",
+      "label": "idle-0s"
+    },
+    {
+      "case": "A2-mobile-clean",
+      "t_ms": 56945,
+      "file": "build-v1-fix3-A2-mobile-clean-56883-A-show.png",
+      "label": "A-show"
+    },
+    {
+      "case": "A2-mobile-clean",
+      "t_ms": 57879,
+      "file": "build-v1-fix3-A2-mobile-clean-57808-idle-5s.png",
+      "label": "idle-5s"
+    },
+    {
+      "case": "A2-mobile-clean",
+      "t_ms": 62916,
+      "file": "build-v1-fix3-A2-mobile-clean-62853-idle-10s.png",
+      "label": "idle-10s"
+    },
+    {
+      "case": "A2-mobile-clean",
+      "t_ms": 67883,
+      "file": "build-v1-fix3-A2-mobile-clean-67815-idle-15s.png",
+      "label": "idle-15s"
+    },
+    {
+      "case": "A2-mobile-clean",
+      "t_ms": 68485,
+      "file": "build-v1-fix3-A2-mobile-clean-68422-A-finale.png",
+      "label": "A-finale"
+    },
+    {
+      "case": "J-mobile-clean",
+      "t_ms": 848,
+      "file": "build-v1-fix3-J-mobile-clean-796-fresh.png",
+      "label": "fresh"
+    },
+    {
+      "case": "J-mobile-clean",
+      "t_ms": 6687,
+      "file": "build-v1-fix3-J-mobile-clean-6643-crafted.png",
+      "label": "crafted"
+    },
+    {
+      "case": "J-mobile-clean",
+      "t_ms": 9126,
+      "file": "build-v1-fix3-J-mobile-clean-9072-idle-0s.png",
+      "label": "idle-0s"
+    },
+    {
+      "case": "J-mobile-clean",
+      "t_ms": 11730,
+      "file": "build-v1-fix3-J-mobile-clean-11672-J-cheer.png",
+      "label": "J-cheer"
+    },
+    {
+      "case": "J-mobile-clean",
+      "t_ms": 14095,
+      "file": "build-v1-fix3-J-mobile-clean-14054-idle-5s.png",
+      "label": "idle-5s"
+    },
+    {
+      "case": "J-mobile-clean",
+      "t_ms": 19062,
+      "file": "build-v1-fix3-J-mobile-clean-19012-idle-10s.png",
+      "label": "idle-10s"
+    },
+    {
+      "case": "J-mobile-clean",
+      "t_ms": 24111,
+      "file": "build-v1-fix3-J-mobile-clean-24062-idle-15s.png",
+      "label": "idle-15s"
+    },
+    {
+      "case": "S-mobile-clean",
+      "t_ms": 827,
+      "file": "build-v1-fix3-S-mobile-clean-801-fresh.png",
+      "label": "fresh"
+    },
+    {
+      "case": "S-mobile-clean",
+      "t_ms": 4471,
+      "file": "build-v1-fix3-S-mobile-clean-4440-crafted.png",
+      "label": "crafted"
+    },
+    {
+      "case": "S-mobile-clean",
+      "t_ms": 7144,
+      "file": "build-v1-fix3-S-mobile-clean-7105-against-wall.png",
+      "label": "against-wall"
+    },
+    {
+      "case": "S-mobile-clean",
+      "t_ms": 7276,
+      "file": "build-v1-fix3-S-mobile-clean-7238-second-layer.png",
+      "label": "second-layer"
+    },
+    {
+      "case": "S-mobile-clean",
+      "t_ms": 7411,
+      "file": "build-v1-fix3-S-mobile-clean-7373-B-third-layer.png",
+      "label": "B-third-layer"
+    },
+    {
+      "case": "S-mobile-clean",
+      "t_ms": 7745,
+      "file": "build-v1-fix3-S-mobile-clean-7712-B-normal-place.png",
+      "label": "B-normal-place"
+    },
+    {
+      "case": "S-mobile-clean",
+      "t_ms": 7977,
+      "file": "build-v1-fix3-S-mobile-clean-7944-B-normal-top-stack.png",
+      "label": "B-normal-top-stack"
+    },
+    {
+      "case": "B-mobile-clean",
+      "t_ms": 813,
+      "file": "build-v1-fix3-B-mobile-clean-778-fresh.png",
+      "label": "fresh"
+    },
+    {
+      "case": "B-mobile-clean",
+      "t_ms": 4472,
+      "file": "build-v1-fix3-B-mobile-clean-4443-crafted.png",
+      "label": "crafted"
+    },
+    {
+      "case": "B-mobile-clean",
+      "t_ms": 7979,
+      "file": "build-v1-fix3-B-mobile-clean-7942-against-wall.png",
+      "label": "against-wall"
+    },
+    {
+      "case": "B-mobile-clean",
+      "t_ms": 8114,
+      "file": "build-v1-fix3-B-mobile-clean-8073-second-layer.png",
+      "label": "second-layer"
+    },
+    {
+      "case": "B-mobile-clean",
+      "t_ms": 8246,
+      "file": "build-v1-fix3-B-mobile-clean-8213-B-third-layer.png",
+      "label": "B-third-layer"
+    },
+    {
+      "case": "B-mobile-clean",
+      "t_ms": 8579,
+      "file": "build-v1-fix3-B-mobile-clean-8548-B-normal-place.png",
+      "label": "B-normal-place"
+    },
+    {
+      "case": "B-mobile-clean",
+      "t_ms": 8811,
+      "file": "build-v1-fix3-B-mobile-clean-8777-B-normal-top-stack.png",
+      "label": "B-normal-top-stack"
+    },
+    {
+      "case": "M-mobile-clean",
+      "t_ms": 834,
+      "file": "build-v1-fix3-M-mobile-clean-786-fresh.png",
+      "label": "fresh"
+    },
+    {
+      "case": "M-mobile-clean",
+      "t_ms": 1089,
+      "file": "build-v1-fix3-M-mobile-clean-1044-M-few.png",
+      "label": "M-few"
+    },
+    {
+      "case": "M-mobile-clean",
+      "t_ms": 6128,
+      "file": "build-v1-fix3-M-mobile-clean-6089-crafted.png",
+      "label": "crafted"
+    },
+    {
+      "case": "M-mobile-clean",
+      "t_ms": 6672,
+      "file": "build-v1-fix3-M-mobile-clean-6616-M-ready.png",
+      "label": "M-ready"
+    },
+    {
+      "case": "M-mobile-clean",
+      "t_ms": 6823,
+      "file": "build-v1-fix3-M-mobile-clean-6774-M-cheer.png",
+      "label": "M-cheer"
+    },
+    {
+      "case": "M-mobile-clean",
+      "t_ms": 8306,
+      "file": "build-v1-fix3-M-mobile-clean-8251-M-intro.png",
+      "label": "M-intro"
+    },
+    {
+      "case": "M-mobile-clean",
+      "t_ms": 9788,
+      "file": "build-v1-fix3-M-mobile-clean-9732-M-free-finale.png",
+      "label": "M-free-finale"
+    },
+    {
+      "case": "M-mobile-clean",
+      "t_ms": 11305,
+      "file": "build-v1-fix3-M-mobile-clean-11259-M-pen.png",
+      "label": "M-pen"
+    },
+    {
+      "case": "M-mobile-clean",
+      "t_ms": 11555,
+      "file": "build-v1-fix3-M-mobile-clean-11500-M-wall-blocked.png",
+      "label": "M-wall-blocked"
+    },
+    {
+      "case": "M-mobile-clean",
+      "t_ms": 14655,
+      "file": "build-v1-fix3-M-mobile-clean-14600-M-pen-question.png",
+      "label": "M-pen-question"
+    },
+    {
+      "case": "M-mobile-clean",
+      "t_ms": 14805,
+      "file": "build-v1-fix3-M-mobile-clean-14757-M-pen-answer.png",
+      "label": "M-pen-answer"
+    },
+    {
+      "case": "M-mobile-clean",
+      "t_ms": 95501,
+      "file": "build-v1-fix3-M-mobile-clean-95450-M-spent.png",
+      "label": "M-spent"
+    },
+    {
+      "case": "M-mobile-clean",
+      "t_ms": 96017,
+      "file": "build-v1-fix3-M-mobile-clean-95981-M-reloaded.png",
+      "label": "M-reloaded"
+    },
+    {
+      "case": "P-mobile-clean",
+      "t_ms": 831,
+      "file": "build-v1-fix3-P-mobile-clean-784-fresh.png",
+      "label": "fresh"
+    },
+    {
+      "case": "P-mobile-clean",
+      "t_ms": 4491,
+      "file": "build-v1-fix3-P-mobile-clean-4445-crafted.png",
+      "label": "crafted"
+    },
+    {
+      "case": "P-mobile-clean",
+      "t_ms": 4931,
+      "file": "build-v1-fix3-P-mobile-clean-4884-P-pulse.png",
+      "label": "P-pulse"
+    },
+    {
+      "case": "P-mobile-clean",
+      "t_ms": 8135,
+      "file": "build-v1-fix3-P-mobile-clean-8078-P-two-planks-show.png",
+      "label": "P-two-planks-show"
+    },
+    {
+      "case": "P-mobile-clean",
+      "t_ms": 8285,
+      "file": "build-v1-fix3-P-mobile-clean-8236-P-occupied.png",
+      "label": "P-occupied"
+    },
+    {
+      "case": "P-mobile-clean",
+      "t_ms": 8434,
+      "file": "build-v1-fix3-P-mobile-clean-8387-P-reach.png",
+      "label": "P-reach"
+    },
+    {
+      "case": "P-mobile-clean",
+      "t_ms": 8685,
+      "file": "build-v1-fix3-P-mobile-clean-8634-P-remove.png",
+      "label": "P-remove"
+    },
+    {
+      "case": "P-mobile-clean",
+      "t_ms": 8931,
+      "file": "build-v1-fix3-P-mobile-clean-8879-P-HUD-yields.png",
+      "label": "P-HUD-yields"
+    },
+    {
+      "case": "G-mobile-clean",
+      "t_ms": 1008,
+      "file": "build-v1-fix3-G-mobile-clean-955-fresh.png",
+      "label": "fresh"
+    },
+    {
+      "case": "G-mobile-clean",
+      "t_ms": 7201,
+      "file": "build-v1-fix3-G-mobile-clean-7159-crafted.png",
+      "label": "crafted"
+    },
+    {
+      "case": "G-mobile-clean",
+      "t_ms": 7672,
+      "file": "build-v1-fix3-G-mobile-clean-7619-G-one-build.png",
+      "label": "G-one-build"
+    },
+    {
+      "case": "G-mobile-clean",
+      "t_ms": 7823,
+      "file": "build-v1-fix3-G-mobile-clean-7770-G-one-normal.png",
+      "label": "G-one-normal"
+    },
+    {
+      "case": "G-mobile-clean",
+      "t_ms": 9339,
+      "file": "build-v1-fix3-G-mobile-clean-9287-G-two-build.png",
+      "label": "G-two-build"
+    },
+    {
+      "case": "G-mobile-clean",
+      "t_ms": 9490,
+      "file": "build-v1-fix3-G-mobile-clean-9439-G-two-normal.png",
+      "label": "G-two-normal"
+    },
+    {
+      "case": "G-mobile-clean",
+      "t_ms": 13639,
+      "file": "build-v1-fix3-G-mobile-clean-13583-G-praise-survives-movement.png",
+      "label": "G-praise-survives-movement"
+    }
+  ]
+}

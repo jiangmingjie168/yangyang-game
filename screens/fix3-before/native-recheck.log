@@ -1,0 +1,1 @@
+{"case":"S-mobile-clean","status":"FAIL","error":"AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n'11' !== '10'\n","errors":[],"video":"build-v1-fix3-video/page@b20b29f70285412765f1ca4415bde64d.webm"}

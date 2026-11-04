@@ -1,0 +1,43 @@
+{
+  "source_sha256": "a8d1c16776ac4fcd5e447d8c75ff3c22ed82aa59d3dafc685b969afb9a4158ea",
+  "results": [
+    {
+      "case": "S-mobile-log",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n'11' !== '10'\n",
+      "errors": []
+    }
+  ],
+  "frames": [
+    {
+      "case": "S-mobile-log",
+      "t_ms": 991,
+      "file": "build-v1-fix3-S-mobile-log-939-fresh.png",
+      "label": "fresh"
+    },
+    {
+      "case": "S-mobile-log",
+      "t_ms": 4697,
+      "file": "build-v1-fix3-S-mobile-log-4657-crafted.png",
+      "label": "crafted"
+    },
+    {
+      "case": "S-mobile-log",
+      "t_ms": 7389,
+      "file": "build-v1-fix3-S-mobile-log-7334-against-wall.png",
+      "label": "against-wall"
+    },
+    {
+      "case": "S-mobile-log",
+      "t_ms": 7539,
+      "file": "build-v1-fix3-S-mobile-log-7481-second-layer.png",
+      "label": "second-layer"
+    },
+    {
+      "case": "S-mobile-log",
+      "t_ms": 7589,
+      "file": "build-v1-fix3-S-mobile-log-7543-FAIL.png",
+      "label": "FAIL"
+    }
+  ]
+}

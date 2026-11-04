@@ -1,0 +1,261 @@
+[
+  {
+    "case": "G-mobile-clean",
+    "t_ms": 198,
+    "x": 422,
+    "y": 223.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "G-mobile-clean",
+    "t_ms": 362,
+    "x": 422,
+    "y": 256,
+    "purpose": "Play"
+  },
+  {
+    "case": "G-mobile-clean",
+    "t_ms": 1022,
+    "x": 658,
+    "y": 262,
+    "purpose": "Harvest first Wood"
+  },
+  {
+    "case": "G-mobile-clean",
+    "t_ms": 3458,
+    "x": 422,
+    "y": 100,
+    "purpose": "Dismiss Wood card"
+  },
+  {
+    "case": "G-mobile-clean",
+    "t_ms": 3562,
+    "x": 459,
+    "y": 224,
+    "purpose": "Harvest second Wood"
+  },
+  {
+    "case": "G-mobile-clean",
+    "t_ms": 3926,
+    "x": 422,
+    "y": 100,
+    "purpose": "Dismiss Wood card"
+  },
+  {
+    "case": "G-mobile-clean",
+    "t_ms": 4031,
+    "x": 459,
+    "y": 262,
+    "purpose": "Harvest third Wood"
+  },
+  {
+    "case": "G-mobile-clean",
+    "t_ms": 4144,
+    "x": 422.00001525878906,
+    "y": 100,
+    "purpose": "Dismiss Wood card"
+  },
+  {
+    "case": "G-mobile-clean",
+    "t_ms": 4243,
+    "x": 626.328125,
+    "y": 34,
+    "purpose": "Open Craft"
+  },
+  {
+    "case": "G-mobile-clean",
+    "t_ms": 4347,
+    "x": 368,
+    "y": 114,
+    "purpose": "Craft Planks ×4"
+  },
+  {
+    "case": "G-mobile-clean",
+    "t_ms": 4449,
+    "x": 422,
+    "y": 99.99999618530273,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "G-mobile-clean",
+    "t_ms": 4549,
+    "x": 368,
+    "y": 114,
+    "purpose": "Craft Planks ×4"
+  },
+  {
+    "case": "G-mobile-clean",
+    "t_ms": 4651,
+    "x": 422,
+    "y": 100,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "G-mobile-clean",
+    "t_ms": 4760,
+    "x": 368,
+    "y": 114,
+    "purpose": "Craft Planks ×4"
+  },
+  {
+    "case": "G-mobile-clean",
+    "t_ms": 4861,
+    "x": 421.99998474121094,
+    "y": 100,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "G-mobile-clean",
+    "t_ms": 4963,
+    "x": 784,
+    "y": 114,
+    "purpose": "Craft Stick ×4"
+  },
+  {
+    "case": "G-mobile-clean",
+    "t_ms": 5065,
+    "x": 422,
+    "y": 100,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "G-mobile-clean",
+    "t_ms": 5166,
+    "x": 422,
+    "y": 180,
+    "purpose": "Native middle-button autoscroll recipe panel"
+  },
+  {
+    "case": "G-mobile-clean",
+    "t_ms": 6086,
+    "x": 422,
+    "y": 300,
+    "purpose": "Stop native recipe autoscroll"
+  },
+  {
+    "case": "G-mobile-clean",
+    "t_ms": 6338,
+    "x": 784,
+    "y": 128,
+    "purpose": "Craft Fence ×2"
+  },
+  {
+    "case": "G-mobile-clean",
+    "t_ms": 6444,
+    "x": 421.99998474121094,
+    "y": 100.00000381469727,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "G-mobile-clean",
+    "t_ms": 6545,
+    "x": 784,
+    "y": 128,
+    "purpose": "Craft Fence ×2"
+  },
+  {
+    "case": "G-mobile-clean",
+    "t_ms": 6649,
+    "x": 421.99998474121094,
+    "y": 99.99999618530273,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "G-mobile-clean",
+    "t_ms": 6750,
+    "x": 784,
+    "y": 128,
+    "purpose": "Craft Fence ×2"
+  },
+  {
+    "case": "G-mobile-clean",
+    "t_ms": 6859,
+    "x": 422,
+    "y": 100,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "G-mobile-clean",
+    "t_ms": 6962,
+    "x": 784,
+    "y": 128,
+    "purpose": "Craft Fence ×2"
+  },
+  {
+    "case": "G-mobile-clean",
+    "t_ms": 7066,
+    "x": 422.00001525878906,
+    "y": 100,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "G-mobile-clean",
+    "t_ms": 7211,
+    "x": 782,
+    "y": 38,
+    "purpose": "Close Craft"
+  },
+  {
+    "case": "G-mobile-clean",
+    "t_ms": 7311,
+    "x": 542.328125,
+    "y": 34,
+    "purpose": "Open Build"
+  },
+  {
+    "case": "G-mobile-clean",
+    "t_ms": 7416,
+    "x": 362.984375,
+    "y": 100,
+    "purpose": "Select material"
+  },
+  {
+    "case": "G-mobile-clean",
+    "t_ms": 7509,
+    "x": 164,
+    "y": 300,
+    "purpose": "One Fence outline"
+  },
+  {
+    "case": "G-mobile-clean",
+    "t_ms": 7679,
+    "x": 542.328125,
+    "y": 34,
+    "purpose": "One Fence outside Build"
+  },
+  {
+    "case": "G-mobile-clean",
+    "t_ms": 7830,
+    "x": 542.328125,
+    "y": 34,
+    "purpose": "Return Build"
+  },
+  {
+    "case": "G-mobile-clean",
+    "t_ms": 7922,
+    "x": 278,
+    "y": 300,
+    "purpose": "Two Fence outline"
+  },
+  {
+    "case": "G-mobile-clean",
+    "t_ms": 9346,
+    "x": 542.328125,
+    "y": 34,
+    "purpose": "Ready outline outside Build"
+  },
+  {
+    "case": "G-mobile-clean",
+    "t_ms": 10498,
+    "x": 68,
+    "y": 322,
+    "purpose": "Joystick 1 700ms"
+  },
+  {
+    "case": "G-mobile-clean",
+    "t_ms": 11226,
+    "x": 117.6,
+    "y": 322,
+    "purpose": "Release joystick; hands off"
+  }
+]

@@ -1,0 +1,333 @@
+{
+  "source_sha256": "a8d1c16776ac4fcd5e447d8c75ff3c22ed82aa59d3dafc685b969afb9a4158ea",
+  "results": [
+    {
+      "case": "J-desktop-log",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Jump buffer: completion within 15s",
+      "errors": [],
+      "video": "build-v1-fix3-video/page@308b459cafa746f17df1ee102af99a98.webm"
+    },
+    {
+      "case": "S-desktop-log",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n'11' !== '10'\n",
+      "errors": [],
+      "video": "build-v1-fix3-video/page@e8997abd0e423fb284d0433dd82b34da.webm"
+    },
+    {
+      "case": "J-desktop-clean",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Jump buffer: completion within 15s",
+      "errors": [],
+      "video": "build-v1-fix3-video/page@2105e2f62c947b2fbb11b68551caee62.webm"
+    },
+    {
+      "case": "S-desktop-clean",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n'11' !== '10'\n",
+      "errors": [],
+      "video": "build-v1-fix3-video/page@60796e8ca18854e5fe8bf5333e1c63fd.webm"
+    },
+    {
+      "case": "J-mobile-log",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Jump buffer: completion within 15s",
+      "errors": [],
+      "video": "build-v1-fix3-video/page@aee3f9de47524a5c9851b66ae9a7fd3d.webm"
+    },
+    {
+      "case": "S-mobile-log",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n'11' !== '10'\n",
+      "errors": [],
+      "video": "build-v1-fix3-video/page@17e6b4fd5aef84749acb20950b9644c9.webm"
+    },
+    {
+      "case": "J-mobile-clean",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Jump buffer: completion within 15s",
+      "errors": [],
+      "video": "build-v1-fix3-video/page@547c262dc2fc8dedd59484ff42d57aba.webm"
+    },
+    {
+      "case": "S-mobile-clean",
+      "status": "FAIL",
+      "error": "Error: Text not visible #hotbar button[aria-label=\"Wood\"] em /^3$/: 4",
+      "errors": [],
+      "video": "build-v1-fix3-video/page@71db17a2ba4b51519233cd21fc2c4304.webm"
+    }
+  ],
+  "frames": [
+    {
+      "case": "J-desktop-log",
+      "t_ms": 1015,
+      "file": "build-v1-fix3-J-desktop-log-955-fresh.png",
+      "label": "fresh"
+    },
+    {
+      "case": "J-desktop-log",
+      "t_ms": 5729,
+      "file": "build-v1-fix3-J-desktop-log-5673-crafted.png",
+      "label": "crafted"
+    },
+    {
+      "case": "J-desktop-log",
+      "t_ms": 6850,
+      "file": "build-v1-fix3-J-desktop-log-6799-idle-0s.png",
+      "label": "idle-0s"
+    },
+    {
+      "case": "J-desktop-log",
+      "t_ms": 11799,
+      "file": "build-v1-fix3-J-desktop-log-11736-idle-5s.png",
+      "label": "idle-5s"
+    },
+    {
+      "case": "J-desktop-log",
+      "t_ms": 16831,
+      "file": "build-v1-fix3-J-desktop-log-16767-idle-10s.png",
+      "label": "idle-10s"
+    },
+    {
+      "case": "J-desktop-log",
+      "t_ms": 21853,
+      "file": "build-v1-fix3-J-desktop-log-21793-idle-15s.png",
+      "label": "idle-15s"
+    },
+    {
+      "case": "J-desktop-log",
+      "t_ms": 22267,
+      "file": "build-v1-fix3-J-desktop-log-22211-FAIL.png",
+      "label": "FAIL"
+    },
+    {
+      "case": "S-desktop-log",
+      "t_ms": 882,
+      "file": "build-v1-fix3-S-desktop-log-827-fresh.png",
+      "label": "fresh"
+    },
+    {
+      "case": "S-desktop-log",
+      "t_ms": 4597,
+      "file": "build-v1-fix3-S-desktop-log-4541-crafted.png",
+      "label": "crafted"
+    },
+    {
+      "case": "S-desktop-log",
+      "t_ms": 7301,
+      "file": "build-v1-fix3-S-desktop-log-7244-against-wall.png",
+      "label": "against-wall"
+    },
+    {
+      "case": "S-desktop-log",
+      "t_ms": 7454,
+      "file": "build-v1-fix3-S-desktop-log-7392-second-layer.png",
+      "label": "second-layer"
+    },
+    {
+      "case": "S-desktop-log",
+      "t_ms": 7518,
+      "file": "build-v1-fix3-S-desktop-log-7463-FAIL.png",
+      "label": "FAIL"
+    },
+    {
+      "case": "J-desktop-clean",
+      "t_ms": 887,
+      "file": "build-v1-fix3-J-desktop-clean-829-fresh.png",
+      "label": "fresh"
+    },
+    {
+      "case": "J-desktop-clean",
+      "t_ms": 5635,
+      "file": "build-v1-fix3-J-desktop-clean-5589-crafted.png",
+      "label": "crafted"
+    },
+    {
+      "case": "J-desktop-clean",
+      "t_ms": 6739,
+      "file": "build-v1-fix3-J-desktop-clean-6690-idle-0s.png",
+      "label": "idle-0s"
+    },
+    {
+      "case": "J-desktop-clean",
+      "t_ms": 11691,
+      "file": "build-v1-fix3-J-desktop-clean-11627-idle-5s.png",
+      "label": "idle-5s"
+    },
+    {
+      "case": "J-desktop-clean",
+      "t_ms": 16659,
+      "file": "build-v1-fix3-J-desktop-clean-16603-idle-10s.png",
+      "label": "idle-10s"
+    },
+    {
+      "case": "J-desktop-clean",
+      "t_ms": 21691,
+      "file": "build-v1-fix3-J-desktop-clean-21625-idle-15s.png",
+      "label": "idle-15s"
+    },
+    {
+      "case": "J-desktop-clean",
+      "t_ms": 22172,
+      "file": "build-v1-fix3-J-desktop-clean-22107-FAIL.png",
+      "label": "FAIL"
+    },
+    {
+      "case": "S-desktop-clean",
+      "t_ms": 869,
+      "file": "build-v1-fix3-S-desktop-clean-816-fresh.png",
+      "label": "fresh"
+    },
+    {
+      "case": "S-desktop-clean",
+      "t_ms": 4552,
+      "file": "build-v1-fix3-S-desktop-clean-4494-crafted.png",
+      "label": "crafted"
+    },
+    {
+      "case": "S-desktop-clean",
+      "t_ms": 7253,
+      "file": "build-v1-fix3-S-desktop-clean-7199-against-wall.png",
+      "label": "against-wall"
+    },
+    {
+      "case": "S-desktop-clean",
+      "t_ms": 7405,
+      "file": "build-v1-fix3-S-desktop-clean-7346-second-layer.png",
+      "label": "second-layer"
+    },
+    {
+      "case": "S-desktop-clean",
+      "t_ms": 7470,
+      "file": "build-v1-fix3-S-desktop-clean-7407-FAIL.png",
+      "label": "FAIL"
+    },
+    {
+      "case": "J-mobile-log",
+      "t_ms": 830,
+      "file": "build-v1-fix3-J-mobile-log-781-fresh.png",
+      "label": "fresh"
+    },
+    {
+      "case": "J-mobile-log",
+      "t_ms": 6827,
+      "file": "build-v1-fix3-J-mobile-log-6784-crafted.png",
+      "label": "crafted"
+    },
+    {
+      "case": "J-mobile-log",
+      "t_ms": 7914,
+      "file": "build-v1-fix3-J-mobile-log-7874-idle-0s.png",
+      "label": "idle-0s"
+    },
+    {
+      "case": "J-mobile-log",
+      "t_ms": 12835,
+      "file": "build-v1-fix3-J-mobile-log-12790-idle-5s.png",
+      "label": "idle-5s"
+    },
+    {
+      "case": "J-mobile-log",
+      "t_ms": 17835,
+      "file": "build-v1-fix3-J-mobile-log-17780-idle-10s.png",
+      "label": "idle-10s"
+    },
+    {
+      "case": "J-mobile-log",
+      "t_ms": 22831,
+      "file": "build-v1-fix3-J-mobile-log-22789-idle-15s.png",
+      "label": "idle-15s"
+    },
+    {
+      "case": "J-mobile-log",
+      "t_ms": 23402,
+      "file": "build-v1-fix3-J-mobile-log-23339-FAIL.png",
+      "label": "FAIL"
+    },
+    {
+      "case": "S-mobile-log",
+      "t_ms": 849,
+      "file": "build-v1-fix3-S-mobile-log-799-fresh.png",
+      "label": "fresh"
+    },
+    {
+      "case": "S-mobile-log",
+      "t_ms": 4544,
+      "file": "build-v1-fix3-S-mobile-log-4496-crafted.png",
+      "label": "crafted"
+    },
+    {
+      "case": "S-mobile-log",
+      "t_ms": 7230,
+      "file": "build-v1-fix3-S-mobile-log-7184-against-wall.png",
+      "label": "against-wall"
+    },
+    {
+      "case": "S-mobile-log",
+      "t_ms": 7364,
+      "file": "build-v1-fix3-S-mobile-log-7324-second-layer.png",
+      "label": "second-layer"
+    },
+    {
+      "case": "S-mobile-log",
+      "t_ms": 7417,
+      "file": "build-v1-fix3-S-mobile-log-7369-FAIL.png",
+      "label": "FAIL"
+    },
+    {
+      "case": "J-mobile-clean",
+      "t_ms": 837,
+      "file": "build-v1-fix3-J-mobile-clean-790-fresh.png",
+      "label": "fresh"
+    },
+    {
+      "case": "J-mobile-clean",
+      "t_ms": 6682,
+      "file": "build-v1-fix3-J-mobile-clean-6641-crafted.png",
+      "label": "crafted"
+    },
+    {
+      "case": "J-mobile-clean",
+      "t_ms": 7771,
+      "file": "build-v1-fix3-J-mobile-clean-7728-idle-0s.png",
+      "label": "idle-0s"
+    },
+    {
+      "case": "J-mobile-clean",
+      "t_ms": 12707,
+      "file": "build-v1-fix3-J-mobile-clean-12664-idle-5s.png",
+      "label": "idle-5s"
+    },
+    {
+      "case": "J-mobile-clean",
+      "t_ms": 17724,
+      "file": "build-v1-fix3-J-mobile-clean-17668-idle-10s.png",
+      "label": "idle-10s"
+    },
+    {
+      "case": "J-mobile-clean",
+      "t_ms": 22723,
+      "file": "build-v1-fix3-J-mobile-clean-22667-idle-15s.png",
+      "label": "idle-15s"
+    },
+    {
+      "case": "J-mobile-clean",
+      "t_ms": 23186,
+      "file": "build-v1-fix3-J-mobile-clean-23145-FAIL.png",
+      "label": "FAIL"
+    },
+    {
+      "case": "S-mobile-clean",
+      "t_ms": 860,
+      "file": "build-v1-fix3-S-mobile-clean-803-fresh.png",
+      "label": "fresh"
+    },
+    {
+      "case": "S-mobile-clean",
+      "t_ms": 15806,
+      "file": "build-v1-fix3-S-mobile-clean-15762-FAIL.png",
+      "label": "FAIL"
+    }
+  ]
+}

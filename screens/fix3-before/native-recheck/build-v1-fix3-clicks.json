@@ -1,0 +1,156 @@
+[
+  {
+    "case": "S-mobile-clean",
+    "t_ms": 161,
+    "x": 422,
+    "y": 223.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "S-mobile-clean",
+    "t_ms": 304,
+    "x": 422,
+    "y": 256,
+    "purpose": "Play"
+  },
+  {
+    "case": "S-mobile-clean",
+    "t_ms": 951,
+    "x": 658,
+    "y": 262,
+    "purpose": "Harvest first Wood"
+  },
+  {
+    "case": "S-mobile-clean",
+    "t_ms": 3346,
+    "x": 459,
+    "y": 224,
+    "purpose": "Harvest second Wood"
+  },
+  {
+    "case": "S-mobile-clean",
+    "t_ms": 3707,
+    "x": 459,
+    "y": 262,
+    "purpose": "Harvest third Wood"
+  },
+  {
+    "case": "S-mobile-clean",
+    "t_ms": 3821,
+    "x": 422,
+    "y": 100,
+    "purpose": "Dismiss Wood card"
+  },
+  {
+    "case": "S-mobile-clean",
+    "t_ms": 3920,
+    "x": 626.328125,
+    "y": 34,
+    "purpose": "Open Craft"
+  },
+  {
+    "case": "S-mobile-clean",
+    "t_ms": 4021,
+    "x": 368,
+    "y": 114,
+    "purpose": "Craft Planks ×4"
+  },
+  {
+    "case": "S-mobile-clean",
+    "t_ms": 4121,
+    "x": 422,
+    "y": 100.00000381469727,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "S-mobile-clean",
+    "t_ms": 4220,
+    "x": 368,
+    "y": 114,
+    "purpose": "Craft Planks ×4"
+  },
+  {
+    "case": "S-mobile-clean",
+    "t_ms": 4323,
+    "x": 422.00001525878906,
+    "y": 100.00000381469727,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "S-mobile-clean",
+    "t_ms": 4423,
+    "x": 368,
+    "y": 114,
+    "purpose": "Craft Planks ×4"
+  },
+  {
+    "case": "S-mobile-clean",
+    "t_ms": 4523,
+    "x": 422.00001525878906,
+    "y": 99.99999618530273,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "S-mobile-clean",
+    "t_ms": 4663,
+    "x": 782,
+    "y": 38,
+    "purpose": "Close Craft"
+  },
+  {
+    "case": "S-mobile-clean",
+    "t_ms": 4765,
+    "x": 542.328125,
+    "y": 34,
+    "purpose": "Open Build"
+  },
+  {
+    "case": "S-mobile-clean",
+    "t_ms": 4868,
+    "x": 48.796875,
+    "y": 100,
+    "purpose": "Select material"
+  },
+  {
+    "case": "S-mobile-clean",
+    "t_ms": 4967,
+    "x": 68,
+    "y": 322,
+    "purpose": "Joystick -1 1300ms"
+  },
+  {
+    "case": "S-mobile-clean",
+    "t_ms": 6298,
+    "x": 18.4,
+    "y": 322,
+    "purpose": "Release joystick; hands off"
+  },
+  {
+    "case": "S-mobile-clean",
+    "t_ms": 6649,
+    "x": 450,
+    "y": 262,
+    "purpose": "Wall base beside child"
+  },
+  {
+    "case": "S-mobile-clean",
+    "t_ms": 6751,
+    "x": 68,
+    "y": 322,
+    "purpose": "Joystick -1 160ms"
+  },
+  {
+    "case": "S-mobile-clean",
+    "t_ms": 6945,
+    "x": 18.4,
+    "y": 322,
+    "purpose": "Release joystick; hands off"
+  },
+  {
+    "case": "S-mobile-clean",
+    "t_ms": 7341,
+    "x": 450,
+    "y": 224,
+    "purpose": "Second layer from beside wall"
+  }
+]
