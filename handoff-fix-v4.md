@@ -9,7 +9,7 @@
 | --- | --- |
 | 分支 | `codex-fix-v4`（已 push） |
 | 修复 commit（改 index.html） | `e29d05dd3f1cf718d33c188cc39229e55e8e72a4`（`e29d05d`） |
-| 分支 tip（含 astra 复查 + handoff） | `58c5628c0c0c3e4d602eca19d5ac312bc8237e42`（`58c5628`） |
+| 分支 tip（含 astra 复查 + handoff） | `0cbefda2e479ccb557ba8bea9ab8a52cfd731210`（`0cbefda`） |
 | origin/main | `a29022929a5aa8991e28b7fcd828b1c231544440`（`a290229`）**未动** |
 | 是否已 push | 是 → `origin/codex-fix-v4` |
 | 预览 URL | https://cdn.jsdelivr.net/gh/jiangmingjie168/yangyang-game@e29d05dd3f1cf718d33c188cc39229e55e8e72a4/index.html |
