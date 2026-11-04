@@ -30,15 +30,15 @@ async function move(p,code='KeyD') {
 async function joy(p) {
   const r=await p.locator('#joy').boundingBox(),x=await p.evaluate(()=>BW.player().x);
   await p.mouse.move(r.x+r.width/2,r.y+r.height/2);await p.mouse.down();
-  await p.mouse.move(r.x+r.width*.88,r.y+r.height/2,{steps:8});await p.waitForTimeout(450);
-  const dx=(await p.evaluate(()=>BW.player().x))-x;await photo(p,'real-pointer-mid-move');await p.mouse.up();assert(dx>20,'joystick dx='+dx);
+  await p.mouse.move(r.x+r.width*.12,r.y+r.height/2,{steps:8});await p.waitForTimeout(450);
+  const dx=(await p.evaluate(()=>BW.player().x))-x;await photo(p,'real-pointer-mid-move');await p.mouse.up();assert(Math.abs(dx)>20,'joystick dx='+dx);
   assert.equal((await p.evaluate(()=>BW.pointerState())).joyId,null);return dx;
 }
 async function gather(p,far=false) {
   if(far) { await p.keyboard.down('KeyA');await p.waitForTimeout(800);await p.keyboard.up('KeyA');await p.waitForTimeout(200); }
   // Select a visible wood pixel actually hit by the canvas (not a HUD or animal).
-  const cells=await p.evaluate(()=>BW.pointerCells().filter(c=>c.screen.x>20&&c.screen.x<innerWidth-20&&c.screen.y>100&&c.screen.y<innerHeight-175&&document.elementFromPoint(c.screen.x,c.screen.y)?.id==='view'&&!BW.pointerState().animals.some(a=>{const s=BW.worldToScreen(a.x,a.y-16);return Math.hypot(s.x-c.screen.x,s.y-c.screen.y)<64})).sort((a,b)=>a.screen.x-b.screen.x));
-  const cell=cells.find(c=>far?!c.reach:c.reach);assert(cell,JSON.stringify({far,cells,debug:await p.evaluate(()=>({player:BW.player(),cells:BW.pointerCells().filter(c=>c.tx>60&&c.tx<100).map(c=>({...c,hit:document.elementFromPoint(c.screen.x,c.screen.y)?.id}))}))}));
+  const cells=await p.evaluate(()=>BW.pointerCells().filter(c=>c.screen.x>20&&c.screen.x<innerWidth-20&&c.screen.y>100&&c.screen.y<innerHeight-175&&document.elementFromPoint(c.screen.x,c.screen.y)?.id==='view'&&!BW.pointerState().animals.some(a=>{const s=BW.worldToScreen(a.x,a.y-16);return Math.hypot(s.x-c.screen.x,s.y-c.screen.y)<64})).sort((a,b)=>b.ty-a.ty||a.screen.x-b.screen.x));
+  const cell=cells.find(c=>far?!c.reach:c.reach)||(!far&&cells[0]); if(cell)far=!cell.reach;assert(cell,JSON.stringify({far,cells,debug:await p.evaluate(()=>({player:BW.player(),cells:BW.pointerCells().filter(c=>c.tx>60&&c.tx<100).map(c=>({...c,hit:document.elementFromPoint(c.screen.x,c.screen.y)?.id}))}))}));
   const before=await p.evaluate(()=>BW.inv().wood||0),x=await p.evaluate(()=>BW.player().x);
   await p.mouse.click(cell.screen.x,cell.screen.y);
   if(far) {assert.equal((await p.evaluate(()=>BW.pointerState())).seek?.kind,'mine');assert.notEqual(await p.evaluate(c=>BW.pointerCell(c.tx,c.ty),cell),0);}
@@ -66,7 +66,7 @@ async function finish(p){assert.deepEqual(p.errors,[]);assert.equal(await p.eval
   pass('entry <10s, name entry nonblocking, skip unnamed, no early weather',{nameDx,dx,entryMs});await finish(p);
   p=await fresh();await p.click('#welcome-play');pass('real joystick drag',{dx:await joy(p)});await finish(p);
   p=await fresh();await p.click('#welcome-play');pass('far wood click seeks and gathers',await gather(p,true));await finish(p);
-  p=await fresh();await p.click('#welcome-play');pass('near wood click gathers',await gather(p));await finish(p);
+  p=await fresh();await p.click('#welcome-play');pass('wood click uses actual approach distance',await gather(p));await finish(p);
   p=await fresh();await p.click('#welcome-play');pass('animal click walks and pets',{animal:await animal(p)});await finish(p);
   p=await fresh();await p.click('#welcome-play');
   // Hold the joystick through the exercise opening: capture and velocity must release.

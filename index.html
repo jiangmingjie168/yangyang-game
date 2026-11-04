@@ -1099,6 +1099,7 @@ function validConversation(value, p) {
     if (['made', 'built'].indexOf(action) >= 0 && !memory.prefs.build && PREF_VALUES.build.indexOf(word) >= 0) { memory.prefs.build = word; memory.prefsLearnedAt.build = Date.now(); saveSoon(); }
   }
   function chatContextLeads(d) {
+    if (d.tier === 1 && d.feedback !== 'success') return [];
     var leads = [], name = d.context.child_name;
     if (name) leads.push(name + '!');
     var events = d.context.recent_events, e = events[events.length - 1];
@@ -1384,15 +1385,16 @@ function validConversation(value, p) {
     document.getElementById('chat-face').hidden = d.choices || d.tier === 1;
     d.audio_url = reply.audio_url;
     d.pending = false; d.controller = null; d.question = d.reveal && !reply.done ? "Let's say " + WORD[d.key][0].toLowerCase() + ' together!' : reply.say; d.at = chatClock;
-    document.getElementById('chat-question').textContent = d.question;
-    document.getElementById('chat-status').textContent = d.answered ? '★ ★ ★' : (d.reveal ? 'Tap ' + WORD[d.key][0] + ' or say it with me.' : d.hint ? 'Good try! Look at the glowing answer.' : '');
+    var listening = d.tier === 1 && !reply.done;
+    document.getElementById('chat-question').textContent = listening ? 'Listen and choose!' : d.question;
+    document.getElementById('chat-status').textContent = listening ? '' : d.answered ? '★ ★ ★' : (d.reveal ? 'Tap ' + WORD[d.key][0] + ' or say it with me.' : d.hint ? 'Good try! Look at the glowing answer.' : '');
     var root = document.getElementById('chat-options'); root.innerHTML = ''; root.hidden = !d.choices || reply.done;
     d.options.forEach(function (key) {
       var b = document.createElement('button'); b.type = 'button'; b.dataset.word = key;
       b.disabled = reply.done || (d.reveal && key !== d.key);
       b.classList.toggle('hint-answer', !!d.hint && key === d.key);
       var icon = document.createElement('canvas'); icon.width = 128; icon.height = 128; icon.setAttribute('aria-hidden', 'true'); paintIcon(icon, key);
-      b.appendChild(icon); b.appendChild(document.createTextNode(WORD[key][0])); tapButton(b, function () { answerChat(key); }); root.appendChild(b);
+      b.appendChild(icon); b.setAttribute('aria-label', WORD[key][0]); if (!listening) b.appendChild(document.createTextNode(WORD[key][0])); tapButton(b, function () { answerChat(key); }); root.appendChild(b);
     });
     document.getElementById('chat-mic').setAttribute('aria-label', 'Answer by voice');
     document.getElementById('chat-mic').disabled = reply.done;
@@ -2071,6 +2073,8 @@ function validConversation(value, p) {
       if (Math.abs(dxp) > 720) { a.x = player.x - player.dir * 38; a.y = player.y; dxp = player.x - a.x; }
       if (Math.abs(dxp) > 54) a.vx = (dxp > 0 ? 1 : -1) * Math.min(158, 66 + Math.abs(dxp) * 0.85);
       else a.vx = 0;
+    } else if (seek && seek.kind === 'pet' && seek.animal === a) {
+      a.vx = 0; // Wait for the approaching child instead of walking away.
     } else {
       a.timer -= dt;
       if (a.timer <= 0) {
@@ -2110,7 +2114,7 @@ function validConversation(value, p) {
   function inReach(tx, ty) {
     var dx = (tx + 0.5) * TILE - player.x;
     var dy = (ty + 0.5) * TILE - (player.y - PH * 0.4);
-    var lim = 10 * TILE;
+    var lim = 3 * TILE;
     return dx * dx + dy * dy <= lim * lim;
   }
   function overlapsPlayer(tx, ty) {
@@ -2417,7 +2421,7 @@ function validConversation(value, p) {
     }
   }
   function pet(a) {
-    a.pet = 0.4;
+    a.pet = 1.2;
     if (!quiz) progress.tapped[a.type] = 1;
     if (quiz && a.type !== quiz.key) quizWrong();
     learn(a.type); rememberEvent('met', a.type);
@@ -2456,9 +2460,13 @@ function validConversation(value, p) {
     saveSoon();
   }
   function petReach(a) { return Math.hypot(a.x - player.x, a.y - player.y) <= 64; }
+  function beginSeek(target) {
+    target.left = 12;
+    seek = target;
+    seekStep(0);
+  }
   function seekMine(tx, ty) {
-    if (inReach(tx, ty)) mine(tx, ty);
-    else seek = { kind: 'mine', tx: tx, ty: ty, left: 6 };
+    beginSeek({ kind: 'mine', tx: tx, ty: ty });
   }
   // A bounded horizontal seek uses the same collision and step-up path as keys.
   // Unreachable heights/obstacles time out; no teleporting or identify-only success.
@@ -2493,15 +2501,18 @@ function validConversation(value, p) {
       lock = { tx: cropX, ty: cropY }; lockAge = 0;
       seekMine(cropX, cropY); return;
     }
-    var best = null, bd = 38 * 38, i;
+    var best = null, bd = Infinity, i;
     for (i = 0; i < animals.length; i++) {
       var a = animals[i];
       var dx = a.x - wx, dy = (a.y - 16) - wy, d = dx * dx + dy * dy;
-      if (d < bd) { bd = d; best = a; }
+      // Cover the drawn head/ears, body and the foot cell a child selects.
+      var hit = Math.abs(dx) <= 32 && wy >= a.y - 54 && wy <= a.y + 8;
+      var footCell = Math.floor(a.x / TILE) === cropX && Math.floor((a.y - 1) / TILE) === cropY;
+      if ((hit || footCell) && d < bd) { bd = d; best = a; }
     }
     if (best) {
-      if (petReach(best)) pet(best);
-      else seek = { kind: 'pet', animal: best, left: 6 };
+      lock = null; lockAge = 0;
+      beginSeek({ kind: 'pet', animal: best });
       return;
     }
     var tx = Math.floor(wx / TILE), ty = Math.floor(wy / TILE);
@@ -3163,6 +3174,11 @@ function validConversation(value, p) {
       ctx.beginPath(); ctx.ellipse(0, -1, 10, 3, 0, 0, 6.3); ctx.fill();
       drawAnimal(ctx, an.type, an.phase);
       ctx.restore();
+      if (an.pet > 0) {
+        ctx.save(); ctx.fillStyle = '#ed4978'; ctx.font = 'bold 20px sans-serif';
+        ctx.textAlign = 'center'; ctx.fillText('♥', an.x, an.y - 55);
+        ctx.restore();
+      }
     }
     var pi;
     for (pi = parts.length - 1; pi >= 0; pi--) {
