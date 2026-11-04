@@ -49,3 +49,8 @@ BW_SOURCE=/tmp/bw-production.html PLAYWRIGHT_MODULE=/tmp/node_modules/playwright
 ## 已知边界
 
 寻路保持原版横向移动、碰撞和跳跃模型；封闭洞穴、超高目标或无法跨越的障碍会在 12 秒后取消，不会穿墙。生产站尚未部署此分支。建议使用分支静态预览，或把 jsDelivr URL 中版本固定到本次提交；用同一回访存档对照旧站与预览，避免缓存/存档差异。
+
+## Astra 复查（gpt-6-astra）
+
+见 `astra-fix-v4-review.md`。三项均 PASS（有适用范围）。独立复跑 raw-pointer-v4 / real-pointer 均 exit 0；对照生产基线脚边点击仍按预期失败。重点风险：家长真实回访存档现场尚待复测；一级题抽检覆盖 `#dialogue` 文字，框外任务栏可能仍显示同名词；reach 收紧到 3 格可能影响放置/种植/钓鱼等共用操作的手感。
+
