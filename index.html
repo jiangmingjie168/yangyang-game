@@ -69,7 +69,9 @@
   #chat-face { width: 44px; height: 44px; }
   #chat-question { flex: 1; font-size: 23px; font-weight: 900; margin: 0; }
   #chat-close { font-size: 26px; width: 44px; height: 44px; }
-  #chat-picture { width: 74px; height: 74px; display: block; margin: 2px auto; }
+  #chat-picture { width: 74px; height: 74px; display: block; margin: 2px auto; cursor: pointer; touch-action: manipulation; }
+  #chat-picture:active { transform: scale(0.96); }
+  #buddy-picture { cursor: pointer; touch-action: manipulation; }
   #chat-options[hidden], #chat-choices[hidden] { display: none; }
   #chat-options { display: flex; gap: 10px; }
   #chat-options button { flex: 1; min-height: 60px; border-radius: 14px; background: #dcf1d1; font-size: 21px; font-weight: 800; border: 2px solid #abd58f; }
@@ -273,6 +275,18 @@
     pointer-events: auto;
     animation: pop 0.18s ease-out;
   }
+  #wordcard.fly-chest {
+    animation: none;
+    transition: transform 0.55s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.55s ease;
+    pointer-events: none;
+    z-index: 70;
+  }
+  #btn-chest.chest-catch { animation: chest-catch 0.45s ease; }
+  @keyframes chest-catch {
+    0% { transform: scale(1); }
+    40% { transform: scale(1.18); }
+    100% { transform: scale(1); }
+  }
   #wordcard canvas { width: 68px; height: 68px; display: block; margin: 0 auto; }
   #card-en { font-size: clamp(42px, 6.4vw, 64px); font-weight: 900; line-height: 1; letter-spacing: -0.5px; }
   @keyframes pop { from { transform: translateX(-50%) scale(0.86); } to { transform: translateX(-50%) scale(1); } }
@@ -458,7 +472,8 @@
   }
 
   .chat-tools { flex-wrap: wrap; }
-  #chat-listen, #chat-mic, #buddy-mic, #name-mic { display: inline-flex; align-items: center; justify-content: center; gap: 7px; min-width: 90px; min-height: 48px; padding: 8px 12px; border: 2px solid #81bad8; box-shadow: 0 3px 0 #7da8bd; color: #174962; background: #d5efff; }
+  #chat-listen { display: none !important; }
+  #chat-mic, #buddy-mic, #name-mic { display: inline-flex; align-items: center; justify-content: center; gap: 7px; min-width: 90px; min-height: 48px; padding: 8px 12px; border: 2px solid #81bad8; box-shadow: 0 3px 0 #7da8bd; color: #174962; background: #d5efff; }
   #chat-mic, #buddy-mic, #name-mic { background: #ffe0d4; border-color: #dc9a80; color: #7d3c2a; box-shadow: 0 3px 0 #c28a74; }
   #btn-speak { background: #d5efff; border: 2px solid #81bad8; }
   #chat-listen svg, #chat-mic svg, #buddy-mic svg, #name-mic svg { width: 25px; height: 25px; flex-shrink: 0; }
@@ -543,7 +558,7 @@
 <div id="app">
   <canvas id="view" width="800" height="400"></canvas>
   <div id="hud">
-    <span id="build-version" aria-label="Build version">build cd91b62+ux15</span>
+    <span id="build-version" aria-label="Build version">build cd91b62+ux16</span>
     <div class="topbar">
       <button id="quest" type="button">
         <canvas id="quest-icon" width="128" height="128"></canvas>
@@ -601,7 +616,7 @@
     <div class="chat-head"><canvas id="chat-face" width="128" height="128" aria-hidden="true"></canvas><p id="chat-question"></p><button id="chat-close" hidden type="button" aria-label="Close">×</button></div>
     <canvas id="chat-picture" width="128" height="128" role="img" aria-label="Picture to talk about"></canvas>
     <div id="chat-options"></div>
-    <div class="chat-tools"><button id="chat-listen" type="button" aria-label="Listen again"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M3 9h4l6-4v14l-6-4H3z"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M16 9a4 4 0 0 1 0 6m3-9a8 8 0 0 1 0 12"/></svg><span>Listen</span></button><button id="chat-mic" type="button" aria-label="Answer by voice"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="2" width="6" height="12" rx="3" fill="currentColor"/><path d="M5 10v2a7 7 0 0 0 14 0v-2M12 19v3m-4 0h8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>Speak</span></button><button id="chat-choices" type="button" hidden aria-hidden="true" tabindex="-1"></button><button id="chat-confirm" type="button" hidden>I said it</button><button id="chat-continue" type="button" hidden>Continue</button></div>
+    <div class="chat-tools"><button id="chat-listen" type="button" hidden aria-hidden="true" tabindex="-1" aria-label="Listen again"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M3 9h4l6-4v14l-6-4H3z"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M16 9a4 4 0 0 1 0 6m3-9a8 8 0 0 1 0 12"/></svg><span>Listen</span></button><button id="chat-mic" type="button" aria-label="Answer by voice"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="2" width="6" height="12" rx="3" fill="currentColor"/><path d="M5 10v2a7 7 0 0 0 14 0v-2M12 19v3m-4 0h8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>Speak</span></button><button id="chat-choices" type="button" hidden aria-hidden="true" tabindex="-1"></button><button id="chat-confirm" type="button" hidden>I said it</button><button id="chat-continue" type="button" hidden>Continue</button></div>
     <p id="chat-status" role="status" aria-live="polite"></p>
   </section>
   <aside id="parent-help" hidden aria-label="家长设置">
@@ -836,7 +851,7 @@ const BRAIN_TIMEOUT_MS = 6500;
   var joyX = 0, joyY = 0, joyJumpLatch = false;
   var keys = {};
   var parts = [];
-  var audioCtx = null, speechOn = false, cardKey = '', cardLeft = 0;
+  var audioCtx = null, speechOn = false, cardKey = '', cardLeft = 0, cardFlyChest = false, cardFlyTimer = null;
   var quiz = null, quizStars = {}, lastQuizKey = '', toastLeft = 0, wrongAt = 0;
   var deepTime = 0, saveIn = 0, dirtySave = false;
   var swimPhase = 0, wasSwim = false, splashT = 0;
@@ -1105,6 +1120,17 @@ function validConversation(value, p) {
     document.getElementById('buddy-chat').addEventListener('click',function(e){if(ambient&&ambient.build&&ambient.build.reward&&!e.target.closest('button'))closeAmbient();});
     document.getElementById('buddy-confirm').addEventListener('click',function(){if(ambient&&!ambient.build&&ambient.voiceFailures>=2){var key=socialPracticeKey(ambient);if(key)logPractice(key,'words',false,true,1);closeAmbient();return;}var d=ambient&&ambient.build;if(!d||d.voiceFailures<2||d.answered)return;d.selfClaim=true;logPractice(d.key,d.event==='word_practice'?'words':'build',false,true,d.tier);finishBuildAnswer(d,d.key,false);});
     document.getElementById('buddy-mic').addEventListener('click', listenSocial);
+    tapButton(document.getElementById('buddy-picture'), function () {
+      if (!ambient) return;
+      var line = (document.getElementById('buddy-line').textContent || '').trim();
+      if (!line) return;
+      if (ambient.build) {
+        if (ambient.build.answered || ambient.build.reward) return;
+        buildSpeak(line, !!ambient.build.named);
+        return;
+      }
+      speakEn(line, { soft: true });
+    });
     document.getElementById('name-mic').addEventListener('click', listenSocial);
     document.getElementById('name-form').addEventListener('submit', function (e) { e.preventDefault(); finishName(document.getElementById('name-input').value); });
     document.getElementById('name-input').addEventListener('input', armNameTimer);
@@ -1470,7 +1496,7 @@ function validConversation(value, p) {
       turn: 0, at: chatClock, answered: false, pending: false, choices: tier === 1, sequence: 0 };
     paintIcon(document.getElementById('chat-face'), 'dog');
     document.getElementById('chat-picture').hidden = false;
-    paintIcon(document.getElementById('chat-picture'), target);document.getElementById('chat-picture').setAttribute('aria-label',WORD[target][0]);
+    paintIcon(document.getElementById('chat-picture'), target);document.getElementById('chat-picture').setAttribute('aria-label','Listen: '+WORD[target][0]);
     requestChat(dialogue, 'prompt');
   }
   function chatTemplate(d, feedback) {
@@ -1540,7 +1566,8 @@ function validConversation(value, p) {
     document.getElementById('chat-choices').hidden = true;
     document.getElementById('chat-confirm').hidden = !d.fallback || reply.done;
     document.getElementById('chat-confirm').disabled = reply.done;
-    ['chat-listen','chat-mic'].forEach(function(id){document.getElementById(id).hidden=reply.done;});
+    document.getElementById('chat-listen').hidden = true;
+    document.getElementById('chat-mic').hidden = reply.done;
     // Success: auto-advance after the reward word. Continue/× only for I said it.
     document.getElementById('chat-continue').hidden = !reply.done || !d.selfClaim;
     document.getElementById('chat-close').hidden = !d.answered || !d.selfClaim;
@@ -1715,11 +1742,16 @@ function validConversation(value, p) {
     d.selfClaim=true;d.answered=true;d.feedback='self_claim';
     renderChat(d,{say:'Thanks for trying!',options:d.options,done:true},true);
   }
+  function replayChatPrompt() {
+    if (!dialogue || dialogue.answered || dialogue.pending) return;
+    speakEn(dialogue.question, { audio_url: !dialogue.reveal ? dialogue.audio_url : undefined });
+  }
   function bindDialogue() {
     tapButton(document.getElementById('chat-close'), closeChat);
     tapButton(document.getElementById('chat-continue'), closeChat);
     document.getElementById('dialogue').addEventListener('click',function(e){if(dialogue&&dialogue.answered&&!e.target.closest('button'))closeChat();});
-    tapButton(document.getElementById('chat-listen'), function () { if (dialogue) speakEn(dialogue.question, { audio_url: !dialogue.reveal ? dialogue.audio_url : undefined }); });
+    // Listen button removed: tap the picture (or animal art) to hear the prompt again.
+    tapButton(document.getElementById('chat-picture'), replayChatPrompt);
     tapButton(document.getElementById('chat-mic'), listenChat);
     tapButton(document.getElementById('chat-choices'), showChatChoices);
     tapButton(document.getElementById('chat-confirm'), confirmChat);
@@ -1727,10 +1759,12 @@ function validConversation(value, p) {
     document.getElementById('dialogue').addEventListener('click', function (e) {
       if (e.detail !== 0) return;
       var b = e.target.closest('button');
-      if (!b) return;
+      if (!b) {
+        if (e.target && e.target.id === 'chat-picture') replayChatPrompt();
+        return;
+      }
       if (b.dataset.word) answerChat(b.dataset.word);
       else if (b.id === 'chat-close') closeChat();
-      else if (b.id === 'chat-listen' && dialogue) speakEn(dialogue.question, { audio_url: !dialogue.reveal ? dialogue.audio_url : undefined });
       else if (b.id === 'chat-mic') listenChat();
       else if (b.id === 'chat-choices') showChatChoices();
       else if (b.id === 'chat-confirm') confirmChat();
@@ -4512,19 +4546,63 @@ function validConversation(value, p) {
     if (!w) return;
     learn(key);
     if (buildSessionBusy() && !buildShowingWord) return;
+    if (cardFlyTimer) { clearTimeout(cardFlyTimer); cardFlyTimer = null; }
     cardKey = key;
+    cardFlyChest = reward === 'chest';
     var card = document.getElementById('wordcard');
+    card.classList.remove('fly-chest');
+    card.style.transform = '';
+    card.style.opacity = '';
     card.hidden = false;
     document.getElementById('card-en').textContent = w[0];
     paintIcon(document.getElementById('card-icon'), key);
-    cardLeft = reward ? 3600 : 2.15;
-    document.getElementById('card-continue').hidden=!reward;
+    // Sticky Continue only for legacy reward===true; quiz rewards fly to Chest.
+    cardLeft = reward === true ? 3600 : (cardFlyChest ? 1.35 : 2.15);
+    document.getElementById('card-continue').hidden = reward !== true;
+    if (cardFlyChest) {
+      // Soft ding on reward-card pop (respects sfxOn / mute).
+      chime();
+      playSfx('star');
+    }
     speak(w[0]);
     renderHotbar();
   }
   function hideCard() {
-    document.getElementById('wordcard').hidden = true;
+    if (cardFlyTimer) { clearTimeout(cardFlyTimer); cardFlyTimer = null; }
+    var card = document.getElementById('wordcard');
+    card.hidden = true;
+    card.classList.remove('fly-chest');
+    card.style.transform = '';
+    card.style.opacity = '';
     cardLeft = 0;
+    cardFlyChest = false;
+  }
+  function flyWordcardToChest() {
+    var card = document.getElementById('wordcard');
+    var chest = document.getElementById('btn-chest');
+    if (!card || card.hidden || !chest) { hideCard(); return; }
+    cardFlyChest = false;
+    cardLeft = 0;
+    var cr = card.getBoundingClientRect();
+    var tr = chest.getBoundingClientRect();
+    var dx = (tr.left + tr.width / 2) - (cr.left + cr.width / 2);
+    var dy = (tr.top + tr.height / 2) - (cr.top + cr.height / 2);
+    card.classList.add('fly-chest');
+    // Force layout, then animate toward the Chest button.
+    void card.offsetWidth;
+    card.style.transform = 'translate(calc(-50% + ' + dx + 'px), ' + dy + 'px) scale(0.16)';
+    card.style.opacity = '0.2';
+    if (cardFlyTimer) clearTimeout(cardFlyTimer);
+    cardFlyTimer = setTimeout(function () {
+      cardFlyTimer = null;
+      hideCard();
+      chest.classList.remove('chest-catch');
+      void chest.offsetWidth;
+      chest.classList.add('chest-catch');
+      setTimeout(function () { chest.classList.remove('chest-catch'); }, 480);
+      tone(880, 0.08, 'sine', 0, 0.035);
+      tone(1175, 0.1, 'sine', 0.06, 0.03);
+    }, 560);
   }
   function speak(text) { return speakEn(text); }
   function pickVoice() {
@@ -4786,11 +4864,11 @@ function validConversation(value, p) {
   function quizWin() {
     var key = quiz.key;
     quiz = null;
-    quizStars[key] = 1;playSfx('correct');playSfx('star');
+    quizStars[key] = 1;playSfx('correct');
     updateQuest();
     celebrate(player.x, player.y - 40, false);
-    // No reward Continue: speak the word once, then the card auto-hides.
-    showWord(key);
+    // Reward card: ding + speak, then fly into the Chest button.
+    showWord(key, 'chest');
     showToast('Great job!', 2.4);
     saveSoon();
   }
@@ -5626,7 +5704,10 @@ function validConversation(value, p) {
     lockAge += dt;
     if (cardLeft > 0) {
       cardLeft -= dt;
-      if (cardLeft <= 0) hideCard();
+      if (cardLeft <= 0) {
+        if (cardFlyChest) flyWordcardToChest();
+        else hideCard();
+      }
     }
     if (toastLeft > 0) {
       toastLeft -= dt;
