@@ -524,6 +524,8 @@
   #parent-help #btn-speak { width:auto; min-width:120px; height:48px; padding:0 14px; border-radius:12px; display:inline-flex; align-items:center; gap:8px; }
 
   body.driving .acts, body.driving #held {visibility:hidden;}
+  body.chest-open .acts .act {visibility:hidden; pointer-events:none;}
+  body.chest-open #held, body.chest-open #hotbar {visibility:hidden;}
   #car-exit { position:absolute;right:18px;top:106px;z-index:25;background:#ffe4a0; }
   #house-upgrade .panel-body { max-width:760px;margin:auto; }
   .upgrade-preview {display:flex;align-items:center;gap:18px;flex-wrap:wrap;}
@@ -541,7 +543,7 @@
 <div id="app">
   <canvas id="view" width="800" height="400"></canvas>
   <div id="hud">
-    <span id="build-version" aria-label="Build version">build cd91b62+ux14</span>
+    <span id="build-version" aria-label="Build version">build cd91b62+ux15</span>
     <div class="topbar">
       <button id="quest" type="button">
         <canvas id="quest-icon" width="128" height="128"></canvas>
@@ -4867,10 +4869,10 @@ function validConversation(value, p) {
     var visible = quickHotbarKeys();
     var keep = bar.scrollLeft;
     bar.innerHTML = '';
-    if (!hotbar.length) {
+    if (!visible.length) {
       var empty = document.createElement('div');
       empty.className = 'emptybar';
-      empty.textContent = 'Tap a block';
+      empty.textContent = hotbar.length ? 'Open Chest' : 'Tap a block';
       bar.appendChild(empty);
     } else {
       visible.forEach(function (key) {
@@ -5080,16 +5082,20 @@ function validConversation(value, p) {
   var CHEST_STASH = { grass:1, dirt:1, leaves:1, sand:1, flower:1, wool:1, seed:1, wheat:1, stone:1 };
   function chestKeys() { return hotbar.filter(function (k) { return CHEST_STASH[k] && inv[k]; }); }
   function quickHotbarKeys() {
-    var quick = hotbar.filter(function (k) { return inv[k] && !CHEST_STASH[k]; });
+    // Chest is the full inventory picker; bottom bar keeps only the held slot.
     var selKey = sel >= 0 ? hotbar[sel] : null;
-    if (selKey && inv[selKey] && quick.indexOf(selKey) < 0) quick.unshift(selKey);
-    return quick.slice(0, 6);
+    if (selKey && inv[selKey]) return [selKey];
+    return [];
   }
   function openChest() {
     if (!started || dialogue || quiz || nameFlow) return;
     closePanels(); renderChest(); document.getElementById('chest-panel').hidden = false;
+    document.body.classList.add('chest-open');
   }
-  function closeChest() { document.getElementById('chest-panel').hidden = true; }
+  function closeChest() {
+    document.getElementById('chest-panel').hidden = true;
+    document.body.classList.remove('chest-open');
+  }
   function renderChest() {
     var root = document.getElementById('chest-grid'); root.replaceChildren();
     var keys = hotbar.filter(function (k) { return inv[k]; });
