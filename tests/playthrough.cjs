@@ -36,7 +36,7 @@ async function fresh(data, { viewport = { width: 1180, height: 720 }, speech = t
     }
   }, { data, speech, fakeRecognition });
   await p.goto(URL + '/#seed=42'); assert(!/[\u3400-\u9fff]/u.test(await p.locator('body').innerText())); await p.click('#btn-start'); if(await p.locator('#name-entry').isVisible())await p.click('#welcome-play'); await sleep(p, 250);
-  assert.equal(await p.evaluate(() => BW.totalWords()), 42);
+  assert.equal(await p.evaluate(() => BW.totalWords()), 47);
   return p;
 }
 async function check(p) { assert.deepEqual(p.errors, []); assert.equal(await p.evaluate(() => BW.error()), ''); }
@@ -77,7 +77,7 @@ async function craft(p,key,n=1) {
   await p.click('#craft-back');
 }
 async function waitChat(p,anchor) {
-  await p.waitForFunction(anchor => BW.adventure().active?.anchor===anchor,anchor,{timeout:7500});
+  await p.waitForFunction(anchor => {const d=BW.adventure().active;return d&&!d.pending&&(anchor==='tree-encounter'?d.key==='tree'&&['scene','task'].includes(d.anchor):d.anchor===anchor);},anchor,{timeout:12000});
   const d = await p.evaluate(()=>BW.adventure().active);
   const words = await p.evaluate(()=>BW.words()); d.options.forEach(k=>assert(words.includes(k)));
   assert.equal(await p.locator('#dialogue').isVisible(),true); return d;
@@ -90,14 +90,16 @@ async function heldMove(p,dir,ms) { await p.keyboard.down(dir); await sleep(p,ms
   // A complete mission regression: resources and travel checkpoints are test fixtures;
   // all 24 task conditions are earned through pointer/keyboard game actions.
   const p = await fresh();
-  await mine(p,87,15); await assertQi(p,1);
-  let d = await waitChat(p,'task'); await photo(p,'dialogue-task');
+  await mine(p,87,15); await p.waitForFunction(()=>BW.questIndex()===1); await assertQi(p,1);
+  let d = await waitChat(p,'tree-encounter'); await photo(p,'dialogue-task');
   const progressBefore = (await snapshot(p)).progress;
   await p.locator(`#chat-options [data-word="${d.options.find(k=>k!==d.key)}"]`).click();
+  await p.waitForFunction(()=>BW.adventure().active?.misses===1);
   assert.equal(await p.locator('.hint-answer').count(),1); assert.deepEqual((await snapshot(p)).progress,progressBefore);
   await p.locator(`#chat-options [data-word="${d.key}"]`).click();
+  await p.waitForFunction(()=>BW.adventure().active?.answered);
   assert.equal((await p.evaluate(()=>BW.adventure())).trail.turns,1);
-  report('Task completion dialogue and gentle retry',d.question);
+  report('Tree encounter dialogue and gentle retry',d.question);
   await mine(p,84,15); await assertQi(p,2);
   await relocate(p,3805); await mine(p,120,16); await assertQi(p,3);
   await animal(p,'sheep'); await assertQi(p,4);
@@ -114,7 +116,8 @@ async function heldMove(p,dir,ms) { await p.keyboard.down(dir); await sleep(p,ms
   await relocate(p,2544); await place(p,'door',78,15); await assertQi(p,12);
   await craft(p,'house'); await assertQi(p,13);
   await craft(p,'fence'); await place(p,'fence',82,15); await assertQi(p,14);
-  await p.evaluate(()=>BW.setTime(.8)); await place(p,'torch',83,15); await assertQi(p,15);
+  // Walk-side checkpoint: the new fence must block placing a torch behind it.
+  await relocate(p,84.5*32); await p.evaluate(()=>BW.setTime(.8)); await place(p,'torch',83,15); await assertQi(p,15);
   await animal(p,'duck'); await assertQi(p,16);
   report('Chapter 2: all 8 tasks, including night torch');
   await craft(p,'rod'); await assertQi(p,17);
@@ -128,7 +131,7 @@ async function heldMove(p,dir,ms) { await p.keyboard.down(dir); await sleep(p,ms
   assert.equal((await p.evaluate(()=>BW.inv())).fish,1);
   await p.click('#chat-mic'); assert.match(await p.locator('#chat-status').textContent(),/Tap an answer/);
   report('Fishing: real cast, wait, catch and fish dialogue; missing recognition tap fallback');
-  await clear(p); await relocate(p,2544);
+  await clear(p); await relocate(p,77*32);
   await p.evaluate(()=>BW.give('seed',2)); await place(p,'seed',75,15); await assertQi(p,19);
   // Wait for the actual 28-second crop growth; never call BW.grow().
   const growthDeadline=Date.now()+45000;
@@ -198,7 +201,7 @@ async function heldMove(p,dir,ms) { await p.keyboard.down(dir); await sleep(p,ms
   report('New scene: cross zone boundary and stop before dialogue');
   // Early chapter fixture deliberately includes later words to verify chapter gates.
   const early=structuredClone(chapter3); early.progress={mined:{},crafted:{},placed:{},tapped:{},tree:0,water:0,nightTorch:0,fish:0,wheatRipe:0,boatRide:0,pet:0};early.mods=[];early.px=2544;early.py=512;delete early.adventure;
-  const v=await fresh(early,{fakeRecognition:true});await mine(v,87,15);d=await waitChat(v,'task');
+  const v=await fresh(early,{fakeRecognition:true});await mine(v,87,15);d=await waitChat(v,'tree-encounter');
   assert(!d.options.some(k=>['fish','boat','rod','wheat','seed','pet','follow','table','cow','chicken','house','fence','duck','horse','rabbit'].includes(k)));
   await v.click('#chat-mic'); await v.evaluate(()=>{testRecognizer.onerror({error:'not-allowed'});testRecognizer.onend?.();});assert.match(await v.locator('#chat-status').textContent(),/Tap an answer/);
   await v.click('#chat-mic'); await v.evaluate(()=>voiceResult('unrelated words'));assert(!(await v.evaluate(()=>BW.adventure().active)).answered);
@@ -208,7 +211,7 @@ async function heldMove(p,dir,ms) { await p.keyboard.down(dir); await sleep(p,ms
   report('Speech adapter: unrecognized retry + approximate answer; early chapter gates',d.options.join('/'));
   await check(v); await v.context().close();
   const silent=await fresh(early,{speech:false,viewport:{width:390,height:844}});await mine(silent,87,15).catch(async()=>{await relocate(silent,87*32-45);await mine(silent,87,15);});
-  await waitChat(silent,'task');await photo(silent,'portrait-no-audio');
+  await waitChat(silent,'tree-encounter');await photo(silent,'portrait-no-audio');
   const box=await silent.locator('#dialogue').boundingBox();assert(box.x>=0&&box.x+box.width<=390);
   const text=await silent.locator('body').innerText(); assert(!/[\u3400-\u9fff]/u.test(text));
   assert(!(await silent.locator('#chat-close').isVisible()));await silent.click('#btn-zh');assert(await silent.locator('#parent-help').isVisible());await silent.click('#parent-close');

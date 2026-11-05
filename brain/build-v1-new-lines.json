@@ -1,0 +1,2901 @@
+{
+  "version": 1,
+  "voice": "en-US-JennyNeural",
+  "rate": "-15%",
+  "hash": "sha256(text.trim().toLowerCase()), first 20 hex characters",
+  "composition": "Optional praise + optional matching context + exercise. Atoms are enumerated separately; named lines compose Jenny name atoms; missing name atoms are omitted and named playback never uses TTS. All friend greeting combinations are enumerated. Toasts are not spoken.",
+  "lines": [
+    {
+      "text": "Wall",
+      "category": "word"
+    },
+    {
+      "text": "Roof",
+      "category": "word"
+    },
+    {
+      "text": "Window",
+      "category": "word"
+    },
+    {
+      "text": "Room",
+      "category": "word"
+    },
+    {
+      "text": "Gate",
+      "category": "word"
+    },
+    {
+      "text": "Find the Wall!",
+      "category": "quiz"
+    },
+    {
+      "text": "Let's say wall together!",
+      "category": "reveal"
+    },
+    {
+      "text": "I see a wall. Say it!",
+      "category": "tier3"
+    },
+    {
+      "text": "I see a wall. Your turn!",
+      "category": "tier3"
+    },
+    {
+      "text": "You built a wall!",
+      "category": "context"
+    },
+    {
+      "text": "You made a wall!",
+      "category": "context"
+    },
+    {
+      "text": "Remember wall?",
+      "category": "context"
+    },
+    {
+      "text": "You said wall!",
+      "category": "context"
+    },
+    {
+      "text": "Try: I see a wall!",
+      "category": "recast"
+    },
+    {
+      "text": "Say: I see a wall!",
+      "category": "recast"
+    },
+    {
+      "text": "I can see a wall!",
+      "category": "recast"
+    },
+    {
+      "text": "We can see a wall!",
+      "category": "recast"
+    },
+    {
+      "text": "Look! I see the wall!",
+      "category": "small_talk"
+    },
+    {
+      "text": "We can see the wall!",
+      "category": "small_talk"
+    },
+    {
+      "text": "Find the Roof!",
+      "category": "quiz"
+    },
+    {
+      "text": "Let's say roof together!",
+      "category": "reveal"
+    },
+    {
+      "text": "I see a roof. Say it!",
+      "category": "tier3"
+    },
+    {
+      "text": "I see a roof. Your turn!",
+      "category": "tier3"
+    },
+    {
+      "text": "You built a roof!",
+      "category": "context"
+    },
+    {
+      "text": "You made a roof!",
+      "category": "context"
+    },
+    {
+      "text": "Remember roof?",
+      "category": "context"
+    },
+    {
+      "text": "You said roof!",
+      "category": "context"
+    },
+    {
+      "text": "Try: I see a roof!",
+      "category": "recast"
+    },
+    {
+      "text": "Say: I see a roof!",
+      "category": "recast"
+    },
+    {
+      "text": "I can see a roof!",
+      "category": "recast"
+    },
+    {
+      "text": "We can see a roof!",
+      "category": "recast"
+    },
+    {
+      "text": "Look! I see the roof!",
+      "category": "small_talk"
+    },
+    {
+      "text": "We can see the roof!",
+      "category": "small_talk"
+    },
+    {
+      "text": "Find the Window!",
+      "category": "quiz"
+    },
+    {
+      "text": "Let's say window together!",
+      "category": "reveal"
+    },
+    {
+      "text": "I see a window. Say it!",
+      "category": "tier3"
+    },
+    {
+      "text": "I see a window. Your turn!",
+      "category": "tier3"
+    },
+    {
+      "text": "You built a window!",
+      "category": "context"
+    },
+    {
+      "text": "You made a window!",
+      "category": "context"
+    },
+    {
+      "text": "Remember window?",
+      "category": "context"
+    },
+    {
+      "text": "You said window!",
+      "category": "context"
+    },
+    {
+      "text": "Try: I see a window!",
+      "category": "recast"
+    },
+    {
+      "text": "Say: I see a window!",
+      "category": "recast"
+    },
+    {
+      "text": "I can see a window!",
+      "category": "recast"
+    },
+    {
+      "text": "We can see a window!",
+      "category": "recast"
+    },
+    {
+      "text": "Look! I see the window!",
+      "category": "small_talk"
+    },
+    {
+      "text": "We can see the window!",
+      "category": "small_talk"
+    },
+    {
+      "text": "Find the Room!",
+      "category": "quiz"
+    },
+    {
+      "text": "Let's say room together!",
+      "category": "reveal"
+    },
+    {
+      "text": "I see a room. Say it!",
+      "category": "tier3"
+    },
+    {
+      "text": "I see a room. Your turn!",
+      "category": "tier3"
+    },
+    {
+      "text": "You built a room!",
+      "category": "context"
+    },
+    {
+      "text": "You made a room!",
+      "category": "context"
+    },
+    {
+      "text": "Remember room?",
+      "category": "context"
+    },
+    {
+      "text": "You said room!",
+      "category": "context"
+    },
+    {
+      "text": "Try: I see a room!",
+      "category": "recast"
+    },
+    {
+      "text": "Say: I see a room!",
+      "category": "recast"
+    },
+    {
+      "text": "I can see a room!",
+      "category": "recast"
+    },
+    {
+      "text": "We can see a room!",
+      "category": "recast"
+    },
+    {
+      "text": "Look! I see the room!",
+      "category": "small_talk"
+    },
+    {
+      "text": "We can see the room!",
+      "category": "small_talk"
+    },
+    {
+      "text": "Find the Gate!",
+      "category": "quiz"
+    },
+    {
+      "text": "Let's say gate together!",
+      "category": "reveal"
+    },
+    {
+      "text": "I see a gate. Say it!",
+      "category": "tier3"
+    },
+    {
+      "text": "I see a gate. Your turn!",
+      "category": "tier3"
+    },
+    {
+      "text": "You built a gate!",
+      "category": "context"
+    },
+    {
+      "text": "You made a gate!",
+      "category": "context"
+    },
+    {
+      "text": "Remember gate?",
+      "category": "context"
+    },
+    {
+      "text": "You said gate!",
+      "category": "context"
+    },
+    {
+      "text": "Try: I see a gate!",
+      "category": "recast"
+    },
+    {
+      "text": "Say: I see a gate!",
+      "category": "recast"
+    },
+    {
+      "text": "I can see a gate!",
+      "category": "recast"
+    },
+    {
+      "text": "We can see a gate!",
+      "category": "recast"
+    },
+    {
+      "text": "Look! I see the gate!",
+      "category": "small_talk"
+    },
+    {
+      "text": "We can see the gate!",
+      "category": "small_talk"
+    },
+    {
+      "text": "Wow!",
+      "category": "build"
+    },
+    {
+      "text": "Let's build more!",
+      "category": "build"
+    },
+    {
+      "text": "What shall we build?",
+      "category": "build"
+    },
+    {
+      "text": "What can we build?",
+      "category": "build"
+    },
+    {
+      "text": "Ready? What shall we build?",
+      "category": "build"
+    },
+    {
+      "text": "A house!",
+      "category": "build"
+    },
+    {
+      "text": "A fence!",
+      "category": "build"
+    },
+    {
+      "text": "Let's build it!",
+      "category": "build"
+    },
+    {
+      "text": "Let's build a house!",
+      "category": "build"
+    },
+    {
+      "text": "Let's build a fence!",
+      "category": "build"
+    },
+    {
+      "text": "What do we need?",
+      "category": "build"
+    },
+    {
+      "text": "We need more planks.",
+      "category": "build"
+    },
+    {
+      "text": "Oops! We need planks.",
+      "category": "build"
+    },
+    {
+      "text": "Let's find more planks!",
+      "category": "build"
+    },
+    {
+      "text": "We need more wood.",
+      "category": "build"
+    },
+    {
+      "text": "Oops! We need wood.",
+      "category": "build"
+    },
+    {
+      "text": "Let's find more wood!",
+      "category": "build"
+    },
+    {
+      "text": "We need more stone.",
+      "category": "build"
+    },
+    {
+      "text": "Oops! We need stone.",
+      "category": "build"
+    },
+    {
+      "text": "Let's find more stone!",
+      "category": "build"
+    },
+    {
+      "text": "We need a stick.",
+      "category": "build"
+    },
+    {
+      "text": "Oops! We need a stick.",
+      "category": "build"
+    },
+    {
+      "text": "Let's find a stick!",
+      "category": "build"
+    },
+    {
+      "text": "Nice start!",
+      "category": "build"
+    },
+    {
+      "text": "You can build!",
+      "category": "build"
+    },
+    {
+      "text": "It's all closed!",
+      "category": "build"
+    },
+    {
+      "text": "The dog is inside!",
+      "category": "build"
+    },
+    {
+      "text": "The cat is inside!",
+      "category": "build"
+    },
+    {
+      "text": "Now it's a house!",
+      "category": "build"
+    },
+    {
+      "text": "It's a house!",
+      "category": "build"
+    },
+    {
+      "text": "Show me!",
+      "category": "build"
+    },
+    {
+      "text": "Can I see it?",
+      "category": "build"
+    },
+    {
+      "text": "Look at that!",
+      "category": "build"
+    },
+    {
+      "text": "I made a house.",
+      "category": "build"
+    },
+    {
+      "text": "I made a fence.",
+      "category": "build"
+    },
+    {
+      "text": "It's so big!",
+      "category": "build"
+    },
+    {
+      "text": "I like it!",
+      "category": "build"
+    },
+    {
+      "text": "It's so nice!",
+      "category": "build"
+    },
+    {
+      "text": "You made this!",
+      "category": "build"
+    },
+    {
+      "text": "Look!",
+      "category": "build"
+    },
+    {
+      "text": "Our house!",
+      "category": "build"
+    },
+    {
+      "text": "Our fence!",
+      "category": "build"
+    },
+    {
+      "text": "I remember our house!",
+      "category": "build"
+    },
+    {
+      "text": "I remember our fence!",
+      "category": "build"
+    },
+    {
+      "text": "Our house is here!",
+      "category": "build"
+    },
+    {
+      "text": "Our fence is here!",
+      "category": "build"
+    },
+    {
+      "text": "Shall we build a house?",
+      "category": "build"
+    },
+    {
+      "text": "Let's build a house together!",
+      "category": "build"
+    },
+    {
+      "text": "Alex!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Alex.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Alex.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Alex.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Alex.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Alex.",
+      "category": "name"
+    },
+    {
+      "text": "Alice!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Alice.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Alice.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Alice.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Alice.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Alice.",
+      "category": "name"
+    },
+    {
+      "text": "Amelia!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Amelia.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Amelia.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Amelia.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Amelia.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Amelia.",
+      "category": "name"
+    },
+    {
+      "text": "Andrew!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Andrew.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Andrew.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Andrew.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Andrew.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Andrew.",
+      "category": "name"
+    },
+    {
+      "text": "Anna!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Anna.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Anna.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Anna.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Anna.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Anna.",
+      "category": "name"
+    },
+    {
+      "text": "Aria!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Aria.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Aria.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Aria.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Aria.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Aria.",
+      "category": "name"
+    },
+    {
+      "text": "Arthur!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Arthur.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Arthur.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Arthur.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Arthur.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Arthur.",
+      "category": "name"
+    },
+    {
+      "text": "Asher!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Asher.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Asher.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Asher.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Asher.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Asher.",
+      "category": "name"
+    },
+    {
+      "text": "Audrey!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Audrey.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Audrey.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Audrey.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Audrey.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Audrey.",
+      "category": "name"
+    },
+    {
+      "text": "Ava!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Ava.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Ava.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Ava.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Ava.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Ava.",
+      "category": "name"
+    },
+    {
+      "text": "Benjamin!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Benjamin.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Benjamin.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Benjamin.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Benjamin.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Benjamin.",
+      "category": "name"
+    },
+    {
+      "text": "Caleb!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Caleb.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Caleb.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Caleb.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Caleb.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Caleb.",
+      "category": "name"
+    },
+    {
+      "text": "Cameron!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Cameron.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Cameron.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Cameron.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Cameron.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Cameron.",
+      "category": "name"
+    },
+    {
+      "text": "Carter!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Carter.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Carter.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Carter.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Carter.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Carter.",
+      "category": "name"
+    },
+    {
+      "text": "Charles!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Charles.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Charles.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Charles.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Charles.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Charles.",
+      "category": "name"
+    },
+    {
+      "text": "Charlotte!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Charlotte.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Charlotte.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Charlotte.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Charlotte.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Charlotte.",
+      "category": "name"
+    },
+    {
+      "text": "Chloe!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Chloe.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Chloe.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Chloe.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Chloe.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Chloe.",
+      "category": "name"
+    },
+    {
+      "text": "Claire!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Claire.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Claire.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Claire.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Claire.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Claire.",
+      "category": "name"
+    },
+    {
+      "text": "Daniel!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Daniel.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Daniel.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Daniel.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Daniel.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Daniel.",
+      "category": "name"
+    },
+    {
+      "text": "David!",
+      "category": "name"
+    },
+    {
+      "text": "Hi David.",
+      "category": "name"
+    },
+    {
+      "text": "Hello David.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, David.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, David.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, David.",
+      "category": "name"
+    },
+    {
+      "text": "Dylan!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Dylan.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Dylan.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Dylan.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Dylan.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Dylan.",
+      "category": "name"
+    },
+    {
+      "text": "Eleanor!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Eleanor.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Eleanor.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Eleanor.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Eleanor.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Eleanor.",
+      "category": "name"
+    },
+    {
+      "text": "Elijah!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Elijah.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Elijah.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Elijah.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Elijah.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Elijah.",
+      "category": "name"
+    },
+    {
+      "text": "Elizabeth!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Elizabeth.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Elizabeth.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Elizabeth.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Elizabeth.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Elizabeth.",
+      "category": "name"
+    },
+    {
+      "text": "Ella!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Ella.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Ella.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Ella.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Ella.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Ella.",
+      "category": "name"
+    },
+    {
+      "text": "Ellie!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Ellie.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Ellie.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Ellie.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Ellie.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Ellie.",
+      "category": "name"
+    },
+    {
+      "text": "Emily!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Emily.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Emily.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Emily.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Emily.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Emily.",
+      "category": "name"
+    },
+    {
+      "text": "Emma!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Emma.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Emma.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Emma.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Emma.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Emma.",
+      "category": "name"
+    },
+    {
+      "text": "Ethan!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Ethan.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Ethan.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Ethan.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Ethan.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Ethan.",
+      "category": "name"
+    },
+    {
+      "text": "Evelyn!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Evelyn.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Evelyn.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Evelyn.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Evelyn.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Evelyn.",
+      "category": "name"
+    },
+    {
+      "text": "Ezra!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Ezra.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Ezra.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Ezra.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Ezra.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Ezra.",
+      "category": "name"
+    },
+    {
+      "text": "Felix!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Felix.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Felix.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Felix.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Felix.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Felix.",
+      "category": "name"
+    },
+    {
+      "text": "Finn!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Finn.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Finn.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Finn.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Finn.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Finn.",
+      "category": "name"
+    },
+    {
+      "text": "Gabriel!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Gabriel.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Gabriel.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Gabriel.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Gabriel.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Gabriel.",
+      "category": "name"
+    },
+    {
+      "text": "George!",
+      "category": "name"
+    },
+    {
+      "text": "Hi George.",
+      "category": "name"
+    },
+    {
+      "text": "Hello George.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, George.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, George.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, George.",
+      "category": "name"
+    },
+    {
+      "text": "Grace!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Grace.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Grace.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Grace.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Grace.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Grace.",
+      "category": "name"
+    },
+    {
+      "text": "Hannah!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Hannah.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Hannah.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Hannah.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Hannah.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Hannah.",
+      "category": "name"
+    },
+    {
+      "text": "Harper!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Harper.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Harper.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Harper.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Harper.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Harper.",
+      "category": "name"
+    },
+    {
+      "text": "Henry!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Henry.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Henry.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Henry.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Henry.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Henry.",
+      "category": "name"
+    },
+    {
+      "text": "Hudson!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Hudson.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Hudson.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Hudson.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Hudson.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Hudson.",
+      "category": "name"
+    },
+    {
+      "text": "Isaac!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Isaac.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Isaac.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Isaac.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Isaac.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Isaac.",
+      "category": "name"
+    },
+    {
+      "text": "Isabella!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Isabella.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Isabella.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Isabella.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Isabella.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Isabella.",
+      "category": "name"
+    },
+    {
+      "text": "Jack!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Jack.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Jack.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Jack.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Jack.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Jack.",
+      "category": "name"
+    },
+    {
+      "text": "Jackson!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Jackson.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Jackson.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Jackson.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Jackson.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Jackson.",
+      "category": "name"
+    },
+    {
+      "text": "Jacob!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Jacob.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Jacob.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Jacob.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Jacob.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Jacob.",
+      "category": "name"
+    },
+    {
+      "text": "James!",
+      "category": "name"
+    },
+    {
+      "text": "Hi James.",
+      "category": "name"
+    },
+    {
+      "text": "Hello James.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, James.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, James.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, James.",
+      "category": "name"
+    },
+    {
+      "text": "Jamie!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Jamie.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Jamie.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Jamie.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Jamie.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Jamie.",
+      "category": "name"
+    },
+    {
+      "text": "Jason!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Jason.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Jason.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Jason.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Jason.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Jason.",
+      "category": "name"
+    },
+    {
+      "text": "Jayden!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Jayden.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Jayden.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Jayden.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Jayden.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Jayden.",
+      "category": "name"
+    },
+    {
+      "text": "Jenny!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Jenny.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Jenny.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Jenny.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Jenny.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Jenny.",
+      "category": "name"
+    },
+    {
+      "text": "Jessica!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Jessica.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Jessica.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Jessica.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Jessica.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Jessica.",
+      "category": "name"
+    },
+    {
+      "text": "John!",
+      "category": "name"
+    },
+    {
+      "text": "Hi John.",
+      "category": "name"
+    },
+    {
+      "text": "Hello John.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, John.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, John.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, John.",
+      "category": "name"
+    },
+    {
+      "text": "Jordan!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Jordan.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Jordan.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Jordan.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Jordan.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Jordan.",
+      "category": "name"
+    },
+    {
+      "text": "Joseph!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Joseph.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Joseph.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Joseph.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Joseph.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Joseph.",
+      "category": "name"
+    },
+    {
+      "text": "Joshua!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Joshua.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Joshua.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Joshua.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Joshua.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Joshua.",
+      "category": "name"
+    },
+    {
+      "text": "Julia!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Julia.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Julia.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Julia.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Julia.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Julia.",
+      "category": "name"
+    },
+    {
+      "text": "Julian!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Julian.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Julian.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Julian.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Julian.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Julian.",
+      "category": "name"
+    },
+    {
+      "text": "Layla!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Layla.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Layla.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Layla.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Layla.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Layla.",
+      "category": "name"
+    },
+    {
+      "text": "Leo!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Leo.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Leo.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Leo.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Leo.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Leo.",
+      "category": "name"
+    },
+    {
+      "text": "Liam!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Liam.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Liam.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Liam.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Liam.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Liam.",
+      "category": "name"
+    },
+    {
+      "text": "Lily!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Lily.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Lily.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Lily.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Lily.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Lily.",
+      "category": "name"
+    },
+    {
+      "text": "Logan!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Logan.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Logan.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Logan.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Logan.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Logan.",
+      "category": "name"
+    },
+    {
+      "text": "Lucas!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Lucas.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Lucas.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Lucas.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Lucas.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Lucas.",
+      "category": "name"
+    },
+    {
+      "text": "Lucy!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Lucy.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Lucy.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Lucy.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Lucy.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Lucy.",
+      "category": "name"
+    },
+    {
+      "text": "Luke!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Luke.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Luke.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Luke.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Luke.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Luke.",
+      "category": "name"
+    },
+    {
+      "text": "Luna!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Luna.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Luna.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Luna.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Luna.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Luna.",
+      "category": "name"
+    },
+    {
+      "text": "Madison!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Madison.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Madison.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Madison.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Madison.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Madison.",
+      "category": "name"
+    },
+    {
+      "text": "Maria!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Maria.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Maria.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Maria.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Maria.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Maria.",
+      "category": "name"
+    },
+    {
+      "text": "Mario!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Mario.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Mario.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Mario.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Mario.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Mario.",
+      "category": "name"
+    },
+    {
+      "text": "Mason!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Mason.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Mason.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Mason.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Mason.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Mason.",
+      "category": "name"
+    },
+    {
+      "text": "Matthew!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Matthew.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Matthew.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Matthew.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Matthew.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Matthew.",
+      "category": "name"
+    },
+    {
+      "text": "Max!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Max.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Max.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Max.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Max.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Max.",
+      "category": "name"
+    },
+    {
+      "text": "Maya!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Maya.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Maya.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Maya.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Maya.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Maya.",
+      "category": "name"
+    },
+    {
+      "text": "Mia!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Mia.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Mia.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Mia.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Mia.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Mia.",
+      "category": "name"
+    },
+    {
+      "text": "Michael!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Michael.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Michael.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Michael.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Michael.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Michael.",
+      "category": "name"
+    },
+    {
+      "text": "Mila!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Mila.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Mila.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Mila.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Mila.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Mila.",
+      "category": "name"
+    },
+    {
+      "text": "Nathan!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Nathan.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Nathan.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Nathan.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Nathan.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Nathan.",
+      "category": "name"
+    },
+    {
+      "text": "Noah!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Noah.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Noah.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Noah.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Noah.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Noah.",
+      "category": "name"
+    },
+    {
+      "text": "Nora!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Nora.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Nora.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Nora.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Nora.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Nora.",
+      "category": "name"
+    },
+    {
+      "text": "Oliver!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Oliver.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Oliver.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Oliver.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Oliver.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Oliver.",
+      "category": "name"
+    },
+    {
+      "text": "Olivia!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Olivia.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Olivia.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Olivia.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Olivia.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Olivia.",
+      "category": "name"
+    },
+    {
+      "text": "Oscar!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Oscar.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Oscar.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Oscar.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Oscar.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Oscar.",
+      "category": "name"
+    },
+    {
+      "text": "Owen!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Owen.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Owen.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Owen.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Owen.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Owen.",
+      "category": "name"
+    },
+    {
+      "text": "Peter!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Peter.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Peter.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Peter.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Peter.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Peter.",
+      "category": "name"
+    },
+    {
+      "text": "Riley!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Riley.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Riley.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Riley.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Riley.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Riley.",
+      "category": "name"
+    },
+    {
+      "text": "Robert!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Robert.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Robert.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Robert.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Robert.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Robert.",
+      "category": "name"
+    },
+    {
+      "text": "Ruby!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Ruby.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Ruby.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Ruby.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Ruby.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Ruby.",
+      "category": "name"
+    },
+    {
+      "text": "Ryan!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Ryan.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Ryan.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Ryan.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Ryan.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Ryan.",
+      "category": "name"
+    },
+    {
+      "text": "Samuel!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Samuel.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Samuel.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Samuel.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Samuel.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Samuel.",
+      "category": "name"
+    },
+    {
+      "text": "Sarah!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Sarah.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Sarah.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Sarah.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Sarah.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Sarah.",
+      "category": "name"
+    },
+    {
+      "text": "Scarlett!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Scarlett.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Scarlett.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Scarlett.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Scarlett.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Scarlett.",
+      "category": "name"
+    },
+    {
+      "text": "Sebastian!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Sebastian.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Sebastian.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Sebastian.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Sebastian.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Sebastian.",
+      "category": "name"
+    },
+    {
+      "text": "Sophia!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Sophia.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Sophia.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Sophia.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Sophia.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Sophia.",
+      "category": "name"
+    },
+    {
+      "text": "Sophie!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Sophie.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Sophie.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Sophie.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Sophie.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Sophie.",
+      "category": "name"
+    },
+    {
+      "text": "Stella!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Stella.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Stella.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Stella.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Stella.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Stella.",
+      "category": "name"
+    },
+    {
+      "text": "Thomas!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Thomas.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Thomas.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Thomas.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Thomas.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Thomas.",
+      "category": "name"
+    },
+    {
+      "text": "Violet!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Violet.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Violet.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Violet.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Violet.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Violet.",
+      "category": "name"
+    },
+    {
+      "text": "William!",
+      "category": "name"
+    },
+    {
+      "text": "Hi William.",
+      "category": "name"
+    },
+    {
+      "text": "Hello William.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, William.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, William.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, William.",
+      "category": "name"
+    },
+    {
+      "text": "Wyatt!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Wyatt.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Wyatt.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Wyatt.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Wyatt.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Wyatt.",
+      "category": "name"
+    },
+    {
+      "text": "Zoe!",
+      "category": "name"
+    },
+    {
+      "text": "Hi Zoe.",
+      "category": "name"
+    },
+    {
+      "text": "Hello Zoe.",
+      "category": "name"
+    },
+    {
+      "text": "Good morning, Zoe.",
+      "category": "name"
+    },
+    {
+      "text": "Good afternoon, Zoe.",
+      "category": "name"
+    },
+    {
+      "text": "Good evening, Zoe.",
+      "category": "name"
+    }
+  ]
+}

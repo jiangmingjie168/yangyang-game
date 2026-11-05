@@ -1,0 +1,380 @@
+[
+  {
+    "case": "P-desktop-log",
+    "t_ms": 206,
+    "x": 683,
+    "y": 400.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "P-desktop-log",
+    "t_ms": 364,
+    "x": 683,
+    "y": 331.09375,
+    "purpose": "Play"
+  },
+  {
+    "case": "P-desktop-log",
+    "t_ms": 1028,
+    "x": 973.0884210526317,
+    "y": 528.2231578947369,
+    "purpose": "Harvest first Wood"
+  },
+  {
+    "case": "P-desktop-log",
+    "t_ms": 3445,
+    "x": 683,
+    "y": 152,
+    "purpose": "Dismiss Wood card"
+  },
+  {
+    "case": "P-desktop-log",
+    "t_ms": 3549,
+    "x": 711.2463157894738,
+    "y": 478.22315789473686,
+    "purpose": "Harvest second Wood"
+  },
+  {
+    "case": "P-desktop-log",
+    "t_ms": 3909,
+    "x": 683,
+    "y": 152,
+    "purpose": "Dismiss Wood card"
+  },
+  {
+    "case": "P-desktop-log",
+    "t_ms": 4018,
+    "x": 711.2463157894738,
+    "y": 528.2231578947369,
+    "purpose": "Harvest third Wood"
+  },
+  {
+    "case": "P-desktop-log",
+    "t_ms": 4132,
+    "x": 683.0000305175781,
+    "y": 152.00000381469727,
+    "purpose": "Dismiss Wood card"
+  },
+  {
+    "case": "P-desktop-log",
+    "t_ms": 4228,
+    "x": 1148.328125,
+    "y": 34,
+    "purpose": "Open Craft"
+  },
+  {
+    "case": "P-desktop-log",
+    "t_ms": 4332,
+    "x": 629,
+    "y": 115.796875,
+    "purpose": "Craft Planks ×4"
+  },
+  {
+    "case": "P-desktop-log",
+    "t_ms": 4434,
+    "x": 683,
+    "y": 152.00000381469727,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "P-desktop-log",
+    "t_ms": 4544,
+    "x": 629,
+    "y": 115.796875,
+    "purpose": "Craft Planks ×4"
+  },
+  {
+    "case": "P-desktop-log",
+    "t_ms": 4646,
+    "x": 683,
+    "y": 151.99999618530273,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "P-desktop-log",
+    "t_ms": 4746,
+    "x": 629,
+    "y": 115.796875,
+    "purpose": "Craft Planks ×4"
+  },
+  {
+    "case": "P-desktop-log",
+    "t_ms": 4846,
+    "x": 683,
+    "y": 152,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "P-desktop-log",
+    "t_ms": 5008,
+    "x": 1304,
+    "y": 38,
+    "purpose": "Close Craft"
+  },
+  {
+    "case": "P-desktop-log",
+    "t_ms": 5111,
+    "x": 1064.328125,
+    "y": 34,
+    "purpose": "Open Build"
+  },
+  {
+    "case": "P-desktop-log",
+    "t_ms": 5216,
+    "x": 144.46875,
+    "y": 100,
+    "purpose": "Select material"
+  },
+  {
+    "case": "P-desktop-log",
+    "t_ms": 5309,
+    "x": 323.08842105263165,
+    "y": 578.2231578947369,
+    "purpose": "Place visible plank"
+  },
+  {
+    "case": "P-mobile-log",
+    "t_ms": 111,
+    "x": 422,
+    "y": 223.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "P-mobile-log",
+    "t_ms": 218,
+    "x": 422,
+    "y": 256,
+    "purpose": "Play"
+  },
+  {
+    "case": "P-mobile-log",
+    "t_ms": 866,
+    "x": 658,
+    "y": 262,
+    "purpose": "Harvest first Wood"
+  },
+  {
+    "case": "P-mobile-log",
+    "t_ms": 3265,
+    "x": 422,
+    "y": 100,
+    "purpose": "Dismiss Wood card"
+  },
+  {
+    "case": "P-mobile-log",
+    "t_ms": 3368,
+    "x": 459,
+    "y": 224,
+    "purpose": "Harvest second Wood"
+  },
+  {
+    "case": "P-mobile-log",
+    "t_ms": 3720,
+    "x": 422,
+    "y": 100,
+    "purpose": "Dismiss Wood card"
+  },
+  {
+    "case": "P-mobile-log",
+    "t_ms": 3819,
+    "x": 459,
+    "y": 262,
+    "purpose": "Harvest third Wood"
+  },
+  {
+    "case": "P-mobile-log",
+    "t_ms": 3922,
+    "x": 422.00001525878906,
+    "y": 100,
+    "purpose": "Dismiss Wood card"
+  },
+  {
+    "case": "P-mobile-log",
+    "t_ms": 4018,
+    "x": 626.328125,
+    "y": 34,
+    "purpose": "Open Craft"
+  },
+  {
+    "case": "P-mobile-log",
+    "t_ms": 4118,
+    "x": 368,
+    "y": 114,
+    "purpose": "Craft Planks ×4"
+  },
+  {
+    "case": "P-mobile-log",
+    "t_ms": 4218,
+    "x": 422,
+    "y": 100.00000381469727,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "P-mobile-log",
+    "t_ms": 4317,
+    "x": 368,
+    "y": 114,
+    "purpose": "Craft Planks ×4"
+  },
+  {
+    "case": "P-mobile-log",
+    "t_ms": 4416,
+    "x": 422.00001525878906,
+    "y": 100.00000381469727,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "P-mobile-log",
+    "t_ms": 4516,
+    "x": 368,
+    "y": 114,
+    "purpose": "Craft Planks ×4"
+  },
+  {
+    "case": "P-mobile-log",
+    "t_ms": 4616,
+    "x": 422.00001525878906,
+    "y": 99.99999618530273,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "P-mobile-log",
+    "t_ms": 4756,
+    "x": 782,
+    "y": 38,
+    "purpose": "Close Craft"
+  },
+  {
+    "case": "P-mobile-log",
+    "t_ms": 4853,
+    "x": 542.328125,
+    "y": 34,
+    "purpose": "Open Build"
+  },
+  {
+    "case": "P-mobile-log",
+    "t_ms": 4951,
+    "x": 144.46875,
+    "y": 100,
+    "purpose": "Select material"
+  },
+  {
+    "case": "P-mobile-log",
+    "t_ms": 5043,
+    "x": 164,
+    "y": 300,
+    "purpose": "Place visible plank"
+  },
+  {
+    "case": "P-mobile-log",
+    "t_ms": 5194,
+    "x": 164,
+    "y": 262,
+    "purpose": "Place above first plank"
+  },
+  {
+    "case": "P-mobile-log",
+    "t_ms": 5300,
+    "x": 57.3359375,
+    "y": 100,
+    "purpose": "Two arbitrary blocks qualify for manual Show"
+  },
+  {
+    "case": "P-mobile-log",
+    "t_ms": 7206,
+    "x": 730.9921875,
+    "y": 220,
+    "purpose": "Accept stable manual invitation"
+  },
+  {
+    "case": "P-mobile-log",
+    "t_ms": 7346,
+    "x": 164,
+    "y": 300,
+    "purpose": "Occupied target with occupied top"
+  },
+  {
+    "case": "P-mobile-log",
+    "t_ms": 7496,
+    "x": 25,
+    "y": 186,
+    "purpose": "Out of reach target"
+  },
+  {
+    "case": "P-mobile-log",
+    "t_ms": 7650,
+    "x": 691.765625,
+    "y": 100,
+    "purpose": "Remove tool"
+  },
+  {
+    "case": "P-mobile-log",
+    "t_ms": 7742,
+    "x": 202,
+    "y": 262,
+    "purpose": "Remove unowned air"
+  },
+  {
+    "case": "P-mobile-log",
+    "t_ms": 7903,
+    "x": 144.46875,
+    "y": 100,
+    "purpose": "Planks below HUD"
+  },
+  {
+    "case": "P-mobile-log",
+    "t_ms": 7994,
+    "x": 164,
+    "y": 142,
+    "purpose": "Place under build status"
+  },
+  {
+    "case": "P-mobile-log",
+    "t_ms": 8150,
+    "x": 144.46875,
+    "y": 100,
+    "purpose": "Animal occupancy check"
+  },
+  {
+    "case": "P-mobile-log",
+    "t_ms": 8245,
+    "x": 202,
+    "y": 300,
+    "purpose": "Try ground cell near roaming animals"
+  },
+  {
+    "case": "P-mobile-log",
+    "t_ms": 8616,
+    "x": 240,
+    "y": 300,
+    "purpose": "Try ground cell near roaming animals"
+  },
+  {
+    "case": "P-mobile-log",
+    "t_ms": 8989,
+    "x": 691.765625,
+    "y": 100,
+    "purpose": "Remove empty-cell probe"
+  },
+  {
+    "case": "P-mobile-log",
+    "t_ms": 9083,
+    "x": 240,
+    "y": 300,
+    "purpose": "Return probe material"
+  },
+  {
+    "case": "P-mobile-log",
+    "t_ms": 9183,
+    "x": 144.46875,
+    "y": 100,
+    "purpose": "Resume animal refusal probe"
+  },
+  {
+    "case": "P-mobile-log",
+    "t_ms": 9278,
+    "x": 278,
+    "y": 300,
+    "purpose": "Try ground cell near roaming animals"
+  }
+]

@@ -1,0 +1,4 @@
+{"case":"B-desktop-log","status":"PASS","video":"build-v1-fix3-video/page@79d30f660a6d7012cab1f72e52863698.webm"}
+{"case":"B-desktop-clean","status":"PASS","video":"build-v1-fix3-video/page@b64269c27d4c7cd61f4da74ddc96479b.webm"}
+{"case":"B-mobile-log","status":"PASS","video":"build-v1-fix3-video/page@2152c7a720487f1a3cded35a8d88e770.webm"}
+{"case":"B-mobile-clean","status":"FAIL","error":"Error: Wood harvest did not increase visible inventory","errors":[],"video":"build-v1-fix3-video/page@3f4988adca59403273983df69ffdff68.webm"}

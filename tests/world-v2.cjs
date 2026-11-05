@@ -91,7 +91,7 @@ async function collect(p, id) {
   p=await page(voice);await p.evaluate(()=>BW.hideCard());const pos=await p.evaluate(()=>BW.worldToScreen(87.5*32,15.5*32));await p.mouse.click(pos.x,pos.y);await p.evaluate(()=>BW.hideCard());
   await p.waitForFunction(()=>BW.adventure().active&&!BW.adventure().active.pending);
   await p.click('#chat-mic');await p.evaluate(()=>voiceResult('three'));await openLog(p);
-  assert.match(await p.locator('#speaking-rows').innerText(),/Tree\s+1\s+任务/);await check(p);await p.context().close();
+  assert.match(await p.locator('#speaking-rows').innerText(),/Tree\s+1\s+新场景/);await check(p);await p.context().close();
   report('mock recognition near-sound answer → saved event → parent speaking count');
   // Collect two complete sets through normal gravity/landing at travel checkpoints.
   const gifts=structuredClone(fixture);gifts.words=['tree','wood','stone','water'];gifts.animals.forEach(a=>a[1]=7000);
@@ -122,9 +122,9 @@ async function collect(p, id) {
   p=await page(malformed);assert.equal((await snapshot(p)).adventure.rounds,0);await check(p);await p.context().close();
   report('legacy complete/partial albums migrate without losing discoveries or duplicating a completion; malformed optional stamps ignored');
   // Visual atlas exercises all existing words and idle frames. Inspect /tmp/bw-v2-art.png for style.
-  p=await page();const words=await p.evaluate(()=>BW.testWords());assert.equal(words.length,42);
+  p=await page();const words=await p.evaluate(()=>BW.testWords());assert.equal(words.length,47);
   const art=await p.evaluate(async()=>{
-    const words=BW.testWords(), atlas=document.createElement('canvas');atlas.width=7*144;atlas.height=6*164;const g=atlas.getContext('2d');g.fillStyle='#fff8ee';g.fillRect(0,0,atlas.width,atlas.height);
+    const words=BW.testWords(), atlas=document.createElement('canvas');atlas.width=7*144;atlas.height=Math.ceil(words.length/7)*164;const g=atlas.getContext('2d');g.fillStyle='#fff8ee';g.fillRect(0,0,atlas.width,atlas.height);
     const counts=[];
     for(let i=0;i<words.length;i++){const img=new Image();img.src=BW.testIcon(words[i],1);await img.decode();g.drawImage(img,(i%7)*144,Math.floor(i/7)*164,128,128);g.fillStyle='#51493c';g.font='16px sans-serif';g.fillText(words[i],(i%7)*144+12,Math.floor(i/7)*164+148);
       const c=document.createElement('canvas');c.width=c.height=128;const ctx=c.getContext('2d');ctx.drawImage(img,0,0);const px=ctx.getImageData(0,0,128,128).data;let ink=0,filled=0;for(let n=0;n<px.length;n+=4){if(px[n+3]>100){filled++;if(px[n]<110&&px[n+1]<110&&px[n+2]<110)ink++;}}counts.push({word:words[i],filled,ink});}
@@ -134,7 +134,7 @@ async function collect(p, id) {
   for(const key of ['dog','cat','cow','horse','chicken','duck','fish'])assert.notEqual(await p.evaluate(k=>BW.testIcon(k,1),key),await p.evaluate(k=>BW.testIcon(k,3),key),key);
   for(const key of ['pig','sheep','rabbit'])assert.notEqual(await p.evaluate(k=>BW.testIcon(k,1),key),await p.evaluate(k=>BW.testIcon(k,24.5),key),key);
   await check(p);assert.deepEqual(p.external,[]);await p.context().close();
-  report('42 nonempty outlined word pictures, visible tail/wing/blink idle frame changes, no external requests');
+  report('47 nonempty outlined word pictures, visible tail/wing/blink idle frame changes, no external requests');
   // New feedback is emitted through a real quiz success; inspect particle lifetime/bounds and audio schedules.
   const quizData={...gifts,words:['wood'],px:87*32-16,py:511.9};
   p=await page(quizData);await p.evaluate(()=>BW.hideCard());await p.click('#btn-words');await p.click('#btn-quiz');
@@ -146,14 +146,14 @@ async function collect(p, id) {
   effects=await p.evaluate(()=>BW.testEffects());assert(effects.filter(e=>e.star||e.confetti).length<=5);assert(effects.filter(e=>e.star||e.confetti).every(e=>e.still));await check(p);await p.context().close();
   report('quiz success emits bounded, expiring stars/confetti and WebAudio notes; reduced-motion/no-AudioContext fallback still succeeds');
   const many=structuredClone(fixture);many.adventure.speaking=words.map(word=>record(word,'task'));
-  p=await page(many,{viewport:{width:844,height:390},touch:true});await openLog(p);assert.equal(await p.locator('#speaking-rows tr').count(),42);
+  p=await page(many,{viewport:{width:844,height:390},touch:true});await openLog(p);assert.equal(await p.locator('#speaking-rows tr').count(),47);
   const box=await p.locator('#parent-help').boundingBox(), client=await p.context().newCDPSession(p);
   const x=box.x+box.width/2, y=box.y+box.height-45;
   await client.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x,y}]});
   for(let n=1;n<=8;n++){await client.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x,y:y-n*24}]});await p.waitForTimeout(20);}
   await client.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
   await p.waitForFunction(()=>document.getElementById('parent-help').scrollTop>30);await p.click('#parent-close');assert(!(await p.locator('#parent-help').isVisible()));await check(p);await p.context().close();
-  report('42-row speaking log scrolls via Chromium touch emulation in short landscape; return button remains reachable (not a device test)');
+  report('47-row speaking log scrolls via Chromium touch emulation in short landscape; return button remains reachable (not a device test)');
   const offline=await browser.newContext({offline:true,viewport:{width:844,height:390}}), f=await offline.newPage();
   const offData=structuredClone(full);offData.adventure.speaking=[{time:Date.now(),word:'tree',spoken_word:'tree',scene:'task',spoke:true,tier:2}];
   await f.addInitScript(data=>{localStorage.setItem('block-world-save-v1',JSON.stringify(data));Object.defineProperty(window,'speechSynthesis',{value:undefined});window.SpeechRecognition=undefined;window.webkitSpeechRecognition=undefined;},offData);

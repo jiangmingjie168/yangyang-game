@@ -1,0 +1,83 @@
+{
+  "source_sha256": "a8d1c16776ac4fcd5e447d8c75ff3c22ed82aa59d3dafc685b969afb9a4158ea",
+  "results": [
+    {
+      "case": "J-mobile-log",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Jump buffer: completion within 15s",
+      "errors": []
+    },
+    {
+      "case": "S-mobile-log",
+      "status": "PASS"
+    }
+  ],
+  "frames": [
+    {
+      "case": "J-mobile-log",
+      "t_ms": 950,
+      "file": "build-v1-fix3-J-mobile-log-902-fresh.png",
+      "label": "fresh"
+    },
+    {
+      "case": "J-mobile-log",
+      "t_ms": 5714,
+      "file": "build-v1-fix3-J-mobile-log-5669-crafted.png",
+      "label": "crafted"
+    },
+    {
+      "case": "J-mobile-log",
+      "t_ms": 6817,
+      "file": "build-v1-fix3-J-mobile-log-6777-idle-0s.png",
+      "label": "idle-0s"
+    },
+    {
+      "case": "J-mobile-log",
+      "t_ms": 12170,
+      "file": "build-v1-fix3-J-mobile-log-12122-idle-5s.png",
+      "label": "idle-5s"
+    },
+    {
+      "case": "J-mobile-log",
+      "t_ms": 17504,
+      "file": "build-v1-fix3-J-mobile-log-17459-idle-10s.png",
+      "label": "idle-10s"
+    },
+    {
+      "case": "J-mobile-log",
+      "t_ms": 22887,
+      "file": "build-v1-fix3-J-mobile-log-22839-idle-15s.png",
+      "label": "idle-15s"
+    },
+    {
+      "case": "J-mobile-log",
+      "t_ms": 23036,
+      "file": "build-v1-fix3-J-mobile-log-22988-FAIL.png",
+      "label": "FAIL"
+    },
+    {
+      "case": "S-mobile-log",
+      "t_ms": 824,
+      "file": "build-v1-fix3-S-mobile-log-792-fresh.png",
+      "label": "fresh"
+    },
+    {
+      "case": "S-mobile-log",
+      "t_ms": 4501,
+      "file": "build-v1-fix3-S-mobile-log-4481-crafted.png",
+      "label": "crafted"
+    },
+    {
+      "case": "S-mobile-log",
+      "t_ms": 6223,
+      "file": "build-v1-fix3-S-mobile-log-6195-against-wall.png",
+      "label": "against-wall"
+    },
+    {
+      "case": "S-mobile-log",
+      "t_ms": 6359,
+      "file": "build-v1-fix3-S-mobile-log-6317-second-layer.png",
+      "label": "second-layer"
+    }
+  ]
+}

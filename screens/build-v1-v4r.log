@@ -1,0 +1,39 @@
+[
+  {
+    "case": "natural dog feet, three pats, visible follow",
+    "status": "PASS",
+    "point": [
+      150,
+      254
+    ],
+    "distanceCSS": 270
+  },
+  {
+    "case": "natural far tree, walk then Wood +1",
+    "status": "PASS",
+    "point": [
+      700,
+      251
+    ],
+    "distanceCSS": 280
+  },
+  {
+    "case": "v4r-level1-short",
+    "status": "PASS",
+    "text": "What is this?\n\nTree\nWood\nListen\nSpeak"
+  },
+  {
+    "case": "natural rabbit feet across intact tree",
+    "status": "PASS",
+    "point": [
+      1100,
+      640
+    ],
+    "distanceCSS": 495
+  },
+  {
+    "case": "v4r-level1-dpr2",
+    "status": "PASS",
+    "text": "What is this?\n\nTree\nWood\nListen\nSpeak\n\nBuddy is thinking..."
+  }
+]

@@ -18,7 +18,7 @@ async function close(s){if(s){s.closeAllConnections();await new Promise(r=>s.clo
   await p.context().grantPermissions(['local-network-access']);
   await p.route(endpoint+'/buddy',async route=>{
     const q=normalize(route.request().postDataJSON()),reply=template(q);
-    if(q.event==='pet')reply.say=contextLeads(q)[0]+' '+reply.say;
+    if(q.event==='pet' && contextLeads(q).length)reply.say=contextLeads(q)[0]+' '+reply.say;
     const hash=audioHash(reply.say);if(fs.existsSync(path.join(root,'brain/audio',hash+'.mp3')))reply.audio_url=endpoint+'/audio/'+hash+'.mp3';
     await route.fulfill({contentType:'application/json',body:JSON.stringify(reply)});
   });
@@ -41,7 +41,7 @@ async function close(s){if(s){s.closeAllConnections();await new Promise(r=>s.clo
   // Missing media falls back once, and preserves the intended line/rate.
   await p.evaluate(url=>BW.voiceSay('Dog',{audio_url:url}),endpoint+'/audio/'+'0'.repeat(20)+'.mp3');
   await p.waitForFunction(()=>spoken.length===1);assert.deepEqual(await p.evaluate(()=>spoken[0]),{text:'Dog',rate:0.8199999928474426});
-  await p.evaluate(()=>BW.voiceSay('Hi Unique Name. Let us play!'));assert.equal(await p.evaluate(()=>spoken.at(-1).text),'Hi Unique Name. Let us play!');
+  const namedBefore=await p.evaluate(()=>spoken.length);await p.evaluate(()=>BW.voiceSay('Hi Unique Name. Let us play!',{named:true}));assert.equal(await p.evaluate(()=>spoken.length),namedBefore);
   // Untrusted/off-origin URL cannot play audio.
   await p.evaluate(()=>BW.voiceSay('Dog',{audio_url:'https://untrusted.invalid/audio/12345678901234567890.mp3'}));assert.equal(await p.evaluate(()=>spoken.at(-1).text),'Dog');
   // Cancellation prevents an asynchronous play rejection from speaking after a card closes.
@@ -49,16 +49,15 @@ async function close(s){if(s){s.closeAllConnections();await new Promise(r=>s.clo
   const count=await p.evaluate(()=>spoken.length);await p.waitForTimeout(180);assert.equal(await p.evaluate(()=>spoken.length),count);
   const exerciseTts=await p.evaluate(()=>spoken.length),exerciseAudio=await p.evaluate(()=>BW.adventure().brain.audio);
   await p.evaluate(()=>BW.voiceOpen());await p.waitForFunction(()=>!BW.adventure().active.pending);
-  assert(await p.locator('#chat-picture').isHidden());assert.equal((await p.evaluate(()=>BW.adventure().active)).key,'dog');
-  // Composite line uses generated context + question atoms whenever both exist.
-  // Context and question atoms both exist in the sample.
-  assert.match(await p.locator('#chat-question').innerText(),/You met a dog! Dog or tree\?/);
-  await p.waitForFunction(n=>BW.adventure().brain.audio>=n+2,exerciseAudio);
+  assert(await p.locator('#chat-picture').isVisible());assert.equal((await p.evaluate(()=>BW.adventure().active)).key,'dog');
+  // Tier one uses the safe question atom, without a context lead that reveals the answer.
+  assert.equal(await p.locator('#chat-question').innerText(),'What is this?');
+  await p.waitForFunction(n=>BW.adventure().brain.audio>=n+1,exerciseAudio);
   assert.equal(await p.evaluate(()=>spoken.length),exerciseTts);
   await p.click('#btn-zh');assert.match(await p.locator('#brain-status').innerText(),/预生成音频 [1-9].*合成回落 [1-9]/);
   await p.screenshot({path:path.join(root,'screens/voice-parent-sources.png')});
   assert.deepEqual(errors,[]);
-  const result={status:'PASS',decoded,stats:await p.evaluate(()=>BW.adventure().brain),checks:['actual MP3 playback before TTS','20 MP3 decode checks','404 fallback once at rate .82','dynamic name fallback','off-origin rejection','late rejection canceled','context + L1 prompt audio metadata accepted','parent source counters']};
+  const result={status:'PASS',decoded,stats:await p.evaluate(()=>BW.adventure().brain),checks:['actual MP3 playback before TTS','20 MP3 decode checks','404 fallback once at rate .82','named TTS forbidden','off-origin rejection','late rejection canceled','safe L1 prompt audio metadata accepted','parent source counters']};
   fs.writeFileSync(path.join(root,'screens/voice-results.json'),JSON.stringify(result,null,2)+'\n');
   console.log('PASS voice playback, fallback, cancellation, names, validation, source stats, 20 MP3 decodes');
 })().catch(e=>{console.error(e);process.exitCode=1}).finally(async()=>{await browser?.close();await close(brain);await close(front)});

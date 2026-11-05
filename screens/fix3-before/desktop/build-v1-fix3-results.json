@@ -1,0 +1,17 @@
+{
+  "source_sha256": "a8d1c16776ac4fcd5e447d8c75ff3c22ed82aa59d3dafc685b969afb9a4158ea",
+  "results": [
+    {
+      "case": "inspect-desktop-log",
+      "status": "PASS"
+    }
+  ],
+  "frames": [
+    {
+      "case": "inspect-desktop-log",
+      "t_ms": 902,
+      "file": "build-v1-fix3-inspect-desktop-log-838-fresh.png",
+      "label": "fresh"
+    }
+  ]
+}

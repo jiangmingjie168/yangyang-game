@@ -1,0 +1,42 @@
+boat crossed {
+  p: { x: 4255.559999999993, y: 516, onGround: true, dir: 1 },
+  ch: {
+    qi: 0,
+    fish: 1,
+    wheatRipe: 0,
+    boatRide: 1,
+    petFlag: 1,
+    pack: false,
+    pet: [ 'dog' ],
+    boat: { x: 4256, y: 512 },
+    riding: true,
+    fishing: false,
+    crops: []
+  },
+  inv: { rod: 1, fish: 1 },
+  err: ''
+}
+landed {
+  p: {
+    x: 4297.559999999993,
+    y: 511.31768239999985,
+    onGround: true,
+    dir: 1
+  },
+  ch: {
+    qi: 0,
+    fish: 1,
+    wheatRipe: 0,
+    boatRide: 1,
+    petFlag: 1,
+    pack: false,
+    pet: [ 'dog' ],
+    boat: { x: 4256, y: 512 },
+    riding: false,
+    fishing: false,
+    crops: []
+  },
+  inv: { rod: 1, fish: 1 },
+  err: ''
+}
+BASELINE PASS: real pointer tame/follow, cast/wait catch, place/board/steer/disembark; seeded pond position and tools.

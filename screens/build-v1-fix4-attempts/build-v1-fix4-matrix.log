@@ -1,0 +1,20 @@
+{"case":"J-desktop-log","status":"PASS","idle_start_ms":9622,"cheer_ms":2688,"show_ms":4170,"video":"build-v1-fix3-video/page@c64feb82e677337079bf0f9b79d37315.webm"}
+{"case":"S-desktop-log","status":"PASS","video":"build-v1-fix3-video/page@8a557f3aa25a3ba534eefba0ae68a48b.webm"}
+{"case":"B-desktop-log","status":"FAIL","error":"AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n'10' !== '9'\n","errors":[],"video":"build-v1-fix3-video/page@2fb538988b3aebd8b412c5e95f738d52.webm"}
+{"case":"P-desktop-log","status":"PASS","video":"build-v1-fix3-video/page@a127b3b20dba7708a15310a2cd1e72af.webm"}
+{"case":"G-desktop-log","status":"PASS","video":"build-v1-fix3-video/page@b7927ad2b6990d1e4e65968e7ef03069.webm"}
+{"case":"J-desktop-clean","status":"PASS","idle_start_ms":8227,"cheer_ms":2732,"show_ms":4212,"video":"build-v1-fix3-video/page@e3a476c3265e24561af6afa9aad3c768.webm"}
+{"case":"S-desktop-clean","status":"PASS","video":"build-v1-fix3-video/page@f1c61d68c0647020e88bd987082cfa2c.webm"}
+{"case":"B-desktop-clean","status":"FAIL","error":"AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n'10' !== '9'\n","errors":[],"video":"build-v1-fix3-video/page@e67ade2fd733b2ff0319380e2599dec2.webm"}
+{"case":"P-desktop-clean","status":"PASS","video":"build-v1-fix3-video/page@ef7a609c20775c84534ba5ab042808e6.webm"}
+{"case":"G-desktop-clean","status":"PASS","video":"build-v1-fix3-video/page@c70505edb7ecfa0e3dae8d6c0b9ce42d.webm"}
+{"case":"J-mobile-log","status":"FAIL","error":"Error: Wood harvest did not increase visible inventory","errors":[],"video":"build-v1-fix3-video/page@25230568b04c53de229ee1e1786fea76.webm"}
+{"case":"S-mobile-log","status":"PASS","video":"build-v1-fix3-video/page@c2f3fb2297208609b550ce1ac43c5f40.webm"}
+{"case":"B-mobile-log","status":"FAIL","error":"AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n'10' !== '9'\n","errors":[],"video":"build-v1-fix3-video/page@a2fa07ec69a9ea930a3cc746cefa61bd.webm"}
+{"case":"P-mobile-log","status":"PASS","video":"build-v1-fix3-video/page@3f5d717fa3494ecf46604428c6b8e820.webm"}
+{"case":"G-mobile-log","status":"PASS","video":"build-v1-fix3-video/page@f9d53f4db01f44995ee62d9d1aaaf25d.webm"}
+{"case":"J-mobile-clean","status":"PASS","idle_start_ms":8112,"cheer_ms":2695,"show_ms":4218,"video":"build-v1-fix3-video/page@1d43a77d22c8816bf6efba50d51c07a1.webm"}
+{"case":"S-mobile-clean","status":"PASS","video":"build-v1-fix3-video/page@a128c53571779aec6008fe301857a0a4.webm"}
+{"case":"B-mobile-clean","status":"FAIL","error":"AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n'10' !== '9'\n","errors":[],"video":"build-v1-fix3-video/page@0238b3596b7cd1b6a3b4795903c4c8fb.webm"}
+{"case":"P-mobile-clean","status":"PASS","video":"build-v1-fix3-video/page@eaca98986b5cf25b2366f3cbedfd2274.webm"}
+{"case":"G-mobile-clean","status":"PASS","video":"build-v1-fix3-video/page@bf6275b90de405f2782cfbaf401ec44c.webm"}

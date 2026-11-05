@@ -1,0 +1,11 @@
+PASS two tier-one successes unlock tier two; taps record no speech
+PASS picture naming accepts plural/near-sound and unlocks tier three after two spoken successes
+PASS tier three accepts the missing word, whole sentence, or small spelling difference
+PASS unavailable mic/unrecognized speech gives tap fallback without tier-two credit
+PASS three misses reveal answer and require confirmation before friendly close; no mission penalties
+PASS all tiers browser -> HTTP buddy -> mock DeepSeek, corrective retry, validated bubble and audio/TTS
+PASS client rejects unsafe/stale rule fields and falls back on malformed JSON/network error/timeout
+PASS client rejects added questions, redirected sentence practice, and exercises after closing
+PASS movement cannot dismiss pending dialogue; parent skip cancels it and late response cannot reopen it
+PASS legacy/malformed optional data and new mastery/speaking records save compatibility
+PASS configured BRAIN_URL starts and falls back to template dialogue offline from file://

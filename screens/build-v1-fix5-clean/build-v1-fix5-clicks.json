@@ -1,0 +1,2634 @@
+[
+  {
+    "case": "H-desktop-clean",
+    "t_ms": 212,
+    "x": 683,
+    "y": 400.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "H-desktop-clean",
+    "t_ms": 362,
+    "x": 683,
+    "y": 331.09375,
+    "purpose": "Play"
+  },
+  {
+    "case": "H-desktop-clean",
+    "t_ms": 1026,
+    "x": 973.0884210526317,
+    "y": 528.2231578947369,
+    "purpose": "Harvest first Wood"
+  },
+  {
+    "case": "H-desktop-clean",
+    "t_ms": 3480,
+    "x": 683,
+    "y": 152,
+    "purpose": "Dismiss Wood card"
+  },
+  {
+    "case": "H-desktop-clean",
+    "t_ms": 3583,
+    "x": 711.2463157894738,
+    "y": 478.22315789473686,
+    "purpose": "Harvest second Wood"
+  },
+  {
+    "case": "H-desktop-clean",
+    "t_ms": 3949,
+    "x": 683,
+    "y": 152,
+    "purpose": "Dismiss Wood card"
+  },
+  {
+    "case": "H-desktop-clean",
+    "t_ms": 4061,
+    "x": 711.2463157894738,
+    "y": 528.2231578947369,
+    "purpose": "Harvest third Wood"
+  },
+  {
+    "case": "H-desktop-clean",
+    "t_ms": 4174,
+    "x": 683,
+    "y": 152,
+    "purpose": "Dismiss Wood card"
+  },
+  {
+    "case": "H-desktop-clean",
+    "t_ms": 4265,
+    "x": 567.8252631578948,
+    "y": 591.381052631579,
+    "purpose": "Mine surface Stone for House"
+  },
+  {
+    "case": "H-desktop-clean",
+    "t_ms": 4381,
+    "x": 683,
+    "y": 152,
+    "purpose": "Dismiss Stone card"
+  },
+  {
+    "case": "H-desktop-clean",
+    "t_ms": 4481,
+    "x": 1148.328125,
+    "y": 34,
+    "purpose": "Open Craft"
+  },
+  {
+    "case": "H-desktop-clean",
+    "t_ms": 4592,
+    "x": 629,
+    "y": 115.796875,
+    "purpose": "Craft Planks ×4"
+  },
+  {
+    "case": "H-desktop-clean",
+    "t_ms": 4697,
+    "x": 683,
+    "y": 151.99999618530273,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "H-desktop-clean",
+    "t_ms": 4799,
+    "x": 629,
+    "y": 115.796875,
+    "purpose": "Craft Planks ×4"
+  },
+  {
+    "case": "H-desktop-clean",
+    "t_ms": 4911,
+    "x": 682.9999694824219,
+    "y": 151.99999618530273,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "H-desktop-clean",
+    "t_ms": 5014,
+    "x": 629,
+    "y": 115.796875,
+    "purpose": "Craft Planks ×4"
+  },
+  {
+    "case": "H-desktop-clean",
+    "t_ms": 5114,
+    "x": 682.9999694824219,
+    "y": 152,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "H-desktop-clean",
+    "t_ms": 5215,
+    "x": 629,
+    "y": 426.578125,
+    "purpose": "Craft House ×4"
+  },
+  {
+    "case": "H-desktop-clean",
+    "t_ms": 5327,
+    "x": 683,
+    "y": 152,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "H-desktop-clean",
+    "t_ms": 5492,
+    "x": 1304,
+    "y": 38,
+    "purpose": "Close Craft"
+  },
+  {
+    "case": "H-desktop-clean",
+    "t_ms": 5594,
+    "x": 1064.328125,
+    "y": 34,
+    "purpose": "Open Build"
+  },
+  {
+    "case": "H-desktop-clean",
+    "t_ms": 5707,
+    "x": 144.46875,
+    "y": 100,
+    "purpose": "Select material"
+  },
+  {
+    "case": "H-desktop-clean",
+    "t_ms": 5812,
+    "x": 513.7890625,
+    "y": 100,
+    "purpose": "Select Roof"
+  },
+  {
+    "case": "H-desktop-clean",
+    "t_ms": 5905,
+    "x": 323.08842105263165,
+    "y": 428.22315789473686,
+    "purpose": "Place roof across both wall columns"
+  },
+  {
+    "case": "H-desktop-clean",
+    "t_ms": 6077,
+    "x": 691.765625,
+    "y": 100,
+    "purpose": "Remove one overhang to match exactly three House"
+  },
+  {
+    "case": "H-desktop-clean",
+    "t_ms": 6170,
+    "x": 473.08842105263165,
+    "y": 428.22315789473686,
+    "purpose": "Remove fourth House overhang"
+  },
+  {
+    "case": "H-desktop-clean",
+    "t_ms": 6343,
+    "x": 144.46875,
+    "y": 100,
+    "purpose": "Select Planks for two stacked walls"
+  },
+  {
+    "case": "H-desktop-clean",
+    "t_ms": 6437,
+    "x": 323.08842105263165,
+    "y": 528.2231578947369,
+    "purpose": "Hana wall 0"
+  },
+  {
+    "case": "H-desktop-clean",
+    "t_ms": 6890,
+    "x": 323.08842105263165,
+    "y": 528.2231578947369,
+    "purpose": "Hana wall 0"
+  },
+  {
+    "case": "H-desktop-clean",
+    "t_ms": 7342,
+    "x": 323.08842105263165,
+    "y": 528.2231578947369,
+    "purpose": "Hana wall 0"
+  },
+  {
+    "case": "H-desktop-clean",
+    "t_ms": 7793,
+    "x": 323.08842105263165,
+    "y": 528.2231578947369,
+    "purpose": "Hana wall 0"
+  },
+  {
+    "case": "H-desktop-clean",
+    "t_ms": 7947,
+    "x": 323.08842105263165,
+    "y": 478.22315789473686,
+    "purpose": "Hana wall 1"
+  },
+  {
+    "case": "H-desktop-clean",
+    "t_ms": 8097,
+    "x": 423.08842105263165,
+    "y": 528.2231578947369,
+    "purpose": "Hana wall 2"
+  },
+  {
+    "case": "H-desktop-clean",
+    "t_ms": 8264,
+    "x": 423.08842105263165,
+    "y": 478.22315789473686,
+    "purpose": "Hana wall 3"
+  },
+  {
+    "case": "H-desktop-clean",
+    "t_ms": 11299,
+    "x": 57.3359375,
+    "y": 100,
+    "purpose": "Manual Show chooses house before nearby free work"
+  },
+  {
+    "case": "H-desktop-clean",
+    "t_ms": 11479,
+    "x": 1252.9921875,
+    "y": 220,
+    "purpose": "Accept HOUSE invitation"
+  },
+  {
+    "case": "H-desktop-clean",
+    "t_ms": 20725,
+    "x": 1251,
+    "y": 223.5,
+    "purpose": "Answer House"
+  },
+  {
+    "case": "H-desktop-clean",
+    "t_ms": 21375,
+    "x": 1253,
+    "y": 238,
+    "purpose": "Close house finale"
+  },
+  {
+    "case": "H-desktop-clean",
+    "t_ms": 21479,
+    "x": 144.46875,
+    "y": 100,
+    "purpose": "Select planks"
+  },
+  {
+    "case": "H-desktop-clean",
+    "t_ms": 21572,
+    "x": 473.08842105263165,
+    "y": 478.22315789473686,
+    "purpose": "Add exactly ONE surviving block to same work"
+  },
+  {
+    "case": "H-desktop-clean",
+    "t_ms": 24622,
+    "x": 57.3359375,
+    "y": 100,
+    "purpose": "Second house Show after one exterior Planks"
+  },
+  {
+    "case": "H-desktop-clean",
+    "t_ms": 24742,
+    "x": 1252.9921875,
+    "y": 220,
+    "purpose": "Accept second house Show"
+  },
+  {
+    "case": "H-desktop-clean",
+    "t_ms": 24848,
+    "x": 1251,
+    "y": 223.5,
+    "purpose": "Answer House again"
+  },
+  {
+    "case": "U-desktop-clean",
+    "t_ms": 111,
+    "x": 683,
+    "y": 400.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "U-desktop-clean",
+    "t_ms": 222,
+    "x": 683,
+    "y": 331.09375,
+    "purpose": "Play"
+  },
+  {
+    "case": "U-desktop-clean",
+    "t_ms": 893,
+    "x": 973.0884210526317,
+    "y": 528.2231578947369,
+    "purpose": "Harvest first Wood"
+  },
+  {
+    "case": "U-desktop-clean",
+    "t_ms": 3325,
+    "x": 683,
+    "y": 152,
+    "purpose": "Dismiss Wood card"
+  },
+  {
+    "case": "U-desktop-clean",
+    "t_ms": 3431,
+    "x": 711.2463157894738,
+    "y": 478.22315789473686,
+    "purpose": "Harvest second Wood"
+  },
+  {
+    "case": "U-desktop-clean",
+    "t_ms": 3792,
+    "x": 683,
+    "y": 152,
+    "purpose": "Dismiss Wood card"
+  },
+  {
+    "case": "U-desktop-clean",
+    "t_ms": 3897,
+    "x": 711.2463157894738,
+    "y": 528.2231578947369,
+    "purpose": "Harvest third Wood"
+  },
+  {
+    "case": "U-desktop-clean",
+    "t_ms": 4007,
+    "x": 683,
+    "y": 151.99999618530273,
+    "purpose": "Dismiss Wood card"
+  },
+  {
+    "case": "U-desktop-clean",
+    "t_ms": 4098,
+    "x": 567.8252631578948,
+    "y": 591.381052631579,
+    "purpose": "Mine surface Stone for House"
+  },
+  {
+    "case": "U-desktop-clean",
+    "t_ms": 4213,
+    "x": 683.0000305175781,
+    "y": 152,
+    "purpose": "Dismiss Stone card"
+  },
+  {
+    "case": "U-desktop-clean",
+    "t_ms": 4309,
+    "x": 1148.328125,
+    "y": 34,
+    "purpose": "Open Craft"
+  },
+  {
+    "case": "U-desktop-clean",
+    "t_ms": 4430,
+    "x": 629,
+    "y": 115.796875,
+    "purpose": "Craft Planks ×4"
+  },
+  {
+    "case": "U-desktop-clean",
+    "t_ms": 4540,
+    "x": 683.0000305175781,
+    "y": 152,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "U-desktop-clean",
+    "t_ms": 4647,
+    "x": 629,
+    "y": 115.796875,
+    "purpose": "Craft Planks ×4"
+  },
+  {
+    "case": "U-desktop-clean",
+    "t_ms": 4747,
+    "x": 683.0000305175781,
+    "y": 152,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "U-desktop-clean",
+    "t_ms": 4848,
+    "x": 629,
+    "y": 115.796875,
+    "purpose": "Craft Planks ×4"
+  },
+  {
+    "case": "U-desktop-clean",
+    "t_ms": 4960,
+    "x": 682.9999694824219,
+    "y": 152,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "U-desktop-clean",
+    "t_ms": 5062,
+    "x": 629,
+    "y": 426.578125,
+    "purpose": "Craft House ×4"
+  },
+  {
+    "case": "U-desktop-clean",
+    "t_ms": 5164,
+    "x": 683,
+    "y": 152.00000381469727,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "U-desktop-clean",
+    "t_ms": 5315,
+    "x": 1304,
+    "y": 38,
+    "purpose": "Close Craft"
+  },
+  {
+    "case": "U-desktop-clean",
+    "t_ms": 5426,
+    "x": 1064.328125,
+    "y": 34,
+    "purpose": "Open Build"
+  },
+  {
+    "case": "U-desktop-clean",
+    "t_ms": 5529,
+    "x": 144.46875,
+    "y": 100,
+    "purpose": "Select material"
+  },
+  {
+    "case": "U-desktop-clean",
+    "t_ms": 5623,
+    "x": 323.08842105263165,
+    "y": 528.2231578947369,
+    "purpose": "Far wall base"
+  },
+  {
+    "case": "U-desktop-clean",
+    "t_ms": 5723,
+    "x": 423.08842105263165,
+    "y": 528.2231578947369,
+    "purpose": "Near wall base"
+  },
+  {
+    "case": "U-desktop-clean",
+    "t_ms": 6175,
+    "x": 423.08842105263165,
+    "y": 528.2231578947369,
+    "purpose": "Near wall base"
+  },
+  {
+    "case": "U-desktop-clean",
+    "t_ms": 6625,
+    "x": 423.08842105263165,
+    "y": 528.2231578947369,
+    "purpose": "Near wall base"
+  },
+  {
+    "case": "U-desktop-clean",
+    "t_ms": 7074,
+    "x": 423.08842105263165,
+    "y": 528.2231578947369,
+    "purpose": "Near wall base"
+  },
+  {
+    "case": "U-desktop-clean",
+    "t_ms": 7524,
+    "x": 423.08842105263165,
+    "y": 528.2231578947369,
+    "purpose": "Near wall base"
+  },
+  {
+    "case": "U-desktop-clean",
+    "t_ms": 7976,
+    "x": 423.08842105263165,
+    "y": 528.2231578947369,
+    "purpose": "Near wall base"
+  },
+  {
+    "case": "U-desktop-clean",
+    "t_ms": 8427,
+    "x": 423.08842105263165,
+    "y": 528.2231578947369,
+    "purpose": "Near wall base"
+  },
+  {
+    "case": "U-desktop-clean",
+    "t_ms": 8876,
+    "x": 423.08842105263165,
+    "y": 528.2231578947369,
+    "purpose": "Near wall base"
+  },
+  {
+    "case": "U-desktop-clean",
+    "t_ms": 8980,
+    "x": 57.3359375,
+    "y": 100,
+    "purpose": "Manual Show before roof"
+  },
+  {
+    "case": "U-desktop-clean",
+    "t_ms": 10960,
+    "x": 513.7890625,
+    "y": 100,
+    "purpose": "Select Roof"
+  },
+  {
+    "case": "U-desktop-clean",
+    "t_ms": 11052,
+    "x": 323.08842105263165,
+    "y": 428.22315789473686,
+    "purpose": "Place roof across both wall columns"
+  },
+  {
+    "case": "U-desktop-clean",
+    "t_ms": 11227,
+    "x": 691.765625,
+    "y": 100,
+    "purpose": "Remove one overhang to match exactly three House"
+  },
+  {
+    "case": "U-desktop-clean",
+    "t_ms": 11319,
+    "x": 473.08842105263165,
+    "y": 428.22315789473686,
+    "purpose": "Remove fourth House overhang"
+  },
+  {
+    "case": "U-desktop-clean",
+    "t_ms": 11496,
+    "x": 144.46875,
+    "y": 100,
+    "purpose": "Select Planks for two stacked walls"
+  },
+  {
+    "case": "U-desktop-clean",
+    "t_ms": 11589,
+    "x": 323.08842105263165,
+    "y": 478.22315789473686,
+    "purpose": "Hana wall 0"
+  },
+  {
+    "case": "U-desktop-clean",
+    "t_ms": 11749,
+    "x": 423.08842105263165,
+    "y": 478.22315789473686,
+    "purpose": "Hana wall 1"
+  },
+  {
+    "case": "U-desktop-clean",
+    "t_ms": 14795,
+    "x": 57.3359375,
+    "y": 100,
+    "purpose": "Manual Show chooses house before nearby free work"
+  },
+  {
+    "case": "U-desktop-clean",
+    "t_ms": 14960,
+    "x": 1252.9921875,
+    "y": 220,
+    "purpose": "Accept HOUSE invitation"
+  },
+  {
+    "case": "U-desktop-clean",
+    "t_ms": 15128,
+    "x": 1251,
+    "y": 223.5,
+    "purpose": "Answer House"
+  },
+  {
+    "case": "U-desktop-clean",
+    "t_ms": 15795,
+    "x": 1253,
+    "y": 238,
+    "purpose": "Close house finale"
+  },
+  {
+    "case": "U-desktop-clean",
+    "t_ms": 15905,
+    "x": 144.46875,
+    "y": 100,
+    "purpose": "Select planks"
+  },
+  {
+    "case": "U-desktop-clean",
+    "t_ms": 15998,
+    "x": 473.08842105263165,
+    "y": 478.22315789473686,
+    "purpose": "Add exactly ONE surviving block to same work"
+  },
+  {
+    "case": "I-desktop-clean",
+    "t_ms": 117,
+    "x": 683,
+    "y": 400.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "I-desktop-clean",
+    "t_ms": 228,
+    "x": 683,
+    "y": 331.09375,
+    "purpose": "Play"
+  },
+  {
+    "case": "I-desktop-clean",
+    "t_ms": 893,
+    "x": 973.0884210526317,
+    "y": 528.2231578947369,
+    "purpose": "Harvest first Wood"
+  },
+  {
+    "case": "I-desktop-clean",
+    "t_ms": 3345,
+    "x": 683,
+    "y": 152,
+    "purpose": "Dismiss Wood card"
+  },
+  {
+    "case": "I-desktop-clean",
+    "t_ms": 3465,
+    "x": 711.2463157894738,
+    "y": 478.22315789473686,
+    "purpose": "Harvest second Wood"
+  },
+  {
+    "case": "I-desktop-clean",
+    "t_ms": 3838,
+    "x": 683,
+    "y": 152,
+    "purpose": "Dismiss Wood card"
+  },
+  {
+    "case": "I-desktop-clean",
+    "t_ms": 3945,
+    "x": 711.2463157894738,
+    "y": 528.2231578947369,
+    "purpose": "Harvest third Wood"
+  },
+  {
+    "case": "I-desktop-clean",
+    "t_ms": 4060,
+    "x": 683.0000305175781,
+    "y": 152.00000381469727,
+    "purpose": "Dismiss Wood card"
+  },
+  {
+    "case": "I-desktop-clean",
+    "t_ms": 4158,
+    "x": 1148.328125,
+    "y": 34,
+    "purpose": "Open Craft"
+  },
+  {
+    "case": "I-desktop-clean",
+    "t_ms": 4265,
+    "x": 629,
+    "y": 115.796875,
+    "purpose": "Craft Planks ×4"
+  },
+  {
+    "case": "I-desktop-clean",
+    "t_ms": 4379,
+    "x": 683.0000305175781,
+    "y": 151.99999618530273,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "I-desktop-clean",
+    "t_ms": 4481,
+    "x": 629,
+    "y": 115.796875,
+    "purpose": "Craft Planks ×4"
+  },
+  {
+    "case": "I-desktop-clean",
+    "t_ms": 4596,
+    "x": 682.9999694824219,
+    "y": 152,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "I-desktop-clean",
+    "t_ms": 4705,
+    "x": 629,
+    "y": 115.796875,
+    "purpose": "Craft Planks ×4"
+  },
+  {
+    "case": "I-desktop-clean",
+    "t_ms": 4812,
+    "x": 683,
+    "y": 152,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "I-desktop-clean",
+    "t_ms": 4915,
+    "x": 1306,
+    "y": 115.796875,
+    "purpose": "Craft Stick ×4"
+  },
+  {
+    "case": "I-desktop-clean",
+    "t_ms": 5028,
+    "x": 683.0000305175781,
+    "y": 152.00000381469727,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "I-desktop-clean",
+    "t_ms": 5129,
+    "x": 1306,
+    "y": 426.578125,
+    "purpose": "Craft Fence ×2"
+  },
+  {
+    "case": "I-desktop-clean",
+    "t_ms": 5240,
+    "x": 682.9999694824219,
+    "y": 152,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "I-desktop-clean",
+    "t_ms": 5345,
+    "x": 1306,
+    "y": 426.578125,
+    "purpose": "Craft Fence ×2"
+  },
+  {
+    "case": "I-desktop-clean",
+    "t_ms": 5444,
+    "x": 683,
+    "y": 152,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "I-desktop-clean",
+    "t_ms": 5548,
+    "x": 1306,
+    "y": 426.578125,
+    "purpose": "Craft Fence ×2"
+  },
+  {
+    "case": "I-desktop-clean",
+    "t_ms": 5648,
+    "x": 683.0000305175781,
+    "y": 152,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "I-desktop-clean",
+    "t_ms": 5755,
+    "x": 1306,
+    "y": 426.578125,
+    "purpose": "Craft Fence ×2"
+  },
+  {
+    "case": "I-desktop-clean",
+    "t_ms": 5860,
+    "x": 682.9999694824219,
+    "y": 152.00000381469727,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "I-desktop-clean",
+    "t_ms": 6023,
+    "x": 1304,
+    "y": 38,
+    "purpose": "Close Craft"
+  },
+  {
+    "case": "I-desktop-clean",
+    "t_ms": 6126,
+    "x": 1064.328125,
+    "y": 34,
+    "purpose": "Open Build"
+  },
+  {
+    "case": "I-desktop-clean",
+    "t_ms": 6229,
+    "x": 362.984375,
+    "y": 100,
+    "purpose": "Select material"
+  },
+  {
+    "case": "I-desktop-clean",
+    "t_ms": 6321,
+    "x": 323.08842105263165,
+    "y": 578.2231578947369,
+    "purpose": "First free Fence"
+  },
+  {
+    "case": "I-desktop-clean",
+    "t_ms": 6423,
+    "x": 473.08842105263165,
+    "y": 578.2231578947369,
+    "purpose": "Second free Fence"
+  },
+  {
+    "case": "I-desktop-clean",
+    "t_ms": 6876,
+    "x": 473.08842105263165,
+    "y": 578.2231578947369,
+    "purpose": "Second free Fence"
+  },
+  {
+    "case": "I-desktop-clean",
+    "t_ms": 7326,
+    "x": 473.08842105263165,
+    "y": 578.2231578947369,
+    "purpose": "Second free Fence"
+  },
+  {
+    "case": "I-desktop-clean",
+    "t_ms": 7431,
+    "x": 57.3359375,
+    "y": 100,
+    "purpose": "Manual Show"
+  },
+  {
+    "case": "I-desktop-clean",
+    "t_ms": 19409,
+    "x": 57.3359375,
+    "y": 100,
+    "purpose": "Repeated Show keeps invitation"
+  },
+  {
+    "case": "I-desktop-clean",
+    "t_ms": 19508,
+    "x": 144.46875,
+    "y": 100,
+    "purpose": "Selection must preserve invitation"
+  },
+  {
+    "case": "I-desktop-clean",
+    "t_ms": 19601,
+    "x": 323.08842105263165,
+    "y": 528.2231578947369,
+    "purpose": "Placement must preserve invitation"
+  },
+  {
+    "case": "I-desktop-clean",
+    "t_ms": 19711,
+    "x": 68,
+    "y": 700,
+    "purpose": "Joystick 1 180ms"
+  },
+  {
+    "case": "I-desktop-clean",
+    "t_ms": 19922,
+    "x": 117.6,
+    "y": 700,
+    "purpose": "Release joystick; hands off"
+  },
+  {
+    "case": "I-desktop-clean",
+    "t_ms": 38409,
+    "x": 1252.9921875,
+    "y": 220,
+    "purpose": "Accept free Show"
+  },
+  {
+    "case": "F-desktop-clean",
+    "t_ms": 121,
+    "x": 683,
+    "y": 400.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "F-desktop-clean",
+    "t_ms": 234,
+    "x": 683,
+    "y": 331.09375,
+    "purpose": "Play"
+  },
+  {
+    "case": "F-desktop-clean",
+    "t_ms": 903,
+    "x": 973.0884210526317,
+    "y": 528.2231578947369,
+    "purpose": "Harvest first Wood"
+  },
+  {
+    "case": "F-desktop-clean",
+    "t_ms": 3342,
+    "x": 683,
+    "y": 152,
+    "purpose": "Dismiss Wood card"
+  },
+  {
+    "case": "F-desktop-clean",
+    "t_ms": 3455,
+    "x": 711.2463157894738,
+    "y": 478.22315789473686,
+    "purpose": "Harvest second Wood"
+  },
+  {
+    "case": "F-desktop-clean",
+    "t_ms": 3817,
+    "x": 683,
+    "y": 152,
+    "purpose": "Dismiss Wood card"
+  },
+  {
+    "case": "F-desktop-clean",
+    "t_ms": 3940,
+    "x": 711.2463157894738,
+    "y": 528.2231578947369,
+    "purpose": "Harvest third Wood"
+  },
+  {
+    "case": "F-desktop-clean",
+    "t_ms": 4051,
+    "x": 683,
+    "y": 152,
+    "purpose": "Dismiss Wood card"
+  },
+  {
+    "case": "F-desktop-clean",
+    "t_ms": 4154,
+    "x": 1148.328125,
+    "y": 34,
+    "purpose": "Open Craft"
+  },
+  {
+    "case": "F-desktop-clean",
+    "t_ms": 4257,
+    "x": 629,
+    "y": 115.796875,
+    "purpose": "Craft Planks ×4"
+  },
+  {
+    "case": "F-desktop-clean",
+    "t_ms": 4358,
+    "x": 683,
+    "y": 152,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "F-desktop-clean",
+    "t_ms": 4467,
+    "x": 629,
+    "y": 115.796875,
+    "purpose": "Craft Planks ×4"
+  },
+  {
+    "case": "F-desktop-clean",
+    "t_ms": 4573,
+    "x": 683.0000305175781,
+    "y": 152,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "F-desktop-clean",
+    "t_ms": 4676,
+    "x": 629,
+    "y": 115.796875,
+    "purpose": "Craft Planks ×4"
+  },
+  {
+    "case": "F-desktop-clean",
+    "t_ms": 4789,
+    "x": 682.9999694824219,
+    "y": 152.00000381469727,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "F-desktop-clean",
+    "t_ms": 4891,
+    "x": 1306,
+    "y": 115.796875,
+    "purpose": "Craft Stick ×4"
+  },
+  {
+    "case": "F-desktop-clean",
+    "t_ms": 4999,
+    "x": 682.9999694824219,
+    "y": 152,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "F-desktop-clean",
+    "t_ms": 5108,
+    "x": 1306,
+    "y": 426.578125,
+    "purpose": "Craft Fence ×2"
+  },
+  {
+    "case": "F-desktop-clean",
+    "t_ms": 5208,
+    "x": 683,
+    "y": 152,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "F-desktop-clean",
+    "t_ms": 5309,
+    "x": 1306,
+    "y": 426.578125,
+    "purpose": "Craft Fence ×2"
+  },
+  {
+    "case": "F-desktop-clean",
+    "t_ms": 5415,
+    "x": 682.9999694824219,
+    "y": 152,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "F-desktop-clean",
+    "t_ms": 5523,
+    "x": 1306,
+    "y": 426.578125,
+    "purpose": "Craft Fence ×2"
+  },
+  {
+    "case": "F-desktop-clean",
+    "t_ms": 5624,
+    "x": 683,
+    "y": 152.00000381469727,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "F-desktop-clean",
+    "t_ms": 5724,
+    "x": 1306,
+    "y": 426.578125,
+    "purpose": "Craft Fence ×2"
+  },
+  {
+    "case": "F-desktop-clean",
+    "t_ms": 5832,
+    "x": 683,
+    "y": 152,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "F-desktop-clean",
+    "t_ms": 5998,
+    "x": 1304,
+    "y": 38,
+    "purpose": "Close Craft"
+  },
+  {
+    "case": "F-desktop-clean",
+    "t_ms": 6103,
+    "x": 1064.328125,
+    "y": 34,
+    "purpose": "Open Build"
+  },
+  {
+    "case": "F-desktop-clean",
+    "t_ms": 6204,
+    "x": 362.984375,
+    "y": 100,
+    "purpose": "Select material"
+  },
+  {
+    "case": "F-desktop-clean",
+    "t_ms": 6298,
+    "x": 323.08842105263165,
+    "y": 578.2231578947369,
+    "purpose": "First free Fence"
+  },
+  {
+    "case": "F-desktop-clean",
+    "t_ms": 6399,
+    "x": 473.08842105263165,
+    "y": 578.2231578947369,
+    "purpose": "Second free Fence"
+  },
+  {
+    "case": "F-desktop-clean",
+    "t_ms": 6852,
+    "x": 473.08842105263165,
+    "y": 578.2231578947369,
+    "purpose": "Second free Fence"
+  },
+  {
+    "case": "F-desktop-clean",
+    "t_ms": 9866,
+    "x": 57.3359375,
+    "y": 100,
+    "purpose": "Manual Show"
+  },
+  {
+    "case": "F-desktop-clean",
+    "t_ms": 9976,
+    "x": 1252.9921875,
+    "y": 220,
+    "purpose": "Accept free Show"
+  },
+  {
+    "case": "S-desktop-clean",
+    "t_ms": 105,
+    "x": 683,
+    "y": 400.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "S-desktop-clean",
+    "t_ms": 227,
+    "x": 683,
+    "y": 331.09375,
+    "purpose": "Play"
+  },
+  {
+    "case": "S-desktop-clean",
+    "t_ms": 921,
+    "x": 973.0884210526317,
+    "y": 528.2231578947369,
+    "purpose": "Harvest first Wood"
+  },
+  {
+    "case": "S-desktop-clean",
+    "t_ms": 3385,
+    "x": 683,
+    "y": 152,
+    "purpose": "Dismiss Wood card"
+  },
+  {
+    "case": "S-desktop-clean",
+    "t_ms": 3487,
+    "x": 711.2463157894738,
+    "y": 478.22315789473686,
+    "purpose": "Harvest second Wood"
+  },
+  {
+    "case": "S-desktop-clean",
+    "t_ms": 3850,
+    "x": 683,
+    "y": 152,
+    "purpose": "Dismiss Wood card"
+  },
+  {
+    "case": "S-desktop-clean",
+    "t_ms": 3952,
+    "x": 711.2463157894738,
+    "y": 528.2231578947369,
+    "purpose": "Harvest third Wood"
+  },
+  {
+    "case": "S-desktop-clean",
+    "t_ms": 4063,
+    "x": 683,
+    "y": 152.00000381469727,
+    "purpose": "Dismiss Wood card"
+  },
+  {
+    "case": "S-desktop-clean",
+    "t_ms": 4165,
+    "x": 1148.328125,
+    "y": 34,
+    "purpose": "Open Craft"
+  },
+  {
+    "case": "S-desktop-clean",
+    "t_ms": 4269,
+    "x": 629,
+    "y": 115.796875,
+    "purpose": "Craft Planks ×4"
+  },
+  {
+    "case": "S-desktop-clean",
+    "t_ms": 4376,
+    "x": 683.0000305175781,
+    "y": 152,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "S-desktop-clean",
+    "t_ms": 4481,
+    "x": 629,
+    "y": 115.796875,
+    "purpose": "Craft Planks ×4"
+  },
+  {
+    "case": "S-desktop-clean",
+    "t_ms": 4583,
+    "x": 683.0000305175781,
+    "y": 152.00000381469727,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "S-desktop-clean",
+    "t_ms": 4685,
+    "x": 629,
+    "y": 115.796875,
+    "purpose": "Craft Planks ×4"
+  },
+  {
+    "case": "S-desktop-clean",
+    "t_ms": 4786,
+    "x": 683,
+    "y": 152,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "S-desktop-clean",
+    "t_ms": 4937,
+    "x": 1304,
+    "y": 38,
+    "purpose": "Close Craft"
+  },
+  {
+    "case": "S-desktop-clean",
+    "t_ms": 5036,
+    "x": 1064.328125,
+    "y": 34,
+    "purpose": "Open Build"
+  },
+  {
+    "case": "S-desktop-clean",
+    "t_ms": 5145,
+    "x": 144.46875,
+    "y": 100,
+    "purpose": "Select material"
+  },
+  {
+    "case": "S-desktop-clean",
+    "t_ms": 5247,
+    "x": 68,
+    "y": 700,
+    "purpose": "Joystick -1 1300ms"
+  },
+  {
+    "case": "S-desktop-clean",
+    "t_ms": 6581,
+    "x": 18.4,
+    "y": 700,
+    "purpose": "Release joystick; hands off"
+  },
+  {
+    "case": "S-desktop-clean",
+    "t_ms": 6931,
+    "x": 740.28,
+    "y": 528.2231578947369,
+    "purpose": "Wall base beside child"
+  },
+  {
+    "case": "S-desktop-clean",
+    "t_ms": 7036,
+    "x": 68,
+    "y": 700,
+    "purpose": "Joystick -1 160ms"
+  },
+  {
+    "case": "S-desktop-clean",
+    "t_ms": 7227,
+    "x": 18.4,
+    "y": 700,
+    "purpose": "Release joystick; hands off"
+  },
+  {
+    "case": "S-desktop-clean",
+    "t_ms": 7634,
+    "x": 740.28,
+    "y": 478.22315789473686,
+    "purpose": "Tap empty square directly above base"
+  },
+  {
+    "case": "S-desktop-clean",
+    "t_ms": 7795,
+    "x": 740.28,
+    "y": 428.22315789473686,
+    "purpose": "Tap upper empty square for third layer"
+  },
+  {
+    "case": "V-desktop-clean",
+    "t_ms": 94,
+    "x": 683,
+    "y": 400.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "V-desktop-clean",
+    "t_ms": 213,
+    "x": 683,
+    "y": 331.09375,
+    "purpose": "Play"
+  },
+  {
+    "case": "H-mobile-clean",
+    "t_ms": 85,
+    "x": 422,
+    "y": 223.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "H-mobile-clean",
+    "t_ms": 188,
+    "x": 422,
+    "y": 256,
+    "purpose": "Play"
+  },
+  {
+    "case": "H-mobile-clean",
+    "t_ms": 838,
+    "x": 658,
+    "y": 262,
+    "purpose": "Harvest first Wood"
+  },
+  {
+    "case": "H-mobile-clean",
+    "t_ms": 3251,
+    "x": 422,
+    "y": 100,
+    "purpose": "Dismiss Wood card"
+  },
+  {
+    "case": "H-mobile-clean",
+    "t_ms": 3355,
+    "x": 459,
+    "y": 224,
+    "purpose": "Harvest second Wood"
+  },
+  {
+    "case": "H-mobile-clean",
+    "t_ms": 3708,
+    "x": 422,
+    "y": 100,
+    "purpose": "Dismiss Wood card"
+  },
+  {
+    "case": "H-mobile-clean",
+    "t_ms": 3818,
+    "x": 459,
+    "y": 262,
+    "purpose": "Harvest third Wood"
+  },
+  {
+    "case": "H-mobile-clean",
+    "t_ms": 3923,
+    "x": 422,
+    "y": 100.00000381469727,
+    "purpose": "Dismiss Wood card"
+  },
+  {
+    "case": "H-mobile-clean",
+    "t_ms": 4015,
+    "x": 350,
+    "y": 310,
+    "purpose": "Mine surface Stone for House"
+  },
+  {
+    "case": "H-mobile-clean",
+    "t_ms": 4118,
+    "x": 422,
+    "y": 100.00000381469727,
+    "purpose": "Dismiss Stone card"
+  },
+  {
+    "case": "H-mobile-clean",
+    "t_ms": 4217,
+    "x": 626.328125,
+    "y": 34,
+    "purpose": "Open Craft"
+  },
+  {
+    "case": "H-mobile-clean",
+    "t_ms": 4319,
+    "x": 368,
+    "y": 114,
+    "purpose": "Craft Planks ×4"
+  },
+  {
+    "case": "H-mobile-clean",
+    "t_ms": 4419,
+    "x": 422.00001525878906,
+    "y": 99.99999618530273,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "H-mobile-clean",
+    "t_ms": 4519,
+    "x": 368,
+    "y": 114,
+    "purpose": "Craft Planks ×4"
+  },
+  {
+    "case": "H-mobile-clean",
+    "t_ms": 4621,
+    "x": 422,
+    "y": 99.99999618530273,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "H-mobile-clean",
+    "t_ms": 4721,
+    "x": 368,
+    "y": 114,
+    "purpose": "Craft Planks ×4"
+  },
+  {
+    "case": "H-mobile-clean",
+    "t_ms": 4823,
+    "x": 422,
+    "y": 100,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "H-mobile-clean",
+    "t_ms": 4921,
+    "x": 422,
+    "y": 180,
+    "purpose": "Native middle-button autoscroll recipe panel"
+  },
+  {
+    "case": "H-mobile-clean",
+    "t_ms": 5827,
+    "x": 422,
+    "y": 300,
+    "purpose": "Stop native recipe autoscroll"
+  },
+  {
+    "case": "H-mobile-clean",
+    "t_ms": 6079,
+    "x": 368,
+    "y": 128,
+    "purpose": "Craft House ×4"
+  },
+  {
+    "case": "H-mobile-clean",
+    "t_ms": 6183,
+    "x": 422,
+    "y": 99.99999618530273,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "H-mobile-clean",
+    "t_ms": 6330,
+    "x": 782,
+    "y": 38,
+    "purpose": "Close Craft"
+  },
+  {
+    "case": "H-mobile-clean",
+    "t_ms": 6431,
+    "x": 542.328125,
+    "y": 34,
+    "purpose": "Open Build"
+  },
+  {
+    "case": "H-mobile-clean",
+    "t_ms": 6532,
+    "x": 144.46875,
+    "y": 100,
+    "purpose": "Select material"
+  },
+  {
+    "case": "H-mobile-clean",
+    "t_ms": 6634,
+    "x": 513.7890625,
+    "y": 100,
+    "purpose": "Select Roof"
+  },
+  {
+    "case": "H-mobile-clean",
+    "t_ms": 6727,
+    "x": 164,
+    "y": 186,
+    "purpose": "Place roof across both wall columns"
+  },
+  {
+    "case": "H-mobile-clean",
+    "t_ms": 6885,
+    "x": 691.765625,
+    "y": 100,
+    "purpose": "Remove one overhang to match exactly three House"
+  },
+  {
+    "case": "H-mobile-clean",
+    "t_ms": 6978,
+    "x": 278,
+    "y": 186,
+    "purpose": "Remove fourth House overhang"
+  },
+  {
+    "case": "H-mobile-clean",
+    "t_ms": 7135,
+    "x": 144.46875,
+    "y": 100,
+    "purpose": "Select Planks for two stacked walls"
+  },
+  {
+    "case": "H-mobile-clean",
+    "t_ms": 7228,
+    "x": 164,
+    "y": 262,
+    "purpose": "Hana wall 0"
+  },
+  {
+    "case": "H-mobile-clean",
+    "t_ms": 7387,
+    "x": 164,
+    "y": 224,
+    "purpose": "Hana wall 1"
+  },
+  {
+    "case": "H-mobile-clean",
+    "t_ms": 7531,
+    "x": 240,
+    "y": 262,
+    "purpose": "Hana wall 2"
+  },
+  {
+    "case": "H-mobile-clean",
+    "t_ms": 7982,
+    "x": 240,
+    "y": 262,
+    "purpose": "Hana wall 2"
+  },
+  {
+    "case": "H-mobile-clean",
+    "t_ms": 8131,
+    "x": 240,
+    "y": 224,
+    "purpose": "Hana wall 3"
+  },
+  {
+    "case": "H-mobile-clean",
+    "t_ms": 11136,
+    "x": 57.3359375,
+    "y": 100,
+    "purpose": "Manual Show chooses house before nearby free work"
+  },
+  {
+    "case": "H-mobile-clean",
+    "t_ms": 11285,
+    "x": 730.9921875,
+    "y": 220,
+    "purpose": "Accept HOUSE invitation"
+  },
+  {
+    "case": "H-mobile-clean",
+    "t_ms": 20500,
+    "x": 729,
+    "y": 223.5,
+    "purpose": "Answer House"
+  },
+  {
+    "case": "H-mobile-clean",
+    "t_ms": 21052,
+    "x": 731,
+    "y": 238,
+    "purpose": "Close house finale"
+  },
+  {
+    "case": "H-mobile-clean",
+    "t_ms": 21152,
+    "x": 144.46875,
+    "y": 100,
+    "purpose": "Select planks"
+  },
+  {
+    "case": "H-mobile-clean",
+    "t_ms": 21244,
+    "x": 278,
+    "y": 224,
+    "purpose": "Add exactly ONE surviving block to same work"
+  },
+  {
+    "case": "H-mobile-clean",
+    "t_ms": 24272,
+    "x": 57.3359375,
+    "y": 100,
+    "purpose": "Second house Show after one exterior Planks"
+  },
+  {
+    "case": "H-mobile-clean",
+    "t_ms": 24381,
+    "x": 730.9921875,
+    "y": 220,
+    "purpose": "Accept second house Show"
+  },
+  {
+    "case": "H-mobile-clean",
+    "t_ms": 24488,
+    "x": 729,
+    "y": 223.5,
+    "purpose": "Answer House again"
+  },
+  {
+    "case": "U-mobile-clean",
+    "t_ms": 94,
+    "x": 422,
+    "y": 223.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "U-mobile-clean",
+    "t_ms": 203,
+    "x": 422,
+    "y": 256,
+    "purpose": "Play"
+  },
+  {
+    "case": "U-mobile-clean",
+    "t_ms": 850,
+    "x": 658,
+    "y": 262,
+    "purpose": "Harvest first Wood"
+  },
+  {
+    "case": "U-mobile-clean",
+    "t_ms": 3248,
+    "x": 422,
+    "y": 100,
+    "purpose": "Dismiss Wood card"
+  },
+  {
+    "case": "U-mobile-clean",
+    "t_ms": 3350,
+    "x": 459,
+    "y": 224,
+    "purpose": "Harvest second Wood"
+  },
+  {
+    "case": "U-mobile-clean",
+    "t_ms": 3706,
+    "x": 422,
+    "y": 100,
+    "purpose": "Dismiss Wood card"
+  },
+  {
+    "case": "U-mobile-clean",
+    "t_ms": 3806,
+    "x": 459,
+    "y": 262,
+    "purpose": "Harvest third Wood"
+  },
+  {
+    "case": "U-mobile-clean",
+    "t_ms": 3915,
+    "x": 421.99998474121094,
+    "y": 100,
+    "purpose": "Dismiss Wood card"
+  },
+  {
+    "case": "U-mobile-clean",
+    "t_ms": 4007,
+    "x": 350,
+    "y": 310,
+    "purpose": "Mine surface Stone for House"
+  },
+  {
+    "case": "U-mobile-clean",
+    "t_ms": 4116,
+    "x": 422,
+    "y": 100.00000381469727,
+    "purpose": "Dismiss Stone card"
+  },
+  {
+    "case": "U-mobile-clean",
+    "t_ms": 4216,
+    "x": 626.328125,
+    "y": 34,
+    "purpose": "Open Craft"
+  },
+  {
+    "case": "U-mobile-clean",
+    "t_ms": 4317,
+    "x": 368,
+    "y": 114,
+    "purpose": "Craft Planks ×4"
+  },
+  {
+    "case": "U-mobile-clean",
+    "t_ms": 4419,
+    "x": 422,
+    "y": 99.99999618530273,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "U-mobile-clean",
+    "t_ms": 4517,
+    "x": 368,
+    "y": 114,
+    "purpose": "Craft Planks ×4"
+  },
+  {
+    "case": "U-mobile-clean",
+    "t_ms": 4618,
+    "x": 421.99998474121094,
+    "y": 100,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "U-mobile-clean",
+    "t_ms": 4717,
+    "x": 368,
+    "y": 114,
+    "purpose": "Craft Planks ×4"
+  },
+  {
+    "case": "U-mobile-clean",
+    "t_ms": 4817,
+    "x": 421.99998474121094,
+    "y": 100.00000381469727,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "U-mobile-clean",
+    "t_ms": 4917,
+    "x": 422,
+    "y": 180,
+    "purpose": "Native middle-button autoscroll recipe panel"
+  },
+  {
+    "case": "U-mobile-clean",
+    "t_ms": 5825,
+    "x": 422,
+    "y": 300,
+    "purpose": "Stop native recipe autoscroll"
+  },
+  {
+    "case": "U-mobile-clean",
+    "t_ms": 6076,
+    "x": 368,
+    "y": 128,
+    "purpose": "Craft House ×4"
+  },
+  {
+    "case": "U-mobile-clean",
+    "t_ms": 6183,
+    "x": 422.00001525878906,
+    "y": 100,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "U-mobile-clean",
+    "t_ms": 6329,
+    "x": 782,
+    "y": 38,
+    "purpose": "Close Craft"
+  },
+  {
+    "case": "U-mobile-clean",
+    "t_ms": 6433,
+    "x": 542.328125,
+    "y": 34,
+    "purpose": "Open Build"
+  },
+  {
+    "case": "U-mobile-clean",
+    "t_ms": 6534,
+    "x": 144.46875,
+    "y": 100,
+    "purpose": "Select material"
+  },
+  {
+    "case": "U-mobile-clean",
+    "t_ms": 6627,
+    "x": 164,
+    "y": 262,
+    "purpose": "Far wall base"
+  },
+  {
+    "case": "U-mobile-clean",
+    "t_ms": 7079,
+    "x": 164,
+    "y": 262,
+    "purpose": "Far wall base"
+  },
+  {
+    "case": "U-mobile-clean",
+    "t_ms": 7528,
+    "x": 164,
+    "y": 262,
+    "purpose": "Far wall base"
+  },
+  {
+    "case": "U-mobile-clean",
+    "t_ms": 7979,
+    "x": 164,
+    "y": 262,
+    "purpose": "Far wall base"
+  },
+  {
+    "case": "U-mobile-clean",
+    "t_ms": 8078,
+    "x": 240,
+    "y": 262,
+    "purpose": "Near wall base"
+  },
+  {
+    "case": "U-mobile-clean",
+    "t_ms": 8184,
+    "x": 57.3359375,
+    "y": 100,
+    "purpose": "Manual Show before roof"
+  },
+  {
+    "case": "U-mobile-clean",
+    "t_ms": 10134,
+    "x": 513.7890625,
+    "y": 100,
+    "purpose": "Select Roof"
+  },
+  {
+    "case": "U-mobile-clean",
+    "t_ms": 10226,
+    "x": 164,
+    "y": 186,
+    "purpose": "Place roof across both wall columns"
+  },
+  {
+    "case": "U-mobile-clean",
+    "t_ms": 10383,
+    "x": 691.765625,
+    "y": 100,
+    "purpose": "Remove one overhang to match exactly three House"
+  },
+  {
+    "case": "U-mobile-clean",
+    "t_ms": 10475,
+    "x": 278,
+    "y": 186,
+    "purpose": "Remove fourth House overhang"
+  },
+  {
+    "case": "U-mobile-clean",
+    "t_ms": 10616,
+    "x": 144.46875,
+    "y": 100,
+    "purpose": "Select Planks for two stacked walls"
+  },
+  {
+    "case": "U-mobile-clean",
+    "t_ms": 10709,
+    "x": 164,
+    "y": 224,
+    "purpose": "Hana wall 0"
+  },
+  {
+    "case": "U-mobile-clean",
+    "t_ms": 10845,
+    "x": 240,
+    "y": 224,
+    "purpose": "Hana wall 1"
+  },
+  {
+    "case": "U-mobile-clean",
+    "t_ms": 13851,
+    "x": 57.3359375,
+    "y": 100,
+    "purpose": "Manual Show chooses house before nearby free work"
+  },
+  {
+    "case": "U-mobile-clean",
+    "t_ms": 14000,
+    "x": 730.9921875,
+    "y": 220,
+    "purpose": "Accept HOUSE invitation"
+  },
+  {
+    "case": "U-mobile-clean",
+    "t_ms": 14153,
+    "x": 729,
+    "y": 223.5,
+    "purpose": "Answer House"
+  },
+  {
+    "case": "U-mobile-clean",
+    "t_ms": 14699,
+    "x": 731,
+    "y": 238,
+    "purpose": "Close house finale"
+  },
+  {
+    "case": "U-mobile-clean",
+    "t_ms": 14799,
+    "x": 144.46875,
+    "y": 100,
+    "purpose": "Select planks"
+  },
+  {
+    "case": "U-mobile-clean",
+    "t_ms": 14892,
+    "x": 278,
+    "y": 224,
+    "purpose": "Add exactly ONE surviving block to same work"
+  },
+  {
+    "case": "I-mobile-clean",
+    "t_ms": 90,
+    "x": 422,
+    "y": 223.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "I-mobile-clean",
+    "t_ms": 194,
+    "x": 422,
+    "y": 256,
+    "purpose": "Play"
+  },
+  {
+    "case": "I-mobile-clean",
+    "t_ms": 829,
+    "x": 658,
+    "y": 262,
+    "purpose": "Harvest first Wood"
+  },
+  {
+    "case": "I-mobile-clean",
+    "t_ms": 3241,
+    "x": 422,
+    "y": 100,
+    "purpose": "Dismiss Wood card"
+  },
+  {
+    "case": "I-mobile-clean",
+    "t_ms": 3348,
+    "x": 459,
+    "y": 224,
+    "purpose": "Harvest second Wood"
+  },
+  {
+    "case": "I-mobile-clean",
+    "t_ms": 3707,
+    "x": 422,
+    "y": 100,
+    "purpose": "Dismiss Wood card"
+  },
+  {
+    "case": "I-mobile-clean",
+    "t_ms": 3812,
+    "x": 459,
+    "y": 262,
+    "purpose": "Harvest third Wood"
+  },
+  {
+    "case": "I-mobile-clean",
+    "t_ms": 3918,
+    "x": 422,
+    "y": 99.99999618530273,
+    "purpose": "Dismiss Wood card"
+  },
+  {
+    "case": "I-mobile-clean",
+    "t_ms": 4020,
+    "x": 626.328125,
+    "y": 34,
+    "purpose": "Open Craft"
+  },
+  {
+    "case": "I-mobile-clean",
+    "t_ms": 4124,
+    "x": 368,
+    "y": 114,
+    "purpose": "Craft Planks ×4"
+  },
+  {
+    "case": "I-mobile-clean",
+    "t_ms": 4227,
+    "x": 422.00001525878906,
+    "y": 100.00000381469727,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "I-mobile-clean",
+    "t_ms": 4328,
+    "x": 368,
+    "y": 114,
+    "purpose": "Craft Planks ×4"
+  },
+  {
+    "case": "I-mobile-clean",
+    "t_ms": 4428,
+    "x": 422,
+    "y": 100,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "I-mobile-clean",
+    "t_ms": 4528,
+    "x": 368,
+    "y": 114,
+    "purpose": "Craft Planks ×4"
+  },
+  {
+    "case": "I-mobile-clean",
+    "t_ms": 4629,
+    "x": 422,
+    "y": 100,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "I-mobile-clean",
+    "t_ms": 4729,
+    "x": 784,
+    "y": 114,
+    "purpose": "Craft Stick ×4"
+  },
+  {
+    "case": "I-mobile-clean",
+    "t_ms": 4830,
+    "x": 422,
+    "y": 99.99999618530273,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "I-mobile-clean",
+    "t_ms": 4931,
+    "x": 422,
+    "y": 180,
+    "purpose": "Native middle-button autoscroll recipe panel"
+  },
+  {
+    "case": "I-mobile-clean",
+    "t_ms": 5834,
+    "x": 422,
+    "y": 300,
+    "purpose": "Stop native recipe autoscroll"
+  },
+  {
+    "case": "I-mobile-clean",
+    "t_ms": 6083,
+    "x": 784,
+    "y": 128,
+    "purpose": "Craft Fence ×2"
+  },
+  {
+    "case": "I-mobile-clean",
+    "t_ms": 6192,
+    "x": 422,
+    "y": 100,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "I-mobile-clean",
+    "t_ms": 6294,
+    "x": 784,
+    "y": 128,
+    "purpose": "Craft Fence ×2"
+  },
+  {
+    "case": "I-mobile-clean",
+    "t_ms": 6393,
+    "x": 422,
+    "y": 100,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "I-mobile-clean",
+    "t_ms": 6494,
+    "x": 784,
+    "y": 128,
+    "purpose": "Craft Fence ×2"
+  },
+  {
+    "case": "I-mobile-clean",
+    "t_ms": 6595,
+    "x": 421.99998474121094,
+    "y": 100,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "I-mobile-clean",
+    "t_ms": 6695,
+    "x": 784,
+    "y": 128,
+    "purpose": "Craft Fence ×2"
+  },
+  {
+    "case": "I-mobile-clean",
+    "t_ms": 6796,
+    "x": 421.99998474121094,
+    "y": 100,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "I-mobile-clean",
+    "t_ms": 6933,
+    "x": 782,
+    "y": 38,
+    "purpose": "Close Craft"
+  },
+  {
+    "case": "I-mobile-clean",
+    "t_ms": 7038,
+    "x": 542.328125,
+    "y": 34,
+    "purpose": "Open Build"
+  },
+  {
+    "case": "I-mobile-clean",
+    "t_ms": 7140,
+    "x": 362.984375,
+    "y": 100,
+    "purpose": "Select material"
+  },
+  {
+    "case": "I-mobile-clean",
+    "t_ms": 7233,
+    "x": 164,
+    "y": 300,
+    "purpose": "First free Fence"
+  },
+  {
+    "case": "I-mobile-clean",
+    "t_ms": 7334,
+    "x": 278,
+    "y": 300,
+    "purpose": "Second free Fence"
+  },
+  {
+    "case": "I-mobile-clean",
+    "t_ms": 7440,
+    "x": 57.3359375,
+    "y": 100,
+    "purpose": "Manual Show"
+  },
+  {
+    "case": "I-mobile-clean",
+    "t_ms": 19451,
+    "x": 57.3359375,
+    "y": 100,
+    "purpose": "Repeated Show keeps invitation"
+  },
+  {
+    "case": "I-mobile-clean",
+    "t_ms": 19574,
+    "x": 144.46875,
+    "y": 100,
+    "purpose": "Selection must preserve invitation"
+  },
+  {
+    "case": "I-mobile-clean",
+    "t_ms": 19668,
+    "x": 164,
+    "y": 262,
+    "purpose": "Placement must preserve invitation"
+  },
+  {
+    "case": "I-mobile-clean",
+    "t_ms": 19774,
+    "x": 68,
+    "y": 322,
+    "purpose": "Joystick 1 180ms"
+  },
+  {
+    "case": "I-mobile-clean",
+    "t_ms": 19987,
+    "x": 117.6,
+    "y": 322,
+    "purpose": "Release joystick; hands off"
+  },
+  {
+    "case": "I-mobile-clean",
+    "t_ms": 38393,
+    "x": 730.9921875,
+    "y": 220,
+    "purpose": "Accept free Show"
+  },
+  {
+    "case": "F-mobile-clean",
+    "t_ms": 88,
+    "x": 422,
+    "y": 223.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "F-mobile-clean",
+    "t_ms": 193,
+    "x": 422,
+    "y": 256,
+    "purpose": "Play"
+  },
+  {
+    "case": "F-mobile-clean",
+    "t_ms": 844,
+    "x": 658,
+    "y": 262,
+    "purpose": "Harvest first Wood"
+  },
+  {
+    "case": "F-mobile-clean",
+    "t_ms": 3255,
+    "x": 422,
+    "y": 100,
+    "purpose": "Dismiss Wood card"
+  },
+  {
+    "case": "F-mobile-clean",
+    "t_ms": 3361,
+    "x": 459,
+    "y": 224,
+    "purpose": "Harvest second Wood"
+  },
+  {
+    "case": "F-mobile-clean",
+    "t_ms": 3715,
+    "x": 422,
+    "y": 100,
+    "purpose": "Dismiss Wood card"
+  },
+  {
+    "case": "F-mobile-clean",
+    "t_ms": 3815,
+    "x": 459,
+    "y": 262,
+    "purpose": "Harvest third Wood"
+  },
+  {
+    "case": "F-mobile-clean",
+    "t_ms": 3928,
+    "x": 422,
+    "y": 100.00000381469727,
+    "purpose": "Dismiss Wood card"
+  },
+  {
+    "case": "F-mobile-clean",
+    "t_ms": 4024,
+    "x": 626.328125,
+    "y": 34,
+    "purpose": "Open Craft"
+  },
+  {
+    "case": "F-mobile-clean",
+    "t_ms": 4127,
+    "x": 368,
+    "y": 114,
+    "purpose": "Craft Planks ×4"
+  },
+  {
+    "case": "F-mobile-clean",
+    "t_ms": 4228,
+    "x": 421.99998474121094,
+    "y": 100,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "F-mobile-clean",
+    "t_ms": 4328,
+    "x": 368,
+    "y": 114,
+    "purpose": "Craft Planks ×4"
+  },
+  {
+    "case": "F-mobile-clean",
+    "t_ms": 4427,
+    "x": 422,
+    "y": 100,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "F-mobile-clean",
+    "t_ms": 4527,
+    "x": 368,
+    "y": 114,
+    "purpose": "Craft Planks ×4"
+  },
+  {
+    "case": "F-mobile-clean",
+    "t_ms": 4627,
+    "x": 421.99998474121094,
+    "y": 100,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "F-mobile-clean",
+    "t_ms": 4728,
+    "x": 784,
+    "y": 114,
+    "purpose": "Craft Stick ×4"
+  },
+  {
+    "case": "F-mobile-clean",
+    "t_ms": 4827,
+    "x": 422,
+    "y": 99.99999618530273,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "F-mobile-clean",
+    "t_ms": 4928,
+    "x": 422,
+    "y": 180,
+    "purpose": "Native middle-button autoscroll recipe panel"
+  },
+  {
+    "case": "F-mobile-clean",
+    "t_ms": 5834,
+    "x": 422,
+    "y": 300,
+    "purpose": "Stop native recipe autoscroll"
+  },
+  {
+    "case": "F-mobile-clean",
+    "t_ms": 6089,
+    "x": 784,
+    "y": 128,
+    "purpose": "Craft Fence ×2"
+  },
+  {
+    "case": "F-mobile-clean",
+    "t_ms": 6191,
+    "x": 421.99998474121094,
+    "y": 100,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "F-mobile-clean",
+    "t_ms": 6292,
+    "x": 784,
+    "y": 128,
+    "purpose": "Craft Fence ×2"
+  },
+  {
+    "case": "F-mobile-clean",
+    "t_ms": 6392,
+    "x": 422,
+    "y": 100,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "F-mobile-clean",
+    "t_ms": 6492,
+    "x": 784,
+    "y": 128,
+    "purpose": "Craft Fence ×2"
+  },
+  {
+    "case": "F-mobile-clean",
+    "t_ms": 6592,
+    "x": 422,
+    "y": 100.00000381469727,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "F-mobile-clean",
+    "t_ms": 6691,
+    "x": 784,
+    "y": 128,
+    "purpose": "Craft Fence ×2"
+  },
+  {
+    "case": "F-mobile-clean",
+    "t_ms": 6791,
+    "x": 422,
+    "y": 99.99999618530273,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "F-mobile-clean",
+    "t_ms": 6933,
+    "x": 782,
+    "y": 38,
+    "purpose": "Close Craft"
+  },
+  {
+    "case": "F-mobile-clean",
+    "t_ms": 7035,
+    "x": 542.328125,
+    "y": 34,
+    "purpose": "Open Build"
+  },
+  {
+    "case": "F-mobile-clean",
+    "t_ms": 7136,
+    "x": 362.984375,
+    "y": 100,
+    "purpose": "Select material"
+  },
+  {
+    "case": "F-mobile-clean",
+    "t_ms": 7230,
+    "x": 164,
+    "y": 300,
+    "purpose": "First free Fence"
+  },
+  {
+    "case": "F-mobile-clean",
+    "t_ms": 7327,
+    "x": 278,
+    "y": 300,
+    "purpose": "Second free Fence"
+  },
+  {
+    "case": "F-mobile-clean",
+    "t_ms": 7774,
+    "x": 278,
+    "y": 300,
+    "purpose": "Second free Fence"
+  },
+  {
+    "case": "F-mobile-clean",
+    "t_ms": 8221,
+    "x": 278,
+    "y": 300,
+    "purpose": "Second free Fence"
+  },
+  {
+    "case": "F-mobile-clean",
+    "t_ms": 8669,
+    "x": 278,
+    "y": 300,
+    "purpose": "Second free Fence"
+  },
+  {
+    "case": "F-mobile-clean",
+    "t_ms": 11590,
+    "x": 57.3359375,
+    "y": 100,
+    "purpose": "Manual Show"
+  },
+  {
+    "case": "F-mobile-clean",
+    "t_ms": 11697,
+    "x": 730.9921875,
+    "y": 220,
+    "purpose": "Accept free Show"
+  },
+  {
+    "case": "S-mobile-clean",
+    "t_ms": 100,
+    "x": 422,
+    "y": 223.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "S-mobile-clean",
+    "t_ms": 209,
+    "x": 422,
+    "y": 256,
+    "purpose": "Play"
+  },
+  {
+    "case": "S-mobile-clean",
+    "t_ms": 870,
+    "x": 658,
+    "y": 262,
+    "purpose": "Harvest first Wood"
+  },
+  {
+    "case": "S-mobile-clean",
+    "t_ms": 3270,
+    "x": 422,
+    "y": 100,
+    "purpose": "Dismiss Wood card"
+  },
+  {
+    "case": "S-mobile-clean",
+    "t_ms": 3373,
+    "x": 459,
+    "y": 224,
+    "purpose": "Harvest second Wood"
+  },
+  {
+    "case": "S-mobile-clean",
+    "t_ms": 3732,
+    "x": 422,
+    "y": 100,
+    "purpose": "Dismiss Wood card"
+  },
+  {
+    "case": "S-mobile-clean",
+    "t_ms": 3835,
+    "x": 459,
+    "y": 262,
+    "purpose": "Harvest third Wood"
+  },
+  {
+    "case": "S-mobile-clean",
+    "t_ms": 3939,
+    "x": 422,
+    "y": 100,
+    "purpose": "Dismiss Wood card"
+  },
+  {
+    "case": "S-mobile-clean",
+    "t_ms": 4036,
+    "x": 626.328125,
+    "y": 34,
+    "purpose": "Open Craft"
+  },
+  {
+    "case": "S-mobile-clean",
+    "t_ms": 4137,
+    "x": 368,
+    "y": 114,
+    "purpose": "Craft Planks ×4"
+  },
+  {
+    "case": "S-mobile-clean",
+    "t_ms": 4237,
+    "x": 421.99998474121094,
+    "y": 100,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "S-mobile-clean",
+    "t_ms": 4336,
+    "x": 368,
+    "y": 114,
+    "purpose": "Craft Planks ×4"
+  },
+  {
+    "case": "S-mobile-clean",
+    "t_ms": 4437,
+    "x": 421.99998474121094,
+    "y": 100,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "S-mobile-clean",
+    "t_ms": 4537,
+    "x": 368,
+    "y": 114,
+    "purpose": "Craft Planks ×4"
+  },
+  {
+    "case": "S-mobile-clean",
+    "t_ms": 4635,
+    "x": 421.99998474121094,
+    "y": 100.00000381469727,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "S-mobile-clean",
+    "t_ms": 4779,
+    "x": 782,
+    "y": 38,
+    "purpose": "Close Craft"
+  },
+  {
+    "case": "S-mobile-clean",
+    "t_ms": 4879,
+    "x": 542.328125,
+    "y": 34,
+    "purpose": "Open Build"
+  },
+  {
+    "case": "S-mobile-clean",
+    "t_ms": 4983,
+    "x": 144.46875,
+    "y": 100,
+    "purpose": "Select material"
+  },
+  {
+    "case": "S-mobile-clean",
+    "t_ms": 5082,
+    "x": 68,
+    "y": 322,
+    "purpose": "Joystick -1 1300ms"
+  },
+  {
+    "case": "S-mobile-clean",
+    "t_ms": 6415,
+    "x": 18.4,
+    "y": 322,
+    "purpose": "Release joystick; hands off"
+  },
+  {
+    "case": "S-mobile-clean",
+    "t_ms": 6765,
+    "x": 450,
+    "y": 262,
+    "purpose": "Wall base beside child"
+  },
+  {
+    "case": "S-mobile-clean",
+    "t_ms": 6869,
+    "x": 68,
+    "y": 322,
+    "purpose": "Joystick -1 160ms"
+  },
+  {
+    "case": "S-mobile-clean",
+    "t_ms": 7059,
+    "x": 18.4,
+    "y": 322,
+    "purpose": "Release joystick; hands off"
+  },
+  {
+    "case": "S-mobile-clean",
+    "t_ms": 7459,
+    "x": 450,
+    "y": 224,
+    "purpose": "Tap empty square directly above base"
+  },
+  {
+    "case": "S-mobile-clean",
+    "t_ms": 7609,
+    "x": 450,
+    "y": 186,
+    "purpose": "Tap upper empty square for third layer"
+  },
+  {
+    "case": "V-mobile-clean",
+    "t_ms": 88,
+    "x": 422,
+    "y": 223.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "V-mobile-clean",
+    "t_ms": 196,
+    "x": 422,
+    "y": 256,
+    "purpose": "Play"
+  }
+]

@@ -1,0 +1,2 @@
+{"case":"N-desktop-clean","status":"PASS","video":"build-v1-fix4-video/page@b78609c3e27fce63f9b135523ae057b3.webm"}
+{"case":"N-mobile-clean","status":"FAIL","error":"AssertionError [ERR_ASSERTION]: Visible pink/purple celebration pixels: 17","errors":[],"video":"build-v1-fix4-video/page@8f6f173a6daa9c107b4e43aeadddaecd.webm"}

@@ -1,0 +1,139 @@
+{
+  "completedAt": "2026-11-04T08:55:12.588619+00:00",
+  "baseline": "1be5055c16bfd99f632af42e65ab953c847cf4da",
+  "branch": "codex-build-v1",
+  "sourceSha256": "84ba79d4d5b42eba3dc458e63d0f72c5db264ad686edf14191876fca758d086c",
+  "quickTest": "PASS local HTTP listener + Chromium navigation",
+  "suiteCount": 18,
+  "allPassed": true,
+  "suites": [
+    {
+      "suite": "build-v1-fix1",
+      "exit": 0,
+      "seconds": 61.6,
+      "log": "screens/build-v1-fix1-test-build-v1-fix1.log"
+    },
+    {
+      "suite": "build-v1",
+      "exit": 0,
+      "seconds": 99.4,
+      "log": "screens/build-v1-fix1-test-build-v1.log"
+    },
+    {
+      "suite": "build-placement",
+      "exit": 0,
+      "seconds": 0,
+      "log": "screens/build-v1-fix1-test-build-placement.log"
+    },
+    {
+      "suite": "chinese-cleanup",
+      "exit": 0,
+      "seconds": 4.9,
+      "log": "screens/build-v1-fix1-test-chinese-cleanup.log"
+    },
+    {
+      "suite": "greeting",
+      "exit": 0,
+      "seconds": 8.6,
+      "log": "screens/build-v1-fix1-test-greeting.log"
+    },
+    {
+      "suite": "landscape",
+      "exit": 0,
+      "seconds": 4.6,
+      "log": "screens/build-v1-fix1-test-landscape.log"
+    },
+    {
+      "suite": "memory-chat",
+      "exit": 0,
+      "seconds": 19.2,
+      "log": "screens/build-v1-fix1-test-memory-chat.log"
+    },
+    {
+      "suite": "natural-pointer-v4r",
+      "exit": 0,
+      "seconds": 18.1,
+      "log": "screens/build-v1-fix1-test-natural-pointer-v4r.log"
+    },
+    {
+      "suite": "blocking-ai",
+      "exit": 0,
+      "seconds": 81.4,
+      "log": "screens/build-v1-fix1-test-blocking-ai.log"
+    },
+    {
+      "suite": "raw-pointer-v4",
+      "exit": 0,
+      "seconds": 40.7,
+      "log": "screens/build-v1-fix1-test-raw-pointer-v4.log"
+    },
+    {
+      "suite": "brain-v2",
+      "exit": 0,
+      "seconds": 126.3,
+      "log": "screens/build-v1-fix1-test-brain-v2.log"
+    },
+    {
+      "suite": "voice",
+      "exit": 0,
+      "seconds": 1.5,
+      "log": "screens/build-v1-fix1-test-voice.log"
+    },
+    {
+      "suite": "playthrough",
+      "exit": 0,
+      "seconds": 87.3,
+      "log": "screens/build-v1-fix1-test-playthrough.log"
+    },
+    {
+      "suite": "real-pointer",
+      "exit": 0,
+      "seconds": 23.8,
+      "log": "screens/build-v1-fix1-test-real-pointer.log"
+    },
+    {
+      "suite": "world-v2",
+      "exit": 0,
+      "seconds": 18.6,
+      "log": "screens/build-v1-fix1-test-world-v2.log"
+    },
+    {
+      "suite": "server",
+      "exit": 0,
+      "seconds": 1,
+      "log": "screens/build-v1-fix1-test-server.log"
+    },
+    {
+      "suite": "baseline",
+      "exit": 0,
+      "seconds": 11.2,
+      "log": "screens/build-v1-fix1-test-baseline.log"
+    },
+    {
+      "suite": "brain-ratio",
+      "exit": 0,
+      "seconds": 45.9,
+      "log": "screens/build-v1-fix1-test-brain-ratio.log"
+    }
+  ],
+  "serverTests": {
+    "pass": 52,
+    "fail": 0,
+    "skipped": 0
+  },
+  "negativeControl": {
+    "revision": "1be5055",
+    "expected": "FAIL first-block bubble within 500ms",
+    "log": "screens/build-v1-fix1-original-red.log"
+  },
+  "postReview": {
+    "change": "Clear stale wall toast on next build action",
+    "command": "node tests/build-v1.cjs",
+    "exit": 0,
+    "includes": "fresh-save A\u2013E and radius gate, legacy construction/roof atomicity/save/pet checks",
+    "log": "screens/build-v1-fix1-post-review.log"
+  },
+  "evidenceManifest": "screens/build-v1-fix1-evidence.json",
+  "publishCheckout": "/tmp/bw-fix1-publish",
+  "originalGitMetadata": "git add still returned Read-only file system; publish from writable checkout"
+}

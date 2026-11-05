@@ -1,0 +1,1830 @@
+{
+  "source_sha256": "6658f2f921ccc7327ce8237986c01509200ac68af1e46e1434530074822afbfc",
+  "index_md5": "2cbcef4a9d248bbe6811bfb74793a726",
+  "new_mouse": {
+    "results": [
+      {
+        "case": "F-desktop-clean",
+        "status": "PASS",
+        "video": "build-v1-fix4-video/page@bb674a79e10eeeacce7966b22f868916.webm",
+        "evidence_dir": "build-v1-fix4-final"
+      },
+      {
+        "case": "M-desktop-clean",
+        "status": "PASS",
+        "invite_ms": 11371,
+        "video": "build-v1-fix4-video/page@6f1cbaa48cf511436e8efc8345414a3a.webm",
+        "evidence_dir": "build-v1-fix4-final"
+      },
+      {
+        "case": "C-desktop-clean",
+        "status": "PASS",
+        "video": "build-v1-fix4-video/page@607df73705bddb6503329df763ec846c.webm",
+        "evidence_dir": "build-v1-fix4-final"
+      },
+      {
+        "case": "R-desktop-clean",
+        "status": "PASS",
+        "video": "build-v1-fix4-video/page@61f0653e04467867e596a368284ca8c5.webm",
+        "evidence_dir": "build-v1-fix4-final"
+      },
+      {
+        "case": "N-desktop-clean",
+        "status": "PASS",
+        "video": "build-v1-fix4-video/page@abda1091acfa14aeab3732ae7ee5b80c.webm",
+        "evidence_dir": "build-v1-fix4-final"
+      },
+      {
+        "case": "S-desktop-clean",
+        "status": "PASS",
+        "video": "build-v1-fix4-video/page@df784936386fb18b2965e781e69c037d.webm",
+        "evidence_dir": "build-v1-fix4-final"
+      },
+      {
+        "case": "V-desktop-clean",
+        "status": "PASS",
+        "video": "build-v1-fix4-video/page@d200d7afbdd707bf78e0c6c16ac467f7.webm",
+        "evidence_dir": "build-v1-fix4-final"
+      },
+      {
+        "case": "F-mobile-clean",
+        "status": "PASS",
+        "video": "build-v1-fix4-video/page@72f0e700b1cff234c7c8c6159540a408.webm",
+        "evidence_dir": "build-v1-fix4-final"
+      },
+      {
+        "case": "M-mobile-clean",
+        "status": "PASS",
+        "invite_ms": 11246,
+        "video": "build-v1-fix4-video/page@7afd1c4e02aac7b7b694e5efa3193ee7.webm",
+        "evidence_dir": "build-v1-fix4-final"
+      },
+      {
+        "case": "C-mobile-clean",
+        "status": "PASS",
+        "video": "build-v1-fix4-video/page@cf11eae90c6ba872bb5fbaaf1f031803.webm",
+        "evidence_dir": "build-v1-fix4-final"
+      },
+      {
+        "case": "R-mobile-clean",
+        "status": "PASS",
+        "video": "build-v1-fix4-video/page@dc4014d9ea3c0bc6a74c46b40c7fe22a.webm",
+        "evidence_dir": "build-v1-fix4-final"
+      },
+      {
+        "case": "N-mobile-clean",
+        "status": "PASS",
+        "video": "build-v1-fix4-video/page@f0f8ee471c2f10d80d7ba7d417e67095.webm",
+        "evidence_dir": "build-v1-fix4-final"
+      },
+      {
+        "case": "S-mobile-clean",
+        "status": "PASS",
+        "video": "build-v1-fix4-video/page@9ad2ae587ea8b0666d8d0024361b2e6d.webm",
+        "evidence_dir": "build-v1-fix4-final"
+      },
+      {
+        "case": "V-mobile-clean",
+        "status": "PASS",
+        "video": "build-v1-fix4-video/page@3687dd1db1c301e0315cb92b553758d5.webm",
+        "evidence_dir": "build-v1-fix4-final"
+      }
+    ],
+    "frames": [
+      {
+        "case": "F-desktop-clean",
+        "t_ms": 1028,
+        "file": "build-v1-fix4-final/build-v1-fix4-F-desktop-clean-953-fresh.png",
+        "label": "fresh"
+      },
+      {
+        "case": "F-desktop-clean",
+        "t_ms": 6195,
+        "file": "build-v1-fix4-final/build-v1-fix4-F-desktop-clean-6139-crafted.png",
+        "label": "crafted"
+      },
+      {
+        "case": "F-desktop-clean",
+        "t_ms": 9662,
+        "file": "build-v1-fix4-final/build-v1-fix4-F-desktop-clean-9433-F-idle-confetti.png",
+        "label": "F-idle-confetti",
+        "confettiPixels": 726
+      },
+      {
+        "case": "F-desktop-clean",
+        "t_ms": 11584,
+        "file": "build-v1-fix4-final/build-v1-fix4-F-desktop-clean-11378-F-free-confetti.png",
+        "label": "F-free-confetti",
+        "confettiPixels": 591
+      },
+      {
+        "case": "M-desktop-clean",
+        "t_ms": 875,
+        "file": "build-v1-fix4-final/build-v1-fix4-M-desktop-clean-815-fresh.png",
+        "label": "fresh"
+      },
+      {
+        "case": "M-desktop-clean",
+        "t_ms": 5873,
+        "file": "build-v1-fix4-final/build-v1-fix4-M-desktop-clean-5818-crafted.png",
+        "label": "crafted"
+      },
+      {
+        "case": "M-desktop-clean",
+        "t_ms": 8331,
+        "file": "build-v1-fix4-final/build-v1-fix4-M-desktop-clean-8278-M-invite-start.png",
+        "label": "M-invite-start"
+      },
+      {
+        "case": "M-desktop-clean",
+        "t_ms": 19012,
+        "file": "build-v1-fix4-final/build-v1-fix4-M-desktop-clean-18955-M-invite-10s.png",
+        "label": "M-invite-10s"
+      },
+      {
+        "case": "M-desktop-clean",
+        "t_ms": 19649,
+        "file": "build-v1-fix4-final/build-v1-fix4-M-desktop-clean-19425-M-free-confetti.png",
+        "label": "M-free-confetti",
+        "confettiPixels": 697
+      },
+      {
+        "case": "C-desktop-clean",
+        "t_ms": 893,
+        "file": "build-v1-fix4-final/build-v1-fix4-C-desktop-clean-839-fresh.png",
+        "label": "fresh"
+      },
+      {
+        "case": "C-desktop-clean",
+        "t_ms": 5926,
+        "file": "build-v1-fix4-final/build-v1-fix4-C-desktop-clean-5873-crafted.png",
+        "label": "crafted"
+      },
+      {
+        "case": "C-desktop-clean",
+        "t_ms": 11798,
+        "file": "build-v1-fix4-final/build-v1-fix4-C-desktop-clean-11577-C-closed-confetti.png",
+        "label": "C-closed-confetti",
+        "confettiPixels": 572
+      },
+      {
+        "case": "C-desktop-clean",
+        "t_ms": 16980,
+        "file": "build-v1-fix4-final/build-v1-fix4-C-desktop-clean-16926-C-invite-5s.png",
+        "label": "C-invite-5s"
+      },
+      {
+        "case": "C-desktop-clean",
+        "t_ms": 17147,
+        "file": "build-v1-fix4-final/build-v1-fix4-C-desktop-clean-17091-C-question-one.png",
+        "label": "C-question-one"
+      },
+      {
+        "case": "C-desktop-clean",
+        "t_ms": 17347,
+        "file": "build-v1-fix4-final/build-v1-fix4-C-desktop-clean-17273-C-answer-finale.png",
+        "label": "C-answer-finale"
+      },
+      {
+        "case": "C-desktop-clean",
+        "t_ms": 18217,
+        "file": "build-v1-fix4-final/build-v1-fix4-C-desktop-clean-18159-C-third-manual-finale.png",
+        "label": "C-third-manual-finale"
+      },
+      {
+        "case": "R-desktop-clean",
+        "t_ms": 893,
+        "file": "build-v1-fix4-final/build-v1-fix4-R-desktop-clean-836-fresh.png",
+        "label": "fresh"
+      },
+      {
+        "case": "R-desktop-clean",
+        "t_ms": 5840,
+        "file": "build-v1-fix4-final/build-v1-fix4-R-desktop-clean-5784-crafted.png",
+        "label": "crafted"
+      },
+      {
+        "case": "R-desktop-clean",
+        "t_ms": 12877,
+        "file": "build-v1-fix4-final/build-v1-fix4-R-desktop-clean-12650-R-idle-confetti.png",
+        "label": "R-idle-confetti",
+        "confettiPixels": 546
+      },
+      {
+        "case": "R-desktop-clean",
+        "t_ms": 42275,
+        "file": "build-v1-fix4-final/build-v1-fix4-R-desktop-clean-42209-R-expired-unanswered.png",
+        "label": "R-expired-unanswered"
+      },
+      {
+        "case": "R-desktop-clean",
+        "t_ms": 48352,
+        "file": "build-v1-fix4-final/build-v1-fix4-R-desktop-clean-48110-R-rearmed-confetti.png",
+        "label": "R-rearmed-confetti",
+        "confettiPixels": 1094
+      },
+      {
+        "case": "R-desktop-clean",
+        "t_ms": 50329,
+        "file": "build-v1-fix4-final/build-v1-fix4-R-desktop-clean-50065-R-second-free-confetti.png",
+        "label": "R-second-free-confetti",
+        "confettiPixels": 1249
+      },
+      {
+        "case": "R-desktop-clean",
+        "t_ms": 66924,
+        "file": "build-v1-fix4-final/build-v1-fix4-R-desktop-clean-66691-R-third-completion-confetti.png",
+        "label": "R-third-completion-confetti",
+        "confettiPixels": 484
+      },
+      {
+        "case": "R-desktop-clean",
+        "t_ms": 67680,
+        "file": "build-v1-fix4-final/build-v1-fix4-R-desktop-clean-67443-R-third-free-confetti.png",
+        "label": "R-third-free-confetti",
+        "confettiPixels": 661
+      },
+      {
+        "case": "R-desktop-clean",
+        "t_ms": 68523,
+        "file": "build-v1-fix4-final/build-v1-fix4-R-desktop-clean-68293-R-fourth-free-confetti.png",
+        "label": "R-fourth-free-confetti",
+        "confettiPixels": 554
+      },
+      {
+        "case": "R-desktop-clean",
+        "t_ms": 68841,
+        "file": "build-v1-fix4-final/build-v1-fix4-R-desktop-clean-68757-R-daily-cap.png",
+        "label": "R-daily-cap"
+      },
+      {
+        "case": "R-desktop-clean",
+        "t_ms": 69365,
+        "file": "build-v1-fix4-final/build-v1-fix4-R-desktop-clean-69272-R-cap-persists.png",
+        "label": "R-cap-persists"
+      },
+      {
+        "case": "N-desktop-clean",
+        "t_ms": 919,
+        "file": "build-v1-fix4-final/build-v1-fix4-N-desktop-clean-859-fresh.png",
+        "label": "fresh"
+      },
+      {
+        "case": "N-desktop-clean",
+        "t_ms": 5983,
+        "file": "build-v1-fix4-final/build-v1-fix4-N-desktop-clean-5923-crafted.png",
+        "label": "crafted"
+      },
+      {
+        "case": "N-desktop-clean",
+        "t_ms": 9438,
+        "file": "build-v1-fix4-final/build-v1-fix4-N-desktop-clean-9218-N-idle-confetti.png",
+        "label": "N-idle-confetti",
+        "confettiPixels": 746
+      },
+      {
+        "case": "N-desktop-clean",
+        "t_ms": 11355,
+        "file": "build-v1-fix4-final/build-v1-fix4-N-desktop-clean-11149-N-first-free-confetti.png",
+        "label": "N-first-free-confetti",
+        "confettiPixels": 637
+      },
+      {
+        "case": "N-desktop-clean",
+        "t_ms": 28396,
+        "file": "build-v1-fix4-final/build-v1-fix4-N-desktop-clean-28166-N-new-cluster-confetti.png",
+        "label": "N-new-cluster-confetti",
+        "confettiPixels": 693
+      },
+      {
+        "case": "N-desktop-clean",
+        "t_ms": 30331,
+        "file": "build-v1-fix4-final/build-v1-fix4-N-desktop-clean-30099-N-second-free-confetti.png",
+        "label": "N-second-free-confetti",
+        "confettiPixels": 466
+      },
+      {
+        "case": "S-desktop-clean",
+        "t_ms": 902,
+        "file": "build-v1-fix4-final/build-v1-fix4-S-desktop-clean-842-fresh.png",
+        "label": "fresh"
+      },
+      {
+        "case": "S-desktop-clean",
+        "t_ms": 4850,
+        "file": "build-v1-fix4-final/build-v1-fix4-S-desktop-clean-4792-crafted.png",
+        "label": "crafted"
+      },
+      {
+        "case": "S-desktop-clean",
+        "t_ms": 7537,
+        "file": "build-v1-fix4-final/build-v1-fix4-S-desktop-clean-7482-S-against-wall.png",
+        "label": "S-against-wall"
+      },
+      {
+        "case": "S-desktop-clean",
+        "t_ms": 7686,
+        "file": "build-v1-fix4-final/build-v1-fix4-S-desktop-clean-7635-S-second-layer.png",
+        "label": "S-second-layer"
+      },
+      {
+        "case": "S-desktop-clean",
+        "t_ms": 7837,
+        "file": "build-v1-fix4-final/build-v1-fix4-S-desktop-clean-7783-S-third-layer.png",
+        "label": "S-third-layer"
+      },
+      {
+        "case": "V-desktop-clean",
+        "t_ms": 872,
+        "file": "build-v1-fix4-final/build-v1-fix4-V-desktop-clean-817-fresh.png",
+        "label": "fresh"
+      },
+      {
+        "case": "V-desktop-clean",
+        "t_ms": 922,
+        "file": "build-v1-fix4-final/build-v1-fix4-V-desktop-clean-876-V-visible-version.png",
+        "label": "V-visible-version"
+      },
+      {
+        "case": "F-mobile-clean",
+        "t_ms": 860,
+        "file": "build-v1-fix4-final/build-v1-fix4-F-mobile-clean-810-fresh.png",
+        "label": "fresh"
+      },
+      {
+        "case": "F-mobile-clean",
+        "t_ms": 6907,
+        "file": "build-v1-fix4-final/build-v1-fix4-F-mobile-clean-6861-crafted.png",
+        "label": "crafted"
+      },
+      {
+        "case": "F-mobile-clean",
+        "t_ms": 10271,
+        "file": "build-v1-fix4-final/build-v1-fix4-F-mobile-clean-10124-F-idle-confetti.png",
+        "label": "F-idle-confetti",
+        "confettiPixels": 363
+      },
+      {
+        "case": "F-mobile-clean",
+        "t_ms": 12132,
+        "file": "build-v1-fix4-final/build-v1-fix4-F-mobile-clean-11969-F-free-confetti.png",
+        "label": "F-free-confetti",
+        "confettiPixels": 367
+      },
+      {
+        "case": "M-mobile-clean",
+        "t_ms": 863,
+        "file": "build-v1-fix4-final/build-v1-fix4-M-mobile-clean-816-fresh.png",
+        "label": "fresh"
+      },
+      {
+        "case": "M-mobile-clean",
+        "t_ms": 6909,
+        "file": "build-v1-fix4-final/build-v1-fix4-M-mobile-clean-6862-crafted.png",
+        "label": "crafted"
+      },
+      {
+        "case": "M-mobile-clean",
+        "t_ms": 19219,
+        "file": "build-v1-fix4-final/build-v1-fix4-M-mobile-clean-19167-M-invite-start.png",
+        "label": "M-invite-start"
+      },
+      {
+        "case": "M-mobile-clean",
+        "t_ms": 29866,
+        "file": "build-v1-fix4-final/build-v1-fix4-M-mobile-clean-29823-M-invite-10s.png",
+        "label": "M-invite-10s"
+      },
+      {
+        "case": "M-mobile-clean",
+        "t_ms": 30413,
+        "file": "build-v1-fix4-final/build-v1-fix4-M-mobile-clean-30270-M-free-confetti.png",
+        "label": "M-free-confetti",
+        "confettiPixels": 359
+      },
+      {
+        "case": "C-mobile-clean",
+        "t_ms": 815,
+        "file": "build-v1-fix4-final/build-v1-fix4-C-mobile-clean-782-fresh.png",
+        "label": "fresh"
+      },
+      {
+        "case": "C-mobile-clean",
+        "t_ms": 7094,
+        "file": "build-v1-fix4-final/build-v1-fix4-C-mobile-clean-7010-crafted.png",
+        "label": "crafted"
+      },
+      {
+        "case": "C-mobile-clean",
+        "t_ms": 11049,
+        "file": "build-v1-fix4-final/build-v1-fix4-C-mobile-clean-10901-C-closed-confetti.png",
+        "label": "C-closed-confetti",
+        "confettiPixels": 426
+      },
+      {
+        "case": "C-mobile-clean",
+        "t_ms": 16219,
+        "file": "build-v1-fix4-final/build-v1-fix4-C-mobile-clean-16156-C-invite-5s.png",
+        "label": "C-invite-5s"
+      },
+      {
+        "case": "C-mobile-clean",
+        "t_ms": 16365,
+        "file": "build-v1-fix4-final/build-v1-fix4-C-mobile-clean-16322-C-question-one.png",
+        "label": "C-question-one"
+      },
+      {
+        "case": "C-mobile-clean",
+        "t_ms": 16517,
+        "file": "build-v1-fix4-final/build-v1-fix4-C-mobile-clean-16468-C-answer-finale.png",
+        "label": "C-answer-finale"
+      },
+      {
+        "case": "C-mobile-clean",
+        "t_ms": 17406,
+        "file": "build-v1-fix4-final/build-v1-fix4-C-mobile-clean-17342-C-third-manual-finale.png",
+        "label": "C-third-manual-finale"
+      },
+      {
+        "case": "R-mobile-clean",
+        "t_ms": 892,
+        "file": "build-v1-fix4-final/build-v1-fix4-R-mobile-clean-831-fresh.png",
+        "label": "fresh"
+      },
+      {
+        "case": "R-mobile-clean",
+        "t_ms": 7111,
+        "file": "build-v1-fix4-final/build-v1-fix4-R-mobile-clean-7078-crafted.png",
+        "label": "crafted"
+      },
+      {
+        "case": "R-mobile-clean",
+        "t_ms": 10487,
+        "file": "build-v1-fix4-final/build-v1-fix4-R-mobile-clean-10342-R-idle-confetti.png",
+        "label": "R-idle-confetti",
+        "confettiPixels": 383
+      },
+      {
+        "case": "R-mobile-clean",
+        "t_ms": 39803,
+        "file": "build-v1-fix4-final/build-v1-fix4-R-mobile-clean-39748-R-expired-unanswered.png",
+        "label": "R-expired-unanswered"
+      },
+      {
+        "case": "R-mobile-clean",
+        "t_ms": 45768,
+        "file": "build-v1-fix4-final/build-v1-fix4-R-mobile-clean-45627-R-rearmed-confetti.png",
+        "label": "R-rearmed-confetti",
+        "confettiPixels": 363
+      },
+      {
+        "case": "R-mobile-clean",
+        "t_ms": 47614,
+        "file": "build-v1-fix4-final/build-v1-fix4-R-mobile-clean-47475-R-second-free-confetti.png",
+        "label": "R-second-free-confetti",
+        "confettiPixels": 659
+      },
+      {
+        "case": "R-mobile-clean",
+        "t_ms": 64567,
+        "file": "build-v1-fix4-final/build-v1-fix4-R-mobile-clean-64406-R-third-completion-confetti.png",
+        "label": "R-third-completion-confetti",
+        "confettiPixels": 170
+      },
+      {
+        "case": "R-mobile-clean",
+        "t_ms": 65256,
+        "file": "build-v1-fix4-final/build-v1-fix4-R-mobile-clean-65077-R-third-free-confetti.png",
+        "label": "R-third-free-confetti",
+        "confettiPixels": 282
+      },
+      {
+        "case": "R-mobile-clean",
+        "t_ms": 66022,
+        "file": "build-v1-fix4-final/build-v1-fix4-R-mobile-clean-65857-R-fourth-free-confetti.png",
+        "label": "R-fourth-free-confetti",
+        "confettiPixels": 247
+      },
+      {
+        "case": "R-mobile-clean",
+        "t_ms": 66286,
+        "file": "build-v1-fix4-final/build-v1-fix4-R-mobile-clean-66223-R-daily-cap.png",
+        "label": "R-daily-cap"
+      },
+      {
+        "case": "R-mobile-clean",
+        "t_ms": 66735,
+        "file": "build-v1-fix4-final/build-v1-fix4-R-mobile-clean-66685-R-cap-persists.png",
+        "label": "R-cap-persists"
+      },
+      {
+        "case": "N-mobile-clean",
+        "t_ms": 826,
+        "file": "build-v1-fix4-final/build-v1-fix4-N-mobile-clean-780-fresh.png",
+        "label": "fresh"
+      },
+      {
+        "case": "N-mobile-clean",
+        "t_ms": 6887,
+        "file": "build-v1-fix4-final/build-v1-fix4-N-mobile-clean-6843-crafted.png",
+        "label": "crafted"
+      },
+      {
+        "case": "N-mobile-clean",
+        "t_ms": 10227,
+        "file": "build-v1-fix4-final/build-v1-fix4-N-mobile-clean-10090-N-idle-confetti.png",
+        "label": "N-idle-confetti",
+        "confettiPixels": 179
+      },
+      {
+        "case": "N-mobile-clean",
+        "t_ms": 12077,
+        "file": "build-v1-fix4-final/build-v1-fix4-N-mobile-clean-11933-N-first-free-confetti.png",
+        "label": "N-first-free-confetti",
+        "confettiPixels": 187
+      },
+      {
+        "case": "N-mobile-clean",
+        "t_ms": 29027,
+        "file": "build-v1-fix4-final/build-v1-fix4-N-mobile-clean-28882-N-new-cluster-confetti.png",
+        "label": "N-new-cluster-confetti",
+        "confettiPixels": 239
+      },
+      {
+        "case": "N-mobile-clean",
+        "t_ms": 30883,
+        "file": "build-v1-fix4-final/build-v1-fix4-N-mobile-clean-30735-N-second-free-confetti.png",
+        "label": "N-second-free-confetti",
+        "confettiPixels": 221
+      },
+      {
+        "case": "S-mobile-clean",
+        "t_ms": 836,
+        "file": "build-v1-fix4-final/build-v1-fix4-S-mobile-clean-786-fresh.png",
+        "label": "fresh"
+      },
+      {
+        "case": "S-mobile-clean",
+        "t_ms": 4764,
+        "file": "build-v1-fix4-final/build-v1-fix4-S-mobile-clean-4724-crafted.png",
+        "label": "crafted"
+      },
+      {
+        "case": "S-mobile-clean",
+        "t_ms": 7441,
+        "file": "build-v1-fix4-final/build-v1-fix4-S-mobile-clean-7387-S-against-wall.png",
+        "label": "S-against-wall"
+      },
+      {
+        "case": "S-mobile-clean",
+        "t_ms": 7587,
+        "file": "build-v1-fix4-final/build-v1-fix4-S-mobile-clean-7543-S-second-layer.png",
+        "label": "S-second-layer"
+      },
+      {
+        "case": "S-mobile-clean",
+        "t_ms": 7737,
+        "file": "build-v1-fix4-final/build-v1-fix4-S-mobile-clean-7687-S-third-layer.png",
+        "label": "S-third-layer"
+      },
+      {
+        "case": "V-mobile-clean",
+        "t_ms": 816,
+        "file": "build-v1-fix4-final/build-v1-fix4-V-mobile-clean-784-fresh.png",
+        "label": "fresh"
+      },
+      {
+        "case": "V-mobile-clean",
+        "t_ms": 846,
+        "file": "build-v1-fix4-final/build-v1-fix4-V-mobile-clean-821-V-visible-version.png",
+        "label": "V-visible-version"
+      }
+    ],
+    "attempts": [
+      {
+        "case": "F-desktop-clean",
+        "status": "PASS",
+        "video": "build-v1-fix4-video/page@bb674a79e10eeeacce7966b22f868916.webm",
+        "evidence_dir": "build-v1-fix4-final"
+      },
+      {
+        "case": "M-desktop-clean",
+        "status": "PASS",
+        "invite_ms": 11371,
+        "video": "build-v1-fix4-video/page@6f1cbaa48cf511436e8efc8345414a3a.webm",
+        "evidence_dir": "build-v1-fix4-final"
+      },
+      {
+        "case": "C-desktop-clean",
+        "status": "PASS",
+        "video": "build-v1-fix4-video/page@607df73705bddb6503329df763ec846c.webm",
+        "evidence_dir": "build-v1-fix4-final"
+      },
+      {
+        "case": "R-desktop-clean",
+        "status": "PASS",
+        "video": "build-v1-fix4-video/page@61f0653e04467867e596a368284ca8c5.webm",
+        "evidence_dir": "build-v1-fix4-final"
+      },
+      {
+        "case": "N-desktop-clean",
+        "status": "PASS",
+        "video": "build-v1-fix4-video/page@abda1091acfa14aeab3732ae7ee5b80c.webm",
+        "evidence_dir": "build-v1-fix4-final"
+      },
+      {
+        "case": "S-desktop-clean",
+        "status": "PASS",
+        "video": "build-v1-fix4-video/page@df784936386fb18b2965e781e69c037d.webm",
+        "evidence_dir": "build-v1-fix4-final"
+      },
+      {
+        "case": "V-desktop-clean",
+        "status": "PASS",
+        "video": "build-v1-fix4-video/page@d200d7afbdd707bf78e0c6c16ac467f7.webm",
+        "evidence_dir": "build-v1-fix4-final"
+      },
+      {
+        "case": "F-mobile-clean",
+        "status": "PASS",
+        "video": "build-v1-fix4-video/page@72f0e700b1cff234c7c8c6159540a408.webm",
+        "evidence_dir": "build-v1-fix4-final"
+      },
+      {
+        "case": "M-mobile-clean",
+        "status": "PASS",
+        "invite_ms": 11246,
+        "video": "build-v1-fix4-video/page@7afd1c4e02aac7b7b694e5efa3193ee7.webm",
+        "evidence_dir": "build-v1-fix4-final"
+      },
+      {
+        "case": "C-mobile-clean",
+        "status": "PASS",
+        "video": "build-v1-fix4-video/page@cf11eae90c6ba872bb5fbaaf1f031803.webm",
+        "evidence_dir": "build-v1-fix4-final"
+      },
+      {
+        "case": "R-mobile-clean",
+        "status": "PASS",
+        "video": "build-v1-fix4-video/page@dc4014d9ea3c0bc6a74c46b40c7fe22a.webm",
+        "evidence_dir": "build-v1-fix4-final"
+      },
+      {
+        "case": "N-mobile-clean",
+        "status": "PASS",
+        "video": "build-v1-fix4-video/page@f0f8ee471c2f10d80d7ba7d417e67095.webm",
+        "evidence_dir": "build-v1-fix4-final"
+      },
+      {
+        "case": "S-mobile-clean",
+        "status": "PASS",
+        "video": "build-v1-fix4-video/page@9ad2ae587ea8b0666d8d0024361b2e6d.webm",
+        "evidence_dir": "build-v1-fix4-final"
+      },
+      {
+        "case": "V-mobile-clean",
+        "status": "PASS",
+        "video": "build-v1-fix4-video/page@3687dd1db1c301e0315cb92b553758d5.webm",
+        "evidence_dir": "build-v1-fix4-final"
+      }
+    ]
+  },
+  "fix3_matrix": {
+    "results": [
+      {
+        "case": "J-desktop-log",
+        "status": "PASS",
+        "idle_start_ms": 7096,
+        "cheer_ms": 2679,
+        "show_ms": 4226,
+        "video": "build-v1-fix3-video/page@ee137d8048481c010709a3d6a688482b.webm",
+        "evidence_dir": "build-v1-fix4-matrix-final"
+      },
+      {
+        "case": "S-desktop-log",
+        "status": "PASS",
+        "video": "build-v1-fix3-video/page@e18de8c9600a24a81c8ee02c9199e80b.webm",
+        "evidence_dir": "build-v1-fix4-matrix-final"
+      },
+      {
+        "case": "B-desktop-log",
+        "status": "PASS",
+        "video": "build-v1-fix3-video/page@027162215461a6128f7a11923c85eede.webm",
+        "evidence_dir": "build-v1-fix4-matrix-final"
+      },
+      {
+        "case": "P-desktop-log",
+        "status": "PASS",
+        "video": "build-v1-fix3-video/page@d2a882fa9860099816858b9fd2f2dc72.webm",
+        "evidence_dir": "build-v1-fix4-recheck-p"
+      },
+      {
+        "case": "G-desktop-log",
+        "status": "PASS",
+        "video": "build-v1-fix3-video/page@4d09be7c23870e6d919dc7560d6f719a.webm",
+        "evidence_dir": "build-v1-fix4-matrix-final"
+      },
+      {
+        "case": "J-desktop-clean",
+        "status": "PASS",
+        "idle_start_ms": 11342,
+        "cheer_ms": 2690,
+        "show_ms": 4214,
+        "video": "build-v1-fix3-video/page@6027b6bbae548f359519b2b10f0c110c.webm",
+        "evidence_dir": "build-v1-fix4-matrix-final"
+      },
+      {
+        "case": "S-desktop-clean",
+        "status": "PASS",
+        "video": "build-v1-fix3-video/page@bad05fcb51399241ca838599744854b8.webm",
+        "evidence_dir": "build-v1-fix4-matrix-final"
+      },
+      {
+        "case": "B-desktop-clean",
+        "status": "PASS",
+        "video": "build-v1-fix3-video/page@3b383fb006ced65fa32cd0f90a273685.webm",
+        "evidence_dir": "build-v1-fix4-matrix-final"
+      },
+      {
+        "case": "P-desktop-clean",
+        "status": "PASS",
+        "video": "build-v1-fix3-video/page@49eeb12334f8c82282036c9faca187be.webm",
+        "evidence_dir": "build-v1-fix4-matrix-final"
+      },
+      {
+        "case": "G-desktop-clean",
+        "status": "PASS",
+        "video": "build-v1-fix3-video/page@d845ec900cb09f9cfbbd056e6cc31c87.webm",
+        "evidence_dir": "build-v1-fix4-matrix-final"
+      },
+      {
+        "case": "J-mobile-log",
+        "status": "PASS",
+        "idle_start_ms": 7810,
+        "cheer_ms": 2748,
+        "show_ms": 4254,
+        "video": "build-v1-fix3-video/page@85f4f73e754f3cda76ed664dc5726622.webm",
+        "evidence_dir": "build-v1-fix4-matrix-final"
+      },
+      {
+        "case": "S-mobile-log",
+        "status": "PASS",
+        "video": "build-v1-fix3-video/page@bbcfb004816caf29c6d6f288c17765e8.webm",
+        "evidence_dir": "build-v1-fix4-matrix-final"
+      },
+      {
+        "case": "B-mobile-log",
+        "status": "PASS",
+        "video": "build-v1-fix3-video/page@84d03ec9a516dda7adf36558cf65039d.webm",
+        "evidence_dir": "build-v1-fix4-matrix-final"
+      },
+      {
+        "case": "P-mobile-log",
+        "status": "PASS",
+        "video": "build-v1-fix3-video/page@78475b968f2cec28c37f7c17f88080df.webm",
+        "evidence_dir": "build-v1-fix4-matrix-recheck"
+      },
+      {
+        "case": "G-mobile-log",
+        "status": "PASS",
+        "video": "build-v1-fix3-video/page@8ba998ef1880b4406c4f784b086c138b.webm",
+        "evidence_dir": "build-v1-fix4-matrix-final"
+      },
+      {
+        "case": "J-mobile-clean",
+        "status": "PASS",
+        "idle_start_ms": 8080,
+        "cheer_ms": 2695,
+        "show_ms": 4217,
+        "video": "build-v1-fix3-video/page@09560b1fef194472321f8f9338dcf134.webm",
+        "evidence_dir": "build-v1-fix4-recheck-j"
+      },
+      {
+        "case": "S-mobile-clean",
+        "status": "PASS",
+        "video": "build-v1-fix3-video/page@e2538627135962ce4030d1680b2b06a5.webm",
+        "evidence_dir": "build-v1-fix4-matrix-final"
+      },
+      {
+        "case": "B-mobile-clean",
+        "status": "PASS",
+        "video": "build-v1-fix3-video/page@853d847d9ac5e69bbd57b2468781894d.webm",
+        "evidence_dir": "build-v1-fix4-matrix-final"
+      },
+      {
+        "case": "P-mobile-clean",
+        "status": "PASS",
+        "video": "build-v1-fix3-video/page@8952a7acc0dc05c31bb40bd01cc8b69b.webm",
+        "evidence_dir": "build-v1-fix4-matrix-final"
+      },
+      {
+        "case": "G-mobile-clean",
+        "status": "PASS",
+        "video": "build-v1-fix3-video/page@294488ece0c7c2a6ab7664fc9d665b89.webm",
+        "evidence_dir": "build-v1-fix4-matrix-final"
+      }
+    ],
+    "frames": [
+      {
+        "case": "J-desktop-log",
+        "t_ms": 1034,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-J-desktop-log-974-fresh.png",
+        "label": "fresh"
+      },
+      {
+        "case": "J-desktop-log",
+        "t_ms": 6144,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-J-desktop-log-6086-crafted.png",
+        "label": "crafted"
+      },
+      {
+        "case": "J-desktop-log",
+        "t_ms": 7266,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-J-desktop-log-7207-idle-0s.png",
+        "label": "idle-0s"
+      },
+      {
+        "case": "J-desktop-log",
+        "t_ms": 9850,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-J-desktop-log-9781-J-cheer.png",
+        "label": "J-cheer"
+      },
+      {
+        "case": "J-desktop-log",
+        "t_ms": 12240,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-J-desktop-log-12177-idle-5s.png",
+        "label": "idle-5s"
+      },
+      {
+        "case": "J-desktop-log",
+        "t_ms": 17208,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-J-desktop-log-17146-idle-10s.png",
+        "label": "idle-10s"
+      },
+      {
+        "case": "J-desktop-log",
+        "t_ms": 22199,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-J-desktop-log-22140-idle-15s.png",
+        "label": "idle-15s"
+      },
+      {
+        "case": "S-desktop-log",
+        "t_ms": 922,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-S-desktop-log-862-fresh.png",
+        "label": "fresh"
+      },
+      {
+        "case": "S-desktop-log",
+        "t_ms": 4871,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-S-desktop-log-4813-crafted.png",
+        "label": "crafted"
+      },
+      {
+        "case": "S-desktop-log",
+        "t_ms": 7604,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-S-desktop-log-7548-against-wall.png",
+        "label": "against-wall"
+      },
+      {
+        "case": "S-desktop-log",
+        "t_ms": 7752,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-S-desktop-log-7700-second-layer.png",
+        "label": "second-layer"
+      },
+      {
+        "case": "B-desktop-log",
+        "t_ms": 886,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-B-desktop-log-821-fresh.png",
+        "label": "fresh"
+      },
+      {
+        "case": "B-desktop-log",
+        "t_ms": 4851,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-B-desktop-log-4790-crafted.png",
+        "label": "crafted"
+      },
+      {
+        "case": "B-desktop-log",
+        "t_ms": 7554,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-B-desktop-log-7493-against-wall.png",
+        "label": "against-wall"
+      },
+      {
+        "case": "B-desktop-log",
+        "t_ms": 7708,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-B-desktop-log-7651-second-layer.png",
+        "label": "second-layer"
+      },
+      {
+        "case": "B-desktop-log",
+        "t_ms": 7870,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-B-desktop-log-7813-B-third-layer.png",
+        "label": "B-third-layer"
+      },
+      {
+        "case": "B-desktop-log",
+        "t_ms": 8253,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-B-desktop-log-8203-B-normal-place.png",
+        "label": "B-normal-place"
+      },
+      {
+        "case": "B-desktop-log",
+        "t_ms": 8532,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-B-desktop-log-8466-B-normal-top-stack.png",
+        "label": "B-normal-top-stack"
+      },
+      {
+        "case": "P-desktop-log",
+        "t_ms": 1040,
+        "file": "build-v1-fix4-recheck-p/build-v1-fix3-P-desktop-log-954-fresh.png",
+        "label": "fresh"
+      },
+      {
+        "case": "P-desktop-log",
+        "t_ms": 5077,
+        "file": "build-v1-fix4-recheck-p/build-v1-fix3-P-desktop-log-5020-crafted.png",
+        "label": "crafted"
+      },
+      {
+        "case": "P-desktop-log",
+        "t_ms": 5558,
+        "file": "build-v1-fix4-recheck-p/build-v1-fix3-P-desktop-log-5488-P-pulse.png",
+        "label": "P-pulse"
+      },
+      {
+        "case": "P-desktop-log",
+        "t_ms": 7765,
+        "file": "build-v1-fix4-recheck-p/build-v1-fix3-P-desktop-log-7706-P-two-planks-show.png",
+        "label": "P-two-planks-show"
+      },
+      {
+        "case": "P-desktop-log",
+        "t_ms": 7933,
+        "file": "build-v1-fix4-recheck-p/build-v1-fix3-P-desktop-log-7875-P-occupied.png",
+        "label": "P-occupied"
+      },
+      {
+        "case": "P-desktop-log",
+        "t_ms": 8152,
+        "file": "build-v1-fix4-recheck-p/build-v1-fix3-P-desktop-log-8080-P-reach.png",
+        "label": "P-reach"
+      },
+      {
+        "case": "P-desktop-log",
+        "t_ms": 8422,
+        "file": "build-v1-fix4-recheck-p/build-v1-fix3-P-desktop-log-8358-P-remove.png",
+        "label": "P-remove"
+      },
+      {
+        "case": "P-desktop-log",
+        "t_ms": 9999,
+        "file": "build-v1-fix4-recheck-p/build-v1-fix3-P-desktop-log-9944-P-animal-refused.png",
+        "label": "P-animal-refused"
+      },
+      {
+        "case": "G-desktop-log",
+        "t_ms": 885,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-G-desktop-log-826-fresh.png",
+        "label": "fresh"
+      },
+      {
+        "case": "G-desktop-log",
+        "t_ms": 6036,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-G-desktop-log-5979-crafted.png",
+        "label": "crafted"
+      },
+      {
+        "case": "G-desktop-log",
+        "t_ms": 6547,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-G-desktop-log-6464-G-one-build.png",
+        "label": "G-one-build"
+      },
+      {
+        "case": "G-desktop-log",
+        "t_ms": 6701,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-G-desktop-log-6645-G-one-normal.png",
+        "label": "G-one-normal"
+      },
+      {
+        "case": "G-desktop-log",
+        "t_ms": 8251,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-G-desktop-log-8178-G-two-build.png",
+        "label": "G-two-build"
+      },
+      {
+        "case": "G-desktop-log",
+        "t_ms": 8443,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-G-desktop-log-8359-G-two-normal.png",
+        "label": "G-two-normal"
+      },
+      {
+        "case": "G-desktop-log",
+        "t_ms": 12535,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-G-desktop-log-12471-G-praise-survives-movement.png",
+        "label": "G-praise-survives-movement"
+      },
+      {
+        "case": "J-desktop-clean",
+        "t_ms": 887,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-J-desktop-clean-830-fresh.png",
+        "label": "fresh"
+      },
+      {
+        "case": "J-desktop-clean",
+        "t_ms": 5867,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-J-desktop-clean-5811-crafted.png",
+        "label": "crafted"
+      },
+      {
+        "case": "J-desktop-clean",
+        "t_ms": 11537,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-J-desktop-clean-11441-idle-0s.png",
+        "label": "idle-0s"
+      },
+      {
+        "case": "J-desktop-clean",
+        "t_ms": 14092,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-J-desktop-clean-14036-J-cheer.png",
+        "label": "J-cheer"
+      },
+      {
+        "case": "J-desktop-clean",
+        "t_ms": 16480,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-J-desktop-clean-16409-idle-5s.png",
+        "label": "idle-5s"
+      },
+      {
+        "case": "J-desktop-clean",
+        "t_ms": 21439,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-J-desktop-clean-21374-idle-10s.png",
+        "label": "idle-10s"
+      },
+      {
+        "case": "J-desktop-clean",
+        "t_ms": 26461,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-J-desktop-clean-26406-idle-15s.png",
+        "label": "idle-15s"
+      },
+      {
+        "case": "S-desktop-clean",
+        "t_ms": 881,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-S-desktop-clean-821-fresh.png",
+        "label": "fresh"
+      },
+      {
+        "case": "S-desktop-clean",
+        "t_ms": 4860,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-S-desktop-clean-4802-crafted.png",
+        "label": "crafted"
+      },
+      {
+        "case": "S-desktop-clean",
+        "t_ms": 8461,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-S-desktop-clean-8408-against-wall.png",
+        "label": "against-wall"
+      },
+      {
+        "case": "S-desktop-clean",
+        "t_ms": 8613,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-S-desktop-clean-8554-second-layer.png",
+        "label": "second-layer"
+      },
+      {
+        "case": "B-desktop-clean",
+        "t_ms": 908,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-B-desktop-clean-857-fresh.png",
+        "label": "fresh"
+      },
+      {
+        "case": "B-desktop-clean",
+        "t_ms": 4889,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-B-desktop-clean-4832-crafted.png",
+        "label": "crafted"
+      },
+      {
+        "case": "B-desktop-clean",
+        "t_ms": 7609,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-B-desktop-clean-7556-against-wall.png",
+        "label": "against-wall"
+      },
+      {
+        "case": "B-desktop-clean",
+        "t_ms": 7761,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-B-desktop-clean-7702-second-layer.png",
+        "label": "second-layer"
+      },
+      {
+        "case": "B-desktop-clean",
+        "t_ms": 7914,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-B-desktop-clean-7858-B-third-layer.png",
+        "label": "B-third-layer"
+      },
+      {
+        "case": "B-desktop-clean",
+        "t_ms": 8277,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-B-desktop-clean-8222-B-normal-place.png",
+        "label": "B-normal-place"
+      },
+      {
+        "case": "B-desktop-clean",
+        "t_ms": 8545,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-B-desktop-clean-8473-B-normal-top-stack.png",
+        "label": "B-normal-top-stack"
+      },
+      {
+        "case": "P-desktop-clean",
+        "t_ms": 876,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-P-desktop-clean-819-fresh.png",
+        "label": "fresh"
+      },
+      {
+        "case": "P-desktop-clean",
+        "t_ms": 4876,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-P-desktop-clean-4820-crafted.png",
+        "label": "crafted"
+      },
+      {
+        "case": "P-desktop-clean",
+        "t_ms": 5346,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-P-desktop-clean-5283-P-pulse.png",
+        "label": "P-pulse"
+      },
+      {
+        "case": "P-desktop-clean",
+        "t_ms": 7515,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-P-desktop-clean-7458-P-two-planks-show.png",
+        "label": "P-two-planks-show"
+      },
+      {
+        "case": "P-desktop-clean",
+        "t_ms": 7684,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-P-desktop-clean-7614-P-occupied.png",
+        "label": "P-occupied"
+      },
+      {
+        "case": "P-desktop-clean",
+        "t_ms": 7848,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-P-desktop-clean-7792-P-reach.png",
+        "label": "P-reach"
+      },
+      {
+        "case": "P-desktop-clean",
+        "t_ms": 8114,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-P-desktop-clean-8050-P-remove.png",
+        "label": "P-remove"
+      },
+      {
+        "case": "G-desktop-clean",
+        "t_ms": 899,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-G-desktop-clean-843-fresh.png",
+        "label": "fresh"
+      },
+      {
+        "case": "G-desktop-clean",
+        "t_ms": 5850,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-G-desktop-clean-5789-crafted.png",
+        "label": "crafted"
+      },
+      {
+        "case": "G-desktop-clean",
+        "t_ms": 6350,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-G-desktop-clean-6270-G-one-build.png",
+        "label": "G-one-build"
+      },
+      {
+        "case": "G-desktop-clean",
+        "t_ms": 6513,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-G-desktop-clean-6456-G-one-normal.png",
+        "label": "G-one-normal"
+      },
+      {
+        "case": "G-desktop-clean",
+        "t_ms": 9386,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-G-desktop-clean-9322-G-two-build.png",
+        "label": "G-two-build"
+      },
+      {
+        "case": "G-desktop-clean",
+        "t_ms": 9550,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-G-desktop-clean-9492-G-two-normal.png",
+        "label": "G-two-normal"
+      },
+      {
+        "case": "G-desktop-clean",
+        "t_ms": 13648,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-G-desktop-clean-13585-G-praise-survives-movement.png",
+        "label": "G-praise-survives-movement"
+      },
+      {
+        "case": "J-mobile-log",
+        "t_ms": 840,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-J-mobile-log-802-fresh.png",
+        "label": "fresh"
+      },
+      {
+        "case": "J-mobile-log",
+        "t_ms": 6879,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-J-mobile-log-6835-crafted.png",
+        "label": "crafted"
+      },
+      {
+        "case": "J-mobile-log",
+        "t_ms": 7956,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-J-mobile-log-7909-idle-0s.png",
+        "label": "idle-0s"
+      },
+      {
+        "case": "J-mobile-log",
+        "t_ms": 10610,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-J-mobile-log-10561-J-cheer.png",
+        "label": "J-cheer"
+      },
+      {
+        "case": "J-mobile-log",
+        "t_ms": 12878,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-J-mobile-log-12833-idle-5s.png",
+        "label": "idle-5s"
+      },
+      {
+        "case": "J-mobile-log",
+        "t_ms": 17922,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-J-mobile-log-17867-idle-10s.png",
+        "label": "idle-10s"
+      },
+      {
+        "case": "J-mobile-log",
+        "t_ms": 22872,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-J-mobile-log-22827-idle-15s.png",
+        "label": "idle-15s"
+      },
+      {
+        "case": "S-mobile-log",
+        "t_ms": 839,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-S-mobile-log-793-fresh.png",
+        "label": "fresh"
+      },
+      {
+        "case": "S-mobile-log",
+        "t_ms": 4733,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-S-mobile-log-4689-crafted.png",
+        "label": "crafted"
+      },
+      {
+        "case": "S-mobile-log",
+        "t_ms": 7413,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-S-mobile-log-7355-against-wall.png",
+        "label": "against-wall"
+      },
+      {
+        "case": "S-mobile-log",
+        "t_ms": 7560,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-S-mobile-log-7508-second-layer.png",
+        "label": "second-layer"
+      },
+      {
+        "case": "B-mobile-log",
+        "t_ms": 841,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-B-mobile-log-790-fresh.png",
+        "label": "fresh"
+      },
+      {
+        "case": "B-mobile-log",
+        "t_ms": 4860,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-B-mobile-log-4805-crafted.png",
+        "label": "crafted"
+      },
+      {
+        "case": "B-mobile-log",
+        "t_ms": 7546,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-B-mobile-log-7490-against-wall.png",
+        "label": "against-wall"
+      },
+      {
+        "case": "B-mobile-log",
+        "t_ms": 7695,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-B-mobile-log-7640-second-layer.png",
+        "label": "second-layer"
+      },
+      {
+        "case": "B-mobile-log",
+        "t_ms": 7845,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-B-mobile-log-7796-B-third-layer.png",
+        "label": "B-third-layer"
+      },
+      {
+        "case": "B-mobile-log",
+        "t_ms": 8215,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-B-mobile-log-8162-B-normal-place.png",
+        "label": "B-normal-place"
+      },
+      {
+        "case": "B-mobile-log",
+        "t_ms": 8467,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-B-mobile-log-8414-B-normal-top-stack.png",
+        "label": "B-normal-top-stack"
+      },
+      {
+        "case": "P-mobile-log",
+        "t_ms": 856,
+        "file": "build-v1-fix4-matrix-recheck/build-v1-fix3-P-mobile-log-811-fresh.png",
+        "label": "fresh"
+      },
+      {
+        "case": "P-mobile-log",
+        "t_ms": 4752,
+        "file": "build-v1-fix4-matrix-recheck/build-v1-fix3-P-mobile-log-4707-crafted.png",
+        "label": "crafted"
+      },
+      {
+        "case": "P-mobile-log",
+        "t_ms": 5194,
+        "file": "build-v1-fix4-matrix-recheck/build-v1-fix3-P-mobile-log-5139-P-pulse.png",
+        "label": "P-pulse"
+      },
+      {
+        "case": "P-mobile-log",
+        "t_ms": 7346,
+        "file": "build-v1-fix4-matrix-recheck/build-v1-fix3-P-mobile-log-7302-P-two-planks-show.png",
+        "label": "P-two-planks-show"
+      },
+      {
+        "case": "P-mobile-log",
+        "t_ms": 7496,
+        "file": "build-v1-fix4-matrix-recheck/build-v1-fix3-P-mobile-log-7447-P-occupied.png",
+        "label": "P-occupied"
+      },
+      {
+        "case": "P-mobile-log",
+        "t_ms": 7645,
+        "file": "build-v1-fix4-matrix-recheck/build-v1-fix3-P-mobile-log-7596-P-reach.png",
+        "label": "P-reach"
+      },
+      {
+        "case": "P-mobile-log",
+        "t_ms": 7896,
+        "file": "build-v1-fix4-matrix-recheck/build-v1-fix3-P-mobile-log-7845-P-remove.png",
+        "label": "P-remove"
+      },
+      {
+        "case": "P-mobile-log",
+        "t_ms": 8144,
+        "file": "build-v1-fix4-matrix-recheck/build-v1-fix3-P-mobile-log-8095-P-HUD-yields.png",
+        "label": "P-HUD-yields"
+      },
+      {
+        "case": "P-mobile-log",
+        "t_ms": 9696,
+        "file": "build-v1-fix4-matrix-recheck/build-v1-fix3-P-mobile-log-9653-P-animal-refused.png",
+        "label": "P-animal-refused"
+      },
+      {
+        "case": "G-mobile-log",
+        "t_ms": 861,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-G-mobile-log-815-fresh.png",
+        "label": "fresh"
+      },
+      {
+        "case": "G-mobile-log",
+        "t_ms": 6990,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-G-mobile-log-6945-crafted.png",
+        "label": "crafted"
+      },
+      {
+        "case": "G-mobile-log",
+        "t_ms": 7449,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-G-mobile-log-7396-G-one-build.png",
+        "label": "G-one-build"
+      },
+      {
+        "case": "G-mobile-log",
+        "t_ms": 7616,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-G-mobile-log-7574-G-one-normal.png",
+        "label": "G-one-normal"
+      },
+      {
+        "case": "G-mobile-log",
+        "t_ms": 9116,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-G-mobile-log-9066-G-two-build.png",
+        "label": "G-two-build"
+      },
+      {
+        "case": "G-mobile-log",
+        "t_ms": 9265,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-G-mobile-log-9213-G-two-normal.png",
+        "label": "G-two-normal"
+      },
+      {
+        "case": "G-mobile-log",
+        "t_ms": 13398,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-G-mobile-log-13355-G-praise-survives-movement.png",
+        "label": "G-praise-survives-movement"
+      },
+      {
+        "case": "J-mobile-clean",
+        "t_ms": 1001,
+        "file": "build-v1-fix4-recheck-j/build-v1-fix3-J-mobile-clean-934-fresh.png",
+        "label": "fresh"
+      },
+      {
+        "case": "J-mobile-clean",
+        "t_ms": 7146,
+        "file": "build-v1-fix4-recheck-j/build-v1-fix3-J-mobile-clean-7104-crafted.png",
+        "label": "crafted"
+      },
+      {
+        "case": "J-mobile-clean",
+        "t_ms": 8222,
+        "file": "build-v1-fix4-recheck-j/build-v1-fix3-J-mobile-clean-8180-idle-0s.png",
+        "label": "idle-0s"
+      },
+      {
+        "case": "J-mobile-clean",
+        "t_ms": 10823,
+        "file": "build-v1-fix4-recheck-j/build-v1-fix3-J-mobile-clean-10779-J-cheer.png",
+        "label": "J-cheer"
+      },
+      {
+        "case": "J-mobile-clean",
+        "t_ms": 13206,
+        "file": "build-v1-fix4-recheck-j/build-v1-fix3-J-mobile-clean-13157-idle-5s.png",
+        "label": "idle-5s"
+      },
+      {
+        "case": "J-mobile-clean",
+        "t_ms": 18223,
+        "file": "build-v1-fix4-recheck-j/build-v1-fix3-J-mobile-clean-18167-idle-10s.png",
+        "label": "idle-10s"
+      },
+      {
+        "case": "J-mobile-clean",
+        "t_ms": 23205,
+        "file": "build-v1-fix4-recheck-j/build-v1-fix3-J-mobile-clean-23152-idle-15s.png",
+        "label": "idle-15s"
+      },
+      {
+        "case": "S-mobile-clean",
+        "t_ms": 844,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-S-mobile-clean-804-fresh.png",
+        "label": "fresh"
+      },
+      {
+        "case": "S-mobile-clean",
+        "t_ms": 4704,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-S-mobile-clean-4672-crafted.png",
+        "label": "crafted"
+      },
+      {
+        "case": "S-mobile-clean",
+        "t_ms": 7375,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-S-mobile-clean-7338-against-wall.png",
+        "label": "against-wall"
+      },
+      {
+        "case": "S-mobile-clean",
+        "t_ms": 7509,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-S-mobile-clean-7469-second-layer.png",
+        "label": "second-layer"
+      },
+      {
+        "case": "B-mobile-clean",
+        "t_ms": 848,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-B-mobile-clean-813-fresh.png",
+        "label": "fresh"
+      },
+      {
+        "case": "B-mobile-clean",
+        "t_ms": 4741,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-B-mobile-clean-4712-crafted.png",
+        "label": "crafted"
+      },
+      {
+        "case": "B-mobile-clean",
+        "t_ms": 7418,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-B-mobile-clean-7378-against-wall.png",
+        "label": "against-wall"
+      },
+      {
+        "case": "B-mobile-clean",
+        "t_ms": 7548,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-B-mobile-clean-7514-second-layer.png",
+        "label": "second-layer"
+      },
+      {
+        "case": "B-mobile-clean",
+        "t_ms": 7682,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-B-mobile-clean-7648-B-third-layer.png",
+        "label": "B-third-layer"
+      },
+      {
+        "case": "B-mobile-clean",
+        "t_ms": 8014,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-B-mobile-clean-7985-B-normal-place.png",
+        "label": "B-normal-place"
+      },
+      {
+        "case": "B-mobile-clean",
+        "t_ms": 8232,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-B-mobile-clean-8207-B-normal-top-stack.png",
+        "label": "B-normal-top-stack"
+      },
+      {
+        "case": "P-mobile-clean",
+        "t_ms": 830,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-P-mobile-clean-795-fresh.png",
+        "label": "fresh"
+      },
+      {
+        "case": "P-mobile-clean",
+        "t_ms": 4706,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-P-mobile-clean-4676-crafted.png",
+        "label": "crafted"
+      },
+      {
+        "case": "P-mobile-clean",
+        "t_ms": 5130,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-P-mobile-clean-5093-P-pulse.png",
+        "label": "P-pulse"
+      },
+      {
+        "case": "P-mobile-clean",
+        "t_ms": 7265,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-P-mobile-clean-7231-P-two-planks-show.png",
+        "label": "P-two-planks-show"
+      },
+      {
+        "case": "P-mobile-clean",
+        "t_ms": 7397,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-P-mobile-clean-7365-P-occupied.png",
+        "label": "P-occupied"
+      },
+      {
+        "case": "P-mobile-clean",
+        "t_ms": 7531,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-P-mobile-clean-7500-P-reach.png",
+        "label": "P-reach"
+      },
+      {
+        "case": "P-mobile-clean",
+        "t_ms": 7764,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-P-mobile-clean-7725-P-remove.png",
+        "label": "P-remove"
+      },
+      {
+        "case": "P-mobile-clean",
+        "t_ms": 7996,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-P-mobile-clean-7958-P-HUD-yields.png",
+        "label": "P-HUD-yields"
+      },
+      {
+        "case": "G-mobile-clean",
+        "t_ms": 834,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-G-mobile-clean-788-fresh.png",
+        "label": "fresh"
+      },
+      {
+        "case": "G-mobile-clean",
+        "t_ms": 6898,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-G-mobile-clean-6853-crafted.png",
+        "label": "crafted"
+      },
+      {
+        "case": "G-mobile-clean",
+        "t_ms": 7355,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-G-mobile-clean-7302-G-one-build.png",
+        "label": "G-one-build"
+      },
+      {
+        "case": "G-mobile-clean",
+        "t_ms": 7502,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-G-mobile-clean-7452-G-one-normal.png",
+        "label": "G-one-normal"
+      },
+      {
+        "case": "G-mobile-clean",
+        "t_ms": 9453,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-G-mobile-clean-9404-G-two-build.png",
+        "label": "G-two-build"
+      },
+      {
+        "case": "G-mobile-clean",
+        "t_ms": 9600,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-G-mobile-clean-9551-G-two-normal.png",
+        "label": "G-two-normal"
+      },
+      {
+        "case": "G-mobile-clean",
+        "t_ms": 13718,
+        "file": "build-v1-fix4-matrix-final/build-v1-fix3-G-mobile-clean-13680-G-praise-survives-movement.png",
+        "label": "G-praise-survives-movement"
+      }
+    ],
+    "attempts": [
+      {
+        "case": "J-desktop-log",
+        "status": "PASS",
+        "idle_start_ms": 7096,
+        "cheer_ms": 2679,
+        "show_ms": 4226,
+        "video": "build-v1-fix3-video/page@ee137d8048481c010709a3d6a688482b.webm",
+        "evidence_dir": "build-v1-fix4-matrix-final"
+      },
+      {
+        "case": "S-desktop-log",
+        "status": "PASS",
+        "video": "build-v1-fix3-video/page@e18de8c9600a24a81c8ee02c9199e80b.webm",
+        "evidence_dir": "build-v1-fix4-matrix-final"
+      },
+      {
+        "case": "B-desktop-log",
+        "status": "PASS",
+        "video": "build-v1-fix3-video/page@027162215461a6128f7a11923c85eede.webm",
+        "evidence_dir": "build-v1-fix4-matrix-final"
+      },
+      {
+        "case": "P-desktop-log",
+        "status": "FAIL",
+        "error": "AssertionError [ERR_ASSERTION]: Read-only log confirms animal collision refusal",
+        "errors": [],
+        "video": "build-v1-fix3-video/page@e562363641d753e607cf618d0656ea25.webm",
+        "evidence_dir": "build-v1-fix4-matrix-final"
+      },
+      {
+        "case": "G-desktop-log",
+        "status": "PASS",
+        "video": "build-v1-fix3-video/page@4d09be7c23870e6d919dc7560d6f719a.webm",
+        "evidence_dir": "build-v1-fix4-matrix-final"
+      },
+      {
+        "case": "J-desktop-clean",
+        "status": "PASS",
+        "idle_start_ms": 11342,
+        "cheer_ms": 2690,
+        "show_ms": 4214,
+        "video": "build-v1-fix3-video/page@6027b6bbae548f359519b2b10f0c110c.webm",
+        "evidence_dir": "build-v1-fix4-matrix-final"
+      },
+      {
+        "case": "S-desktop-clean",
+        "status": "PASS",
+        "video": "build-v1-fix3-video/page@bad05fcb51399241ca838599744854b8.webm",
+        "evidence_dir": "build-v1-fix4-matrix-final"
+      },
+      {
+        "case": "B-desktop-clean",
+        "status": "PASS",
+        "video": "build-v1-fix3-video/page@3b383fb006ced65fa32cd0f90a273685.webm",
+        "evidence_dir": "build-v1-fix4-matrix-final"
+      },
+      {
+        "case": "P-desktop-clean",
+        "status": "PASS",
+        "video": "build-v1-fix3-video/page@49eeb12334f8c82282036c9faca187be.webm",
+        "evidence_dir": "build-v1-fix4-matrix-final"
+      },
+      {
+        "case": "G-desktop-clean",
+        "status": "PASS",
+        "video": "build-v1-fix3-video/page@d845ec900cb09f9cfbbd056e6cc31c87.webm",
+        "evidence_dir": "build-v1-fix4-matrix-final"
+      },
+      {
+        "case": "J-mobile-log",
+        "status": "PASS",
+        "idle_start_ms": 7810,
+        "cheer_ms": 2748,
+        "show_ms": 4254,
+        "video": "build-v1-fix3-video/page@85f4f73e754f3cda76ed664dc5726622.webm",
+        "evidence_dir": "build-v1-fix4-matrix-final"
+      },
+      {
+        "case": "S-mobile-log",
+        "status": "PASS",
+        "video": "build-v1-fix3-video/page@bbcfb004816caf29c6d6f288c17765e8.webm",
+        "evidence_dir": "build-v1-fix4-matrix-final"
+      },
+      {
+        "case": "B-mobile-log",
+        "status": "PASS",
+        "video": "build-v1-fix3-video/page@84d03ec9a516dda7adf36558cf65039d.webm",
+        "evidence_dir": "build-v1-fix4-matrix-final"
+      },
+      {
+        "case": "P-mobile-log",
+        "status": "PASS",
+        "video": "build-v1-fix3-video/page@a517a6dafc9c27bf06eab50149b74528.webm",
+        "evidence_dir": "build-v1-fix4-matrix-final"
+      },
+      {
+        "case": "G-mobile-log",
+        "status": "PASS",
+        "video": "build-v1-fix3-video/page@8ba998ef1880b4406c4f784b086c138b.webm",
+        "evidence_dir": "build-v1-fix4-matrix-final"
+      },
+      {
+        "case": "J-mobile-clean",
+        "status": "FAIL",
+        "error": "Error: Wood harvest did not increase visible inventory",
+        "errors": [],
+        "video": "build-v1-fix3-video/page@d1bc1d9fee8b12f3f7dd660b4b089286.webm",
+        "evidence_dir": "build-v1-fix4-matrix-final"
+      },
+      {
+        "case": "S-mobile-clean",
+        "status": "PASS",
+        "video": "build-v1-fix3-video/page@e2538627135962ce4030d1680b2b06a5.webm",
+        "evidence_dir": "build-v1-fix4-matrix-final"
+      },
+      {
+        "case": "B-mobile-clean",
+        "status": "PASS",
+        "video": "build-v1-fix3-video/page@853d847d9ac5e69bbd57b2468781894d.webm",
+        "evidence_dir": "build-v1-fix4-matrix-final"
+      },
+      {
+        "case": "P-mobile-clean",
+        "status": "PASS",
+        "video": "build-v1-fix3-video/page@8952a7acc0dc05c31bb40bd01cc8b69b.webm",
+        "evidence_dir": "build-v1-fix4-matrix-final"
+      },
+      {
+        "case": "G-mobile-clean",
+        "status": "PASS",
+        "video": "build-v1-fix3-video/page@294488ece0c7c2a6ab7664fc9d665b89.webm",
+        "evidence_dir": "build-v1-fix4-matrix-final"
+      },
+      {
+        "case": "P-desktop-log",
+        "status": "FAIL",
+        "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n'12' !== '11'\n",
+        "errors": [],
+        "video": "build-v1-fix3-video/page@90eb2fc4443e92aae4e19ffc5bfc3459.webm",
+        "evidence_dir": "build-v1-fix4-matrix-recheck"
+      },
+      {
+        "case": "P-mobile-log",
+        "status": "PASS",
+        "video": "build-v1-fix3-video/page@78475b968f2cec28c37f7c17f88080df.webm",
+        "evidence_dir": "build-v1-fix4-matrix-recheck"
+      },
+      {
+        "case": "P-desktop-log",
+        "status": "PASS",
+        "video": "build-v1-fix3-video/page@d2a882fa9860099816858b9fd2f2dc72.webm",
+        "evidence_dir": "build-v1-fix4-recheck-p"
+      },
+      {
+        "case": "J-mobile-clean",
+        "status": "PASS",
+        "idle_start_ms": 8080,
+        "cheer_ms": 2695,
+        "show_ms": 4217,
+        "video": "build-v1-fix3-video/page@09560b1fef194472321f8f9338dcf134.webm",
+        "evidence_dir": "build-v1-fix4-recheck-j"
+      }
+    ]
+  },
+  "regressions": [
+    {
+      "suite": "build-v1",
+      "exit": 0,
+      "seconds": 151,
+      "log": "screens/build-v1-fix4-test-build-v1.log"
+    },
+    {
+      "suite": "build-placement-fix3",
+      "exit": 0,
+      "seconds": 0,
+      "log": "screens/build-v1-fix4-test-build-placement-fix3.log"
+    },
+    {
+      "suite": "chinese-cleanup",
+      "exit": 0,
+      "seconds": 5,
+      "log": "screens/build-v1-fix4-test-chinese-cleanup.log"
+    },
+    {
+      "suite": "natural-pointer-v4r",
+      "exit": 0,
+      "seconds": 18.3,
+      "log": "screens/build-v1-fix4-test-natural-pointer-v4r.log"
+    },
+    {
+      "suite": "world-v2",
+      "exit": 0,
+      "seconds": 19.2,
+      "log": "screens/build-v1-fix4-test-world-v2.log"
+    },
+    {
+      "suite": "server",
+      "exit": 0,
+      "seconds": 1.1,
+      "log": "screens/build-v1-fix4-test-server.log"
+    },
+    {
+      "suite": "memory-chat",
+      "exit": 0,
+      "seconds": 20,
+      "log": "screens/build-v1-fix4-test-memory-chat.log"
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{"case":"J-desktop-log","status":"PASS","idle_start_ms":7096,"cheer_ms":2679,"show_ms":4226,"video":"build-v1-fix3-video/page@ee137d8048481c010709a3d6a688482b.webm"}
+{"case":"S-desktop-log","status":"PASS","video":"build-v1-fix3-video/page@e18de8c9600a24a81c8ee02c9199e80b.webm"}
+{"case":"B-desktop-log","status":"PASS","video":"build-v1-fix3-video/page@027162215461a6128f7a11923c85eede.webm"}
+{"case":"P-desktop-log","status":"FAIL","error":"AssertionError [ERR_ASSERTION]: Read-only log confirms animal collision refusal","errors":[],"video":"build-v1-fix3-video/page@e562363641d753e607cf618d0656ea25.webm"}
+{"case":"G-desktop-log","status":"PASS","video":"build-v1-fix3-video/page@4d09be7c23870e6d919dc7560d6f719a.webm"}
+{"case":"J-desktop-clean","status":"PASS","idle_start_ms":11342,"cheer_ms":2690,"show_ms":4214,"video":"build-v1-fix3-video/page@6027b6bbae548f359519b2b10f0c110c.webm"}
+{"case":"S-desktop-clean","status":"PASS","video":"build-v1-fix3-video/page@bad05fcb51399241ca838599744854b8.webm"}
+{"case":"B-desktop-clean","status":"PASS","video":"build-v1-fix3-video/page@3b383fb006ced65fa32cd0f90a273685.webm"}
+{"case":"P-desktop-clean","status":"PASS","video":"build-v1-fix3-video/page@49eeb12334f8c82282036c9faca187be.webm"}
+{"case":"G-desktop-clean","status":"PASS","video":"build-v1-fix3-video/page@d845ec900cb09f9cfbbd056e6cc31c87.webm"}
+{"case":"J-mobile-log","status":"PASS","idle_start_ms":7810,"cheer_ms":2748,"show_ms":4254,"video":"build-v1-fix3-video/page@85f4f73e754f3cda76ed664dc5726622.webm"}
+{"case":"S-mobile-log","status":"PASS","video":"build-v1-fix3-video/page@bbcfb004816caf29c6d6f288c17765e8.webm"}
+{"case":"B-mobile-log","status":"PASS","video":"build-v1-fix3-video/page@84d03ec9a516dda7adf36558cf65039d.webm"}
+{"case":"P-mobile-log","status":"PASS","video":"build-v1-fix3-video/page@a517a6dafc9c27bf06eab50149b74528.webm"}
+{"case":"G-mobile-log","status":"PASS","video":"build-v1-fix3-video/page@8ba998ef1880b4406c4f784b086c138b.webm"}
+{"case":"J-mobile-clean","status":"FAIL","error":"Error: Wood harvest did not increase visible inventory","errors":[],"video":"build-v1-fix3-video/page@d1bc1d9fee8b12f3f7dd660b4b089286.webm"}
+{"case":"S-mobile-clean","status":"PASS","video":"build-v1-fix3-video/page@e2538627135962ce4030d1680b2b06a5.webm"}
+{"case":"B-mobile-clean","status":"PASS","video":"build-v1-fix3-video/page@853d847d9ac5e69bbd57b2468781894d.webm"}
+{"case":"P-mobile-clean","status":"PASS","video":"build-v1-fix3-video/page@8952a7acc0dc05c31bb40bd01cc8b69b.webm"}
+{"case":"G-mobile-clean","status":"PASS","video":"build-v1-fix3-video/page@294488ece0c7c2a6ab7664fc9d665b89.webm"}

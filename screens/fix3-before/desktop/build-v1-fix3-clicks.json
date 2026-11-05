@@ -1,0 +1,16 @@
+[
+  {
+    "case": "inspect-desktop-log",
+    "t_ms": 232,
+    "x": 683,
+    "y": 400.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "inspect-desktop-log",
+    "t_ms": 335,
+    "x": 683,
+    "y": 331.09375,
+    "purpose": "Play"
+  }
+]

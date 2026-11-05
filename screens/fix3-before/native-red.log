@@ -1,0 +1,8 @@
+{"case":"J-desktop-log","status":"FAIL","error":"AssertionError [ERR_ASSERTION]: Jump buffer: completion within 15s","errors":[],"video":"build-v1-fix3-video/page@308b459cafa746f17df1ee102af99a98.webm"}
+{"case":"S-desktop-log","status":"FAIL","error":"AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n'11' !== '10'\n","errors":[],"video":"build-v1-fix3-video/page@e8997abd0e423fb284d0433dd82b34da.webm"}
+{"case":"J-desktop-clean","status":"FAIL","error":"AssertionError [ERR_ASSERTION]: Jump buffer: completion within 15s","errors":[],"video":"build-v1-fix3-video/page@2105e2f62c947b2fbb11b68551caee62.webm"}
+{"case":"S-desktop-clean","status":"FAIL","error":"AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n'11' !== '10'\n","errors":[],"video":"build-v1-fix3-video/page@60796e8ca18854e5fe8bf5333e1c63fd.webm"}
+{"case":"J-mobile-log","status":"FAIL","error":"AssertionError [ERR_ASSERTION]: Jump buffer: completion within 15s","errors":[],"video":"build-v1-fix3-video/page@aee3f9de47524a5c9851b66ae9a7fd3d.webm"}
+{"case":"S-mobile-log","status":"FAIL","error":"AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n'11' !== '10'\n","errors":[],"video":"build-v1-fix3-video/page@17e6b4fd5aef84749acb20950b9644c9.webm"}
+{"case":"J-mobile-clean","status":"FAIL","error":"AssertionError [ERR_ASSERTION]: Jump buffer: completion within 15s","errors":[],"video":"build-v1-fix3-video/page@547c262dc2fc8dedd59484ff42d57aba.webm"}
+{"case":"S-mobile-clean","status":"FAIL","error":"Error: Text not visible #hotbar button[aria-label=\"Wood\"] em /^3$/: 4","errors":[],"video":"build-v1-fix3-video/page@71db17a2ba4b51519233cd21fc2c4304.webm"}

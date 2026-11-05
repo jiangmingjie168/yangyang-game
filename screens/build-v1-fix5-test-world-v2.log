@@ -1,0 +1,9 @@
+PASS parent page: local Monday/DST boundary, all five scenes, exact counts, excludes taps/unmatched/old/future events, saves unchanged, keyboard tabs
+PASS legacy empty speaking log and portrait parent panel
+PASS mock recognition near-sound answer → saved event → parent speaking count
+PASS two full seven-gift rounds earned by landings, seven distinct dry hideouts, different next locations, preserved completed album/stamp, partial-round save restore, synthetic chime calls
+PASS legacy complete/partial albums migrate without losing discoveries or duplicating a completion; malformed optional stamps ignored
+PASS 47 nonempty outlined word pictures, visible tail/wing/blink idle frame changes, no external requests
+PASS quiz success emits bounded, expiring stars/confetti and WebAudio notes; reduced-motion/no-AudioContext fallback still succeeds
+PASS 47-row speaking log scrolls via Chromium touch emulation in short landscape; return button remains reachable (not a device test)
+PASS actual file:// offline: saved speaking log, legacy gift-round migration, completed album, no speech service

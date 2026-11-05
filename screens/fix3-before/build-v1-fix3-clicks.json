@@ -1,0 +1,352 @@
+[
+  {
+    "case": "J-mobile-log",
+    "t_ms": 166,
+    "x": 422,
+    "y": 223.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "J-mobile-log",
+    "t_ms": 309,
+    "x": 422,
+    "y": 256,
+    "purpose": "Play"
+  },
+  {
+    "case": "J-mobile-log",
+    "t_ms": 950,
+    "x": 658,
+    "y": 262,
+    "purpose": "Harvest first Wood"
+  },
+  {
+    "case": "J-mobile-log",
+    "t_ms": 3342,
+    "x": 459,
+    "y": 224,
+    "purpose": "Harvest second Wood"
+  },
+  {
+    "case": "J-mobile-log",
+    "t_ms": 3691,
+    "x": 459,
+    "y": 262,
+    "purpose": "Harvest third Wood"
+  },
+  {
+    "case": "J-mobile-log",
+    "t_ms": 3799,
+    "x": 422,
+    "y": 100,
+    "purpose": "Dismiss Wood card"
+  },
+  {
+    "case": "J-mobile-log",
+    "t_ms": 3905,
+    "x": 626.328125,
+    "y": 34,
+    "purpose": "Open Craft"
+  },
+  {
+    "case": "J-mobile-log",
+    "t_ms": 4011,
+    "x": 368,
+    "y": 114,
+    "purpose": "Craft Planks ×4"
+  },
+  {
+    "case": "J-mobile-log",
+    "t_ms": 4114,
+    "x": 422,
+    "y": 100,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "J-mobile-log",
+    "t_ms": 4215,
+    "x": 368,
+    "y": 114,
+    "purpose": "Craft Planks ×4"
+  },
+  {
+    "case": "J-mobile-log",
+    "t_ms": 4323,
+    "x": 422,
+    "y": 100,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "J-mobile-log",
+    "t_ms": 4426,
+    "x": 368,
+    "y": 114,
+    "purpose": "Craft Planks ×4"
+  },
+  {
+    "case": "J-mobile-log",
+    "t_ms": 4526,
+    "x": 421.99998474121094,
+    "y": 100,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "J-mobile-log",
+    "t_ms": 4629,
+    "x": 784,
+    "y": 114,
+    "purpose": "Craft Stick ×4"
+  },
+  {
+    "case": "J-mobile-log",
+    "t_ms": 4730,
+    "x": 422,
+    "y": 100,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "J-mobile-log",
+    "t_ms": 4876,
+    "x": 784,
+    "y": 225,
+    "purpose": "Craft Fence ×2"
+  },
+  {
+    "case": "J-mobile-log",
+    "t_ms": 4976,
+    "x": 422,
+    "y": 100.00000381469727,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "J-mobile-log",
+    "t_ms": 5074,
+    "x": 784,
+    "y": 225,
+    "purpose": "Craft Fence ×2"
+  },
+  {
+    "case": "J-mobile-log",
+    "t_ms": 5174,
+    "x": 422.00001525878906,
+    "y": 99.99999618530273,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "J-mobile-log",
+    "t_ms": 5276,
+    "x": 784,
+    "y": 225,
+    "purpose": "Craft Fence ×2"
+  },
+  {
+    "case": "J-mobile-log",
+    "t_ms": 5377,
+    "x": 421.99998474121094,
+    "y": 99.99999618530273,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "J-mobile-log",
+    "t_ms": 5478,
+    "x": 784,
+    "y": 225,
+    "purpose": "Craft Fence ×2"
+  },
+  {
+    "case": "J-mobile-log",
+    "t_ms": 5578,
+    "x": 422,
+    "y": 100,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "J-mobile-log",
+    "t_ms": 5723,
+    "x": 782,
+    "y": 38,
+    "purpose": "Close Craft"
+  },
+  {
+    "case": "J-mobile-log",
+    "t_ms": 5824,
+    "x": 542.328125,
+    "y": 34,
+    "purpose": "Open Build"
+  },
+  {
+    "case": "J-mobile-log",
+    "t_ms": 5936,
+    "x": 267.3125,
+    "y": 100,
+    "purpose": "Select material"
+  },
+  {
+    "case": "J-mobile-log",
+    "t_ms": 6030,
+    "x": 164,
+    "y": 300,
+    "purpose": "First Fence"
+  },
+  {
+    "case": "J-mobile-log",
+    "t_ms": 6127,
+    "x": 278,
+    "y": 300,
+    "purpose": "Second Fence"
+  },
+  {
+    "case": "J-mobile-log",
+    "t_ms": 6230,
+    "x": 801,
+    "y": 347,
+    "purpose": "Jump on ground"
+  },
+  {
+    "case": "J-mobile-log",
+    "t_ms": 6473,
+    "x": 801,
+    "y": 347,
+    "purpose": "Jump in air"
+  },
+  {
+    "case": "J-mobile-log",
+    "t_ms": 6676,
+    "x": 801,
+    "y": 347,
+    "purpose": "Jump in air again"
+  },
+  {
+    "case": "S-mobile-log",
+    "t_ms": 96,
+    "x": 422,
+    "y": 223.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "S-mobile-log",
+    "t_ms": 200,
+    "x": 422,
+    "y": 256,
+    "purpose": "Play"
+  },
+  {
+    "case": "S-mobile-log",
+    "t_ms": 824,
+    "x": 658,
+    "y": 262,
+    "purpose": "Harvest first Wood"
+  },
+  {
+    "case": "S-mobile-log",
+    "t_ms": 3210,
+    "x": 459,
+    "y": 224,
+    "purpose": "Harvest second Wood"
+  },
+  {
+    "case": "S-mobile-log",
+    "t_ms": 3560,
+    "x": 459,
+    "y": 262,
+    "purpose": "Harvest third Wood"
+  },
+  {
+    "case": "S-mobile-log",
+    "t_ms": 3667,
+    "x": 422,
+    "y": 100,
+    "purpose": "Dismiss Wood card"
+  },
+  {
+    "case": "S-mobile-log",
+    "t_ms": 3766,
+    "x": 626.328125,
+    "y": 34,
+    "purpose": "Open Craft"
+  },
+  {
+    "case": "S-mobile-log",
+    "t_ms": 3867,
+    "x": 368,
+    "y": 114,
+    "purpose": "Craft Planks ×4"
+  },
+  {
+    "case": "S-mobile-log",
+    "t_ms": 3969,
+    "x": 422,
+    "y": 100.00000381469727,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "S-mobile-log",
+    "t_ms": 4077,
+    "x": 368,
+    "y": 114,
+    "purpose": "Craft Planks ×4"
+  },
+  {
+    "case": "S-mobile-log",
+    "t_ms": 4179,
+    "x": 422.00001525878906,
+    "y": 99.99999618530273,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "S-mobile-log",
+    "t_ms": 4284,
+    "x": 368,
+    "y": 114,
+    "purpose": "Craft Planks ×4"
+  },
+  {
+    "case": "S-mobile-log",
+    "t_ms": 4390,
+    "x": 421.99998474121094,
+    "y": 99.99999618530273,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "S-mobile-log",
+    "t_ms": 4510,
+    "x": 782,
+    "y": 38,
+    "purpose": "Close Craft"
+  },
+  {
+    "case": "S-mobile-log",
+    "t_ms": 4610,
+    "x": 542.328125,
+    "y": 34,
+    "purpose": "Open Build"
+  },
+  {
+    "case": "S-mobile-log",
+    "t_ms": 4712,
+    "x": 48.796875,
+    "y": 100,
+    "purpose": "Select material"
+  },
+  {
+    "case": "S-mobile-log",
+    "t_ms": 4805,
+    "x": 278,
+    "y": 300,
+    "purpose": "Wall base"
+  },
+  {
+    "case": "S-mobile-log",
+    "t_ms": 4911,
+    "x": 68,
+    "y": 322,
+    "purpose": "Joystick -1 900ms"
+  },
+  {
+    "case": "S-mobile-log",
+    "t_ms": 6223,
+    "x": 354,
+    "y": 262,
+    "purpose": "Second layer from beside wall"
+  }
+]

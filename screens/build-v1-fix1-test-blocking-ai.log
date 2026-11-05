@@ -1,0 +1,11 @@
+PASS rotating during a question permits portrait play without dismissing or answering it
+PASS short landscape dialogue scrolls by touch to I said it while world input stays blocked
+PASS background taps, swipe, hidden ×, Escape, move/jump/mine/place/craft/book controls cannot dismiss or play
+PASS opening/closing parent settings preserves question; explicit parent skip works by keyboard without reward and restores play
+PASS three misses reveal the answer and still require repeat/confirmation; praise then closes without false spoken credit
+PASS missing/throwing/denied/empty/hanging recognition all offer taps + I said it, without recognition credit
+PASS pending prompts already block; parent skip cancels late replies; timeout restores usable local answer buttons
+PASS name + real mined block + recognized answer reach brain without mismatched wood lead, validated contextual bubble/TTS and accurate provenance; raw transcript stays out of saves
+PASS last answer and recent lines reach the next prompt; minute/session budgets survive reload; ninth request in one minute uses an immediately answerable template; no additional provider request
+PASS unanswered question remains blocking beyond the former 24-second timer; correct answer releases it
+PASS phone blocking speech fallback fits viewport and all child-facing text remains English

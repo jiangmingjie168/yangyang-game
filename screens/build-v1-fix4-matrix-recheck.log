@@ -1,0 +1,2 @@
+{"case":"P-desktop-log","status":"FAIL","error":"AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n'12' !== '11'\n","errors":[],"video":"build-v1-fix3-video/page@90eb2fc4443e92aae4e19ffc5bfc3459.webm"}
+{"case":"P-mobile-log","status":"PASS","video":"build-v1-fix3-video/page@78475b968f2cec28c37f7c17f88080df.webm"}

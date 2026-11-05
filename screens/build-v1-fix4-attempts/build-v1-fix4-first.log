@@ -1,0 +1,6 @@
+{"case":"F-mobile-clean","status":"PASS","video":"build-v1-fix4-video/page@2fa941093148dcde5051ee52e751dee2.webm"}
+{"case":"M-mobile-clean","status":"PASS","invite_ms":11167,"video":"build-v1-fix4-video/page@3e785ff83dd2bb453fac26fb789bdf71.webm"}
+{"case":"C-mobile-clean","status":"FAIL","error":"Error: Text not visible #buddy-line /^What's this\\?$/: What is this?","errors":[],"video":"build-v1-fix4-video/page@4c4c9dacca6064d93a7143571d1d0e5e.webm"}
+{"case":"N-mobile-clean","status":"FAIL","error":"AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n'8' !== '7'\n","errors":[],"video":"build-v1-fix4-video/page@f6ade4eeac7203d312a7a1726749fa31.webm"}
+{"case":"S-mobile-clean","status":"PASS","video":"build-v1-fix4-video/page@280dd44bac98bad88c2960a65bb71466.webm"}
+{"case":"V-mobile-clean","status":"PASS","video":"build-v1-fix4-video/page@afd6edf3091d951d660a2c29fec807a2.webm"}

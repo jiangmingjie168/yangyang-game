@@ -1,0 +1,905 @@
+[
+  {
+    "case": "H-mobile-log",
+    "t_ms": 210,
+    "x": 422,
+    "y": 223.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "H-mobile-log",
+    "t_ms": 358,
+    "x": 422,
+    "y": 256,
+    "purpose": "Play"
+  },
+  {
+    "case": "H-mobile-log",
+    "t_ms": 1021,
+    "x": 658,
+    "y": 262,
+    "purpose": "Harvest first Wood"
+  },
+  {
+    "case": "H-mobile-log",
+    "t_ms": 3436,
+    "x": 422,
+    "y": 100,
+    "purpose": "Dismiss Wood card"
+  },
+  {
+    "case": "H-mobile-log",
+    "t_ms": 3539,
+    "x": 459,
+    "y": 224,
+    "purpose": "Harvest second Wood"
+  },
+  {
+    "case": "H-mobile-log",
+    "t_ms": 3900,
+    "x": 422,
+    "y": 100,
+    "purpose": "Dismiss Wood card"
+  },
+  {
+    "case": "H-mobile-log",
+    "t_ms": 4003,
+    "x": 459,
+    "y": 262,
+    "purpose": "Harvest third Wood"
+  },
+  {
+    "case": "H-mobile-log",
+    "t_ms": 4115,
+    "x": 422,
+    "y": 99.99999618530273,
+    "purpose": "Dismiss Wood card"
+  },
+  {
+    "case": "H-mobile-log",
+    "t_ms": 4206,
+    "x": 350,
+    "y": 310,
+    "purpose": "Mine surface Stone for House"
+  },
+  {
+    "case": "H-mobile-log",
+    "t_ms": 4316,
+    "x": 421.99998474121094,
+    "y": 100,
+    "purpose": "Dismiss Stone card"
+  },
+  {
+    "case": "H-mobile-log",
+    "t_ms": 4416,
+    "x": 626.328125,
+    "y": 34,
+    "purpose": "Open Craft"
+  },
+  {
+    "case": "H-mobile-log",
+    "t_ms": 4519,
+    "x": 368,
+    "y": 114,
+    "purpose": "Craft Planks ×4"
+  },
+  {
+    "case": "H-mobile-log",
+    "t_ms": 4621,
+    "x": 422,
+    "y": 99.99999618530273,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "H-mobile-log",
+    "t_ms": 4723,
+    "x": 368,
+    "y": 114,
+    "purpose": "Craft Planks ×4"
+  },
+  {
+    "case": "H-mobile-log",
+    "t_ms": 4824,
+    "x": 421.99998474121094,
+    "y": 100.00000381469727,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "H-mobile-log",
+    "t_ms": 4932,
+    "x": 368,
+    "y": 114,
+    "purpose": "Craft Planks ×4"
+  },
+  {
+    "case": "H-mobile-log",
+    "t_ms": 5035,
+    "x": 421.99998474121094,
+    "y": 99.99999618530273,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "H-mobile-log",
+    "t_ms": 5138,
+    "x": 422,
+    "y": 180,
+    "purpose": "Native middle-button autoscroll recipe panel"
+  },
+  {
+    "case": "H-mobile-log",
+    "t_ms": 6059,
+    "x": 422,
+    "y": 300,
+    "purpose": "Stop native recipe autoscroll"
+  },
+  {
+    "case": "H-mobile-log",
+    "t_ms": 6307,
+    "x": 368,
+    "y": 128,
+    "purpose": "Craft House ×4"
+  },
+  {
+    "case": "H-mobile-log",
+    "t_ms": 6417,
+    "x": 422,
+    "y": 100,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "H-mobile-log",
+    "t_ms": 6565,
+    "x": 782,
+    "y": 38,
+    "purpose": "Close Craft"
+  },
+  {
+    "case": "H-mobile-log",
+    "t_ms": 6666,
+    "x": 542.328125,
+    "y": 34,
+    "purpose": "Open Build"
+  },
+  {
+    "case": "H-mobile-log",
+    "t_ms": 6771,
+    "x": 144.46875,
+    "y": 100,
+    "purpose": "Select material"
+  },
+  {
+    "case": "H-mobile-log",
+    "t_ms": 6870,
+    "x": 513.7890625,
+    "y": 100,
+    "purpose": "Select Roof"
+  },
+  {
+    "case": "H-mobile-log",
+    "t_ms": 6962,
+    "x": 164,
+    "y": 186,
+    "purpose": "Place roof across both wall columns"
+  },
+  {
+    "case": "H-mobile-log",
+    "t_ms": 7118,
+    "x": 691.765625,
+    "y": 100,
+    "purpose": "Remove one overhang to match exactly three House"
+  },
+  {
+    "case": "H-mobile-log",
+    "t_ms": 7211,
+    "x": 278,
+    "y": 186,
+    "purpose": "Remove fourth House overhang"
+  },
+  {
+    "case": "H-mobile-log",
+    "t_ms": 7368,
+    "x": 144.46875,
+    "y": 100,
+    "purpose": "Select Planks for two stacked walls"
+  },
+  {
+    "case": "H-mobile-log",
+    "t_ms": 7460,
+    "x": 164,
+    "y": 262,
+    "purpose": "Hana wall 0"
+  },
+  {
+    "case": "H-mobile-log",
+    "t_ms": 7912,
+    "x": 164,
+    "y": 262,
+    "purpose": "Hana wall 0"
+  },
+  {
+    "case": "H-mobile-log",
+    "t_ms": 8362,
+    "x": 164,
+    "y": 262,
+    "purpose": "Hana wall 0"
+  },
+  {
+    "case": "H-mobile-log",
+    "t_ms": 8812,
+    "x": 164,
+    "y": 262,
+    "purpose": "Hana wall 0"
+  },
+  {
+    "case": "H-mobile-log",
+    "t_ms": 8963,
+    "x": 164,
+    "y": 224,
+    "purpose": "Hana wall 1"
+  },
+  {
+    "case": "H-mobile-log",
+    "t_ms": 9113,
+    "x": 240,
+    "y": 262,
+    "purpose": "Hana wall 2"
+  },
+  {
+    "case": "H-mobile-log",
+    "t_ms": 9262,
+    "x": 240,
+    "y": 224,
+    "purpose": "Hana wall 3"
+  },
+  {
+    "case": "H-mobile-log",
+    "t_ms": 12274,
+    "x": 57.3359375,
+    "y": 100,
+    "purpose": "Manual Show chooses house before nearby free work"
+  },
+  {
+    "case": "H-mobile-log",
+    "t_ms": 12438,
+    "x": 730.9921875,
+    "y": 220,
+    "purpose": "Accept HOUSE invitation"
+  },
+  {
+    "case": "H-mobile-log",
+    "t_ms": 21753,
+    "x": 729,
+    "y": 223.5,
+    "purpose": "Answer House"
+  },
+  {
+    "case": "H-mobile-log",
+    "t_ms": 22203,
+    "x": 731,
+    "y": 238,
+    "purpose": "Close house finale"
+  },
+  {
+    "case": "H-mobile-log",
+    "t_ms": 22303,
+    "x": 144.46875,
+    "y": 100,
+    "purpose": "Select planks"
+  },
+  {
+    "case": "H-mobile-log",
+    "t_ms": 22395,
+    "x": 278,
+    "y": 224,
+    "purpose": "Add exactly ONE surviving block to same work"
+  },
+  {
+    "case": "H-mobile-log",
+    "t_ms": 25422,
+    "x": 57.33593940734863,
+    "y": 100,
+    "purpose": "Second house Show after one exterior Planks"
+  },
+  {
+    "case": "H-mobile-log",
+    "t_ms": 25523,
+    "x": 730.9921875,
+    "y": 220,
+    "purpose": "Accept second house Show"
+  },
+  {
+    "case": "H-mobile-log",
+    "t_ms": 25632,
+    "x": 729,
+    "y": 223.5,
+    "purpose": "Answer House again"
+  },
+  {
+    "case": "U-mobile-log",
+    "t_ms": 109,
+    "x": 422,
+    "y": 223.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "U-mobile-log",
+    "t_ms": 219,
+    "x": 422,
+    "y": 256,
+    "purpose": "Play"
+  },
+  {
+    "case": "U-mobile-log",
+    "t_ms": 874,
+    "x": 658,
+    "y": 262,
+    "purpose": "Harvest first Wood"
+  },
+  {
+    "case": "U-mobile-log",
+    "t_ms": 3289,
+    "x": 422,
+    "y": 100,
+    "purpose": "Dismiss Wood card"
+  },
+  {
+    "case": "U-mobile-log",
+    "t_ms": 3396,
+    "x": 459,
+    "y": 224,
+    "purpose": "Harvest second Wood"
+  },
+  {
+    "case": "U-mobile-log",
+    "t_ms": 3755,
+    "x": 422,
+    "y": 100,
+    "purpose": "Dismiss Wood card"
+  },
+  {
+    "case": "U-mobile-log",
+    "t_ms": 3859,
+    "x": 459,
+    "y": 262,
+    "purpose": "Harvest third Wood"
+  },
+  {
+    "case": "U-mobile-log",
+    "t_ms": 3964,
+    "x": 421.99998474121094,
+    "y": 100,
+    "purpose": "Dismiss Wood card"
+  },
+  {
+    "case": "U-mobile-log",
+    "t_ms": 4055,
+    "x": 350,
+    "y": 310,
+    "purpose": "Mine surface Stone for House"
+  },
+  {
+    "case": "U-mobile-log",
+    "t_ms": 4162,
+    "x": 422,
+    "y": 100.00000381469727,
+    "purpose": "Dismiss Stone card"
+  },
+  {
+    "case": "U-mobile-log",
+    "t_ms": 4261,
+    "x": 626.328125,
+    "y": 34,
+    "purpose": "Open Craft"
+  },
+  {
+    "case": "U-mobile-log",
+    "t_ms": 4362,
+    "x": 368,
+    "y": 114,
+    "purpose": "Craft Planks ×4"
+  },
+  {
+    "case": "U-mobile-log",
+    "t_ms": 4465,
+    "x": 422,
+    "y": 100.00000381469727,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "U-mobile-log",
+    "t_ms": 4578,
+    "x": 368,
+    "y": 114,
+    "purpose": "Craft Planks ×4"
+  },
+  {
+    "case": "U-mobile-log",
+    "t_ms": 4685,
+    "x": 422,
+    "y": 100,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "U-mobile-log",
+    "t_ms": 4790,
+    "x": 368,
+    "y": 114,
+    "purpose": "Craft Planks ×4"
+  },
+  {
+    "case": "U-mobile-log",
+    "t_ms": 4893,
+    "x": 421.99998474121094,
+    "y": 100,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "U-mobile-log",
+    "t_ms": 4995,
+    "x": 422,
+    "y": 180,
+    "purpose": "Native middle-button autoscroll recipe panel"
+  },
+  {
+    "case": "U-mobile-log",
+    "t_ms": 5898,
+    "x": 422,
+    "y": 300,
+    "purpose": "Stop native recipe autoscroll"
+  },
+  {
+    "case": "U-mobile-log",
+    "t_ms": 6148,
+    "x": 368,
+    "y": 128,
+    "purpose": "Craft House ×4"
+  },
+  {
+    "case": "U-mobile-log",
+    "t_ms": 6256,
+    "x": 422.00001525878906,
+    "y": 100,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "U-mobile-log",
+    "t_ms": 6402,
+    "x": 782,
+    "y": 38,
+    "purpose": "Close Craft"
+  },
+  {
+    "case": "U-mobile-log",
+    "t_ms": 6504,
+    "x": 542.328125,
+    "y": 34,
+    "purpose": "Open Build"
+  },
+  {
+    "case": "U-mobile-log",
+    "t_ms": 6608,
+    "x": 144.46875,
+    "y": 100,
+    "purpose": "Select material"
+  },
+  {
+    "case": "U-mobile-log",
+    "t_ms": 6701,
+    "x": 164,
+    "y": 262,
+    "purpose": "Far wall base"
+  },
+  {
+    "case": "U-mobile-log",
+    "t_ms": 7153,
+    "x": 164,
+    "y": 262,
+    "purpose": "Far wall base"
+  },
+  {
+    "case": "U-mobile-log",
+    "t_ms": 7602,
+    "x": 164,
+    "y": 262,
+    "purpose": "Far wall base"
+  },
+  {
+    "case": "U-mobile-log",
+    "t_ms": 7701,
+    "x": 240,
+    "y": 262,
+    "purpose": "Near wall base"
+  },
+  {
+    "case": "U-mobile-log",
+    "t_ms": 7806,
+    "x": 57.3359375,
+    "y": 100,
+    "purpose": "Manual Show before roof"
+  },
+  {
+    "case": "U-mobile-log",
+    "t_ms": 9774,
+    "x": 513.7890625,
+    "y": 100,
+    "purpose": "Select Roof"
+  },
+  {
+    "case": "U-mobile-log",
+    "t_ms": 9867,
+    "x": 164,
+    "y": 186,
+    "purpose": "Place roof across both wall columns"
+  },
+  {
+    "case": "U-mobile-log",
+    "t_ms": 10027,
+    "x": 691.765625,
+    "y": 100,
+    "purpose": "Remove one overhang to match exactly three House"
+  },
+  {
+    "case": "U-mobile-log",
+    "t_ms": 10119,
+    "x": 278,
+    "y": 186,
+    "purpose": "Remove fourth House overhang"
+  },
+  {
+    "case": "U-mobile-log",
+    "t_ms": 10286,
+    "x": 144.46875,
+    "y": 100,
+    "purpose": "Select Planks for two stacked walls"
+  },
+  {
+    "case": "U-mobile-log",
+    "t_ms": 10380,
+    "x": 164,
+    "y": 224,
+    "purpose": "Hana wall 0"
+  },
+  {
+    "case": "U-mobile-log",
+    "t_ms": 10538,
+    "x": 240,
+    "y": 224,
+    "purpose": "Hana wall 1"
+  },
+  {
+    "case": "U-mobile-log",
+    "t_ms": 13546,
+    "x": 57.3359375,
+    "y": 100,
+    "purpose": "Manual Show chooses house before nearby free work"
+  },
+  {
+    "case": "U-mobile-log",
+    "t_ms": 13692,
+    "x": 730.9921875,
+    "y": 220,
+    "purpose": "Accept HOUSE invitation"
+  },
+  {
+    "case": "U-mobile-log",
+    "t_ms": 14027,
+    "x": 729,
+    "y": 223.5,
+    "purpose": "Answer House"
+  },
+  {
+    "case": "U-mobile-log",
+    "t_ms": 14480,
+    "x": 731,
+    "y": 238,
+    "purpose": "Close house finale"
+  },
+  {
+    "case": "U-mobile-log",
+    "t_ms": 14579,
+    "x": 144.46875,
+    "y": 100,
+    "purpose": "Select planks"
+  },
+  {
+    "case": "U-mobile-log",
+    "t_ms": 14671,
+    "x": 278,
+    "y": 224,
+    "purpose": "Add exactly ONE surviving block to same work"
+  },
+  {
+    "case": "R-mobile-log",
+    "t_ms": 107,
+    "x": 422,
+    "y": 223.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "R-mobile-log",
+    "t_ms": 214,
+    "x": 422,
+    "y": 256,
+    "purpose": "Play"
+  },
+  {
+    "case": "R-mobile-log",
+    "t_ms": 872,
+    "x": 658,
+    "y": 262,
+    "purpose": "Harvest first Wood"
+  },
+  {
+    "case": "R-mobile-log",
+    "t_ms": 3289,
+    "x": 422,
+    "y": 100,
+    "purpose": "Dismiss Wood card"
+  },
+  {
+    "case": "R-mobile-log",
+    "t_ms": 3396,
+    "x": 459,
+    "y": 224,
+    "purpose": "Harvest second Wood"
+  },
+  {
+    "case": "R-mobile-log",
+    "t_ms": 3754,
+    "x": 422,
+    "y": 100,
+    "purpose": "Dismiss Wood card"
+  },
+  {
+    "case": "R-mobile-log",
+    "t_ms": 3855,
+    "x": 459,
+    "y": 262,
+    "purpose": "Harvest third Wood"
+  },
+  {
+    "case": "R-mobile-log",
+    "t_ms": 3966,
+    "x": 421.99998474121094,
+    "y": 99.99999618530273,
+    "purpose": "Dismiss Wood card"
+  },
+  {
+    "case": "R-mobile-log",
+    "t_ms": 4065,
+    "x": 626.328125,
+    "y": 34,
+    "purpose": "Open Craft"
+  },
+  {
+    "case": "R-mobile-log",
+    "t_ms": 4166,
+    "x": 368,
+    "y": 114,
+    "purpose": "Craft Planks ×4"
+  },
+  {
+    "case": "R-mobile-log",
+    "t_ms": 4267,
+    "x": 422,
+    "y": 100,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "R-mobile-log",
+    "t_ms": 4368,
+    "x": 368,
+    "y": 114,
+    "purpose": "Craft Planks ×4"
+  },
+  {
+    "case": "R-mobile-log",
+    "t_ms": 4468,
+    "x": 422,
+    "y": 99.99999618530273,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "R-mobile-log",
+    "t_ms": 4568,
+    "x": 368,
+    "y": 114,
+    "purpose": "Craft Planks ×4"
+  },
+  {
+    "case": "R-mobile-log",
+    "t_ms": 4668,
+    "x": 422,
+    "y": 99.99999618530273,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "R-mobile-log",
+    "t_ms": 4768,
+    "x": 784,
+    "y": 114,
+    "purpose": "Craft Stick ×4"
+  },
+  {
+    "case": "R-mobile-log",
+    "t_ms": 4867,
+    "x": 422.00001525878906,
+    "y": 100,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "R-mobile-log",
+    "t_ms": 4968,
+    "x": 422,
+    "y": 180,
+    "purpose": "Native middle-button autoscroll recipe panel"
+  },
+  {
+    "case": "R-mobile-log",
+    "t_ms": 5874,
+    "x": 422,
+    "y": 300,
+    "purpose": "Stop native recipe autoscroll"
+  },
+  {
+    "case": "R-mobile-log",
+    "t_ms": 6123,
+    "x": 784,
+    "y": 128,
+    "purpose": "Craft Fence ×2"
+  },
+  {
+    "case": "R-mobile-log",
+    "t_ms": 6231,
+    "x": 422.00001525878906,
+    "y": 99.99999618530273,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "R-mobile-log",
+    "t_ms": 6331,
+    "x": 784,
+    "y": 128,
+    "purpose": "Craft Fence ×2"
+  },
+  {
+    "case": "R-mobile-log",
+    "t_ms": 6432,
+    "x": 422,
+    "y": 100,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "R-mobile-log",
+    "t_ms": 6531,
+    "x": 784,
+    "y": 128,
+    "purpose": "Craft Fence ×2"
+  },
+  {
+    "case": "R-mobile-log",
+    "t_ms": 6634,
+    "x": 422.00001525878906,
+    "y": 100,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "R-mobile-log",
+    "t_ms": 6734,
+    "x": 784,
+    "y": 128,
+    "purpose": "Craft Fence ×2"
+  },
+  {
+    "case": "R-mobile-log",
+    "t_ms": 6836,
+    "x": 421.99998474121094,
+    "y": 100,
+    "purpose": "Dismiss material card"
+  },
+  {
+    "case": "R-mobile-log",
+    "t_ms": 6979,
+    "x": 782,
+    "y": 38,
+    "purpose": "Close Craft"
+  },
+  {
+    "case": "R-mobile-log",
+    "t_ms": 7083,
+    "x": 542.328125,
+    "y": 34,
+    "purpose": "Open Build"
+  },
+  {
+    "case": "R-mobile-log",
+    "t_ms": 7184,
+    "x": 362.984375,
+    "y": 100,
+    "purpose": "Select material"
+  },
+  {
+    "case": "R-mobile-log",
+    "t_ms": 7276,
+    "x": 164,
+    "y": 300,
+    "purpose": "First free Fence"
+  },
+  {
+    "case": "R-mobile-log",
+    "t_ms": 7377,
+    "x": 278,
+    "y": 300,
+    "purpose": "Second free Fence"
+  },
+  {
+    "case": "R-mobile-log",
+    "t_ms": 7484,
+    "x": 57.3359375,
+    "y": 100,
+    "purpose": "Manual Show"
+  },
+  {
+    "case": "R-mobile-log",
+    "t_ms": 44117,
+    "x": 144.46875,
+    "y": 100,
+    "purpose": "Select planks"
+  },
+  {
+    "case": "R-mobile-log",
+    "t_ms": 44212,
+    "x": 164,
+    "y": 262,
+    "purpose": "Add exactly ONE surviving block to same work"
+  },
+  {
+    "case": "R-mobile-log",
+    "t_ms": 47185,
+    "x": 57.3359375,
+    "y": 100,
+    "purpose": "Manual Show after exactly one extra Planks"
+  },
+  {
+    "case": "R-mobile-log",
+    "t_ms": 47294,
+    "x": 730.9921875,
+    "y": 220,
+    "purpose": "Accept free Show"
+  },
+  {
+    "case": "R-mobile-log",
+    "t_ms": 47776,
+    "x": 731,
+    "y": 238,
+    "purpose": "Close completed Show"
+  },
+  {
+    "case": "R-mobile-log",
+    "t_ms": 47880,
+    "x": 144.46875,
+    "y": 100,
+    "purpose": "Select planks"
+  },
+  {
+    "case": "R-mobile-log",
+    "t_ms": 47973,
+    "x": 278,
+    "y": 262,
+    "purpose": "Add exactly ONE surviving block to same work"
+  },
+  {
+    "case": "R-mobile-log",
+    "t_ms": 50944,
+    "x": 57.3359375,
+    "y": 100,
+    "purpose": "Manual Show after one more Planks"
+  },
+  {
+    "case": "R-mobile-log",
+    "t_ms": 51048,
+    "x": 730.9921875,
+    "y": 220,
+    "purpose": "Accept free Show"
+  }
+]

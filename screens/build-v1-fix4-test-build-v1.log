@@ -1,0 +1,163 @@
+fix3 compatibility: one obsolete own-block rejection assertion now requires a successful stack; every other fix1 assertion unchanged
+{
+  "results": [
+    {
+      "case": "phone house and pen",
+      "status": "PASS",
+      "details": {
+        "viewport": "844x390",
+        "house": "5 walls + door + whole roof",
+        "pen": "7 fence blocks + door",
+        "builds": [
+          {
+            "id": "82:13:83:15",
+            "x": 82,
+            "y": 13,
+            "w": 2,
+            "h": 3,
+            "createdAt": 1793836686854,
+            "shown": false,
+            "kind": "house",
+            "roofed": true,
+            "closed": true,
+            "feedbackMembers": [
+              3201,
+              2962,
+              3204,
+              2963,
+              3441,
+              3444,
+              3681,
+              3684
+            ],
+            "autoOffered": true,
+            "invited": true
+          },
+          {
+            "id": "75:14:76:15",
+            "x": 75,
+            "y": 14,
+            "w": 2,
+            "h": 2,
+            "createdAt": 1793836686854,
+            "shown": false,
+            "kind": "pen",
+            "roofed": false,
+            "closed": true,
+            "feedbackMembers": [
+              3434,
+              3195,
+              3437,
+              3196,
+              3674,
+              3677
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "case": "remove returns inventory",
+      "status": "PASS",
+      "details": {
+        "before": 35,
+        "after": 36
+      }
+    },
+    {
+      "case": "pet enters pen",
+      "status": "PASS",
+      "details": {
+        "pen": {
+          "id": "75:14:76:15",
+          "x": 75,
+          "y": 14,
+          "w": 2,
+          "h": 2,
+          "createdAt": 1793836686854,
+          "shown": false,
+          "kind": "pen",
+          "roofed": false,
+          "closed": true,
+          "feedbackMembers": [
+            3434,
+            3195,
+            3437,
+            3196,
+            3674,
+            3677
+          ],
+          "autoOffered": true,
+          "invited": false
+        },
+        "dog": [
+          "dog",
+          2441.5,
+          512,
+          -1,
+          1,
+          3
+        ]
+      }
+    },
+    {
+      "case": "no build modal",
+      "status": "PASS"
+    },
+    {
+      "case": "refresh persists buildings",
+      "status": "PASS"
+    },
+    {
+      "case": "main save retains data",
+      "status": "PASS",
+      "details": {
+        "fixture": "tests/fixtures/build-v1-main-save.json",
+        "originalFormat": true
+      }
+    },
+    {
+      "case": "tier-one text and speech",
+      "status": "PASS",
+      "details": {
+        "prompt": "What is this?",
+        "options": [
+          "Tree",
+          "Wood"
+        ],
+        "spoken": [
+          "Hi! What is your name?",
+          "Tree",
+          "What is this?"
+        ]
+      }
+    },
+    {
+      "case": "names never use TTS",
+      "status": "PASS",
+      "details": {
+        "audio": "missing; Jenny-only named paths remain silent",
+        "names": [
+          "",
+          "Mario",
+          "Zyxora"
+        ]
+      }
+    }
+  ],
+  "screenshots": [
+    "screens/build-v1-01-main-save.png",
+    "screens/build-v1-02-house-and-pen.png",
+    "screens/build-v1-03-returned-material.png",
+    "screens/build-v1-10-window.png",
+    "screens/build-v1-04-house-room.png",
+    "screens/build-v1-05-pet-in-pen.png",
+    "screens/build-v1-06-restored.png",
+    "screens/build-v1-11-word-book.png",
+    "screens/build-v1-07-legacy-retained.png",
+    "screens/build-v1-08-safe-tier-one.png",
+    "screens/build-v1-09-name-empty.png",
+    "screens/build-v1-09-name-Mario.png",
+    "screens/build-v1-09-name-Zyxora.png"
+  ]
+}

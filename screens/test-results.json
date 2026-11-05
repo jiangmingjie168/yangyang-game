@@ -3,9 +3,9 @@
   "fixtures": "Seed 42; tools/materials and travel checkpoints supplied; mission flags earned by inputs; fake recognition explicitly marked",
   "results": [
     {
-      "name": "Task completion dialogue and gentle retry",
+      "name": "Tree encounter dialogue and gentle retry",
       "status": "passed",
-      "details": "Tree or wood?"
+      "details": "What is this?"
     },
     {
       "name": "Chapter 1: all 8 tasks and hat earned",
@@ -69,7 +69,7 @@
       "status": "passed"
     },
     {
-      "name": "Spiral recurrence: fish encounter revisits earlier water/wood after save/resume",
+      "name": "Repeated fish encounter keeps fish as target and earlier words as distractors after save/resume",
       "status": "passed"
     }
   ]

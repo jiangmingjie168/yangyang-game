@@ -1,0 +1,57 @@
+{
+  "source_sha256": "6658f2f921ccc7327ce8237986c01509200ac68af1e46e1434530074822afbfc",
+  "results": [
+    {
+      "case": "J-mobile-clean",
+      "status": "PASS",
+      "idle_start_ms": 8080,
+      "cheer_ms": 2695,
+      "show_ms": 4217,
+      "video": "build-v1-fix3-video/page@09560b1fef194472321f8f9338dcf134.webm"
+    }
+  ],
+  "frames": [
+    {
+      "case": "J-mobile-clean",
+      "t_ms": 1001,
+      "file": "build-v1-fix3-J-mobile-clean-934-fresh.png",
+      "label": "fresh"
+    },
+    {
+      "case": "J-mobile-clean",
+      "t_ms": 7146,
+      "file": "build-v1-fix3-J-mobile-clean-7104-crafted.png",
+      "label": "crafted"
+    },
+    {
+      "case": "J-mobile-clean",
+      "t_ms": 8222,
+      "file": "build-v1-fix3-J-mobile-clean-8180-idle-0s.png",
+      "label": "idle-0s"
+    },
+    {
+      "case": "J-mobile-clean",
+      "t_ms": 10823,
+      "file": "build-v1-fix3-J-mobile-clean-10779-J-cheer.png",
+      "label": "J-cheer"
+    },
+    {
+      "case": "J-mobile-clean",
+      "t_ms": 13206,
+      "file": "build-v1-fix3-J-mobile-clean-13157-idle-5s.png",
+      "label": "idle-5s"
+    },
+    {
+      "case": "J-mobile-clean",
+      "t_ms": 18223,
+      "file": "build-v1-fix3-J-mobile-clean-18167-idle-10s.png",
+      "label": "idle-10s"
+    },
+    {
+      "case": "J-mobile-clean",
+      "t_ms": 23205,
+      "file": "build-v1-fix3-J-mobile-clean-23152-idle-15s.png",
+      "label": "idle-15s"
+    }
+  ]
+}

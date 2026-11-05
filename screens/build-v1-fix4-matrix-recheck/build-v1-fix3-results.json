@@ -1,0 +1,91 @@
+{
+  "source_sha256": "6658f2f921ccc7327ce8237986c01509200ac68af1e46e1434530074822afbfc",
+  "results": [
+    {
+      "case": "P-desktop-log",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n'12' !== '11'\n",
+      "errors": [],
+      "video": "build-v1-fix3-video/page@90eb2fc4443e92aae4e19ffc5bfc3459.webm"
+    },
+    {
+      "case": "P-mobile-log",
+      "status": "PASS",
+      "video": "build-v1-fix3-video/page@78475b968f2cec28c37f7c17f88080df.webm"
+    }
+  ],
+  "frames": [
+    {
+      "case": "P-desktop-log",
+      "t_ms": 1013,
+      "file": "build-v1-fix3-P-desktop-log-958-fresh.png",
+      "label": "fresh"
+    },
+    {
+      "case": "P-desktop-log",
+      "t_ms": 4998,
+      "file": "build-v1-fix3-P-desktop-log-4940-crafted.png",
+      "label": "crafted"
+    },
+    {
+      "case": "P-desktop-log",
+      "t_ms": 5466,
+      "file": "build-v1-fix3-P-desktop-log-5409-FAIL.png",
+      "label": "FAIL"
+    },
+    {
+      "case": "P-mobile-log",
+      "t_ms": 856,
+      "file": "build-v1-fix3-P-mobile-log-811-fresh.png",
+      "label": "fresh"
+    },
+    {
+      "case": "P-mobile-log",
+      "t_ms": 4752,
+      "file": "build-v1-fix3-P-mobile-log-4707-crafted.png",
+      "label": "crafted"
+    },
+    {
+      "case": "P-mobile-log",
+      "t_ms": 5194,
+      "file": "build-v1-fix3-P-mobile-log-5139-P-pulse.png",
+      "label": "P-pulse"
+    },
+    {
+      "case": "P-mobile-log",
+      "t_ms": 7346,
+      "file": "build-v1-fix3-P-mobile-log-7302-P-two-planks-show.png",
+      "label": "P-two-planks-show"
+    },
+    {
+      "case": "P-mobile-log",
+      "t_ms": 7496,
+      "file": "build-v1-fix3-P-mobile-log-7447-P-occupied.png",
+      "label": "P-occupied"
+    },
+    {
+      "case": "P-mobile-log",
+      "t_ms": 7645,
+      "file": "build-v1-fix3-P-mobile-log-7596-P-reach.png",
+      "label": "P-reach"
+    },
+    {
+      "case": "P-mobile-log",
+      "t_ms": 7896,
+      "file": "build-v1-fix3-P-mobile-log-7845-P-remove.png",
+      "label": "P-remove"
+    },
+    {
+      "case": "P-mobile-log",
+      "t_ms": 8144,
+      "file": "build-v1-fix3-P-mobile-log-8095-P-HUD-yields.png",
+      "label": "P-HUD-yields"
+    },
+    {
+      "case": "P-mobile-log",
+      "t_ms": 9696,
+      "file": "build-v1-fix3-P-mobile-log-9653-P-animal-refused.png",
+      "label": "P-animal-refused"
+    }
+  ]
+}

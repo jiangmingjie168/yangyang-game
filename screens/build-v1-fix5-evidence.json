@@ -1,0 +1,1721 @@
+{
+  "source_sha256": "5a566ee4c8b2b2d61489be5cb988a40d58a95fd547f2d7cf1e9c30431f8b7a0d",
+  "source_md5": "af48b23fc78dc087e439a2a4b8a5331c",
+  "main": {
+    "H-desktop-log": {
+      "case": "H-desktop-log",
+      "status": "PASS",
+      "video": "build-v1-fix5-video/page@8fe00577a97a5604b5c8633d5393927a.webm",
+      "folder": "build-v1-fix5-final"
+    },
+    "U-desktop-log": {
+      "case": "U-desktop-log",
+      "status": "PASS",
+      "video": "build-v1-fix5-video/page@1dac7bd35fbe2062722e24c8ce5df0a9.webm",
+      "folder": "build-v1-fix5-final"
+    },
+    "L-desktop-log": {
+      "case": "L-desktop-log",
+      "status": "PASS",
+      "video": "build-v1-fix5-video/page@ff9a6d81f94f19f62e0add2182ac8a12.webm",
+      "folder": "build-v1-fix5-final"
+    },
+    "Q-desktop-log": {
+      "case": "Q-desktop-log",
+      "status": "PASS",
+      "video": "build-v1-fix5-video/page@ceeb13b2974a394596c4f2a4dcd1412f.webm",
+      "folder": "build-v1-fix5-final"
+    },
+    "R-desktop-log": {
+      "case": "R-desktop-log",
+      "status": "PASS",
+      "video": "build-v1-fix5-video/page@e65bd04267e4e3cd1167f71d6ee4cd17.webm",
+      "folder": "build-v1-fix5-final"
+    },
+    "I-desktop-log": {
+      "case": "I-desktop-log",
+      "status": "PASS",
+      "invite_ms": 29595,
+      "video": "build-v1-fix5-video/page@defbb15acf3c4623aa0a18de4c766c30.webm",
+      "folder": "build-v1-fix5-final"
+    },
+    "F-desktop-log": {
+      "case": "F-desktop-log",
+      "status": "PASS",
+      "video": "build-v1-fix5-video/page@e1bd17c28395837a6ab17114cf47870a.webm",
+      "folder": "build-v1-fix5-final"
+    },
+    "S-desktop-log": {
+      "case": "S-desktop-log",
+      "status": "PASS",
+      "video": "build-v1-fix5-video/page@ded2a58d944539ac65987dcc6158ba5c.webm",
+      "folder": "build-v1-fix5-final"
+    },
+    "V-desktop-log": {
+      "case": "V-desktop-log",
+      "status": "PASS",
+      "video": "build-v1-fix5-video/page@7acbc04a734bc552a7b23a0313dd14a0.webm",
+      "folder": "build-v1-fix5-final"
+    },
+    "H-mobile-log": {
+      "case": "H-mobile-log",
+      "status": "PASS",
+      "video": "build-v1-fix5-video/page@b00b4ef088efe25ccdb1244c94262f36.webm",
+      "folder": "build-v1-fix5-recheck"
+    },
+    "U-mobile-log": {
+      "case": "U-mobile-log",
+      "status": "PASS",
+      "video": "build-v1-fix5-video/page@e09f65435dacc55eb294c9f7dfb21c62.webm",
+      "folder": "build-v1-fix5-recheck"
+    },
+    "L-mobile-log": {
+      "case": "L-mobile-log",
+      "status": "PASS",
+      "video": "build-v1-fix5-video/page@a2413702dafadac8ccef217993388e81.webm",
+      "folder": "build-v1-fix5-final"
+    },
+    "Q-mobile-log": {
+      "case": "Q-mobile-log",
+      "status": "PASS",
+      "video": "build-v1-fix5-video/page@1ddbad261b64636da23792745737aa50.webm",
+      "folder": "build-v1-fix5-final"
+    },
+    "R-mobile-log": {
+      "case": "R-mobile-log",
+      "status": "PASS",
+      "video": "build-v1-fix5-video/page@31d51f38ce75dc916ac331ddcd2fc598.webm",
+      "folder": "build-v1-fix5-recheck"
+    },
+    "I-mobile-log": {
+      "case": "I-mobile-log",
+      "status": "PASS",
+      "invite_ms": 29534,
+      "video": "build-v1-fix5-video/page@dd59e095812f88c68919065609c1b6d1.webm",
+      "folder": "build-v1-fix5-final"
+    },
+    "F-mobile-log": {
+      "case": "F-mobile-log",
+      "status": "PASS",
+      "video": "build-v1-fix5-video/page@140d4638fb00caf556918d24fce32f6b.webm",
+      "folder": "build-v1-fix5-final"
+    },
+    "S-mobile-log": {
+      "case": "S-mobile-log",
+      "status": "PASS",
+      "video": "build-v1-fix5-video/page@9e79b58cdefda841eaebbfbb25b2864f.webm",
+      "folder": "build-v1-fix5-final"
+    },
+    "V-mobile-log": {
+      "case": "V-mobile-log",
+      "status": "PASS",
+      "video": "build-v1-fix5-video/page@07d7dc1ead4567e91b0c54497f5ffc7a.webm",
+      "folder": "build-v1-fix5-final"
+    }
+  },
+  "clean": [
+    {
+      "case": "H-desktop-clean",
+      "status": "PASS",
+      "video": "build-v1-fix5-video/page@fb9bf0bd96b5af87f1cc95d1ddc07a96.webm"
+    },
+    {
+      "case": "U-desktop-clean",
+      "status": "PASS",
+      "video": "build-v1-fix5-video/page@9db18c2f66fbb103af885b1f81715da7.webm"
+    },
+    {
+      "case": "I-desktop-clean",
+      "status": "PASS",
+      "invite_ms": 29705,
+      "video": "build-v1-fix5-video/page@dd93a055ecfe86628454a3e47a6fab84.webm"
+    },
+    {
+      "case": "F-desktop-clean",
+      "status": "PASS",
+      "video": "build-v1-fix5-video/page@b820623d4693dd3018c2d491e08f594a.webm"
+    },
+    {
+      "case": "S-desktop-clean",
+      "status": "PASS",
+      "video": "build-v1-fix5-video/page@ddb45ddf09e0038391786c9b3446fcbb.webm"
+    },
+    {
+      "case": "V-desktop-clean",
+      "status": "PASS",
+      "video": "build-v1-fix5-video/page@853f06212017cd027d41e232e59ed824.webm"
+    },
+    {
+      "case": "H-mobile-clean",
+      "status": "PASS",
+      "video": "build-v1-fix5-video/page@36ffae1d55e536c090812394ca5e614d.webm"
+    },
+    {
+      "case": "U-mobile-clean",
+      "status": "PASS",
+      "video": "build-v1-fix5-video/page@5a55637a2f5d0d1e072c29e59ce83af8.webm"
+    },
+    {
+      "case": "I-mobile-clean",
+      "status": "PASS",
+      "invite_ms": 29608,
+      "video": "build-v1-fix5-video/page@179e977fec8341ab2548ca8bb1091c21.webm"
+    },
+    {
+      "case": "F-mobile-clean",
+      "status": "PASS",
+      "video": "build-v1-fix5-video/page@3df872d7ee7ff9ce562a77c9363bc276.webm"
+    },
+    {
+      "case": "S-mobile-clean",
+      "status": "PASS",
+      "video": "build-v1-fix5-video/page@eea20c57d70cfa248da1da01684377e3.webm"
+    },
+    {
+      "case": "V-mobile-clean",
+      "status": "PASS",
+      "video": "build-v1-fix5-video/page@28a0ed7043923aae31f1d8503b355616.webm"
+    }
+  ],
+  "fix3": [
+    {
+      "case": "J-desktop-clean",
+      "status": "PASS",
+      "idle_start_ms": 7101,
+      "cheer_ms": 2714,
+      "show_ms": 4225,
+      "video": "build-v1-fix3-video/page@46c6e2bb144d93d3adbd9280c4cb1a40.webm",
+      "folder": "build-v1-fix5-fix3-final"
+    },
+    {
+      "case": "S-desktop-clean",
+      "status": "PASS",
+      "video": "build-v1-fix3-video/page@7b9db1cb786a8ad2d21dd13637bc312a.webm",
+      "folder": "build-v1-fix5-fix3-final"
+    },
+    {
+      "case": "B-desktop-clean",
+      "status": "PASS",
+      "video": "build-v1-fix3-video/page@62000ef0fb85c0fb0a3a984942bb8258.webm",
+      "folder": "build-v1-fix5-fix3-recheck"
+    },
+    {
+      "case": "P-desktop-clean",
+      "status": "PASS",
+      "video": "build-v1-fix3-video/page@6882418e508d16c23fa7be9eca3711be.webm",
+      "folder": "build-v1-fix5-fix3-final"
+    },
+    {
+      "case": "G-desktop-clean",
+      "status": "PASS",
+      "video": "build-v1-fix3-video/page@a4536a7e79605545eba2cbae6653092f.webm",
+      "folder": "build-v1-fix5-fix3-final"
+    },
+    {
+      "case": "J-mobile-clean",
+      "status": "PASS",
+      "idle_start_ms": 7989,
+      "cheer_ms": 2697,
+      "show_ms": 4210,
+      "video": "build-v1-fix3-video/page@6dc93e3b85b6e9584fab4c0b4118b97d.webm",
+      "folder": "build-v1-fix5-fix3-final"
+    },
+    {
+      "case": "S-mobile-clean",
+      "status": "PASS",
+      "video": "build-v1-fix3-video/page@be77e7709d1afa9a8e01c92eb5106cdf.webm",
+      "folder": "build-v1-fix5-fix3-final"
+    },
+    {
+      "case": "B-mobile-clean",
+      "status": "PASS",
+      "video": "build-v1-fix3-video/page@7f51bd4ec23d6a258e62109eaca164c9.webm",
+      "folder": "build-v1-fix5-fix3-final"
+    },
+    {
+      "case": "P-mobile-clean",
+      "status": "PASS",
+      "video": "build-v1-fix3-video/page@23977048c88744b11b1b150edb93edd8.webm",
+      "folder": "build-v1-fix5-fix3-final"
+    },
+    {
+      "case": "G-mobile-clean",
+      "status": "PASS",
+      "video": "build-v1-fix3-video/page@7a5d10ac2925a3acd65c597db6d1492f.webm",
+      "folder": "build-v1-fix5-fix3-final"
+    }
+  ],
+  "regressions": [
+    {
+      "suite": "build-v1",
+      "exit": 0,
+      "seconds": 162.6,
+      "log": "screens/build-v1-fix5-test-build-v1.log"
+    },
+    {
+      "suite": "build-placement-fix3",
+      "exit": 0,
+      "seconds": 0,
+      "log": "screens/build-v1-fix5-test-build-placement-fix3.log"
+    },
+    {
+      "suite": "chinese-cleanup",
+      "exit": 0,
+      "seconds": 4.9,
+      "log": "screens/build-v1-fix5-test-chinese-cleanup.log"
+    },
+    {
+      "suite": "natural-pointer-v4r",
+      "exit": 0,
+      "seconds": 18.1,
+      "log": "screens/build-v1-fix5-test-natural-pointer-v4r.log"
+    },
+    {
+      "suite": "world-v2",
+      "exit": 0,
+      "seconds": 18.8,
+      "log": "screens/build-v1-fix5-test-world-v2.log"
+    },
+    {
+      "suite": "server",
+      "exit": 0,
+      "seconds": 1,
+      "log": "screens/build-v1-fix5-test-server.log"
+    },
+    {
+      "suite": "memory-chat",
+      "exit": 0,
+      "seconds": 19.3,
+      "log": "screens/build-v1-fix5-test-memory-chat.log"
+    }
+  ],
+  "confetti_pixels": {
+    "frames": 10,
+    "min": 419,
+    "max": 994
+  },
+  "key_frames": [
+    {
+      "case": "H-desktop-log",
+      "t_ms": 10384,
+      "file": "build-v1-fix5-final/build-v1-fix5-H-desktop-log-10316-hana-house-three-roof.png",
+      "label": "hana-house-three-roof"
+    },
+    {
+      "case": "L-desktop-log",
+      "t_ms": 16043,
+      "file": "build-v1-fix5-final/build-v1-fix5-L-desktop-log-15986-saved-house-revisit-invite.png",
+      "label": "saved-house-revisit-invite"
+    },
+    {
+      "case": "L-desktop-log",
+      "t_ms": 16320,
+      "file": "build-v1-fix5-final/build-v1-fix5-L-desktop-log-16253-house-question-options.png",
+      "label": "house-question-options"
+    },
+    {
+      "case": "L-desktop-log",
+      "t_ms": 16801,
+      "file": "build-v1-fix5-final/build-v1-fix5-L-desktop-log-16735-house-finale-confetti.png",
+      "label": "house-finale-confetti"
+    },
+    {
+      "case": "Q-desktop-log",
+      "t_ms": 14721,
+      "file": "build-v1-fix5-final/build-v1-fix5-Q-desktop-log-14657-two-shows-not-spent.png",
+      "label": "two-shows-not-spent"
+    },
+    {
+      "case": "Q-desktop-log",
+      "t_ms": 22489,
+      "file": "build-v1-fix5-final/build-v1-fix5-Q-desktop-log-22413-fifth-blocked.png",
+      "label": "fifth-blocked"
+    },
+    {
+      "case": "Q-desktop-log",
+      "t_ms": 23782,
+      "file": "build-v1-fix5-final/build-v1-fix5-Q-desktop-log-23725-cap-persists.png",
+      "label": "cap-persists"
+    },
+    {
+      "case": "Q-desktop-log",
+      "t_ms": 24463,
+      "file": "build-v1-fix5-final/build-v1-fix5-Q-desktop-log-24408-new-world-zero.png",
+      "label": "new-world-zero"
+    },
+    {
+      "case": "R-desktop-log",
+      "t_ms": 45047,
+      "file": "build-v1-fix5-final/build-v1-fix5-R-desktop-log-44984-expired-no-slot-spent.png",
+      "label": "expired-no-slot-spent"
+    },
+    {
+      "case": "R-desktop-log",
+      "t_ms": 48137,
+      "file": "build-v1-fix5-final/build-v1-fix5-R-desktop-log-48063-one-block-rearmed.png",
+      "label": "one-block-rearmed"
+    },
+    {
+      "case": "R-desktop-log",
+      "t_ms": 48745,
+      "file": "build-v1-fix5-final/build-v1-fix5-R-desktop-log-48666-rearmed-expiry-confetti.png",
+      "label": "rearmed-expiry-confetti"
+    },
+    {
+      "case": "R-desktop-log",
+      "t_ms": 51966,
+      "file": "build-v1-fix5-final/build-v1-fix5-R-desktop-log-51867-one-block-rearmed.png",
+      "label": "one-block-rearmed"
+    },
+    {
+      "case": "R-desktop-log",
+      "t_ms": 52596,
+      "file": "build-v1-fix5-final/build-v1-fix5-R-desktop-log-52501-rearmed-completion-confetti.png",
+      "label": "rearmed-completion-confetti"
+    },
+    {
+      "case": "I-desktop-log",
+      "t_ms": 37891,
+      "file": "build-v1-fix5-final/build-v1-fix5-I-desktop-log-37824-invite-29s.png",
+      "label": "invite-29s"
+    },
+    {
+      "case": "I-desktop-log",
+      "t_ms": 38391,
+      "file": "build-v1-fix5-final/build-v1-fix5-I-desktop-log-38312-waited-show-confetti.png",
+      "label": "waited-show-confetti"
+    },
+    {
+      "case": "H-mobile-log",
+      "t_ms": 12265,
+      "file": "build-v1-fix5-recheck/build-v1-fix5-H-mobile-log-12214-hana-house-three-roof.png",
+      "label": "hana-house-three-roof"
+    },
+    {
+      "case": "L-mobile-log",
+      "t_ms": 16883,
+      "file": "build-v1-fix5-final/build-v1-fix5-L-mobile-log-16836-saved-house-revisit-invite.png",
+      "label": "saved-house-revisit-invite"
+    },
+    {
+      "case": "L-mobile-log",
+      "t_ms": 17132,
+      "file": "build-v1-fix5-final/build-v1-fix5-L-mobile-log-17084-house-question-options.png",
+      "label": "house-question-options"
+    },
+    {
+      "case": "L-mobile-log",
+      "t_ms": 17583,
+      "file": "build-v1-fix5-final/build-v1-fix5-L-mobile-log-17536-house-finale-confetti.png",
+      "label": "house-finale-confetti"
+    },
+    {
+      "case": "Q-mobile-log",
+      "t_ms": 14300,
+      "file": "build-v1-fix5-final/build-v1-fix5-Q-mobile-log-14251-two-shows-not-spent.png",
+      "label": "two-shows-not-spent"
+    },
+    {
+      "case": "Q-mobile-log",
+      "t_ms": 21900,
+      "file": "build-v1-fix5-final/build-v1-fix5-Q-mobile-log-21856-fifth-blocked.png",
+      "label": "fifth-blocked"
+    },
+    {
+      "case": "Q-mobile-log",
+      "t_ms": 23115,
+      "file": "build-v1-fix5-final/build-v1-fix5-Q-mobile-log-23087-cap-persists.png",
+      "label": "cap-persists"
+    },
+    {
+      "case": "Q-mobile-log",
+      "t_ms": 23775,
+      "file": "build-v1-fix5-final/build-v1-fix5-Q-mobile-log-23703-new-world-zero.png",
+      "label": "new-world-zero"
+    },
+    {
+      "case": "R-mobile-log",
+      "t_ms": 44110,
+      "file": "build-v1-fix5-recheck/build-v1-fix5-R-mobile-log-44047-expired-no-slot-spent.png",
+      "label": "expired-no-slot-spent"
+    },
+    {
+      "case": "R-mobile-log",
+      "t_ms": 47179,
+      "file": "build-v1-fix5-recheck/build-v1-fix5-R-mobile-log-47118-one-block-rearmed.png",
+      "label": "one-block-rearmed"
+    },
+    {
+      "case": "R-mobile-log",
+      "t_ms": 47763,
+      "file": "build-v1-fix5-recheck/build-v1-fix5-R-mobile-log-47699-rearmed-expiry-confetti.png",
+      "label": "rearmed-expiry-confetti"
+    },
+    {
+      "case": "R-mobile-log",
+      "t_ms": 50935,
+      "file": "build-v1-fix5-recheck/build-v1-fix5-R-mobile-log-50880-one-block-rearmed.png",
+      "label": "one-block-rearmed"
+    },
+    {
+      "case": "R-mobile-log",
+      "t_ms": 51503,
+      "file": "build-v1-fix5-recheck/build-v1-fix5-R-mobile-log-51449-rearmed-completion-confetti.png",
+      "label": "rearmed-completion-confetti"
+    },
+    {
+      "case": "I-mobile-log",
+      "t_ms": 38425,
+      "file": "build-v1-fix5-final/build-v1-fix5-I-mobile-log-38376-invite-29s.png",
+      "label": "invite-29s"
+    },
+    {
+      "case": "I-mobile-log",
+      "t_ms": 38895,
+      "file": "build-v1-fix5-final/build-v1-fix5-I-mobile-log-38833-waited-show-confetti.png",
+      "label": "waited-show-confetti"
+    },
+    {
+      "case": "H-desktop-clean",
+      "t_ms": 6065,
+      "file": "build-v1-fix5-clean/build-v1-fix5-H-desktop-clean-6007-four-House-roof.png",
+      "label": "four-House-roof"
+    },
+    {
+      "case": "H-desktop-clean",
+      "t_ms": 6331,
+      "file": "build-v1-fix5-clean/build-v1-fix5-H-desktop-clean-6275-three-House-roof.png",
+      "label": "three-House-roof"
+    },
+    {
+      "case": "H-desktop-clean",
+      "t_ms": 8097,
+      "file": "build-v1-fix5-clean/build-v1-fix5-H-desktop-clean-8045-wall-2.png",
+      "label": "wall-2"
+    },
+    {
+      "case": "H-desktop-clean",
+      "t_ms": 8413,
+      "file": "build-v1-fix5-clean/build-v1-fix5-H-desktop-clean-8360-wall-4.png",
+      "label": "wall-4"
+    },
+    {
+      "case": "H-desktop-clean",
+      "t_ms": 11284,
+      "file": "build-v1-fix5-clean/build-v1-fix5-H-desktop-clean-11214-hana-house-three-roof.png",
+      "label": "hana-house-three-roof"
+    },
+    {
+      "case": "H-desktop-clean",
+      "t_ms": 11469,
+      "file": "build-v1-fix5-clean/build-v1-fix5-H-desktop-clean-11410-house-invite.png",
+      "label": "house-invite"
+    },
+    {
+      "case": "H-desktop-clean",
+      "t_ms": 11652,
+      "file": "build-v1-fix5-clean/build-v1-fix5-H-desktop-clean-11580-house-question-options.png",
+      "label": "house-question-options"
+    },
+    {
+      "case": "H-desktop-clean",
+      "t_ms": 20714,
+      "file": "build-v1-fix5-clean/build-v1-fix5-H-desktop-clean-20661-house-question-after-9s.png",
+      "label": "house-question-after-9s"
+    },
+    {
+      "case": "H-desktop-clean",
+      "t_ms": 21360,
+      "file": "build-v1-fix5-clean/build-v1-fix5-H-desktop-clean-21125-house-finale-confetti.png",
+      "label": "house-finale-confetti",
+      "confettiPixels": 627
+    },
+    {
+      "case": "H-desktop-clean",
+      "t_ms": 24608,
+      "file": "build-v1-fix5-clean/build-v1-fix5-H-desktop-clean-24539-house-one-Planks-ready.png",
+      "label": "house-one-Planks-ready"
+    },
+    {
+      "case": "H-desktop-clean",
+      "t_ms": 25023,
+      "file": "build-v1-fix5-clean/build-v1-fix5-H-desktop-clean-24955-second-house-finale.png",
+      "label": "second-house-finale"
+    },
+    {
+      "case": "U-desktop-clean",
+      "t_ms": 10948,
+      "file": "build-v1-fix5-clean/build-v1-fix5-U-desktop-clean-10880-free-walls-invite.png",
+      "label": "free-walls-invite"
+    },
+    {
+      "case": "U-desktop-clean",
+      "t_ms": 14785,
+      "file": "build-v1-fix5-clean/build-v1-fix5-U-desktop-clean-14716-hana-house-three-roof.png",
+      "label": "hana-house-three-roof"
+    },
+    {
+      "case": "U-desktop-clean",
+      "t_ms": 15116,
+      "file": "build-v1-fix5-clean/build-v1-fix5-U-desktop-clean-15062-house-question-options.png",
+      "label": "house-question-options"
+    },
+    {
+      "case": "U-desktop-clean",
+      "t_ms": 15784,
+      "file": "build-v1-fix5-clean/build-v1-fix5-U-desktop-clean-15527-house-finale-confetti.png",
+      "label": "house-finale-confetti",
+      "confettiPixels": 633
+    },
+    {
+      "case": "I-desktop-clean",
+      "t_ms": 38397,
+      "file": "build-v1-fix5-clean/build-v1-fix5-I-desktop-clean-38339-invite-29s.png",
+      "label": "invite-29s"
+    },
+    {
+      "case": "I-desktop-clean",
+      "t_ms": 39037,
+      "file": "build-v1-fix5-clean/build-v1-fix5-I-desktop-clean-38810-waited-show-confetti.png",
+      "label": "waited-show-confetti",
+      "confettiPixels": 723
+    },
+    {
+      "case": "F-desktop-clean",
+      "t_ms": 9851,
+      "file": "build-v1-fix5-clean/build-v1-fix5-F-desktop-clean-9624-idle-confetti.png",
+      "label": "idle-confetti",
+      "confettiPixels": 621
+    },
+    {
+      "case": "F-desktop-clean",
+      "t_ms": 10598,
+      "file": "build-v1-fix5-clean/build-v1-fix5-F-desktop-clean-10383-free-show-confetti.png",
+      "label": "free-show-confetti",
+      "confettiPixels": 994
+    },
+    {
+      "case": "S-desktop-clean",
+      "t_ms": 7795,
+      "file": "build-v1-fix5-clean/build-v1-fix5-S-desktop-clean-7734-second-layer.png",
+      "label": "second-layer"
+    },
+    {
+      "case": "S-desktop-clean",
+      "t_ms": 7954,
+      "file": "build-v1-fix5-clean/build-v1-fix5-S-desktop-clean-7898-third-layer.png",
+      "label": "third-layer"
+    },
+    {
+      "case": "V-desktop-clean",
+      "t_ms": 929,
+      "file": "build-v1-fix5-clean/build-v1-fix5-V-desktop-clean-869-version.png",
+      "label": "version"
+    },
+    {
+      "case": "H-mobile-clean",
+      "t_ms": 6879,
+      "file": "build-v1-fix5-clean/build-v1-fix5-H-mobile-clean-6826-four-House-roof.png",
+      "label": "four-House-roof"
+    },
+    {
+      "case": "H-mobile-clean",
+      "t_ms": 7130,
+      "file": "build-v1-fix5-clean/build-v1-fix5-H-mobile-clean-7075-three-House-roof.png",
+      "label": "three-House-roof"
+    },
+    {
+      "case": "H-mobile-clean",
+      "t_ms": 7531,
+      "file": "build-v1-fix5-clean/build-v1-fix5-H-mobile-clean-7484-wall-2.png",
+      "label": "wall-2"
+    },
+    {
+      "case": "H-mobile-clean",
+      "t_ms": 8281,
+      "file": "build-v1-fix5-clean/build-v1-fix5-H-mobile-clean-8230-wall-4.png",
+      "label": "wall-4"
+    },
+    {
+      "case": "H-mobile-clean",
+      "t_ms": 11130,
+      "file": "build-v1-fix5-clean/build-v1-fix5-H-mobile-clean-11081-hana-house-three-roof.png",
+      "label": "hana-house-three-roof"
+    },
+    {
+      "case": "H-mobile-clean",
+      "t_ms": 11279,
+      "file": "build-v1-fix5-clean/build-v1-fix5-H-mobile-clean-11236-house-invite.png",
+      "label": "house-invite"
+    },
+    {
+      "case": "H-mobile-clean",
+      "t_ms": 11430,
+      "file": "build-v1-fix5-clean/build-v1-fix5-H-mobile-clean-11385-house-question-options.png",
+      "label": "house-question-options"
+    },
+    {
+      "case": "H-mobile-clean",
+      "t_ms": 20495,
+      "file": "build-v1-fix5-clean/build-v1-fix5-H-mobile-clean-20441-house-question-after-9s.png",
+      "label": "house-question-after-9s"
+    },
+    {
+      "case": "H-mobile-clean",
+      "t_ms": 21047,
+      "file": "build-v1-fix5-clean/build-v1-fix5-H-mobile-clean-20898-house-finale-confetti.png",
+      "label": "house-finale-confetti",
+      "confettiPixels": 494
+    },
+    {
+      "case": "H-mobile-clean",
+      "t_ms": 24265,
+      "file": "build-v1-fix5-clean/build-v1-fix5-H-mobile-clean-24205-house-one-Planks-ready.png",
+      "label": "house-one-Planks-ready"
+    },
+    {
+      "case": "H-mobile-clean",
+      "t_ms": 24629,
+      "file": "build-v1-fix5-clean/build-v1-fix5-H-mobile-clean-24586-second-house-finale.png",
+      "label": "second-house-finale"
+    },
+    {
+      "case": "U-mobile-clean",
+      "t_ms": 10128,
+      "file": "build-v1-fix5-clean/build-v1-fix5-U-mobile-clean-10081-free-walls-invite.png",
+      "label": "free-walls-invite"
+    },
+    {
+      "case": "U-mobile-clean",
+      "t_ms": 13844,
+      "file": "build-v1-fix5-clean/build-v1-fix5-U-mobile-clean-13795-hana-house-three-roof.png",
+      "label": "hana-house-three-roof"
+    },
+    {
+      "case": "U-mobile-clean",
+      "t_ms": 14145,
+      "file": "build-v1-fix5-clean/build-v1-fix5-U-mobile-clean-14099-house-question-options.png",
+      "label": "house-question-options"
+    },
+    {
+      "case": "U-mobile-clean",
+      "t_ms": 14693,
+      "file": "build-v1-fix5-clean/build-v1-fix5-U-mobile-clean-14551-house-finale-confetti.png",
+      "label": "house-finale-confetti",
+      "confettiPixels": 639
+    },
+    {
+      "case": "I-mobile-clean",
+      "t_ms": 38386,
+      "file": "build-v1-fix5-clean/build-v1-fix5-I-mobile-clean-38339-invite-29s.png",
+      "label": "invite-29s"
+    },
+    {
+      "case": "I-mobile-clean",
+      "t_ms": 38943,
+      "file": "build-v1-fix5-clean/build-v1-fix5-I-mobile-clean-38793-waited-show-confetti.png",
+      "label": "waited-show-confetti",
+      "confettiPixels": 438
+    },
+    {
+      "case": "F-mobile-clean",
+      "t_ms": 11582,
+      "file": "build-v1-fix5-clean/build-v1-fix5-F-mobile-clean-11443-idle-confetti.png",
+      "label": "idle-confetti",
+      "confettiPixels": 419
+    },
+    {
+      "case": "F-mobile-clean",
+      "t_ms": 12248,
+      "file": "build-v1-fix5-clean/build-v1-fix5-F-mobile-clean-12095-free-show-confetti.png",
+      "label": "free-show-confetti",
+      "confettiPixels": 632
+    },
+    {
+      "case": "S-mobile-clean",
+      "t_ms": 7609,
+      "file": "build-v1-fix5-clean/build-v1-fix5-S-mobile-clean-7562-second-layer.png",
+      "label": "second-layer"
+    },
+    {
+      "case": "S-mobile-clean",
+      "t_ms": 7759,
+      "file": "build-v1-fix5-clean/build-v1-fix5-S-mobile-clean-7708-third-layer.png",
+      "label": "third-layer"
+    },
+    {
+      "case": "V-mobile-clean",
+      "t_ms": 889,
+      "file": "build-v1-fix5-clean/build-v1-fix5-V-mobile-clean-845-version.png",
+      "label": "version"
+    }
+  ],
+  "videos": [
+    {
+      "case": "H-desktop-log",
+      "file": "build-v1-fix5-final/build-v1-fix5-video/page@8fe00577a97a5604b5c8633d5393927a.webm"
+    },
+    {
+      "case": "U-desktop-log",
+      "file": "build-v1-fix5-final/build-v1-fix5-video/page@1dac7bd35fbe2062722e24c8ce5df0a9.webm"
+    },
+    {
+      "case": "L-desktop-log",
+      "file": "build-v1-fix5-final/build-v1-fix5-video/page@ff9a6d81f94f19f62e0add2182ac8a12.webm"
+    },
+    {
+      "case": "Q-desktop-log",
+      "file": "build-v1-fix5-final/build-v1-fix5-video/page@ceeb13b2974a394596c4f2a4dcd1412f.webm"
+    },
+    {
+      "case": "R-desktop-log",
+      "file": "build-v1-fix5-final/build-v1-fix5-video/page@e65bd04267e4e3cd1167f71d6ee4cd17.webm"
+    },
+    {
+      "case": "I-desktop-log",
+      "file": "build-v1-fix5-final/build-v1-fix5-video/page@defbb15acf3c4623aa0a18de4c766c30.webm"
+    },
+    {
+      "case": "F-desktop-log",
+      "file": "build-v1-fix5-final/build-v1-fix5-video/page@e1bd17c28395837a6ab17114cf47870a.webm"
+    },
+    {
+      "case": "S-desktop-log",
+      "file": "build-v1-fix5-final/build-v1-fix5-video/page@ded2a58d944539ac65987dcc6158ba5c.webm"
+    },
+    {
+      "case": "V-desktop-log",
+      "file": "build-v1-fix5-final/build-v1-fix5-video/page@7acbc04a734bc552a7b23a0313dd14a0.webm"
+    },
+    {
+      "case": "H-mobile-log",
+      "file": "build-v1-fix5-recheck/build-v1-fix5-video/page@b00b4ef088efe25ccdb1244c94262f36.webm"
+    },
+    {
+      "case": "U-mobile-log",
+      "file": "build-v1-fix5-recheck/build-v1-fix5-video/page@e09f65435dacc55eb294c9f7dfb21c62.webm"
+    },
+    {
+      "case": "L-mobile-log",
+      "file": "build-v1-fix5-final/build-v1-fix5-video/page@a2413702dafadac8ccef217993388e81.webm"
+    },
+    {
+      "case": "Q-mobile-log",
+      "file": "build-v1-fix5-final/build-v1-fix5-video/page@1ddbad261b64636da23792745737aa50.webm"
+    },
+    {
+      "case": "R-mobile-log",
+      "file": "build-v1-fix5-recheck/build-v1-fix5-video/page@31d51f38ce75dc916ac331ddcd2fc598.webm"
+    },
+    {
+      "case": "I-mobile-log",
+      "file": "build-v1-fix5-final/build-v1-fix5-video/page@dd59e095812f88c68919065609c1b6d1.webm"
+    },
+    {
+      "case": "F-mobile-log",
+      "file": "build-v1-fix5-final/build-v1-fix5-video/page@140d4638fb00caf556918d24fce32f6b.webm"
+    },
+    {
+      "case": "S-mobile-log",
+      "file": "build-v1-fix5-final/build-v1-fix5-video/page@9e79b58cdefda841eaebbfbb25b2864f.webm"
+    },
+    {
+      "case": "V-mobile-log",
+      "file": "build-v1-fix5-final/build-v1-fix5-video/page@07d7dc1ead4567e91b0c54497f5ffc7a.webm"
+    },
+    {
+      "case": "H-desktop-clean",
+      "file": "build-v1-fix5-clean/build-v1-fix5-video/page@fb9bf0bd96b5af87f1cc95d1ddc07a96.webm"
+    },
+    {
+      "case": "U-desktop-clean",
+      "file": "build-v1-fix5-clean/build-v1-fix5-video/page@9db18c2f66fbb103af885b1f81715da7.webm"
+    },
+    {
+      "case": "I-desktop-clean",
+      "file": "build-v1-fix5-clean/build-v1-fix5-video/page@dd93a055ecfe86628454a3e47a6fab84.webm"
+    },
+    {
+      "case": "F-desktop-clean",
+      "file": "build-v1-fix5-clean/build-v1-fix5-video/page@b820623d4693dd3018c2d491e08f594a.webm"
+    },
+    {
+      "case": "S-desktop-clean",
+      "file": "build-v1-fix5-clean/build-v1-fix5-video/page@ddb45ddf09e0038391786c9b3446fcbb.webm"
+    },
+    {
+      "case": "V-desktop-clean",
+      "file": "build-v1-fix5-clean/build-v1-fix5-video/page@853f06212017cd027d41e232e59ed824.webm"
+    },
+    {
+      "case": "H-mobile-clean",
+      "file": "build-v1-fix5-clean/build-v1-fix5-video/page@36ffae1d55e536c090812394ca5e614d.webm"
+    },
+    {
+      "case": "U-mobile-clean",
+      "file": "build-v1-fix5-clean/build-v1-fix5-video/page@5a55637a2f5d0d1e072c29e59ce83af8.webm"
+    },
+    {
+      "case": "I-mobile-clean",
+      "file": "build-v1-fix5-clean/build-v1-fix5-video/page@179e977fec8341ab2548ca8bb1091c21.webm"
+    },
+    {
+      "case": "F-mobile-clean",
+      "file": "build-v1-fix5-clean/build-v1-fix5-video/page@3df872d7ee7ff9ce562a77c9363bc276.webm"
+    },
+    {
+      "case": "S-mobile-clean",
+      "file": "build-v1-fix5-clean/build-v1-fix5-video/page@eea20c57d70cfa248da1da01684377e3.webm"
+    },
+    {
+      "case": "V-mobile-clean",
+      "file": "build-v1-fix5-clean/build-v1-fix5-video/page@28a0ed7043923aae31f1d8503b355616.webm"
+    }
+  ],
+  "attempts": [
+    {
+      "file": "build-v1-fix5-attempt1/build-v1-fix5-results.json",
+      "source_sha256": "20e0ee0795c453ed01f60b1ba11db0cf1db19182315f118e174de768c8f0afa5",
+      "results": [
+        {
+          "case": "H-mobile-log",
+          "status": "FAIL",
+          "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n'10' !== '9'\n",
+          "errors": [],
+          "video": "build-v1-fix5-video/page@326afe35af735a0e468b15f629cedd6f.webm"
+        }
+      ]
+    },
+    {
+      "file": "build-v1-fix5-attempt2/build-v1-fix5-results.json",
+      "source_sha256": "20e0ee0795c453ed01f60b1ba11db0cf1db19182315f118e174de768c8f0afa5",
+      "results": [
+        {
+          "case": "H-mobile-log",
+          "status": "FAIL",
+          "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ '4 / 4 House'\n- '0 / 4 House'\n",
+          "errors": [],
+          "video": "build-v1-fix5-video/page@bff043892f2bbafce211ae740b3c3240.webm"
+        }
+      ]
+    },
+    {
+      "file": "build-v1-fix5-attempt3/build-v1-fix5-results.json",
+      "source_sha256": "20e0ee0795c453ed01f60b1ba11db0cf1db19182315f118e174de768c8f0afa5",
+      "results": [
+        {
+          "case": "H-mobile-log",
+          "status": "FAIL",
+          "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ '4 / 4 House'\n- '0 / 4 House'\n",
+          "errors": [],
+          "video": "build-v1-fix5-video/page@415aa29de470514b6af5c45cae46f2f0.webm"
+        }
+      ]
+    },
+    {
+      "file": "build-v1-fix5-attempt4/build-v1-fix5-results.json",
+      "source_sha256": "20e0ee0795c453ed01f60b1ba11db0cf1db19182315f118e174de768c8f0afa5",
+      "results": [
+        {
+          "case": "H-mobile-log",
+          "status": "PASS",
+          "video": "build-v1-fix5-video/page@9b17271e20747c61a678cf3f184838d8.webm"
+        },
+        {
+          "case": "U-mobile-log",
+          "status": "PASS",
+          "video": "build-v1-fix5-video/page@9082de50c88d143548f9137a18fdfbe0.webm"
+        }
+      ]
+    },
+    {
+      "file": "build-v1-fix5-before-question-guard/main/build-v1-fix5-results.json",
+      "source_sha256": "629afea2082c964c452ddceeb0265d3f303fc9d477e4c9d2fe15b399f398b285",
+      "results": [
+        {
+          "case": "H-desktop-log",
+          "status": "PASS",
+          "video": "build-v1-fix5-video/page@b4808c26fbbd5a09bf3124089cc8edc3.webm"
+        },
+        {
+          "case": "U-desktop-log",
+          "status": "PASS",
+          "video": "build-v1-fix5-video/page@a30c96ad88318e164e8842f40fa55fbf.webm"
+        },
+        {
+          "case": "Q-desktop-log",
+          "status": "PASS",
+          "video": "build-v1-fix5-video/page@f64140a3736b8549e667a8b6becf774b.webm"
+        },
+        {
+          "case": "R-desktop-log",
+          "status": "PASS",
+          "video": "build-v1-fix5-video/page@abc2675808cfa4b90ea7a80e3cd041d3.webm"
+        },
+        {
+          "case": "I-desktop-log",
+          "status": "PASS",
+          "invite_ms": 29582,
+          "video": "build-v1-fix5-video/page@b6ace6ff90366d3eb1ae24e1e85c71d4.webm"
+        },
+        {
+          "case": "F-desktop-log",
+          "status": "PASS",
+          "video": "build-v1-fix5-video/page@cac5c828a5d87d5d0de645be26683d16.webm"
+        },
+        {
+          "case": "S-desktop-log",
+          "status": "PASS",
+          "video": "build-v1-fix5-video/page@5a497ae6f874b7cf5b31d75da8b8cb5e.webm"
+        },
+        {
+          "case": "V-desktop-log",
+          "status": "PASS",
+          "video": "build-v1-fix5-video/page@ebe50502d045e7091ea83127ce272f1a.webm"
+        },
+        {
+          "case": "H-mobile-log",
+          "status": "PASS",
+          "video": "build-v1-fix5-video/page@71d298b57ad7d75dc4fcc9df7df0cfe0.webm"
+        },
+        {
+          "case": "U-mobile-log",
+          "status": "PASS",
+          "video": "build-v1-fix5-video/page@7c44bd17be8c408152225b92ab3c8643.webm"
+        },
+        {
+          "case": "Q-mobile-log",
+          "status": "PASS",
+          "video": "build-v1-fix5-video/page@a5579a2ff4141f53c1d4355b9ca6ccf9.webm"
+        },
+        {
+          "case": "R-mobile-log",
+          "status": "PASS",
+          "video": "build-v1-fix5-video/page@9bce0068846a58ec8cd31dfe31ac19b7.webm"
+        },
+        {
+          "case": "I-mobile-log",
+          "status": "PASS",
+          "invite_ms": 29532,
+          "video": "build-v1-fix5-video/page@4c72c58c76636fe722fab4340909b2f6.webm"
+        },
+        {
+          "case": "F-mobile-log",
+          "status": "PASS",
+          "video": "build-v1-fix5-video/page@1be037dbbdaec442523e10d1f5ddabe0.webm"
+        },
+        {
+          "case": "S-mobile-log",
+          "status": "PASS",
+          "video": "build-v1-fix5-video/page@9bfc58cdf91ad911c043be604a1c99f0.webm"
+        },
+        {
+          "case": "V-mobile-log",
+          "status": "PASS",
+          "video": "build-v1-fix5-video/page@e02a475a7314501f8a9a962b80f19ac6.webm"
+        }
+      ]
+    },
+    {
+      "file": "build-v1-fix5-check-ifsv/build-v1-fix5-results.json",
+      "source_sha256": "20e0ee0795c453ed01f60b1ba11db0cf1db19182315f118e174de768c8f0afa5",
+      "results": [
+        {
+          "case": "I-mobile-clean",
+          "status": "PASS",
+          "invite_ms": 29696,
+          "video": "build-v1-fix5-video/page@fcfa1242014be8ae0d14787a5936c6b9.webm"
+        },
+        {
+          "case": "F-mobile-clean",
+          "status": "PASS",
+          "video": "build-v1-fix5-video/page@a3b76b64f619ea7bc97966d6bbc98027.webm"
+        },
+        {
+          "case": "S-mobile-clean",
+          "status": "PASS",
+          "video": "build-v1-fix5-video/page@4015a499385e11c9ab7ab59ee03a413b.webm"
+        },
+        {
+          "case": "V-mobile-clean",
+          "status": "PASS",
+          "video": "build-v1-fix5-video/page@712fdf343dfe6d9854ac012061880c52.webm"
+        }
+      ]
+    },
+    {
+      "file": "build-v1-fix5-check-qr/build-v1-fix5-results.json",
+      "source_sha256": "20e0ee0795c453ed01f60b1ba11db0cf1db19182315f118e174de768c8f0afa5",
+      "results": [
+        {
+          "case": "Q-desktop-log",
+          "status": "PASS",
+          "video": "build-v1-fix5-video/page@b24bb94a6230927159ecd49134b0a730.webm"
+        },
+        {
+          "case": "R-desktop-log",
+          "status": "FAIL",
+          "error": "Error: Wood harvest did not increase visible inventory",
+          "errors": [],
+          "video": "build-v1-fix5-video/page@eb15a58fede4fbcfaf14294ac54e9671.webm"
+        }
+      ]
+    },
+    {
+      "file": "build-v1-fix5-clean/build-v1-fix5-results.json",
+      "source_sha256": "5a566ee4c8b2b2d61489be5cb988a40d58a95fd547f2d7cf1e9c30431f8b7a0d",
+      "results": [
+        {
+          "case": "H-desktop-clean",
+          "status": "PASS",
+          "video": "build-v1-fix5-video/page@fb9bf0bd96b5af87f1cc95d1ddc07a96.webm"
+        },
+        {
+          "case": "U-desktop-clean",
+          "status": "PASS",
+          "video": "build-v1-fix5-video/page@9db18c2f66fbb103af885b1f81715da7.webm"
+        },
+        {
+          "case": "I-desktop-clean",
+          "status": "PASS",
+          "invite_ms": 29705,
+          "video": "build-v1-fix5-video/page@dd93a055ecfe86628454a3e47a6fab84.webm"
+        },
+        {
+          "case": "F-desktop-clean",
+          "status": "PASS",
+          "video": "build-v1-fix5-video/page@b820623d4693dd3018c2d491e08f594a.webm"
+        },
+        {
+          "case": "S-desktop-clean",
+          "status": "PASS",
+          "video": "build-v1-fix5-video/page@ddb45ddf09e0038391786c9b3446fcbb.webm"
+        },
+        {
+          "case": "V-desktop-clean",
+          "status": "PASS",
+          "video": "build-v1-fix5-video/page@853f06212017cd027d41e232e59ed824.webm"
+        },
+        {
+          "case": "H-mobile-clean",
+          "status": "PASS",
+          "video": "build-v1-fix5-video/page@36ffae1d55e536c090812394ca5e614d.webm"
+        },
+        {
+          "case": "U-mobile-clean",
+          "status": "PASS",
+          "video": "build-v1-fix5-video/page@5a55637a2f5d0d1e072c29e59ce83af8.webm"
+        },
+        {
+          "case": "I-mobile-clean",
+          "status": "PASS",
+          "invite_ms": 29608,
+          "video": "build-v1-fix5-video/page@179e977fec8341ab2548ca8bb1091c21.webm"
+        },
+        {
+          "case": "F-mobile-clean",
+          "status": "PASS",
+          "video": "build-v1-fix5-video/page@3df872d7ee7ff9ce562a77c9363bc276.webm"
+        },
+        {
+          "case": "S-mobile-clean",
+          "status": "PASS",
+          "video": "build-v1-fix5-video/page@eea20c57d70cfa248da1da01684377e3.webm"
+        },
+        {
+          "case": "V-mobile-clean",
+          "status": "PASS",
+          "video": "build-v1-fix5-video/page@28a0ed7043923aae31f1d8503b355616.webm"
+        }
+      ]
+    },
+    {
+      "file": "build-v1-fix5-compat/build-v1-fix1-results.json",
+      "source_sha256": null,
+      "results": [
+        {
+          "case": "A: first placement immediately replaces a natural plan",
+          "status": "PASS"
+        },
+        {
+          "case": "B: depletion and repeated empty taps immediately explain the result",
+          "status": "PASS"
+        },
+        {
+          "case": "C: harvested and crafted enclosure, cheer, Show and parent-selected levels 1/2/3",
+          "status": "PASS"
+        },
+        {
+          "case": "D: natural level-one encounter question",
+          "status": "PASS",
+          "prompt": "What is this?",
+          "options": [
+            "Tree",
+            "Wood"
+          ]
+        },
+        {
+          "case": "E: icon-only gear, Chinese confined to the parent panel",
+          "status": "PASS"
+        },
+        {
+          "case": "R: build radius +1, outer limit, wall occlusion and stock safety",
+          "status": "PASS"
+        },
+        {
+          "case": "R: ordinary radius +1, outer limit, wall occlusion and stock safety",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "file": "build-v1-fix5-compat/build-v1-fix2-results.json",
+      "source_sha256": null,
+      "results": [
+        {
+          "case": "A",
+          "status": "PASS"
+        },
+        {
+          "case": "B",
+          "status": "PASS"
+        },
+        {
+          "case": "F",
+          "status": "PASS"
+        },
+        {
+          "case": "C",
+          "status": "PASS"
+        },
+        {
+          "case": "N",
+          "status": "PASS"
+        },
+        {
+          "case": "R",
+          "status": "PASS"
+        },
+        {
+          "case": "S",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "file": "build-v1-fix5-compat/build-v1-results.json",
+      "source_sha256": null,
+      "results": [
+        {
+          "case": "phone house and pen",
+          "status": "PASS",
+          "details": {
+            "viewport": "844x390",
+            "house": "5 walls + door + whole roof",
+            "pen": "7 fence blocks + door",
+            "builds": [
+              {
+                "id": "82:13:83:15",
+                "x": 82,
+                "y": 13,
+                "w": 2,
+                "h": 3,
+                "createdAt": 1793849314010,
+                "shown": false,
+                "kind": "house",
+                "roofed": true,
+                "closed": true,
+                "feedbackMembers": [
+                  2961,
+                  2962,
+                  2963,
+                  2964,
+                  3201,
+                  3204,
+                  3441,
+                  3444,
+                  3681,
+                  3684
+                ],
+                "autoOffered": true,
+                "invited": true
+              },
+              {
+                "id": "75:14:76:15",
+                "x": 75,
+                "y": 14,
+                "w": 2,
+                "h": 2,
+                "createdAt": 1793849314010,
+                "shown": false,
+                "kind": "pen",
+                "roofed": false,
+                "closed": true,
+                "feedbackMembers": [
+                  3194,
+                  3195,
+                  3196,
+                  3197,
+                  3434,
+                  3437,
+                  3674,
+                  3677
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "case": "remove returns inventory",
+          "status": "PASS",
+          "details": {
+            "before": 35,
+            "after": 36
+          }
+        },
+        {
+          "case": "pet enters pen",
+          "status": "PASS",
+          "details": {
+            "pen": {
+              "id": "75:14:76:15",
+              "x": 75,
+              "y": 14,
+              "w": 2,
+              "h": 2,
+              "createdAt": 1793849314010,
+              "shown": false,
+              "kind": "pen",
+              "roofed": false,
+              "closed": true,
+              "feedbackMembers": [
+                3194,
+                3195,
+                3196,
+                3197,
+                3434,
+                3437,
+                3674,
+                3677
+              ]
+            },
+            "dog": [
+              "dog",
+              2441.5,
+              512,
+              -1,
+              1,
+              3
+            ]
+          }
+        },
+        {
+          "case": "no build modal",
+          "status": "PASS"
+        },
+        {
+          "case": "refresh persists buildings",
+          "status": "PASS"
+        },
+        {
+          "case": "main save retains data",
+          "status": "PASS",
+          "details": {
+            "fixture": "tests/fixtures/build-v1-main-save.json",
+            "originalFormat": true
+          }
+        },
+        {
+          "case": "tier-one text and speech",
+          "status": "PASS",
+          "details": {
+            "prompt": "What is this?",
+            "options": [
+              "Tree",
+              "Wood"
+            ],
+            "spoken": [
+              "Hi! What is your name?",
+              "Tree",
+              "What is this?"
+            ]
+          }
+        },
+        {
+          "case": "names never use TTS",
+          "status": "PASS",
+          "details": {
+            "audio": "missing; Jenny-only named paths remain silent",
+            "names": [
+              "",
+              "Mario",
+              "Zyxora"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "file": "build-v1-fix5-final/build-v1-fix5-results.json",
+      "source_sha256": "5a566ee4c8b2b2d61489be5cb988a40d58a95fd547f2d7cf1e9c30431f8b7a0d",
+      "results": [
+        {
+          "case": "H-desktop-log",
+          "status": "PASS",
+          "video": "build-v1-fix5-video/page@8fe00577a97a5604b5c8633d5393927a.webm"
+        },
+        {
+          "case": "U-desktop-log",
+          "status": "PASS",
+          "video": "build-v1-fix5-video/page@1dac7bd35fbe2062722e24c8ce5df0a9.webm"
+        },
+        {
+          "case": "L-desktop-log",
+          "status": "PASS",
+          "video": "build-v1-fix5-video/page@ff9a6d81f94f19f62e0add2182ac8a12.webm"
+        },
+        {
+          "case": "Q-desktop-log",
+          "status": "PASS",
+          "video": "build-v1-fix5-video/page@ceeb13b2974a394596c4f2a4dcd1412f.webm"
+        },
+        {
+          "case": "R-desktop-log",
+          "status": "PASS",
+          "video": "build-v1-fix5-video/page@e65bd04267e4e3cd1167f71d6ee4cd17.webm"
+        },
+        {
+          "case": "I-desktop-log",
+          "status": "PASS",
+          "invite_ms": 29595,
+          "video": "build-v1-fix5-video/page@defbb15acf3c4623aa0a18de4c766c30.webm"
+        },
+        {
+          "case": "F-desktop-log",
+          "status": "PASS",
+          "video": "build-v1-fix5-video/page@e1bd17c28395837a6ab17114cf47870a.webm"
+        },
+        {
+          "case": "S-desktop-log",
+          "status": "PASS",
+          "video": "build-v1-fix5-video/page@ded2a58d944539ac65987dcc6158ba5c.webm"
+        },
+        {
+          "case": "V-desktop-log",
+          "status": "PASS",
+          "video": "build-v1-fix5-video/page@7acbc04a734bc552a7b23a0313dd14a0.webm"
+        },
+        {
+          "case": "H-mobile-log",
+          "status": "FAIL",
+          "error": "Error: Wood harvest did not increase visible inventory",
+          "errors": [],
+          "video": "build-v1-fix5-video/page@9f50d483b8c0eea5ac09ea19675b1ad2.webm"
+        },
+        {
+          "case": "U-mobile-log",
+          "status": "FAIL",
+          "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n'6' !== '5'\n",
+          "errors": [],
+          "video": "build-v1-fix5-video/page@bb78f806fac2446efa095e97f31a6436.webm"
+        },
+        {
+          "case": "L-mobile-log",
+          "status": "PASS",
+          "video": "build-v1-fix5-video/page@a2413702dafadac8ccef217993388e81.webm"
+        },
+        {
+          "case": "Q-mobile-log",
+          "status": "PASS",
+          "video": "build-v1-fix5-video/page@1ddbad261b64636da23792745737aa50.webm"
+        },
+        {
+          "case": "R-mobile-log",
+          "status": "FAIL",
+          "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n'8' !== '7'\n",
+          "errors": [],
+          "video": "build-v1-fix5-video/page@61548806cf94d0339ae9701026917f78.webm"
+        },
+        {
+          "case": "I-mobile-log",
+          "status": "PASS",
+          "invite_ms": 29534,
+          "video": "build-v1-fix5-video/page@dd59e095812f88c68919065609c1b6d1.webm"
+        },
+        {
+          "case": "F-mobile-log",
+          "status": "PASS",
+          "video": "build-v1-fix5-video/page@140d4638fb00caf556918d24fce32f6b.webm"
+        },
+        {
+          "case": "S-mobile-log",
+          "status": "PASS",
+          "video": "build-v1-fix5-video/page@9e79b58cdefda841eaebbfbb25b2864f.webm"
+        },
+        {
+          "case": "V-mobile-log",
+          "status": "PASS",
+          "video": "build-v1-fix5-video/page@07d7dc1ead4567e91b0c54497f5ffc7a.webm"
+        }
+      ]
+    },
+    {
+      "file": "build-v1-fix5-fix3/build-v1-fix3-results.json",
+      "source_sha256": "629afea2082c964c452ddceeb0265d3f303fc9d477e4c9d2fe15b399f398b285",
+      "results": [
+        {
+          "case": "J-desktop-clean",
+          "status": "PASS",
+          "idle_start_ms": 7601,
+          "cheer_ms": 2719,
+          "show_ms": 4200,
+          "video": "build-v1-fix3-video/page@a5708f9c97b56894c09e6b6226b92310.webm"
+        },
+        {
+          "case": "S-desktop-clean",
+          "status": "PASS",
+          "video": "build-v1-fix3-video/page@df70658d41a1eefe1ba5afe934cb3ce5.webm"
+        },
+        {
+          "case": "B-desktop-clean",
+          "status": "PASS",
+          "video": "build-v1-fix3-video/page@c55c2379805e8eeeb3462793d096ce3d.webm"
+        },
+        {
+          "case": "P-desktop-clean",
+          "status": "PASS",
+          "video": "build-v1-fix3-video/page@43c928c3345f9bb0959b861ada141dc9.webm"
+        },
+        {
+          "case": "G-desktop-clean",
+          "status": "PASS",
+          "video": "build-v1-fix3-video/page@ee069d3248b372174f2cbfa3feebfd82.webm"
+        },
+        {
+          "case": "J-mobile-clean",
+          "status": "PASS",
+          "idle_start_ms": 7792,
+          "cheer_ms": 2748,
+          "show_ms": 4240,
+          "video": "build-v1-fix3-video/page@b83394b5f76203adf35784a76408fdf4.webm"
+        },
+        {
+          "case": "S-mobile-clean",
+          "status": "PASS",
+          "video": "build-v1-fix3-video/page@43652f6bae9601ec07f9e4f3c7fc587b.webm"
+        },
+        {
+          "case": "B-mobile-clean",
+          "status": "PASS",
+          "video": "build-v1-fix3-video/page@fa2e594820ce140bc9fe2c1d2f224bc5.webm"
+        },
+        {
+          "case": "P-mobile-clean",
+          "status": "PASS",
+          "video": "build-v1-fix3-video/page@a6f14a2856f01ab60aaaaec198b7403f.webm"
+        },
+        {
+          "case": "G-mobile-clean",
+          "status": "PASS",
+          "video": "build-v1-fix3-video/page@72f3bc4be28933870e5705e1545d2d69.webm"
+        }
+      ]
+    },
+    {
+      "file": "build-v1-fix5-fix3-final/build-v1-fix3-results.json",
+      "source_sha256": "5a566ee4c8b2b2d61489be5cb988a40d58a95fd547f2d7cf1e9c30431f8b7a0d",
+      "results": [
+        {
+          "case": "J-desktop-clean",
+          "status": "PASS",
+          "idle_start_ms": 7101,
+          "cheer_ms": 2714,
+          "show_ms": 4225,
+          "video": "build-v1-fix3-video/page@46c6e2bb144d93d3adbd9280c4cb1a40.webm"
+        },
+        {
+          "case": "S-desktop-clean",
+          "status": "PASS",
+          "video": "build-v1-fix3-video/page@7b9db1cb786a8ad2d21dd13637bc312a.webm"
+        },
+        {
+          "case": "B-desktop-clean",
+          "status": "FAIL",
+          "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n'12' !== '11'\n",
+          "errors": [],
+          "video": "build-v1-fix3-video/page@8d7b79d4290d1ac371409cf28c46c592.webm"
+        },
+        {
+          "case": "P-desktop-clean",
+          "status": "PASS",
+          "video": "build-v1-fix3-video/page@6882418e508d16c23fa7be9eca3711be.webm"
+        },
+        {
+          "case": "G-desktop-clean",
+          "status": "PASS",
+          "video": "build-v1-fix3-video/page@a4536a7e79605545eba2cbae6653092f.webm"
+        },
+        {
+          "case": "J-mobile-clean",
+          "status": "PASS",
+          "idle_start_ms": 7989,
+          "cheer_ms": 2697,
+          "show_ms": 4210,
+          "video": "build-v1-fix3-video/page@6dc93e3b85b6e9584fab4c0b4118b97d.webm"
+        },
+        {
+          "case": "S-mobile-clean",
+          "status": "PASS",
+          "video": "build-v1-fix3-video/page@be77e7709d1afa9a8e01c92eb5106cdf.webm"
+        },
+        {
+          "case": "B-mobile-clean",
+          "status": "PASS",
+          "video": "build-v1-fix3-video/page@7f51bd4ec23d6a258e62109eaca164c9.webm"
+        },
+        {
+          "case": "P-mobile-clean",
+          "status": "PASS",
+          "video": "build-v1-fix3-video/page@23977048c88744b11b1b150edb93edd8.webm"
+        },
+        {
+          "case": "G-mobile-clean",
+          "status": "PASS",
+          "video": "build-v1-fix3-video/page@7a5d10ac2925a3acd65c597db6d1492f.webm"
+        }
+      ]
+    },
+    {
+      "file": "build-v1-fix5-fix3-recheck/build-v1-fix3-results.json",
+      "source_sha256": "5a566ee4c8b2b2d61489be5cb988a40d58a95fd547f2d7cf1e9c30431f8b7a0d",
+      "results": [
+        {
+          "case": "B-desktop-clean",
+          "status": "PASS",
+          "video": "build-v1-fix3-video/page@62000ef0fb85c0fb0a3a984942bb8258.webm"
+        }
+      ]
+    },
+    {
+      "file": "build-v1-fix5-intermediate/clean/build-v1-fix5-results.json",
+      "source_sha256": "5a8ab40ecab297f4c058f65de047d2af5892323650b18500f1000ba71e186106",
+      "results": [
+        {
+          "case": "H-desktop-clean",
+          "status": "PASS",
+          "video": "build-v1-fix5-video/page@31fa2d9c9f001c227bf9198b366c00a5.webm"
+        },
+        {
+          "case": "U-desktop-clean",
+          "status": "FAIL",
+          "error": "Error: Wood harvest did not increase visible inventory",
+          "errors": [],
+          "video": "build-v1-fix5-video/page@2caebe3040c7f76c7444135743decb23.webm"
+        },
+        {
+          "case": "I-desktop-clean",
+          "status": "PASS",
+          "invite_ms": 29719,
+          "video": "build-v1-fix5-video/page@28a2b57571e6c076062ee70eeb99a25a.webm"
+        },
+        {
+          "case": "F-desktop-clean",
+          "status": "PASS",
+          "video": "build-v1-fix5-video/page@08a5911a116e454d47d218d138adb13c.webm"
+        },
+        {
+          "case": "S-desktop-clean",
+          "status": "PASS",
+          "video": "build-v1-fix5-video/page@9f18ce054d2cfff9a6c9709185957a7c.webm"
+        },
+        {
+          "case": "V-desktop-clean",
+          "status": "PASS",
+          "video": "build-v1-fix5-video/page@c3f440b941249bc086bce9a3b2b45f3b.webm"
+        },
+        {
+          "case": "H-mobile-clean",
+          "status": "PASS",
+          "video": "build-v1-fix5-video/page@51f7dbda84666d7b1d12e0618d561ef5.webm"
+        },
+        {
+          "case": "U-mobile-clean",
+          "status": "PASS",
+          "video": "build-v1-fix5-video/page@68a880718cbe55cb320dd62059d3724c.webm"
+        }
+      ]
+    },
+    {
+      "file": "build-v1-fix5-intermediate/debug/build-v1-fix5-results.json",
+      "source_sha256": "5a8ab40ecab297f4c058f65de047d2af5892323650b18500f1000ba71e186106",
+      "results": [
+        {
+          "case": "H-desktop-log",
+          "status": "FAIL",
+          "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n'done' !== 'ready'\n",
+          "errors": [],
+          "video": "build-v1-fix5-video/page@579b42f4daa41a7e6c652e7eeba16cf8.webm"
+        },
+        {
+          "case": "U-desktop-log",
+          "status": "PASS",
+          "video": "build-v1-fix5-video/page@e1d0fd8da267bb9cfb5671aecd7cd7ad.webm"
+        },
+        {
+          "case": "Q-desktop-log",
+          "status": "PASS",
+          "video": "build-v1-fix5-video/page@4980a2fc2bb74df042adec5e7ee1add5.webm"
+        },
+        {
+          "case": "R-desktop-log",
+          "status": "PASS",
+          "video": "build-v1-fix5-video/page@0a715f8cdb7d7a07324563a361517884.webm"
+        },
+        {
+          "case": "I-desktop-log",
+          "status": "PASS",
+          "invite_ms": 29542,
+          "video": "build-v1-fix5-video/page@55f44b8307b5854040814e307a0a473f.webm"
+        },
+        {
+          "case": "F-desktop-log",
+          "status": "PASS",
+          "video": "build-v1-fix5-video/page@1c58413a278bd0f8c6ccb14167463af7.webm"
+        },
+        {
+          "case": "S-desktop-log",
+          "status": "FAIL",
+          "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n'12' !== '11'\n",
+          "errors": [],
+          "video": "build-v1-fix5-video/page@558659fafdb0343dd7bd1458b4b7cc8f.webm"
+        },
+        {
+          "case": "V-desktop-log",
+          "status": "PASS",
+          "video": "build-v1-fix5-video/page@2ec2d0071ad1ffc1e3c261da7fc66883.webm"
+        }
+      ]
+    },
+    {
+      "file": "build-v1-fix5-recheck/build-v1-fix5-results.json",
+      "source_sha256": "5a566ee4c8b2b2d61489be5cb988a40d58a95fd547f2d7cf1e9c30431f8b7a0d",
+      "results": [
+        {
+          "case": "H-mobile-log",
+          "status": "PASS",
+          "video": "build-v1-fix5-video/page@b00b4ef088efe25ccdb1244c94262f36.webm"
+        },
+        {
+          "case": "U-mobile-log",
+          "status": "PASS",
+          "video": "build-v1-fix5-video/page@e09f65435dacc55eb294c9f7dfb21c62.webm"
+        },
+        {
+          "case": "R-mobile-log",
+          "status": "PASS",
+          "video": "build-v1-fix5-video/page@31d51f38ce75dc916ac331ddcd2fc598.webm"
+        }
+      ]
+    }
+  ]
+}

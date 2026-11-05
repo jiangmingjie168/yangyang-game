@@ -1,0 +1,453 @@
+{
+  "source_sha256": "ffac2b846bf371a2f0371e5e81a307fe8b7dff36aff244ca877f0dc904774c25",
+  "results": [
+    {
+      "case": "J-desktop-clean",
+      "status": "PASS",
+      "idle_start_ms": 7205,
+      "cheer_ms": 2756,
+      "show_ms": 4251,
+      "video": "build-v1-fix3-video/page@17ecc88a9ea7f6c97dda777cc9cabf10.webm"
+    },
+    {
+      "case": "S-desktop-clean",
+      "status": "PASS",
+      "video": "build-v1-fix3-video/page@f13b0b7f53f7a50687d2c59cf9b5058c.webm"
+    },
+    {
+      "case": "B-desktop-clean",
+      "status": "PASS",
+      "video": "build-v1-fix3-video/page@0342a8ec36da2c2624d6cb2ec3180e8c.webm"
+    },
+    {
+      "case": "P-desktop-clean",
+      "status": "PASS",
+      "video": "build-v1-fix3-video/page@4e88434346065271c18f4883efa78558.webm"
+    },
+    {
+      "case": "G-desktop-clean",
+      "status": "PASS",
+      "video": "build-v1-fix3-video/page@c5aaae18591b947b4bdc534a9515980e.webm"
+    },
+    {
+      "case": "J-mobile-clean",
+      "status": "PASS",
+      "idle_start_ms": 7962,
+      "cheer_ms": 2712,
+      "show_ms": 4241,
+      "video": "build-v1-fix3-video/page@4669765cdceaa478d3e04d935f21fcdc.webm"
+    },
+    {
+      "case": "S-mobile-clean",
+      "status": "PASS",
+      "video": "build-v1-fix3-video/page@e2207d31e2ab25e217b65866658aaf5b.webm"
+    },
+    {
+      "case": "B-mobile-clean",
+      "status": "PASS",
+      "video": "build-v1-fix3-video/page@5c69ac663879b941d48a14642094c170.webm"
+    },
+    {
+      "case": "P-mobile-clean",
+      "status": "PASS",
+      "video": "build-v1-fix3-video/page@2b2a1b0da47ca137b506eeb63ae799a1.webm"
+    },
+    {
+      "case": "G-mobile-clean",
+      "status": "PASS",
+      "video": "build-v1-fix3-video/page@ca50688305dd74065bc4c26ddf59e29e.webm"
+    }
+  ],
+  "frames": [
+    {
+      "case": "J-desktop-clean",
+      "t_ms": 1061,
+      "file": "build-v1-fix3-J-desktop-clean-991-fresh.png",
+      "label": "fresh"
+    },
+    {
+      "case": "J-desktop-clean",
+      "t_ms": 6226,
+      "file": "build-v1-fix3-J-desktop-clean-6167-crafted.png",
+      "label": "crafted"
+    },
+    {
+      "case": "J-desktop-clean",
+      "t_ms": 7361,
+      "file": "build-v1-fix3-J-desktop-clean-7307-idle-0s.png",
+      "label": "idle-0s"
+    },
+    {
+      "case": "J-desktop-clean",
+      "t_ms": 10028,
+      "file": "build-v1-fix3-J-desktop-clean-9968-J-cheer.png",
+      "label": "J-cheer"
+    },
+    {
+      "case": "J-desktop-clean",
+      "t_ms": 12314,
+      "file": "build-v1-fix3-J-desktop-clean-12253-idle-5s.png",
+      "label": "idle-5s"
+    },
+    {
+      "case": "J-desktop-clean",
+      "t_ms": 17373,
+      "file": "build-v1-fix3-J-desktop-clean-17294-idle-10s.png",
+      "label": "idle-10s"
+    },
+    {
+      "case": "J-desktop-clean",
+      "t_ms": 22327,
+      "file": "build-v1-fix3-J-desktop-clean-22259-idle-15s.png",
+      "label": "idle-15s"
+    },
+    {
+      "case": "S-desktop-clean",
+      "t_ms": 912,
+      "file": "build-v1-fix3-S-desktop-clean-852-fresh.png",
+      "label": "fresh"
+    },
+    {
+      "case": "S-desktop-clean",
+      "t_ms": 4965,
+      "file": "build-v1-fix3-S-desktop-clean-4907-crafted.png",
+      "label": "crafted"
+    },
+    {
+      "case": "S-desktop-clean",
+      "t_ms": 11763,
+      "file": "build-v1-fix3-S-desktop-clean-11673-against-wall.png",
+      "label": "against-wall"
+    },
+    {
+      "case": "S-desktop-clean",
+      "t_ms": 11916,
+      "file": "build-v1-fix3-S-desktop-clean-11863-second-layer.png",
+      "label": "second-layer"
+    },
+    {
+      "case": "B-desktop-clean",
+      "t_ms": 1017,
+      "file": "build-v1-fix3-B-desktop-clean-962-fresh.png",
+      "label": "fresh"
+    },
+    {
+      "case": "B-desktop-clean",
+      "t_ms": 5082,
+      "file": "build-v1-fix3-B-desktop-clean-5023-crafted.png",
+      "label": "crafted"
+    },
+    {
+      "case": "B-desktop-clean",
+      "t_ms": 7816,
+      "file": "build-v1-fix3-B-desktop-clean-7757-against-wall.png",
+      "label": "against-wall"
+    },
+    {
+      "case": "B-desktop-clean",
+      "t_ms": 7966,
+      "file": "build-v1-fix3-B-desktop-clean-7911-second-layer.png",
+      "label": "second-layer"
+    },
+    {
+      "case": "B-desktop-clean",
+      "t_ms": 8133,
+      "file": "build-v1-fix3-B-desktop-clean-8075-B-third-layer.png",
+      "label": "B-third-layer"
+    },
+    {
+      "case": "B-desktop-clean",
+      "t_ms": 8513,
+      "file": "build-v1-fix3-B-desktop-clean-8462-B-normal-place.png",
+      "label": "B-normal-place"
+    },
+    {
+      "case": "B-desktop-clean",
+      "t_ms": 8764,
+      "file": "build-v1-fix3-B-desktop-clean-8714-B-normal-top-stack.png",
+      "label": "B-normal-top-stack"
+    },
+    {
+      "case": "P-desktop-clean",
+      "t_ms": 898,
+      "file": "build-v1-fix3-P-desktop-clean-839-fresh.png",
+      "label": "fresh"
+    },
+    {
+      "case": "P-desktop-clean",
+      "t_ms": 4972,
+      "file": "build-v1-fix3-P-desktop-clean-4902-crafted.png",
+      "label": "crafted"
+    },
+    {
+      "case": "P-desktop-clean",
+      "t_ms": 5465,
+      "file": "build-v1-fix3-P-desktop-clean-5394-P-pulse.png",
+      "label": "P-pulse"
+    },
+    {
+      "case": "P-desktop-clean",
+      "t_ms": 7701,
+      "file": "build-v1-fix3-P-desktop-clean-7629-P-two-planks-show.png",
+      "label": "P-two-planks-show"
+    },
+    {
+      "case": "P-desktop-clean",
+      "t_ms": 7879,
+      "file": "build-v1-fix3-P-desktop-clean-7800-P-occupied.png",
+      "label": "P-occupied"
+    },
+    {
+      "case": "P-desktop-clean",
+      "t_ms": 8060,
+      "file": "build-v1-fix3-P-desktop-clean-7989-P-reach.png",
+      "label": "P-reach"
+    },
+    {
+      "case": "P-desktop-clean",
+      "t_ms": 8337,
+      "file": "build-v1-fix3-P-desktop-clean-8264-P-remove.png",
+      "label": "P-remove"
+    },
+    {
+      "case": "G-desktop-clean",
+      "t_ms": 910,
+      "file": "build-v1-fix3-G-desktop-clean-850-fresh.png",
+      "label": "fresh"
+    },
+    {
+      "case": "G-desktop-clean",
+      "t_ms": 6076,
+      "file": "build-v1-fix3-G-desktop-clean-6008-crafted.png",
+      "label": "crafted"
+    },
+    {
+      "case": "G-desktop-clean",
+      "t_ms": 6576,
+      "file": "build-v1-fix3-G-desktop-clean-6511-G-one-build.png",
+      "label": "G-one-build"
+    },
+    {
+      "case": "G-desktop-clean",
+      "t_ms": 6742,
+      "file": "build-v1-fix3-G-desktop-clean-6680-G-one-normal.png",
+      "label": "G-one-normal"
+    },
+    {
+      "case": "G-desktop-clean",
+      "t_ms": 8296,
+      "file": "build-v1-fix3-G-desktop-clean-8229-G-two-build.png",
+      "label": "G-two-build"
+    },
+    {
+      "case": "G-desktop-clean",
+      "t_ms": 8458,
+      "file": "build-v1-fix3-G-desktop-clean-8401-G-two-normal.png",
+      "label": "G-two-normal"
+    },
+    {
+      "case": "G-desktop-clean",
+      "t_ms": 12557,
+      "file": "build-v1-fix3-G-desktop-clean-12494-G-praise-survives-movement.png",
+      "label": "G-praise-survives-movement"
+    },
+    {
+      "case": "J-mobile-clean",
+      "t_ms": 838,
+      "file": "build-v1-fix3-J-mobile-clean-804-fresh.png",
+      "label": "fresh"
+    },
+    {
+      "case": "J-mobile-clean",
+      "t_ms": 7012,
+      "file": "build-v1-fix3-J-mobile-clean-6967-crafted.png",
+      "label": "crafted"
+    },
+    {
+      "case": "J-mobile-clean",
+      "t_ms": 8104,
+      "file": "build-v1-fix3-J-mobile-clean-8061-idle-0s.png",
+      "label": "idle-0s"
+    },
+    {
+      "case": "J-mobile-clean",
+      "t_ms": 10720,
+      "file": "build-v1-fix3-J-mobile-clean-10678-J-cheer.png",
+      "label": "J-cheer"
+    },
+    {
+      "case": "J-mobile-clean",
+      "t_ms": 13037,
+      "file": "build-v1-fix3-J-mobile-clean-12981-idle-5s.png",
+      "label": "idle-5s"
+    },
+    {
+      "case": "J-mobile-clean",
+      "t_ms": 18088,
+      "file": "build-v1-fix3-J-mobile-clean-18017-idle-10s.png",
+      "label": "idle-10s"
+    },
+    {
+      "case": "J-mobile-clean",
+      "t_ms": 23054,
+      "file": "build-v1-fix3-J-mobile-clean-22998-idle-15s.png",
+      "label": "idle-15s"
+    },
+    {
+      "case": "S-mobile-clean",
+      "t_ms": 841,
+      "file": "build-v1-fix3-S-mobile-clean-791-fresh.png",
+      "label": "fresh"
+    },
+    {
+      "case": "S-mobile-clean",
+      "t_ms": 4771,
+      "file": "build-v1-fix3-S-mobile-clean-4724-crafted.png",
+      "label": "crafted"
+    },
+    {
+      "case": "S-mobile-clean",
+      "t_ms": 7461,
+      "file": "build-v1-fix3-S-mobile-clean-7408-against-wall.png",
+      "label": "against-wall"
+    },
+    {
+      "case": "S-mobile-clean",
+      "t_ms": 7612,
+      "file": "build-v1-fix3-S-mobile-clean-7557-second-layer.png",
+      "label": "second-layer"
+    },
+    {
+      "case": "B-mobile-clean",
+      "t_ms": 841,
+      "file": "build-v1-fix3-B-mobile-clean-803-fresh.png",
+      "label": "fresh"
+    },
+    {
+      "case": "B-mobile-clean",
+      "t_ms": 4785,
+      "file": "build-v1-fix3-B-mobile-clean-4757-crafted.png",
+      "label": "crafted"
+    },
+    {
+      "case": "B-mobile-clean",
+      "t_ms": 7458,
+      "file": "build-v1-fix3-B-mobile-clean-7420-against-wall.png",
+      "label": "against-wall"
+    },
+    {
+      "case": "B-mobile-clean",
+      "t_ms": 7591,
+      "file": "build-v1-fix3-B-mobile-clean-7552-second-layer.png",
+      "label": "second-layer"
+    },
+    {
+      "case": "B-mobile-clean",
+      "t_ms": 7725,
+      "file": "build-v1-fix3-B-mobile-clean-7690-B-third-layer.png",
+      "label": "B-third-layer"
+    },
+    {
+      "case": "B-mobile-clean",
+      "t_ms": 8057,
+      "file": "build-v1-fix3-B-mobile-clean-8029-B-normal-place.png",
+      "label": "B-normal-place"
+    },
+    {
+      "case": "B-mobile-clean",
+      "t_ms": 8290,
+      "file": "build-v1-fix3-B-mobile-clean-8259-B-normal-top-stack.png",
+      "label": "B-normal-top-stack"
+    },
+    {
+      "case": "P-mobile-clean",
+      "t_ms": 821,
+      "file": "build-v1-fix3-P-mobile-clean-792-fresh.png",
+      "label": "fresh"
+    },
+    {
+      "case": "P-mobile-clean",
+      "t_ms": 4747,
+      "file": "build-v1-fix3-P-mobile-clean-4721-crafted.png",
+      "label": "crafted"
+    },
+    {
+      "case": "P-mobile-clean",
+      "t_ms": 6988,
+      "file": "build-v1-fix3-P-mobile-clean-6949-P-pulse.png",
+      "label": "P-pulse"
+    },
+    {
+      "case": "P-mobile-clean",
+      "t_ms": 9145,
+      "file": "build-v1-fix3-P-mobile-clean-9109-P-two-planks-show.png",
+      "label": "P-two-planks-show"
+    },
+    {
+      "case": "P-mobile-clean",
+      "t_ms": 9292,
+      "file": "build-v1-fix3-P-mobile-clean-9245-P-occupied.png",
+      "label": "P-occupied"
+    },
+    {
+      "case": "P-mobile-clean",
+      "t_ms": 9425,
+      "file": "build-v1-fix3-P-mobile-clean-9391-P-reach.png",
+      "label": "P-reach"
+    },
+    {
+      "case": "P-mobile-clean",
+      "t_ms": 9656,
+      "file": "build-v1-fix3-P-mobile-clean-9626-P-remove.png",
+      "label": "P-remove"
+    },
+    {
+      "case": "P-mobile-clean",
+      "t_ms": 9890,
+      "file": "build-v1-fix3-P-mobile-clean-9855-P-HUD-yields.png",
+      "label": "P-HUD-yields"
+    },
+    {
+      "case": "G-mobile-clean",
+      "t_ms": 864,
+      "file": "build-v1-fix3-G-mobile-clean-809-fresh.png",
+      "label": "fresh"
+    },
+    {
+      "case": "G-mobile-clean",
+      "t_ms": 7007,
+      "file": "build-v1-fix3-G-mobile-clean-6974-crafted.png",
+      "label": "crafted"
+    },
+    {
+      "case": "G-mobile-clean",
+      "t_ms": 7485,
+      "file": "build-v1-fix3-G-mobile-clean-7430-G-one-build.png",
+      "label": "G-one-build"
+    },
+    {
+      "case": "G-mobile-clean",
+      "t_ms": 7633,
+      "file": "build-v1-fix3-G-mobile-clean-7584-G-one-normal.png",
+      "label": "G-one-normal"
+    },
+    {
+      "case": "G-mobile-clean",
+      "t_ms": 10051,
+      "file": "build-v1-fix3-G-mobile-clean-9997-G-two-build.png",
+      "label": "G-two-build"
+    },
+    {
+      "case": "G-mobile-clean",
+      "t_ms": 10198,
+      "file": "build-v1-fix3-G-mobile-clean-10150-G-two-normal.png",
+      "label": "G-two-normal"
+    },
+    {
+      "case": "G-mobile-clean",
+      "t_ms": 14351,
+      "file": "build-v1-fix3-G-mobile-clean-14294-G-praise-survives-movement.png",
+      "label": "G-praise-survives-movement"
+    }
+  ]
+}

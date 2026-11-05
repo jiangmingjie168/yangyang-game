@@ -31,7 +31,8 @@ credentials, child replies, model content or request bodies.
 
 ## Contract
 
-Start/resume welcomes use a separate rule-owned event (no vocabulary exercise):
+Start/resume welcomes use a separate rule-owned event (no vocabulary exercise).
+Names in the following examples are for demonstration only:
 
 ```json
 {"event":"greet","child_name":"Mario","time_of_day":"morning","returning":false,"greeting_id":0,"last_greeting":""}
@@ -40,8 +41,10 @@ Start/resume welcomes use a separate rule-owned event (no vocabulary exercise):
 `time_of_day` is `morning|afternoon|evening`, `returning` is a boolean,
 `greeting_id` is an optional 0–3 fallback selector, and `last_greeting` is optional
 ASCII text of at most 200 characters. The optional name uses the same two-word
-English-name validation as exercises. The game defaults empty/missing names to
-Mario and saves parent edits locally. The response keeps the JSON envelope:
+English-name validation as exercises. The game has no default name: an empty or missing
+`child_name` stays empty. The buddy never substitutes Mario or another name.
+Unnamed greetings retain the rule-owned friend lines; no build line uses a placeholder name.
+Parent edits are saved locally. Mario is only an example or input placeholder. The response keeps the JSON envelope:
 
 ```json
 {"say":"Hi Mario. I'm so happy you're here. Let's build something together!","options":[],"answer":null,"done":true}
@@ -95,10 +98,10 @@ Response (same in AI/template modes):
 - Options must be two distinct known words in the supplied learned whitelist;
   target must be one. Model cannot change their order, answer, tier or done.
 - Output must be ASCII English, 1–12 words, with a small fixed scaffold plus
-  the supplied option vocabulary and exact context phrases. No other content
+  the supplied option vocabulary (tiers 2–3 only) and exact context phrases. No other content
   vocabulary is allowed.
   The entire sentence must match a rule-owned tier form, with optional praise and one exact validated context lead:
-  tier 1 `<first label> or <second label>?` (optionally `Is this ...?`),
+  tier 1 `What is this?` (no option vocabulary or context lead before an answer),
   tier 2 `What's this?` or `What is this?`, tier 3 the template's `I see ... .`
   sentence followed by `Say it!` or `Your turn!`. Closing allows only praise
   and an optional context lead followed by `Keep exploring!` or `Let's keep exploring!`. Praise is required after
@@ -303,9 +306,9 @@ Preference taps or recognized answers save a whitelist value; raw speech is
 never written to the save or counted as mastery by social coaching.
 
 First play asks the name using the welcome card, letters, short input and mic.
-After 20 seconds, or “Let's play!”, it accepts the current/default Mario name,
-saves `name_asked`, and gives the usual named greeting. A parent-set non-default
-name completes onboarding. `#parent-name` remains authoritative; the existing
+After 30 seconds (`armNameTimer`, 30000 ms), or “Let's play!”, it accepts whatever
+is currently in the input. Empty means no name. It saves `name_asked` and gives
+a named greeting only when a name exists. A parent-set name completes onboarding. `#parent-name` remains authoritative; the existing
 two-tap new-world reset clears name/preferences with the rest of the save.
 
 Name asking and exercises gate social chat. Buddy taps or 60 seconds idle
@@ -345,3 +348,27 @@ See `../screens/memory-chat-smoke.json` for synthetic sample outputs/provenance.
 The live browser ratio regression also passes (14 brain / 1 template across
 four exercise encounters plus welcomes/onboarding/weather); current trace is
 `../screens/memory-chat-ratio.json`.
+
+## Build v1 and Name voice
+
+The vocabulary now has 47 words (the original 42 plus wall, roof, window, room,
+gate); `learned_words` is limited to 47. Tier-one exercise prompts are exactly
+`What is this?`, optionally preceded by praise. They never disclose the options
+or target through a context lead. Higher tiers retain their original rules.
+Build events are local, finite, nonmodal conversations and never call `/buddy`.
+
+`brain/names.json` contains 100 preset ASCII names. `build-lines.cjs` creates six
+Jenny atoms per name and reads `BUILD_LINES` directly from `index.html`; there is
+no second copy of the build dialogue catalogue. `generate-voice.py --names Xxx,Yyy`
+pre-generates the six atoms for each extra name, updates the local preset/manifest
+and merges available files into `audio/index.json`. Run it before publishing
+audio, never from a playback request. `--manifest brain/build-v1-new-lines.json`
+accepts the same metadata-plus-`lines` format as the full manifest.
+
+The client composes only existing Jenny atoms for name-bearing speech. A missing
+name atom is omitted; the remaining Jenny phrase plays if available. Named calls
+never use browser TTS, including on missing phrase audio, 404, timeout or decoding
+failure. The parent panel shows whether the name's atoms are available. Unnamed
+speech keeps the existing browser TTS fallback. No online generation endpoint is
+added, and the server does not log names or requests. See
+[`DEPLOY-build-v1-brain.md`](../DEPLOY-build-v1-brain.md) for the undeployed release.

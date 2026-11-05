@@ -1,0 +1,3460 @@
+[
+  {
+    "case": "C-desktop",
+    "ms": 321,
+    "x": 683,
+    "y": 400.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "C-desktop",
+    "ms": 520,
+    "x": 683,
+    "y": 331.09375,
+    "purpose": "Play"
+  },
+  {
+    "case": "C-desktop",
+    "ms": 1188,
+    "x": 1148.328125,
+    "y": 34,
+    "purpose": "Open Craft"
+  },
+  {
+    "case": "C-desktop",
+    "ms": 1338,
+    "x": 629,
+    "y": 414,
+    "purpose": "Craft House"
+  },
+  {
+    "case": "C-desktop",
+    "ms": 1569,
+    "x": 683,
+    "y": 152,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "C-desktop",
+    "ms": 1802,
+    "x": 1304,
+    "y": 38,
+    "purpose": "Close Craft"
+  },
+  {
+    "case": "C-desktop",
+    "ms": 1935,
+    "x": 1064.328125,
+    "y": 34,
+    "purpose": "Open Build"
+  },
+  {
+    "case": "C-desktop",
+    "ms": 2086,
+    "x": 159.125,
+    "y": 100,
+    "purpose": "Select whole house"
+  },
+  {
+    "case": "C-desktop",
+    "ms": 2193,
+    "x": 474.0000000000002,
+    "y": 477.99999999999994,
+    "purpose": "Reject unsupported placement"
+  },
+  {
+    "case": "C-desktop",
+    "ms": 2307,
+    "x": 824.0000000000002,
+    "y": 527.9999999999999,
+    "purpose": "Reject terrain/tree obstruction"
+  },
+  {
+    "case": "C-desktop",
+    "ms": 2504,
+    "x": 474.0000000000002,
+    "y": 527.9999999999999,
+    "purpose": "Place entire house with one mouse click"
+  },
+  {
+    "case": "C-desktop",
+    "ms": 4357,
+    "x": 57.3359375,
+    "y": 100,
+    "purpose": "Open Show invitation"
+  },
+  {
+    "case": "C-desktop",
+    "ms": 4606,
+    "x": 57.3359375,
+    "y": 100,
+    "purpose": "Repeat toolbar Show"
+  },
+  {
+    "case": "C-desktop",
+    "ms": 4753,
+    "x": 1252.9921875,
+    "y": 220,
+    "purpose": "Accept Show (only quota increment)"
+  },
+  {
+    "case": "C-desktop",
+    "ms": 4987,
+    "x": 1251,
+    "y": 223.5,
+    "purpose": "Answer house"
+  },
+  {
+    "case": "C-desktop",
+    "ms": 5371,
+    "x": 1253,
+    "y": 238,
+    "purpose": "Keep playing / close feedback"
+  },
+  {
+    "case": "C-desktop",
+    "ms": 5521,
+    "x": 159.125,
+    "y": 100,
+    "purpose": "Select empty whole inventory"
+  },
+  {
+    "case": "C-desktop",
+    "ms": 5625,
+    "x": 474.0000000000002,
+    "y": 527.9999999999999,
+    "purpose": "No stock cannot duplicate whole building"
+  },
+  {
+    "case": "C-desktop",
+    "ms": 5786,
+    "x": 346.046875,
+    "y": 100,
+    "purpose": "Select Remove"
+  },
+  {
+    "case": "C-desktop",
+    "ms": 5890,
+    "x": 524.0000000000002,
+    "y": 477.99999999999994,
+    "purpose": "Remove by clicking any occupied cell"
+  },
+  {
+    "case": "C-desktop",
+    "ms": 6253,
+    "x": 683,
+    "y": 356.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "C-desktop",
+    "ms": 6407,
+    "x": 683,
+    "y": 238.28125,
+    "purpose": "Play"
+  },
+  {
+    "case": "C-desktop",
+    "ms": 7053,
+    "x": 1064.328125,
+    "y": 34,
+    "purpose": "Open saved Build"
+  },
+  {
+    "case": "C-desktop",
+    "ms": 7201,
+    "x": 159.125,
+    "y": 100,
+    "purpose": "Select recovered saved building"
+  },
+  {
+    "case": "C-desktop",
+    "ms": 7306,
+    "x": 474.0000000000002,
+    "y": 527.9999999999999,
+    "purpose": "Re-place recovered whole building"
+  },
+  {
+    "case": "C-desktop",
+    "ms": 7619,
+    "x": 683,
+    "y": 356.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "C-desktop",
+    "ms": 7769,
+    "x": 683,
+    "y": 238.28125,
+    "purpose": "Play"
+  },
+  {
+    "case": "C-desktop",
+    "ms": 8420,
+    "x": 1064.328125,
+    "y": 34,
+    "purpose": "Open restored placed building"
+  },
+  {
+    "case": "P-desktop",
+    "ms": 214,
+    "x": 683,
+    "y": 400.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "P-desktop",
+    "ms": 362,
+    "x": 683,
+    "y": 331.09375,
+    "purpose": "Play"
+  },
+  {
+    "case": "P-desktop",
+    "ms": 1013,
+    "x": 1159,
+    "y": 725,
+    "purpose": "Harvest the flower ahead to clear 4-wide ground"
+  },
+  {
+    "case": "P-desktop",
+    "ms": 1665,
+    "x": 683,
+    "y": 152,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "P-desktop",
+    "ms": 1811,
+    "x": 1148.328125,
+    "y": 34,
+    "purpose": "Open Craft"
+  },
+  {
+    "case": "P-desktop",
+    "ms": 1961,
+    "x": 1306,
+    "y": 414,
+    "purpose": "Craft Pen"
+  },
+  {
+    "case": "P-desktop",
+    "ms": 2194,
+    "x": 683,
+    "y": 152,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "P-desktop",
+    "ms": 2410,
+    "x": 1304,
+    "y": 38,
+    "purpose": "Close Craft"
+  },
+  {
+    "case": "P-desktop",
+    "ms": 2545,
+    "x": 1064.328125,
+    "y": 34,
+    "purpose": "Open Build"
+  },
+  {
+    "case": "P-desktop",
+    "ms": 2694,
+    "x": 257.25,
+    "y": 100,
+    "purpose": "Select whole pen"
+  },
+  {
+    "case": "P-desktop",
+    "ms": 2800,
+    "x": 474.0000000000002,
+    "y": 477.99999999999994,
+    "purpose": "Reject unsupported placement"
+  },
+  {
+    "case": "P-desktop",
+    "ms": 2911,
+    "x": 824.0000000000002,
+    "y": 527.9999999999999,
+    "purpose": "Reject terrain/tree obstruction"
+  },
+  {
+    "case": "P-desktop",
+    "ms": 3096,
+    "x": 474.0000000000002,
+    "y": 527.9999999999999,
+    "purpose": "Place entire pen with one mouse click"
+  },
+  {
+    "case": "P-desktop",
+    "ms": 5429,
+    "x": 57.3359375,
+    "y": 100,
+    "purpose": "Open Show invitation"
+  },
+  {
+    "case": "P-desktop",
+    "ms": 5665,
+    "x": 57.3359375,
+    "y": 100,
+    "purpose": "Repeat toolbar Show"
+  },
+  {
+    "case": "P-desktop",
+    "ms": 5814,
+    "x": 1252.9921875,
+    "y": 220,
+    "purpose": "Accept Show (only quota increment)"
+  },
+  {
+    "case": "P-desktop",
+    "ms": 6045,
+    "x": 1303,
+    "y": 223.5,
+    "purpose": "Answer pen"
+  },
+  {
+    "case": "P-desktop",
+    "ms": 6428,
+    "x": 1253,
+    "y": 238,
+    "purpose": "Keep playing / close feedback"
+  },
+  {
+    "case": "P-desktop",
+    "ms": 6578,
+    "x": 257.25,
+    "y": 100,
+    "purpose": "Select empty whole inventory"
+  },
+  {
+    "case": "P-desktop",
+    "ms": 138419,
+    "x": 474.0000000000002,
+    "y": 527.9999999999999,
+    "purpose": "No stock cannot duplicate whole building"
+  },
+  {
+    "case": "P-desktop",
+    "ms": 138718,
+    "x": 346.046875,
+    "y": 100,
+    "purpose": "Select Remove"
+  },
+  {
+    "case": "P-desktop",
+    "ms": 138846,
+    "x": 524.0000000000002,
+    "y": 477.99999999999994,
+    "purpose": "Remove by clicking any occupied cell"
+  },
+  {
+    "case": "P-desktop",
+    "ms": 139330,
+    "x": 683,
+    "y": 356.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "P-desktop",
+    "ms": 139481,
+    "x": 683,
+    "y": 238.28125,
+    "purpose": "Play"
+  },
+  {
+    "case": "P-desktop",
+    "ms": 140130,
+    "x": 1064.328125,
+    "y": 34,
+    "purpose": "Open saved Build"
+  },
+  {
+    "case": "P-desktop",
+    "ms": 140298,
+    "x": 257.25,
+    "y": 100,
+    "purpose": "Select recovered saved building"
+  },
+  {
+    "case": "P-desktop",
+    "ms": 140408,
+    "x": 474.0000000000002,
+    "y": 527.9999999999999,
+    "purpose": "Re-place recovered whole building"
+  },
+  {
+    "case": "P-desktop",
+    "ms": 140829,
+    "x": 683,
+    "y": 356.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "P-desktop",
+    "ms": 140981,
+    "x": 683,
+    "y": 238.28125,
+    "purpose": "Play"
+  },
+  {
+    "case": "P-desktop",
+    "ms": 141632,
+    "x": 1064.328125,
+    "y": 34,
+    "purpose": "Open restored placed building"
+  },
+  {
+    "case": "F-desktop",
+    "ms": 286,
+    "x": 683,
+    "y": 400.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "F-desktop",
+    "ms": 439,
+    "x": 683,
+    "y": 331.09375,
+    "purpose": "Play"
+  },
+  {
+    "case": "F-desktop",
+    "ms": 1106,
+    "x": 1064.328125,
+    "y": 34,
+    "purpose": "Open free Build"
+  },
+  {
+    "case": "F-desktop",
+    "ms": 1253,
+    "x": 648.484375,
+    "y": 100,
+    "purpose": "Select loose Fence"
+  },
+  {
+    "case": "F-desktop",
+    "ms": 1366,
+    "x": 474.0000000000002,
+    "y": 527.9999999999999,
+    "purpose": "Place loose Fence"
+  },
+  {
+    "case": "F-desktop",
+    "ms": 1486,
+    "x": 524.0000000000002,
+    "y": 527.9999999999999,
+    "purpose": "Place loose Fence"
+  },
+  {
+    "case": "F-desktop",
+    "ms": 4336,
+    "x": 57.3359375,
+    "y": 100,
+    "purpose": "Open Show invitation"
+  },
+  {
+    "case": "F-desktop",
+    "ms": 4503,
+    "x": 1252.9921875,
+    "y": 220,
+    "purpose": "Accept Show (only quota increment)"
+  },
+  {
+    "case": "F-desktop",
+    "ms": 5053,
+    "x": 1253,
+    "y": 238,
+    "purpose": "Keep playing / close feedback"
+  },
+  {
+    "case": "F-desktop",
+    "ms": 8122,
+    "x": 683,
+    "y": 356.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "F-desktop",
+    "ms": 8287,
+    "x": 683,
+    "y": 238.28125,
+    "purpose": "Play"
+  },
+  {
+    "case": "Q-desktop",
+    "ms": 229,
+    "x": 683,
+    "y": 400.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "Q-desktop",
+    "ms": 379,
+    "x": 683,
+    "y": 331.09375,
+    "purpose": "Play"
+  },
+  {
+    "case": "Q-desktop",
+    "ms": 1047,
+    "x": 1148.328125,
+    "y": 34,
+    "purpose": "Open Craft"
+  },
+  {
+    "case": "Q-desktop",
+    "ms": 1223,
+    "x": 629,
+    "y": 414,
+    "purpose": "Craft House"
+  },
+  {
+    "case": "Q-desktop",
+    "ms": 1464,
+    "x": 683,
+    "y": 152,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "Q-desktop",
+    "ms": 1696,
+    "x": 1304,
+    "y": 38,
+    "purpose": "Close Craft"
+  },
+  {
+    "case": "Q-desktop",
+    "ms": 1844,
+    "x": 1064.328125,
+    "y": 34,
+    "purpose": "Open Build"
+  },
+  {
+    "case": "Q-desktop",
+    "ms": 1996,
+    "x": 159.125,
+    "y": 100,
+    "purpose": "Select whole house"
+  },
+  {
+    "case": "Q-desktop",
+    "ms": 2107,
+    "x": 474.0000000000002,
+    "y": 477.99999999999994,
+    "purpose": "Reject unsupported placement"
+  },
+  {
+    "case": "Q-desktop",
+    "ms": 2223,
+    "x": 824.0000000000002,
+    "y": 527.9999999999999,
+    "purpose": "Reject terrain/tree obstruction"
+  },
+  {
+    "case": "Q-desktop",
+    "ms": 2423,
+    "x": 474.0000000000002,
+    "y": 527.9999999999999,
+    "purpose": "Place entire house with one mouse click"
+  },
+  {
+    "case": "Q-desktop",
+    "ms": 4778,
+    "x": 57.3359375,
+    "y": 100,
+    "purpose": "Open Show invitation"
+  },
+  {
+    "case": "Q-desktop",
+    "ms": 5010,
+    "x": 57.3359375,
+    "y": 100,
+    "purpose": "Repeat toolbar Show"
+  },
+  {
+    "case": "Q-desktop",
+    "ms": 5160,
+    "x": 1252.9921875,
+    "y": 220,
+    "purpose": "Accept Show (only quota increment)"
+  },
+  {
+    "case": "Q-desktop",
+    "ms": 5710,
+    "x": 1251,
+    "y": 223.5,
+    "purpose": "Answer house"
+  },
+  {
+    "case": "Q-desktop",
+    "ms": 6376,
+    "x": 1253,
+    "y": 238,
+    "purpose": "Keep playing / close feedback"
+  },
+  {
+    "case": "Q-desktop",
+    "ms": 6528,
+    "x": 429.96875,
+    "y": 100,
+    "purpose": "Select one extra Planks"
+  },
+  {
+    "case": "Q-desktop",
+    "ms": 6640,
+    "x": 474.0000000000002,
+    "y": 378,
+    "purpose": "Place exactly one new block beside whole House"
+  },
+  {
+    "case": "Q-desktop",
+    "ms": 11097,
+    "x": 57.3359375,
+    "y": 100,
+    "purpose": "Open Show invitation"
+  },
+  {
+    "case": "Q-desktop",
+    "ms": 11246,
+    "x": 1252.9921875,
+    "y": 220,
+    "purpose": "Accept Show (only quota increment)"
+  },
+  {
+    "case": "Q-desktop",
+    "ms": 11478,
+    "x": 1251,
+    "y": 223.5,
+    "purpose": "Answer house"
+  },
+  {
+    "case": "Q-desktop",
+    "ms": 11877,
+    "x": 1253,
+    "y": 238,
+    "purpose": "Keep playing / close feedback"
+  },
+  {
+    "case": "Q-desktop",
+    "ms": 12028,
+    "x": 57.3359375,
+    "y": 100,
+    "purpose": "Completed is distinct from spent"
+  },
+  {
+    "case": "Q-desktop",
+    "ms": 12178,
+    "x": 429.96875,
+    "y": 100,
+    "purpose": "Select one extra Planks"
+  },
+  {
+    "case": "Q-desktop",
+    "ms": 12290,
+    "x": 524.0000000000002,
+    "y": 378,
+    "purpose": "Place exactly one new block beside whole House"
+  },
+  {
+    "case": "Q-desktop",
+    "ms": 16763,
+    "x": 57.3359375,
+    "y": 100,
+    "purpose": "Open Show invitation"
+  },
+  {
+    "case": "Q-desktop",
+    "ms": 16911,
+    "x": 1252.9921875,
+    "y": 220,
+    "purpose": "Accept Show (only quota increment)"
+  },
+  {
+    "case": "Q-desktop",
+    "ms": 17144,
+    "x": 1251,
+    "y": 223.5,
+    "purpose": "Answer house"
+  },
+  {
+    "case": "Q-desktop",
+    "ms": 17592,
+    "x": 1253,
+    "y": 238,
+    "purpose": "Keep playing / close feedback"
+  },
+  {
+    "case": "Q-desktop",
+    "ms": 17744,
+    "x": 429.96875,
+    "y": 100,
+    "purpose": "Select one extra Planks"
+  },
+  {
+    "case": "Q-desktop",
+    "ms": 17857,
+    "x": 574.0000000000002,
+    "y": 378,
+    "purpose": "Place exactly one new block beside whole House"
+  },
+  {
+    "case": "Q-desktop",
+    "ms": 22330,
+    "x": 57.3359375,
+    "y": 100,
+    "purpose": "Open Show invitation"
+  },
+  {
+    "case": "Q-desktop",
+    "ms": 22496,
+    "x": 1252.9921875,
+    "y": 220,
+    "purpose": "Accept Show (only quota increment)"
+  },
+  {
+    "case": "Q-desktop",
+    "ms": 22744,
+    "x": 1251,
+    "y": 223.5,
+    "purpose": "Answer house"
+  },
+  {
+    "case": "Q-desktop",
+    "ms": 23162,
+    "x": 1253,
+    "y": 238,
+    "purpose": "Keep playing / close feedback"
+  },
+  {
+    "case": "Q-desktop",
+    "ms": 23309,
+    "x": 57.3359375,
+    "y": 100,
+    "purpose": "Fifth Show blocked"
+  },
+  {
+    "case": "Q-desktop",
+    "ms": 26478,
+    "x": 683,
+    "y": 356.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "Q-desktop",
+    "ms": 26628,
+    "x": 683,
+    "y": 238.28125,
+    "purpose": "Play"
+  },
+  {
+    "case": "Q-desktop",
+    "ms": 27277,
+    "x": 1064.328125,
+    "y": 34,
+    "purpose": "Open saved quota"
+  },
+  {
+    "case": "Q-desktop",
+    "ms": 27611,
+    "x": 682.9921875,
+    "y": 487.75,
+    "purpose": "New world"
+  },
+  {
+    "case": "Q-desktop",
+    "ms": 27760,
+    "x": 683,
+    "y": 487.75,
+    "purpose": "Confirm New world"
+  },
+  {
+    "case": "Q-desktop",
+    "ms": 27908,
+    "x": 683,
+    "y": 400.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "Q-desktop",
+    "ms": 28062,
+    "x": 683,
+    "y": 331.09375,
+    "purpose": "Play"
+  },
+  {
+    "case": "Q-desktop",
+    "ms": 28723,
+    "x": 1064.328125,
+    "y": 34,
+    "purpose": "Open new Build"
+  },
+  {
+    "case": "R-desktop",
+    "ms": 261,
+    "x": 683,
+    "y": 400.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "R-desktop",
+    "ms": 414,
+    "x": 683,
+    "y": 331.09375,
+    "purpose": "Play"
+  },
+  {
+    "case": "R-desktop",
+    "ms": 1079,
+    "x": 1148.328125,
+    "y": 34,
+    "purpose": "Open Craft"
+  },
+  {
+    "case": "R-desktop",
+    "ms": 1246,
+    "x": 629,
+    "y": 414,
+    "purpose": "Craft House"
+  },
+  {
+    "case": "R-desktop",
+    "ms": 1482,
+    "x": 683,
+    "y": 152,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "R-desktop",
+    "ms": 1712,
+    "x": 1304,
+    "y": 38,
+    "purpose": "Close Craft"
+  },
+  {
+    "case": "R-desktop",
+    "ms": 1862,
+    "x": 1064.328125,
+    "y": 34,
+    "purpose": "Open Build"
+  },
+  {
+    "case": "R-desktop",
+    "ms": 2028,
+    "x": 159.125,
+    "y": 100,
+    "purpose": "Select whole house"
+  },
+  {
+    "case": "R-desktop",
+    "ms": 2144,
+    "x": 474.0000000000002,
+    "y": 477.99999999999994,
+    "purpose": "Reject unsupported placement"
+  },
+  {
+    "case": "R-desktop",
+    "ms": 2260,
+    "x": 824.0000000000002,
+    "y": 527.9999999999999,
+    "purpose": "Reject terrain/tree obstruction"
+  },
+  {
+    "case": "R-desktop",
+    "ms": 2449,
+    "x": 474.0000000000002,
+    "y": 527.9999999999999,
+    "purpose": "Place entire house with one mouse click"
+  },
+  {
+    "case": "R-desktop",
+    "ms": 4331,
+    "x": 57.3359375,
+    "y": 100,
+    "purpose": "Open Show invitation"
+  },
+  {
+    "case": "R-desktop",
+    "ms": 4576,
+    "x": 57.3359375,
+    "y": 100,
+    "purpose": "Repeat toolbar Show"
+  },
+  {
+    "case": "R-desktop",
+    "ms": 39661,
+    "x": 429.96875,
+    "y": 100,
+    "purpose": "Select one extra Planks"
+  },
+  {
+    "case": "R-desktop",
+    "ms": 39772,
+    "x": 474.0000000000002,
+    "y": 378,
+    "purpose": "Place exactly one new block beside whole House"
+  },
+  {
+    "case": "R-desktop",
+    "ms": 44246,
+    "x": 57.3359375,
+    "y": 100,
+    "purpose": "Open Show invitation"
+  },
+  {
+    "case": "R-desktop",
+    "ms": 44411,
+    "x": 1252.9921875,
+    "y": 220,
+    "purpose": "Accept Show (only quota increment)"
+  },
+  {
+    "case": "R-desktop",
+    "ms": 44642,
+    "x": 1251,
+    "y": 223.5,
+    "purpose": "Answer house"
+  },
+  {
+    "case": "R-desktop",
+    "ms": 45092,
+    "x": 1253,
+    "y": 238,
+    "purpose": "Keep playing / close feedback"
+  },
+  {
+    "case": "R-desktop",
+    "ms": 45243,
+    "x": 429.96875,
+    "y": 100,
+    "purpose": "Select one extra Planks"
+  },
+  {
+    "case": "R-desktop",
+    "ms": 45355,
+    "x": 524.0000000000002,
+    "y": 378,
+    "purpose": "Place exactly one new block beside whole House"
+  },
+  {
+    "case": "R-desktop",
+    "ms": 49862,
+    "x": 57.3359375,
+    "y": 100,
+    "purpose": "Open Show invitation"
+  },
+  {
+    "case": "R-desktop",
+    "ms": 50028,
+    "x": 1252.9921875,
+    "y": 220,
+    "purpose": "Accept Show (only quota increment)"
+  },
+  {
+    "case": "R-desktop",
+    "ms": 50293,
+    "x": 1251,
+    "y": 223.5,
+    "purpose": "Answer house"
+  },
+  {
+    "case": "I-desktop",
+    "ms": 240,
+    "x": 683,
+    "y": 400.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "I-desktop",
+    "ms": 388,
+    "x": 683,
+    "y": 331.09375,
+    "purpose": "Play"
+  },
+  {
+    "case": "I-desktop",
+    "ms": 1057,
+    "x": 1148.328125,
+    "y": 34,
+    "purpose": "Open Craft"
+  },
+  {
+    "case": "I-desktop",
+    "ms": 1206,
+    "x": 629,
+    "y": 414,
+    "purpose": "Craft House"
+  },
+  {
+    "case": "I-desktop",
+    "ms": 1439,
+    "x": 683,
+    "y": 152,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "I-desktop",
+    "ms": 1672,
+    "x": 1304,
+    "y": 38,
+    "purpose": "Close Craft"
+  },
+  {
+    "case": "I-desktop",
+    "ms": 1822,
+    "x": 1064.328125,
+    "y": 34,
+    "purpose": "Open Build"
+  },
+  {
+    "case": "I-desktop",
+    "ms": 1975,
+    "x": 159.125,
+    "y": 100,
+    "purpose": "Select whole house"
+  },
+  {
+    "case": "I-desktop",
+    "ms": 2085,
+    "x": 474.0000000000002,
+    "y": 477.99999999999994,
+    "purpose": "Reject unsupported placement"
+  },
+  {
+    "case": "I-desktop",
+    "ms": 2203,
+    "x": 824.0000000000002,
+    "y": 527.9999999999999,
+    "purpose": "Reject terrain/tree obstruction"
+  },
+  {
+    "case": "I-desktop",
+    "ms": 2407,
+    "x": 474.0000000000002,
+    "y": 527.9999999999999,
+    "purpose": "Place entire house with one mouse click"
+  },
+  {
+    "case": "I-desktop",
+    "ms": 4757,
+    "x": 57.3359375,
+    "y": 100,
+    "purpose": "Open Show invitation"
+  },
+  {
+    "case": "I-desktop",
+    "ms": 5006,
+    "x": 57.3359375,
+    "y": 100,
+    "purpose": "Repeat toolbar Show"
+  },
+  {
+    "case": "I-desktop",
+    "ms": 15172,
+    "x": 429.96875,
+    "y": 100,
+    "purpose": "Select during invite"
+  },
+  {
+    "case": "I-desktop",
+    "ms": 15284,
+    "x": 474.0000000000002,
+    "y": 378,
+    "purpose": "Place during invite"
+  },
+  {
+    "case": "I-desktop",
+    "ms": 15439,
+    "x": 57.3359375,
+    "y": 100,
+    "purpose": "Repeat Show during invite"
+  },
+  {
+    "case": "I-desktop",
+    "ms": 34258,
+    "x": 1252.9921875,
+    "y": 220,
+    "purpose": "Accept Show (only quota increment)"
+  },
+  {
+    "case": "I-desktop",
+    "ms": 34488,
+    "x": 1251,
+    "y": 223.5,
+    "purpose": "Answer house"
+  },
+  {
+    "case": "V-desktop",
+    "ms": 236,
+    "x": 683,
+    "y": 400.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "V-desktop",
+    "ms": 388,
+    "x": 683,
+    "y": 331.09375,
+    "purpose": "Play"
+  },
+  {
+    "case": "T2-desktop",
+    "ms": 222,
+    "x": 683,
+    "y": 400.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "T2-desktop",
+    "ms": 373,
+    "x": 683,
+    "y": 331.09375,
+    "purpose": "Play"
+  },
+  {
+    "case": "T2-desktop",
+    "ms": 1022,
+    "x": 1320,
+    "y": 34,
+    "purpose": "Open parent difficulty"
+  },
+  {
+    "case": "T2-desktop",
+    "ms": 1173,
+    "x": 1092.0078125,
+    "y": 495.9375,
+    "purpose": "Set build difficulty"
+  },
+  {
+    "case": "T2-desktop",
+    "ms": 1322,
+    "x": 1068.0078125,
+    "y": 710.25,
+    "purpose": "Return from parent settings"
+  },
+  {
+    "case": "T2-desktop",
+    "ms": 1473,
+    "x": 1148.328125,
+    "y": 34,
+    "purpose": "Open Craft"
+  },
+  {
+    "case": "T2-desktop",
+    "ms": 1624,
+    "x": 629,
+    "y": 414,
+    "purpose": "Craft House"
+  },
+  {
+    "case": "T2-desktop",
+    "ms": 1855,
+    "x": 683,
+    "y": 152,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "T2-desktop",
+    "ms": 2089,
+    "x": 1304,
+    "y": 38,
+    "purpose": "Close Craft"
+  },
+  {
+    "case": "T2-desktop",
+    "ms": 2238,
+    "x": 1064.328125,
+    "y": 34,
+    "purpose": "Open Build"
+  },
+  {
+    "case": "T2-desktop",
+    "ms": 2390,
+    "x": 159.125,
+    "y": 100,
+    "purpose": "Select whole house"
+  },
+  {
+    "case": "T2-desktop",
+    "ms": 2505,
+    "x": 474.0000000000002,
+    "y": 477.99999999999994,
+    "purpose": "Reject unsupported placement"
+  },
+  {
+    "case": "T2-desktop",
+    "ms": 2622,
+    "x": 824.0000000000002,
+    "y": 527.9999999999999,
+    "purpose": "Reject terrain/tree obstruction"
+  },
+  {
+    "case": "T2-desktop",
+    "ms": 2809,
+    "x": 474.0000000000002,
+    "y": 527.9999999999999,
+    "purpose": "Place entire house with one mouse click"
+  },
+  {
+    "case": "T2-desktop",
+    "ms": 4674,
+    "x": 57.3359375,
+    "y": 100,
+    "purpose": "Open Show invitation"
+  },
+  {
+    "case": "T2-desktop",
+    "ms": 4924,
+    "x": 57.3359375,
+    "y": 100,
+    "purpose": "Repeat toolbar Show"
+  },
+  {
+    "case": "T2-desktop",
+    "ms": 5086,
+    "x": 1252.9921875,
+    "y": 220,
+    "purpose": "Accept Show (only quota increment)"
+  },
+  {
+    "case": "T2-desktop",
+    "ms": 13275,
+    "x": 1251,
+    "y": 223.5,
+    "purpose": "Answer house"
+  },
+  {
+    "case": "T2-desktop",
+    "ms": 13689,
+    "x": 1253,
+    "y": 238,
+    "purpose": "Keep playing / close feedback"
+  },
+  {
+    "case": "T2-desktop",
+    "ms": 13841,
+    "x": 159.125,
+    "y": 100,
+    "purpose": "Select empty whole inventory"
+  },
+  {
+    "case": "T2-desktop",
+    "ms": 13952,
+    "x": 474.0000000000002,
+    "y": 527.9999999999999,
+    "purpose": "No stock cannot duplicate whole building"
+  },
+  {
+    "case": "T2-desktop",
+    "ms": 14125,
+    "x": 346.046875,
+    "y": 100,
+    "purpose": "Select Remove"
+  },
+  {
+    "case": "T2-desktop",
+    "ms": 14235,
+    "x": 524.0000000000002,
+    "y": 477.99999999999994,
+    "purpose": "Remove by clicking any occupied cell"
+  },
+  {
+    "case": "T2-desktop",
+    "ms": 14588,
+    "x": 683,
+    "y": 356.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "T2-desktop",
+    "ms": 14738,
+    "x": 683,
+    "y": 238.28125,
+    "purpose": "Play"
+  },
+  {
+    "case": "T2-desktop",
+    "ms": 15390,
+    "x": 1064.328125,
+    "y": 34,
+    "purpose": "Open saved Build"
+  },
+  {
+    "case": "T2-desktop",
+    "ms": 15554,
+    "x": 159.125,
+    "y": 100,
+    "purpose": "Select recovered saved building"
+  },
+  {
+    "case": "T2-desktop",
+    "ms": 15659,
+    "x": 474.0000000000002,
+    "y": 527.9999999999999,
+    "purpose": "Re-place recovered whole building"
+  },
+  {
+    "case": "T2-desktop",
+    "ms": 16024,
+    "x": 683,
+    "y": 356.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "T2-desktop",
+    "ms": 16176,
+    "x": 683,
+    "y": 238.28125,
+    "purpose": "Play"
+  },
+  {
+    "case": "T2-desktop",
+    "ms": 16822,
+    "x": 1064.328125,
+    "y": 34,
+    "purpose": "Open restored placed building"
+  },
+  {
+    "case": "T3-desktop",
+    "ms": 259,
+    "x": 683,
+    "y": 400.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "T3-desktop",
+    "ms": 410,
+    "x": 683,
+    "y": 331.09375,
+    "purpose": "Play"
+  },
+  {
+    "case": "T3-desktop",
+    "ms": 1059,
+    "x": 1320,
+    "y": 34,
+    "purpose": "Open parent difficulty"
+  },
+  {
+    "case": "T3-desktop",
+    "ms": 1209,
+    "x": 1204.4765625,
+    "y": 495.9375,
+    "purpose": "Set build difficulty"
+  },
+  {
+    "case": "T3-desktop",
+    "ms": 1361,
+    "x": 1068.0078125,
+    "y": 710.25,
+    "purpose": "Return from parent settings"
+  },
+  {
+    "case": "T3-desktop",
+    "ms": 1510,
+    "x": 1159,
+    "y": 725,
+    "purpose": "Harvest the flower ahead to clear 4-wide ground"
+  },
+  {
+    "case": "T3-desktop",
+    "ms": 2160,
+    "x": 683,
+    "y": 152,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "T3-desktop",
+    "ms": 2307,
+    "x": 1148.328125,
+    "y": 34,
+    "purpose": "Open Craft"
+  },
+  {
+    "case": "T3-desktop",
+    "ms": 2459,
+    "x": 1306,
+    "y": 414,
+    "purpose": "Craft Pen"
+  },
+  {
+    "case": "T3-desktop",
+    "ms": 2693,
+    "x": 683,
+    "y": 152,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "T3-desktop",
+    "ms": 2924,
+    "x": 1304,
+    "y": 38,
+    "purpose": "Close Craft"
+  },
+  {
+    "case": "T3-desktop",
+    "ms": 3076,
+    "x": 1064.328125,
+    "y": 34,
+    "purpose": "Open Build"
+  },
+  {
+    "case": "T3-desktop",
+    "ms": 3223,
+    "x": 257.25,
+    "y": 100,
+    "purpose": "Select whole pen"
+  },
+  {
+    "case": "T3-desktop",
+    "ms": 3331,
+    "x": 474.0000000000002,
+    "y": 477.99999999999994,
+    "purpose": "Reject unsupported placement"
+  },
+  {
+    "case": "T3-desktop",
+    "ms": 3447,
+    "x": 824.0000000000002,
+    "y": 527.9999999999999,
+    "purpose": "Reject terrain/tree obstruction"
+  },
+  {
+    "case": "T3-desktop",
+    "ms": 3646,
+    "x": 474.0000000000002,
+    "y": 527.9999999999999,
+    "purpose": "Place entire pen with one mouse click"
+  },
+  {
+    "case": "T3-desktop",
+    "ms": 5462,
+    "x": 57.3359375,
+    "y": 100,
+    "purpose": "Open Show invitation"
+  },
+  {
+    "case": "T3-desktop",
+    "ms": 5710,
+    "x": 57.3359375,
+    "y": 100,
+    "purpose": "Repeat toolbar Show"
+  },
+  {
+    "case": "T3-desktop",
+    "ms": 5860,
+    "x": 1252.9921875,
+    "y": 220,
+    "purpose": "Accept Show (only quota increment)"
+  },
+  {
+    "case": "T3-desktop",
+    "ms": 14024,
+    "x": 1303,
+    "y": 241.5,
+    "purpose": "Answer pen"
+  },
+  {
+    "case": "T3-desktop",
+    "ms": 14459,
+    "x": 1253,
+    "y": 238,
+    "purpose": "Keep playing / close feedback"
+  },
+  {
+    "case": "T3-desktop",
+    "ms": 14608,
+    "x": 257.25,
+    "y": 100,
+    "purpose": "Select empty whole inventory"
+  },
+  {
+    "case": "T3-desktop",
+    "ms": 14711,
+    "x": 474.0000000000002,
+    "y": 527.9999999999999,
+    "purpose": "No stock cannot duplicate whole building"
+  },
+  {
+    "case": "T3-desktop",
+    "ms": 14858,
+    "x": 346.046875,
+    "y": 100,
+    "purpose": "Select Remove"
+  },
+  {
+    "case": "T3-desktop",
+    "ms": 14963,
+    "x": 524.0000000000002,
+    "y": 477.99999999999994,
+    "purpose": "Remove by clicking any occupied cell"
+  },
+  {
+    "case": "T3-desktop",
+    "ms": 15323,
+    "x": 683,
+    "y": 356.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "T3-desktop",
+    "ms": 15475,
+    "x": 683,
+    "y": 238.28125,
+    "purpose": "Play"
+  },
+  {
+    "case": "T3-desktop",
+    "ms": 16123,
+    "x": 1064.328125,
+    "y": 34,
+    "purpose": "Open saved Build"
+  },
+  {
+    "case": "T3-desktop",
+    "ms": 16274,
+    "x": 257.25,
+    "y": 100,
+    "purpose": "Select recovered saved building"
+  },
+  {
+    "case": "T3-desktop",
+    "ms": 16380,
+    "x": 474.0000000000002,
+    "y": 527.9999999999999,
+    "purpose": "Re-place recovered whole building"
+  },
+  {
+    "case": "T3-desktop",
+    "ms": 16707,
+    "x": 683,
+    "y": 356.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "T3-desktop",
+    "ms": 16858,
+    "x": 683,
+    "y": 238.28125,
+    "purpose": "Play"
+  },
+  {
+    "case": "T3-desktop",
+    "ms": 17507,
+    "x": 1064.328125,
+    "y": 34,
+    "purpose": "Open restored placed building"
+  },
+  {
+    "case": "N-desktop",
+    "ms": 216,
+    "x": 683,
+    "y": 400.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "N-desktop",
+    "ms": 365,
+    "x": 683,
+    "y": 331.09375,
+    "purpose": "Play"
+  },
+  {
+    "case": "N-desktop",
+    "ms": 1034,
+    "x": 1148.328125,
+    "y": 34,
+    "purpose": "Open Craft"
+  },
+  {
+    "case": "N-desktop",
+    "ms": 1181,
+    "x": 629,
+    "y": 414,
+    "purpose": "Craft House"
+  },
+  {
+    "case": "N-desktop",
+    "ms": 1417,
+    "x": 683,
+    "y": 152,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "N-desktop",
+    "ms": 1566,
+    "x": 629,
+    "y": 414,
+    "purpose": "Craft House"
+  },
+  {
+    "case": "N-desktop",
+    "ms": 1800,
+    "x": 683,
+    "y": 152,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "N-desktop",
+    "ms": 2030,
+    "x": 1304,
+    "y": 38,
+    "purpose": "Close Craft"
+  },
+  {
+    "case": "N-desktop",
+    "ms": 2185,
+    "x": 1064.328125,
+    "y": 34,
+    "purpose": "Open Build"
+  },
+  {
+    "case": "N-desktop",
+    "ms": 2330,
+    "x": 159.125,
+    "y": 100,
+    "purpose": "Select whole house"
+  },
+  {
+    "case": "N-desktop",
+    "ms": 2437,
+    "x": 474.0000000000002,
+    "y": 477.99999999999994,
+    "purpose": "Reject unsupported placement"
+  },
+  {
+    "case": "N-desktop",
+    "ms": 2550,
+    "x": 824.0000000000002,
+    "y": 527.9999999999999,
+    "purpose": "Reject terrain/tree obstruction"
+  },
+  {
+    "case": "N-desktop",
+    "ms": 2743,
+    "x": 474.0000000000002,
+    "y": 527.9999999999999,
+    "purpose": "Place entire house with one mouse click"
+  },
+  {
+    "case": "N-desktop",
+    "ms": 3097,
+    "x": 474.0000000000002,
+    "y": 527.9999999999999,
+    "purpose": "Reject overlapping whole building"
+  },
+  {
+    "case": "N-desktop",
+    "ms": 4767,
+    "x": 57.3359375,
+    "y": 100,
+    "purpose": "Open Show invitation"
+  },
+  {
+    "case": "N-desktop",
+    "ms": 5013,
+    "x": 57.3359375,
+    "y": 100,
+    "purpose": "Repeat toolbar Show"
+  },
+  {
+    "case": "N-desktop",
+    "ms": 5165,
+    "x": 1252.9921875,
+    "y": 220,
+    "purpose": "Accept Show (only quota increment)"
+  },
+  {
+    "case": "N-desktop",
+    "ms": 5397,
+    "x": 1251,
+    "y": 223.5,
+    "purpose": "Answer house"
+  },
+  {
+    "case": "N-desktop",
+    "ms": 5797,
+    "x": 1253,
+    "y": 238,
+    "purpose": "Keep playing / close feedback"
+  },
+  {
+    "case": "N-desktop",
+    "ms": 5947,
+    "x": 1064.328125,
+    "y": 34,
+    "purpose": "Leave Build to test backpack placement"
+  },
+  {
+    "case": "N-desktop",
+    "ms": 6097,
+    "x": 361,
+    "y": 729,
+    "purpose": "Select next whole House from backpack"
+  },
+  {
+    "case": "N-desktop",
+    "ms": 6201,
+    "x": 674.0000000000002,
+    "y": 527.9999999999999,
+    "purpose": "Place exactly one additional whole House from backpack"
+  },
+  {
+    "case": "N-desktop",
+    "ms": 6348,
+    "x": 1064.328125,
+    "y": 34,
+    "purpose": "Return to Build"
+  },
+  {
+    "case": "N-desktop",
+    "ms": 8533,
+    "x": 57.3359375,
+    "y": 100,
+    "purpose": "Open Show invitation"
+  },
+  {
+    "case": "N-desktop",
+    "ms": 8699,
+    "x": 1252.9921875,
+    "y": 220,
+    "purpose": "Accept Show (only quota increment)"
+  },
+  {
+    "case": "N-desktop",
+    "ms": 8931,
+    "x": 1251,
+    "y": 223.5,
+    "purpose": "Answer house"
+  },
+  {
+    "case": "C-mobile",
+    "ms": 191,
+    "x": 422,
+    "y": 223.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "C-mobile",
+    "ms": 343,
+    "x": 422,
+    "y": 256,
+    "purpose": "Play"
+  },
+  {
+    "case": "C-mobile",
+    "ms": 994,
+    "x": 626.328125,
+    "y": 34,
+    "purpose": "Open Craft"
+  },
+  {
+    "case": "C-mobile",
+    "ms": 1143,
+    "x": 368,
+    "y": 225,
+    "purpose": "Craft House"
+  },
+  {
+    "case": "C-mobile",
+    "ms": 1375,
+    "x": 422,
+    "y": 100,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "C-mobile",
+    "ms": 1577,
+    "x": 782,
+    "y": 38,
+    "purpose": "Close Craft"
+  },
+  {
+    "case": "C-mobile",
+    "ms": 1726,
+    "x": 542.328125,
+    "y": 34,
+    "purpose": "Open Build"
+  },
+  {
+    "case": "C-mobile",
+    "ms": 1878,
+    "x": 159.125,
+    "y": 100,
+    "purpose": "Select whole house"
+  },
+  {
+    "case": "C-mobile",
+    "ms": 1988,
+    "x": 277.9999999999998,
+    "y": 224.00000000000003,
+    "purpose": "Reject unsupported placement"
+  },
+  {
+    "case": "C-mobile",
+    "ms": 2099,
+    "x": 543.9999999999998,
+    "y": 262,
+    "purpose": "Reject terrain/tree obstruction"
+  },
+  {
+    "case": "C-mobile",
+    "ms": 2265,
+    "x": 277.9999999999998,
+    "y": 262,
+    "purpose": "Place entire house with one mouse click"
+  },
+  {
+    "case": "C-mobile",
+    "ms": 4527,
+    "x": 57.3359375,
+    "y": 100,
+    "purpose": "Open Show invitation"
+  },
+  {
+    "case": "C-mobile",
+    "ms": 4726,
+    "x": 57.3359375,
+    "y": 100,
+    "purpose": "Repeat toolbar Show"
+  },
+  {
+    "case": "C-mobile",
+    "ms": 4877,
+    "x": 730.9921875,
+    "y": 220,
+    "purpose": "Accept Show (only quota increment)"
+  },
+  {
+    "case": "C-mobile",
+    "ms": 5075,
+    "x": 729,
+    "y": 223.5,
+    "purpose": "Answer house"
+  },
+  {
+    "case": "C-mobile",
+    "ms": 5375,
+    "x": 731,
+    "y": 238,
+    "purpose": "Keep playing / close feedback"
+  },
+  {
+    "case": "C-mobile",
+    "ms": 5525,
+    "x": 159.125,
+    "y": 100,
+    "purpose": "Select empty whole inventory"
+  },
+  {
+    "case": "C-mobile",
+    "ms": 5630,
+    "x": 277.9999999999998,
+    "y": 262,
+    "purpose": "No stock cannot duplicate whole building"
+  },
+  {
+    "case": "C-mobile",
+    "ms": 5774,
+    "x": 346.046875,
+    "y": 100,
+    "purpose": "Select Remove"
+  },
+  {
+    "case": "C-mobile",
+    "ms": 5879,
+    "x": 315.9999999999998,
+    "y": 224.00000000000003,
+    "purpose": "Remove by clicking any occupied cell"
+  },
+  {
+    "case": "C-mobile",
+    "ms": 6160,
+    "x": 422,
+    "y": 179.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "C-mobile",
+    "ms": 6311,
+    "x": 422,
+    "y": 163,
+    "purpose": "Play"
+  },
+  {
+    "case": "C-mobile",
+    "ms": 6961,
+    "x": 542.328125,
+    "y": 34,
+    "purpose": "Open saved Build"
+  },
+  {
+    "case": "C-mobile",
+    "ms": 7108,
+    "x": 159.125,
+    "y": 100,
+    "purpose": "Select recovered saved building"
+  },
+  {
+    "case": "C-mobile",
+    "ms": 7213,
+    "x": 277.9999999999998,
+    "y": 262,
+    "purpose": "Re-place recovered whole building"
+  },
+  {
+    "case": "C-mobile",
+    "ms": 7493,
+    "x": 422,
+    "y": 179.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "C-mobile",
+    "ms": 7642,
+    "x": 422,
+    "y": 163,
+    "purpose": "Play"
+  },
+  {
+    "case": "C-mobile",
+    "ms": 8293,
+    "x": 542.328125,
+    "y": 34,
+    "purpose": "Open restored placed building"
+  },
+  {
+    "case": "P-mobile",
+    "ms": 200,
+    "x": 422,
+    "y": 223.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "P-mobile",
+    "ms": 352,
+    "x": 422,
+    "y": 256,
+    "purpose": "Play"
+  },
+  {
+    "case": "P-mobile",
+    "ms": 1000,
+    "x": 637,
+    "y": 347,
+    "purpose": "Harvest the flower ahead to clear 4-wide ground"
+  },
+  {
+    "case": "P-mobile",
+    "ms": 1652,
+    "x": 422,
+    "y": 100,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "P-mobile",
+    "ms": 1800,
+    "x": 626.328125,
+    "y": 34,
+    "purpose": "Open Craft"
+  },
+  {
+    "case": "P-mobile",
+    "ms": 1951,
+    "x": 784,
+    "y": 225,
+    "purpose": "Craft Pen"
+  },
+  {
+    "case": "P-mobile",
+    "ms": 2184,
+    "x": 422,
+    "y": 100,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "P-mobile",
+    "ms": 2384,
+    "x": 782,
+    "y": 38,
+    "purpose": "Close Craft"
+  },
+  {
+    "case": "P-mobile",
+    "ms": 2534,
+    "x": 542.328125,
+    "y": 34,
+    "purpose": "Open Build"
+  },
+  {
+    "case": "P-mobile",
+    "ms": 2686,
+    "x": 257.25,
+    "y": 100,
+    "purpose": "Select whole pen"
+  },
+  {
+    "case": "P-mobile",
+    "ms": 2796,
+    "x": 277.9999999999998,
+    "y": 224.00000000000003,
+    "purpose": "Reject unsupported placement"
+  },
+  {
+    "case": "P-mobile",
+    "ms": 2907,
+    "x": 543.9999999999998,
+    "y": 262,
+    "purpose": "Reject terrain/tree obstruction"
+  },
+  {
+    "case": "P-mobile",
+    "ms": 3070,
+    "x": 277.9999999999998,
+    "y": 262,
+    "purpose": "Place entire pen with one mouse click"
+  },
+  {
+    "case": "P-mobile",
+    "ms": 5335,
+    "x": 57.3359375,
+    "y": 100,
+    "purpose": "Open Show invitation"
+  },
+  {
+    "case": "P-mobile",
+    "ms": 5550,
+    "x": 57.3359375,
+    "y": 100,
+    "purpose": "Repeat toolbar Show"
+  },
+  {
+    "case": "P-mobile",
+    "ms": 5700,
+    "x": 730.9921875,
+    "y": 220,
+    "purpose": "Accept Show (only quota increment)"
+  },
+  {
+    "case": "P-mobile",
+    "ms": 5916,
+    "x": 781,
+    "y": 223.5,
+    "purpose": "Answer pen"
+  },
+  {
+    "case": "P-mobile",
+    "ms": 6236,
+    "x": 731,
+    "y": 238,
+    "purpose": "Keep playing / close feedback"
+  },
+  {
+    "case": "P-mobile",
+    "ms": 6385,
+    "x": 257.25,
+    "y": 100,
+    "purpose": "Select empty whole inventory"
+  },
+  {
+    "case": "P-mobile",
+    "ms": 6490,
+    "x": 277.9999999999998,
+    "y": 262,
+    "purpose": "No stock cannot duplicate whole building"
+  },
+  {
+    "case": "P-mobile",
+    "ms": 6633,
+    "x": 346.046875,
+    "y": 100,
+    "purpose": "Select Remove"
+  },
+  {
+    "case": "P-mobile",
+    "ms": 6739,
+    "x": 315.9999999999998,
+    "y": 224.00000000000003,
+    "purpose": "Remove by clicking any occupied cell"
+  },
+  {
+    "case": "P-mobile",
+    "ms": 7034,
+    "x": 422,
+    "y": 179.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "P-mobile",
+    "ms": 7184,
+    "x": 422,
+    "y": 163,
+    "purpose": "Play"
+  },
+  {
+    "case": "P-mobile",
+    "ms": 7835,
+    "x": 542.328125,
+    "y": 34,
+    "purpose": "Open saved Build"
+  },
+  {
+    "case": "P-mobile",
+    "ms": 7984,
+    "x": 257.25,
+    "y": 100,
+    "purpose": "Select recovered saved building"
+  },
+  {
+    "case": "P-mobile",
+    "ms": 8089,
+    "x": 277.9999999999998,
+    "y": 262,
+    "purpose": "Re-place recovered whole building"
+  },
+  {
+    "case": "P-mobile",
+    "ms": 8367,
+    "x": 422,
+    "y": 179.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "P-mobile",
+    "ms": 8518,
+    "x": 422,
+    "y": 163,
+    "purpose": "Play"
+  },
+  {
+    "case": "P-mobile",
+    "ms": 9167,
+    "x": 542.328125,
+    "y": 34,
+    "purpose": "Open restored placed building"
+  },
+  {
+    "case": "F-mobile",
+    "ms": 196,
+    "x": 422,
+    "y": 223.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "F-mobile",
+    "ms": 347,
+    "x": 422,
+    "y": 256,
+    "purpose": "Play"
+  },
+  {
+    "case": "F-mobile",
+    "ms": 997,
+    "x": 542.328125,
+    "y": 34,
+    "purpose": "Open free Build"
+  },
+  {
+    "case": "F-mobile",
+    "ms": 1144,
+    "x": 648.484375,
+    "y": 100,
+    "purpose": "Select loose Fence"
+  },
+  {
+    "case": "F-mobile",
+    "ms": 1249,
+    "x": 277.9999999999998,
+    "y": 262,
+    "purpose": "Place loose Fence"
+  },
+  {
+    "case": "F-mobile",
+    "ms": 1363,
+    "x": 315.9999999999998,
+    "y": 262,
+    "purpose": "Place loose Fence"
+  },
+  {
+    "case": "F-mobile",
+    "ms": 4164,
+    "x": 57.3359375,
+    "y": 100,
+    "purpose": "Open Show invitation"
+  },
+  {
+    "case": "F-mobile",
+    "ms": 4313,
+    "x": 730.9921875,
+    "y": 220,
+    "purpose": "Accept Show (only quota increment)"
+  },
+  {
+    "case": "F-mobile",
+    "ms": 4745,
+    "x": 731,
+    "y": 238,
+    "purpose": "Keep playing / close feedback"
+  },
+  {
+    "case": "F-mobile",
+    "ms": 7779,
+    "x": 422,
+    "y": 179.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "F-mobile",
+    "ms": 7928,
+    "x": 422,
+    "y": 163,
+    "purpose": "Play"
+  },
+  {
+    "case": "Q-mobile",
+    "ms": 196,
+    "x": 422,
+    "y": 223.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "Q-mobile",
+    "ms": 347,
+    "x": 422,
+    "y": 256,
+    "purpose": "Play"
+  },
+  {
+    "case": "Q-mobile",
+    "ms": 999,
+    "x": 626.328125,
+    "y": 34,
+    "purpose": "Open Craft"
+  },
+  {
+    "case": "Q-mobile",
+    "ms": 1151,
+    "x": 368,
+    "y": 225,
+    "purpose": "Craft House"
+  },
+  {
+    "case": "Q-mobile",
+    "ms": 1382,
+    "x": 422,
+    "y": 100,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "Q-mobile",
+    "ms": 1581,
+    "x": 782,
+    "y": 38,
+    "purpose": "Close Craft"
+  },
+  {
+    "case": "Q-mobile",
+    "ms": 1733,
+    "x": 542.328125,
+    "y": 34,
+    "purpose": "Open Build"
+  },
+  {
+    "case": "Q-mobile",
+    "ms": 1882,
+    "x": 159.125,
+    "y": 100,
+    "purpose": "Select whole house"
+  },
+  {
+    "case": "Q-mobile",
+    "ms": 1993,
+    "x": 277.9999999999998,
+    "y": 224.00000000000003,
+    "purpose": "Reject unsupported placement"
+  },
+  {
+    "case": "Q-mobile",
+    "ms": 2105,
+    "x": 543.9999999999998,
+    "y": 262,
+    "purpose": "Reject terrain/tree obstruction"
+  },
+  {
+    "case": "Q-mobile",
+    "ms": 2269,
+    "x": 277.9999999999998,
+    "y": 262,
+    "purpose": "Place entire house with one mouse click"
+  },
+  {
+    "case": "Q-mobile",
+    "ms": 4531,
+    "x": 57.3359375,
+    "y": 100,
+    "purpose": "Open Show invitation"
+  },
+  {
+    "case": "Q-mobile",
+    "ms": 4749,
+    "x": 57.3359375,
+    "y": 100,
+    "purpose": "Repeat toolbar Show"
+  },
+  {
+    "case": "Q-mobile",
+    "ms": 4899,
+    "x": 730.9921875,
+    "y": 220,
+    "purpose": "Accept Show (only quota increment)"
+  },
+  {
+    "case": "Q-mobile",
+    "ms": 5115,
+    "x": 729,
+    "y": 223.5,
+    "purpose": "Answer house"
+  },
+  {
+    "case": "Q-mobile",
+    "ms": 5447,
+    "x": 731,
+    "y": 238,
+    "purpose": "Keep playing / close feedback"
+  },
+  {
+    "case": "Q-mobile",
+    "ms": 5599,
+    "x": 429.96875,
+    "y": 100,
+    "purpose": "Select one extra Planks"
+  },
+  {
+    "case": "Q-mobile",
+    "ms": 5705,
+    "x": 277.9999999999998,
+    "y": 148.00000000000003,
+    "purpose": "Place exactly one new block beside whole House"
+  },
+  {
+    "case": "Q-mobile",
+    "ms": 10150,
+    "x": 57.3359375,
+    "y": 100,
+    "purpose": "Open Show invitation"
+  },
+  {
+    "case": "Q-mobile",
+    "ms": 10301,
+    "x": 730.9921875,
+    "y": 220,
+    "purpose": "Accept Show (only quota increment)"
+  },
+  {
+    "case": "Q-mobile",
+    "ms": 10514,
+    "x": 729,
+    "y": 223.5,
+    "purpose": "Answer house"
+  },
+  {
+    "case": "Q-mobile",
+    "ms": 10831,
+    "x": 731,
+    "y": 238,
+    "purpose": "Keep playing / close feedback"
+  },
+  {
+    "case": "Q-mobile",
+    "ms": 10980,
+    "x": 57.3359375,
+    "y": 100,
+    "purpose": "Completed is distinct from spent"
+  },
+  {
+    "case": "Q-mobile",
+    "ms": 11131,
+    "x": 429.96875,
+    "y": 100,
+    "purpose": "Select one extra Planks"
+  },
+  {
+    "case": "Q-mobile",
+    "ms": 11237,
+    "x": 315.9999999999998,
+    "y": 148.00000000000003,
+    "purpose": "Place exactly one new block beside whole House"
+  },
+  {
+    "case": "Q-mobile",
+    "ms": 15682,
+    "x": 57.3359375,
+    "y": 100,
+    "purpose": "Open Show invitation"
+  },
+  {
+    "case": "Q-mobile",
+    "ms": 15830,
+    "x": 730.9921875,
+    "y": 220,
+    "purpose": "Accept Show (only quota increment)"
+  },
+  {
+    "case": "Q-mobile",
+    "ms": 16047,
+    "x": 729,
+    "y": 223.5,
+    "purpose": "Answer house"
+  },
+  {
+    "case": "Q-mobile",
+    "ms": 16363,
+    "x": 731,
+    "y": 238,
+    "purpose": "Keep playing / close feedback"
+  },
+  {
+    "case": "Q-mobile",
+    "ms": 16497,
+    "x": 429.96875,
+    "y": 100,
+    "purpose": "Select one extra Planks"
+  },
+  {
+    "case": "Q-mobile",
+    "ms": 16602,
+    "x": 353.9999999999998,
+    "y": 148.00000000000003,
+    "purpose": "Place exactly one new block beside whole House"
+  },
+  {
+    "case": "Q-mobile",
+    "ms": 21048,
+    "x": 57.3359375,
+    "y": 100,
+    "purpose": "Open Show invitation"
+  },
+  {
+    "case": "Q-mobile",
+    "ms": 21198,
+    "x": 730.9921875,
+    "y": 220,
+    "purpose": "Accept Show (only quota increment)"
+  },
+  {
+    "case": "Q-mobile",
+    "ms": 21415,
+    "x": 729,
+    "y": 223.5,
+    "purpose": "Answer house"
+  },
+  {
+    "case": "Q-mobile",
+    "ms": 21730,
+    "x": 731,
+    "y": 238,
+    "purpose": "Keep playing / close feedback"
+  },
+  {
+    "case": "Q-mobile",
+    "ms": 21879,
+    "x": 57.3359375,
+    "y": 100,
+    "purpose": "Fifth Show blocked"
+  },
+  {
+    "case": "Q-mobile",
+    "ms": 25015,
+    "x": 422,
+    "y": 179.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "Q-mobile",
+    "ms": 25165,
+    "x": 422,
+    "y": 163,
+    "purpose": "Play"
+  },
+  {
+    "case": "Q-mobile",
+    "ms": 25811,
+    "x": 542.328125,
+    "y": 34,
+    "purpose": "Open saved quota"
+  },
+  {
+    "case": "Q-mobile",
+    "ms": 26096,
+    "x": 421.9921875,
+    "y": 310.75,
+    "purpose": "New world"
+  },
+  {
+    "case": "Q-mobile",
+    "ms": 26244,
+    "x": 422,
+    "y": 310.75,
+    "purpose": "Confirm New world"
+  },
+  {
+    "case": "Q-mobile",
+    "ms": 26380,
+    "x": 422,
+    "y": 223.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "Q-mobile",
+    "ms": 26528,
+    "x": 422,
+    "y": 256,
+    "purpose": "Play"
+  },
+  {
+    "case": "Q-mobile",
+    "ms": 27161,
+    "x": 542.328125,
+    "y": 34,
+    "purpose": "Open new Build"
+  },
+  {
+    "case": "R-mobile",
+    "ms": 183,
+    "x": 422,
+    "y": 223.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "R-mobile",
+    "ms": 334,
+    "x": 422,
+    "y": 256,
+    "purpose": "Play"
+  },
+  {
+    "case": "R-mobile",
+    "ms": 984,
+    "x": 626.328125,
+    "y": 34,
+    "purpose": "Open Craft"
+  },
+  {
+    "case": "R-mobile",
+    "ms": 1135,
+    "x": 368,
+    "y": 225,
+    "purpose": "Craft House"
+  },
+  {
+    "case": "R-mobile",
+    "ms": 1367,
+    "x": 422,
+    "y": 100,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "R-mobile",
+    "ms": 1535,
+    "x": 782,
+    "y": 38,
+    "purpose": "Close Craft"
+  },
+  {
+    "case": "R-mobile",
+    "ms": 1667,
+    "x": 542.328125,
+    "y": 34,
+    "purpose": "Open Build"
+  },
+  {
+    "case": "R-mobile",
+    "ms": 1819,
+    "x": 159.125,
+    "y": 100,
+    "purpose": "Select whole house"
+  },
+  {
+    "case": "R-mobile",
+    "ms": 1925,
+    "x": 277.9999999999998,
+    "y": 224.00000000000003,
+    "purpose": "Reject unsupported placement"
+  },
+  {
+    "case": "R-mobile",
+    "ms": 2035,
+    "x": 543.9999999999998,
+    "y": 262,
+    "purpose": "Reject terrain/tree obstruction"
+  },
+  {
+    "case": "R-mobile",
+    "ms": 2197,
+    "x": 277.9999999999998,
+    "y": 262,
+    "purpose": "Place entire house with one mouse click"
+  },
+  {
+    "case": "R-mobile",
+    "ms": 4486,
+    "x": 57.3359375,
+    "y": 100,
+    "purpose": "Open Show invitation"
+  },
+  {
+    "case": "R-mobile",
+    "ms": 4683,
+    "x": 57.3359375,
+    "y": 100,
+    "purpose": "Repeat toolbar Show"
+  },
+  {
+    "case": "R-mobile",
+    "ms": 40085,
+    "x": 429.96875,
+    "y": 100,
+    "purpose": "Select one extra Planks"
+  },
+  {
+    "case": "R-mobile",
+    "ms": 40191,
+    "x": 277.9999999999998,
+    "y": 148.00000000000003,
+    "purpose": "Place exactly one new block beside whole House"
+  },
+  {
+    "case": "R-mobile",
+    "ms": 44601,
+    "x": 57.3359375,
+    "y": 100,
+    "purpose": "Open Show invitation"
+  },
+  {
+    "case": "R-mobile",
+    "ms": 44753,
+    "x": 730.9921875,
+    "y": 220,
+    "purpose": "Accept Show (only quota increment)"
+  },
+  {
+    "case": "R-mobile",
+    "ms": 44951,
+    "x": 729,
+    "y": 223.5,
+    "purpose": "Answer house"
+  },
+  {
+    "case": "R-mobile",
+    "ms": 45250,
+    "x": 731,
+    "y": 238,
+    "purpose": "Keep playing / close feedback"
+  },
+  {
+    "case": "R-mobile",
+    "ms": 45400,
+    "x": 429.96875,
+    "y": 100,
+    "purpose": "Select one extra Planks"
+  },
+  {
+    "case": "R-mobile",
+    "ms": 45506,
+    "x": 315.9999999999998,
+    "y": 148.00000000000003,
+    "purpose": "Place exactly one new block beside whole House"
+  },
+  {
+    "case": "R-mobile",
+    "ms": 49935,
+    "x": 57.3359375,
+    "y": 100,
+    "purpose": "Open Show invitation"
+  },
+  {
+    "case": "R-mobile",
+    "ms": 50084,
+    "x": 730.9921875,
+    "y": 220,
+    "purpose": "Accept Show (only quota increment)"
+  },
+  {
+    "case": "R-mobile",
+    "ms": 50283,
+    "x": 729,
+    "y": 223.5,
+    "purpose": "Answer house"
+  },
+  {
+    "case": "I-mobile",
+    "ms": 203,
+    "x": 422,
+    "y": 223.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "I-mobile",
+    "ms": 352,
+    "x": 422,
+    "y": 256,
+    "purpose": "Play"
+  },
+  {
+    "case": "I-mobile",
+    "ms": 1004,
+    "x": 626.328125,
+    "y": 34,
+    "purpose": "Open Craft"
+  },
+  {
+    "case": "I-mobile",
+    "ms": 1152,
+    "x": 368,
+    "y": 225,
+    "purpose": "Craft House"
+  },
+  {
+    "case": "I-mobile",
+    "ms": 1388,
+    "x": 422,
+    "y": 100,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "I-mobile",
+    "ms": 1586,
+    "x": 782,
+    "y": 38,
+    "purpose": "Close Craft"
+  },
+  {
+    "case": "I-mobile",
+    "ms": 1736,
+    "x": 542.328125,
+    "y": 34,
+    "purpose": "Open Build"
+  },
+  {
+    "case": "I-mobile",
+    "ms": 1887,
+    "x": 159.125,
+    "y": 100,
+    "purpose": "Select whole house"
+  },
+  {
+    "case": "I-mobile",
+    "ms": 1995,
+    "x": 277.9999999999998,
+    "y": 224.00000000000003,
+    "purpose": "Reject unsupported placement"
+  },
+  {
+    "case": "I-mobile",
+    "ms": 2108,
+    "x": 543.9999999999998,
+    "y": 262,
+    "purpose": "Reject terrain/tree obstruction"
+  },
+  {
+    "case": "I-mobile",
+    "ms": 2274,
+    "x": 277.9999999999998,
+    "y": 262,
+    "purpose": "Place entire house with one mouse click"
+  },
+  {
+    "case": "I-mobile",
+    "ms": 4537,
+    "x": 57.3359375,
+    "y": 100,
+    "purpose": "Open Show invitation"
+  },
+  {
+    "case": "I-mobile",
+    "ms": 4736,
+    "x": 57.3359375,
+    "y": 100,
+    "purpose": "Repeat toolbar Show"
+  },
+  {
+    "case": "I-mobile",
+    "ms": 14884,
+    "x": 429.96875,
+    "y": 100,
+    "purpose": "Select during invite"
+  },
+  {
+    "case": "I-mobile",
+    "ms": 14990,
+    "x": 277.9999999999998,
+    "y": 148.00000000000003,
+    "purpose": "Place during invite"
+  },
+  {
+    "case": "I-mobile",
+    "ms": 15136,
+    "x": 57.3359375,
+    "y": 100,
+    "purpose": "Repeat Show during invite"
+  },
+  {
+    "case": "I-mobile",
+    "ms": 33953,
+    "x": 730.9921875,
+    "y": 220,
+    "purpose": "Accept Show (only quota increment)"
+  },
+  {
+    "case": "I-mobile",
+    "ms": 34152,
+    "x": 729,
+    "y": 223.5,
+    "purpose": "Answer house"
+  },
+  {
+    "case": "V-mobile",
+    "ms": 200,
+    "x": 422,
+    "y": 223.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "V-mobile",
+    "ms": 352,
+    "x": 422,
+    "y": 256,
+    "purpose": "Play"
+  },
+  {
+    "case": "T2-mobile",
+    "ms": 184,
+    "x": 422,
+    "y": 223.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "T2-mobile",
+    "ms": 333,
+    "x": 422,
+    "y": 256,
+    "purpose": "Play"
+  },
+  {
+    "case": "T2-mobile",
+    "ms": 969,
+    "x": 798,
+    "y": 34,
+    "purpose": "Open parent difficulty"
+  },
+  {
+    "case": "T2-mobile",
+    "ms": 1119,
+    "x": 570.0078125,
+    "y": 221.9375,
+    "purpose": "Set build difficulty"
+  },
+  {
+    "case": "T2-mobile",
+    "ms": 1267,
+    "x": 546.0078125,
+    "y": 332.25,
+    "purpose": "Return from parent settings"
+  },
+  {
+    "case": "T2-mobile",
+    "ms": 1417,
+    "x": 626.328125,
+    "y": 34,
+    "purpose": "Open Craft"
+  },
+  {
+    "case": "T2-mobile",
+    "ms": 1569,
+    "x": 368,
+    "y": 225,
+    "purpose": "Craft House"
+  },
+  {
+    "case": "T2-mobile",
+    "ms": 1802,
+    "x": 422,
+    "y": 100,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "T2-mobile",
+    "ms": 1986,
+    "x": 782,
+    "y": 38,
+    "purpose": "Close Craft"
+  },
+  {
+    "case": "T2-mobile",
+    "ms": 2135,
+    "x": 542.328125,
+    "y": 34,
+    "purpose": "Open Build"
+  },
+  {
+    "case": "T2-mobile",
+    "ms": 2284,
+    "x": 159.125,
+    "y": 100,
+    "purpose": "Select whole house"
+  },
+  {
+    "case": "T2-mobile",
+    "ms": 2393,
+    "x": 277.9999999999998,
+    "y": 224.00000000000003,
+    "purpose": "Reject unsupported placement"
+  },
+  {
+    "case": "T2-mobile",
+    "ms": 2508,
+    "x": 543.9999999999998,
+    "y": 262,
+    "purpose": "Reject terrain/tree obstruction"
+  },
+  {
+    "case": "T2-mobile",
+    "ms": 2658,
+    "x": 277.9999999999998,
+    "y": 262,
+    "purpose": "Place entire house with one mouse click"
+  },
+  {
+    "case": "T2-mobile",
+    "ms": 4902,
+    "x": 57.3359375,
+    "y": 100,
+    "purpose": "Open Show invitation"
+  },
+  {
+    "case": "T2-mobile",
+    "ms": 5101,
+    "x": 57.3359375,
+    "y": 100,
+    "purpose": "Repeat toolbar Show"
+  },
+  {
+    "case": "T2-mobile",
+    "ms": 5252,
+    "x": 730.9921875,
+    "y": 220,
+    "purpose": "Accept Show (only quota increment)"
+  },
+  {
+    "case": "T2-mobile",
+    "ms": 13835,
+    "x": 729,
+    "y": 223.5,
+    "purpose": "Answer house"
+  },
+  {
+    "case": "T2-mobile",
+    "ms": 14136,
+    "x": 731,
+    "y": 238,
+    "purpose": "Keep playing / close feedback"
+  },
+  {
+    "case": "T2-mobile",
+    "ms": 14285,
+    "x": 159.125,
+    "y": 100,
+    "purpose": "Select empty whole inventory"
+  },
+  {
+    "case": "T2-mobile",
+    "ms": 14392,
+    "x": 277.9999999999998,
+    "y": 262,
+    "purpose": "No stock cannot duplicate whole building"
+  },
+  {
+    "case": "T2-mobile",
+    "ms": 14533,
+    "x": 346.046875,
+    "y": 100,
+    "purpose": "Select Remove"
+  },
+  {
+    "case": "T2-mobile",
+    "ms": 14639,
+    "x": 315.9999999999998,
+    "y": 224.00000000000003,
+    "purpose": "Remove by clicking any occupied cell"
+  },
+  {
+    "case": "T2-mobile",
+    "ms": 14936,
+    "x": 422,
+    "y": 179.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "T2-mobile",
+    "ms": 15085,
+    "x": 422,
+    "y": 163,
+    "purpose": "Play"
+  },
+  {
+    "case": "T2-mobile",
+    "ms": 15733,
+    "x": 542.328125,
+    "y": 34,
+    "purpose": "Open saved Build"
+  },
+  {
+    "case": "T2-mobile",
+    "ms": 15885,
+    "x": 159.125,
+    "y": 100,
+    "purpose": "Select recovered saved building"
+  },
+  {
+    "case": "T2-mobile",
+    "ms": 15990,
+    "x": 277.9999999999998,
+    "y": 262,
+    "purpose": "Re-place recovered whole building"
+  },
+  {
+    "case": "T2-mobile",
+    "ms": 16287,
+    "x": 422,
+    "y": 179.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "T2-mobile",
+    "ms": 16434,
+    "x": 422,
+    "y": 163,
+    "purpose": "Play"
+  },
+  {
+    "case": "T2-mobile",
+    "ms": 17085,
+    "x": 542.328125,
+    "y": 34,
+    "purpose": "Open restored placed building"
+  },
+  {
+    "case": "T3-mobile",
+    "ms": 235,
+    "x": 422,
+    "y": 223.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "T3-mobile",
+    "ms": 379,
+    "x": 422,
+    "y": 256,
+    "purpose": "Play"
+  },
+  {
+    "case": "T3-mobile",
+    "ms": 1029,
+    "x": 798,
+    "y": 34,
+    "purpose": "Open parent difficulty"
+  },
+  {
+    "case": "T3-mobile",
+    "ms": 1177,
+    "x": 682.4765625,
+    "y": 221.9375,
+    "purpose": "Set build difficulty"
+  },
+  {
+    "case": "T3-mobile",
+    "ms": 1330,
+    "x": 546.0078125,
+    "y": 332.25,
+    "purpose": "Return from parent settings"
+  },
+  {
+    "case": "T3-mobile",
+    "ms": 1479,
+    "x": 637,
+    "y": 347,
+    "purpose": "Harvest the flower ahead to clear 4-wide ground"
+  },
+  {
+    "case": "T3-mobile",
+    "ms": 2130,
+    "x": 422,
+    "y": 100,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "T3-mobile",
+    "ms": 2277,
+    "x": 626.328125,
+    "y": 34,
+    "purpose": "Open Craft"
+  },
+  {
+    "case": "T3-mobile",
+    "ms": 2428,
+    "x": 784,
+    "y": 225,
+    "purpose": "Craft Pen"
+  },
+  {
+    "case": "T3-mobile",
+    "ms": 2664,
+    "x": 422,
+    "y": 100,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "T3-mobile",
+    "ms": 2860,
+    "x": 782,
+    "y": 38,
+    "purpose": "Close Craft"
+  },
+  {
+    "case": "T3-mobile",
+    "ms": 3012,
+    "x": 542.328125,
+    "y": 34,
+    "purpose": "Open Build"
+  },
+  {
+    "case": "T3-mobile",
+    "ms": 3160,
+    "x": 257.25,
+    "y": 100,
+    "purpose": "Select whole pen"
+  },
+  {
+    "case": "T3-mobile",
+    "ms": 3269,
+    "x": 277.9999999999998,
+    "y": 224.00000000000003,
+    "purpose": "Reject unsupported placement"
+  },
+  {
+    "case": "T3-mobile",
+    "ms": 3383,
+    "x": 543.9999999999998,
+    "y": 262,
+    "purpose": "Reject terrain/tree obstruction"
+  },
+  {
+    "case": "T3-mobile",
+    "ms": 3551,
+    "x": 277.9999999999998,
+    "y": 262,
+    "purpose": "Place entire pen with one mouse click"
+  },
+  {
+    "case": "T3-mobile",
+    "ms": 5830,
+    "x": 57.3359375,
+    "y": 100,
+    "purpose": "Open Show invitation"
+  },
+  {
+    "case": "T3-mobile",
+    "ms": 6028,
+    "x": 57.3359375,
+    "y": 100,
+    "purpose": "Repeat toolbar Show"
+  },
+  {
+    "case": "T3-mobile",
+    "ms": 6180,
+    "x": 730.9921875,
+    "y": 220,
+    "purpose": "Accept Show (only quota increment)"
+  },
+  {
+    "case": "T3-mobile",
+    "ms": 14793,
+    "x": 781,
+    "y": 239.5,
+    "purpose": "Answer pen"
+  },
+  {
+    "case": "T3-mobile",
+    "ms": 15111,
+    "x": 731,
+    "y": 236,
+    "purpose": "Keep playing / close feedback"
+  },
+  {
+    "case": "T3-mobile",
+    "ms": 15261,
+    "x": 257.25,
+    "y": 100,
+    "purpose": "Select empty whole inventory"
+  },
+  {
+    "case": "T3-mobile",
+    "ms": 15367,
+    "x": 277.9999999999998,
+    "y": 262,
+    "purpose": "No stock cannot duplicate whole building"
+  },
+  {
+    "case": "T3-mobile",
+    "ms": 15514,
+    "x": 346.046875,
+    "y": 100,
+    "purpose": "Select Remove"
+  },
+  {
+    "case": "T3-mobile",
+    "ms": 15619,
+    "x": 315.9999999999998,
+    "y": 224.00000000000003,
+    "purpose": "Remove by clicking any occupied cell"
+  },
+  {
+    "case": "T3-mobile",
+    "ms": 15911,
+    "x": 422,
+    "y": 179.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "T3-mobile",
+    "ms": 16062,
+    "x": 422,
+    "y": 163,
+    "purpose": "Play"
+  },
+  {
+    "case": "T3-mobile",
+    "ms": 16711,
+    "x": 542.328125,
+    "y": 34,
+    "purpose": "Open saved Build"
+  },
+  {
+    "case": "T3-mobile",
+    "ms": 16861,
+    "x": 257.25,
+    "y": 100,
+    "purpose": "Select recovered saved building"
+  },
+  {
+    "case": "T3-mobile",
+    "ms": 16966,
+    "x": 277.9999999999998,
+    "y": 262,
+    "purpose": "Re-place recovered whole building"
+  },
+  {
+    "case": "T3-mobile",
+    "ms": 17260,
+    "x": 422,
+    "y": 179.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "T3-mobile",
+    "ms": 17412,
+    "x": 422,
+    "y": 163,
+    "purpose": "Play"
+  },
+  {
+    "case": "T3-mobile",
+    "ms": 18060,
+    "x": 542.328125,
+    "y": 34,
+    "purpose": "Open restored placed building"
+  },
+  {
+    "case": "N-mobile",
+    "ms": 204,
+    "x": 422,
+    "y": 223.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "N-mobile",
+    "ms": 354,
+    "x": 422,
+    "y": 256,
+    "purpose": "Play"
+  },
+  {
+    "case": "N-mobile",
+    "ms": 1004,
+    "x": 626.328125,
+    "y": 34,
+    "purpose": "Open Craft"
+  },
+  {
+    "case": "N-mobile",
+    "ms": 1153,
+    "x": 368,
+    "y": 225,
+    "purpose": "Craft House"
+  },
+  {
+    "case": "N-mobile",
+    "ms": 1387,
+    "x": 422,
+    "y": 100,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "N-mobile",
+    "ms": 1535,
+    "x": 368,
+    "y": 225,
+    "purpose": "Craft House"
+  },
+  {
+    "case": "N-mobile",
+    "ms": 1768,
+    "x": 422,
+    "y": 100,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "N-mobile",
+    "ms": 1951,
+    "x": 782,
+    "y": 38,
+    "purpose": "Close Craft"
+  },
+  {
+    "case": "N-mobile",
+    "ms": 2084,
+    "x": 542.328125,
+    "y": 34,
+    "purpose": "Open Build"
+  },
+  {
+    "case": "N-mobile",
+    "ms": 2218,
+    "x": 159.125,
+    "y": 100,
+    "purpose": "Select whole house"
+  },
+  {
+    "case": "N-mobile",
+    "ms": 2325,
+    "x": 277.9999999999998,
+    "y": 224.00000000000003,
+    "purpose": "Reject unsupported placement"
+  },
+  {
+    "case": "N-mobile",
+    "ms": 2435,
+    "x": 543.9999999999998,
+    "y": 262,
+    "purpose": "Reject terrain/tree obstruction"
+  },
+  {
+    "case": "N-mobile",
+    "ms": 2609,
+    "x": 277.9999999999998,
+    "y": 262,
+    "purpose": "Place entire house with one mouse click"
+  },
+  {
+    "case": "N-mobile",
+    "ms": 2878,
+    "x": 277.9999999999998,
+    "y": 262,
+    "purpose": "Reject overlapping whole building"
+  },
+  {
+    "case": "N-mobile",
+    "ms": 4504,
+    "x": 57.3359375,
+    "y": 100,
+    "purpose": "Open Show invitation"
+  },
+  {
+    "case": "N-mobile",
+    "ms": 4702,
+    "x": 57.3359375,
+    "y": 100,
+    "purpose": "Repeat toolbar Show"
+  },
+  {
+    "case": "N-mobile",
+    "ms": 4852,
+    "x": 730.9921875,
+    "y": 220,
+    "purpose": "Accept Show (only quota increment)"
+  },
+  {
+    "case": "N-mobile",
+    "ms": 5052,
+    "x": 729,
+    "y": 223.5,
+    "purpose": "Answer house"
+  },
+  {
+    "case": "N-mobile",
+    "ms": 5369,
+    "x": 731,
+    "y": 238,
+    "purpose": "Keep playing / close feedback"
+  },
+  {
+    "case": "N-mobile",
+    "ms": 5519,
+    "x": 542.328125,
+    "y": 34,
+    "purpose": "Leave Build to test backpack placement"
+  },
+  {
+    "case": "N-mobile",
+    "ms": 5669,
+    "x": 361,
+    "y": 351,
+    "purpose": "Select next whole House from backpack"
+  },
+  {
+    "case": "N-mobile",
+    "ms": 5773,
+    "x": 429.9999999999998,
+    "y": 262,
+    "purpose": "Place exactly one additional whole House from backpack"
+  },
+  {
+    "case": "N-mobile",
+    "ms": 5921,
+    "x": 542.328125,
+    "y": 34,
+    "purpose": "Return to Build"
+  },
+  {
+    "case": "N-mobile",
+    "ms": 8089,
+    "x": 57.3359375,
+    "y": 100,
+    "purpose": "Open Show invitation"
+  },
+  {
+    "case": "N-mobile",
+    "ms": 8236,
+    "x": 730.9921875,
+    "y": 220,
+    "purpose": "Accept Show (only quota increment)"
+  },
+  {
+    "case": "N-mobile",
+    "ms": 8454,
+    "x": 729,
+    "y": 223.5,
+    "purpose": "Answer house"
+  }
+]

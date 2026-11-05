@@ -1,0 +1,2 @@
+{"case":"J-desktop-log","status":"PASS","cheer_ms":2647,"show_ms":4184}
+{"case":"S-desktop-log","status":"FAIL","error":"AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n'12' !== '11'\n","errors":[]}

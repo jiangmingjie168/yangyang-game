@@ -88,8 +88,8 @@
     "unknown": 2,
     "requests": 2,
     "limited": 0,
-    "audio": 4,
-    "tts": 3,
+    "audio": 3,
+    "tts": 2,
     "reasons": {
       "no-provenance": 2
     }
@@ -98,10 +98,10 @@
     "actual MP3 playback before TTS",
     "20 MP3 decode checks",
     "404 fallback once at rate .82",
-    "dynamic name fallback",
+    "named TTS forbidden",
     "off-origin rejection",
     "late rejection canceled",
-    "context + L1 prompt audio metadata accepted",
+    "safe L1 prompt audio metadata accepted",
     "parent source counters"
   ]
 }

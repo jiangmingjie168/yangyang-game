@@ -1,0 +1,14 @@
+{"case":"F-desktop-clean","status":"PASS","video":"build-v1-fix4-video/page@bb674a79e10eeeacce7966b22f868916.webm"}
+{"case":"M-desktop-clean","status":"PASS","invite_ms":11371,"video":"build-v1-fix4-video/page@6f1cbaa48cf511436e8efc8345414a3a.webm"}
+{"case":"C-desktop-clean","status":"PASS","video":"build-v1-fix4-video/page@607df73705bddb6503329df763ec846c.webm"}
+{"case":"R-desktop-clean","status":"PASS","video":"build-v1-fix4-video/page@61f0653e04467867e596a368284ca8c5.webm"}
+{"case":"N-desktop-clean","status":"PASS","video":"build-v1-fix4-video/page@abda1091acfa14aeab3732ae7ee5b80c.webm"}
+{"case":"S-desktop-clean","status":"PASS","video":"build-v1-fix4-video/page@df784936386fb18b2965e781e69c037d.webm"}
+{"case":"V-desktop-clean","status":"PASS","video":"build-v1-fix4-video/page@d200d7afbdd707bf78e0c6c16ac467f7.webm"}
+{"case":"F-mobile-clean","status":"PASS","video":"build-v1-fix4-video/page@72f0e700b1cff234c7c8c6159540a408.webm"}
+{"case":"M-mobile-clean","status":"PASS","invite_ms":11246,"video":"build-v1-fix4-video/page@7afd1c4e02aac7b7b694e5efa3193ee7.webm"}
+{"case":"C-mobile-clean","status":"PASS","video":"build-v1-fix4-video/page@cf11eae90c6ba872bb5fbaaf1f031803.webm"}
+{"case":"R-mobile-clean","status":"PASS","video":"build-v1-fix4-video/page@dc4014d9ea3c0bc6a74c46b40c7fe22a.webm"}
+{"case":"N-mobile-clean","status":"PASS","video":"build-v1-fix4-video/page@f0f8ee471c2f10d80d7ba7d417e67095.webm"}
+{"case":"S-mobile-clean","status":"PASS","video":"build-v1-fix4-video/page@9ad2ae587ea8b0666d8d0024361b2e6d.webm"}
+{"case":"V-mobile-clean","status":"PASS","video":"build-v1-fix4-video/page@3687dd1db1c301e0315cb92b553758d5.webm"}

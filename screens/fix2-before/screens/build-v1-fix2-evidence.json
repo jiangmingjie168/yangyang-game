@@ -1,0 +1,138 @@
+[
+  {
+    "file": "screens/build-v1-fix2-A-01.png",
+    "caption": "Fresh save, 844x390"
+  },
+  {
+    "file": "screens/build-v1-fix2-A-02.png",
+    "caption": "Harvested three Wood; crafted eight Fence"
+  },
+  {
+    "file": "screens/build-v1-fix2-A-03.png",
+    "caption": "Natural plan is visible; its cooldown must not delay Show"
+  },
+  {
+    "file": "screens/build-v1-fix2-A-04.png",
+    "caption": "First fence: open outline"
+  },
+  {
+    "file": "screens/build-v1-fix2-A-05.png",
+    "caption": "Hana A: two fences, two empty squares between"
+  },
+  {
+    "file": "screens/build-v1-fix2-A-06.png",
+    "caption": "Failure evidence"
+  },
+  {
+    "file": "screens/build-v1-fix2-B-01.png",
+    "caption": "Fresh save, 844x390"
+  },
+  {
+    "file": "screens/build-v1-fix2-B-02.png",
+    "caption": "Harvested three Wood; crafted twelve Planks"
+  },
+  {
+    "file": "screens/build-v1-fix2-B-03.png",
+    "caption": "Two blocks: near-completion glow"
+  },
+  {
+    "file": "screens/build-v1-fix2-B-04.png",
+    "caption": "Hana B: two walls, two empty columns, no roof"
+  },
+  {
+    "file": "screens/build-v1-fix2-B-05.png",
+    "caption": "Failure evidence"
+  },
+  {
+    "file": "screens/build-v1-fix2-F-01.png",
+    "caption": "Fresh save, 844x390"
+  },
+  {
+    "file": "screens/build-v1-fix2-F-02.png",
+    "caption": "Harvested three Wood; crafted eight Fence"
+  },
+  {
+    "file": "screens/build-v1-fix2-F-03.png",
+    "caption": "Eight-fence cluster with no enclosed air"
+  },
+  {
+    "file": "screens/build-v1-fix2-F-04.png",
+    "caption": "Failure evidence"
+  },
+  {
+    "file": "screens/build-v1-fix2-C-01.png",
+    "caption": "Fresh save, 844x390"
+  },
+  {
+    "file": "screens/build-v1-fix2-C-02.png",
+    "caption": "Harvested three Wood; crafted eight Fence"
+  },
+  {
+    "file": "screens/build-v1-fix2-C-03.png",
+    "caption": "Eight fences and ground close a real pen"
+  },
+  {
+    "file": "screens/build-v1-fix2-C-04.png",
+    "caption": "Closed enclosure: cheer and confetti"
+  },
+  {
+    "file": "screens/build-v1-fix2-C-05.png",
+    "caption": "Failure evidence"
+  },
+  {
+    "file": "screens/build-v1-fix2-R-01.png",
+    "caption": "Fresh save, 844x390"
+  },
+  {
+    "file": "screens/build-v1-fix2-R-02.png",
+    "caption": "Mine stone quest: surface rock below the child"
+  },
+  {
+    "file": "screens/build-v1-fix2-R-03.png",
+    "caption": "One surface stone collected during the quest"
+  },
+  {
+    "file": "screens/build-v1-fix2-R-04.png",
+    "caption": "Failure evidence"
+  },
+  {
+    "file": "screens/build-v1-fix2-S-01.png",
+    "caption": "Fresh save, 844x390"
+  },
+  {
+    "file": "screens/build-v1-fix2-S-02.png",
+    "caption": "Tap the visible surface stone"
+  },
+  {
+    "file": "screens/build-v1-fix2-S-03.png",
+    "caption": "Walk towards stone"
+  },
+  {
+    "file": "screens/build-v1-fix2-S-04.png",
+    "caption": "Stone collected before Mine stone quest"
+  },
+  {
+    "file": "screens/build-v1-fix2-A-sheet.png",
+    "caption": "A contact sheet"
+  },
+  {
+    "file": "screens/build-v1-fix2-B-sheet.png",
+    "caption": "B contact sheet"
+  },
+  {
+    "file": "screens/build-v1-fix2-F-sheet.png",
+    "caption": "F contact sheet"
+  },
+  {
+    "file": "screens/build-v1-fix2-C-sheet.png",
+    "caption": "C contact sheet"
+  },
+  {
+    "file": "screens/build-v1-fix2-R-sheet.png",
+    "caption": "R contact sheet"
+  },
+  {
+    "file": "screens/build-v1-fix2-S-sheet.png",
+    "caption": "S contact sheet"
+  }
+]

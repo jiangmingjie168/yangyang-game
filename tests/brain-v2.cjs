@@ -64,7 +64,7 @@ function report(text) { console.log('PASS', text); }
   let data = next(fixture);
   for (let n=1;n<=2;n++) {
     p = await page(next(data)); const d = await chat(p); assert.equal(d.key,'tree'); assert.equal(d.tier,1);
-    await p.locator('[data-word="tree"]').click(); data = await snapshot(p);
+    await p.locator('[data-word="tree"]').click(); await p.waitForFunction(()=>BW.adventure().active?.answered); data = await snapshot(p);
     assert.equal(data.adventure.levels.tree.t1,n); assert.equal(data.adventure.levels.tree.t2,0);
     assert.equal(data.adventure.speaking.at(-1).spoke,false); await checkClose(p);
   }
@@ -85,14 +85,14 @@ function report(text) { console.log('PASS', text); }
   }
   report('tier three accepts the missing word, whole sentence, or small spelling difference');
   p = await page(next(unlocked2), { voice: false }); await chat(p); await p.click('#chat-mic');
-  assert(await p.locator('#chat-options').isVisible()); await p.locator('[data-word="tree"]').click();
+  assert(await p.locator('#chat-options').isVisible()); await p.locator('[data-word="tree"]').click(); await p.waitForFunction(()=>BW.adventure().active?.answered);
   assert.equal((await snapshot(p)).adventure.levels.tree.t2,0); await checkClose(p);
   p = await page(next(unlocked2)); await chat(p); await voice(p,'something unrelated');
-  assert(await p.locator('#chat-options').isVisible()); await p.locator('[data-word="tree"]').click();
+  assert(await p.locator('#chat-options').isVisible()); await p.locator('[data-word="tree"]').click(); await p.waitForFunction(()=>BW.adventure().active?.answered);
   const downgraded = await snapshot(p); assert.equal(downgraded.adventure.levels.tree.t2,0); assert.equal(downgraded.adventure.speaking.at(-2).spoke,true); await checkClose(p);
   report('unavailable mic/unrecognized speech gives tap fallback without tier-two credit');
   p = await page(next(fixture)); await chat(p); const before = (await snapshot(p)).progress;
-  for(let n=0;n<3;n++) await p.locator('[data-word="wood"]').click();
+  for(let n=0;n<3;n++) {await p.locator('[data-word="wood"]').click();await p.waitForFunction(n=>BW.adventure().active?.misses===n+1,n);}
   assert(!(await p.evaluate(() => BW.adventure().active)).answered); assert((await p.evaluate(() => BW.adventure().active)).reveal);
   assert(await p.locator('[data-word=wood]').isDisabled()); await p.locator('[data-word=tree]').click();
   assert.deepEqual((await snapshot(p)).progress,before); await p.waitForFunction(() => !BW.adventure().active); await checkClose(p);
@@ -119,13 +119,13 @@ function report(text) { console.log('PASS', text); }
   }
   assert.match(upstreamCalls[1].messages.at(-1).content,/Correction/);
   report('all tiers browser -> HTTP buddy -> mock DeepSeek, corrective retry, validated bubble and audio/TTS');
-  const invalid = [p=>({...template(normalize(p)),say:'你好'}), p=>({...template(normalize(p)),options:['tree','cat']}), p=>({...template(normalize(p)),answer:'wood'}), p=>({...template(normalize(p)),done:true}), p=>({...template(normalize(p)),say:'Tree or wood? rocket'}), p=>({...template(normalize(p)),reward:100}), '{bad json'];
-  for(const reply of invalid) { p=await page(next(fixture),{endpoint:URL+'/mock-buddy',reply}); await chat(p); assert.equal(await p.locator('#chat-question').innerText(),'Tree or wood?'); await checkClose(p); }
-  p=await page(next(fixture),{endpoint:'http://127.0.0.1:1/buddy'}); await chat(p); assert.equal(await p.locator('#chat-question').innerText(),'Tree or wood?'); await checkClose(p);
+  const invalid = [p=>({...template(normalize(p)),say:'你好'}), p=>({...template(normalize(p)),options:['tree','cat']}), p=>({...template(normalize(p)),answer:'wood'}), p=>({...template(normalize(p)),done:true}), p=>({...template(normalize(p)),say:'What is this? rocket'}), p=>({...template(normalize(p)),reward:100}), '{bad json'];
+  for(const reply of invalid) { p=await page(next(fixture),{endpoint:URL+'/mock-buddy',reply}); await chat(p); assert.equal(await p.locator('#chat-question').innerText(),'What is this?'); await checkClose(p); }
+  p=await page(next(fixture),{endpoint:'http://127.0.0.1:1/buddy'}); await chat(p); assert.equal(await p.locator('#chat-question').innerText(),'What is this?'); await checkClose(p);
   p=await page(next(fixture),{endpoint:URL+'/mock-buddy',reply:q=>template(normalize(q)),delay:350,timeout:100}); await chat(p);
-  assert.equal(await p.locator('#chat-question').innerText(),'Tree or wood?'); await checkClose(p);
+  assert.equal(await p.locator('#chat-question').innerText(),'What is this?'); await checkClose(p);
   report('client rejects unsafe/stale rule fields and falls back on malformed JSON/network error/timeout');
-  for (const [tier, say] of [[1, 'Tree or wood? What is wood?'], [2, "What's this? What can you say?"], [3, 'I see a tree. Say wood!']]) {
+  for (const [tier, say] of [[1, 'What is this? What is wood?'], [2, "What's this? What can you say?"], [3, 'I see a tree. Say wood!']]) {
     const seed = next(fixture); seed.adventure.levels.tree = { t1: tier >= 2 ? 2 : 0, t2: tier === 3 ? 2 : 0, t3: 0 };
     p = await page(seed, { endpoint: URL + '/mock-buddy', reply: q => ({ ...template(normalize(q)), say: q.feedback === 'success' ? 'Great! Say wood!' : say }) });
     await chat(p);
@@ -153,6 +153,6 @@ function report(text) { console.log('PASS', text); }
   // File URL + offline context proves the configured brain still has local fallback.
   const offline=await browser.newContext({offline:true,viewport:{width:1180,height:720}}); const f=await offline.newPage();
   await f.addInitScript(data=>localStorage.setItem('block-world-save-v1',JSON.stringify(data)),next(fixture));
-  await f.goto('file://'+require('node:path').resolve(__dirname,'../index.html')); await f.click('#btn-start'); if(await f.locator('#name-entry').isVisible())await f.click('#welcome-play'); assert(await f.evaluate(()=>BW.layout().started)); await chat(f); assert.equal(await f.locator('#chat-question').innerText(),'Tree or wood?'); await offline.close();
+  await f.goto('file://'+require('node:path').resolve(__dirname,'../index.html')); await f.click('#btn-start'); if(await f.locator('#name-entry').isVisible())await f.click('#welcome-play'); assert(await f.evaluate(()=>BW.layout().started)); await chat(f); assert.equal(await f.locator('#chat-question').innerText(),'What is this?'); await offline.close();
   report('configured BRAIN_URL starts and falls back to template dialogue offline from file://');
 })().catch(e=>{console.error(e);process.exitCode=1;}).finally(async()=>{await browser?.close();await close(brain);await close(upstream);});
