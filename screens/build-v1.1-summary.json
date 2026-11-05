@@ -1,17 +1,18 @@
 {
-  "phase": "main features before sound addendum",
-  "md5": "4f34eca55d8f18cf326cccf39ffe8953",
-  "sha256": "04ef30cd2adae06d4ef6963d4dfac729159da4a653af19d6ad6e8de5c5fe0ec6",
+  "phase": "final with audio addendum",
+  "main_feature_commit": "6bff8d9",
+  "md5": "6b93dc912ff197f8c44489aa54c9e9de",
+  "sha256": "e5ded9e7315c332113a35de116a6b978729581f3891c05b4cd98cb4b17537cf3",
   "new_feature_cases": [
     {
       "case": "C-desktop",
       "status": "PASS",
-      "seconds": 12.4
+      "seconds": 12.3
     },
     {
       "case": "U-desktop",
       "status": "PASS",
-      "seconds": 17.2
+      "seconds": 17
     },
     {
       "case": "P-desktop",
@@ -26,27 +27,32 @@
     {
       "case": "Otree-desktop",
       "status": "PASS",
-      "seconds": 7.9
+      "seconds": 8
     },
     {
       "case": "Owater-desktop",
       "status": "PASS",
-      "seconds": 7.9
+      "seconds": 8
     },
     {
       "case": "Obuilding-desktop",
       "status": "PASS",
-      "seconds": 8.3
+      "seconds": 8.4
     },
     {
       "case": "Ofence-desktop",
       "status": "PASS",
-      "seconds": 8.1
+      "seconds": 8.2
+    },
+    {
+      "case": "A-desktop",
+      "status": "PASS",
+      "seconds": 8.4
     },
     {
       "case": "C-mobile",
       "status": "PASS",
-      "seconds": 11.7
+      "seconds": 11.6
     },
     {
       "case": "U-mobile",
@@ -56,7 +62,7 @@
     {
       "case": "P-mobile",
       "status": "PASS",
-      "seconds": 11.5
+      "seconds": 11
     },
     {
       "case": "M-mobile",
@@ -66,22 +72,27 @@
     {
       "case": "Otree-mobile",
       "status": "PASS",
-      "seconds": 7.7
+      "seconds": 7.8
     },
     {
       "case": "Owater-mobile",
       "status": "PASS",
-      "seconds": 7.7
+      "seconds": 7.8
     },
     {
       "case": "Obuilding-mobile",
       "status": "PASS",
-      "seconds": 8.2
+      "seconds": 8.3
     },
     {
       "case": "Ofence-mobile",
       "status": "PASS",
-      "seconds": 7.9
+      "seconds": 8.1
+    },
+    {
+      "case": "A-mobile",
+      "status": "PASS",
+      "seconds": 8.2
     }
   ],
   "craftable_cases": [
@@ -128,12 +139,12 @@
     {
       "case": "I-desktop",
       "status": "PASS",
-      "invite_ms": 29716
+      "invite_ms": 29655
     },
     {
       "case": "I-mobile",
       "status": "PASS",
-      "invite_ms": 29607
+      "invite_ms": 29567
     },
     {
       "case": "V-desktop",
@@ -168,56 +179,70 @@
       "status": "PASS"
     }
   ],
-  "regression_run": [
+  "regressions": [
     {
       "suite": "build-v1-craftable-compat",
       "exit": 0,
       "seconds": 24.4,
-      "log": "screens/build-v1.1-regression-final/build-v1-craftable-compat.log"
+      "log": "screens/build-v1.1-with-audio-regression/build-v1-craftable-compat.log"
     },
     {
       "suite": "build-v1-fix3",
-      "exit": 1,
-      "seconds": 152.9,
-      "log": "screens/build-v1.1-regression-final/build-v1-fix3.log"
+      "exit": 0,
+      "seconds": 131.6,
+      "log": "screens/build-v1.1-with-audio-regression/build-v1-fix3.log"
     },
     {
       "suite": "build-placement-fix3",
       "exit": 0,
       "seconds": 0,
-      "log": "screens/build-v1.1-regression-final/build-placement-fix3.log"
+      "log": "screens/build-v1.1-with-audio-regression/build-placement-fix3.log"
     },
     {
       "suite": "chinese-cleanup",
       "exit": 0,
       "seconds": 4.9,
-      "log": "screens/build-v1.1-regression-final/chinese-cleanup.log"
+      "log": "screens/build-v1.1-with-audio-regression/chinese-cleanup.log"
     },
     {
       "suite": "natural-pointer-v4r",
       "exit": 0,
-      "seconds": 18,
-      "log": "screens/build-v1.1-regression-final/natural-pointer-v4r.log"
+      "seconds": 17.9,
+      "log": "screens/build-v1.1-with-audio-regression/natural-pointer-v4r.log"
     },
     {
       "suite": "world-v2",
       "exit": 0,
-      "seconds": 18.7,
-      "log": "screens/build-v1.1-regression-final/world-v2.log"
+      "seconds": 0.8,
+      "log": "screens/build-v1.1-with-audio-regression/world-v2.log",
+      "original_exit": 1,
+      "verified_log": "world-v2-retry.log",
+      "retry_reason": "Test-only local Ogg route corrected: existing URL constant shadowed the URL constructor."
     },
     {
       "suite": "memory-chat",
       "exit": 0,
-      "seconds": 18.6,
-      "log": "screens/build-v1.1-regression-final/memory-chat.log"
+      "seconds": 16.2,
+      "log": "screens/build-v1.1-with-audio-regression/memory-chat.log",
+      "original_exit": 1,
+      "verified_log": "memory-chat-retry.log",
+      "retry_reason": "Test-only local Ogg route corrected for file:// paths."
     },
     {
       "suite": "server",
       "exit": 0,
       "seconds": 1,
-      "log": "screens/build-v1.1-regression-final/server.log"
+      "log": "screens/build-v1.1-with-audio-regression/server.log"
     }
   ],
-  "fix3_retry_evidence": "build-v1.1-fix3-retry-clean/build-v1-fix3-results.json",
-  "notes": "Original failures preserved; targeted passing reruns documented in CODEX-REPORT-build-v1.1.md."
+  "audio_assets": "build-v1.1-audio-assets.json",
+  "screenshots": {
+    "new_features": 118,
+    "craftable": 176
+  },
+  "pointer_records": {
+    "new_features": 506,
+    "craftable": 494
+  },
+  "notes": "Original failures and same-source retries remain in provenance; see final sound report."
 }

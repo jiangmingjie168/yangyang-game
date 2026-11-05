@@ -33,7 +33,7 @@ try{for(const mobile of (process.env.BW_MOBILE==='0'?[false]:process.env.BW_MOBI
  async function close(){if(await p.locator('#buddy-chat').isVisible())await button('#buddy-close','Keep playing / close feedback');}
  async function ready(){await p.locator('#build-show[data-state="ready"]').waitFor({state:'visible'});}
  async function extra(i){await button('[data-build="planks"]','Select one extra Planks');await world(77+i,12,'Place exactly one new block beside whole House');await stock('planks',35-i);await wait(2800);await ready();await snap('rearmed-'+i);}
- async function enter(){await button('#btn-start','Start');await button('#welcome-play','Play');await wait(500);}
+ async function enter(){await p.bringToFront();await button('#btn-start','Start');await button('#welcome-play','Play');await wait(500);}
  try{
  await p.goto('http://craft.test/?buildlog=1#seed=42');await enter();
  if(test==='T2'||test==='T3'){await button('#btn-zh','Open parent difficulty');await button('[data-build-level="'+test.slice(1)+'"]','Set build difficulty');await button('#parent-close','Return from parent settings');}

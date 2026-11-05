@@ -25,6 +25,7 @@ async function page(data, options={}) {
   p.on('pageerror',e=>p.errors.push(String(e)));
   p.on('console',m=>{if(m.type()==='error')p.errors.push(m.text());});
   await p.route('**/*',r=>{
+    if (/\/audio\/build-v1\.1\/[a-z-]+\.ogg$/.test(r.request().url())) return r.fulfill({contentType:'audio/ogg',body:fs.readFileSync(path.join(__dirname,'../audio/build-v1.1',r.request().url().split('/').pop()))});
     if (r.request().url()===URL+'/') return r.fulfill({contentType:'text/html',body:html});
     p.external.push(r.request().url()); return r.abort();
   });

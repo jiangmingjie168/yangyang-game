@@ -1,0 +1,112 @@
+{
+  "license": "CC0-1.0",
+  "external_samples": false,
+  "voice": false,
+  "total_bytes": 173797,
+  "assets": [
+    {
+      "file": "audio/build-v1.1/garden-loop.ogg",
+      "source": "Original self-synthesis: tools/make-build-v1.1-audio.py",
+      "license": "CC0-1.0",
+      "seconds": 18.4615,
+      "bytes": 113584,
+      "loop": true
+    },
+    {
+      "file": "audio/build-v1.1/harvest.ogg",
+      "source": "Original self-synthesis: tools/make-build-v1.1-audio.py",
+      "license": "CC0-1.0",
+      "seconds": 0.2,
+      "bytes": 5097,
+      "loop": false
+    },
+    {
+      "file": "audio/build-v1.1/place.ogg",
+      "source": "Original self-synthesis: tools/make-build-v1.1-audio.py",
+      "license": "CC0-1.0",
+      "seconds": 0.16,
+      "bytes": 4469,
+      "loop": false
+    },
+    {
+      "file": "audio/build-v1.1/remove.ogg",
+      "source": "Original self-synthesis: tools/make-build-v1.1-audio.py",
+      "license": "CC0-1.0",
+      "seconds": 0.34,
+      "bytes": 4369,
+      "loop": false
+    },
+    {
+      "file": "audio/build-v1.1/craft.ogg",
+      "source": "Original self-synthesis: tools/make-build-v1.1-audio.py",
+      "license": "CC0-1.0",
+      "seconds": 0.59,
+      "bytes": 5163,
+      "loop": false
+    },
+    {
+      "file": "audio/build-v1.1/confetti.ogg",
+      "source": "Original self-synthesis: tools/make-build-v1.1-audio.py",
+      "license": "CC0-1.0",
+      "seconds": 0.39,
+      "bytes": 5384,
+      "loop": false
+    },
+    {
+      "file": "audio/build-v1.1/star.ogg",
+      "source": "Original self-synthesis: tools/make-build-v1.1-audio.py",
+      "license": "CC0-1.0",
+      "seconds": 0.635,
+      "bytes": 5883,
+      "loop": false
+    },
+    {
+      "file": "audio/build-v1.1/correct.ogg",
+      "source": "Original self-synthesis: tools/make-build-v1.1-audio.py",
+      "license": "CC0-1.0",
+      "seconds": 0.48,
+      "bytes": 4735,
+      "loop": false
+    },
+    {
+      "file": "audio/build-v1.1/wrong.ogg",
+      "source": "Original self-synthesis: tools/make-build-v1.1-audio.py",
+      "license": "CC0-1.0",
+      "seconds": 0.45,
+      "bytes": 4663,
+      "loop": false
+    },
+    {
+      "file": "audio/build-v1.1/enter-car.ogg",
+      "source": "Original self-synthesis: tools/make-build-v1.1-audio.py",
+      "license": "CC0-1.0",
+      "seconds": 0.42,
+      "bytes": 5178,
+      "loop": false
+    },
+    {
+      "file": "audio/build-v1.1/engine.ogg",
+      "source": "Original self-synthesis: tools/make-build-v1.1-audio.py",
+      "license": "CC0-1.0",
+      "seconds": 2.0,
+      "bytes": 6792,
+      "loop": true
+    },
+    {
+      "file": "audio/build-v1.1/horn.ogg",
+      "source": "Original self-synthesis: tools/make-build-v1.1-audio.py",
+      "license": "CC0-1.0",
+      "seconds": 0.28,
+      "bytes": 3967,
+      "loop": false
+    },
+    {
+      "file": "audio/build-v1.1/pet.ogg",
+      "source": "Original self-synthesis: tools/make-build-v1.1-audio.py",
+      "license": "CC0-1.0",
+      "seconds": 0.36,
+      "bytes": 4513,
+      "loop": false
+    }
+  ]
+}

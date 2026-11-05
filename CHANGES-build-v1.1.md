@@ -15,7 +15,7 @@
 - Car 以左下格为锚点一次放下；Remove 整体回收一个 Car。车在背包、合成台、Build、图鉴和世界共用像素母版。
 - 普通模式点车上车；刚放下且该整件工具库存已空时，在 Build 内再点车也能直接上车。仍有库存的放置工具继续检查重叠，Remove 保持回收优先。
 - 当前世界是横向 2D：摇杆左右转向、前后行驶；速度 **136.88 px/s**（步行 116，1.18 倍），不跳跃、不飞行。每一像素步进检查完整 3×2 车体，实体方块、树干/树叶、石头、门、栅栏、其它整件、水及缺少陆地支撑会轻停；无损坏、不扣材料、不惩罚。
-- 点正在乘坐的车或 **Get out** 下车。优先站到车旁；两侧不适合时回到可步行的车厢占地，防止夹住角色。车留在原位。
+- 主线原为点正在乘坐的车或 **Get out** 下车；音效补充包后，坐车时点车身按喇叭，使用 **Get out** 下车。优先站到车旁；两侧不适合时回到可步行的车厢占地，防止夹住角色。车留在原位。
 - 驾驶期间隐藏无效的 Break/Place/Jump，不接受 Build 回收、跳跃、一般问答或 Treasure Quiz；伙伴只显示非模态反馈。打开普通面板会暂停行驶。下车后恢复。
 - **宠物选项：留原地。** 乘车期间驯服动物暂停跟随、没有追车传送；下车后恢复原有步行跟随。
 - 停放 Show：邀请 → 1 题（Car 图 + Car/Wheel 两个像素选项）→ 记词汇星星、撒花、收尾。三级保留跟读提示和 8 秒后图片选项。点击上车取消尚未接受的本车邀请，不消耗额度；停车后仍能 Show。
@@ -62,7 +62,7 @@
 - `icons/build-v1.1-house-{base,wall,roof,yard,window,all}.png`（96×96）
 - 导出入口 `tests/export-build-v1.1-art.cjs`；对照图 `screens/build-v1.1-assets.png`。
 
-新增词汇/固定台词 **19 条**，另列复用组合与 **26 条 UI 文案/模板**：`docs/build-v1.1-lines.json`。未生成 Jenny，未改 v1 语音资产或脑服务；新反馈可静默读到，已有播放机制保留。内容冻结后的录音由编排另行安排。
+新增词汇/固定台词 **19 条**，另列复用组合与 **30 条 UI 文案/模板**（含音频补充包 4 条家长开关标签）：`docs/build-v1.1-lines.json`。未生成 Jenny，未改 v1 语音资产或脑服务；新反馈可静默读到，已有播放机制保留。内容冻结后的录音由编排另行安排。
 
 ## 验证口径
 
@@ -75,4 +75,36 @@
 - `build-v1-craftable.cjs` 20 案继续覆盖 House 整件、散放只夸、4 次额度、+1 重亮、35 秒邀请、二/三级和新对象优先。仅更新版本标记、具体阻挡文案，以及“空库存点击已放 House 现在打开菜单”后的无库存测试落点。
 - 旧档兼容、fix3、placement、chinese-cleanup、natural-pointer-v4r、world-v2、memory-chat、server 继续跑。旧套件原有 fixture/注入机制保留，与本轮只读鼠标验收分开说明；词数断言 47→49。
 
-最终结果、源码哈希与证据索引见 `CODEX-REPORT-build-v1.1.md`，交接副本 `/workspace/handoff/build-v1.1/CODEX-REPORT.md`。自动化不代替 Hana 真人签收。
+主线结果见 `CODEX-REPORT-build-v1.1.md`；最终含音频结果见 `CODEX-REPORT-build-v1.1-sound.md`，交接副本 `/workspace/handoff/build-v1.1/CODEX-REPORT.md`。自动化不代替 Hana 真人签收。
+
+
+## 音乐与音效补充提交（主线提交之后）
+
+依据工作区追加的 `SOUND-ADDENDUM-READ-ME.md` / `SOUND-SPEC-v1.1-ADDENDUM.md` 和交接目录 `block-world-v1.1-sound-spec-2026-11-05.md`。主线先提交为 `6bff8d9`，音效包同分支另作提交。**没有 Jenny、人声、歌词或脑服务扩展。**
+
+- BGM：原创 104 BPM、8 小节、约 18.46 秒，明亮的木琴式旋律、分解和弦与轻打击，尾音折回开头形成循环。首次 Start 手势沿用现有音频解锁后播放，HTMLAudio `loop=true`、默认音量 **0.30**。
+- 全包 **13 个 Ogg、173,797 字节（约 170 KiB）**。全部由 `tools/make-build-v1.1-audio.py` 使用 Python/NumPy 自合成，经 ffmpeg libvorbis 压缩；没有外部采样。源码与产物使用 **CC0-1.0**，许可说明 `audio/build-v1.1/LICENSE.txt`；[CC0 正文](https://creativecommons.org/publicdomain/zero/1.0/)。无须下载素材、注册平台或调用生成服务。
+- Music/SFX 默认开，两个独立开关仅在家长齿轮内。`audio_settings={music,sfx}` 可选字段随旧存档保存，旧档缺省开；不更改台词语音开关/播放路径。关闭 SFX 同时阻止原有 WebAudio 提示音，关闭 Music 不影响 SFX。
+- 音频元素按首次触发延迟创建，`preload=none`，不等待加载才进入游戏。资源缺失、离线、浏览器拒绝播放均静默降级，不阻断动作；后台 `visibilitychange` / `pagehide` 暂停全包，前台 `pageshow` / 可见恢复只重启已解锁且开着的音乐。
+- 引擎只在实际行驶时低音量循环（0.14），松摇杆、撞停、开面板、下车、后台时停止。**乘坐时点车身改为按喇叭**（0.6 秒防连点）；下车使用现有 Get out 按钮，孩子界面没有新增音频设置。
+- 保留原有 WebAudio 轻提示（任务、动物、合成/庆祝等），新增文件音效叠加低音量播放；统一受 SFX 开关控制。台词声音仍走原机制，未替换或批量生成旧语音。
+
+| 触发 | 文件（均在 `audio/build-v1.1/`） | 来源 / 授权 | 字节 |
+| --- | --- | --- | --- |
+| 首次解锁/回前台：循环音乐 | `garden-loop.ogg` | 原创自合成 `tools/make-build-v1.1-audio.py` / CC0-1.0 | 113,584 |
+| 采木、采集、收麦 | `harvest.ogg` | 原创自合成 `tools/make-build-v1.1-audio.py` / CC0-1.0 | 5,097 |
+| 放散块或整件成功 | `place.ogg` | 原创自合成 `tools/make-build-v1.1-audio.py` / CC0-1.0 | 4,469 |
+| 拆散块或整件回收 | `remove.ogg` | 原创自合成 `tools/make-build-v1.1-audio.py` / CC0-1.0 | 4,369 |
+| 配方合成成功 | `craft.ogg` | 原创自合成 `tools/make-build-v1.1-audio.py` / CC0-1.0 | 5,163 |
+| 撒花庆祝 | `confetti.ogg` | 原创自合成 `tools/make-build-v1.1-audio.py` / CC0-1.0 | 5,384 |
+| Build / Treasure Quiz 得星 | `star.ogg` | 原创自合成 `tools/make-build-v1.1-audio.py` / CC0-1.0 | 5,883 |
+| Build / 一般问答 / Treasure Quiz 答对 | `correct.ogg` | 原创自合成 `tools/make-build-v1.1-audio.py` / CC0-1.0 | 4,735 |
+| Build / 一般问答 / Treasure Quiz 答错 | `wrong.ogg` | 原创自合成 `tools/make-build-v1.1-audio.py` / CC0-1.0 | 4,663 |
+| 上车（短关门声＋启动） | `enter-car.ogg` | 原创自合成 `tools/make-build-v1.1-audio.py` / CC0-1.0 | 5,178 |
+| 汽车实际移动时循环 | `engine.ogg` | 原创自合成 `tools/make-build-v1.1-audio.py` / CC0-1.0 | 6,792 |
+| 乘坐时点车身 | `horn.ogg` | 原创自合成 `tools/make-build-v1.1-audio.py` / CC0-1.0 | 3,967 |
+| 摸宠物 | `pet.ogg` | 原创自合成 `tools/make-build-v1.1-audio.py` / CC0-1.0 | 4,513 |
+
+验收：`tests/build-v1.1-audio-assets.py` 通过 13 个文件解码、非静音、无削波、时长、两条循环接缝和预算检查。`tests/build-v1.1.cjs` 新增 A × desktop/mobile：真实 Start、合成、放置、上车、引擎、喇叭、答错/答对/得星、回收、Music/SFX 独立关闭、刷新持久化、静音合成、重新开启和离开/返回页面。`BW.audioState()` 仅提供只读播放请求与成功计数，不改游戏/问答，不用 evaluate 注入触发。新版 O 碰撞用例改为点车按喇叭后按 Get out 下车。
+
+**预览交付要求：部署 `index.html` 时须同时复制 `audio/build-v1.1/`。** 本轮不执行部署。真实设备最终听感、切 App 返回的系统音频策略由 Hana/杰哥复测；自动化解码与播放成功不等于真人听感签收。

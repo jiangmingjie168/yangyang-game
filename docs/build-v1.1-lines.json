@@ -112,7 +112,11 @@
     "Choose dry land!",
     "Tap empty ground · 3 × 2 · Car",
     "No more car!",
-    "build a0b0871+v11"
+    "build a0b0871+v11",
+    "Music: On",
+    "Music: Off",
+    "SFX: On",
+    "SFX: Off"
   ],
-  "notes": "No Jenny files generated or queued. No brain service changes. Existing browser/recorded-word playback remains in the app; new boarding/upgrade celebration feedback explicitly defers speech. Reused combinations are listed separately from the 19 new fixed vocabulary/dialogue lines. UI list includes templates, not all numeric expansions."
+  "notes": "No Jenny files generated or queued. No brain service changes. Existing browser/recorded-word playback remains in the app; new boarding/upgrade celebration feedback explicitly defers speech. Reused combinations are listed separately from the 19 new fixed vocabulary/dialogue lines. UI list includes templates, not all numeric expansions. Audio addendum adds four parent-only switch labels; no spoken lines or child audio controls."
 }

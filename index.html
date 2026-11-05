@@ -587,6 +587,7 @@
     <button id="parent-skip" type="button" hidden>跳过本题</button>
     <div id="parent-info" role="tabpanel" aria-labelledby="parent-info-tab"><strong>家长说明</strong><p>游戏内只显示英语和图画。停稳后伙伴会提问；作答时暂停探索。可点选或尝试开口，没有发音评分。三次尝试后会显示答案，孩子可跟读或点选确认。仅家长可跳过。</p>
     <p>浏览器朗读可离线使用（需设备已有英语语音）。语音识别由浏览器提供，可能需要联网和麦克风权限；不可用时直接点图文选项。</p>
+    <fieldset><legend>音乐与音效（不改变台词语音）</legend><button id="parent-music" type="button" aria-pressed="true">Music: On</button><button id="parent-sfx" type="button" aria-pressed="true">SFX: On</button></fieldset>
     <fieldset id="parent-build-level"><legend>建造提问难度（不改掌握记录）</legend>
       <button type="button" data-build-level="0" aria-pressed="true">自动</button>
       <button type="button" data-build-level="1" aria-pressed="false">一级：点图</button>
@@ -1560,7 +1561,7 @@ function validConversation(value, p) {
   }
   function retryChat(childSaid, spokenKey) {
     if (!dialogue || dialogue.pending || dialogue.answered) return;
-    stopChatListening();
+    playSfx('wrong');stopChatListening();
     var d = dialogue; d.misses++; d.turn = Math.min(2, d.misses); d.choices = true; d.hint = true;
     if (d.misses >= 3) { d.reveal = true; d.fallback = true; }
     requestChat(d, 'retry', childSaid, spokenKey);
@@ -1568,7 +1569,7 @@ function validConversation(value, p) {
   function answerChat(key, childSaid) {
     if (!dialogue || dialogue.pending || dialogue.answered) return;
     if (key !== dialogue.key) { retryChat(childSaid, key); return; }
-    stopChatListening();
+    playSfx('correct');stopChatListening();
     var d = dialogue;
     d.answered = true; d.coachSaid = childSaid || key; d.turn = Math.min(2, d.turn + 1);
     lastAnswer = key;
@@ -1773,7 +1774,7 @@ function validConversation(value, p) {
   function placeCraftable(item,r) {
     var at=craftedObjects.findIndex(function(b){return b.item===item;}),b=at<0?newCraftable(item):craftedObjects.splice(at,1)[0];
     Object.assign(b,{id:'object:'+r.x+':'+r.y,x:r.x,y:r.y,createdAt:Date.now(),roofed:b.kind==='house',shown:false,closed:false,autoOffered:false,invited:false,roofPraise:true,feedbackMembers:null});
-    buildObjects.push(b);consume(item);craftableCells(b).forEach(function(at){placedThisRun.add(at);});
+    playSfx('place');buildObjects.push(b);consume(item);craftableCells(b).forEach(function(at){placedThisRun.add(at);});
     buildSession.placed++;buildSession.lastObjectId=b.id;buildSession.firstDone=true;buildSession.lastPoint={x:b.x,y:b.y};buildDirty=true;
     progress.placed[item]=1;rememberEvent('built',b.kind==='house'?'house':b.kind==='car'?'car':'fence');
     detectBuilds();buildCompletion(craftableRegion(b));tone(520,.06,'sine',0,.035,760);
@@ -1783,7 +1784,7 @@ function validConversation(value, p) {
     if(drivingCar===b)return;
     // End an invitation to a removed object, without charging a Show slot.
     if(ambient&&ambient.build&&ambient.build.building===b)closeAmbient();
-    buildObjects.splice(buildObjects.indexOf(b),1);craftedObjects.push(newCraftable(b.item,b));addItem(b.item,1,true);
+    playSfx('remove');buildObjects.splice(buildObjects.indexOf(b),1);craftedObjects.push(newCraftable(b.item,b));addItem(b.item,1,true);
     craftableCells(b).forEach(function(at){placedThisRun.delete(at);});buildSession.removed++;buildDirty=true;
     detectBuilds();logBuildResult(b.x,b.y,'recovered whole '+b.kind);save();renderHotbar();renderBuildTools();
   }
@@ -1884,12 +1885,12 @@ function validConversation(value, p) {
     drivingCar=b;b.dir=b.dir||1;document.body.classList.add('driving');
     buildMode=false;document.getElementById('btn-build').setAttribute('aria-pressed','false');document.getElementById('build-tools').hidden=true;document.getElementById('build-status').hidden=true;
     document.getElementById('car-exit').hidden=false;seatDriver(b);
-    buildFeedback('Hop in! Let\'s drive!','car_ride');save();
+    buildFeedback('Hop in! Let\'s drive!','car_ride');playSfx('enter-car');save();
   }
   function driveCar(dt) {
-    var b=drivingCar,ax=axis();jumpBuf=0;
+    var b=drivingCar,ax=axis();jumpBuf=0;carMoving=false;
     if(ax){b.dir=ax;var left=MOVE*1.18*dt;
-      while(left>.0001){var step=Math.min(1,left),nx=b.x+ax*step/TILE;if(!carClear(b,nx))break;b.x=nx;left-=step;saveSoon();}
+      while(left>.0001){var step=Math.min(1,left),nx=b.x+ax*step/TILE;if(!carClear(b,nx))break;b.x=nx;left-=step;carMoving=true;saveSoon();}
     }
     seatDriver(b);player.anim+=dt*2;
   }
@@ -1900,13 +1901,13 @@ function validConversation(value, p) {
     var yy=(b.y+b.h)*TILE,candidates=[(b.x+b.w+.4)*TILE,(b.x-.4)*TILE,(b.x+b.w/2)*TILE];
     var xx=candidates.find(function(x){return !collides(x,yy)&&get(Math.floor(x/TILE),Math.floor((yy-5)/TILE))!==WATER;});
     if(xx===undefined){showToast('Make room to get out!',2);return;}
-    drivingCar=null;document.body.classList.remove('driving');player.x=xx;player.y=yy;player.vy=0;onGround=true;joyX=0;jumpBuf=0;
+    drivingCar=null;carMoving=false;syncSoundPack();document.body.classList.remove('driving');player.x=xx;player.y=yy;player.vy=0;onGround=true;joyX=0;jumpBuf=0;
     document.getElementById('car-exit').hidden=true;buildDirty=true;detectBuilds();buildSession.lastObjectId=b.id;buildSession.lastActionAt=chatClock;
     closeAmbient();buildFeedback('Parked! Ready to explore?','car_park');save();
   }
   function interactObject(wx,wy) {
     var b=craftableAt(wx/TILE,wy/TILE);
-    if(drivingCar){if(b===drivingCar)exitCar();return true;}
+    if(drivingCar){if(b===drivingCar&&chatClock-hornAt>.6){hornAt=chatClock;playSfx('horn');}return true;}
     // A just-placed, now-empty whole tool opens its object immediately. Explicit
     // removal and stocked placement still take priority over object interaction.
     if(buildMode&&(!b||buildTool!==b.item||(inv[buildTool]||0)>0))return false;
@@ -2120,10 +2121,10 @@ function validConversation(value, p) {
     if(r.object){removeCraftable(r.object);return;}
     if(CRAFTABLES[buildTool]){placeCraftable(buildTool,r);return;}
     if(buildTool==='remove') {
-      var key=KEY_OF[get(x,y)];setCell(x,y,AIR);addItem(key,1,true);placedThisRun.delete(idx(x,y));buildSession.removed++;buildDirty=true;
+      playSfx('remove');var key=KEY_OF[get(x,y)];setCell(x,y,AIR);addItem(key,1,true);placedThisRun.delete(idx(x,y));buildSession.removed++;buildDirty=true;
       logBuildResult(x,y,'removed '+key);save();renderBuildTools();return;
     }
-    var material=buildMaterial(),width=r.w,id=BLOCK_OF[material];
+    playSfx('place');var material=buildMaterial(),width=r.w,id=BLOCK_OF[material];
     // Atomic validation above: inventory is only consumed after writing tiles.
     for(var j=0;j<width;j++) {
       setCell(x+j,y,id);consume(material);progress.placed[material]=1;buildPlaced(x+j,y,material,true);
@@ -2339,16 +2340,17 @@ function validConversation(value, p) {
   function answerBuild(d,key,clicked) {
     if(!ambient || ambient.build!==d || d.answered)return;
     if(d.event!=='build_plan' && key!==d.key){
+      playSfx('wrong');
       d.misses++;buildSpeak(WORD[key][0],false);buildChoices(d);
       clearTimeout(ambient.hintTimer);ambient.hintTimer=setTimeout(function(){if(ambient&&ambient.build===d){var line=d.misses>=3?"Let's say "+d.key+" together!":'Great! What is this?';document.getElementById('buddy-line').textContent=line;buildSpeak(line,false);}},1200);return;
     }
     finishBuildAnswer(d,key,clicked);
   }
   function finishBuildAnswer(d,key,clicked) {
-    if(!ambient||ambient.build!==d||d.answered)return; d.answered=true;
+    if(!ambient||ambient.build!==d||d.answered)return; d.answered=true;playSfx('correct');
     if(d.event==='build_plan'){buildSession.plan=key;buildSession.planAnswered=true;}
     else if(d.tier===1 && clicked){var l=trail.levels[key]||{t1:0,t2:0,t3:0};l.t1++;trail.levels[key]=l;}
-    if(d.building){d.building.shown=true;d.stage='done';celebrateBuild(d.building);learn(key);quizStars[key]=1;}
+    if(d.building){d.building.shown=true;d.stage='done';celebrateBuild(d.building);learn(key);quizStars[key]=1;playSfx('star');}
     var text=d.event==='build_plan'?(key==='house'?BUILD_LINES[5]:BUILD_LINES[6])+' '+BUILD_LINES[7]:d.event==='build_short'?(key==='stick'?'Great! '+BUILD_LINES[20]:'Great! '+buildNeedLine(key)):'You built a '+key+'! '+lineVariant([(BUILD_LINES[0] + ' ' + BUILD_LINES[35]),(BUILD_LINES[36] + ' Good job!'),(BUILD_LINES[37] + ' Well done!')]);
     if(d.upgrade)text={stone:'Strong stone walls! Well done!',roof:'A lovely roof! Well done!',flower:'Flowers in our yard! Well done!',window:'A bright window! Well done!'}[key];
     if(d.building&&d.building.kind==='car')text='You built a car! Look at the wheels! Good job!';
@@ -3212,6 +3214,7 @@ function validConversation(value, p) {
     }
   }
   function celebrate(x, y, completed, building) {
+    playSfx('confetti');
     var colors = building ? ['#ffca28','#ff5288','#38c8ef','#8d67ef'] : ['#f4d382', '#aed09b', '#eab7bd', '#acd9e5'];
     for (var i = 0; i < (reducedMotion ? 5 : completed ? 30 : 20); i++) {
       if (parts.length >= 90) parts.shift();
@@ -3242,6 +3245,7 @@ function validConversation(value, p) {
     saveSoon();
   }
   function harvestWheat(tx, ty, id) {
+    playSfx('harvest');
     setCell(tx, ty, AIR);
     var i;
     for (i = crops.length - 1; i >= 0; i--) if (crops[i].tx === tx && crops[i].ty === ty) crops.splice(i, 1);
@@ -3277,7 +3281,7 @@ function validConversation(value, p) {
       var returned=KEY_OF[id]; if(returned && (inv[returned]||0)>=99)return;
       buildAction('remove'); placedThisRun.delete(idx(tx,ty)); buildSession.removed++; buildDirty=true;
     }
-    setCell(tx, ty, AIR);
+    playSfx(buildOwned(tx,ty)?'remove':'harvest');setCell(tx, ty, AIR);
     burst((tx + 0.5) * TILE, (ty + 0.5) * TILE, PCOL[id] || '#fff', false);
     tone(180, 0.07, 'triangle', 0, 0.04, 80);
     giveMined(id);
@@ -3312,7 +3316,7 @@ function validConversation(value, p) {
       return;
     }
     setCell(tx, ty, BLOCK_OF[key]);
-    consume(key);
+    playSfx('place');consume(key);
     buildPlaced(tx,ty,key);
     placementPulse(tx,ty,1);logBuildResult(tx,ty,'placed '+key);
     if (!quiz) {
@@ -3441,6 +3445,7 @@ function validConversation(value, p) {
     }
   }
   function pet(a) {
+    playSfx('pet');
     a.pet = 1.2;
     a.wait = 4; a.vx = 0; a.timer = 2;
     if (!quiz) progress.tapped[a.type] = 1;
@@ -4528,7 +4533,36 @@ function validConversation(value, p) {
     document.getElementById('toast').hidden = false;
     toastLeft = secs || 2.2;
   }
+  // Optional local sound pack: lazy HTMLAudio loads never block starting play.
+  // Speech has its own existing switch/path; these settings control music/SFX.
+  var musicOn=true,sfxOn=true,packUnlocked=false,packSuspended=false,carMoving=false;
+  var packPlayers={},packWanted={},packRequests={},packPlayed={},hornAt=-100;
+  function packAudio(key,loop) {
+    if(!packPlayers[key]){var a=new Audio('audio/build-v1.1/'+key+'.ogg');a.preload='none';a.loop=!!loop;a.volume=key==='garden-loop'?.30:key==='engine'?.14:.42;packPlayers[key]=a;}
+    return packPlayers[key];
+  }
+  function packPlay(key,loop) {
+    if(!packUnlocked||packSuspended||document.hidden||!(key==='garden-loop'?musicOn:sfxOn))return;
+    try{var a=packAudio(key,loop);if(!loop){a.pause();a.currentTime=0;}packRequests[key]=(packRequests[key]||0)+1;
+      var p=a.play();if(p&&p.then)p.then(function(){packPlayed[key]=(packPlayed[key]||0)+1;}).catch(function(){/* optional asset/offline/autoplay: stay silent */});
+    }catch(err){/* Missing browser audio support never blocks game actions. */}
+  }
+  function playSfx(key){packPlay(key,false);}
+  function packLoop(key,wanted) {
+    wanted=!!(wanted&&packUnlocked&&!packSuspended&&!document.hidden);
+    if(packWanted[key]===wanted)return;packWanted[key]=wanted;
+    if(wanted)packPlay(key,true);else if(packPlayers[key])packPlayers[key].pause();
+  }
+  function syncSoundPack() {
+    packLoop('garden-loop',started&&musicOn);
+    packLoop('engine',started&&sfxOn&&drivingCar&&carMoving&&!panelOpen()&&!chatBlocked());
+  }
+  function suspendSoundPack(){packSuspended=true;Object.keys(packPlayers).forEach(function(k){packPlayers[k].pause();});packWanted={};}
+  function resumeSoundPack(){packSuspended=false;syncSoundPack();}
+  function renderSoundSettings(){['music','sfx'].forEach(function(k){var b=document.getElementById('parent-'+k),on=k==='music'?musicOn:sfxOn;b.textContent=(k==='music'?'Music':'SFX')+': '+(on?'On':'Off');b.setAttribute('aria-pressed',String(on));});}
+  function setPackSetting(key){if(key==='music')musicOn=!musicOn;else{sfxOn=!sfxOn;if(!sfxOn)Object.keys(packPlayers).forEach(function(k){if(k!=='garden-loop')packPlayers[k].pause();});}renderSoundSettings();syncSoundPack();save();}
   function unlockAudio() {
+    packUnlocked=true;
     var AC = window.AudioContext || window.webkitAudioContext;
     if (!AC) return;
     try {
@@ -4548,7 +4582,7 @@ function validConversation(value, p) {
     } catch (err) { /* audio is optional */ }
   }
   function tone(freq, dur, type, delay, vol, freq2) {
-    if (!audioCtx) return;
+    if (!audioCtx || !sfxOn || document.hidden || packSuspended) return;
     try {
       if (audioCtx.state === 'suspended') audioCtx.resume();
       var t = audioCtx.currentTime + (delay || 0);
@@ -4631,14 +4665,14 @@ function validConversation(value, p) {
   function quizWrong() {
     var now = Date.now();
     if (now - wrongAt < 1500) return;
-    wrongAt = now;
+    wrongAt = now;playSfx('wrong');
     showToast('Try again!', 1.6);
     tone(220, 0.12, 'sine', 0, 0.03, 180);
   }
   function quizWin() {
     var key = quiz.key;
     quiz = null;
-    quizStars[key] = 1;
+    quizStars[key] = 1;playSfx('correct');playSfx('star');
     updateQuest();
     celebrate(player.x, player.y - 40, false);
     showWord(key);
@@ -4837,7 +4871,7 @@ function validConversation(value, p) {
       }
     });
     if (!quiz) { progress.crafted[r.out] = 1; rememberEvent('made', r.out); }
-    addItem(r.out, r.n, true);
+    playSfx('craft');addItem(r.out, r.n, true);
     if(CRAFTABLES[r.out]){craftedObjects.push(newCraftable(r.out));progress.crafted[r.out==='houseKit'?'house':r.out==='pen'?'fence':r.out]=1;}
     if (r.out === 'window') recognizeBuildWord('window', 'made');
     else showWord(r.out);
@@ -4991,6 +5025,7 @@ function validConversation(value, p) {
     var data = {
       v: 1, seed: seed, time: timeOfDay,
       build_objects: buildObjects, crafted_objects: craftedObjects, builds: builds, build_chat: buildChat, build_words: buildWords, build_level: buildLevel,
+      audio_settings:{music:musicOn,sfx:sfxOn},
       px: player.x, py: player.y, dir: player.dir,
       mods: mods, inv: inv, hotbar: hotbar, sel: sel,
       words: learned, stars: quizStars, progress: progress, intros: intros, zh: zhOn,
@@ -5014,6 +5049,7 @@ function validConversation(value, p) {
     } catch (err) { return null; }
   }
   function applySave(data) {
+    musicOn=!(data.audio_settings&&data.audio_settings.music===false);sfxOn=!(data.audio_settings&&data.audio_settings.sfx===false);renderSoundSettings();
     generate(data.seed);
     restoreBuild(data);
     if (Array.isArray(data.mods)) {
@@ -5138,7 +5174,7 @@ function validConversation(value, p) {
     if (window.speechSynthesis) {
       try { speechSynthesis.getVoices(); } catch (err) { /* ignore */ }
     }
-    started = true; startedAt = Date.now(); loadVoiceIndex();
+    started = true; startedAt = Date.now(); loadVoiceIndex();syncSoundPack();
     document.getElementById('start').hidden = true;
     learn('hello');
     if (determineMode('gameLoad') === 'name_ask') openNameAsk(); else openGreeting();
@@ -5234,6 +5270,7 @@ function validConversation(value, p) {
     });
     document.getElementById('btn-build').addEventListener('click', toggleBuild);
     document.getElementById('car-exit').onclick=exitCar;
+    document.getElementById('parent-music').onclick=function(){setPackSetting('music');};document.getElementById('parent-sfx').onclick=function(){setPackSetting('sfx');};
     document.getElementById('upgrade-back').onclick=closeUpgrade;
     document.getElementById('upgrade-confirm').onclick=confirmUpgrade;
     document.getElementById('upgrade-show').onclick=function(){var b=upgradeHouse;closeUpgrade();if(b)requestObjectShow(b);};
@@ -5420,7 +5457,8 @@ function validConversation(value, p) {
       window.visualViewport.addEventListener('resize', scheduleResize);
       window.visualViewport.addEventListener('scroll', scheduleResize);
     }
-    document.addEventListener('visibilitychange', function () { if (document.hidden) save(); });
+    document.addEventListener('visibilitychange', function () { if (document.hidden){save();suspendSoundPack();}else resumeSoundPack(); });
+    window.addEventListener('pagehide',suspendSoundPack);window.addEventListener('pageshow',resumeSoundPack);
     window.addEventListener('pagehide', save);
     if (window.speechSynthesis) {
       try { speechSynthesis.getVoices(); speechSynthesis.onvoiceschanged = function () { pickVoice(); }; } catch (err) { /* ignore */ }
@@ -5532,6 +5570,7 @@ function validConversation(value, p) {
       }
     }
     // Dialogue also pauses physics; opening a parent panel keeps it intact.
+    syncSoundPack();
     updateCamera(playing ? dt : 1);
     if (invSignature() !== invSig) { renderHotbar(); renderBuildTools(); }
     drawFrame(sec);
@@ -5570,6 +5609,7 @@ function validConversation(value, p) {
     });
     window.BW = {
       ready: true,
+      audioState:function(){var players={};Object.keys(packPlayers).forEach(function(k){var a=packPlayers[k];players[k]={paused:a.paused,volume:a.volume,loop:a.loop,time:a.currentTime,ready:a.readyState};});return JSON.parse(JSON.stringify({music:musicOn,sfx:sfxOn,unlocked:packUnlocked,suspended:packSuspended,requests:packRequests,played:packPlayed,players:players}));},
       buildState: function(){return JSON.parse(JSON.stringify({objects:buildObjects,driving:drivingCar&&drivingCar.id,crafted:craftedObjects,shows:showsToday()}));},
       adventure: function () {
         return JSON.parse(JSON.stringify({ trail: trail, spots: trailSpots, active: dialogue, queue: chatQueue,

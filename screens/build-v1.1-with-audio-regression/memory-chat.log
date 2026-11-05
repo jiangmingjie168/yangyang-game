@@ -1,0 +1,28 @@
+PASS first visit name flow allows movement; letter taps + keyboard save one name; return greet uses it
+PASS 30-second default preserves typed names; letters, typing and mic reset it; 10-second hint and editable ASR require confirmation
+PASS preference chips save whitelist values and coach; unanswered slots never re-ask; chat stays nonblocking and caps at five across reload
+PASS parent preference reset persists without clearing name, progress, speech records or daily limits
+PASS local calendar resets counters; weather matches rain, waits at least 60s after start and persists once per day
+PASS noun-only recasts label fishing rod; tier-1 mic works eight seconds after TTS, closes at nine; gated Buddy waves silently
+node:fs:621
+  return binding.open(
+                 ^
+
+Error: ENOENT: no such file or directory, open '/tmp/bw-v11/tmp/bw-v11/audio/build-v1.1/garden-loop.ogg'
+    at Object.openSync (node:fs:621:18)
+    at Object.readFileSync (node:fs:487:35)
+    at /tmp/bw-v11/tests/memory-chat.cjs:22:91
+    at RouteHandler._handleInternal (/tmp/node_modules/playwright-core/lib/coreBundle.js:61687:11)
+    at RouteHandler._handleImpl (/tmp/node_modules/playwright-core/lib/coreBundle.js:61654:29)
+    at /tmp/node_modules/playwright-core/lib/coreBundle.js:61648:59
+    at AsyncLocalStorage.run (node:internal/async_local_storage/async_context_frame:65:14)
+    at _Zone.run (/tmp/node_modules/playwright-core/lib/coreBundle.js:11049:40)
+    at RouteHandler.handle (/tmp/node_modules/playwright-core/lib/coreBundle.js:61648:38)
+    at _Page._onRoute (/tmp/node_modules/playwright-core/lib/coreBundle.js:62968:46) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/tmp/bw-v11/tmp/bw-v11/audio/build-v1.1/garden-loop.ogg'
+}
+
+Node.js v24.22.1

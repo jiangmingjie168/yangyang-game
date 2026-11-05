@@ -19,6 +19,7 @@ async function page({data,online=false,bad=false,hang=false,autoWeather=false,vi
       testWeatherPicture: weather => showAmbient(Object.assign(socialPayload('weather_chat'), {weather:weather})),
       testWeatherKey: (night, stars, cloudy) => { timeOfDay=night?0.8:0.3; starPos=stars?[{}]:[]; sunPos={x:50,y:50}; cloudPos=cloudy?[{x:50,y:50,scale:1}]:[]; return weatherKey(); },
       testRainbow: () => { const c=document.createElement('canvas'); c.width=viewW; c.height=viewH; drawRainbow(c.getContext('2d')); return {left:rainbowLeft,pixels:c.getContext('2d').getImageData(0,0,c.width,c.height).data.some(v=>v!==0)}; },`);
+  await p.route('**/audio/build-v1.1/*.ogg',r=>r.fulfill({contentType:'audio/ogg',body:fs.readFileSync(path.join(__dirname,'../audio/build-v1.1',r.request().url().split('/').pop()))}));
   await p.route(origin+'/',r=>r.fulfill({contentType:'text/html',body:html}));
   await p.route('**/mock-buddy',async r=>{
     const q=r.request().postDataJSON();p.calls.push(q);if(hang&&q.event!=='greet')return;
