@@ -115,7 +115,7 @@
   }
   .topbar > * { pointer-events: auto; }
   #quest {
-    flex: 1; min-width: 0; min-height: 44px;
+    flex: 0 1 auto; width: max-content; max-width: min(52vw, 280px); min-width: 0; min-height: 44px;
     display: flex; align-items: center; gap: 6px;
     text-align: left;
     background: rgba(255,248,238,0.96);
@@ -127,11 +127,12 @@
   .qtext { min-width: 0; display: flex; flex-direction: column; }
   #quest-en { font-size: 15px; font-weight: 800; line-height: 1.15; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .topbtn {
-    min-width: 52px; height: 44px; padding: 0 8px;
+    min-width: 56px; min-height: 48px; height: 48px; padding: 0 10px;
     border-radius: 12px; background: #fff;
     font-size: 14px; font-weight: 800;
     box-shadow: 0 3px 0 rgba(58,42,28,0.14);
     flex: 0 0 auto;
+    touch-action: manipulation;
   }
   .topbtn:active { transform: translateY(2px); box-shadow: 0 1px 0 rgba(58,42,28,0.14); }
   #btn-craft { background: #b7f0c4; }
@@ -203,9 +204,18 @@
     background: rgba(255,248,238,0.7); border-radius: 14px;
     border: 2px dashed rgba(58,42,28,0.25);
   }
-  .slot.chest-btn { width: 58px; background: #f3e2c4; outline: 2px dashed #b99260; }
-  .slot.chest-btn strong { display:block; font-size:11px; line-height:1; margin-top:-2px; }
-  #chest-panel .body { display:grid; grid-template-columns:repeat(auto-fill,minmax(72px,1fr)); gap:8px; align-content:start; }
+  #btn-chest {
+    width: 58px; height: 58px; flex: 0 0 auto; border-radius: 14px;
+    background: #f3e2c4; outline: 2px dashed #b99260; color: var(--ink);
+    box-shadow: 0 3px 0 rgba(58,42,28,0.12); pointer-events: auto;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    font-weight: 800; line-height: 1; position: relative; touch-action: manipulation;
+  }
+  #btn-chest canvas { width: 36px; height: 36px; display: block; }
+  #btn-chest strong { display:block; font-size:11px; margin-top:1px; }
+  #btn-chest em { position:absolute; right:2px; bottom:1px; font-style:normal; font-size:12px; font-weight:800; background:#fff9; border-radius:8px; padding:0 3px; }
+  .acts { gap: 6px; }
+  #chest-panel .panel-body { display:grid; grid-template-columns:repeat(auto-fill,minmax(72px,1fr)); gap:8px; align-content:start; }
   #chest-panel .chest-item { min-height:72px; border-radius:14px; background:#fff8ee; border:2px solid #c6d9ad; padding:6px; font-weight:800; }
   #chest-panel .chest-item em { display:block; font-style:normal; font-size:14px; }
   .acts { display: flex; gap: 6px; flex: 0 0 auto; align-items: flex-end; }
@@ -214,6 +224,7 @@
     display: flex; flex-direction: column; align-items: center; justify-content: center;
     color: #fff; font-weight: 800; line-height: 1.05;
     box-shadow: 0 3px 0 rgba(58,42,28,0.2);
+    touch-action: manipulation;
   }
   .act strong { font-size: 14px; }
   .act:active { transform: translateY(2px); box-shadow: 0 1px 0 rgba(58,42,28,0.2); }
@@ -281,7 +292,7 @@
     box-shadow: 0 4px 0 rgba(58,42,28,0.12);
   }
   .back:active { transform: translateY(3px); }
-  .body { flex: 1; min-height: 0; overflow: auto; -webkit-overflow-scrolling: touch; touch-action: pan-y; padding-bottom: 8px; }
+  .panel-body { flex: 1; min-height: 0; overflow: auto; -webkit-overflow-scrolling: touch; touch-action: pan-y; padding-bottom: 8px; }
   #recipes { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; align-content: start; }
   .recipe {
     display: flex; align-items: center; gap: 6px;
@@ -509,10 +520,12 @@
   #buddy-options button { min-height:44px; }
   #buddy-options canvas { width:34px; height:34px; display:block; margin:auto; }
   #btn-build[aria-pressed="true"] { background:#ffe29a; }
-  @media (max-width:600px) { .topbtn { min-width:42px; padding:0 5px; font-size:12px; } #btn-speak { width:40px; height:40px; } #build-tools { right:12px; top:64px; } }
+  @media (max-width:600px) { .topbtn { min-width:48px; min-height:48px; height:48px; padding:0 6px; font-size:12px; } #build-tools { right:12px; top:64px; } }
+  #parent-help #btn-speak { width:auto; min-width:120px; height:48px; padding:0 14px; border-radius:12px; display:inline-flex; align-items:center; gap:8px; }
+
   body.driving .acts, body.driving #held {visibility:hidden;}
   #car-exit { position:absolute;right:18px;top:106px;z-index:25;background:#ffe4a0; }
-  #house-upgrade .body { max-width:760px;margin:auto; }
+  #house-upgrade .panel-body { max-width:760px;margin:auto; }
   .upgrade-preview {display:flex;align-items:center;gap:18px;flex-wrap:wrap;}
   #upgrade-preview {width:136px;height:136px;image-rendering:pixelated;}
   #upgrade-parts {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;}
@@ -528,16 +541,13 @@
 <div id="app">
   <canvas id="view" width="800" height="400"></canvas>
   <div id="hud">
-    <span id="build-version" aria-label="Build version">build cd91b62+ux12</span>
+    <span id="build-version" aria-label="Build version">build cd91b62+ux13</span>
     <div class="topbar">
       <button id="quest" type="button">
         <canvas id="quest-icon" width="128" height="128"></canvas>
         <span class="qtext">
           <strong id="quest-en">Find a tree!</strong>
         </span>
-      </button>
-      <button id="btn-speak" type="button" aria-label="Listen to the quest">
-        <svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true"><path fill="#3a2a1c" d="M4 9h4l5-4v14l-5-4H4z"/><path fill="none" stroke="#3a2a1c" stroke-width="2" stroke-linecap="round" d="M16 9.2a4 4 0 0 1 0 5.6M18.2 7a7 7 0 0 1 0 10"/></svg>
       </button>
       <button id="btn-build" class="topbtn" type="button" aria-pressed="false">Build</button>
       <button id="btn-craft" class="topbtn" type="button">Craft</button>
@@ -557,6 +567,7 @@
         <div id="hotbar" class="hotbar"></div>
       </div>
       <div class="acts">
+        <button id="btn-chest" type="button" aria-label="Open chest"><canvas width="128" height="128" aria-hidden="true"></canvas><strong>Chest</strong><em id="chest-count">0</em></button>
         <button id="btn-break" class="act break" type="button" aria-label="Break"><strong>Break</strong></button>
         <button id="btn-place" class="act place" type="button" aria-label="Place"><strong>Place</strong></button>
         <button id="btn-jump" class="act jump" type="button" aria-label="Jump"><strong>↑</strong></button>
@@ -599,7 +610,7 @@
     <button id="parent-skip" type="button" hidden>跳过本题</button>
     <div id="parent-info" role="tabpanel" aria-labelledby="parent-info-tab"><strong>家长说明</strong><p>游戏内只显示英语和图画。停稳后伙伴会提问；作答时暂停探索。可点选或尝试开口，没有发音评分。三次尝试后会显示答案，孩子可跟读或点选确认。仅家长可跳过。</p>
     <p>浏览器朗读可离线使用（需设备已有英语语音）。语音识别由浏览器提供，可能需要联网和麦克风权限；不可用时直接点图文选项。</p>
-    <fieldset><legend>音乐与音效（不改变台词语音）</legend><button id="parent-music" type="button" aria-pressed="true">Music: On</button><button id="parent-sfx" type="button" aria-pressed="true">SFX: On</button></fieldset>
+    <fieldset><legend>音乐与音效（不改变台词语音）</legend><button id="parent-music" type="button" aria-pressed="true">Music: On</button><button id="parent-sfx" type="button" aria-pressed="true">SFX: On</button><button id="btn-speak" type="button" aria-label="Listen to the quest"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="#3a2a1c" d="M4 9h4l5-4v14l-5-4H4z"/><path fill="none" stroke="#3a2a1c" stroke-width="2" stroke-linecap="round" d="M16 9.2a4 4 0 0 1 0 5.6M18.2 7a7 7 0 0 1 0 10"/></svg><span>Quest sound</span></button></fieldset>
     <fieldset id="parent-build-level"><legend>建造提问难度（不改掌握记录）</legend>
       <button type="button" data-build-level="0" aria-pressed="true">自动</button>
       <button type="button" data-build-level="1" aria-pressed="false">一级：点图</button>
@@ -639,14 +650,14 @@
   <button id="car-exit" class="topbtn" type="button" hidden>Get out</button>
   <section id="house-upgrade" class="panel" hidden aria-labelledby="upgrade-title">
     <header><h2 id="upgrade-title">Make it yours</h2><button id="upgrade-back" class="back" type="button">Back</button></header>
-    <div class="body"><div class="upgrade-preview"><canvas id="upgrade-preview" width="192" height="192"></canvas><p>Choose a part for your house.</p><button id="upgrade-show" class="back" type="button">Show</button></div><div id="upgrade-parts"></div><p id="upgrade-confirm-text" role="status"></p><button id="upgrade-confirm" class="back" type="button" hidden>Make it!</button></div>
+    <div class="panel-body"><div class="upgrade-preview"><canvas id="upgrade-preview" width="192" height="192"></canvas><p>Choose a part for your house.</p><button id="upgrade-show" class="back" type="button">Show</button></div><div id="upgrade-parts"></div><p id="upgrade-confirm-text" role="status"></p><button id="upgrade-confirm" class="back" type="button" hidden>Make it!</button></div>
   </section>
   <div id="craft" class="panel" hidden>
     <header>
       <h2>Craft</h2>
       <button id="craft-back" class="back" type="button">Back</button>
     </header>
-    <div class="body" id="recipes"></div>
+    <div class="panel-body" id="recipes"></div>
   </div>
 
   <div id="chest-panel" class="panel" hidden>
@@ -654,7 +665,7 @@
       <h2>Chest</h2>
       <button id="chest-back" class="back" type="button">Back</button>
     </header>
-    <div class="body" id="chest-grid"></div>
+    <div class="panel-body" id="chest-grid"></div>
   </div>
 
   <div id="book" class="panel" hidden>
@@ -662,7 +673,7 @@
       <h2>Word Book</h2>
       <button id="book-back" class="back" type="button">Back</button>
     </header>
-    <div class="body">
+    <div class="panel-body">
       <button id="btn-quiz" type="button"><span id="quiz-btn-en">Treasure Quiz</span></button>
       <p id="album-completion" hidden role="status"></p>
       <p id="album-round">Round 1 · Find seven gifts!</p>
@@ -1528,13 +1539,29 @@ function validConversation(value, p) {
     document.getElementById('chat-confirm').hidden = !d.fallback || reply.done;
     document.getElementById('chat-confirm').disabled = reply.done;
     ['chat-listen','chat-mic'].forEach(function(id){document.getElementById(id).hidden=reply.done;});
-    document.getElementById('chat-continue').hidden=!reply.done;
-    document.getElementById('chat-close').hidden = !d.answered;
+    document.getElementById('chat-continue').hidden=!reply.done || (!!d.voicePass && !d.selfClaim);
+    document.getElementById('chat-close').hidden = !d.answered || (!!d.voicePass && !d.selfClaim);
     document.getElementById('dialogue').hidden = false;
     document.getElementById('chat-shade').hidden = false;
     document.body.classList.add('chat-blocked');
     document.getElementById('parent-skip').hidden = d.answered;
-    if (reply.done) { d.answered = true;if(!d.rewardRead&&!d.selfClaim){d.rewardRead=true;speakEn(WORD[d.key][0]);}return; }
+    if (reply.done) {
+      d.answered = true;
+      if (!d.rewardRead && !d.selfClaim) {
+        d.rewardRead = true;
+        if (d.voicePass) {
+          speakEn(WORD[d.key][0], { onend: function () { if (dialogue === d) closeChat(); } });
+          clearTimeout(d.autoAdvanceTimer);
+          d.autoAdvanceTimer = setTimeout(function () { if (dialogue === d) closeChat(); }, 1600);
+        } else {
+          speakEn(WORD[d.key][0]);
+        }
+      } else if (d.voicePass && !d.selfClaim) {
+        clearTimeout(d.autoAdvanceTimer);
+        d.autoAdvanceTimer = setTimeout(function () { if (dialogue === d) closeChat(); }, 600);
+      }
+      return;
+    }
     if (!quiet) speakEn(d.question, { named: !!(childName && d.question.includes(childName)), audio_url: !d.reveal ? d.audio_url : undefined });
   }
   function requestChat(d, feedback, childSaid, spokenKey) {
@@ -1609,7 +1636,8 @@ function validConversation(value, p) {
     if (key !== dialogue.key) { retryChat(childSaid, key); return; }
     playSfx('correct');stopChatListening();
     var d = dialogue;
-    d.answered = true; d.coachSaid = childSaid || key; d.turn = Math.min(2, d.turn + 1);
+    // Real mic match → auto-advance after reward (no Continue/OK). Tap / I said it keep a dismiss control.
+    d.voicePass = !!childSaid; d.answered = true; d.coachSaid = childSaid || key; d.turn = Math.min(2, d.turn + 1);
     lastAnswer = key;
     trail.turns++;
     var r = trail.reviews[key] || { n: 0, last: 0 }; r.n++; r.last = trail.turns; trail.reviews[key] = r;
@@ -1776,11 +1804,11 @@ function validConversation(value, p) {
   var buildSession = newBuildSession(), buildRegions = [], buildClusters = [], buildClusterDirty = true, buildDirty = false, buildShowingWord = false, buildWordPending = {}, buildGhost = null, buildArrow = null;
   // Whole buildings reserve air cells but are walkable scenery: no child/pet trap.
   // Instances, including their part materials, survive pickup and save/reload.
-  var CRAFTABLES={houseKit:{kind:'house',w:3,h:3,parts:{wall:'wood',roof:'planks',yard:'grass',window:'wood',foundation:'stone',door:'wood'}},pen:{kind:'pen',w:4,h:2,parts:{fence:'wood',gate:'wood',yard:'grass'}},car:{kind:'car',w:3,h:2,parts:{body:'wood',wheel:'stone'}}};
+  var CRAFTABLES={houseKit:{kind:'house',w:3,h:3,parts:{wall:'wood',roof:'planks',yard:'grass',window:'wood',foundation:'stone',door:'wood'}},pen:{kind:'pen',w:4,h:2,parts:{fence:'wood',gate:'wood',yard:'grass'}},car:{kind:'car',w:3,h:2,parts:{frame:'wood',wheel:'stone'}}};
   var buildObjects=[],craftedObjects=[],craftableArt={},drivingCar=null,upgradeHouse=null,upgradePart=null,partQuestionAt=0;
   function newCraftable(item,raw) {
     var def=CRAFTABLES[item],parts={};raw=raw||{};
-    Object.keys(def.parts).forEach(function(k){var p=raw.parts&&raw.parts[k];parts[k]={material:p&&['wood','planks','grass','glass','stone','sand','flower'].includes(p.material)?p.material:def.parts[k],tier:p&&Number.isInteger(p.tier)?Math.max(1,Math.min(9,p.tier)):1};});
+    Object.keys(def.parts).forEach(function(k){var p=raw.parts&&raw.parts[k];if(!p&&k==='frame'&&raw.parts&&raw.parts.body)p=raw.parts.body;parts[k]={material:p&&['wood','planks','grass','glass','stone','sand','flower'].includes(p.material)?p.material:def.parts[k],tier:p&&Number.isInteger(p.tier)?Math.max(1,Math.min(9,p.tier)):1};});
     return {item:item,kind:def.kind,level:Number.isInteger(raw.level)?Math.max(1,Math.min(99,raw.level)):1,parts:parts,w:def.w,h:def.h};
   }
   function restoreCraftables(data) {
@@ -2333,7 +2361,7 @@ function validConversation(value, p) {
     document.getElementById('buddy-picture').hidden=true;
     document.getElementById('buddy-options').replaceChildren();
     document.getElementById('buddy-mic').hidden=!!data.praise||data.stage==='invite';
-    document.getElementById('buddy-close').hidden=!data.praise&&data.stage!=='invite';
+    document.getElementById('buddy-close').hidden=(!data.praise&&data.stage!=='invite')||!!data.autoAdvance;
     document.getElementById('buddy-close').textContent=data.reward?'Continue':'OK!';
     document.getElementById('buddy-confirm').hidden=!(data.voiceFailures>=2)||!!data.praise;
     a.timer=setTimeout(function(){if(ambient!==a)return;closeAmbient();if(['build_show','build_revisit'].includes(data.event)&&!data.praise&&!data.answered){if(data.building)celebrateBuild(data.building);buildBubble((BUILD_LINES[0] + ' ' + BUILD_LINES[38] + ' ' + BUILD_LINES[36] + ' Good job!'),{event:data.event,praise:true});}},data.stage==='invite'?35000:14000);
@@ -2341,6 +2369,10 @@ function validConversation(value, p) {
     if(data.event==='house_part')clearTimeout(a.timer);
     if(data.reward){clearTimeout(a.timer);buildSpeak(WORD[data.key][0],false);}
     else if(!data.deferSpeech)buildSpeak(text,data.named);
+    if(data.autoAdvance){
+      clearTimeout(a.timer);
+      a.timer=setTimeout(function(){if(ambient===a)closeAmbient();}, data.reward ? 1500 : 900);
+    }
     return a;
   }
   function buildChoiceButton(word,fn) {
@@ -2408,7 +2440,9 @@ function validConversation(value, p) {
     if(d.upgrade)text={stone:'Strong stone walls! Well done!',roof:'A lovely roof! Well done!',flower:'Flowers in our yard! Well done!',window:'A bright window! Well done!'}[key];
     if(d.building&&d.building.kind==='car')text='You built a car! Look at the wheels! Good job!';
     if(d.event==='build_short')pointBuildMaterial(key);
-    closeAmbient();buildBubble(d.selfClaim?'Thanks for trying!':text,{event:d.event,praise:true,deferSpeech:true,reward:!d.selfClaim,key:key});
+    closeAmbient();
+    // Mic match (!clicked, !selfClaim): praise then auto-close — no OK!/Continue. I said it / tap keep dismiss.
+    buildBubble(d.selfClaim?'Thanks for trying!':text,{event:d.event,praise:true,deferSpeech:true,reward:!d.selfClaim,key:key,autoAdvance:!clicked&&!d.selfClaim});
     saveSoon();
   }
   function buildVoiceFailure(a) {
@@ -4854,20 +4888,13 @@ function validConversation(value, p) {
         });
         bar.appendChild(b);
       });
-      var stashN = chestKeys().length;
-      var chest = document.createElement('button');
-      chest.type = 'button';
-      chest.className = 'slot chest-btn';
-      chest.setAttribute('aria-label', 'Open chest');
-      chest.innerHTML = '<canvas width="128" height="128" style="width:44px;height:44px;display:block;margin:4px auto 0"></canvas><strong>Chest</strong><em>' + stashN + '</em>';
-      paintIcon(chest.querySelector('canvas'), 'table');
-      tapButton(chest, openChest);
-      bar.appendChild(chest);
     }
     bar.scrollLeft = keep;
     invSig = sig;
     var key = hotbar[sel];
     document.getElementById('held-en').textContent = key && WORD[key] ? (key==='house'?'Roof blocks':WORD[key][0]) : 'Tap a block';
+    var cc = document.getElementById('chest-count');
+    if (cc) cc.textContent = String(chestKeys().length);
   }
   function canCraft(r) {
     var k;
@@ -5353,8 +5380,11 @@ function validConversation(value, p) {
       hardReset();
     });
     tapButton(document.getElementById('btn-craft'), openCraft);
+    document.getElementById('btn-craft').addEventListener('click', function (e) { if (e.detail === 0) openCraft(); });
     tapButton(document.getElementById('btn-words'), openBook);
+    document.getElementById('btn-words').addEventListener('click', function (e) { if (e.detail === 0) openBook(); });
     tapButton(document.getElementById('chest-back'), closeChest);
+    (function () { var c = document.getElementById('btn-chest'); if (c) { paintIcon(c.querySelector('canvas'), 'table'); tapButton(c, openChest); c.addEventListener('click', function (e) { if (e.detail === 0) openChest(); }); } })();
     bindDialogue();
     function toggleParent() {
       stopChatListening(); releaseChatInput(); closeCraft(); closeBook();
@@ -5382,7 +5412,8 @@ function validConversation(value, p) {
       memory.prefs = blankMemory().prefs; memory.prefsLearnedAt = {};
       save(); showParentPage(document.getElementById('parent-info').hidden);
     });
-    document.getElementById('btn-build').addEventListener('click', toggleBuild);
+    tapButton(document.getElementById('btn-build'), toggleBuild);
+    document.getElementById('btn-build').addEventListener('click', function (e) { if (e.detail === 0) toggleBuild(); });
     document.getElementById('car-exit').onclick=exitCar;
     document.getElementById('parent-music').onclick=function(){setPackSetting('music');};document.getElementById('parent-sfx').onclick=function(){setPackSetting('sfx');};
     document.getElementById('upgrade-back').onclick=closeUpgrade;
@@ -5547,7 +5578,7 @@ function validConversation(value, p) {
     window.addEventListener('blur', function () { keys={};joyEnd({pointerId:joyId}); });
     document.addEventListener('touchmove', function (e) {
       var t = e.target;
-      if (t && t.closest && t.closest('.body, .hotbar, #build-tools, #chest-panel, #parent-help, #dialogue, #welcome, #buddy-chat')) return;
+      if (t && t.closest && t.closest('.panel-body, .topbar, .acts, .hotbar, #build-tools, #chest-panel, #parent-help, #dialogue, #welcome, #buddy-chat, #btn-build, #btn-craft, #btn-words, #btn-zh, #btn-chest')) return;
       e.preventDefault();
     }, { passive: false });
     ['gesturestart', 'gesturechange', 'gestureend'].forEach(function (ev) {
