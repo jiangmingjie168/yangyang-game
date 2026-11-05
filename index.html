@@ -292,7 +292,7 @@
   @keyframes pop { from { transform: translateX(-50%) scale(0.86); } to { transform: translateX(-50%) scale(1); } }
 
   .panel {
-    position: absolute; inset: 0; z-index: 50;
+    position: absolute; inset: 0; z-index: 80;
     background: #fff6e8;
     display: flex; flex-direction: column;
     padding: calc(8px + var(--sat)) calc(10px + var(--sar)) calc(8px + var(--sab)) calc(10px + var(--sal));
@@ -539,8 +539,25 @@
   #parent-help #btn-speak { width:auto; min-width:120px; height:48px; padding:0 14px; border-radius:12px; display:inline-flex; align-items:center; gap:8px; }
 
   body.driving .acts, body.driving #held {visibility:hidden;}
-  body.chest-open .acts .act {visibility:hidden; pointer-events:none;}
-  body.chest-open #held, body.chest-open #hotbar {visibility:hidden;}
+  /* UX17: chest-open must fully remove Break/Place/Jump (not only visibility).
+     Prior UX15 used visibility on .acts .act; Tesla still showed the buttons.
+     Use display:none + id selectors; keep #btn-chest. Also hard-cap hotbar to 1 slot. */
+  body.chest-open #btn-break,
+  body.chest-open #btn-place,
+  body.chest-open #btn-jump,
+  body.chest-open .acts > .act {
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+  body.chest-open #held,
+  body.chest-open #hotbar {
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+  /* Belt-and-suspenders: never paint more than one quick slot, even if JS regresses. */
+  #hotbar .slot:nth-child(n+2) { display: none !important; }
   #car-exit { position:absolute;right:18px;top:106px;z-index:25;background:#ffe4a0; }
   #house-upgrade .panel-body { max-width:760px;margin:auto; }
   .upgrade-preview {display:flex;align-items:center;gap:18px;flex-wrap:wrap;}
@@ -558,7 +575,7 @@
 <div id="app">
   <canvas id="view" width="800" height="400"></canvas>
   <div id="hud">
-    <span id="build-version" aria-label="Build version">build cd91b62+ux16</span>
+    <span id="build-version" aria-label="Build version">build cd91b62+ux17</span>
     <div class="topbar">
       <button id="quest" type="button">
         <canvas id="quest-icon" width="128" height="128"></canvas>
@@ -4942,9 +4959,9 @@ function validConversation(value, p) {
     }
   }
   function renderHotbar() {
-    var sig = invSignature() + '|chest:' + chestKeys().length;
+    var sig = invSignature() + '|chest:' + chestKeys().length + '|quick1';
     var bar = document.getElementById('hotbar');
-    var visible = quickHotbarKeys();
+    var visible = quickHotbarKeys().slice(0, 1);
     var keep = bar.scrollLeft;
     bar.innerHTML = '';
     if (!visible.length) {
@@ -5165,14 +5182,25 @@ function validConversation(value, p) {
     if (selKey && inv[selKey]) return [selKey];
     return [];
   }
+  function setChestOpenUi(open) {
+    document.body.classList.toggle('chest-open', !!open);
+    ['btn-break', 'btn-place', 'btn-jump'].forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el) el.hidden = !!open;
+    });
+    var held = document.getElementById('held');
+    var bar = document.getElementById('hotbar');
+    if (held) held.hidden = !!open;
+    if (bar) bar.hidden = !!open;
+  }
   function openChest() {
     if (!started || dialogue || quiz || nameFlow) return;
     closePanels(); renderChest(); document.getElementById('chest-panel').hidden = false;
-    document.body.classList.add('chest-open');
+    setChestOpenUi(true);
   }
   function closeChest() {
     document.getElementById('chest-panel').hidden = true;
-    document.body.classList.remove('chest-open');
+    setChestOpenUi(false);
   }
   function renderChest() {
     var root = document.getElementById('chest-grid'); root.replaceChildren();
