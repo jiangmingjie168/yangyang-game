@@ -1,0 +1,18 @@
+{"case":"B-desktop-log","status":"FAIL","error":"AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n'11' !== '10'\n","errors":[],"video":"build-v1-fix3-video/page@92c102cfa3817fcf3f1876cfdb83bbef.webm"}
+Traceback (most recent call last):
+  File "/tmp/bw-build/tests/build-v1-fix3-vision.py", line 19, in <module>
+    g=min((g for g in groups if len(g)>tile*.4),key=lambda g:abs((g[0]+g[-1])/2-x))
+ValueError: min() iterable argument is empty
+{"case":"B-desktop-clean","status":"FAIL","error":"Error: Command failed: python3 /tmp/bw-build/tests/build-v1-fix3-vision.py plank 598.0884210526317 50\nTraceback (most recent call last):\n  File \"/tmp/bw-build/tests/build-v1-fix3-vision.py\", line 19, in <module>\n    g=min((g for g in groups if len(g)>tile*.4),key=lambda g:abs((g[0]+g[-1])/2-x))\nValueError: min() iterable argument is empty\n","errors":[],"video":"build-v1-fix3-video/page@71bab34c293cb865c09820b71e266afe.webm"}
+Traceback (most recent call last):
+  File "/tmp/bw-build/tests/build-v1-fix3-vision.py", line 14, in <module>
+    if not pts: raise ValueError('No visible plank pixels near wall')
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: No visible plank pixels near wall
+{"case":"B-mobile-log","status":"FAIL","error":"Error: Command failed: python3 /tmp/bw-build/tests/build-v1-fix3-vision.py plank 373 38\nTraceback (most recent call last):\n  File \"/tmp/bw-build/tests/build-v1-fix3-vision.py\", line 14, in <module>\n    if not pts: raise ValueError('No visible plank pixels near wall')\n                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nValueError: No visible plank pixels near wall\n","errors":[],"video":"build-v1-fix3-video/page@15761626da9e132fc618553aea926c86.webm"}
+Traceback (most recent call last):
+  File "/tmp/bw-build/tests/build-v1-fix3-vision.py", line 14, in <module>
+    if not pts: raise ValueError('No visible plank pixels near wall')
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: No visible plank pixels near wall
+{"case":"B-mobile-clean","status":"FAIL","error":"Error: Command failed: python3 /tmp/bw-build/tests/build-v1-fix3-vision.py plank 373 38\nTraceback (most recent call last):\n  File \"/tmp/bw-build/tests/build-v1-fix3-vision.py\", line 14, in <module>\n    if not pts: raise ValueError('No visible plank pixels near wall')\n                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nValueError: No visible plank pixels near wall\n","errors":[],"video":"build-v1-fix3-video/page@4b50fd3ce8e885ae6412dac0103a4e69.webm"}

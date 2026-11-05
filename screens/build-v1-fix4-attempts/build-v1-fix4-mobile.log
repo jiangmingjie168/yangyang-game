@@ -1,0 +1,7 @@
+{"case":"F-mobile-clean","status":"PASS","video":"build-v1-fix4-video/page@a02096163ae0b423ab1a936566004c33.webm"}
+{"case":"M-mobile-clean","status":"PASS","invite_ms":11303,"video":"build-v1-fix4-video/page@20ee6085b45c726ee250b44ea62e0ce5.webm"}
+{"case":"C-mobile-clean","status":"PASS","video":"build-v1-fix4-video/page@90a08c91d05e4220eeecbda6501da173.webm"}
+{"case":"R-mobile-clean","status":"PASS","video":"build-v1-fix4-video/page@99506ad5a05d27d612e0b4260cf2b354.webm"}
+{"case":"N-mobile-clean","status":"FAIL","error":"AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n'5' !== '4'\n","errors":[],"video":"build-v1-fix4-video/page@4b35d10ac286350f17bd6b13ec542d02.webm"}
+{"case":"S-mobile-clean","status":"PASS","video":"build-v1-fix4-video/page@87d727f708ca0d1f95d9a885c8f59bd2.webm"}
+{"case":"V-mobile-clean","status":"PASS","video":"build-v1-fix4-video/page@2faaaba498467e60cd84ebac5bc5547d.webm"}

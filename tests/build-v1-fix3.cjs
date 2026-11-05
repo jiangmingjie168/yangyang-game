@@ -9,7 +9,7 @@ fs.mkdirSync(out,{recursive:true});
 async function run(){
  const browser=await chromium.launch({executablePath:process.env.CHROME||'/usr/bin/google-chrome',args:['--no-sandbox','--enable-blink-features=MiddleClickAutoscroll'],ignoreDefaultArgs:['--hide-scrollbars']});
  const results=[],clicks=[],frames=[];let serial=0;
- try{for(const mobile of (process.env.BW_MOBILE==='1'?[true]:process.env.BW_MOBILE==='0'?[false]:[false,true]))for(const debug of (process.env.BW_DEBUG==='0'?[false]:process.env.BW_DEBUG==='1'?[true]:[true,false]))for(const name of (process.env.BW_CASE||'A,A2,J,S,B,M,P,G').split(',')){
+ try{for(const mobile of (process.env.BW_MOBILE==='1'?[true]:process.env.BW_MOBILE==='0'?[false]:[false,true]))for(const debug of (process.env.BW_DEBUG==='0'?[false]:process.env.BW_DEBUG==='1'?[true]:[true,false]))for(const name of (process.env.BW_CASE||'J,S,B,P,G').split(',')){
  const tag=`${name}-${mobile?'mobile':'desktop'}-${debug?'log':'clean'}`;
  const context=await browser.newContext({viewport:mobile?{width:844,height:390}:{width:1366,height:768},isMobile:mobile,hasTouch:mobile,recordVideo:{dir:path.join(out,'build-v1-fix3-video'),size:mobile?{width:844,height:390}:{width:1366,height:768}}});
  await context.route(/http:\/\/fix3-\d+\.test\/.*/,r=>r.fulfill({contentType:'text/html; charset=utf-8',body:source}));
@@ -59,19 +59,20 @@ async function run(){
  async function move(dir,ms){facing=dir;const b=await p.locator('#joy').boundingBox();const x=b.x+b.width/2,y=b.y+b.height/2;clicks.push({case:tag,t_ms:Date.now()-start,x,y,purpose:`Joystick ${dir} ${ms}ms`});await p.mouse.move(x,y);await p.mouse.down();await p.mouse.move(x+dir*b.width*.4,y);await wait(ms);await p.mouse.up();lastInputAt=Date.now();clicks.push({case:tag,t_ms:lastInputAt-start,x:x+dir*b.width*.4,y,purpose:'Release joystick; hands off'});await wait(350);}
  try{
  await p.goto(`http://fix3-${++serial}.test/${debug?'?buildlog=1':''}`);await button('#btn-start','Start');await button('#welcome-play','Play');await wait(500);await snap('fresh');
+ assert(['inspect','J','S','B','W','P','G'].includes(name),'Implemented matrix case: '+name);
  if(name==='inspect'){await prep(false);await snap('after-prep');}
  else if(name==='J'){
  await prep();await place(164,300,'fence',7,'First Fence');await place(278,300,'fence',6,'Second Fence');
  await button('#btn-jump','Jump on ground');await wait(140);await button('#btn-jump','Jump in air');await wait(100);await button('#btn-jump','Jump in air again');
  const idle=lastInputAt;let cheer=null,show=null,next=0;while(Date.now()-idle<15500){const elapsed=Date.now()-idle;const line=await p.locator('#buddy-line').innerText();if(/You made this!/.test(line)&&await p.locator('#buddy-chat').isVisible()&&cheer===null){cheer=elapsed;await snap('J-cheer');}if(await p.getByRole('button',{name:'Show my building'}).isVisible()&&show===null)show=elapsed;if(elapsed>=next){await snap('idle-'+next/1000+'s');next+=5000;}await wait(80);}assert(cheer!==null,'Jump buffer: completion within 15s');assert(show!==null,'Jump buffer: Show within 15s');results.push({case:tag,status:'PASS',idle_start_ms:idle-start,cheer_ms:cheer,show_ms:show});
  }else if(name==='S'||name==='B'){
- // Fixed human-path coordinates from the passing main matrix (no evaluate / vision injection).
+ // Stand on the flat left side; the former right-side path could stand on
+ // its own base after crossing the spawn ledge, invalidating fixed click rows.
  await prep(false);await move(-1,1300);
- const wallX=name==='S'?450:395;
- if(name==='B'){await move(1,80);await wait(500);}
+ const wallX=450;
  await place(wallX,262,'planks',11,'Wall base beside child');
- await move(name==='S'?-1:1,160);await snap('against-wall');
- const targetX=name==='S'?450:373;
+ await move(-1,160);await snap('against-wall');
+ const targetX=450;
  await world(targetX,224,'Second layer from beside wall');await snap('second-layer');await stock('planks',10);
  if(name==='B'){
   await world(targetX,213,'Tap second layer top surface for third layer');await stock('planks',9);await snap('B-third-layer');
@@ -91,11 +92,14 @@ async function run(){
  for(const [i,[x,y]] of [[411,224],[411,186],[373,224],[373,186]].entries()){await place(x,y,'planks',9-i,'Stack wall cell '+i);await snap('B-two-column-'+i);}
  results.push({case:tag,status:'PASS'});
  }else if(name==='P'){
- await prep(false);await world(164,300,'Place visible plank');await stock('planks',11);await snap('P-pulse');await world(164,262,'Place above first plank');await stock('planks',10);assert.equal(await p.locator('#build-show').getAttribute('aria-disabled'),'false');await button('#build-show','Two arbitrary blocks qualify for manual Show');await waitText('#buddy-line',/You made this!.*Good job!/);await snap('P-two-planks-show');await world(164,300,'Occupied target with occupied top');await stock('planks',10);await waitText('#toast-en',/Choose empty squares!/);await snap('P-occupied');
+ await prep(false);await place(164,300,'planks',11,'Place visible plank');await snap('P-pulse');await place(164,262,'planks',10,'Place above first plank');assert.equal(await p.locator('#build-show').getAttribute('aria-disabled'),'false');await button('#build-show','Two arbitrary blocks qualify for manual Show');await p.getByRole('button',{name:'Show my building'}).waitFor();await button(p.getByRole('button',{name:'Show my building'}),'Accept stable manual invitation');await waitText('#buddy-line',/You made this!.*Good job!/);await snap('P-two-planks-show');await world(164,300,'Occupied target with occupied top');await stock('planks',10);await waitText('#toast-en',/Choose empty squares!/);await snap('P-occupied');
  await world(25,186,'Out of reach target');await stock('planks',10);await waitText('#toast-en',/Move a little closer!/);await snap('P-reach');await button('[data-build="remove"]','Remove tool');await world(202,262,'Remove unowned air');await waitText('#toast-en',/Tap a block you built!/);await stock('planks',10);await snap('P-remove');
  if(mobile){await button('[data-build="planks"]','Planks below HUD');await world(164,142,'Place under build status');await stock('planks',9);assert.equal(await p.locator('#build-status').isVisible(),false);await snap('P-HUD-yields');}
  if(debug){await button('[data-build="planks"]','Animal occupancy check');let animal=false;
- for(const x of [88,126,164,202,240,278,316,88,126,202,240]){const before=Number(await p.locator('[data-build=planks] small').innerText());await world(x,300,'Try ground cell near roaming animals');await wait(270);const log=await p.locator('#build-debug').innerText();if(log.trim().split('\n').at(-1).includes('fail:animal')){await stock('planks',before);await waitText('#toast-en',/Choose empty squares!/);animal=true;await snap('P-animal-refused');break;}}
+ for(const x of [202,240,278,316,202,240,278,316,202,240,278,316]){const before=Number(await p.locator('[data-build=planks] small').innerText());await world(x,300,'Try ground cell near roaming animals');await wait(270);const log=await p.locator('#build-debug').innerText();if(log.trim().split('\n').at(-1).includes('fail:animal')){await stock('planks',before);await waitText('#toast-en',/Choose empty squares!/);animal=true;await snap('P-animal-refused');break;}
+ // Remove a successful probe immediately so it cannot wall off later animals.
+ if(Number(await p.locator('[data-build=planks] small').innerText())<before){await button('[data-build=remove]','Remove empty-cell probe');await world(x,300,'Return probe material');await stock('planks',before);await button('[data-build=planks]','Resume animal refusal probe');}}
+
  assert(animal,'Read-only log confirms animal collision refusal');}
  results.push({case:tag,status:'PASS'});
  }else if(name==='G'){

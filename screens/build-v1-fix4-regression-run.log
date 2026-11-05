@@ -1,0 +1,7 @@
+{"suite":"build-v1","exit":0,"seconds":151,"log":"screens/build-v1-fix4-test-build-v1.log"}
+{"suite":"build-placement-fix3","exit":0,"seconds":0,"log":"screens/build-v1-fix4-test-build-placement-fix3.log"}
+{"suite":"chinese-cleanup","exit":0,"seconds":5,"log":"screens/build-v1-fix4-test-chinese-cleanup.log"}
+{"suite":"natural-pointer-v4r","exit":0,"seconds":18.3,"log":"screens/build-v1-fix4-test-natural-pointer-v4r.log"}
+{"suite":"world-v2","exit":0,"seconds":19.2,"log":"screens/build-v1-fix4-test-world-v2.log"}
+{"suite":"server","exit":0,"seconds":1.1,"log":"screens/build-v1-fix4-test-server.log"}
+{"suite":"memory-chat","exit":0,"seconds":20,"log":"screens/build-v1-fix4-test-memory-chat.log"}

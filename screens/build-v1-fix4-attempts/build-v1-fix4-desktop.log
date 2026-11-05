@@ -1,0 +1,7 @@
+{"case":"F-desktop-clean","status":"PASS","video":"build-v1-fix4-video/page@19ab8bb0da0adb9bfe44d11e3a63da6b.webm"}
+{"case":"M-desktop-clean","status":"PASS","invite_ms":11425,"video":"build-v1-fix4-video/page@6709577877628876bf9873ee8e55ed4d.webm"}
+{"case":"C-desktop-clean","status":"PASS","video":"build-v1-fix4-video/page@4d7ccb9c8dcac6eb7de01b629acd9b1f.webm"}
+{"case":"R-desktop-clean","status":"PASS","video":"build-v1-fix4-video/page@68debf3801b86e82335d11d3b305a4f0.webm"}
+{"case":"N-desktop-clean","status":"FAIL","error":"AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n'5' !== '4'\n","errors":[],"video":"build-v1-fix4-video/page@fba9e5212bb8ef439bd0863ee57bca0e.webm"}
+{"case":"S-desktop-clean","status":"PASS","video":"build-v1-fix4-video/page@9e2503cf6d06b722e62879983140940e.webm"}
+{"case":"V-desktop-clean","status":"PASS","video":"build-v1-fix4-video/page@9c07eb9f5d5f5093b6eadd7d148bfce0.webm"}

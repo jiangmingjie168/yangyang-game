@@ -480,6 +480,7 @@
   #buddy-chat.build-done { border:3px solid #d99a18; padding:3px 8px; max-width:320px; }
   #buddy-chat.build-done #buddy-line { font-size:20px; line-height:20px; }
   #buddy-chat.build-done #buddy-line::before { content:''; display:inline-block; width:20px; height:20px; vertical-align:bottom; margin-right:5px; background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='m12 2 3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1z' fill='%23ffc23d' stroke='%23986c25'/%3E%3C/svg%3E") center/contain no-repeat; }
+  #build-version { position:absolute; z-index:16; left:8px; bottom:calc(3px + var(--sab)); padding:2px 5px; border-radius:4px; background:#fff8eee6; color:#4c493f; font:10px/1.2 monospace; pointer-events:none; }
   #build-debug { position:absolute; z-index:45; left:8px; bottom:115px; max-width:calc(100% - 16px); background:#152030e8; color:#fff; padding:6px; font:11px/1.3 monospace; white-space:pre-wrap; pointer-events:none; }
   #build-tools small { display:block; font-size:12px; }
   #build-status { position:absolute; left:16px; top:130px; font-size:14px; pointer-events:none; background:#fff8eedd; border-radius:8px; padding:4px 8px; }
@@ -503,6 +504,7 @@
 <div id="app">
   <canvas id="view" width="800" height="400"></canvas>
   <div id="hud">
+    <span id="build-version" aria-label="Build version">build c331096+fix4</span>
     <div class="topbar">
       <button id="quest" type="button">
         <canvas id="quest-icon" width="128" height="128"></canvas>
@@ -882,6 +884,8 @@ function validConversation(value, p) {
   function closeAmbient() {
     if (ambient) cancelEnAudio();
     var active = ambient; cancelSocial(ambient); ambient = null; stopSocialListening();
+    // invited is transient; closing/expiring an invitation never means shown.
+    if(active && active.build && active.build.building){active.build.building.invited=false;saveSoon();}
     if (active && window.speechSynthesis) { try { speechSynthesis.cancel(); } catch (err) { /* optional */ } }
     document.getElementById('buddy-chat').hidden = true;
     document.getElementById('buddy-chat').classList.remove('build-bubble', 'build-feedback', 'build-done');
@@ -1708,7 +1712,7 @@ function validConversation(value, p) {
     buildLevel = [1,2,3].includes(data.build_level) ? data.build_level : 0;
     placedThisRun.clear(); buildStill=0; buildLastPosition=null; manualShowPending=null;
     buildMode = false; buildSession = newBuildSession(); buildQueue = []; buildRegions = []; buildClusters = []; buildClusterDirty = true; buildGhost = null; buildWordPending = {};
-    builds = Array.isArray(data.builds) ? data.builds.filter(function (b) { return b && ['house','pen','free'].includes(b.kind) && Number.isInteger(b.x) && Number.isInteger(b.y) && b.x >= 0 && b.x < W && b.y >= 0 && b.y < H && b.w > 0 && b.w <= 14 && b.h > 0 && b.h <= 10; }).slice(0,8).map(function (b) { return {id:String(b.id).slice(0,40),kind:b.kind,x:b.x,y:b.y,w:b.w,h:b.h,roofed:!!b.roofed,createdAt:Number(b.createdAt)||Date.now(),shown:!!b.shown,invited:!!b.invited,closed:!!b.closed,roofPraise:!!b.roofPraise}; }) : [];
+    builds = Array.isArray(data.builds) ? data.builds.filter(function (b) { return b && ['house','pen','free'].includes(b.kind) && Number.isInteger(b.x) && Number.isInteger(b.y) && b.x >= 0 && b.x < W && b.y >= 0 && b.y < H && b.w > 0 && b.w <= 14 && b.h > 0 && b.h <= 10; }).slice(0,8).map(function (b) { return {id:String(b.id).slice(0,40),kind:b.kind,x:b.x,y:b.y,w:b.w,h:b.h,roofed:!!b.roofed,createdAt:Number(b.createdAt)||Date.now(),shown:!!b.shown,invited:false,autoOffered:!!(b.autoOffered||b.invited||b.shown),closed:!!b.closed,roofPraise:!!b.roofPraise,feedbackMembers:Array.isArray(b.feedbackMembers)?b.feedbackMembers.filter(function(at){return Number.isInteger(at)&&at>=0&&at<W*H;}).slice(0,140):null}; }) : [];
     buildSavedIds = new Set(builds.map(function(b){return b.id;}));
     buildChat = {}; var raw = data.build_chat || {};
     ['asked','plans','shorts','shows','revisits','offers','praised','manualShows','offerIgnored','offerPausedUntil'].forEach(function (k) { buildChat[k] = Number.isFinite(raw[k]) ? Math.max(0, Math.min(k === 'offerPausedUntil' ? Date.now()+7*86400000 : 100, Math.floor(raw[k]))) : 0; });
@@ -1934,8 +1938,9 @@ function validConversation(value, p) {
         var kind=roofed?'house':hasFence?'pen':null;
         if(!kind)continue;
         var old=builds.find(function(b){return b.id===id;});
-        if(old && old.kind!==kind)old=Object.assign({},old,{shown:false,invited:false,roofPraise:false});
-        var b=Object.assign({id:id,x:minX,y:minY,w:maxX-minX+1,h:maxY-minY+1,createdAt:Date.now(),shown:false},old||{},{kind:kind,roofed:roofed});
+        if(old && old.kind!==kind)Object.assign(old,{shown:false,invited:false,autoOffered:false,closed:false,roofPraise:false,feedbackMembers:null});
+        var b=Object.assign(old||{id:id,x:minX,y:minY,w:maxX-minX+1,h:maxY-minY+1,createdAt:Date.now(),shown:false},{kind:kind,roofed:roofed});
+        refreshBuildFeedback(b,owned);
         regions.push({building:b,inside:inside,members:owned});
       }
     });
@@ -1964,18 +1969,35 @@ function validConversation(value, p) {
       }
       var fences=members.filter(function(at){return cells[at]===FENCE;}).length;
       var old=previous.find(function(b){return b.kind==='free' && members.some(function(at){var x=at%W,y=Math.floor(at/W);return x>=b.x&&x<b.x+b.w&&y>=b.y&&y<b.y+b.h;});});
-      var b=Object.assign({id:'free:'+start,kind:'free',createdAt:Date.now(),shown:false,invited:false,closed:false},old||{},{x:x0,y:y0,w:x1-x0+1,h:y1-y0+1,roofed:false});
+      var b=Object.assign(old||{id:'free:'+start,kind:'free',createdAt:Date.now(),shown:false,invited:false,closed:false},{x:x0,y:y0,w:x1-x0+1,h:y1-y0+1,roofed:false});
+      refreshBuildFeedback(b,members);
       clusters.push({building:b,inside:[],members:members,ready:members.length>=4||fences>=2,near:members.length>=2||fences>=1});
     });
     buildClusters=clusters; updateShowButton();
   }
+  // Snapshot live cells at the last completion, not placement attempts. Two
+  // distinct new surviving blocks rearm this work; remove/re-place cannot farm it.
+  // autoOffered prevents idle retry loops; shown means the child completed Show.
+  function refreshBuildFeedback(b,members) {
+    if(!b.closed)return;
+    if(!b.feedbackMembers){b.feedbackMembers=members.slice();return;}
+    var previous=new Set(b.feedbackMembers);
+    if(members.filter(function(at){return !previous.has(at)&&placedThisRun.has(at);}).length<2)return;
+    b.closed=false;b.shown=false;b.invited=false;b.autoOffered=false;
+    showFlashUntil=chatClock+1.8;saveSoon();
+  }
+  function celebrateBuild(b) {
+    buildSession.flash={building:b,until:chatClock+3.2};
+    // Keep the burst below the toolbar on short screens, even for high builds.
+    var z=tileScreen/TILE, y=Math.max(b.y*TILE,drawCamY+Math.min(viewH*.65,300)/z);
+    celebrate((b.x+b.w/2)*TILE,y,true,true);
+  }
   function buildCompletion(r) {
     var b=r.building;
-    b.closed=true;buildSession.closed++;buildSession.completionAt=chatClock;
+    b.closed=true;b.feedbackMembers=r.members.slice();buildSession.closed++;buildSession.completionAt=chatClock;
     buildFeedback(BUILD_LINES[0]+' '+BUILD_LINES[b.kind==='free'?38:25],b.kind==='free'?'build_free':'build_closed');
     document.getElementById('buddy-chat').classList.add('build-done');
-    buildSession.flash={building:b,until:chatClock+2.5};
-    celebrate((b.x+b.w/2)*TILE,b.y*TILE,true);saveSoon();
+    celebrateBuild(b);saveSoon();
   }
   function quietBlockers() {
     var r=[];
@@ -2010,7 +2032,7 @@ function validConversation(value, p) {
     document.getElementById('buddy-picture').hidden=true;
     document.getElementById('buddy-options').replaceChildren();
     document.getElementById('buddy-mic').hidden=!!data.praise;
-    a.timer=setTimeout(function(){if(ambient!==a)return;closeAmbient();if(['build_show','build_revisit'].includes(data.event)&&!data.praise&&!data.answered)buildBubble((BUILD_LINES[0] + ' ' + BUILD_LINES[38] + ' ' + BUILD_LINES[36] + ' Good job!'),{event:data.event,praise:true});},14000);
+    a.timer=setTimeout(function(){if(ambient!==a)return;closeAmbient();if(['build_show','build_revisit'].includes(data.event)&&!data.praise&&!data.answered){if(data.building)celebrateBuild(data.building);buildBubble((BUILD_LINES[0] + ' ' + BUILD_LINES[38] + ' ' + BUILD_LINES[36] + ' Good job!'),{event:data.event,praise:true});}},14000);
     if(!data.feedback)buildSession.lastBubbleAt=chatClock;
     if(!data.deferSpeech)buildSpeak(text,data.named);
     return a;
@@ -2030,11 +2052,11 @@ function validConversation(value, p) {
     if(d.stage==='invite' && d.event==='build_show') {
       // An invitation is a lightweight action. Only the child's Show click
       // opens a question, and free creations never get a false house/pen label.
-      if(d.building.kind==='free' || (d.manual && buildChat.manualShows>=3) || (!d.manual && !buildQuota())) {
-        d.building.shown=true;d.praise=true;d.stage='done';
+      if(d.building.kind==='free') {
+        d.building.shown=true;d.praise=true;d.stage='done';celebrateBuild(d.building);
         buildBubble(BUILD_LINES[0]+' '+BUILD_LINES[38]+' '+BUILD_LINES[36]+' Good job!',d);saveSoon();return;
       }
-      if(!d.manual)spendBuildQuestion();
+      if(!d.manual && buildQuota())spendBuildQuestion();
     }
     d.stage='question';d.tier=buildTier(d.options);d.misses=0;
     var text=d.event==='build_plan'?(d.tier===3?(BUILD_LINES[8] + ' Say it!'):lineVariant([BUILD_LINES[2],BUILD_LINES[3],BUILD_LINES[4]])):d.tier===1?(d.event==='build_short'?BUILD_LINES[10]:'What is this?'):d.tier===2?"What's this?":d.event==='build_short'?(d.key==='stick'?BUILD_LINES[20]:buildNeedLine(d.key))+' Say it!':(d.key==='house'?BUILD_LINES[33]:BUILD_LINES[34])+' Say it!';
@@ -2056,7 +2078,7 @@ function validConversation(value, p) {
     if(!ambient||ambient.build!==d||d.answered)return; d.answered=true;
     if(d.event==='build_plan'){buildSession.plan=key;buildSession.planAnswered=true;}
     else if(d.tier===1 && clicked){var l=trail.levels[key]||{t1:0,t2:0,t3:0};l.t1++;trail.levels[key]=l;}
-    if(d.building)d.building.shown=true;
+    if(d.building){d.building.shown=true;d.stage='done';celebrateBuild(d.building);}
     var text=d.event==='build_plan'?(key==='house'?BUILD_LINES[5]:BUILD_LINES[6])+' '+BUILD_LINES[7]:d.event==='build_short'?(key==='stick'?'Great! '+BUILD_LINES[20]:'Great! '+buildNeedLine(key)):'You built a '+key+'! '+lineVariant([(BUILD_LINES[0] + ' ' + BUILD_LINES[35]),(BUILD_LINES[36] + ' Good job!'),(BUILD_LINES[37] + ' Well done!')]);
     if(d.event==='build_short')pointBuildMaterial(key);
     closeAmbient();buildBubble(text,{event:d.event,praise:true,deferSpeech:clicked});
@@ -2131,6 +2153,8 @@ function validConversation(value, p) {
     if(state==='spent'){document.getElementById('toast').style.visibility='';showToast('No more shows today!',2);return;}
     if(state==='few'){document.getElementById('toast').style.visibility='';showToast('Build 2 blocks first!',2);return;}
     if(state==='busy'||manualShowPending)return;
+    // Repeated toolbar taps keep the same invitation and spend no extra slot.
+    if(ambient&&ambient.build&&ambient.build.event==='build_show'&&!ambient.build.praise)return;
     if(buildDirty)detectBuilds();else if(buildClusterDirty)scanFreeBuilds();
     var r=manualShowTarget();if(!r){showToast('Build 2 blocks first!',2);return;}
     seek=null;var b=r.building,delay=0,token={};manualShowPending=token;
@@ -2141,10 +2165,9 @@ function validConversation(value, p) {
     var b=r.building,d={building:b,key:b.kind==='house'?'house':'fence',options:['house','fence'],manual:source==='manual'};
     if(!showBuildEvent({event:'build_show',data:d}))return;
     updateShowButton();
-    if(d.manual)setTimeout(function(){if(ambient&&ambient.build===d&&d.stage==='invite')showBuildQuestion(d);},1500);
   }
   function autoShowCandidate() {
-    return buildRegions.concat(buildClusters.filter(function(r){return r.ready;})).find(function(r){var b=r.building;return b.closed&&!b.invited&&nearBuild(b);});
+    return buildRegions.concat(buildClusters.filter(function(r){return r.ready;})).find(function(r){var b=r.building;return b.closed&&!b.invited&&!b.autoOffered&&!b.shown&&nearBuild(b);});
   }
   function inviteBuildShow(manual) {
     if(manual){requestManualShow('buddy');return;}
@@ -2179,11 +2202,11 @@ function validConversation(value, p) {
       clearTimeout(ambient.timer);ambient.timer=setTimeout(closeAmbient,6000);
     } else if(event==='build_short')showBuildQuestion(d);
     else if(event==='build_show'||event==='build_revisit'){
-      if(event==='build_show'){if(d.manual)buildChat.manualShows=(buildChat.manualShows||0)+1;else buildChat.shows++;d.building.invited=true;updateShowButton();}
+      if(event==='build_show'){if(d.manual)buildChat.manualShows=(buildChat.manualShows||0)+1;else buildChat.shows++;d.building.autoOffered=true;updateShowButton();}
       else {buildChat.revisits++;buildSession.revisit=true;}
       var prefix=buildName();d.named=!!prefix;
       if((event==='build_revisit' && d.building.shown)) {d.praise=true;buildBubble(d.building.kind==='free'?BUILD_LINES[0]+' '+BUILD_LINES[38]+' '+BUILD_LINES[1]:prefix+BUILD_LINES[39]+' '+BUILD_LINES[d.key==='house'?40:41]+' '+BUILD_LINES[1],d);}
-      else {d.stage='invite';buildBubble(prefix+(event==='build_revisit'?lineVariant([BUILD_LINES[39]+' '+BUILD_LINES[d.key==='house'?40:41],BUILD_LINES[d.key==='house'?42:43],BUILD_LINES[d.key==='house'?44:45]]):lineVariant([(BUILD_LINES[0] + ' ' + BUILD_LINES[30]),BUILD_LINES[31],(BUILD_LINES[32] + ' ' + BUILD_LINES[30])])),d);var b=document.createElement('button');b.textContent='☝ Show';b.setAttribute('aria-label','Show my building');b.onclick=function(){showBuildQuestion(d);};document.getElementById('buddy-options').appendChild(b);}
+      else {d.stage='invite';buildBubble(prefix+(event==='build_revisit'?lineVariant([BUILD_LINES[39]+' '+BUILD_LINES[d.key==='house'?40:41],BUILD_LINES[d.key==='house'?42:43],BUILD_LINES[d.key==='house'?44:45]]):lineVariant([(BUILD_LINES[0] + ' ' + BUILD_LINES[30]),BUILD_LINES[31],(BUILD_LINES[32] + ' ' + BUILD_LINES[30])])),d);var b=document.createElement('button');b.textContent='☝ Show';b.setAttribute('aria-label','Show my building');b.onclick=function(){showBuildQuestion(d);};document.getElementById('buddy-options').appendChild(b);d.building.invited=true;}
     } else if(event==='build_word') {
       buildWords[d.key]=1;delete buildWordPending[d.key];
       buildShowingWord=true;showWord(d.key);buildShowingWord=false;
@@ -2222,14 +2245,14 @@ function validConversation(value, p) {
       else {r.roomTime=0;r.roomEntered=false;}
       if(!quiet)return;
       if(b.roofed&&!buildWords.roof)recognizeBuildWord('roof','built');
-      if(!b.closed&&buildSession.closed<2&&(r.members||[]).some(function(at){return placedThisRun.has(at);}))buildCompletion(r);
+      if(!b.closed&&(r.members||[]).some(function(at){return placedThisRun.has(at);}))buildCompletion(r);
       if(b.roofed&&!b.roofPraise&&buildWords.roof&&!buildWordPending.roof){b.roofPraise=true;queueBuild('build_roof',{});}
       animals.filter(function(a){return a.tamed&&['dog','cat'].includes(a.type);}).forEach(function(a){
         if(r.inside.includes(idx(Math.floor(a.x/TILE),Math.floor((a.y-10)/TILE)))){r.petTime=(r.petTime||0)+dt;if(r.petTime>=4&&!r.petPraised){r.petPraised=true;queueBuild('build_closed',{text:BUILD_LINES[a.type==='dog'?26:27]});}}else r.petTime=0;
       });
       if(returningVisit && buildSavedIds.has(b.id) && !buildSession.revisit && buildChat.revisits<1 && Math.abs(player.x-(b.x+b.w/2)*TILE)<14*TILE)queueBuild('build_revisit',{building:b,key:b.kind==='house'?'house':'fence',options:['house','fence'],manual:b.shown});
     });
-    if(quiet && buildSession.closed<2) {var free=buildClusters.find(function(r){return r.ready&&!r.building.closed&&r.members.some(function(at){return placedThisRun.has(at);});});if(free)buildCompletion(free);}
+    if(quiet) {var free=buildClusters.find(function(r){return r.ready&&!r.building.closed&&r.members.some(function(at){return placedThisRun.has(at);});});if(free)buildCompletion(free);}
     if(ambient && ambient.build && ambient.build.event==='build_plan' && !buildSession.planAnswered && chatClock-buildSession.planAt>=8)closeAmbient();
     if(quiet && ambient && ambient.build && ['build_closed','build_free'].includes(ambient.build.event) && chatClock-buildSession.completionAt>=1.5 && chatClock-buildSession.lastActionAt>=4)closeAmbient();
     if(!quiet || ambient)return;
@@ -2251,6 +2274,7 @@ function validConversation(value, p) {
       'idle '+(chatClock-buildSession.lastActionAt).toFixed(1)+'s / select '+(chatClock-buildSession.selectedAt).toFixed(1)+'s / still '+buildStill.toFixed(1)+'s'];
     buildClusters.forEach(function(r){var b=r.building;lines.push('free m='+r.members.length+' f='+r.members.filter(function(at){return cells[at]===FENCE;}).length+' ready='+r.ready+' closed='+!!b.closed+' invited='+!!b.invited+' dx='+((b.x+b.w/2)-player.x/TILE).toFixed(1)+'t');});
     lines.push('session active='+buildSession.active+' / placed this run='+placedThisRun.size);
+    lines.push('celebrate particles='+parts.filter(function(p){return p.buildCelebration;}).length);
     lines.push('shows '+showsToday()+'/4 (auto '+(buildChat.shows||0)+', manual '+(buildChat.manualShows||0)+')');
     el.textContent=lines.concat(buildClicks).join('\n');
   }
@@ -2870,13 +2894,13 @@ function validConversation(value, p) {
       });
     }
   }
-  function celebrate(x, y, completed) {
-    var colors = ['#f4d382', '#aed09b', '#eab7bd', '#acd9e5'];
+  function celebrate(x, y, completed, building) {
+    var colors = building ? ['#ffca28','#ff5288','#38c8ef','#8d67ef'] : ['#f4d382', '#aed09b', '#eab7bd', '#acd9e5'];
     for (var i = 0; i < (reducedMotion ? 5 : completed ? 30 : 20); i++) {
       if (parts.length >= 90) parts.shift();
-      parts.push({ x: x, y: y, vx: reducedMotion ? 0 : (Math.random() - 0.5) * 180,
-        vy: reducedMotion ? 0 : -70 - Math.random() * 100, life: reducedMotion ? 0.35 : 0.9 + Math.random() * 0.4,
-        age: 0, color: colors[i % colors.length], s: 3 + Math.random() * 3,
+      parts.push({ x: x + (building ? (Math.random()-.5)*70 : 0), y: y - (building ? 12 : 0), vx: reducedMotion ? 0 : (Math.random() - 0.5) * 180,
+        vy: reducedMotion ? 0 : -70 - Math.random() * 100, life: building ? (reducedMotion ? 2 : 2.6 + Math.random()*.4) : reducedMotion ? 0.35 : 0.9 + Math.random() * 0.4,
+        age: 0, color: colors[i % colors.length], s: (building ? 6 : 3) + Math.random() * 3, buildCelebration:!!building,
         star: i % 3 === 0, confetti: i % 3 !== 0, heart: false, still: reducedMotion });
     }
     chime();

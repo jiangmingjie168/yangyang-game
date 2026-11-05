@@ -1,0 +1,12 @@
+{"case":"B-desktop-log","status":"FAIL","error":"Error: Text not visible #hotbar button[aria-label=\"Planks\"] em /^8$/: 10","errors":[],"video":"build-v1-fix3-video/page@31f419b5f8c8bf84d90bb957ec661afc.webm"}
+{"case":"B-desktop-clean","status":"FAIL","error":"Error: Text not visible #hotbar button[aria-label=\"Planks\"] em /^8$/: 10","errors":[],"video":"build-v1-fix3-video/page@b26eedd6ced14edc0f81cd958b8bed83.webm"}
+Traceback (most recent call last):
+  File "/tmp/bw-build/tests/build-v1-fix3-vision.py", line 19, in <module>
+    g=min((g for g in groups if len(g)>tile*.4),key=lambda g:abs((g[0]+g[-1])/2-x))
+ValueError: min() iterable argument is empty
+{"case":"B-mobile-log","status":"FAIL","error":"Error: Command failed: python3 /tmp/bw-build/tests/build-v1-fix3-vision.py plank 450 38\nTraceback (most recent call last):\n  File \"/tmp/bw-build/tests/build-v1-fix3-vision.py\", line 19, in <module>\n    g=min((g for g in groups if len(g)>tile*.4),key=lambda g:abs((g[0]+g[-1])/2-x))\nValueError: min() iterable argument is empty\n","errors":[],"video":"build-v1-fix3-video/page@cc8cdd564a04af6ae04d3dafd8c451cc.webm"}
+Traceback (most recent call last):
+  File "/tmp/bw-build/tests/build-v1-fix3-vision.py", line 19, in <module>
+    g=min((g for g in groups if len(g)>tile*.4),key=lambda g:abs((g[0]+g[-1])/2-x))
+ValueError: min() iterable argument is empty
+{"case":"B-mobile-clean","status":"FAIL","error":"Error: Command failed: python3 /tmp/bw-build/tests/build-v1-fix3-vision.py plank 450 38\nTraceback (most recent call last):\n  File \"/tmp/bw-build/tests/build-v1-fix3-vision.py\", line 19, in <module>\n    g=min((g for g in groups if len(g)>tile*.4),key=lambda g:abs((g[0]+g[-1])/2-x))\nValueError: min() iterable argument is empty\n","errors":[],"video":"build-v1-fix3-video/page@06e0e1afe1a57931551a9c8e875fcccc.webm"}

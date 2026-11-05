@@ -1,0 +1,246 @@
+{
+  "results": [
+    {
+      "case": "A",
+      "status": "PASS"
+    },
+    {
+      "case": "B",
+      "status": "PASS"
+    },
+    {
+      "case": "F",
+      "status": "PASS"
+    },
+    {
+      "case": "C",
+      "status": "PASS"
+    },
+    {
+      "case": "N",
+      "status": "PASS"
+    },
+    {
+      "case": "R",
+      "status": "PASS"
+    },
+    {
+      "case": "S",
+      "status": "PASS"
+    }
+  ],
+  "frames": [
+    {
+      "file": "screens/build-v1-fix2-A-01.png",
+      "caption": "Fresh save, 844x390"
+    },
+    {
+      "file": "screens/build-v1-fix2-A-02.png",
+      "caption": "Harvested three Wood; crafted eight Fence"
+    },
+    {
+      "file": "screens/build-v1-fix2-A-03.png",
+      "caption": "Natural plan is visible; its cooldown must not delay Show"
+    },
+    {
+      "file": "screens/build-v1-fix2-A-04.png",
+      "caption": "First fence: open outline"
+    },
+    {
+      "file": "screens/build-v1-fix2-A-05.png",
+      "caption": "Hana A: two fences, two empty squares between"
+    },
+    {
+      "file": "screens/build-v1-fix2-A-06.png",
+      "caption": "Open creation: cheer and confetti"
+    },
+    {
+      "file": "screens/build-v1-fix2-A-07.png",
+      "caption": "Show invitation without a modal"
+    },
+    {
+      "file": "screens/build-v1-fix2-A-08.png",
+      "caption": "Show accepts the free creation"
+    },
+    {
+      "file": "screens/build-v1-fix2-B-01.png",
+      "caption": "Fresh save, 844x390"
+    },
+    {
+      "file": "screens/build-v1-fix2-B-02.png",
+      "caption": "Harvested three Wood; crafted twelve Planks"
+    },
+    {
+      "file": "screens/build-v1-fix2-B-03.png",
+      "caption": "Two blocks: near-completion glow"
+    },
+    {
+      "file": "screens/build-v1-fix2-B-04.png",
+      "caption": "Hana B: two walls, two empty columns, no roof"
+    },
+    {
+      "file": "screens/build-v1-fix2-B-05.png",
+      "caption": "Open creation: cheer and confetti"
+    },
+    {
+      "file": "screens/build-v1-fix2-B-06.png",
+      "caption": "Show invitation without a modal"
+    },
+    {
+      "file": "screens/build-v1-fix2-B-07.png",
+      "caption": "Free walls shown"
+    },
+    {
+      "file": "screens/build-v1-fix2-F-01.png",
+      "caption": "Fresh save, 844x390"
+    },
+    {
+      "file": "screens/build-v1-fix2-F-02.png",
+      "caption": "Harvested three Wood; crafted eight Fence"
+    },
+    {
+      "file": "screens/build-v1-fix2-F-03.png",
+      "caption": "Two-fence cluster with no enclosed air"
+    },
+    {
+      "file": "screens/build-v1-fix2-F-04.png",
+      "caption": "Open creation: cheer and confetti"
+    },
+    {
+      "file": "screens/build-v1-fix2-F-05.png",
+      "caption": "Show invitation without a modal"
+    },
+    {
+      "file": "screens/build-v1-fix2-F-06.png",
+      "caption": "Next placement folds Show away and consumes one plank"
+    },
+    {
+      "file": "screens/build-v1-fix2-F-07.png",
+      "caption": "Manual Buddy Show works with at least two live blocks"
+    },
+    {
+      "file": "screens/build-v1-fix2-C-01.png",
+      "caption": "Fresh save, 844x390"
+    },
+    {
+      "file": "screens/build-v1-fix2-C-02.png",
+      "caption": "Harvested three Wood; crafted eight Fence"
+    },
+    {
+      "file": "screens/build-v1-fix2-C-03.png",
+      "caption": "Eight fences and ground close a real pen"
+    },
+    {
+      "file": "screens/build-v1-fix2-C-04.png",
+      "caption": "Closed enclosure: cheer and confetti"
+    },
+    {
+      "file": "screens/build-v1-fix2-C-05.png",
+      "caption": "Show invitation without a modal"
+    },
+    {
+      "file": "screens/build-v1-fix2-C-06.png",
+      "caption": "Closed pen: level-one Show question"
+    },
+    {
+      "file": "screens/build-v1-fix2-C-07.png",
+      "caption": "Fence answer accepted"
+    },
+    {
+      "file": "screens/build-v1-fix2-N-01.png",
+      "caption": "Fresh save, 844x390"
+    },
+    {
+      "file": "screens/build-v1-fix2-N-02.png",
+      "caption": "Harvested three Wood; crafted twelve Planks"
+    },
+    {
+      "file": "screens/build-v1-fix2-N-03.png",
+      "caption": "Four placements minus one: three live blocks"
+    },
+    {
+      "file": "screens/build-v1-fix2-N-04.png",
+      "caption": "Three live blocks glow; no premature completion"
+    },
+    {
+      "file": "screens/build-v1-fix2-N-05.png",
+      "caption": "Open creation: cheer and confetti"
+    },
+    {
+      "file": "screens/build-v1-fix2-N-06.png",
+      "caption": "Show invitation without a modal"
+    },
+    {
+      "file": "screens/build-v1-fix2-N-07.png",
+      "caption": "Fourth live block completes free work"
+    },
+    {
+      "file": "screens/build-v1-fix2-N-08.png",
+      "caption": "Reload preserves stock and does not repeat the invitation"
+    },
+    {
+      "file": "screens/build-v1-fix2-R-01.png",
+      "caption": "Fresh save, 844x390"
+    },
+    {
+      "file": "screens/build-v1-fix2-R-02.png",
+      "caption": "Mine stone quest: surface rock below the child"
+    },
+    {
+      "file": "screens/build-v1-fix2-R-03.png",
+      "caption": "One surface stone collected during the quest"
+    },
+    {
+      "file": "screens/build-v1-fix2-R-04.png",
+      "caption": "One harvested Stone plus two Planks makes four House"
+    },
+    {
+      "file": "screens/build-v1-fix2-R-05.png",
+      "caption": "Four House placed as an actual Roof"
+    },
+    {
+      "file": "screens/build-v1-fix2-S-01.png",
+      "caption": "Fresh save, 844x390"
+    },
+    {
+      "file": "screens/build-v1-fix2-S-02.png",
+      "caption": "Tap the visible surface stone"
+    },
+    {
+      "file": "screens/build-v1-fix2-S-03.png",
+      "caption": "Walk towards stone"
+    },
+    {
+      "file": "screens/build-v1-fix2-S-04.png",
+      "caption": "Stone collected before Mine stone quest"
+    }
+  ],
+  "errors": [],
+  "timings": [
+    {
+      "case": "A",
+      "cheerMs": 2793,
+      "showMs": 4150
+    },
+    {
+      "case": "B",
+      "cheerMs": 2793,
+      "showMs": 4134
+    },
+    {
+      "case": "F",
+      "cheerMs": 2800,
+      "showMs": 4138
+    },
+    {
+      "case": "C",
+      "cheerMs": 2795,
+      "showMs": 4141
+    },
+    {
+      "case": "N",
+      "cheerMs": 2799,
+      "showMs": 4156
+    }
+  ]
+}

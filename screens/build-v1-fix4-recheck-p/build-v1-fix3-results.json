@@ -1,0 +1,60 @@
+{
+  "source_sha256": "6658f2f921ccc7327ce8237986c01509200ac68af1e46e1434530074822afbfc",
+  "results": [
+    {
+      "case": "P-desktop-log",
+      "status": "PASS",
+      "video": "build-v1-fix3-video/page@d2a882fa9860099816858b9fd2f2dc72.webm"
+    }
+  ],
+  "frames": [
+    {
+      "case": "P-desktop-log",
+      "t_ms": 1040,
+      "file": "build-v1-fix3-P-desktop-log-954-fresh.png",
+      "label": "fresh"
+    },
+    {
+      "case": "P-desktop-log",
+      "t_ms": 5077,
+      "file": "build-v1-fix3-P-desktop-log-5020-crafted.png",
+      "label": "crafted"
+    },
+    {
+      "case": "P-desktop-log",
+      "t_ms": 5558,
+      "file": "build-v1-fix3-P-desktop-log-5488-P-pulse.png",
+      "label": "P-pulse"
+    },
+    {
+      "case": "P-desktop-log",
+      "t_ms": 7765,
+      "file": "build-v1-fix3-P-desktop-log-7706-P-two-planks-show.png",
+      "label": "P-two-planks-show"
+    },
+    {
+      "case": "P-desktop-log",
+      "t_ms": 7933,
+      "file": "build-v1-fix3-P-desktop-log-7875-P-occupied.png",
+      "label": "P-occupied"
+    },
+    {
+      "case": "P-desktop-log",
+      "t_ms": 8152,
+      "file": "build-v1-fix3-P-desktop-log-8080-P-reach.png",
+      "label": "P-reach"
+    },
+    {
+      "case": "P-desktop-log",
+      "t_ms": 8422,
+      "file": "build-v1-fix3-P-desktop-log-8358-P-remove.png",
+      "label": "P-remove"
+    },
+    {
+      "case": "P-desktop-log",
+      "t_ms": 9999,
+      "file": "build-v1-fix3-P-desktop-log-9944-P-animal-refused.png",
+      "label": "P-animal-refused"
+    }
+  ]
+}
