@@ -541,7 +541,7 @@
 <div id="app">
   <canvas id="view" width="800" height="400"></canvas>
   <div id="hud">
-    <span id="build-version" aria-label="Build version">build cd91b62+ux13</span>
+    <span id="build-version" aria-label="Build version">build cd91b62+ux14</span>
     <div class="topbar">
       <button id="quest" type="button">
         <canvas id="quest-icon" width="128" height="128"></canvas>
@@ -1539,8 +1539,9 @@ function validConversation(value, p) {
     document.getElementById('chat-confirm').hidden = !d.fallback || reply.done;
     document.getElementById('chat-confirm').disabled = reply.done;
     ['chat-listen','chat-mic'].forEach(function(id){document.getElementById(id).hidden=reply.done;});
-    document.getElementById('chat-continue').hidden=!reply.done || (!!d.voicePass && !d.selfClaim);
-    document.getElementById('chat-close').hidden = !d.answered || (!!d.voicePass && !d.selfClaim);
+    // Success: auto-advance after the reward word. Continue/× only for I said it.
+    document.getElementById('chat-continue').hidden = !reply.done || !d.selfClaim;
+    document.getElementById('chat-close').hidden = !d.answered || !d.selfClaim;
     document.getElementById('dialogue').hidden = false;
     document.getElementById('chat-shade').hidden = false;
     document.body.classList.add('chat-blocked');
@@ -1549,14 +1550,10 @@ function validConversation(value, p) {
       d.answered = true;
       if (!d.rewardRead && !d.selfClaim) {
         d.rewardRead = true;
-        if (d.voicePass) {
-          speakEn(WORD[d.key][0], { onend: function () { if (dialogue === d) closeChat(); } });
-          clearTimeout(d.autoAdvanceTimer);
-          d.autoAdvanceTimer = setTimeout(function () { if (dialogue === d) closeChat(); }, 1600);
-        } else {
-          speakEn(WORD[d.key][0]);
-        }
-      } else if (d.voicePass && !d.selfClaim) {
+        speakEn(WORD[d.key][0], { onend: function () { if (dialogue === d) closeChat(); } });
+        clearTimeout(d.autoAdvanceTimer);
+        d.autoAdvanceTimer = setTimeout(function () { if (dialogue === d) closeChat(); }, 1600);
+      } else if (!d.selfClaim) {
         clearTimeout(d.autoAdvanceTimer);
         d.autoAdvanceTimer = setTimeout(function () { if (dialogue === d) closeChat(); }, 600);
       }
@@ -1636,7 +1633,7 @@ function validConversation(value, p) {
     if (key !== dialogue.key) { retryChat(childSaid, key); return; }
     playSfx('correct');stopChatListening();
     var d = dialogue;
-    // Real mic match → auto-advance after reward (no Continue/OK). Tap / I said it keep a dismiss control.
+    // Recognized answer / tap: auto-advance after reward (no Continue). I said it keeps dismiss.
     d.voicePass = !!childSaid; d.answered = true; d.coachSaid = childSaid || key; d.turn = Math.min(2, d.turn + 1);
     lastAnswer = key;
     trail.turns++;
@@ -2441,8 +2438,8 @@ function validConversation(value, p) {
     if(d.building&&d.building.kind==='car')text='You built a car! Look at the wheels! Good job!';
     if(d.event==='build_short')pointBuildMaterial(key);
     closeAmbient();
-    // Mic match (!clicked, !selfClaim): praise then auto-close — no OK!/Continue. I said it / tap keep dismiss.
-    buildBubble(d.selfClaim?'Thanks for trying!':text,{event:d.event,praise:true,deferSpeech:true,reward:!d.selfClaim,key:key,autoAdvance:!clicked&&!d.selfClaim});
+    // Success except I said it: praise then auto-close — no OK!/Continue.
+    buildBubble(d.selfClaim?'Thanks for trying!':text,{event:d.event,praise:true,deferSpeech:true,reward:!d.selfClaim,key:key,autoAdvance:!d.selfClaim});
     saveSoon();
   }
   function buildVoiceFailure(a) {
@@ -3366,9 +3363,10 @@ function validConversation(value, p) {
     updateQuest();
     saveSoon();
   }
-  function mine(tx, ty) {
+  function mine(tx, ty, fromBreak) {
     var id = get(tx, ty);
-    if (id === WATER) {
+    // Rod/boat on water: tap-to-use only. Break always digs so water leaves a mark.
+    if (id === WATER && !fromBreak) {
       var sk = selectedKey();
       if (sk === 'rod') { if (inReach(tx, ty)) startFishing(tx, ty); return; }
       if (sk === 'boat') { if (inReach(tx, ty)) placeBoat(tx, ty); return; }
@@ -3384,6 +3382,13 @@ function validConversation(value, p) {
       buildAction('remove'); placedThisRun.delete(idx(tx,ty)); buildSession.removed++; buildDirty=true;
     }
     playSfx(buildOwned(tx,ty)?'remove':'harvest');setCell(tx, ty, AIR);
+    // Lasting dig marks: water must not look like an untouched sandy shore;
+    // sand under water opens the surface so the pond shows a crater.
+    if (id === WATER) {
+      if (get(tx, ty + 1) === SAND) setCell(tx, ty + 1, DIRT);
+    } else if (id === SAND) {
+      if (get(tx, ty - 1) === WATER) setCell(tx, ty - 1, AIR);
+    }
     burst((tx + 0.5) * TILE, (ty + 0.5) * TILE, PCOL[id] || '#fff', false);
     tone(180, 0.07, 'triangle', 0, 0.04, 80);
     giveMined(id);
@@ -3438,7 +3443,7 @@ function validConversation(value, p) {
     if (!c) return;
     lock = { tx: c.tx, ty: c.ty };
     lockAge = 0;
-    mine(c.tx, c.ty);
+    mine(c.tx, c.ty, true);
   }
   function doPlace() {
     if (riding || drivingCar) return;
@@ -4782,7 +4787,8 @@ function validConversation(value, p) {
     quizStars[key] = 1;playSfx('correct');playSfx('star');
     updateQuest();
     celebrate(player.x, player.y - 40, false);
-    showWord(key,true);
+    // No reward Continue: speak the word once, then the card auto-hides.
+    showWord(key);
     showToast('Great job!', 2.4);
     saveSoon();
   }
