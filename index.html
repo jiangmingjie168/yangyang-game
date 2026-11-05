@@ -575,7 +575,7 @@
 <div id="app">
   <canvas id="view" width="800" height="400"></canvas>
   <div id="hud">
-    <span id="build-version" aria-label="Build version">build cd91b62+ux17</span>
+    <span id="build-version" aria-label="Build version">build cd91b62+ux18</span>
     <div class="topbar">
       <button id="quest" type="button">
         <canvas id="quest-icon" width="128" height="128"></canvas>
@@ -1460,7 +1460,8 @@ function validConversation(value, p) {
   }
   function queueChat(anchor, key) {
     if (!started || quiz) return;
-    if (anchor === 'pet' && chatClock - lastPetChatAt < 90 && trail.discoveries[key]) return;
+    // Pet re-prompts are cooldown-gated only (first meet and later pats share this).
+    if (anchor === 'pet' && chatClock - lastPetChatAt < 60) return;
     if (anchor !== 'task' || !recentEvents.length || recentEvents[recentEvents.length - 1].word !== key) rememberEvent(({ fish: 'caught', pet: 'met', boat: 'rode', task: 'task', scene: 'scene' })[anchor], key);
     if (anchor === 'task' && chatQueue.some(function (q) { return q.key === key && q.anchor !== 'task'; })) return;
     chatQueue = chatQueue.filter(function (q) { return q.anchor !== anchor && !(q.anchor === 'task' && q.key === key); });
@@ -1482,7 +1483,7 @@ function validConversation(value, p) {
     stopChatListening();
     if (dialogue) {
       if (dialogue.controller) dialogue.controller.abort();
-      chatCooldown = dialogue.anchor === 'pet' ? 45 : 12;
+      chatCooldown = dialogue.anchor === 'pet' ? 22 : 12;
       if (window.speechSynthesis) { try { speechSynthesis.cancel(); } catch (err) { /* optional */ } }
     }
     var coach = dialogue && dialogue.answered && dialogue.feedback === 'success' ? (dialogue.coachSaid || dialogue.key) : '';
@@ -1496,7 +1497,8 @@ function validConversation(value, p) {
     chatIdle = 0;
   }
   function openChat(event) {
-    if (nameFlow || quiz || buildSessionBusy() || buildShowActive()) return;
+    // Exploration prompts may open during the post-build quiet window; only live building blocks them.
+    if (nameFlow || quiz || buildMode || buildSession.active || buildShowActive()) return;
     closeAmbient();
     dismissGreeting();
     var pool = chatWords();
@@ -1804,7 +1806,7 @@ function validConversation(value, p) {
       if (!riding && Math.abs(player.x - followLastX) < TILE * 2) followTravel += Math.abs(player.x - followLastX);
       followLastX = player.x;
       if (followTravel > TILE * 28) followReady = true;
-      if (followReady && safe && Math.abs(buddy.x - player.x) < TILE * 3 && chatClock - lastPetChatAt >= 90) {
+      if (followReady && safe && Math.abs(buddy.x - player.x) < TILE * 3 && chatClock - lastPetChatAt >= 60) {
         queueChat('pet', buddy.type); followReady = false; followTravel = 0; lastPetChatAt = chatClock;
       }
     }
@@ -1834,12 +1836,16 @@ function validConversation(value, p) {
       // Discoveries are scene-entry stops, with the same safety/cooldown as every other chat.
       queueChat('scene', sticker); rememberEvent('found', sticker); saveSoon();
     });
-    chatQueue = chatQueue.filter(function (e) { return chatClock - e.at < 18; });
-    if (!buildSessionBusy() && !dialogue && chatIdle > 0.8 && chatCooldown <= 0 && cardLeft <= 0 && chatQueue.length) {
-      var priority = { fish: 4, boat: 4, pet: 1, task: 2, scene: 1 };
+    // Keep exploration events long enough to survive a short stand-still after walking.
+    chatQueue = chatQueue.filter(function (e) { return chatClock - e.at < 40; });
+    if (!(buildMode || buildSession.active) && !dialogue && chatIdle > 0.8 && chatCooldown <= 0 && cardLeft <= 0 && chatQueue.length) {
+      var priority = { fish: 4, boat: 4, pet: 2, task: 2, scene: 1 };
       chatQueue.sort(function (a, b) { return priority[b.anchor] - priority[a.anchor] || b.at - a.at; });
       var event = chatQueue.shift();
-      if (chatWords().length >= 2) { openChat(event); chatQueue = []; }
+      if (chatWords().length >= 2) {
+        if (event.anchor === 'pet') lastPetChatAt = chatClock;
+        openChat(event); chatQueue = [];
+      }
     }
   }
 
@@ -2395,8 +2401,8 @@ function validConversation(value, p) {
   function buildFeedback(text,event) {
     // An action result is not an optional conversation: no idle gate, queue,
     // praise/question budget, other-material test, or 25/45-second cooldown.
-    // Text is enough; do not start a voice or microphone for these messages.
-    var a=buildBubble(text,{event:event,praise:true,deferSpeech:true,feedback:true});
+    // Ordinary build feedback stays text-only; animal meet speaks English (respects speechOn).
+    var a=buildBubble(text,{event:event,praise:true,deferSpeech:event!=='animal_meet',feedback:true});
     if(!a)return;
     document.getElementById('buddy-chat').classList.add('build-feedback');
     clearTimeout(a.timer);
@@ -2665,7 +2671,8 @@ function validConversation(value, p) {
     buildLastPosition={x:player.x,y:player.y};
     resetBuildDay();updateShowButton();
     if(buildSession.active && chatClock-buildSession.lastActionAt>=30 && !buildMode) {buildSession.active=false;buildQueue=[];}
-    if((buildSessionBusy() || autoShowCandidate()) && (axis() || joyId!==null || jumpBuf>0)) {buildAction('move');buildSession.moved=true;}
+    // Do not refresh lastActionAt during the post-build afterglow — that starved exploration chat/TTS.
+    if((buildMode || buildSession.active) && (axis() || joyId!==null || jumpBuf>0)) {buildAction('move');buildSession.moved=true;}
     if(buildDirty && chatClock-buildSession.lastActionAt>=2.5)detectBuilds();
     if(buildClusterDirty)scanFreeBuilds();
     var quiet=buildQuiet();
@@ -3595,7 +3602,7 @@ function validConversation(value, p) {
   }
   function requestJump() {
     if(drivingCar)return;
-    if (buildSessionBusy()) buildAction('jump');
+    if (buildMode || buildSession.active) buildAction('jump');
     if (riding) { disembark(); return; }
     jumpBuf = 0.16;
     if (!intros.jump) {
@@ -3612,7 +3619,9 @@ function validConversation(value, p) {
     if (!quiz) progress.tapped[a.type] = 1;
     if (quiz && a.type !== quiz.key) quizWrong();
     learn(a.type); rememberEvent('met', a.type);
-    if(!trail.discoveries[a.type]){trail.discoveries[a.type]=true;queueChat('pet',a.type);}
+    if(!trail.discoveries[a.type]) trail.discoveries[a.type]=true;
+    // First meet and later pats can enqueue an exploration prompt (queueChat cooldown applies).
+    queueChat('pet', a.type);
     if(!quiz&&!dialogue&&!buildShowActive())buildFeedback('Look! A '+a.type+'!','animal_meet');
     if (a.type === 'sheep') { addItem('wool', 1, true); learn('wool'); }
     if (a.tamed) {
@@ -4562,7 +4571,11 @@ function validConversation(value, p) {
     var w = WORD[key];
     if (!w) return;
     learn(key);
-    if (buildSessionBusy() && !buildShowingWord) return;
+    if (buildSessionBusy() && !buildShowingWord) {
+      // Build-busy hides the card, but animal taps / word reads must still say English when unmuted.
+      speak(w[0]);
+      return;
+    }
     if (cardFlyTimer) { clearTimeout(cardFlyTimer); cardFlyTimer = null; }
     cardKey = key;
     cardFlyChest = reward === 'chest';
