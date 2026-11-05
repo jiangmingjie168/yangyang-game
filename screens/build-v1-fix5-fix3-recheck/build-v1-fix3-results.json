@@ -1,0 +1,54 @@
+{
+  "source_sha256": "5a566ee4c8b2b2d61489be5cb988a40d58a95fd547f2d7cf1e9c30431f8b7a0d",
+  "results": [
+    {
+      "case": "B-desktop-clean",
+      "status": "PASS",
+      "video": "build-v1-fix3-video/page@62000ef0fb85c0fb0a3a984942bb8258.webm"
+    }
+  ],
+  "frames": [
+    {
+      "case": "B-desktop-clean",
+      "t_ms": 1027,
+      "file": "build-v1-fix3-B-desktop-clean-947-fresh.png",
+      "label": "fresh"
+    },
+    {
+      "case": "B-desktop-clean",
+      "t_ms": 5125,
+      "file": "build-v1-fix3-B-desktop-clean-5058-crafted.png",
+      "label": "crafted"
+    },
+    {
+      "case": "B-desktop-clean",
+      "t_ms": 7859,
+      "file": "build-v1-fix3-B-desktop-clean-7802-against-wall.png",
+      "label": "against-wall"
+    },
+    {
+      "case": "B-desktop-clean",
+      "t_ms": 8008,
+      "file": "build-v1-fix3-B-desktop-clean-7954-second-layer.png",
+      "label": "second-layer"
+    },
+    {
+      "case": "B-desktop-clean",
+      "t_ms": 8159,
+      "file": "build-v1-fix3-B-desktop-clean-8108-B-third-layer.png",
+      "label": "B-third-layer"
+    },
+    {
+      "case": "B-desktop-clean",
+      "t_ms": 8541,
+      "file": "build-v1-fix3-B-desktop-clean-8476-B-normal-place.png",
+      "label": "B-normal-place"
+    },
+    {
+      "case": "B-desktop-clean",
+      "t_ms": 8793,
+      "file": "build-v1-fix3-B-desktop-clean-8739-B-normal-top-stack.png",
+      "label": "B-normal-top-stack"
+    }
+  ]
+}

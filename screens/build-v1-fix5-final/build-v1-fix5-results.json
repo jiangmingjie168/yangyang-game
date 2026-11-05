@@ -1,0 +1,951 @@
+{
+  "source_sha256": "5a566ee4c8b2b2d61489be5cb988a40d58a95fd547f2d7cf1e9c30431f8b7a0d",
+  "results": [
+    {
+      "case": "H-desktop-log",
+      "status": "PASS",
+      "video": "build-v1-fix5-video/page@8fe00577a97a5604b5c8633d5393927a.webm"
+    },
+    {
+      "case": "U-desktop-log",
+      "status": "PASS",
+      "video": "build-v1-fix5-video/page@1dac7bd35fbe2062722e24c8ce5df0a9.webm"
+    },
+    {
+      "case": "L-desktop-log",
+      "status": "PASS",
+      "video": "build-v1-fix5-video/page@ff9a6d81f94f19f62e0add2182ac8a12.webm"
+    },
+    {
+      "case": "Q-desktop-log",
+      "status": "PASS",
+      "video": "build-v1-fix5-video/page@ceeb13b2974a394596c4f2a4dcd1412f.webm"
+    },
+    {
+      "case": "R-desktop-log",
+      "status": "PASS",
+      "video": "build-v1-fix5-video/page@e65bd04267e4e3cd1167f71d6ee4cd17.webm"
+    },
+    {
+      "case": "I-desktop-log",
+      "status": "PASS",
+      "invite_ms": 29595,
+      "video": "build-v1-fix5-video/page@defbb15acf3c4623aa0a18de4c766c30.webm"
+    },
+    {
+      "case": "F-desktop-log",
+      "status": "PASS",
+      "video": "build-v1-fix5-video/page@e1bd17c28395837a6ab17114cf47870a.webm"
+    },
+    {
+      "case": "S-desktop-log",
+      "status": "PASS",
+      "video": "build-v1-fix5-video/page@ded2a58d944539ac65987dcc6158ba5c.webm"
+    },
+    {
+      "case": "V-desktop-log",
+      "status": "PASS",
+      "video": "build-v1-fix5-video/page@7acbc04a734bc552a7b23a0313dd14a0.webm"
+    },
+    {
+      "case": "H-mobile-log",
+      "status": "FAIL",
+      "error": "Error: Wood harvest did not increase visible inventory",
+      "errors": [],
+      "video": "build-v1-fix5-video/page@9f50d483b8c0eea5ac09ea19675b1ad2.webm"
+    },
+    {
+      "case": "U-mobile-log",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n'6' !== '5'\n",
+      "errors": [],
+      "video": "build-v1-fix5-video/page@bb78f806fac2446efa095e97f31a6436.webm"
+    },
+    {
+      "case": "L-mobile-log",
+      "status": "PASS",
+      "video": "build-v1-fix5-video/page@a2413702dafadac8ccef217993388e81.webm"
+    },
+    {
+      "case": "Q-mobile-log",
+      "status": "PASS",
+      "video": "build-v1-fix5-video/page@1ddbad261b64636da23792745737aa50.webm"
+    },
+    {
+      "case": "R-mobile-log",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n'8' !== '7'\n",
+      "errors": [],
+      "video": "build-v1-fix5-video/page@61548806cf94d0339ae9701026917f78.webm"
+    },
+    {
+      "case": "I-mobile-log",
+      "status": "PASS",
+      "invite_ms": 29534,
+      "video": "build-v1-fix5-video/page@dd59e095812f88c68919065609c1b6d1.webm"
+    },
+    {
+      "case": "F-mobile-log",
+      "status": "PASS",
+      "video": "build-v1-fix5-video/page@140d4638fb00caf556918d24fce32f6b.webm"
+    },
+    {
+      "case": "S-mobile-log",
+      "status": "PASS",
+      "video": "build-v1-fix5-video/page@9e79b58cdefda841eaebbfbb25b2864f.webm"
+    },
+    {
+      "case": "V-mobile-log",
+      "status": "PASS",
+      "video": "build-v1-fix5-video/page@07d7dc1ead4567e91b0c54497f5ffc7a.webm"
+    }
+  ],
+  "frames": [
+    {
+      "case": "H-desktop-log",
+      "t_ms": 1016,
+      "file": "build-v1-fix5-H-desktop-log-952-fresh.png",
+      "label": "fresh"
+    },
+    {
+      "case": "H-desktop-log",
+      "t_ms": 5460,
+      "file": "build-v1-fix5-H-desktop-log-5407-crafted.png",
+      "label": "crafted"
+    },
+    {
+      "case": "H-desktop-log",
+      "t_ms": 6033,
+      "file": "build-v1-fix5-H-desktop-log-5966-four-House-roof.png",
+      "label": "four-House-roof"
+    },
+    {
+      "case": "H-desktop-log",
+      "t_ms": 6300,
+      "file": "build-v1-fix5-H-desktop-log-6239-three-House-roof.png",
+      "label": "three-House-roof"
+    },
+    {
+      "case": "H-desktop-log",
+      "t_ms": 6567,
+      "file": "build-v1-fix5-H-desktop-log-6500-wall-1.png",
+      "label": "wall-1"
+    },
+    {
+      "case": "H-desktop-log",
+      "t_ms": 6733,
+      "file": "build-v1-fix5-H-desktop-log-6673-wall-2.png",
+      "label": "wall-2"
+    },
+    {
+      "case": "H-desktop-log",
+      "t_ms": 7351,
+      "file": "build-v1-fix5-H-desktop-log-7290-wall-3.png",
+      "label": "wall-3"
+    },
+    {
+      "case": "H-desktop-log",
+      "t_ms": 7517,
+      "file": "build-v1-fix5-H-desktop-log-7456-wall-4.png",
+      "label": "wall-4"
+    },
+    {
+      "case": "H-desktop-log",
+      "t_ms": 10384,
+      "file": "build-v1-fix5-H-desktop-log-10316-hana-house-three-roof.png",
+      "label": "hana-house-three-roof"
+    },
+    {
+      "case": "H-desktop-log",
+      "t_ms": 10572,
+      "file": "build-v1-fix5-H-desktop-log-10507-house-invite.png",
+      "label": "house-invite"
+    },
+    {
+      "case": "H-desktop-log",
+      "t_ms": 10924,
+      "file": "build-v1-fix5-H-desktop-log-10860-house-question-options.png",
+      "label": "house-question-options"
+    },
+    {
+      "case": "H-desktop-log",
+      "t_ms": 20006,
+      "file": "build-v1-fix5-H-desktop-log-19931-house-question-after-9s.png",
+      "label": "house-question-after-9s"
+    },
+    {
+      "case": "H-desktop-log",
+      "t_ms": 20489,
+      "file": "build-v1-fix5-H-desktop-log-20413-house-finale-confetti.png",
+      "label": "house-finale-confetti"
+    },
+    {
+      "case": "H-desktop-log",
+      "t_ms": 23666,
+      "file": "build-v1-fix5-H-desktop-log-23596-one-block-rearmed.png",
+      "label": "one-block-rearmed"
+    },
+    {
+      "case": "H-desktop-log",
+      "t_ms": 23740,
+      "file": "build-v1-fix5-H-desktop-log-23675-house-one-Planks-ready.png",
+      "label": "house-one-Planks-ready"
+    },
+    {
+      "case": "H-desktop-log",
+      "t_ms": 24122,
+      "file": "build-v1-fix5-H-desktop-log-24061-second-house-finale.png",
+      "label": "second-house-finale"
+    },
+    {
+      "case": "U-desktop-log",
+      "t_ms": 877,
+      "file": "build-v1-fix5-U-desktop-log-821-fresh.png",
+      "label": "fresh"
+    },
+    {
+      "case": "U-desktop-log",
+      "t_ms": 5397,
+      "file": "build-v1-fix5-U-desktop-log-5334-crafted.png",
+      "label": "crafted"
+    },
+    {
+      "case": "U-desktop-log",
+      "t_ms": 9791,
+      "file": "build-v1-fix5-U-desktop-log-9718-free-walls-invite.png",
+      "label": "free-walls-invite"
+    },
+    {
+      "case": "U-desktop-log",
+      "t_ms": 10075,
+      "file": "build-v1-fix5-U-desktop-log-10006-four-House-roof.png",
+      "label": "four-House-roof"
+    },
+    {
+      "case": "U-desktop-log",
+      "t_ms": 10407,
+      "file": "build-v1-fix5-U-desktop-log-10325-three-House-roof.png",
+      "label": "three-House-roof"
+    },
+    {
+      "case": "U-desktop-log",
+      "t_ms": 10672,
+      "file": "build-v1-fix5-U-desktop-log-10610-wall-1.png",
+      "label": "wall-1"
+    },
+    {
+      "case": "U-desktop-log",
+      "t_ms": 10839,
+      "file": "build-v1-fix5-U-desktop-log-10772-wall-2.png",
+      "label": "wall-2"
+    },
+    {
+      "case": "U-desktop-log",
+      "t_ms": 13699,
+      "file": "build-v1-fix5-U-desktop-log-13640-hana-house-three-roof.png",
+      "label": "hana-house-three-roof"
+    },
+    {
+      "case": "U-desktop-log",
+      "t_ms": 13881,
+      "file": "build-v1-fix5-U-desktop-log-13822-house-invite.png",
+      "label": "house-invite"
+    },
+    {
+      "case": "U-desktop-log",
+      "t_ms": 14239,
+      "file": "build-v1-fix5-U-desktop-log-14179-house-question-options.png",
+      "label": "house-question-options"
+    },
+    {
+      "case": "U-desktop-log",
+      "t_ms": 14705,
+      "file": "build-v1-fix5-U-desktop-log-14644-house-finale-confetti.png",
+      "label": "house-finale-confetti"
+    },
+    {
+      "case": "U-desktop-log",
+      "t_ms": 17880,
+      "file": "build-v1-fix5-U-desktop-log-17810-one-block-rearmed.png",
+      "label": "one-block-rearmed"
+    },
+    {
+      "case": "U-desktop-log",
+      "t_ms": 17955,
+      "file": "build-v1-fix5-U-desktop-log-17888-house-one-Planks-ready.png",
+      "label": "house-one-Planks-ready"
+    },
+    {
+      "case": "L-desktop-log",
+      "t_ms": 889,
+      "file": "build-v1-fix5-L-desktop-log-831-fresh.png",
+      "label": "fresh"
+    },
+    {
+      "case": "L-desktop-log",
+      "t_ms": 5302,
+      "file": "build-v1-fix5-L-desktop-log-5249-crafted.png",
+      "label": "crafted"
+    },
+    {
+      "case": "L-desktop-log",
+      "t_ms": 5869,
+      "file": "build-v1-fix5-L-desktop-log-5802-four-House-roof.png",
+      "label": "four-House-roof"
+    },
+    {
+      "case": "L-desktop-log",
+      "t_ms": 6129,
+      "file": "build-v1-fix5-L-desktop-log-6068-three-House-roof.png",
+      "label": "three-House-roof"
+    },
+    {
+      "case": "L-desktop-log",
+      "t_ms": 6394,
+      "file": "build-v1-fix5-L-desktop-log-6334-wall-1.png",
+      "label": "wall-1"
+    },
+    {
+      "case": "L-desktop-log",
+      "t_ms": 6568,
+      "file": "build-v1-fix5-L-desktop-log-6501-wall-2.png",
+      "label": "wall-2"
+    },
+    {
+      "case": "L-desktop-log",
+      "t_ms": 8527,
+      "file": "build-v1-fix5-L-desktop-log-8467-wall-3.png",
+      "label": "wall-3"
+    },
+    {
+      "case": "L-desktop-log",
+      "t_ms": 8701,
+      "file": "build-v1-fix5-L-desktop-log-8635-wall-4.png",
+      "label": "wall-4"
+    },
+    {
+      "case": "L-desktop-log",
+      "t_ms": 11568,
+      "file": "build-v1-fix5-L-desktop-log-11501-hana-house-three-roof.png",
+      "label": "hana-house-three-roof"
+    },
+    {
+      "case": "L-desktop-log",
+      "t_ms": 11752,
+      "file": "build-v1-fix5-L-desktop-log-11688-house-invite.png",
+      "label": "house-invite"
+    },
+    {
+      "case": "L-desktop-log",
+      "t_ms": 16043,
+      "file": "build-v1-fix5-L-desktop-log-15986-saved-house-revisit-invite.png",
+      "label": "saved-house-revisit-invite"
+    },
+    {
+      "case": "L-desktop-log",
+      "t_ms": 16320,
+      "file": "build-v1-fix5-L-desktop-log-16253-house-question-options.png",
+      "label": "house-question-options"
+    },
+    {
+      "case": "L-desktop-log",
+      "t_ms": 16801,
+      "file": "build-v1-fix5-L-desktop-log-16735-house-finale-confetti.png",
+      "label": "house-finale-confetti"
+    },
+    {
+      "case": "L-desktop-log",
+      "t_ms": 19976,
+      "file": "build-v1-fix5-L-desktop-log-19922-one-block-rearmed.png",
+      "label": "one-block-rearmed"
+    },
+    {
+      "case": "L-desktop-log",
+      "t_ms": 20044,
+      "file": "build-v1-fix5-L-desktop-log-19986-house-one-Planks-ready.png",
+      "label": "house-one-Planks-ready"
+    },
+    {
+      "case": "Q-desktop-log",
+      "t_ms": 878,
+      "file": "build-v1-fix5-Q-desktop-log-822-fresh.png",
+      "label": "fresh"
+    },
+    {
+      "case": "Q-desktop-log",
+      "t_ms": 5944,
+      "file": "build-v1-fix5-Q-desktop-log-5887-crafted.png",
+      "label": "crafted"
+    },
+    {
+      "case": "Q-desktop-log",
+      "t_ms": 10662,
+      "file": "build-v1-fix5-Q-desktop-log-10594-show-1-confetti.png",
+      "label": "show-1-confetti"
+    },
+    {
+      "case": "Q-desktop-log",
+      "t_ms": 13872,
+      "file": "build-v1-fix5-Q-desktop-log-13796-one-block-rearmed.png",
+      "label": "one-block-rearmed"
+    },
+    {
+      "case": "Q-desktop-log",
+      "t_ms": 14439,
+      "file": "build-v1-fix5-Q-desktop-log-14377-show-2-confetti.png",
+      "label": "show-2-confetti"
+    },
+    {
+      "case": "Q-desktop-log",
+      "t_ms": 14721,
+      "file": "build-v1-fix5-Q-desktop-log-14657-two-shows-not-spent.png",
+      "label": "two-shows-not-spent"
+    },
+    {
+      "case": "Q-desktop-log",
+      "t_ms": 17804,
+      "file": "build-v1-fix5-Q-desktop-log-17729-one-block-rearmed.png",
+      "label": "one-block-rearmed"
+    },
+    {
+      "case": "Q-desktop-log",
+      "t_ms": 18388,
+      "file": "build-v1-fix5-Q-desktop-log-18326-show-3-confetti.png",
+      "label": "show-3-confetti"
+    },
+    {
+      "case": "Q-desktop-log",
+      "t_ms": 21589,
+      "file": "build-v1-fix5-Q-desktop-log-21512-one-block-rearmed.png",
+      "label": "one-block-rearmed"
+    },
+    {
+      "case": "Q-desktop-log",
+      "t_ms": 22188,
+      "file": "build-v1-fix5-Q-desktop-log-22124-show-4-confetti.png",
+      "label": "show-4-confetti"
+    },
+    {
+      "case": "Q-desktop-log",
+      "t_ms": 22489,
+      "file": "build-v1-fix5-Q-desktop-log-22413-fifth-blocked.png",
+      "label": "fifth-blocked"
+    },
+    {
+      "case": "Q-desktop-log",
+      "t_ms": 23782,
+      "file": "build-v1-fix5-Q-desktop-log-23725-cap-persists.png",
+      "label": "cap-persists"
+    },
+    {
+      "case": "Q-desktop-log",
+      "t_ms": 24463,
+      "file": "build-v1-fix5-Q-desktop-log-24408-new-world-zero.png",
+      "label": "new-world-zero"
+    },
+    {
+      "case": "R-desktop-log",
+      "t_ms": 885,
+      "file": "build-v1-fix5-R-desktop-log-828-fresh.png",
+      "label": "fresh"
+    },
+    {
+      "case": "R-desktop-log",
+      "t_ms": 6021,
+      "file": "build-v1-fix5-R-desktop-log-5959-crafted.png",
+      "label": "crafted"
+    },
+    {
+      "case": "R-desktop-log",
+      "t_ms": 45047,
+      "file": "build-v1-fix5-R-desktop-log-44984-expired-no-slot-spent.png",
+      "label": "expired-no-slot-spent"
+    },
+    {
+      "case": "R-desktop-log",
+      "t_ms": 48137,
+      "file": "build-v1-fix5-R-desktop-log-48063-one-block-rearmed.png",
+      "label": "one-block-rearmed"
+    },
+    {
+      "case": "R-desktop-log",
+      "t_ms": 48745,
+      "file": "build-v1-fix5-R-desktop-log-48666-rearmed-expiry-confetti.png",
+      "label": "rearmed-expiry-confetti"
+    },
+    {
+      "case": "R-desktop-log",
+      "t_ms": 51966,
+      "file": "build-v1-fix5-R-desktop-log-51867-one-block-rearmed.png",
+      "label": "one-block-rearmed"
+    },
+    {
+      "case": "R-desktop-log",
+      "t_ms": 52596,
+      "file": "build-v1-fix5-R-desktop-log-52501-rearmed-completion-confetti.png",
+      "label": "rearmed-completion-confetti"
+    },
+    {
+      "case": "I-desktop-log",
+      "t_ms": 863,
+      "file": "build-v1-fix5-I-desktop-log-808-fresh.png",
+      "label": "fresh"
+    },
+    {
+      "case": "I-desktop-log",
+      "t_ms": 5928,
+      "file": "build-v1-fix5-I-desktop-log-5880-crafted.png",
+      "label": "crafted"
+    },
+    {
+      "case": "I-desktop-log",
+      "t_ms": 8876,
+      "file": "build-v1-fix5-I-desktop-log-8812-invite-start.png",
+      "label": "invite-start"
+    },
+    {
+      "case": "I-desktop-log",
+      "t_ms": 37891,
+      "file": "build-v1-fix5-I-desktop-log-37824-invite-29s.png",
+      "label": "invite-29s"
+    },
+    {
+      "case": "I-desktop-log",
+      "t_ms": 38391,
+      "file": "build-v1-fix5-I-desktop-log-38312-waited-show-confetti.png",
+      "label": "waited-show-confetti"
+    },
+    {
+      "case": "F-desktop-log",
+      "t_ms": 924,
+      "file": "build-v1-fix5-F-desktop-log-863-fresh.png",
+      "label": "fresh"
+    },
+    {
+      "case": "F-desktop-log",
+      "t_ms": 20204,
+      "file": "build-v1-fix5-F-desktop-log-20147-crafted.png",
+      "label": "crafted"
+    },
+    {
+      "case": "F-desktop-log",
+      "t_ms": 23478,
+      "file": "build-v1-fix5-F-desktop-log-23412-idle-confetti.png",
+      "label": "idle-confetti"
+    },
+    {
+      "case": "F-desktop-log",
+      "t_ms": 24068,
+      "file": "build-v1-fix5-F-desktop-log-24003-free-show-confetti.png",
+      "label": "free-show-confetti"
+    },
+    {
+      "case": "S-desktop-log",
+      "t_ms": 890,
+      "file": "build-v1-fix5-S-desktop-log-830-fresh.png",
+      "label": "fresh"
+    },
+    {
+      "case": "S-desktop-log",
+      "t_ms": 209363,
+      "file": "build-v1-fix5-S-desktop-log-209166-crafted.png",
+      "label": "crafted"
+    },
+    {
+      "case": "S-desktop-log",
+      "t_ms": 213236,
+      "file": "build-v1-fix5-S-desktop-log-213158-against-wall.png",
+      "label": "against-wall"
+    },
+    {
+      "case": "S-desktop-log",
+      "t_ms": 213448,
+      "file": "build-v1-fix5-S-desktop-log-213344-second-layer.png",
+      "label": "second-layer"
+    },
+    {
+      "case": "S-desktop-log",
+      "t_ms": 213657,
+      "file": "build-v1-fix5-S-desktop-log-213562-third-layer.png",
+      "label": "third-layer"
+    },
+    {
+      "case": "V-desktop-log",
+      "t_ms": 1016,
+      "file": "build-v1-fix5-V-desktop-log-959-fresh.png",
+      "label": "fresh"
+    },
+    {
+      "case": "V-desktop-log",
+      "t_ms": 1084,
+      "file": "build-v1-fix5-V-desktop-log-1028-version.png",
+      "label": "version"
+    },
+    {
+      "case": "H-mobile-log",
+      "t_ms": 861,
+      "file": "build-v1-fix5-H-mobile-log-817-fresh.png",
+      "label": "fresh"
+    },
+    {
+      "case": "H-mobile-log",
+      "t_ms": 33116,
+      "file": "build-v1-fix5-H-mobile-log-33064-FAIL.png",
+      "label": "FAIL"
+    },
+    {
+      "case": "U-mobile-log",
+      "t_ms": 870,
+      "file": "build-v1-fix5-U-mobile-log-818-fresh.png",
+      "label": "fresh"
+    },
+    {
+      "case": "U-mobile-log",
+      "t_ms": 6478,
+      "file": "build-v1-fix5-U-mobile-log-6435-crafted.png",
+      "label": "crafted"
+    },
+    {
+      "case": "U-mobile-log",
+      "t_ms": 8954,
+      "file": "build-v1-fix5-U-mobile-log-8901-free-walls-invite.png",
+      "label": "free-walls-invite"
+    },
+    {
+      "case": "U-mobile-log",
+      "t_ms": 9203,
+      "file": "build-v1-fix5-U-mobile-log-9153-four-House-roof.png",
+      "label": "four-House-roof"
+    },
+    {
+      "case": "U-mobile-log",
+      "t_ms": 9455,
+      "file": "build-v1-fix5-U-mobile-log-9402-three-House-roof.png",
+      "label": "three-House-roof"
+    },
+    {
+      "case": "U-mobile-log",
+      "t_ms": 9710,
+      "file": "build-v1-fix5-U-mobile-log-9652-wall-1.png",
+      "label": "wall-1"
+    },
+    {
+      "case": "U-mobile-log",
+      "t_ms": 9853,
+      "file": "build-v1-fix5-U-mobile-log-9807-wall-2.png",
+      "label": "wall-2"
+    },
+    {
+      "case": "U-mobile-log",
+      "t_ms": 12706,
+      "file": "build-v1-fix5-U-mobile-log-12654-hana-house-three-roof.png",
+      "label": "hana-house-three-roof"
+    },
+    {
+      "case": "U-mobile-log",
+      "t_ms": 12870,
+      "file": "build-v1-fix5-U-mobile-log-12818-house-invite.png",
+      "label": "house-invite"
+    },
+    {
+      "case": "U-mobile-log",
+      "t_ms": 13207,
+      "file": "build-v1-fix5-U-mobile-log-13147-house-question-options.png",
+      "label": "house-question-options"
+    },
+    {
+      "case": "U-mobile-log",
+      "t_ms": 13677,
+      "file": "build-v1-fix5-U-mobile-log-13620-house-finale-confetti.png",
+      "label": "house-finale-confetti"
+    },
+    {
+      "case": "U-mobile-log",
+      "t_ms": 27455,
+      "file": "build-v1-fix5-U-mobile-log-27392-FAIL.png",
+      "label": "FAIL"
+    },
+    {
+      "case": "L-mobile-log",
+      "t_ms": 863,
+      "file": "build-v1-fix5-L-mobile-log-817-fresh.png",
+      "label": "fresh"
+    },
+    {
+      "case": "L-mobile-log",
+      "t_ms": 6391,
+      "file": "build-v1-fix5-L-mobile-log-6344-crafted.png",
+      "label": "crafted"
+    },
+    {
+      "case": "L-mobile-log",
+      "t_ms": 6949,
+      "file": "build-v1-fix5-L-mobile-log-6895-four-House-roof.png",
+      "label": "four-House-roof"
+    },
+    {
+      "case": "L-mobile-log",
+      "t_ms": 7200,
+      "file": "build-v1-fix5-L-mobile-log-7150-three-House-roof.png",
+      "label": "three-House-roof"
+    },
+    {
+      "case": "L-mobile-log",
+      "t_ms": 9252,
+      "file": "build-v1-fix5-L-mobile-log-9200-wall-1.png",
+      "label": "wall-1"
+    },
+    {
+      "case": "L-mobile-log",
+      "t_ms": 9400,
+      "file": "build-v1-fix5-L-mobile-log-9348-wall-2.png",
+      "label": "wall-2"
+    },
+    {
+      "case": "L-mobile-log",
+      "t_ms": 9550,
+      "file": "build-v1-fix5-L-mobile-log-9501-wall-3.png",
+      "label": "wall-3"
+    },
+    {
+      "case": "L-mobile-log",
+      "t_ms": 9700,
+      "file": "build-v1-fix5-L-mobile-log-9648-wall-4.png",
+      "label": "wall-4"
+    },
+    {
+      "case": "L-mobile-log",
+      "t_ms": 12551,
+      "file": "build-v1-fix5-L-mobile-log-12501-hana-house-three-roof.png",
+      "label": "hana-house-three-roof"
+    },
+    {
+      "case": "L-mobile-log",
+      "t_ms": 12720,
+      "file": "build-v1-fix5-L-mobile-log-12668-house-invite.png",
+      "label": "house-invite"
+    },
+    {
+      "case": "L-mobile-log",
+      "t_ms": 16883,
+      "file": "build-v1-fix5-L-mobile-log-16836-saved-house-revisit-invite.png",
+      "label": "saved-house-revisit-invite"
+    },
+    {
+      "case": "L-mobile-log",
+      "t_ms": 17132,
+      "file": "build-v1-fix5-L-mobile-log-17084-house-question-options.png",
+      "label": "house-question-options"
+    },
+    {
+      "case": "L-mobile-log",
+      "t_ms": 17583,
+      "file": "build-v1-fix5-L-mobile-log-17536-house-finale-confetti.png",
+      "label": "house-finale-confetti"
+    },
+    {
+      "case": "L-mobile-log",
+      "t_ms": 20732,
+      "file": "build-v1-fix5-L-mobile-log-20685-one-block-rearmed.png",
+      "label": "one-block-rearmed"
+    },
+    {
+      "case": "L-mobile-log",
+      "t_ms": 20782,
+      "file": "build-v1-fix5-L-mobile-log-20736-house-one-Planks-ready.png",
+      "label": "house-one-Planks-ready"
+    },
+    {
+      "case": "Q-mobile-log",
+      "t_ms": 849,
+      "file": "build-v1-fix5-Q-mobile-log-797-fresh.png",
+      "label": "fresh"
+    },
+    {
+      "case": "Q-mobile-log",
+      "t_ms": 6972,
+      "file": "build-v1-fix5-Q-mobile-log-6932-crafted.png",
+      "label": "crafted"
+    },
+    {
+      "case": "Q-mobile-log",
+      "t_ms": 10303,
+      "file": "build-v1-fix5-Q-mobile-log-10253-show-1-confetti.png",
+      "label": "show-1-confetti"
+    },
+    {
+      "case": "Q-mobile-log",
+      "t_ms": 13467,
+      "file": "build-v1-fix5-Q-mobile-log-13419-one-block-rearmed.png",
+      "label": "one-block-rearmed"
+    },
+    {
+      "case": "Q-mobile-log",
+      "t_ms": 14036,
+      "file": "build-v1-fix5-Q-mobile-log-13981-show-2-confetti.png",
+      "label": "show-2-confetti"
+    },
+    {
+      "case": "Q-mobile-log",
+      "t_ms": 14300,
+      "file": "build-v1-fix5-Q-mobile-log-14251-two-shows-not-spent.png",
+      "label": "two-shows-not-spent"
+    },
+    {
+      "case": "Q-mobile-log",
+      "t_ms": 17348,
+      "file": "build-v1-fix5-Q-mobile-log-17304-one-block-rearmed.png",
+      "label": "one-block-rearmed"
+    },
+    {
+      "case": "Q-mobile-log",
+      "t_ms": 17916,
+      "file": "build-v1-fix5-Q-mobile-log-17856-show-3-confetti.png",
+      "label": "show-3-confetti"
+    },
+    {
+      "case": "Q-mobile-log",
+      "t_ms": 21067,
+      "file": "build-v1-fix5-Q-mobile-log-21023-one-block-rearmed.png",
+      "label": "one-block-rearmed"
+    },
+    {
+      "case": "Q-mobile-log",
+      "t_ms": 21634,
+      "file": "build-v1-fix5-Q-mobile-log-21584-show-4-confetti.png",
+      "label": "show-4-confetti"
+    },
+    {
+      "case": "Q-mobile-log",
+      "t_ms": 21900,
+      "file": "build-v1-fix5-Q-mobile-log-21856-fifth-blocked.png",
+      "label": "fifth-blocked"
+    },
+    {
+      "case": "Q-mobile-log",
+      "t_ms": 23115,
+      "file": "build-v1-fix5-Q-mobile-log-23087-cap-persists.png",
+      "label": "cap-persists"
+    },
+    {
+      "case": "Q-mobile-log",
+      "t_ms": 23775,
+      "file": "build-v1-fix5-Q-mobile-log-23703-new-world-zero.png",
+      "label": "new-world-zero"
+    },
+    {
+      "case": "R-mobile-log",
+      "t_ms": 843,
+      "file": "build-v1-fix5-R-mobile-log-798-fresh.png",
+      "label": "fresh"
+    },
+    {
+      "case": "R-mobile-log",
+      "t_ms": 9101,
+      "file": "build-v1-fix5-R-mobile-log-9057-crafted.png",
+      "label": "crafted"
+    },
+    {
+      "case": "R-mobile-log",
+      "t_ms": 9558,
+      "file": "build-v1-fix5-R-mobile-log-9511-FAIL.png",
+      "label": "FAIL"
+    },
+    {
+      "case": "I-mobile-log",
+      "t_ms": 854,
+      "file": "build-v1-fix5-I-mobile-log-802-fresh.png",
+      "label": "fresh"
+    },
+    {
+      "case": "I-mobile-log",
+      "t_ms": 6950,
+      "file": "build-v1-fix5-I-mobile-log-6907-crafted.png",
+      "label": "crafted"
+    },
+    {
+      "case": "I-mobile-log",
+      "t_ms": 9410,
+      "file": "build-v1-fix5-I-mobile-log-9366-invite-start.png",
+      "label": "invite-start"
+    },
+    {
+      "case": "I-mobile-log",
+      "t_ms": 38425,
+      "file": "build-v1-fix5-I-mobile-log-38376-invite-29s.png",
+      "label": "invite-29s"
+    },
+    {
+      "case": "I-mobile-log",
+      "t_ms": 38895,
+      "file": "build-v1-fix5-I-mobile-log-38833-waited-show-confetti.png",
+      "label": "waited-show-confetti"
+    },
+    {
+      "case": "F-mobile-log",
+      "t_ms": 853,
+      "file": "build-v1-fix5-F-mobile-log-807-fresh.png",
+      "label": "fresh"
+    },
+    {
+      "case": "F-mobile-log",
+      "t_ms": 6997,
+      "file": "build-v1-fix5-F-mobile-log-6950-crafted.png",
+      "label": "crafted"
+    },
+    {
+      "case": "F-mobile-log",
+      "t_ms": 10241,
+      "file": "build-v1-fix5-F-mobile-log-10180-idle-confetti.png",
+      "label": "idle-confetti"
+    },
+    {
+      "case": "F-mobile-log",
+      "t_ms": 10809,
+      "file": "build-v1-fix5-F-mobile-log-10762-free-show-confetti.png",
+      "label": "free-show-confetti"
+    },
+    {
+      "case": "S-mobile-log",
+      "t_ms": 854,
+      "file": "build-v1-fix5-S-mobile-log-799-fresh.png",
+      "label": "fresh"
+    },
+    {
+      "case": "S-mobile-log",
+      "t_ms": 4781,
+      "file": "build-v1-fix5-S-mobile-log-4738-crafted.png",
+      "label": "crafted"
+    },
+    {
+      "case": "S-mobile-log",
+      "t_ms": 7924,
+      "file": "build-v1-fix5-S-mobile-log-7870-against-wall.png",
+      "label": "against-wall"
+    },
+    {
+      "case": "S-mobile-log",
+      "t_ms": 8074,
+      "file": "build-v1-fix5-S-mobile-log-8024-second-layer.png",
+      "label": "second-layer"
+    },
+    {
+      "case": "S-mobile-log",
+      "t_ms": 8223,
+      "file": "build-v1-fix5-S-mobile-log-8177-third-layer.png",
+      "label": "third-layer"
+    },
+    {
+      "case": "V-mobile-log",
+      "t_ms": 875,
+      "file": "build-v1-fix5-V-mobile-log-829-fresh.png",
+      "label": "fresh"
+    },
+    {
+      "case": "V-mobile-log",
+      "t_ms": 925,
+      "file": "build-v1-fix5-V-mobile-log-880-version.png",
+      "label": "version"
+    }
+  ]
+}

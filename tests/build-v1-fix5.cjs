@@ -1,0 +1,133 @@
+'use strict';
+// Unmodified HTML, fresh origins. Gameplay uses only trusted mouse events.
+// The existing #seed URL makes terrain repeatable; no saved fixture is injected.
+// DOM geometry locates controls; assertions read rendered text/attributes only.
+const {chromium}=require(process.env.PLAYWRIGHT_MODULE||'playwright');
+const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
+const root=path.resolve(__dirname,'..'),out=path.resolve(process.env.BW_EVIDENCE_ROOT||path.join(root,'screens'));
+const source=fs.readFileSync(process.env.BW_SOURCE||path.join(root,'index.html'));
+fs.mkdirSync(out,{recursive:true});
+async function run(){
+ const browser=await chromium.launch({executablePath:process.env.CHROME||'/usr/bin/google-chrome',args:['--no-sandbox','--enable-blink-features=MiddleClickAutoscroll'],ignoreDefaultArgs:['--hide-scrollbars']});
+ const results=[],clicks=[],frames=[];let serial=0;
+ try{for(const mobile of (process.env.BW_MOBILE==='1'?[true]:process.env.BW_MOBILE==='0'?[false]:[false,true]))for(const debug of (process.env.BW_DEBUG==='0'?[false]:process.env.BW_DEBUG==='1'?[true]:[false]))for(const name of (process.env.BW_CASE||'H,U,L,Q,R,I,F,S,V').split(',')){
+ const tag=`${name}-${mobile?'mobile':'desktop'}-${debug?'log':'clean'}`;
+ const context=await browser.newContext({viewport:mobile?{width:844,height:390}:{width:1366,height:768},isMobile:mobile,hasTouch:mobile,recordVideo:{dir:path.join(out,'build-v1-fix5-video'),size:mobile?{width:844,height:390}:{width:1366,height:768}}});
+ await context.route(/http:\/\/fix5-\d+\.test\/.*/,r=>r.fulfill({contentType:'text/html; charset=utf-8',body:source}));
+ await context.route('https://brain.yydriver.cn/**',r=>r.fulfill({contentType:'application/json',body:'{}'}));
+ const p=await context.newPage(),start=Date.now(),errors=[];p.on('pageerror',e=>errors.push(e.message));p.on('console',m=>{if(m.type()==='error'&&/Error|at .*http/.test(m.text())&&!/Failed to load|net::/.test(m.text()))errors.push(m.text());});p.setDefaultTimeout(12000);
+ let lastInputAt=start;
+ const wait=ms=>p.waitForTimeout(ms);
+ async function click(x,y,purpose){clicks.push({case:tag,t_ms:Date.now()-start,x,y,purpose});await p.mouse.click(x,y);lastInputAt=Date.now();await wait(90);}
+ async function button(selector,purpose){const l=typeof selector==='string'?p.locator(selector):selector;let b=await l.boundingBox();if(b&&b.y+b.height> (mobile?390:768)){const sx=(mobile?844:1366)/2;clicks.push({case:tag,t_ms:Date.now()-start,x:sx,y:180,purpose:'Native middle-button autoscroll recipe panel'});await p.mouse.click(sx,180,{button:'middle'});await p.mouse.move(sx,300);await wait(900);await click(sx,300,'Stop native recipe autoscroll');await wait(150);b=await l.boundingBox();}assert(b,'Visible control: '+purpose);await click(b.x+b.width/2,b.y+b.height/2,purpose);}
+ async function snap(label){const file=`build-v1-fix5-${tag}-${Date.now()-start}-${label}.png`;const png=await p.screenshot({path:path.join(out,file),timeout:20000});let confettiPixels;if(label.endsWith('-confetti')&&!debug){confettiPixels=Number(require('node:child_process').execFileSync('python3',[path.join(__dirname,'build-v1-fix4-pixels.py')],{input:png}));assert(confettiPixels>=35,'Visible pink/purple celebration pixels: '+confettiPixels);}frames.push({case:tag,t_ms:Date.now()-start,file,label,confettiPixels});}
+ async function place(x,y,k,n,purpose){for(let retry=0;retry<30;retry++){await world(x,y,purpose);if(await p.locator(`[data-build="${k}"] small`).innerText()===String(n))return;if(!/Choose empty squares/.test(await p.locator('#toast-en').innerText()))break;await wait(350);}await stock(k,n);}
+
+ async function stock(k,n){assert.equal(await p.locator(`[data-build="${k}"] small`).innerText(),String(n));}
+ async function waitText(selector,re,ms=12000){const end=Date.now()+ms;do{if(await p.locator(selector).isVisible()&&re.test(await p.locator(selector).innerText()))return;await wait(80);}while(Date.now()<end);throw Error(`Text not visible ${selector} ${re}: `+await p.locator(selector).innerText());}
+ async function craft(label,times){const b=p.locator('#recipes .recipe').filter({has:p.locator('.out b',{hasText:new RegExp('^'+label+'$')})}).locator('.craftbtn');for(let i=0;i<times;i++){assert.match(await b.getAttribute('class'),/ready/);await button(b,'Craft '+label);if(await p.locator('#wordcard').isVisible())await button('#wordcard','Dismiss material card');}}
+ let facing=1;
+ async function world(x,y,purpose){const ax=facing<0?.58:.42;if(!mobile){x=(x-844*ax)*50/38+1366*ax;y=(y-390*.72)*50/38+768*.72;}await click(x,y,purpose);}
+ async function settleEncounter(){
+ for(let i=0;i<8&&await p.locator('#dialogue').isVisible();i++){
+   await wait(500);const hint=p.locator('#chat-options .hint-answer').first(),choice=await hint.isVisible()?hint:p.locator('#chat-options button').first();
+   if(await choice.isVisible() && await choice.getAttribute('disabled')===null)await button(choice,'Answer visible encounter picture choice');
+   await wait(1300);
+ }
+ assert.equal(await p.locator('#dialogue').isVisible(),false,'Encounter answered through visible buttons');
+ }
+ async function harvest(x,y,label){
+ await settleEncounter();const item=p.locator('#hotbar button[aria-label="Wood"] em');const before=await item.isVisible()?Number(await item.innerText()):0;
+ for(let n=0;n<8;n++){
+   await settleEncounter();
+   if(await p.locator('#wordcard').isVisible())await button('#wordcard','Dismiss blocking card before harvest');
+   await world(x,y,label);const end=Date.now()+3500;
+   do{
+     if(await item.isVisible()&&Number(await item.innerText())>before)return;
+     if(await p.locator('#dialogue').isVisible())break;
+     if(await p.locator('#wordcard').isVisible()){await button('#wordcard','Dismiss Wood card during harvest wait');}
+     await wait(100);
+   }while(Date.now()<end);
+ }
+ throw Error('Wood harvest did not increase visible inventory');
+ }
+ async function prep(fence=true,house=false){
+ await harvest(658,262,'Harvest first Wood');await wait(700);if(await p.locator('#wordcard').isVisible())await button('#wordcard','Dismiss Wood card');
+ await harvest(459,224,'Harvest second Wood');await wait(250);if(await p.locator('#wordcard').isVisible())await button('#wordcard','Dismiss Wood card');
+ await harvest(459,262,'Harvest third Wood');await settleEncounter();
+ if(await p.locator('#wordcard').isVisible())await button('#wordcard','Dismiss Wood card');if(house){await world(350,310,'Mine surface Stone for House');await waitText('#hotbar button[aria-label="Stone"] em',/^1$/);if(await p.locator('#wordcard').isVisible())await button('#wordcard','Dismiss Stone card');}
+ await button('#btn-craft','Open Craft');await craft('Planks ×4',3);if(house)await craft('House ×4',1);if(fence){await craft('Stick ×4',1);await craft('Fence ×2',4);}await snap('crafted');await button('#craft-back','Close Craft');await button('#btn-build','Open Build');await button(`[data-build="${fence?'fence':'planks'}"]`,'Select material');
+ }
+ async function move(dir,ms){facing=dir;const b=await p.locator('#joy').boundingBox();const x=b.x+b.width/2,y=b.y+b.height/2;clicks.push({case:tag,t_ms:Date.now()-start,x,y,purpose:`Joystick ${dir} ${ms}ms`});await p.mouse.move(x,y);await p.mouse.down();await p.mouse.move(x+dir*b.width*.4,y);await wait(ms);await p.mouse.up();lastInputAt=Date.now();clicks.push({case:tag,t_ms:lastInputAt-start,x:x+dir*b.width*.4,y,purpose:'Release joystick; hands off'});await wait(350);}
+ try{
+ await p.goto(`http://fix5-${++serial}.test/${debug?'?buildlog=1':''}#seed=${process.env.BW_SEED||42}`);await button('#btn-start','Start');await button('#welcome-play','Play');await wait(500);await snap('fresh');
+ assert(['H','U','L','Q','R','I','F','S','V'].includes(name),'Implemented case: '+name);
+ const show=p.getByRole('button',{name:'Show my building'});
+ async function count(n){if(debug)await waitText('#build-debug',new RegExp('shows '+n+'/4'));}
+ async function invite(){await show.waitFor({state:'visible'});}
+ async function acceptFree(label){await button(show,'Accept free Show');await waitText('#buddy-line',/You made this!.*Good job!/);assert.equal(await p.locator('#buddy-options button').count(),0);await wait(300);await snap(label+'-confetti');}
+ async function ready(){await p.locator('#build-show[data-state="ready"]').waitFor({state:'visible',timeout:12000});assert.equal(await p.locator('#build-show').getAttribute('data-state'),'ready');}
+ async function more(x,y,k,n){await button(`[data-build="${k}"]`,'Select '+k);await place(x,y,k,n,'Add exactly ONE surviving block to same work');await wait(2800);await ready();await snap('one-block-rearmed');}
+ if(name==='V'){
+  assert.equal(await p.locator('#build-version').innerText(),'build 1d8d3b7+fix5');assert(await p.locator('#build-version').isVisible());await snap('version');
+ }else if(name==='S'){
+  await prep(false);await move(-1,1300);await place(450,262,'planks',11,'Wall base beside child');await move(-1,160);await snap('against-wall');
+  await world(450,224,'Tap empty square directly above base');if(await p.locator('[data-build="planks"] small').innerText()==='11')await world(450,224,'Confirm same upper empty square');await stock('planks',10);await snap('second-layer');
+  await world(450,186,'Tap upper empty square for third layer');if(await p.locator('[data-build="planks"] small').innerText()==='10')await world(450,186,'Confirm third-layer square');await stock('planks',9);await snap('third-layer');
+ }else if(name==='H'||name==='U'||name==='L'){
+  await prep(false,true);
+  if(name==='U'){
+   await place(164,262,'planks',9,'Far wall base');await place(240,262,'planks',8,'Near wall base');
+   await button('#build-show','Manual Show before roof');await invite();await count(0);await snap('free-walls-invite');
+  }
+  // Roof first leaves a clear placement ray from outside; avoids trapping the child.
+  await button('[data-build="roof"]','Select Roof');await world(164,186,'Place roof across both wall columns');
+  assert.equal(await p.locator('[data-build="roof"] small').innerText(),'0 / 4 House');await snap('four-House-roof');
+  await button('[data-build="remove"]','Remove one overhang to match exactly three House');await world(278,186,'Remove fourth House overhang');
+  assert.equal(await p.locator('[data-build="roof"] small').innerText(),'1 / 4 House');await snap('three-House-roof');
+  await button('[data-build="planks"]','Select Planks for two stacked walls');
+  const walls=name==='U'?[[164,224],[240,224]]:[[164,262],[164,224],[240,262],[240,224]];
+  for(const [i,[x,y]] of walls.entries()){
+   await place(x,y,'planks',(name==='U'?7:9)-i,'Hana wall '+i);await snap('wall-'+(i+1));
+  }
+  await wait(2800);await snap('hana-house-three-roof');
+  if(debug)await waitText('#build-debug',/house interior=1x2 boundary=5 roofed=true/);
+  await button('#build-show','Manual Show chooses house before nearby free work');await invite();await snap('house-invite');
+  if(name==='L'){await button('#buddy-close','Decline invitation without spending a slot');await count(0);await wait(800);await p.reload();await button('#btn-start','Start saved unshown house');await button('#welcome-play','Play saved world');await button('#btn-build','Open Build');await invite();await count(0);await snap('saved-house-revisit-invite');}
+  await button(show,'Accept HOUSE invitation');await waitText('#buddy-line',/^What is this\?$/);assert.equal(await p.locator('#buddy-options button').count(),2);await count(1);await snap('house-question-options');
+  if(name==='H'){await wait(9000);await waitText('#buddy-line',/^What is this\?$/);assert.equal(await p.locator('#buddy-options button').count(),2);await snap('house-question-after-9s');}
+  await button('#buddy-options [data-word="house"]','Answer House');await waitText('#buddy-line',/You built a house!/);await wait(300);await snap('house-finale-confetti');
+  await button('#buddy-close','Close house finale');assert.equal(await p.locator('#build-show').getAttribute('data-state'),'done');
+  await more(278,224,'planks',5);if(debug)await waitText('#build-debug',/house interior=1x2 boundary=5 roofed=true/);await snap('house-one-Planks-ready');
+  if(name==='H'){await button('#build-show','Second house Show after one exterior Planks');await invite();await button(show,'Accept second house Show');await waitText('#buddy-line',/^What is this\?$/);await button('#buddy-options [data-word="house"]','Answer House again');await waitText('#buddy-line',/You built a house!/);await count(2);await snap('second-house-finale');}
+ }else{
+  await prep();await place(164,300,'fence',7,'First free Fence');await place(278,300,'fence',6,'Second free Fence');
+  if(name==='F'){await waitText('#buddy-line',/You made this!/);await wait(250);await snap('idle-confetti');}
+  await button('#build-show','Manual Show');await invite();await count(0);
+  if(name==='I'){
+   const since=Date.now();await snap('invite-start');await wait(10000);await button('#build-show','Repeated Show keeps invitation');
+   await button('[data-build="planks"]','Selection must preserve invitation');await place(164,262,'planks',1,'Placement must preserve invitation');
+   await move(1,180);assert(await show.isVisible(),'Movement preserves invitation');await wait(Math.max(0,29000-(Date.now()-since)));assert(await show.isVisible(),'Invitation is still actionable after >=28 seconds');await count(0);await snap('invite-29s');await acceptFree('waited-show');await count(1);results.push({case:tag,status:'PASS',invite_ms:Date.now()-since});
+  }else if(name==='R'){
+   const since=Date.now();await show.waitFor({state:'hidden',timeout:39000});assert(Date.now()-since>=33000,'No early invite timeout');await count(0);await snap('expired-no-slot-spent');
+   await more(164,262,'planks',1);await button('#build-show','Manual Show after exactly one extra Planks');await invite();await acceptFree('rearmed-expiry');await count(1);await button('#buddy-close','Close completed Show');assert.equal(await p.locator('#build-show').getAttribute('data-state'),'done');
+   await more(278,262,'planks',0);await button('#build-show','Manual Show after one more Planks');await invite();await acceptFree('rearmed-completion');await count(2);
+  }else if(name==='Q'){
+   for(let n=1;n<=4;n++){
+    if(n>1){const [x,y]=[[164,262],[278,262],[164,224]][n-2];await more(x,y,'fence',7-n);await button('#build-show','Show cycle '+n);await invite();}
+    await acceptFree('show-'+n);await count(n);await button('#buddy-close','Close Show '+n);
+    assert.equal(await p.locator('#build-show').getAttribute('data-state'),n===4?'spent':'done');
+    if(n===2){await button('#build-show','Completed work should request one extra block, not claim daily cap');await waitText('#toast-en',/Add 1 more block/);await snap('two-shows-not-spent');}
+   }
+   await button('#build-show','Fifth Show attempt');await waitText('#toast-en',/No more shows today!/);assert.equal(await show.isVisible(),false);await count(4);await snap('fifth-blocked');
+   await wait(800);await p.reload();await button('#btn-start','Start saved world');await button('#welcome-play','Play saved world');await button('#btn-build','Open saved Build');await count(4);assert.equal(await p.locator('#build-show').getAttribute('data-state'),'spent');await snap('cap-persists');
+   await p.reload();await button('#btn-new','New world');await waitText('#btn-new',/Tap again/);await button('#btn-new','Confirm New world');await button('#btn-start','Start fresh world');await button('#welcome-play','Play fresh world');await button('#btn-build','Open fresh Build');await count(0);assert.equal(await p.locator('#build-show').getAttribute('data-state'),'few');await snap('new-world-zero');
+  }else{await acceptFree('free-show');await count(1);}
+ }
+ if(results.at(-1)?.case!==tag)results.push({case:tag,status:'PASS'});
+ assert.deepEqual(errors,[]);
+ }catch(e){await snap('FAIL');results.push({case:tag,status:'FAIL',error:String(e),errors});}finally{const video=p.video();await p.close();await context.close();results.at(-1).video=path.relative(out,await video.path());console.log(JSON.stringify(results.at(-1)));fs.writeFileSync(path.join(out,'build-v1-fix5-clicks.json'),JSON.stringify(clicks,null,2));fs.writeFileSync(path.join(out,'build-v1-fix5-results.json'),JSON.stringify({source_sha256:require('node:crypto').createHash('sha256').update(source).digest('hex'),results,frames},null,2));}
+ }
+ }finally{await browser.close();}if(results.some(r=>r.status==='FAIL'))process.exitCode=1;
+}
+run().catch(e=>{console.error(e);process.exitCode=1;});

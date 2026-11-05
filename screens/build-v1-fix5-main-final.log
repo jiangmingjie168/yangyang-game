@@ -1,0 +1,18 @@
+{"case":"H-desktop-log","status":"PASS","video":"build-v1-fix5-video/page@8fe00577a97a5604b5c8633d5393927a.webm"}
+{"case":"U-desktop-log","status":"PASS","video":"build-v1-fix5-video/page@1dac7bd35fbe2062722e24c8ce5df0a9.webm"}
+{"case":"L-desktop-log","status":"PASS","video":"build-v1-fix5-video/page@ff9a6d81f94f19f62e0add2182ac8a12.webm"}
+{"case":"Q-desktop-log","status":"PASS","video":"build-v1-fix5-video/page@ceeb13b2974a394596c4f2a4dcd1412f.webm"}
+{"case":"R-desktop-log","status":"PASS","video":"build-v1-fix5-video/page@e65bd04267e4e3cd1167f71d6ee4cd17.webm"}
+{"case":"I-desktop-log","status":"PASS","invite_ms":29595,"video":"build-v1-fix5-video/page@defbb15acf3c4623aa0a18de4c766c30.webm"}
+{"case":"F-desktop-log","status":"PASS","video":"build-v1-fix5-video/page@e1bd17c28395837a6ab17114cf47870a.webm"}
+{"case":"S-desktop-log","status":"PASS","video":"build-v1-fix5-video/page@ded2a58d944539ac65987dcc6158ba5c.webm"}
+{"case":"V-desktop-log","status":"PASS","video":"build-v1-fix5-video/page@7acbc04a734bc552a7b23a0313dd14a0.webm"}
+{"case":"H-mobile-log","status":"FAIL","error":"Error: Wood harvest did not increase visible inventory","errors":[],"video":"build-v1-fix5-video/page@9f50d483b8c0eea5ac09ea19675b1ad2.webm"}
+{"case":"U-mobile-log","status":"FAIL","error":"AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n'6' !== '5'\n","errors":[],"video":"build-v1-fix5-video/page@bb78f806fac2446efa095e97f31a6436.webm"}
+{"case":"L-mobile-log","status":"PASS","video":"build-v1-fix5-video/page@a2413702dafadac8ccef217993388e81.webm"}
+{"case":"Q-mobile-log","status":"PASS","video":"build-v1-fix5-video/page@1ddbad261b64636da23792745737aa50.webm"}
+{"case":"R-mobile-log","status":"FAIL","error":"AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n'8' !== '7'\n","errors":[],"video":"build-v1-fix5-video/page@61548806cf94d0339ae9701026917f78.webm"}
+{"case":"I-mobile-log","status":"PASS","invite_ms":29534,"video":"build-v1-fix5-video/page@dd59e095812f88c68919065609c1b6d1.webm"}
+{"case":"F-mobile-log","status":"PASS","video":"build-v1-fix5-video/page@140d4638fb00caf556918d24fce32f6b.webm"}
+{"case":"S-mobile-log","status":"PASS","video":"build-v1-fix5-video/page@9e79b58cdefda841eaebbfbb25b2864f.webm"}
+{"case":"V-mobile-log","status":"PASS","video":"build-v1-fix5-video/page@07d7dc1ead4567e91b0c54497f5ffc7a.webm"}
