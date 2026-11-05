@@ -1,0 +1,17 @@
+/tmp/bw-v11/tests/world-v2.cjs:28
+    if (/\/audio\/build-v1\.1\/[a-z-]+\.ogg$/.test(r.request().url())) return r.fulfill({contentType:'audio/ogg',body:fs.readFileSync(path.join(__dirname,'..',new URL(r.request().url()).pathname))});
+                                                                                                                                                               ^
+
+TypeError: URL is not a constructor
+    at /tmp/bw-v11/tests/world-v2.cjs:28:160
+    at RouteHandler._handleInternal (/tmp/node_modules/playwright-core/lib/coreBundle.js:61687:11)
+    at RouteHandler._handleImpl (/tmp/node_modules/playwright-core/lib/coreBundle.js:61654:29)
+    at /tmp/node_modules/playwright-core/lib/coreBundle.js:61648:59
+    at AsyncLocalStorage.run (node:internal/async_local_storage/async_context_frame:65:14)
+    at _Zone.run (/tmp/node_modules/playwright-core/lib/coreBundle.js:11049:40)
+    at RouteHandler.handle (/tmp/node_modules/playwright-core/lib/coreBundle.js:61648:38)
+    at _Page._onRoute (/tmp/node_modules/playwright-core/lib/coreBundle.js:62968:46)
+    at Proxy.<anonymous> (/tmp/node_modules/playwright-core/lib/coreBundle.js:62914:63)
+    at Proxy._callHandler (/tmp/node_modules/playwright-core/lib/coreBundle.js:11647:33)
+
+Node.js v24.22.1

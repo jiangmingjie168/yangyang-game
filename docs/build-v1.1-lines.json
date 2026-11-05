@@ -1,0 +1,122 @@
+{
+  "version": "build a0b0871+v11",
+  "voice_generated": false,
+  "brain_changed": false,
+  "dialogue_count": 19,
+  "dialogue": [
+    {
+      "text": "Car",
+      "use": "New vocabulary card / answer label"
+    },
+    {
+      "text": "Wheel",
+      "use": "New vocabulary card / answer label"
+    },
+    {
+      "text": "Hop in! Let's drive!",
+      "use": "Boarding; non-modal, silent feedback"
+    },
+    {
+      "text": "Parked! Ready to explore?",
+      "use": "Exit; non-modal, silent feedback"
+    },
+    {
+      "text": "Strong stone walls! You made this!",
+      "use": "Wall celebration; silent feedback"
+    },
+    {
+      "text": "A lovely tiled roof! You made this!",
+      "use": "Roof celebration; silent feedback"
+    },
+    {
+      "text": "Flowers in our yard! You made this!",
+      "use": "Yard celebration; silent feedback"
+    },
+    {
+      "text": "A bright glass window! You made this!",
+      "use": "Window celebration; silent feedback"
+    },
+    {
+      "text": "Strong stone walls! Well done!",
+      "use": "Wall question finale"
+    },
+    {
+      "text": "A lovely roof! Well done!",
+      "use": "Roof question finale"
+    },
+    {
+      "text": "Flowers in our yard! Well done!",
+      "use": "Yard question finale"
+    },
+    {
+      "text": "A bright window! Well done!",
+      "use": "Window question finale"
+    },
+    {
+      "text": "You built a car! Look at the wheels! Good job!",
+      "use": "Car Show finale"
+    },
+    {
+      "text": "I made a car. Say it!",
+      "use": "Car Show tier 3"
+    },
+    {
+      "text": "Look! Stone. Say it!",
+      "use": "Wall Show tier 3"
+    },
+    {
+      "text": "Look! Roof. Say it!",
+      "use": "Roof Show tier 3"
+    },
+    {
+      "text": "Look! Flower. Say it!",
+      "use": "Yard Show tier 3"
+    },
+    {
+      "text": "Look! Window. Say it!",
+      "use": "Window Show tier 3"
+    },
+    {
+      "text": "Look! Our car!",
+      "use": "Car revisit prefix, composed with existing invitation / I like it!"
+    }
+  ],
+  "reused_compositions": [
+    "Look! Our car! (listed above) + existing Show invitation / I like it!",
+    "Look! Our house! + existing Show invitation / I like it!",
+    "What is this? / What's this? / existing Show invitation atoms remain unchanged"
+  ],
+  "ui": [
+    "Get out",
+    "Make room to get out!",
+    "Make it yours",
+    "Choose a part for your house.",
+    "Wall · Stone ×2",
+    "Roof · Planks ×2",
+    "Yard · Flower ×2",
+    "Window · Sand ×2",
+    "Wood → Stone",
+    "Flat → Tiled",
+    "Grass → Flower bed",
+    "Wood → Bright glass",
+    "Finished!",
+    "Make it!",
+    "Need {missing} more {material}",
+    "Use 2 {material} for the {part}?",
+    "A tree is in the way!",
+    "A rock is in the way!",
+    "A building is in the way!",
+    "A fence is in the way!",
+    "A flower is in the way!",
+    "A block is in the way!",
+    "Choose dry land!",
+    "Tap empty ground · 3 × 2 · Car",
+    "No more car!",
+    "build a0b0871+v11",
+    "Music: On",
+    "Music: Off",
+    "SFX: On",
+    "SFX: Off"
+  ],
+  "notes": "No Jenny files generated or queued. No brain service changes. Existing browser/recorded-word playback remains in the app; new boarding/upgrade celebration feedback explicitly defers speech. Reused combinations are listed separately from the 19 new fixed vocabulary/dialogue lines. UI list includes templates, not all numeric expansions. Audio addendum adds four parent-only switch labels; no spoken lines or child audio controls."
+}

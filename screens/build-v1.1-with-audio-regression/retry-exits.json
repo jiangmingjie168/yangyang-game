@@ -1,0 +1,14 @@
+[
+  {
+    "suite": "world-v2",
+    "exit": 0,
+    "log": "world-v2-retry.log",
+    "reason": "Test-only local Ogg route corrected: existing URL constant shadowed the URL constructor."
+  },
+  {
+    "suite": "memory-chat",
+    "exit": 0,
+    "log": "memory-chat-retry.log",
+    "reason": "Test-only local Ogg route corrected for file:// paths."
+  }
+]

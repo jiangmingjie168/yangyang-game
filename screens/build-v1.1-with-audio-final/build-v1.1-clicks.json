@@ -1,0 +1,3488 @@
+[
+  {
+    "case": "C-desktop",
+    "ms": 279,
+    "x": 683,
+    "y": 400.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "C-desktop",
+    "ms": 434,
+    "x": 683,
+    "y": 331.09375,
+    "purpose": "Play"
+  },
+  {
+    "case": "C-desktop",
+    "ms": 962,
+    "x": 974.0000000000002,
+    "y": 527.9999999999999,
+    "purpose": "Harvest natural Wood 1"
+  },
+  {
+    "case": "C-desktop",
+    "ms": 2781,
+    "x": 683,
+    "y": 152,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "C-desktop",
+    "ms": 2896,
+    "x": 711.9999999999998,
+    "y": 533,
+    "purpose": "Harvest natural Wood 2"
+  },
+  {
+    "case": "C-desktop",
+    "ms": 3167,
+    "x": 683,
+    "y": 152,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "C-desktop",
+    "ms": 3283,
+    "x": 1148.328125,
+    "y": 34,
+    "purpose": "Open Craft"
+  },
+  {
+    "case": "C-desktop",
+    "ms": 3402,
+    "x": 629,
+    "y": 114,
+    "purpose": "Craft Planks"
+  },
+  {
+    "case": "C-desktop",
+    "ms": 3517,
+    "x": 683.0000305175781,
+    "y": 152,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "C-desktop",
+    "ms": 3636,
+    "x": 629,
+    "y": 114,
+    "purpose": "Craft Planks"
+  },
+  {
+    "case": "C-desktop",
+    "ms": 3751,
+    "x": 683,
+    "y": 152.00000381469727,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "C-desktop",
+    "ms": 3872,
+    "x": 629,
+    "y": 514,
+    "purpose": "Craft Wheel"
+  },
+  {
+    "case": "C-desktop",
+    "ms": 3987,
+    "x": 683,
+    "y": 152,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "C-desktop",
+    "ms": 4104,
+    "x": 629,
+    "y": 514,
+    "purpose": "Craft Wheel"
+  },
+  {
+    "case": "C-desktop",
+    "ms": 4218,
+    "x": 683,
+    "y": 152,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "C-desktop",
+    "ms": 4416,
+    "x": 1306,
+    "y": 514,
+    "purpose": "Craft Car"
+  },
+  {
+    "case": "C-desktop",
+    "ms": 4532,
+    "x": 683,
+    "y": 151.99999618530273,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "C-desktop",
+    "ms": 4722,
+    "x": 1304,
+    "y": 38,
+    "purpose": "Close Craft"
+  },
+  {
+    "case": "C-desktop",
+    "purpose": "Joystick -1 for 1100ms",
+    "ms": 4838
+  },
+  {
+    "case": "C-desktop",
+    "ms": 6568,
+    "x": 1064.328125,
+    "y": 34,
+    "purpose": "Build"
+  },
+  {
+    "case": "C-desktop",
+    "ms": 6685,
+    "x": 344.265625,
+    "y": 100,
+    "purpose": "Select car"
+  },
+  {
+    "case": "C-desktop",
+    "ms": 6795,
+    "x": 632,
+    "y": 527.9999999999999,
+    "purpose": "Place car once near spawn"
+  },
+  {
+    "case": "C-desktop",
+    "ms": 7150,
+    "x": 57.3359375,
+    "y": 100,
+    "purpose": "Invite before boarding"
+  },
+  {
+    "case": "C-desktop",
+    "ms": 7271,
+    "x": 682,
+    "y": 527.9999999999999,
+    "purpose": "Tap just-placed car to sit directly from Build"
+  },
+  {
+    "case": "C-desktop",
+    "ms": 7471,
+    "x": 1064.328125,
+    "y": 34,
+    "purpose": "Build cannot remove an occupied car"
+  },
+  {
+    "case": "C-desktop",
+    "purpose": "Joystick 1 for 1200ms",
+    "ms": 7596
+  },
+  {
+    "case": "C-desktop",
+    "purpose": "Joystick 1 for 600ms",
+    "ms": 8969
+  },
+  {
+    "case": "C-desktop",
+    "purpose": "Joystick -1 for 220ms",
+    "ms": 9803
+  },
+  {
+    "case": "C-desktop",
+    "ms": 10250,
+    "x": 1304.5,
+    "y": 134,
+    "purpose": "Get out"
+  },
+  {
+    "case": "C-desktop",
+    "ms": 10539,
+    "x": 683,
+    "y": 356.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "C-desktop",
+    "ms": 10662,
+    "x": 683,
+    "y": 238.28125,
+    "purpose": "Play"
+  },
+  {
+    "case": "C-desktop",
+    "ms": 11236,
+    "x": 1064.328125,
+    "y": 34,
+    "purpose": "Open parked Show"
+  },
+  {
+    "case": "C-desktop",
+    "ms": 11363,
+    "x": 1252.9921875,
+    "y": 220,
+    "purpose": "Accept Show"
+  },
+  {
+    "case": "C-desktop",
+    "ms": 11565,
+    "x": 1251,
+    "y": 223.5,
+    "purpose": "Answer car"
+  },
+  {
+    "case": "C-desktop",
+    "ms": 11918,
+    "x": 1253,
+    "y": 238,
+    "purpose": "Close buddy bubble"
+  },
+  {
+    "case": "C-desktop",
+    "ms": 12034,
+    "x": 431.734375,
+    "y": 100,
+    "purpose": "Remove parked car"
+  },
+  {
+    "case": "C-desktop",
+    "ms": 12145,
+    "x": 697.1188625000209,
+    "y": 527.9999999999999,
+    "purpose": "Recover entire car"
+  },
+  {
+    "case": "U-desktop",
+    "ms": 238,
+    "x": 683,
+    "y": 356.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "U-desktop",
+    "ms": 360,
+    "x": 683,
+    "y": 331.09375,
+    "purpose": "Play"
+  },
+  {
+    "case": "U-desktop",
+    "ms": 879,
+    "x": 1148.328125,
+    "y": 34,
+    "purpose": "Open Craft"
+  },
+  {
+    "case": "U-desktop",
+    "ms": 996,
+    "x": 629,
+    "y": 414,
+    "purpose": "Craft House"
+  },
+  {
+    "case": "U-desktop",
+    "ms": 1114,
+    "x": 683.0000305175781,
+    "y": 152,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "U-desktop",
+    "ms": 1232,
+    "x": 1304,
+    "y": 38,
+    "purpose": "Close Craft"
+  },
+  {
+    "case": "U-desktop",
+    "ms": 1344,
+    "x": 1064.328125,
+    "y": 34,
+    "purpose": "Build"
+  },
+  {
+    "case": "U-desktop",
+    "ms": 1462,
+    "x": 159.125,
+    "y": 100,
+    "purpose": "Select House"
+  },
+  {
+    "case": "U-desktop",
+    "ms": 1567,
+    "x": 474.0000000000002,
+    "y": 527.9999999999999,
+    "purpose": "Place House"
+  },
+  {
+    "case": "U-desktop",
+    "ms": 1929,
+    "x": 1064.328125,
+    "y": 34,
+    "purpose": "Leave Build"
+  },
+  {
+    "case": "U-desktop",
+    "ms": 2032,
+    "x": 524.0000000000002,
+    "y": 477.99999999999994,
+    "purpose": "Open House improvements"
+  },
+  {
+    "case": "U-desktop",
+    "ms": 2208,
+    "x": 558.078125,
+    "y": 242,
+    "purpose": "Choose wall"
+  },
+  {
+    "case": "U-desktop",
+    "ms": 2318,
+    "x": 491.15625,
+    "y": 446,
+    "purpose": "Confirm wall"
+  },
+  {
+    "case": "U-desktop",
+    "ms": 3997,
+    "x": 1252.9921875,
+    "y": 220,
+    "purpose": "Accept Show"
+  },
+  {
+    "case": "U-desktop",
+    "ms": 4194,
+    "x": 1251,
+    "y": 223.5,
+    "purpose": "Answer stone"
+  },
+  {
+    "case": "U-desktop",
+    "ms": 4561,
+    "x": 1253,
+    "y": 238,
+    "purpose": "Close buddy bubble"
+  },
+  {
+    "case": "U-desktop",
+    "ms": 4664,
+    "x": 524.0000000000002,
+    "y": 477.99999999999994,
+    "purpose": "Open House improvements"
+  },
+  {
+    "case": "U-desktop",
+    "ms": 4843,
+    "x": 558.078125,
+    "y": 330,
+    "purpose": "Choose yard"
+  },
+  {
+    "case": "U-desktop",
+    "ms": 4959,
+    "x": 491.15625,
+    "y": 446,
+    "purpose": "Confirm yard"
+  },
+  {
+    "case": "U-desktop",
+    "ms": 6650,
+    "x": 1252.9921875,
+    "y": 220,
+    "purpose": "Accept Show"
+  },
+  {
+    "case": "U-desktop",
+    "ms": 6867,
+    "x": 1250.9921875,
+    "y": 223.5,
+    "purpose": "Answer flower"
+  },
+  {
+    "case": "U-desktop",
+    "ms": 7244,
+    "x": 1253,
+    "y": 238,
+    "purpose": "Close buddy bubble"
+  },
+  {
+    "case": "U-desktop",
+    "ms": 7348,
+    "x": 524.0000000000002,
+    "y": 477.99999999999994,
+    "purpose": "Open House improvements"
+  },
+  {
+    "case": "U-desktop",
+    "ms": 7527,
+    "x": 807.921875,
+    "y": 242,
+    "purpose": "Choose roof"
+  },
+  {
+    "case": "U-desktop",
+    "ms": 7640,
+    "x": 491.15625,
+    "y": 446,
+    "purpose": "Confirm roof"
+  },
+  {
+    "case": "U-desktop",
+    "ms": 9296,
+    "x": 1252.9921875,
+    "y": 220,
+    "purpose": "Accept Show"
+  },
+  {
+    "case": "U-desktop",
+    "ms": 9492,
+    "x": 1246.875,
+    "y": 223.5,
+    "purpose": "Answer roof"
+  },
+  {
+    "case": "U-desktop",
+    "ms": 9844,
+    "x": 1253,
+    "y": 220,
+    "purpose": "Close buddy bubble"
+  },
+  {
+    "case": "U-desktop",
+    "ms": 9947,
+    "x": 524.0000000000002,
+    "y": 477.99999999999994,
+    "purpose": "Open House improvements"
+  },
+  {
+    "case": "U-desktop",
+    "ms": 10127,
+    "x": 807.921875,
+    "y": 330,
+    "purpose": "Choose window"
+  },
+  {
+    "case": "U-desktop",
+    "ms": 10240,
+    "x": 491.15625,
+    "y": 446,
+    "purpose": "Confirm window"
+  },
+  {
+    "case": "U-desktop",
+    "ms": 11875,
+    "x": 1252.9921875,
+    "y": 220,
+    "purpose": "Accept Show"
+  },
+  {
+    "case": "U-desktop",
+    "ms": 12075,
+    "x": 1251,
+    "y": 223.5,
+    "purpose": "Answer window"
+  },
+  {
+    "case": "U-desktop",
+    "ms": 12428,
+    "x": 1253,
+    "y": 238,
+    "purpose": "Close buddy bubble"
+  },
+  {
+    "case": "U-desktop",
+    "ms": 15346,
+    "x": 683,
+    "y": 356.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "U-desktop",
+    "ms": 15461,
+    "x": 683,
+    "y": 238.28125,
+    "purpose": "Play"
+  },
+  {
+    "case": "U-desktop",
+    "ms": 16046,
+    "x": 524.0000000000002,
+    "y": 477.99999999999994,
+    "purpose": "Open finished upgrades"
+  },
+  {
+    "case": "U-desktop",
+    "ms": 16215,
+    "x": 1304,
+    "y": 38,
+    "purpose": "Back"
+  },
+  {
+    "case": "U-desktop",
+    "ms": 16327,
+    "x": 1064.328125,
+    "y": 34,
+    "purpose": "Build"
+  },
+  {
+    "case": "U-desktop",
+    "ms": 16441,
+    "x": 431.734375,
+    "y": 100,
+    "purpose": "Recover improved house"
+  },
+  {
+    "case": "U-desktop",
+    "ms": 16546,
+    "x": 524.0000000000002,
+    "y": 477.99999999999994,
+    "purpose": "Remove improved House"
+  },
+  {
+    "case": "U-desktop",
+    "ms": 16662,
+    "x": 159.125,
+    "y": 100,
+    "purpose": "Select recovered house"
+  },
+  {
+    "case": "U-desktop",
+    "ms": 16766,
+    "x": 474.0000000000002,
+    "y": 527.9999999999999,
+    "purpose": "Replace improved House"
+  },
+  {
+    "case": "P-desktop",
+    "ms": 174,
+    "x": 683,
+    "y": 400.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "P-desktop",
+    "ms": 290,
+    "x": 683,
+    "y": 331.09375,
+    "purpose": "Play"
+  },
+  {
+    "case": "P-desktop",
+    "ms": 808,
+    "x": 974.0000000000002,
+    "y": 527.9999999999999,
+    "purpose": "Harvest natural Wood 1"
+  },
+  {
+    "case": "P-desktop",
+    "ms": 2609,
+    "x": 683,
+    "y": 152.00000381469727,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "P-desktop",
+    "ms": 2723,
+    "x": 711.9999999999998,
+    "y": 533,
+    "purpose": "Harvest natural Wood 2"
+  },
+  {
+    "case": "P-desktop",
+    "ms": 2993,
+    "x": 683,
+    "y": 152,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "P-desktop",
+    "ms": 3108,
+    "x": 1148.328125,
+    "y": 34,
+    "purpose": "Open Craft"
+  },
+  {
+    "case": "P-desktop",
+    "ms": 3225,
+    "x": 629,
+    "y": 114,
+    "purpose": "Craft Planks"
+  },
+  {
+    "case": "P-desktop",
+    "ms": 3340,
+    "x": 683,
+    "y": 152.00000381469727,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "P-desktop",
+    "ms": 3457,
+    "x": 629,
+    "y": 114,
+    "purpose": "Craft Planks"
+  },
+  {
+    "case": "P-desktop",
+    "ms": 3574,
+    "x": 683,
+    "y": 152.00000381469727,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "P-desktop",
+    "ms": 3694,
+    "x": 1306,
+    "y": 114,
+    "purpose": "Craft Stick"
+  },
+  {
+    "case": "P-desktop",
+    "ms": 3807,
+    "x": 682.9999694824219,
+    "y": 152,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "P-desktop",
+    "ms": 3936,
+    "x": 1306,
+    "y": 614,
+    "purpose": "Craft Fence"
+  },
+  {
+    "case": "P-desktop",
+    "ms": 4054,
+    "x": 683,
+    "y": 152.00000381469727,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "P-desktop",
+    "ms": 4173,
+    "x": 1306,
+    "y": 614,
+    "purpose": "Craft Fence"
+  },
+  {
+    "case": "P-desktop",
+    "ms": 4290,
+    "x": 682.9999694824219,
+    "y": 152.00000381469727,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "P-desktop",
+    "ms": 4410,
+    "x": 1306,
+    "y": 414,
+    "purpose": "Craft Pen"
+  },
+  {
+    "case": "P-desktop",
+    "ms": 4524,
+    "x": 682.9999694824219,
+    "y": 152,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "P-desktop",
+    "ms": 4712,
+    "x": 1304,
+    "y": 38,
+    "purpose": "Close Craft"
+  },
+  {
+    "case": "P-desktop",
+    "purpose": "Joystick -1 for 1100ms",
+    "ms": 4823
+  },
+  {
+    "case": "P-desktop",
+    "ms": 6543,
+    "x": 1064.328125,
+    "y": 34,
+    "purpose": "Build"
+  },
+  {
+    "case": "P-desktop",
+    "ms": 6655,
+    "x": 257.25,
+    "y": 100,
+    "purpose": "Select pen"
+  },
+  {
+    "case": "P-desktop",
+    "ms": 6761,
+    "x": 632,
+    "y": 527.9999999999999,
+    "purpose": "Place pen once near spawn"
+  },
+  {
+    "case": "P-desktop",
+    "ms": 7138,
+    "x": 57.3359375,
+    "y": 100,
+    "purpose": "Request Show"
+  },
+  {
+    "case": "P-desktop",
+    "ms": 7255,
+    "x": 1252.9921875,
+    "y": 220,
+    "purpose": "Accept Show"
+  },
+  {
+    "case": "P-desktop",
+    "ms": 7456,
+    "x": 1303,
+    "y": 223.5,
+    "purpose": "Answer fence"
+  },
+  {
+    "case": "P-desktop",
+    "ms": 7819,
+    "x": 1253,
+    "y": 238,
+    "purpose": "Close buddy bubble"
+  },
+  {
+    "case": "P-desktop",
+    "ms": 10658,
+    "x": 683,
+    "y": 356.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "P-desktop",
+    "ms": 10772,
+    "x": 683,
+    "y": 238.28125,
+    "purpose": "Play"
+  },
+  {
+    "case": "M-desktop",
+    "ms": 278,
+    "x": 683,
+    "y": 356.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "M-desktop",
+    "ms": 393,
+    "x": 683,
+    "y": 331.09375,
+    "purpose": "Play"
+  },
+  {
+    "case": "M-desktop",
+    "ms": 909,
+    "x": 1148.328125,
+    "y": 34,
+    "purpose": "Open Craft"
+  },
+  {
+    "case": "M-desktop",
+    "ms": 1028,
+    "x": 629,
+    "y": 414,
+    "purpose": "Craft House"
+  },
+  {
+    "case": "M-desktop",
+    "ms": 1146,
+    "x": 683,
+    "y": 152,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "M-desktop",
+    "ms": 1261,
+    "x": 1304,
+    "y": 38,
+    "purpose": "Close Craft"
+  },
+  {
+    "case": "M-desktop",
+    "ms": 1374,
+    "x": 1064.328125,
+    "y": 34,
+    "purpose": "Build"
+  },
+  {
+    "case": "M-desktop",
+    "ms": 1492,
+    "x": 159.125,
+    "y": 100,
+    "purpose": "Select House"
+  },
+  {
+    "case": "M-desktop",
+    "ms": 1598,
+    "x": 474.0000000000002,
+    "y": 527.9999999999999,
+    "purpose": "Place House"
+  },
+  {
+    "case": "M-desktop",
+    "ms": 1725,
+    "x": 1064.328125,
+    "y": 34,
+    "purpose": "Leave Build"
+  },
+  {
+    "case": "M-desktop",
+    "ms": 1829,
+    "x": 524.0000000000002,
+    "y": 477.99999999999994,
+    "purpose": "Open missing materials"
+  },
+  {
+    "case": "M-desktop",
+    "ms": 2026,
+    "x": 807.921875,
+    "y": 242,
+    "purpose": "Preview affordable roof"
+  },
+  {
+    "case": "M-desktop",
+    "ms": 2141,
+    "x": 1304,
+    "y": 38,
+    "purpose": "Cancel confirmation"
+  },
+  {
+    "case": "M-desktop",
+    "ms": 2246,
+    "x": 524.0000000000002,
+    "y": 477.99999999999994,
+    "purpose": "Reopen house"
+  },
+  {
+    "case": "M-desktop",
+    "ms": 2361,
+    "x": 807.921875,
+    "y": 242,
+    "purpose": "Choose roof after daily cap"
+  },
+  {
+    "case": "M-desktop",
+    "ms": 2476,
+    "x": 491.15625,
+    "y": 446,
+    "purpose": "Confirm upgrade despite daily Show cap"
+  },
+  {
+    "case": "Otree-desktop",
+    "ms": 240,
+    "x": 683,
+    "y": 356.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "Otree-desktop",
+    "ms": 373,
+    "x": 683,
+    "y": 331.09375,
+    "purpose": "Play"
+  },
+  {
+    "case": "Otree-desktop",
+    "ms": 893,
+    "x": 1148.328125,
+    "y": 34,
+    "purpose": "Open Craft"
+  },
+  {
+    "case": "Otree-desktop",
+    "ms": 1010,
+    "x": 629,
+    "y": 514,
+    "purpose": "Craft Wheel"
+  },
+  {
+    "case": "Otree-desktop",
+    "ms": 1129,
+    "x": 683,
+    "y": 152,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "Otree-desktop",
+    "ms": 1250,
+    "x": 629,
+    "y": 514,
+    "purpose": "Craft Wheel"
+  },
+  {
+    "case": "Otree-desktop",
+    "ms": 1374,
+    "x": 683,
+    "y": 152.00000381469727,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "Otree-desktop",
+    "ms": 1493,
+    "x": 1306,
+    "y": 514,
+    "purpose": "Craft Car"
+  },
+  {
+    "case": "Otree-desktop",
+    "ms": 1610,
+    "x": 683,
+    "y": 152,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "Otree-desktop",
+    "ms": 1728,
+    "x": 1304,
+    "y": 38,
+    "purpose": "Close Craft"
+  },
+  {
+    "case": "Otree-desktop",
+    "ms": 1841,
+    "x": 1064.328125,
+    "y": 34,
+    "purpose": "Build"
+  },
+  {
+    "case": "Otree-desktop",
+    "ms": 1957,
+    "x": 344.265625,
+    "y": 100,
+    "purpose": "Select Car"
+  },
+  {
+    "case": "Otree-desktop",
+    "ms": 2063,
+    "x": 699.0000000000002,
+    "y": 527.9999999999999,
+    "purpose": "Reject blocked Car placement"
+  },
+  {
+    "case": "Otree-desktop",
+    "ms": 2258,
+    "x": 599.0000000000002,
+    "y": 527.9999999999999,
+    "purpose": "Place Car before tree"
+  },
+  {
+    "case": "Otree-desktop",
+    "ms": 2464,
+    "x": 1064.328125,
+    "y": 34,
+    "purpose": "Leave Build"
+  },
+  {
+    "case": "Otree-desktop",
+    "ms": 2568,
+    "x": 649.0000000000002,
+    "y": 527.9999999999999,
+    "purpose": "Board before obstacle"
+  },
+  {
+    "case": "Otree-desktop",
+    "purpose": "Joystick 1 for 1400ms",
+    "ms": 2693
+  },
+  {
+    "case": "Otree-desktop",
+    "purpose": "Joystick 1 for 500ms",
+    "ms": 4260
+  },
+  {
+    "case": "Otree-desktop",
+    "ms": 7726,
+    "x": 579.0467500000069,
+    "y": 550,
+    "purpose": "Tap car horn"
+  },
+  {
+    "case": "Otree-desktop",
+    "ms": 7844,
+    "x": 1304.5,
+    "y": 134,
+    "purpose": "Get out after horn"
+  },
+  {
+    "case": "Owater-desktop",
+    "ms": 260,
+    "x": 683,
+    "y": 356.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "Owater-desktop",
+    "ms": 382,
+    "x": 683,
+    "y": 331.09375,
+    "purpose": "Play"
+  },
+  {
+    "case": "Owater-desktop",
+    "ms": 899,
+    "x": 1148.328125,
+    "y": 34,
+    "purpose": "Open Craft"
+  },
+  {
+    "case": "Owater-desktop",
+    "ms": 1016,
+    "x": 629,
+    "y": 514,
+    "purpose": "Craft Wheel"
+  },
+  {
+    "case": "Owater-desktop",
+    "ms": 1131,
+    "x": 683,
+    "y": 151.99999618530273,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "Owater-desktop",
+    "ms": 1250,
+    "x": 629,
+    "y": 514,
+    "purpose": "Craft Wheel"
+  },
+  {
+    "case": "Owater-desktop",
+    "ms": 1368,
+    "x": 683,
+    "y": 151.99999618530273,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "Owater-desktop",
+    "ms": 1487,
+    "x": 1306,
+    "y": 514,
+    "purpose": "Craft Car"
+  },
+  {
+    "case": "Owater-desktop",
+    "ms": 1604,
+    "x": 683,
+    "y": 151.99999618530273,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "Owater-desktop",
+    "ms": 1720,
+    "x": 1304,
+    "y": 38,
+    "purpose": "Close Craft"
+  },
+  {
+    "case": "Owater-desktop",
+    "ms": 1832,
+    "x": 1064.328125,
+    "y": 34,
+    "purpose": "Build"
+  },
+  {
+    "case": "Owater-desktop",
+    "ms": 1947,
+    "x": 344.265625,
+    "y": 100,
+    "purpose": "Select Car"
+  },
+  {
+    "case": "Owater-desktop",
+    "ms": 2052,
+    "x": 749.0000000000002,
+    "y": 527.9999999999999,
+    "purpose": "Reject blocked Car placement"
+  },
+  {
+    "case": "Owater-desktop",
+    "ms": 2241,
+    "x": 549.0000000000002,
+    "y": 527.9999999999999,
+    "purpose": "Place Car before water"
+  },
+  {
+    "case": "Owater-desktop",
+    "ms": 2454,
+    "x": 1064.328125,
+    "y": 34,
+    "purpose": "Leave Build"
+  },
+  {
+    "case": "Owater-desktop",
+    "ms": 2558,
+    "x": 599.0000000000002,
+    "y": 527.9999999999999,
+    "purpose": "Board before obstacle"
+  },
+  {
+    "case": "Owater-desktop",
+    "purpose": "Joystick 1 for 1400ms",
+    "ms": 2681
+  },
+  {
+    "case": "Owater-desktop",
+    "purpose": "Joystick 1 for 500ms",
+    "ms": 4250
+  },
+  {
+    "case": "Owater-desktop",
+    "ms": 7697,
+    "x": 578.990537500021,
+    "y": 550,
+    "purpose": "Tap car horn"
+  },
+  {
+    "case": "Owater-desktop",
+    "ms": 7814,
+    "x": 1304.5,
+    "y": 134,
+    "purpose": "Get out after horn"
+  },
+  {
+    "case": "Obuilding-desktop",
+    "ms": 233,
+    "x": 683,
+    "y": 356.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "Obuilding-desktop",
+    "ms": 356,
+    "x": 683,
+    "y": 331.09375,
+    "purpose": "Play"
+  },
+  {
+    "case": "Obuilding-desktop",
+    "ms": 873,
+    "x": 1148.328125,
+    "y": 34,
+    "purpose": "Open Craft"
+  },
+  {
+    "case": "Obuilding-desktop",
+    "ms": 989,
+    "x": 629,
+    "y": 514,
+    "purpose": "Craft Wheel"
+  },
+  {
+    "case": "Obuilding-desktop",
+    "ms": 1107,
+    "x": 683,
+    "y": 152.00000381469727,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "Obuilding-desktop",
+    "ms": 1226,
+    "x": 629,
+    "y": 514,
+    "purpose": "Craft Wheel"
+  },
+  {
+    "case": "Obuilding-desktop",
+    "ms": 1341,
+    "x": 683,
+    "y": 152,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "Obuilding-desktop",
+    "ms": 1461,
+    "x": 1306,
+    "y": 514,
+    "purpose": "Craft Car"
+  },
+  {
+    "case": "Obuilding-desktop",
+    "ms": 1578,
+    "x": 683,
+    "y": 151.99999618530273,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "Obuilding-desktop",
+    "ms": 1701,
+    "x": 629,
+    "y": 414,
+    "purpose": "Craft House"
+  },
+  {
+    "case": "Obuilding-desktop",
+    "ms": 1820,
+    "x": 683.0000305175781,
+    "y": 151.99999618530273,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "Obuilding-desktop",
+    "ms": 1940,
+    "x": 1304,
+    "y": 38,
+    "purpose": "Close Craft"
+  },
+  {
+    "case": "Obuilding-desktop",
+    "ms": 2058,
+    "x": 1064.328125,
+    "y": 34,
+    "purpose": "Build"
+  },
+  {
+    "case": "Obuilding-desktop",
+    "ms": 2171,
+    "x": 159.125,
+    "y": 100,
+    "purpose": "Select building obstacle"
+  },
+  {
+    "case": "Obuilding-desktop",
+    "ms": 2276,
+    "x": 674.0000000000002,
+    "y": 527.9999999999999,
+    "purpose": "Place building obstacle"
+  },
+  {
+    "case": "Obuilding-desktop",
+    "ms": 2391,
+    "x": 344.265625,
+    "y": 100,
+    "purpose": "Select Car"
+  },
+  {
+    "case": "Obuilding-desktop",
+    "ms": 2501,
+    "x": 674.0000000000002,
+    "y": 527.9999999999999,
+    "purpose": "Reject blocked Car placement"
+  },
+  {
+    "case": "Obuilding-desktop",
+    "ms": 2695,
+    "x": 474.0000000000002,
+    "y": 527.9999999999999,
+    "purpose": "Place Car before building"
+  },
+  {
+    "case": "Obuilding-desktop",
+    "ms": 2888,
+    "x": 1064.328125,
+    "y": 34,
+    "purpose": "Leave Build"
+  },
+  {
+    "case": "Obuilding-desktop",
+    "ms": 2991,
+    "x": 524.0000000000002,
+    "y": 527.9999999999999,
+    "purpose": "Board before obstacle"
+  },
+  {
+    "case": "Obuilding-desktop",
+    "purpose": "Joystick 1 for 1400ms",
+    "ms": 3111
+  },
+  {
+    "case": "Obuilding-desktop",
+    "purpose": "Joystick 1 for 500ms",
+    "ms": 4692
+  },
+  {
+    "case": "Obuilding-desktop",
+    "ms": 8127,
+    "x": 578.897037500007,
+    "y": 550,
+    "purpose": "Tap car horn"
+  },
+  {
+    "case": "Obuilding-desktop",
+    "ms": 8241,
+    "x": 1304.5,
+    "y": 134,
+    "purpose": "Get out after horn"
+  },
+  {
+    "case": "Ofence-desktop",
+    "ms": 247,
+    "x": 683,
+    "y": 356.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "Ofence-desktop",
+    "ms": 363,
+    "x": 683,
+    "y": 331.09375,
+    "purpose": "Play"
+  },
+  {
+    "case": "Ofence-desktop",
+    "ms": 875,
+    "x": 1148.328125,
+    "y": 34,
+    "purpose": "Open Craft"
+  },
+  {
+    "case": "Ofence-desktop",
+    "ms": 990,
+    "x": 629,
+    "y": 514,
+    "purpose": "Craft Wheel"
+  },
+  {
+    "case": "Ofence-desktop",
+    "ms": 1107,
+    "x": 682.9999694824219,
+    "y": 152,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "Ofence-desktop",
+    "ms": 1225,
+    "x": 629,
+    "y": 514,
+    "purpose": "Craft Wheel"
+  },
+  {
+    "case": "Ofence-desktop",
+    "ms": 1343,
+    "x": 683,
+    "y": 151.99999618530273,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "Ofence-desktop",
+    "ms": 1458,
+    "x": 1306,
+    "y": 514,
+    "purpose": "Craft Car"
+  },
+  {
+    "case": "Ofence-desktop",
+    "ms": 1572,
+    "x": 683,
+    "y": 151.99999618530273,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "Ofence-desktop",
+    "ms": 1686,
+    "x": 1304,
+    "y": 38,
+    "purpose": "Close Craft"
+  },
+  {
+    "case": "Ofence-desktop",
+    "ms": 1792,
+    "x": 1064.328125,
+    "y": 34,
+    "purpose": "Build"
+  },
+  {
+    "case": "Ofence-desktop",
+    "ms": 1905,
+    "x": 734.171875,
+    "y": 100,
+    "purpose": "Select fence obstacle"
+  },
+  {
+    "case": "Ofence-desktop",
+    "ms": 2009,
+    "x": 774.0000000000002,
+    "y": 527.9999999999999,
+    "purpose": "Place fence obstacle"
+  },
+  {
+    "case": "Ofence-desktop",
+    "ms": 2143,
+    "x": 344.265625,
+    "y": 100,
+    "purpose": "Select Car"
+  },
+  {
+    "case": "Ofence-desktop",
+    "ms": 2253,
+    "x": 724.0000000000002,
+    "y": 527.9999999999999,
+    "purpose": "Reject blocked Car placement"
+  },
+  {
+    "case": "Ofence-desktop",
+    "ms": 2452,
+    "x": 474.0000000000002,
+    "y": 527.9999999999999,
+    "purpose": "Place Car before fence"
+  },
+  {
+    "case": "Ofence-desktop",
+    "ms": 2654,
+    "x": 1064.328125,
+    "y": 34,
+    "purpose": "Leave Build"
+  },
+  {
+    "case": "Ofence-desktop",
+    "ms": 2758,
+    "x": 524.0000000000002,
+    "y": 527.9999999999999,
+    "purpose": "Board before obstacle"
+  },
+  {
+    "case": "Ofence-desktop",
+    "purpose": "Joystick 1 for 1400ms",
+    "ms": 2878
+  },
+  {
+    "case": "Ofence-desktop",
+    "purpose": "Joystick 1 for 500ms",
+    "ms": 4443
+  },
+  {
+    "case": "Ofence-desktop",
+    "ms": 7885,
+    "x": 578.990537500021,
+    "y": 550,
+    "purpose": "Tap car horn"
+  },
+  {
+    "case": "Ofence-desktop",
+    "ms": 8002,
+    "x": 1304.5,
+    "y": 134,
+    "purpose": "Get out after horn"
+  },
+  {
+    "case": "A-desktop",
+    "ms": 233,
+    "x": 683,
+    "y": 356.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "A-desktop",
+    "ms": 347,
+    "x": 683,
+    "y": 331.09375,
+    "purpose": "Play"
+  },
+  {
+    "case": "A-desktop",
+    "ms": 867,
+    "x": 1148.328125,
+    "y": 34,
+    "purpose": "Craft sound"
+  },
+  {
+    "case": "A-desktop",
+    "ms": 984,
+    "x": 629,
+    "y": 514,
+    "purpose": "Craft Wheel"
+  },
+  {
+    "case": "A-desktop",
+    "ms": 1100,
+    "x": 682.9999694824219,
+    "y": 152,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "A-desktop",
+    "ms": 1220,
+    "x": 629,
+    "y": 514,
+    "purpose": "Craft Wheel"
+  },
+  {
+    "case": "A-desktop",
+    "ms": 1334,
+    "x": 682.9999694824219,
+    "y": 151.99999618530273,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "A-desktop",
+    "ms": 1462,
+    "x": 1306,
+    "y": 514,
+    "purpose": "Craft Car"
+  },
+  {
+    "case": "A-desktop",
+    "ms": 1583,
+    "x": 682.9999694824219,
+    "y": 152,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "A-desktop",
+    "ms": 1700,
+    "x": 1304,
+    "y": 38,
+    "purpose": "Close Craft"
+  },
+  {
+    "case": "A-desktop",
+    "ms": 1814,
+    "x": 1064.328125,
+    "y": 34,
+    "purpose": "Build"
+  },
+  {
+    "case": "A-desktop",
+    "ms": 1932,
+    "x": 344.265625,
+    "y": 100,
+    "purpose": "Select Car"
+  },
+  {
+    "case": "A-desktop",
+    "ms": 2039,
+    "x": 474.0000000000002,
+    "y": 527.9999999999999,
+    "purpose": "Place Car with sound"
+  },
+  {
+    "case": "A-desktop",
+    "ms": 2154,
+    "x": 524.0000000000002,
+    "y": 527.9999999999999,
+    "purpose": "Board Car with sound"
+  },
+  {
+    "case": "A-desktop",
+    "purpose": "Joystick 1 for 180ms",
+    "ms": 2268
+  },
+  {
+    "case": "A-desktop",
+    "ms": 2601,
+    "x": 562.0000000000005,
+    "y": 550,
+    "purpose": "Horn"
+  },
+  {
+    "case": "A-desktop",
+    "ms": 3412,
+    "x": 1304.5,
+    "y": 134,
+    "purpose": "Get out"
+  },
+  {
+    "case": "A-desktop",
+    "ms": 3527,
+    "x": 1064.328125,
+    "y": 34,
+    "purpose": "Build Show"
+  },
+  {
+    "case": "A-desktop",
+    "ms": 3636,
+    "x": 57.3359375,
+    "y": 100,
+    "purpose": "Invite Car Show"
+  },
+  {
+    "case": "A-desktop",
+    "ms": 3769,
+    "x": 1252.9921875,
+    "y": 220,
+    "purpose": "Accept Car Show"
+  },
+  {
+    "case": "A-desktop",
+    "ms": 3883,
+    "x": 1303,
+    "y": 223.5,
+    "purpose": "Soft wrong answer"
+  },
+  {
+    "case": "A-desktop",
+    "ms": 3999,
+    "x": 1251,
+    "y": 223.5,
+    "purpose": "Correct answer and star"
+  },
+  {
+    "case": "A-desktop",
+    "ms": 4631,
+    "x": 1253,
+    "y": 238,
+    "purpose": "Close buddy bubble"
+  },
+  {
+    "case": "A-desktop",
+    "ms": 4738,
+    "x": 431.734375,
+    "y": 100,
+    "purpose": "Select Remove"
+  },
+  {
+    "case": "A-desktop",
+    "ms": 4850,
+    "x": 478.77500000000595,
+    "y": 527.9999999999999,
+    "purpose": "Recover car with sound"
+  },
+  {
+    "case": "A-desktop",
+    "ms": 5167,
+    "x": 1320,
+    "y": 34,
+    "purpose": "Parent audio settings"
+  },
+  {
+    "case": "A-desktop",
+    "ms": 5282,
+    "x": 1088.0078125,
+    "y": 451.9375,
+    "purpose": "Music off"
+  },
+  {
+    "case": "A-desktop",
+    "ms": 5402,
+    "x": 1182.3984375,
+    "y": 451.9375,
+    "purpose": "SFX off"
+  },
+  {
+    "case": "A-desktop",
+    "ms": 5648,
+    "x": 1068.0078125,
+    "y": 710.4375,
+    "purpose": "Close settings"
+  },
+  {
+    "case": "A-desktop",
+    "ms": 5866,
+    "x": 683,
+    "y": 356.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "A-desktop",
+    "ms": 5983,
+    "x": 683,
+    "y": 238.28125,
+    "purpose": "Play"
+  },
+  {
+    "case": "A-desktop",
+    "ms": 6501,
+    "x": 1148.328125,
+    "y": 34,
+    "purpose": "Muted craft"
+  },
+  {
+    "case": "A-desktop",
+    "ms": 6618,
+    "x": 629,
+    "y": 514,
+    "purpose": "Craft Wheel"
+  },
+  {
+    "case": "A-desktop",
+    "ms": 6734,
+    "x": 683,
+    "y": 151.99999618530273,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "A-desktop",
+    "ms": 6849,
+    "x": 1304,
+    "y": 38,
+    "purpose": "Close Craft"
+  },
+  {
+    "case": "A-desktop",
+    "ms": 6964,
+    "x": 1320,
+    "y": 34,
+    "purpose": "Restore sound settings"
+  },
+  {
+    "case": "A-desktop",
+    "ms": 7079,
+    "x": 1087.859375,
+    "y": 451.9375,
+    "purpose": "Music on independently"
+  },
+  {
+    "case": "A-desktop",
+    "ms": 7195,
+    "x": 1182.546875,
+    "y": 451.9375,
+    "purpose": "SFX on"
+  },
+  {
+    "case": "A-desktop",
+    "ms": 7354,
+    "x": 1068.0078125,
+    "y": 710.4375,
+    "purpose": "Close settings"
+  },
+  {
+    "case": "A-desktop",
+    "ms": 7657,
+    "x": 683,
+    "y": 356.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "A-desktop",
+    "ms": 7780,
+    "x": 683,
+    "y": 238.28125,
+    "purpose": "Play"
+  },
+  {
+    "case": "C-mobile",
+    "ms": 152,
+    "x": 422,
+    "y": 223.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "C-mobile",
+    "ms": 266,
+    "x": 422,
+    "y": 256,
+    "purpose": "Play"
+  },
+  {
+    "case": "C-mobile",
+    "ms": 783,
+    "x": 657.9999999999998,
+    "y": 262,
+    "purpose": "Harvest natural Wood 1"
+  },
+  {
+    "case": "C-mobile",
+    "ms": 2596,
+    "x": 421.99998474121094,
+    "y": 100,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "C-mobile",
+    "ms": 2705,
+    "x": 459.0000000000001,
+    "y": 266,
+    "purpose": "Harvest natural Wood 2"
+  },
+  {
+    "case": "C-mobile",
+    "ms": 2969,
+    "x": 422,
+    "y": 100,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "C-mobile",
+    "ms": 3081,
+    "x": 626.328125,
+    "y": 34,
+    "purpose": "Open Craft"
+  },
+  {
+    "case": "C-mobile",
+    "ms": 3197,
+    "x": 368,
+    "y": 114,
+    "purpose": "Craft Planks"
+  },
+  {
+    "case": "C-mobile",
+    "ms": 3312,
+    "x": 422,
+    "y": 100.00000381469727,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "C-mobile",
+    "ms": 3426,
+    "x": 368,
+    "y": 114,
+    "purpose": "Craft Planks"
+  },
+  {
+    "case": "C-mobile",
+    "ms": 3537,
+    "x": 421.99998474121094,
+    "y": 99.99999618530273,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "C-mobile",
+    "ms": 3684,
+    "x": 368,
+    "y": 225,
+    "purpose": "Craft Wheel"
+  },
+  {
+    "case": "C-mobile",
+    "ms": 3799,
+    "x": 421.99998474121094,
+    "y": 100.00000381469727,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "C-mobile",
+    "ms": 3914,
+    "x": 368,
+    "y": 225,
+    "purpose": "Craft Wheel"
+  },
+  {
+    "case": "C-mobile",
+    "ms": 4029,
+    "x": 422.00001525878906,
+    "y": 100,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "C-mobile",
+    "ms": 4174,
+    "x": 784,
+    "y": 225,
+    "purpose": "Craft Car"
+  },
+  {
+    "case": "C-mobile",
+    "ms": 4284,
+    "x": 421.99998474121094,
+    "y": 99.99999618530273,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "C-mobile",
+    "ms": 4437,
+    "x": 782,
+    "y": 38,
+    "purpose": "Close Craft"
+  },
+  {
+    "case": "C-mobile",
+    "purpose": "Joystick -1 for 1100ms",
+    "ms": 4550
+  },
+  {
+    "case": "C-mobile",
+    "ms": 6269,
+    "x": 542.328125,
+    "y": 34,
+    "purpose": "Build"
+  },
+  {
+    "case": "C-mobile",
+    "ms": 6383,
+    "x": 344.265625,
+    "y": 100,
+    "purpose": "Select car"
+  },
+  {
+    "case": "C-mobile",
+    "ms": 6488,
+    "x": 368.0000000000002,
+    "y": 262,
+    "purpose": "Place car once near spawn"
+  },
+  {
+    "case": "C-mobile",
+    "ms": 6773,
+    "x": 57.3359375,
+    "y": 100,
+    "purpose": "Invite before boarding"
+  },
+  {
+    "case": "C-mobile",
+    "ms": 6885,
+    "x": 406.0000000000002,
+    "y": 262,
+    "purpose": "Tap just-placed car to sit directly from Build"
+  },
+  {
+    "case": "C-mobile",
+    "ms": 7043,
+    "x": 542.328125,
+    "y": 34,
+    "purpose": "Build cannot remove an occupied car"
+  },
+  {
+    "case": "C-mobile",
+    "purpose": "Joystick 1 for 1200ms",
+    "ms": 7157
+  },
+  {
+    "case": "C-mobile",
+    "purpose": "Joystick 1 for 600ms",
+    "ms": 8515
+  },
+  {
+    "case": "C-mobile",
+    "purpose": "Joystick -1 for 220ms",
+    "ms": 9325
+  },
+  {
+    "case": "C-mobile",
+    "ms": 9741,
+    "x": 782.5,
+    "y": 134,
+    "purpose": "Get out"
+  },
+  {
+    "case": "C-mobile",
+    "ms": 9977,
+    "x": 422,
+    "y": 179.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "C-mobile",
+    "ms": 10089,
+    "x": 422,
+    "y": 163,
+    "purpose": "Play"
+  },
+  {
+    "case": "C-mobile",
+    "ms": 10664,
+    "x": 542.328125,
+    "y": 34,
+    "purpose": "Open parked Show"
+  },
+  {
+    "case": "C-mobile",
+    "ms": 10785,
+    "x": 730.9921875,
+    "y": 220,
+    "purpose": "Accept Show"
+  },
+  {
+    "case": "C-mobile",
+    "ms": 10965,
+    "x": 729,
+    "y": 223.5,
+    "purpose": "Answer car"
+  },
+  {
+    "case": "C-mobile",
+    "ms": 11250,
+    "x": 731,
+    "y": 238,
+    "purpose": "Close buddy bubble"
+  },
+  {
+    "case": "C-mobile",
+    "ms": 11364,
+    "x": 431.734375,
+    "y": 100,
+    "purpose": "Remove parked car"
+  },
+  {
+    "case": "C-mobile",
+    "ms": 11471,
+    "x": 417.09033550001595,
+    "y": 262,
+    "purpose": "Recover entire car"
+  },
+  {
+    "case": "U-mobile",
+    "ms": 245,
+    "x": 422,
+    "y": 179.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "U-mobile",
+    "ms": 363,
+    "x": 422,
+    "y": 256,
+    "purpose": "Play"
+  },
+  {
+    "case": "U-mobile",
+    "ms": 875,
+    "x": 626.328125,
+    "y": 34,
+    "purpose": "Open Craft"
+  },
+  {
+    "case": "U-mobile",
+    "ms": 1036,
+    "x": 368,
+    "y": 225,
+    "purpose": "Craft House"
+  },
+  {
+    "case": "U-mobile",
+    "ms": 1151,
+    "x": 422.00001525878906,
+    "y": 100.00000381469727,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "U-mobile",
+    "ms": 1265,
+    "x": 782,
+    "y": 38,
+    "purpose": "Close Craft"
+  },
+  {
+    "case": "U-mobile",
+    "ms": 1372,
+    "x": 542.328125,
+    "y": 34,
+    "purpose": "Build"
+  },
+  {
+    "case": "U-mobile",
+    "ms": 1486,
+    "x": 159.125,
+    "y": 100,
+    "purpose": "Select House"
+  },
+  {
+    "case": "U-mobile",
+    "ms": 1591,
+    "x": 277.9999999999998,
+    "y": 262,
+    "purpose": "Place House"
+  },
+  {
+    "case": "U-mobile",
+    "ms": 1868,
+    "x": 542.328125,
+    "y": 34,
+    "purpose": "Leave Build"
+  },
+  {
+    "case": "U-mobile",
+    "ms": 1971,
+    "x": 315.9999999999998,
+    "y": 224.00000000000003,
+    "purpose": "Open House improvements"
+  },
+  {
+    "case": "U-mobile",
+    "ms": 2131,
+    "x": 311.078125,
+    "y": 180,
+    "purpose": "Choose wall"
+  },
+  {
+    "case": "U-mobile",
+    "ms": 2283,
+    "x": 258.15625,
+    "y": 354,
+    "purpose": "Confirm wall"
+  },
+  {
+    "case": "U-mobile",
+    "ms": 4350,
+    "x": 730.9921875,
+    "y": 220,
+    "purpose": "Accept Show"
+  },
+  {
+    "case": "U-mobile",
+    "ms": 4523,
+    "x": 729,
+    "y": 223.5,
+    "purpose": "Answer stone"
+  },
+  {
+    "case": "U-mobile",
+    "ms": 4799,
+    "x": 731,
+    "y": 238,
+    "purpose": "Close buddy bubble"
+  },
+  {
+    "case": "U-mobile",
+    "ms": 4902,
+    "x": 315.9999999999998,
+    "y": 224.00000000000003,
+    "purpose": "Open House improvements"
+  },
+  {
+    "case": "U-mobile",
+    "ms": 5075,
+    "x": 311.078125,
+    "y": 256,
+    "purpose": "Choose yard"
+  },
+  {
+    "case": "U-mobile",
+    "ms": 5216,
+    "x": 258.15625,
+    "y": 354,
+    "purpose": "Confirm yard"
+  },
+  {
+    "case": "U-mobile",
+    "ms": 7280,
+    "x": 730.9921875,
+    "y": 220,
+    "purpose": "Accept Show"
+  },
+  {
+    "case": "U-mobile",
+    "ms": 7448,
+    "x": 728.9921875,
+    "y": 223.5,
+    "purpose": "Answer flower"
+  },
+  {
+    "case": "U-mobile",
+    "ms": 7725,
+    "x": 731,
+    "y": 238,
+    "purpose": "Close buddy bubble"
+  },
+  {
+    "case": "U-mobile",
+    "ms": 7832,
+    "x": 315.9999999999998,
+    "y": 224.00000000000003,
+    "purpose": "Open House improvements"
+  },
+  {
+    "case": "U-mobile",
+    "ms": 8009,
+    "x": 532.921875,
+    "y": 180,
+    "purpose": "Choose roof"
+  },
+  {
+    "case": "U-mobile",
+    "ms": 8167,
+    "x": 258.15625,
+    "y": 354,
+    "purpose": "Confirm roof"
+  },
+  {
+    "case": "U-mobile",
+    "ms": 10279,
+    "x": 730.9921875,
+    "y": 220,
+    "purpose": "Accept Show"
+  },
+  {
+    "case": "U-mobile",
+    "ms": 10445,
+    "x": 724.875,
+    "y": 223.5,
+    "purpose": "Answer roof"
+  },
+  {
+    "case": "U-mobile",
+    "ms": 10714,
+    "x": 731,
+    "y": 220,
+    "purpose": "Close buddy bubble"
+  },
+  {
+    "case": "U-mobile",
+    "ms": 10817,
+    "x": 315.9999999999998,
+    "y": 224.00000000000003,
+    "purpose": "Open House improvements"
+  },
+  {
+    "case": "U-mobile",
+    "ms": 10987,
+    "x": 532.921875,
+    "y": 256,
+    "purpose": "Choose window"
+  },
+  {
+    "case": "U-mobile",
+    "ms": 11132,
+    "x": 258.15625,
+    "y": 354,
+    "purpose": "Confirm window"
+  },
+  {
+    "case": "U-mobile",
+    "ms": 13197,
+    "x": 730.9921875,
+    "y": 220,
+    "purpose": "Accept Show"
+  },
+  {
+    "case": "U-mobile",
+    "ms": 13363,
+    "x": 729,
+    "y": 223.5,
+    "purpose": "Answer window"
+  },
+  {
+    "case": "U-mobile",
+    "ms": 13652,
+    "x": 731,
+    "y": 238,
+    "purpose": "Close buddy bubble"
+  },
+  {
+    "case": "U-mobile",
+    "ms": 16558,
+    "x": 422,
+    "y": 179.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "U-mobile",
+    "ms": 16672,
+    "x": 422,
+    "y": 163,
+    "purpose": "Play"
+  },
+  {
+    "case": "U-mobile",
+    "ms": 17242,
+    "x": 315.9999999999998,
+    "y": 224.00000000000003,
+    "purpose": "Open finished upgrades"
+  },
+  {
+    "case": "U-mobile",
+    "ms": 17397,
+    "x": 782,
+    "y": 38,
+    "purpose": "Back"
+  },
+  {
+    "case": "U-mobile",
+    "ms": 17505,
+    "x": 542.328125,
+    "y": 34,
+    "purpose": "Build"
+  },
+  {
+    "case": "U-mobile",
+    "ms": 17615,
+    "x": 431.734375,
+    "y": 100,
+    "purpose": "Recover improved house"
+  },
+  {
+    "case": "U-mobile",
+    "ms": 17721,
+    "x": 315.9999999999998,
+    "y": 224.00000000000003,
+    "purpose": "Remove improved House"
+  },
+  {
+    "case": "U-mobile",
+    "ms": 17833,
+    "x": 159.125,
+    "y": 100,
+    "purpose": "Select recovered house"
+  },
+  {
+    "case": "U-mobile",
+    "ms": 17937,
+    "x": 277.9999999999998,
+    "y": 262,
+    "purpose": "Replace improved House"
+  },
+  {
+    "case": "P-mobile",
+    "ms": 141,
+    "x": 422,
+    "y": 223.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "P-mobile",
+    "ms": 256,
+    "x": 422,
+    "y": 256,
+    "purpose": "Play"
+  },
+  {
+    "case": "P-mobile",
+    "ms": 774,
+    "x": 657.9999999999998,
+    "y": 262,
+    "purpose": "Harvest natural Wood 1"
+  },
+  {
+    "case": "P-mobile",
+    "ms": 2581,
+    "x": 422,
+    "y": 99.99999618530273,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "P-mobile",
+    "ms": 2690,
+    "x": 459.0000000000001,
+    "y": 266,
+    "purpose": "Harvest natural Wood 2"
+  },
+  {
+    "case": "P-mobile",
+    "ms": 2956,
+    "x": 422,
+    "y": 100,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "P-mobile",
+    "ms": 3072,
+    "x": 626.328125,
+    "y": 34,
+    "purpose": "Open Craft"
+  },
+  {
+    "case": "P-mobile",
+    "ms": 3187,
+    "x": 368,
+    "y": 114,
+    "purpose": "Craft Planks"
+  },
+  {
+    "case": "P-mobile",
+    "ms": 3303,
+    "x": 421.99998474121094,
+    "y": 100,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "P-mobile",
+    "ms": 3419,
+    "x": 368,
+    "y": 114,
+    "purpose": "Craft Planks"
+  },
+  {
+    "case": "P-mobile",
+    "ms": 3527,
+    "x": 421.99998474121094,
+    "y": 100.00000381469727,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "P-mobile",
+    "ms": 3639,
+    "x": 784,
+    "y": 114,
+    "purpose": "Craft Stick"
+  },
+  {
+    "case": "P-mobile",
+    "ms": 3754,
+    "x": 422,
+    "y": 100.00000381469727,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "P-mobile",
+    "ms": 3906,
+    "x": 784,
+    "y": 225,
+    "purpose": "Craft Fence"
+  },
+  {
+    "case": "P-mobile",
+    "ms": 4019,
+    "x": 422,
+    "y": 100.00000381469727,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "P-mobile",
+    "ms": 4129,
+    "x": 784,
+    "y": 225,
+    "purpose": "Craft Fence"
+  },
+  {
+    "case": "P-mobile",
+    "ms": 4241,
+    "x": 422.00001525878906,
+    "y": 100,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "P-mobile",
+    "ms": 4389,
+    "x": 784,
+    "y": 225,
+    "purpose": "Craft Pen"
+  },
+  {
+    "case": "P-mobile",
+    "ms": 4505,
+    "x": 421.99998474121094,
+    "y": 99.99999618530273,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "P-mobile",
+    "ms": 4662,
+    "x": 782,
+    "y": 38,
+    "purpose": "Close Craft"
+  },
+  {
+    "case": "P-mobile",
+    "purpose": "Joystick -1 for 1100ms",
+    "ms": 4773
+  },
+  {
+    "case": "P-mobile",
+    "ms": 6491,
+    "x": 542.328125,
+    "y": 34,
+    "purpose": "Build"
+  },
+  {
+    "case": "P-mobile",
+    "ms": 6603,
+    "x": 257.25,
+    "y": 100,
+    "purpose": "Select pen"
+  },
+  {
+    "case": "P-mobile",
+    "ms": 6707,
+    "x": 368.0000000000002,
+    "y": 262,
+    "purpose": "Place pen once near spawn"
+  },
+  {
+    "case": "P-mobile",
+    "ms": 6973,
+    "x": 57.33593940734863,
+    "y": 100,
+    "purpose": "Request Show"
+  },
+  {
+    "case": "P-mobile",
+    "ms": 7087,
+    "x": 730.9921875,
+    "y": 220,
+    "purpose": "Accept Show"
+  },
+  {
+    "case": "P-mobile",
+    "ms": 7238,
+    "x": 781,
+    "y": 223.5,
+    "purpose": "Answer fence"
+  },
+  {
+    "case": "P-mobile",
+    "ms": 7506,
+    "x": 731,
+    "y": 238,
+    "purpose": "Close buddy bubble"
+  },
+  {
+    "case": "P-mobile",
+    "ms": 10291,
+    "x": 422,
+    "y": 179.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "P-mobile",
+    "ms": 10407,
+    "x": 422,
+    "y": 163,
+    "purpose": "Play"
+  },
+  {
+    "case": "M-mobile",
+    "ms": 204,
+    "x": 422,
+    "y": 179.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "M-mobile",
+    "ms": 319,
+    "x": 422,
+    "y": 256,
+    "purpose": "Play"
+  },
+  {
+    "case": "M-mobile",
+    "ms": 837,
+    "x": 626.328125,
+    "y": 34,
+    "purpose": "Open Craft"
+  },
+  {
+    "case": "M-mobile",
+    "ms": 987,
+    "x": 368,
+    "y": 225,
+    "purpose": "Craft House"
+  },
+  {
+    "case": "M-mobile",
+    "ms": 1104,
+    "x": 422.00001525878906,
+    "y": 100.00000381469727,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "M-mobile",
+    "ms": 1215,
+    "x": 782,
+    "y": 38,
+    "purpose": "Close Craft"
+  },
+  {
+    "case": "M-mobile",
+    "ms": 1322,
+    "x": 542.328125,
+    "y": 34,
+    "purpose": "Build"
+  },
+  {
+    "case": "M-mobile",
+    "ms": 1434,
+    "x": 159.125,
+    "y": 100,
+    "purpose": "Select House"
+  },
+  {
+    "case": "M-mobile",
+    "ms": 1540,
+    "x": 277.9999999999998,
+    "y": 262,
+    "purpose": "Place House"
+  },
+  {
+    "case": "M-mobile",
+    "ms": 1658,
+    "x": 542.328125,
+    "y": 34,
+    "purpose": "Leave Build"
+  },
+  {
+    "case": "M-mobile",
+    "ms": 1761,
+    "x": 315.9999999999998,
+    "y": 224.00000000000003,
+    "purpose": "Open missing materials"
+  },
+  {
+    "case": "M-mobile",
+    "ms": 1937,
+    "x": 532.921875,
+    "y": 180,
+    "purpose": "Preview affordable roof"
+  },
+  {
+    "case": "M-mobile",
+    "ms": 2049,
+    "x": 782,
+    "y": 38,
+    "purpose": "Cancel confirmation"
+  },
+  {
+    "case": "M-mobile",
+    "ms": 2156,
+    "x": 315.9999999999998,
+    "y": 224.00000000000003,
+    "purpose": "Reopen house"
+  },
+  {
+    "case": "M-mobile",
+    "ms": 2268,
+    "x": 532.921875,
+    "y": 180,
+    "purpose": "Choose roof after daily cap"
+  },
+  {
+    "case": "M-mobile",
+    "ms": 2418,
+    "x": 258.15625,
+    "y": 354,
+    "purpose": "Confirm upgrade despite daily Show cap"
+  },
+  {
+    "case": "Otree-mobile",
+    "ms": 212,
+    "x": 422,
+    "y": 179.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "Otree-mobile",
+    "ms": 331,
+    "x": 422,
+    "y": 256,
+    "purpose": "Play"
+  },
+  {
+    "case": "Otree-mobile",
+    "ms": 844,
+    "x": 626.328125,
+    "y": 34,
+    "purpose": "Open Craft"
+  },
+  {
+    "case": "Otree-mobile",
+    "ms": 1005,
+    "x": 368,
+    "y": 225,
+    "purpose": "Craft Wheel"
+  },
+  {
+    "case": "Otree-mobile",
+    "ms": 1119,
+    "x": 422,
+    "y": 100,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "Otree-mobile",
+    "ms": 1234,
+    "x": 368,
+    "y": 225,
+    "purpose": "Craft Wheel"
+  },
+  {
+    "case": "Otree-mobile",
+    "ms": 1344,
+    "x": 422,
+    "y": 100,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "Otree-mobile",
+    "ms": 1459,
+    "x": 784,
+    "y": 225,
+    "purpose": "Craft Car"
+  },
+  {
+    "case": "Otree-mobile",
+    "ms": 1570,
+    "x": 422,
+    "y": 99.99999618530273,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "Otree-mobile",
+    "ms": 1684,
+    "x": 782,
+    "y": 38,
+    "purpose": "Close Craft"
+  },
+  {
+    "case": "Otree-mobile",
+    "ms": 1793,
+    "x": 542.328125,
+    "y": 34,
+    "purpose": "Build"
+  },
+  {
+    "case": "Otree-mobile",
+    "ms": 1906,
+    "x": 344.265625,
+    "y": 100,
+    "purpose": "Select Car"
+  },
+  {
+    "case": "Otree-mobile",
+    "ms": 2012,
+    "x": 448.9999999999998,
+    "y": 262,
+    "purpose": "Reject blocked Car placement"
+  },
+  {
+    "case": "Otree-mobile",
+    "ms": 2176,
+    "x": 372.9999999999998,
+    "y": 262,
+    "purpose": "Place Car before tree"
+  },
+  {
+    "case": "Otree-mobile",
+    "ms": 2343,
+    "x": 542.328125,
+    "y": 34,
+    "purpose": "Leave Build"
+  },
+  {
+    "case": "Otree-mobile",
+    "ms": 2447,
+    "x": 410.9999999999998,
+    "y": 262,
+    "purpose": "Board before obstacle"
+  },
+  {
+    "case": "Otree-mobile",
+    "purpose": "Joystick 1 for 1400ms",
+    "ms": 2561
+  },
+  {
+    "case": "Otree-mobile",
+    "purpose": "Joystick 1 for 500ms",
+    "ms": 4135
+  },
+  {
+    "case": "Otree-mobile",
+    "ms": 7564,
+    "x": 358.0192755000053,
+    "y": 279.00000000000006,
+    "purpose": "Tap car horn"
+  },
+  {
+    "case": "Otree-mobile",
+    "ms": 7676,
+    "x": 782.5,
+    "y": 134,
+    "purpose": "Get out after horn"
+  },
+  {
+    "case": "Owater-mobile",
+    "ms": 217,
+    "x": 422,
+    "y": 179.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "Owater-mobile",
+    "ms": 338,
+    "x": 422,
+    "y": 256,
+    "purpose": "Play"
+  },
+  {
+    "case": "Owater-mobile",
+    "ms": 851,
+    "x": 626.328125,
+    "y": 34,
+    "purpose": "Open Craft"
+  },
+  {
+    "case": "Owater-mobile",
+    "ms": 999,
+    "x": 368,
+    "y": 225,
+    "purpose": "Craft Wheel"
+  },
+  {
+    "case": "Owater-mobile",
+    "ms": 1114,
+    "x": 422,
+    "y": 100,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "Owater-mobile",
+    "ms": 1230,
+    "x": 368,
+    "y": 225,
+    "purpose": "Craft Wheel"
+  },
+  {
+    "case": "Owater-mobile",
+    "ms": 1341,
+    "x": 422,
+    "y": 100.00000381469727,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "Owater-mobile",
+    "ms": 1455,
+    "x": 784,
+    "y": 225,
+    "purpose": "Craft Car"
+  },
+  {
+    "case": "Owater-mobile",
+    "ms": 1569,
+    "x": 422,
+    "y": 99.99999618530273,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "Owater-mobile",
+    "ms": 1683,
+    "x": 782,
+    "y": 38,
+    "purpose": "Close Craft"
+  },
+  {
+    "case": "Owater-mobile",
+    "ms": 1792,
+    "x": 542.328125,
+    "y": 34,
+    "purpose": "Build"
+  },
+  {
+    "case": "Owater-mobile",
+    "ms": 1904,
+    "x": 344.265625,
+    "y": 100,
+    "purpose": "Select Car"
+  },
+  {
+    "case": "Owater-mobile",
+    "ms": 2012,
+    "x": 486.9999999999998,
+    "y": 262,
+    "purpose": "Reject blocked Car placement"
+  },
+  {
+    "case": "Owater-mobile",
+    "ms": 2179,
+    "x": 334.9999999999998,
+    "y": 262,
+    "purpose": "Place Car before water"
+  },
+  {
+    "case": "Owater-mobile",
+    "ms": 2336,
+    "x": 542.328125,
+    "y": 34,
+    "purpose": "Leave Build"
+  },
+  {
+    "case": "Owater-mobile",
+    "ms": 2439,
+    "x": 372.9999999999998,
+    "y": 262,
+    "purpose": "Board before obstacle"
+  },
+  {
+    "case": "Owater-mobile",
+    "purpose": "Joystick 1 for 1400ms",
+    "ms": 2554
+  },
+  {
+    "case": "Owater-mobile",
+    "purpose": "Joystick 1 for 500ms",
+    "ms": 4114
+  },
+  {
+    "case": "Owater-mobile",
+    "ms": 7528,
+    "x": 358.0090630000159,
+    "y": 279.00000000000006,
+    "purpose": "Tap car horn"
+  },
+  {
+    "case": "Owater-mobile",
+    "ms": 7641,
+    "x": 782.5,
+    "y": 134,
+    "purpose": "Get out after horn"
+  },
+  {
+    "case": "Obuilding-mobile",
+    "ms": 219,
+    "x": 422,
+    "y": 179.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "Obuilding-mobile",
+    "ms": 332,
+    "x": 422,
+    "y": 256,
+    "purpose": "Play"
+  },
+  {
+    "case": "Obuilding-mobile",
+    "ms": 846,
+    "x": 626.328125,
+    "y": 34,
+    "purpose": "Open Craft"
+  },
+  {
+    "case": "Obuilding-mobile",
+    "ms": 999,
+    "x": 368,
+    "y": 225,
+    "purpose": "Craft Wheel"
+  },
+  {
+    "case": "Obuilding-mobile",
+    "ms": 1115,
+    "x": 422,
+    "y": 100,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "Obuilding-mobile",
+    "ms": 1232,
+    "x": 368,
+    "y": 225,
+    "purpose": "Craft Wheel"
+  },
+  {
+    "case": "Obuilding-mobile",
+    "ms": 1348,
+    "x": 422,
+    "y": 100,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "Obuilding-mobile",
+    "ms": 1463,
+    "x": 784,
+    "y": 225,
+    "purpose": "Craft Car"
+  },
+  {
+    "case": "Obuilding-mobile",
+    "ms": 1578,
+    "x": 421.99998474121094,
+    "y": 99.99999618530273,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "Obuilding-mobile",
+    "ms": 1695,
+    "x": 368,
+    "y": 125,
+    "purpose": "Craft House"
+  },
+  {
+    "case": "Obuilding-mobile",
+    "ms": 1808,
+    "x": 422,
+    "y": 100.00000381469727,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "Obuilding-mobile",
+    "ms": 1921,
+    "x": 782,
+    "y": 38,
+    "purpose": "Close Craft"
+  },
+  {
+    "case": "Obuilding-mobile",
+    "ms": 2032,
+    "x": 542.328125,
+    "y": 34,
+    "purpose": "Build"
+  },
+  {
+    "case": "Obuilding-mobile",
+    "ms": 2146,
+    "x": 159.125,
+    "y": 100,
+    "purpose": "Select building obstacle"
+  },
+  {
+    "case": "Obuilding-mobile",
+    "ms": 2252,
+    "x": 429.9999999999998,
+    "y": 262,
+    "purpose": "Place building obstacle"
+  },
+  {
+    "case": "Obuilding-mobile",
+    "ms": 2367,
+    "x": 344.265625,
+    "y": 100,
+    "purpose": "Select Car"
+  },
+  {
+    "case": "Obuilding-mobile",
+    "ms": 2472,
+    "x": 429.9999999999998,
+    "y": 262,
+    "purpose": "Reject blocked Car placement"
+  },
+  {
+    "case": "Obuilding-mobile",
+    "ms": 2641,
+    "x": 277.9999999999998,
+    "y": 262,
+    "purpose": "Place Car before building"
+  },
+  {
+    "case": "Obuilding-mobile",
+    "ms": 2817,
+    "x": 542.328125,
+    "y": 34,
+    "purpose": "Leave Build"
+  },
+  {
+    "case": "Obuilding-mobile",
+    "ms": 2920,
+    "x": 315.9999999999998,
+    "y": 262,
+    "purpose": "Board before obstacle"
+  },
+  {
+    "case": "Obuilding-mobile",
+    "purpose": "Joystick 1 for 1400ms",
+    "ms": 3041
+  },
+  {
+    "case": "Obuilding-mobile",
+    "purpose": "Joystick 1 for 500ms",
+    "ms": 4601
+  },
+  {
+    "case": "Obuilding-mobile",
+    "ms": 8025,
+    "x": 357.92174850000526,
+    "y": 279.00000000000006,
+    "purpose": "Tap car horn"
+  },
+  {
+    "case": "Obuilding-mobile",
+    "ms": 8140,
+    "x": 782.5,
+    "y": 134,
+    "purpose": "Get out after horn"
+  },
+  {
+    "case": "Ofence-mobile",
+    "ms": 204,
+    "x": 422,
+    "y": 179.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "Ofence-mobile",
+    "ms": 318,
+    "x": 422,
+    "y": 256,
+    "purpose": "Play"
+  },
+  {
+    "case": "Ofence-mobile",
+    "ms": 828,
+    "x": 626.328125,
+    "y": 34,
+    "purpose": "Open Craft"
+  },
+  {
+    "case": "Ofence-mobile",
+    "ms": 980,
+    "x": 368,
+    "y": 225,
+    "purpose": "Craft Wheel"
+  },
+  {
+    "case": "Ofence-mobile",
+    "ms": 1095,
+    "x": 422,
+    "y": 100,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "Ofence-mobile",
+    "ms": 1211,
+    "x": 368,
+    "y": 225,
+    "purpose": "Craft Wheel"
+  },
+  {
+    "case": "Ofence-mobile",
+    "ms": 1321,
+    "x": 421.99998474121094,
+    "y": 100.00000381469727,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "Ofence-mobile",
+    "ms": 1436,
+    "x": 784,
+    "y": 225,
+    "purpose": "Craft Car"
+  },
+  {
+    "case": "Ofence-mobile",
+    "ms": 1548,
+    "x": 421.99998474121094,
+    "y": 100,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "Ofence-mobile",
+    "ms": 1663,
+    "x": 782,
+    "y": 38,
+    "purpose": "Close Craft"
+  },
+  {
+    "case": "Ofence-mobile",
+    "ms": 1776,
+    "x": 542.328125,
+    "y": 34,
+    "purpose": "Build"
+  },
+  {
+    "case": "Ofence-mobile",
+    "ms": 1888,
+    "x": 734.171875,
+    "y": 100,
+    "purpose": "Select fence obstacle"
+  },
+  {
+    "case": "Ofence-mobile",
+    "ms": 1993,
+    "x": 505.9999999999998,
+    "y": 262,
+    "purpose": "Place fence obstacle"
+  },
+  {
+    "case": "Ofence-mobile",
+    "ms": 2105,
+    "x": 344.265625,
+    "y": 100,
+    "purpose": "Select Car"
+  },
+  {
+    "case": "Ofence-mobile",
+    "ms": 2210,
+    "x": 467.9999999999998,
+    "y": 262,
+    "purpose": "Reject blocked Car placement"
+  },
+  {
+    "case": "Ofence-mobile",
+    "ms": 2386,
+    "x": 277.9999999999998,
+    "y": 262,
+    "purpose": "Place Car before fence"
+  },
+  {
+    "case": "Ofence-mobile",
+    "ms": 2562,
+    "x": 542.328125,
+    "y": 34,
+    "purpose": "Leave Build"
+  },
+  {
+    "case": "Ofence-mobile",
+    "ms": 2665,
+    "x": 315.9999999999998,
+    "y": 262,
+    "purpose": "Board before obstacle"
+  },
+  {
+    "case": "Ofence-mobile",
+    "purpose": "Joystick 1 for 1400ms",
+    "ms": 2779
+  },
+  {
+    "case": "Ofence-mobile",
+    "purpose": "Joystick 1 for 500ms",
+    "ms": 4345
+  },
+  {
+    "case": "Ofence-mobile",
+    "ms": 7775,
+    "x": 357.99280850001594,
+    "y": 279.00000000000006,
+    "purpose": "Tap car horn"
+  },
+  {
+    "case": "Ofence-mobile",
+    "ms": 7887,
+    "x": 782.5,
+    "y": 134,
+    "purpose": "Get out after horn"
+  },
+  {
+    "case": "A-mobile",
+    "ms": 220,
+    "x": 422,
+    "y": 179.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "A-mobile",
+    "ms": 334,
+    "x": 422,
+    "y": 256,
+    "purpose": "Play"
+  },
+  {
+    "case": "A-mobile",
+    "ms": 852,
+    "x": 626.328125,
+    "y": 34,
+    "purpose": "Craft sound"
+  },
+  {
+    "case": "A-mobile",
+    "ms": 1002,
+    "x": 368,
+    "y": 225,
+    "purpose": "Craft Wheel"
+  },
+  {
+    "case": "A-mobile",
+    "ms": 1118,
+    "x": 422,
+    "y": 100,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "A-mobile",
+    "ms": 1235,
+    "x": 368,
+    "y": 225,
+    "purpose": "Craft Wheel"
+  },
+  {
+    "case": "A-mobile",
+    "ms": 1350,
+    "x": 422.00001525878906,
+    "y": 99.99999618530273,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "A-mobile",
+    "ms": 1466,
+    "x": 784,
+    "y": 225,
+    "purpose": "Craft Car"
+  },
+  {
+    "case": "A-mobile",
+    "ms": 1583,
+    "x": 422.00001525878906,
+    "y": 100.00000381469727,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "A-mobile",
+    "ms": 1698,
+    "x": 782,
+    "y": 38,
+    "purpose": "Close Craft"
+  },
+  {
+    "case": "A-mobile",
+    "ms": 1808,
+    "x": 542.328125,
+    "y": 34,
+    "purpose": "Build"
+  },
+  {
+    "case": "A-mobile",
+    "ms": 1921,
+    "x": 344.265625,
+    "y": 100,
+    "purpose": "Select Car"
+  },
+  {
+    "case": "A-mobile",
+    "ms": 2025,
+    "x": 277.9999999999998,
+    "y": 262,
+    "purpose": "Place Car with sound"
+  },
+  {
+    "case": "A-mobile",
+    "ms": 2135,
+    "x": 315.9999999999998,
+    "y": 262,
+    "purpose": "Board Car with sound"
+  },
+  {
+    "case": "A-mobile",
+    "purpose": "Joystick 1 for 180ms",
+    "ms": 2249
+  },
+  {
+    "case": "A-mobile",
+    "ms": 2588,
+    "x": 345.2000000000004,
+    "y": 279.00000000000006,
+    "purpose": "Horn"
+  },
+  {
+    "case": "A-mobile",
+    "ms": 3383,
+    "x": 782.5,
+    "y": 134,
+    "purpose": "Get out"
+  },
+  {
+    "case": "A-mobile",
+    "ms": 3493,
+    "x": 542.328125,
+    "y": 34,
+    "purpose": "Build Show"
+  },
+  {
+    "case": "A-mobile",
+    "ms": 3602,
+    "x": 57.3359375,
+    "y": 100,
+    "purpose": "Invite Car Show"
+  },
+  {
+    "case": "A-mobile",
+    "ms": 3721,
+    "x": 730.9921875,
+    "y": 220,
+    "purpose": "Accept Car Show"
+  },
+  {
+    "case": "A-mobile",
+    "ms": 3836,
+    "x": 781,
+    "y": 223.5,
+    "purpose": "Soft wrong answer"
+  },
+  {
+    "case": "A-mobile",
+    "ms": 3949,
+    "x": 729,
+    "y": 223.5,
+    "purpose": "Correct answer and star"
+  },
+  {
+    "case": "A-mobile",
+    "ms": 4572,
+    "x": 731,
+    "y": 238,
+    "purpose": "Close buddy bubble"
+  },
+  {
+    "case": "A-mobile",
+    "ms": 4682,
+    "x": 431.734375,
+    "y": 100,
+    "purpose": "Select Remove"
+  },
+  {
+    "case": "A-mobile",
+    "ms": 4788,
+    "x": 282.5090000000047,
+    "y": 262,
+    "purpose": "Recover car with sound"
+  },
+  {
+    "case": "A-mobile",
+    "ms": 5105,
+    "x": 798,
+    "y": 34,
+    "purpose": "Parent audio settings"
+  },
+  {
+    "case": "A-mobile",
+    "ms": 5251,
+    "x": 566.0078125,
+    "y": 221.9375,
+    "purpose": "Music off"
+  },
+  {
+    "case": "A-mobile",
+    "ms": 5368,
+    "x": 660.3984375,
+    "y": 221.9375,
+    "purpose": "SFX off"
+  },
+  {
+    "case": "A-mobile",
+    "ms": 5569,
+    "x": 546.0078125,
+    "y": 332.4375,
+    "purpose": "Close settings"
+  },
+  {
+    "case": "A-mobile",
+    "ms": 5774,
+    "x": 422,
+    "y": 179.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "A-mobile",
+    "ms": 5889,
+    "x": 422,
+    "y": 163,
+    "purpose": "Play"
+  },
+  {
+    "case": "A-mobile",
+    "ms": 6405,
+    "x": 626.328125,
+    "y": 34,
+    "purpose": "Muted craft"
+  },
+  {
+    "case": "A-mobile",
+    "ms": 6552,
+    "x": 368,
+    "y": 225,
+    "purpose": "Craft Wheel"
+  },
+  {
+    "case": "A-mobile",
+    "ms": 6666,
+    "x": 422,
+    "y": 100,
+    "purpose": "Dismiss word card"
+  },
+  {
+    "case": "A-mobile",
+    "ms": 6777,
+    "x": 782,
+    "y": 38,
+    "purpose": "Close Craft"
+  },
+  {
+    "case": "A-mobile",
+    "ms": 6890,
+    "x": 798,
+    "y": 34,
+    "purpose": "Restore sound settings"
+  },
+  {
+    "case": "A-mobile",
+    "ms": 7035,
+    "x": 565.859375,
+    "y": 221.9375,
+    "purpose": "Music on independently"
+  },
+  {
+    "case": "A-mobile",
+    "ms": 7147,
+    "x": 660.546875,
+    "y": 221.9375,
+    "purpose": "SFX on"
+  },
+  {
+    "case": "A-mobile",
+    "ms": 7286,
+    "x": 546.0078125,
+    "y": 332.4375,
+    "purpose": "Close settings"
+  },
+  {
+    "case": "A-mobile",
+    "ms": 7529,
+    "x": 422,
+    "y": 179.25,
+    "purpose": "Start"
+  },
+  {
+    "case": "A-mobile",
+    "ms": 7642,
+    "x": 422,
+    "y": 163,
+    "purpose": "Play"
+  }
+]

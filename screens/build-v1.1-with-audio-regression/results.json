@@ -1,0 +1,50 @@
+[
+  {
+    "suite": "build-v1-craftable-compat",
+    "exit": 0,
+    "seconds": 24.4,
+    "log": "screens/build-v1.1-with-audio-regression/build-v1-craftable-compat.log"
+  },
+  {
+    "suite": "build-v1-fix3",
+    "exit": 0,
+    "seconds": 131.6,
+    "log": "screens/build-v1.1-with-audio-regression/build-v1-fix3.log"
+  },
+  {
+    "suite": "build-placement-fix3",
+    "exit": 0,
+    "seconds": 0,
+    "log": "screens/build-v1.1-with-audio-regression/build-placement-fix3.log"
+  },
+  {
+    "suite": "chinese-cleanup",
+    "exit": 0,
+    "seconds": 4.9,
+    "log": "screens/build-v1.1-with-audio-regression/chinese-cleanup.log"
+  },
+  {
+    "suite": "natural-pointer-v4r",
+    "exit": 0,
+    "seconds": 17.9,
+    "log": "screens/build-v1.1-with-audio-regression/natural-pointer-v4r.log"
+  },
+  {
+    "suite": "world-v2",
+    "exit": 1,
+    "seconds": 0.8,
+    "log": "screens/build-v1.1-with-audio-regression/world-v2.log"
+  },
+  {
+    "suite": "memory-chat",
+    "exit": 1,
+    "seconds": 16.2,
+    "log": "screens/build-v1.1-with-audio-regression/memory-chat.log"
+  },
+  {
+    "suite": "server",
+    "exit": 0,
+    "seconds": 1,
+    "log": "screens/build-v1.1-with-audio-regression/server.log"
+  }
+]

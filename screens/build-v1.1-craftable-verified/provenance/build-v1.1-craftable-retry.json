@@ -1,0 +1,195 @@
+{
+  "sha256": "04ef30cd2adae06d4ef6963d4dfac729159da4a653af19d6ad6e8de5c5fe0ec6",
+  "results": [
+    {
+      "case": "C-desktop",
+      "status": "PASS"
+    },
+    {
+      "case": "P-desktop",
+      "status": "PASS"
+    }
+  ],
+  "frames": [
+    {
+      "case": "C-desktop",
+      "file": "build-v1-craftable-C-desktop-recipe.png",
+      "label": "recipe",
+      "ms": 1572,
+      "line": "",
+      "options": [],
+      "debug": "quiet: blockers=[panel]\nidle 101.3s / select 101.3s / still 0.8s\nsession active=false / placed this run=0\ncelebrate particles=0\nshows 0/4 (auto 0, manual 0; accepted Shows)"
+    },
+    {
+      "case": "C-desktop",
+      "file": "build-v1-craftable-C-desktop-invalid-no-charge.png",
+      "label": "invalid-no-charge",
+      "ms": 2237,
+      "line": "",
+      "options": [],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.0s / select 0.2s / still 1.2s\nsession active=true / placed this run=0\ncelebrate particles=0\nshows 0/4 (auto 0, manual 0; accepted Shows)\nt=1.7 click(474,478) -> cell(77,12) -> fail:ground\nt=1.8 click(824,528) -> cell(84,12) -> fail:tree"
+    },
+    {
+      "case": "C-desktop",
+      "file": "build-v1-craftable-C-desktop-placed-celebration.png",
+      "label": "placed-celebration",
+      "ms": 2624,
+      "confettiPixels": 535,
+      "line": "Wow! It's all closed!",
+      "options": [],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.3s / select 0.8s / still 1.7s\nsession active=true / placed this run=9\ncelebrate particles=30\nhouse interior=3x3 boundary=9 roofed=true\nshows 0/4 (auto 0, manual 0; accepted Shows)\nt=1.7 click(474,478) -> cell(77,12) -> fail:ground\nt=1.8 click(824,528) -> cell(84,12) -> fail:tree\nt=2.0 click(474,528) -> cell(77,13) -> placed whole house"
+    },
+    {
+      "case": "C-desktop",
+      "file": "build-v1-craftable-C-desktop-opening-invite.png",
+      "label": "opening-invite",
+      "ms": 2874,
+      "line": "Wow! Show me!",
+      "options": [
+        "☝ Show"
+      ],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.6s / select 1.0s / still 2.0s\nsession active=true / placed this run=9\ncelebrate particles=30\nhouse interior=3x3 boundary=9 roofed=true\nshows 0/4 (auto 0, manual 0; accepted Shows)\nt=1.7 click(474,478) -> cell(77,12) -> fail:ground\nt=1.8 click(824,528) -> cell(84,12) -> fail:tree\nt=2.0 click(474,528) -> cell(77,13) -> placed whole house"
+    },
+    {
+      "case": "C-desktop",
+      "file": "build-v1-craftable-C-desktop-house-question-options.png",
+      "label": "house-question-options",
+      "ms": 3222,
+      "line": "What is this?",
+      "options": [
+        "House",
+        "Fence"
+      ],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.9s / select 1.3s / still 2.3s\nsession active=true / placed this run=9\ncelebrate particles=30\nhouse interior=3x3 boundary=9 roofed=true\nshows 1/4 (auto 0, manual 1; accepted Shows)\nt=1.7 click(474,478) -> cell(77,12) -> fail:ground\nt=1.8 click(824,528) -> cell(84,12) -> fail:tree\nt=2.0 click(474,528) -> cell(77,13) -> placed whole house"
+    },
+    {
+      "case": "C-desktop",
+      "file": "build-v1-craftable-C-desktop-house-finale-confetti.png",
+      "label": "house-finale-confetti",
+      "ms": 3596,
+      "confettiPixels": 758,
+      "line": "You built a house! Wow! It's so big!",
+      "options": [],
+      "debug": "quiet: blockers=[recent,select]\nidle 1.1s / select 1.6s / still 2.5s\nsession active=true / placed this run=9\ncelebrate particles=60\nhouse interior=3x3 boundary=9 roofed=true\nshows 1/4 (auto 0, manual 1; accepted Shows)\nt=1.7 click(474,478) -> cell(77,12) -> fail:ground\nt=1.8 click(824,528) -> cell(84,12) -> fail:tree\nt=2.0 click(474,528) -> cell(77,13) -> placed whole house"
+    },
+    {
+      "case": "C-desktop",
+      "file": "build-v1-craftable-C-desktop-recovered-instance.png",
+      "label": "recovered-instance",
+      "ms": 4274,
+      "line": "No more house!",
+      "options": [],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.1s / select 0.2s / still 3.3s\nsession active=true / placed this run=0\ncelebrate particles=60\nshows 1/4 (auto 0, manual 1; accepted Shows)\nt=1.7 click(474,478) -> cell(77,12) -> fail:ground\nt=1.8 click(824,528) -> cell(84,12) -> fail:tree\nt=2.0 click(474,528) -> cell(77,13) -> placed whole house\nt=3.6 click(424,528) -> cell(76,13) -> fail:stock\nt=3.8 click(524,478) -> cell(77,13) -> recovered whole house"
+    },
+    {
+      "case": "C-desktop",
+      "file": "build-v1-craftable-C-desktop-replaced-after-reload.png",
+      "label": "replaced-after-reload",
+      "ms": 5546,
+      "line": "Wow! It's all closed!",
+      "options": [],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.1s / select 0.1s / still 0.9s\nsession active=true / placed this run=0\ncelebrate particles=0\nshows 1/4 (auto 0, manual 1; accepted Shows)"
+    },
+    {
+      "case": "C-desktop",
+      "file": "build-v1-craftable-C-desktop-placed-persists.png",
+      "label": "placed-persists",
+      "ms": 6588,
+      "line": "Wow! Show me!",
+      "options": [
+        "☝ Show"
+      ],
+      "debug": "quiet: OK\nidle 100.8s / select 100.8s / still 0.7s\nsession active=false / placed this run=0\ncelebrate particles=0\nhouse interior=3x3 boundary=9 roofed=true\nshows 1/4 (auto 0, manual 1; accepted Shows)"
+    },
+    {
+      "case": "P-desktop",
+      "file": "build-v1-craftable-P-desktop-recipe.png",
+      "label": "recipe",
+      "ms": 2155,
+      "line": "",
+      "options": [],
+      "debug": "quiet: blockers=[panel]\nidle 101.8s / select 101.8s / still 1.5s\nsession active=false / placed this run=0\ncelebrate particles=0\nshows 0/4 (auto 0, manual 0; accepted Shows)"
+    },
+    {
+      "case": "P-desktop",
+      "file": "build-v1-craftable-P-desktop-invalid-no-charge.png",
+      "label": "invalid-no-charge",
+      "ms": 2822,
+      "line": "",
+      "options": [],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.1s / select 0.4s / still 2.1s\nsession active=true / placed this run=0\ncelebrate particles=0\nshows 0/4 (auto 0, manual 0; accepted Shows)\nt=2.4 click(474,478) -> cell(77,13) -> fail:ground\nt=2.5 click(824,528) -> cell(84,13) -> fail:tree"
+    },
+    {
+      "case": "P-desktop",
+      "file": "build-v1-craftable-P-desktop-placed-celebration.png",
+      "label": "placed-celebration",
+      "ms": 3239,
+      "confettiPixels": 618,
+      "line": "Wow! It's all closed!",
+      "options": [],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.2s / select 0.6s / still 2.3s\nsession active=true / placed this run=8\ncelebrate particles=30\npen interior=4x2 boundary=8 roofed=false\nshows 0/4 (auto 0, manual 0; accepted Shows)\nt=2.4 click(474,478) -> cell(77,13) -> fail:ground\nt=2.5 click(824,528) -> cell(84,13) -> fail:tree\nt=2.7 click(474,528) -> cell(77,14) -> placed whole pen"
+    },
+    {
+      "case": "P-desktop",
+      "file": "build-v1-craftable-P-desktop-opening-invite.png",
+      "label": "opening-invite",
+      "ms": 3457,
+      "line": "Wow! Show me!",
+      "options": [
+        "☝ Show"
+      ],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.5s / select 0.9s / still 2.6s\nsession active=true / placed this run=8\ncelebrate particles=30\npen interior=4x2 boundary=8 roofed=false\nshows 0/4 (auto 0, manual 0; accepted Shows)\nt=2.4 click(474,478) -> cell(77,13) -> fail:ground\nt=2.5 click(824,528) -> cell(84,13) -> fail:tree\nt=2.7 click(474,528) -> cell(77,14) -> placed whole pen"
+    },
+    {
+      "case": "P-desktop",
+      "file": "build-v1-craftable-P-desktop-pen-question-options.png",
+      "label": "pen-question-options",
+      "ms": 3790,
+      "line": "What is this?",
+      "options": [
+        "House",
+        "Fence"
+      ],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.7s / select 1.2s / still 2.9s\nsession active=true / placed this run=8\ncelebrate particles=30\npen interior=4x2 boundary=8 roofed=false\nshows 0/4 (auto 0, manual 0; accepted Shows)\nt=2.4 click(474,478) -> cell(77,13) -> fail:ground\nt=2.5 click(824,528) -> cell(84,13) -> fail:tree\nt=2.7 click(474,528) -> cell(77,14) -> placed whole pen"
+    },
+    {
+      "case": "P-desktop",
+      "file": "build-v1-craftable-P-desktop-pen-finale-confetti.png",
+      "label": "pen-finale-confetti",
+      "ms": 4184,
+      "confettiPixels": 802,
+      "line": "You built a fence! Wow! It's so big!",
+      "options": [],
+      "debug": "quiet: blockers=[recent,select]\nidle 1.3s / select 1.7s / still 3.4s\nsession active=true / placed this run=8\ncelebrate particles=60\npen interior=4x2 boundary=8 roofed=false\nshows 1/4 (auto 0, manual 1; accepted Shows)\nt=2.4 click(474,478) -> cell(77,13) -> fail:ground\nt=2.5 click(824,528) -> cell(84,13) -> fail:tree\nt=2.7 click(474,528) -> cell(77,14) -> placed whole pen"
+    },
+    {
+      "case": "P-desktop",
+      "file": "build-v1-craftable-P-desktop-recovered-instance.png",
+      "label": "recovered-instance",
+      "ms": 4873,
+      "line": "No more pen!",
+      "options": [],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.2s / select 0.3s / still 4.2s\nsession active=true / placed this run=0\ncelebrate particles=60\nshows 1/4 (auto 0, manual 1; accepted Shows)\nt=2.4 click(474,478) -> cell(77,13) -> fail:ground\nt=2.5 click(824,528) -> cell(84,13) -> fail:tree\nt=2.7 click(474,528) -> cell(77,14) -> placed whole pen\nt=4.3 click(424,528) -> cell(76,14) -> fail:stock\nt=4.5 click(524,478) -> cell(77,14) -> recovered whole pen"
+    },
+    {
+      "case": "P-desktop",
+      "file": "build-v1-craftable-P-desktop-replaced-after-reload.png",
+      "label": "replaced-after-reload",
+      "ms": 6210,
+      "line": "Wow! It's all closed!",
+      "options": [],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.1s / select 0.1s / still 0.9s\nsession active=true / placed this run=0\ncelebrate particles=0\nshows 1/4 (auto 0, manual 1; accepted Shows)"
+    },
+    {
+      "case": "P-desktop",
+      "file": "build-v1-craftable-P-desktop-placed-persists.png",
+      "label": "placed-persists",
+      "ms": 7323,
+      "line": "Wow! Show me!",
+      "options": [
+        "☝ Show"
+      ],
+      "debug": "quiet: blockers=[recent]\nidle 0.2s / select 101.0s / still 0.9s\nsession active=true / placed this run=0\ncelebrate particles=0\npen interior=4x2 boundary=8 roofed=false\nshows 1/4 (auto 0, manual 1; accepted Shows)"
+    }
+  ]
+}

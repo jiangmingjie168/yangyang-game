@@ -16,7 +16,7 @@ try{for(const mobile of (process.env.BW_MOBILE==='0'?[false]:process.env.BW_MOBI
  await context.route('https://brain.yydriver.cn/**',r=>r.fulfill({contentType:'application/json',body:'{}'}));
  const p=await context.newPage();p.on('pageerror',e=>errors.push(e.message));p.setDefaultTimeout(12000);
  const wait=ms=>p.waitForTimeout(ms);
- async function button(selector,purpose){const l=typeof selector==='string'?p.locator(selector):selector;await l.scrollIntoViewIfNeeded();const b=await l.boundingBox();assert(b,'visible '+purpose);await click(b.x+b.width/2,b.y+b.height/2,purpose);}
+ async function button(selector,purpose){const l=typeof selector==='string'?p.locator(selector):selector;let b=await l.boundingBox();const viewport=p.viewportSize();if(!b||b.y<0||b.y+b.height>viewport.height){await l.scrollIntoViewIfNeeded();b=await l.boundingBox();}assert(b,'visible '+purpose);await click(b.x+b.width/2,b.y+b.height/2,purpose);}
  async function click(x,y,purpose){clicks.push({case:tag,ms:Date.now()-start,x,y,purpose});await p.mouse.click(x,y);await wait(100);}
  async function world(x,y,purpose){const pos=await p.evaluate(([x,y])=>BW.worldToScreen((x+.5)*32,(y+.5)*32),[x,y]);await click(pos.x,pos.y,purpose);}
  async function snap(label){const file=`build-v1-craftable-${tag}-${label}.png`;const png=await p.screenshot({path:path.join(out,file),style:'#build-debug{visibility:hidden!important}'});let pixels;if(/celebration|finale-confetti/.test(label)){pixels=Number(require('node:child_process').execFileSync('python3',[path.join(__dirname,'build-v1-fix4-pixels.py')],{input:png}));assert(pixels>=35,'Visible confetti: '+pixels);}frames.push({case:tag,file,label,ms:Date.now()-start,confettiPixels:pixels,line:await p.locator('#buddy-line').innerText(),options:await p.locator('#buddy-options button').allInnerTexts(),debug:await p.locator('#build-debug').innerText()});}
@@ -33,11 +33,11 @@ try{for(const mobile of (process.env.BW_MOBILE==='0'?[false]:process.env.BW_MOBI
  async function close(){if(await p.locator('#buddy-chat').isVisible())await button('#buddy-close','Keep playing / close feedback');}
  async function ready(){await p.locator('#build-show[data-state="ready"]').waitFor({state:'visible'});}
  async function extra(i){await button('[data-build="planks"]','Select one extra Planks');await world(77+i,12,'Place exactly one new block beside whole House');await stock('planks',35-i);await wait(2800);await ready();await snap('rearmed-'+i);}
- async function enter(){await button('#btn-start','Start');await button('#welcome-play','Play');await wait(500);}
+ async function enter(){await p.bringToFront();await button('#btn-start','Start');await button('#welcome-play','Play');await wait(500);}
  try{
  await p.goto('http://craft.test/?buildlog=1#seed=42');await enter();
  if(test==='T2'||test==='T3'){await button('#btn-zh','Open parent difficulty');await button('[data-build-level="'+test.slice(1)+'"]','Set build difficulty');await button('#parent-close','Return from parent settings');}
- assert.equal(await p.locator('#build-version').innerText(),'build fdec124+craft');assert(await p.locator('#build-version').isVisible());
+ assert.equal(await p.locator('#build-version').innerText(),'build a0b0871+v11qa');assert(await p.locator('#build-version').isVisible());
  if(test==='V'){await snap('version');}
  else{
   // Raw materials only; crafting itself must create the instance and count.
@@ -50,16 +50,16 @@ try{for(const mobile of (process.env.BW_MOBILE==='0'?[false]:process.env.BW_MOBI
    await stock(item,initial);
    // In midair and at the existing tree: reject without spending the item.
    await world(77,14,'Reject unsupported placement');await stock(item,initial);await text('#toast-en',/Choose flat ground!/);
-   await world(84,15,'Reject terrain/tree obstruction');await stock(item,initial);await text('#toast-en',/Find a clear|Move a little closer/);await snap('invalid-no-charge');
+   await world(84,15,'Reject terrain/tree obstruction');await stock(item,initial);await text('#toast-en',/A rock is in the way|A tree is in the way|Move a little closer/);await snap('invalid-no-charge');
    await world(77,15,'Place entire '+kind+' with one mouse click');await stock(item,initial-1);await text('#buddy-line',/Wow! It's all closed!/);await snap('placed-celebration');
    const placed=await save();assert.equal(placed.build_objects.length,1);const object=placed.build_objects[0];assert.equal(object.kind,kind);assert.equal(object.level,1);assert.equal(object.w,kind==='house'?3:4);assert.equal(object.h,kind==='house'?3:2);assert(object.parts.yard.material);assert(object.parts[kind==='house'?'wall':'fence'].tier===1);assert.equal(placed.crafted_objects.length,initial-1);
-   if(test==='N'){await world(77,15,'Reject overlapping whole building');await stock(item,1);await text('#toast-en',/Find a clear 3 by 3 space!/);assert.equal((await save()).build_objects.length,1);await snap('overlap-no-charge');}
+   if(test==='N'){await world(77,15,'Reject overlapping whole building');await stock(item,1);await text('#toast-en',/A building is in the way!/);assert.equal((await save()).build_objects.length,1);await snap('overlap-no-charge');}
    await openShow();await count(0);await snap('opening-invite');
    // Toolbar repetitions do not charge or restart an invitation.
    await button('#build-show','Repeat toolbar Show');await count(0);
    if(test==='C'||test==='P'||test==='T2'||test==='T3'){
     await accept(kind,1,kind);await close();assert.equal(await p.locator('#build-show').getAttribute('data-state'),'done');
-    await button(`[data-build="${item}"]`,'Select empty whole inventory');await world(77,15,'No stock cannot duplicate whole building');await stock(item,0);
+    await button(`[data-build="${item}"]`,'Select empty whole inventory');await world(76,15,'No stock cannot duplicate whole building');await stock(item,0);
     await button('[data-build="remove"]','Select Remove');await world(78,14,'Remove by clicking any occupied cell');await stock(item,1);
     const recovered=await save();assert.equal(recovered.build_objects.length,0);assert.equal(recovered.crafted_objects.length,1);assert.deepEqual(recovered.crafted_objects[0].parts,object.parts);await snap('recovered-instance');
     await p.reload();await enter();await button('#btn-build','Open saved Build');await stock(item,1);await count(1);

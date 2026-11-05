@@ -25,6 +25,7 @@ async function page(data, options={}) {
   p.on('pageerror',e=>p.errors.push(String(e)));
   p.on('console',m=>{if(m.type()==='error')p.errors.push(m.text());});
   await p.route('**/*',r=>{
+    if (/\/audio\/build-v1\.1\/[a-z-]+\.ogg$/.test(r.request().url())) return r.fulfill({contentType:'audio/ogg',body:fs.readFileSync(path.join(__dirname,'../audio/build-v1.1',r.request().url().split('/').pop()))});
     if (r.request().url()===URL+'/') return r.fulfill({contentType:'text/html',body:html});
     p.external.push(r.request().url()); return r.abort();
   });
@@ -72,13 +73,13 @@ async function collect(p, id) {
   ];
   p=await page(log);await openLog(p);
   assert.match(await p.locator('#speaking-week').innerText(),/11\/2 — 11\/4/);
-  assert.deepEqual(await p.locator('#speaking-rows tr').allTextContents(),['Tree5任务（1）、钓鱼（1）、宠物（1）、乘船（1）、新场景（1）','Fish2钓鱼（1）、乘船（1）','Wood1任务（1）']);
+  assert.deepEqual(await p.locator('#speaking-rows tr').allTextContents(),['Tree50任务（1）、钓鱼（1）、宠物（1）、乘船（1）、新场景（1）','Fish20钓鱼（1）、乘船（1）','Wood10任务（1）']);
   assert.equal(await p.locator('#parent-info').isVisible(),false);
   assert.equal(await p.locator('#parent-log-tab').getAttribute('aria-selected'),'true');
   await p.locator('#parent-log-tab').focus();await p.keyboard.press('ArrowLeft');assert(await p.locator('#parent-info').isVisible());
   await p.keyboard.press('End');assert(await p.locator('#parent-log').isVisible());
   await p.screenshot({path:'/tmp/bw-v2-parent-log.png'});
-  const saved=await snapshot(p);assert.deepEqual(saved.adventure.speaking,log.adventure.speaking);
+  const saved=await snapshot(p);assert.deepEqual(saved.adventure.speaking,log.adventure.speaking.map(r=>({...r,self_claim:false})));
   await p.reload();await p.click('#btn-start'); if(await p.locator('#name-entry').isVisible())await p.click('#welcome-play');await openLog(p);assert.equal(await p.locator('#speaking-rows tr').count(),3);
   await p.click('#parent-close');assert(!/[\u3400-\u9fff]/u.test(await p.locator('body').innerText()));await check(p);await p.context().close();
   report('parent page: local Monday/DST boundary, all five scenes, exact counts, excludes taps/unmatched/old/future events, saves unchanged, keyboard tabs');
@@ -91,7 +92,7 @@ async function collect(p, id) {
   p=await page(voice);await p.evaluate(()=>BW.hideCard());const pos=await p.evaluate(()=>BW.worldToScreen(87.5*32,15.5*32));await p.mouse.click(pos.x,pos.y);await p.evaluate(()=>BW.hideCard());
   await p.waitForFunction(()=>BW.adventure().active&&!BW.adventure().active.pending);
   await p.click('#chat-mic');await p.evaluate(()=>voiceResult('three'));await openLog(p);
-  assert.match(await p.locator('#speaking-rows').innerText(),/Tree\s+1\s+新场景/);await check(p);await p.context().close();
+  assert.match(await p.locator('#speaking-rows').innerText(),/Tree\s+1\s+0\s+新场景/);await check(p);await p.context().close();
   report('mock recognition near-sound answer → saved event → parent speaking count');
   // Collect two complete sets through normal gravity/landing at travel checkpoints.
   const gifts=structuredClone(fixture);gifts.words=['tree','wood','stone','water'];gifts.animals.forEach(a=>a[1]=7000);
@@ -122,7 +123,7 @@ async function collect(p, id) {
   p=await page(malformed);assert.equal((await snapshot(p)).adventure.rounds,0);await check(p);await p.context().close();
   report('legacy complete/partial albums migrate without losing discoveries or duplicating a completion; malformed optional stamps ignored');
   // Visual atlas exercises all existing words and idle frames. Inspect /tmp/bw-v2-art.png for style.
-  p=await page();const words=await p.evaluate(()=>BW.testWords());assert.equal(words.length,47);
+  p=await page();const words=await p.evaluate(()=>BW.testWords());assert.equal(words.length,49);
   const art=await p.evaluate(async()=>{
     const words=BW.testWords(), atlas=document.createElement('canvas');atlas.width=7*144;atlas.height=Math.ceil(words.length/7)*164;const g=atlas.getContext('2d');g.fillStyle='#fff8ee';g.fillRect(0,0,atlas.width,atlas.height);
     const counts=[];
@@ -134,7 +135,7 @@ async function collect(p, id) {
   for(const key of ['dog','cat','cow','horse','chicken','duck','fish'])assert.notEqual(await p.evaluate(k=>BW.testIcon(k,1),key),await p.evaluate(k=>BW.testIcon(k,3),key),key);
   for(const key of ['pig','sheep','rabbit'])assert.notEqual(await p.evaluate(k=>BW.testIcon(k,1),key),await p.evaluate(k=>BW.testIcon(k,24.5),key),key);
   await check(p);assert.deepEqual(p.external,[]);await p.context().close();
-  report('47 nonempty outlined word pictures, visible tail/wing/blink idle frame changes, no external requests');
+  report('49 nonempty outlined word pictures, visible tail/wing/blink idle frame changes, no external requests');
   // New feedback is emitted through a real quiz success; inspect particle lifetime/bounds and audio schedules.
   const quizData={...gifts,words:['wood'],px:87*32-16,py:511.9};
   p=await page(quizData);await p.evaluate(()=>BW.hideCard());await p.click('#btn-words');await p.click('#btn-quiz');
@@ -146,19 +147,19 @@ async function collect(p, id) {
   effects=await p.evaluate(()=>BW.testEffects());assert(effects.filter(e=>e.star||e.confetti).length<=5);assert(effects.filter(e=>e.star||e.confetti).every(e=>e.still));await check(p);await p.context().close();
   report('quiz success emits bounded, expiring stars/confetti and WebAudio notes; reduced-motion/no-AudioContext fallback still succeeds');
   const many=structuredClone(fixture);many.adventure.speaking=words.map(word=>record(word,'task'));
-  p=await page(many,{viewport:{width:844,height:390},touch:true});await openLog(p);assert.equal(await p.locator('#speaking-rows tr').count(),47);
+  p=await page(many,{viewport:{width:844,height:390},touch:true});await openLog(p);assert.equal(await p.locator('#speaking-rows tr').count(),49);
   const box=await p.locator('#parent-help').boundingBox(), client=await p.context().newCDPSession(p);
   const x=box.x+box.width/2, y=box.y+box.height-45;
   await client.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x,y}]});
   for(let n=1;n<=8;n++){await client.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x,y:y-n*24}]});await p.waitForTimeout(20);}
   await client.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
   await p.waitForFunction(()=>document.getElementById('parent-help').scrollTop>30);await p.click('#parent-close');assert(!(await p.locator('#parent-help').isVisible()));await check(p);await p.context().close();
-  report('47-row speaking log scrolls via Chromium touch emulation in short landscape; return button remains reachable (not a device test)');
+  report('49-row speaking log scrolls via Chromium touch emulation in short landscape; return button remains reachable (not a device test)');
   const offline=await browser.newContext({offline:true,viewport:{width:844,height:390}}), f=await offline.newPage();
   const offData=structuredClone(full);offData.adventure.speaking=[{time:Date.now(),word:'tree',spoken_word:'tree',scene:'task',spoke:true,tier:2}];
   await f.addInitScript(data=>{localStorage.setItem('block-world-save-v1',JSON.stringify(data));Object.defineProperty(window,'speechSynthesis',{value:undefined});window.SpeechRecognition=undefined;window.webkitSpeechRecognition=undefined;},offData);
   await f.goto('file://'+path.resolve(__dirname,'../index.html'));await f.click('#btn-start'); if(await f.locator('#name-entry').isVisible())await f.click('#welcome-play');await f.evaluate(()=>BW.hideCard());await openLog(f);
-  assert.match(await f.locator('#speaking-rows').innerText(),/Tree\s+1\s+任务/);await f.click('#parent-close');await f.click('#btn-words');assert.equal(await f.locator('#album-completion').innerText(),'✓ 1 round complete!');assert.equal(await f.locator('#album-last button').count(),7);await offline.close();
+  assert.match(await f.locator('#speaking-rows').innerText(),/Tree\s+1\s+0\s+任务/);await f.click('#parent-close');await f.click('#btn-words');assert.equal(await f.locator('#album-completion').innerText(),'✓ 1 round complete!');assert.equal(await f.locator('#album-last button').count(),7);await offline.close();
   report('actual file:// offline: saved speaking log, legacy gift-round migration, completed album, no speech service');
 
 })().catch(e=>{console.error(e);process.exitCode=1;}).finally(async()=>{await browser?.close();});

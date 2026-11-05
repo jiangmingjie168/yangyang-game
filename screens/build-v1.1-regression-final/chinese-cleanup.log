@@ -1,0 +1,6 @@
+PASS game loads and starts
+PASS original bilingual toast displays only English and expires
+PASS Treasure Quiz starts and stops, restoring the English quest
+PASS word card, held label, Craft and Word Book have no Chinese display slots
+PASS Chinese parent help still opens and closes
+PASS no page, console or game-loop errors

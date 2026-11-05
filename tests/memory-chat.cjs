@@ -19,6 +19,7 @@ async function page({data,online=false,bad=false,hang=false,autoWeather=false,vi
       testWeatherPicture: weather => showAmbient(Object.assign(socialPayload('weather_chat'), {weather:weather})),
       testWeatherKey: (night, stars, cloudy) => { timeOfDay=night?0.8:0.3; starPos=stars?[{}]:[]; sunPos={x:50,y:50}; cloudPos=cloudy?[{x:50,y:50,scale:1}]:[]; return weatherKey(); },
       testRainbow: () => { const c=document.createElement('canvas'); c.width=viewW; c.height=viewH; drawRainbow(c.getContext('2d')); return {left:rainbowLeft,pixels:c.getContext('2d').getImageData(0,0,c.width,c.height).data.some(v=>v!==0)}; },`);
+  await p.route('**/audio/build-v1.1/*.ogg',r=>r.fulfill({contentType:'audio/ogg',body:fs.readFileSync(path.join(__dirname,'../audio/build-v1.1',r.request().url().split('/').pop()))}));
   await p.route(origin+'/',r=>r.fulfill({contentType:'text/html',body:html}));
   await p.route('**/mock-buddy',async r=>{
     const q=r.request().postDataJSON();p.calls.push(q);if(hang&&q.event!=='greet')return;
@@ -39,7 +40,7 @@ async function page({data,online=false,bad=false,hang=false,autoWeather=false,vi
 async function saved(p){return p.evaluate(()=>{BW.saveNow();return JSON.parse(localStorage.getItem('block-world-save-v1'));});}
 async function done(p){assert.deepEqual(p.errors,[]);assert.equal(await p.evaluate(()=>BW.error()),'');await p.context().close();}
 async function dismiss(p){if(await p.locator('#welcome').isVisible())await p.click('#welcome-play');}
-async function photo(p,name){await p.screenshot({path:path.join(__dirname,'../screens/'+name+'.png')});}
+async function photo(p,name){await p.screenshot({path:path.join(process.env.BW_EVIDENCE_ROOT||path.join(__dirname,'../screens'),name+'.png')});}
 async function mic(p,id,on){
  assert.equal(await p.locator('#'+id).evaluate(e=>e.classList.contains('mic-recording')),on);
  if(on){assert.equal(await p.locator('#'+id).evaluate(e=>getComputedStyle(e).opacity),'1');assert.equal(await p.locator('#'+id).evaluate(e=>getComputedStyle(e).animationName),'mic-pulse');}
@@ -88,7 +89,7 @@ const report=s=>console.log('PASS',s);
  await photo(p,'small-talk');await p.getByRole('button',{name:'dog',exact:true}).click();
  assert.equal((await saved(p)).prefs.animal,'dog');assert.equal(await p.locator('#buddy-line').innerText(),'Try: I see a dog!');await photo(p,'coach');
  assert.equal((await saved(p)).adventure.speaking.length,0);
- await p.click('#buddy-close');await p.click('#btn-buddy');assert.match(await p.locator('#buddy-line').innerText(),/house or table/);await p.click('#buddy-close');
+ assert(await p.locator('#buddy-close').isHidden());await p.evaluate(()=>lastUtterance.onend());await p.clock.fastForward(9001);await p.click('#btn-buddy');assert.match(await p.locator('#buddy-line').innerText(),/house or table/);await p.click('#buddy-close');
  await p.click('#btn-buddy');assert.match(await p.locator('#buddy-line').innerText(),/fish or wheat/);await p.click('#buddy-close');
  await p.click('#btn-buddy');await p.click('#buddy-close');await p.click('#btn-buddy');await p.click('#buddy-close');
  assert.equal((await saved(p)).small_talk_count,5);const limitedSpoken=await p.evaluate(()=>spoken.length);await p.click('#btn-buddy');assert(await p.locator('#buddy-chat').isHidden());
@@ -113,7 +114,7 @@ const report=s=>console.log('PASS',s);
  await p.evaluate(()=>{BW.setTime(0.3);BW.setRain(false);});await p.clock.runFor(1400);
  assert((await p.evaluate(()=>BW.testRainbow())).pixels);await photo(p,'weather-rainbow');
  const weatherKeys=await p.evaluate(()=>[BW.testWeatherKey(false,false,true),BW.testWeatherKey(false,false,false),BW.testWeatherKey(true,true,false),BW.testWeatherKey(true,true,false),BW.testWeatherKey(true,false,false)]);
- assert.deepEqual(weatherKeys,['cloud','sun','star','moon','moon']);assert.equal(await p.evaluate(()=>BW.totalWords()),47);
+ assert.deepEqual(weatherKeys,['cloud','sun','star','moon','moon']);assert.equal(await p.evaluate(()=>BW.totalWords()),49);
  for(const weather of ['rain',...weatherKeys]){assert((await p.evaluate(()=>BW.testWords())).includes(weather));const q=normalize({event:'weather_chat',weather,time_of_day:'evening'});const lines=await p.evaluate(q=>BW.testLines(q),q);assert.deepEqual(lines,conversationLines(q));for(const line of lines){assert(line.split(/\s+/).length>=3&&line.split(/\s+/).length<=6);assert(!/rainbow/i.test(line));}}
  for(const weather of ['sun','cloud','moon','star']){await p.evaluate(weather=>BW.testWeatherPicture(weather),weather);assert(await p.locator('#buddy-picture').isVisible());assert.equal(await p.locator('#buddy-picture').getAttribute('aria-label'),weather[0].toUpperCase()+weather.slice(1));assert(await p.locator('#buddy-picture').evaluate(c=>c.getContext('2d').getImageData(0,0,128,128).data.some(v=>v!==0)));}
  await p.click('#buddy-close');
@@ -167,12 +168,12 @@ const report=s=>console.log('PASS',s);
    if(end==='failure'){await mic(p,'chat-mic',false);await p.evaluate(()=>window.failListen=false);await p.locator('#chat-mic').tap();}
    await mic(p,'chat-mic',true);
  }
- await p.evaluate(()=>voiceResult('I see a tree'));await mic(p,'chat-mic',false);await p.clock.fastForward(1901);await p.waitForFunction(()=>BW.adventure().mode==='recast');assert.equal(await p.locator('#buddy-line').innerText(),'Good job! Well done!');assert(!JSON.stringify(await saved(p)).includes('I see a tree'));await done(p);
+ await p.evaluate(()=>voiceResult('I see a tree'));await mic(p,'chat-mic',false);await p.clock.fastForward(1901);assert(await p.locator('#chat-continue').isVisible());assert(await p.locator('#chat-mic').isHidden());assert(await p.locator('#chat-listen').isHidden());await p.click('#chat-continue');assert.equal(await p.locator('#dialogue').isVisible(),false);assert(!JSON.stringify(await saved(p)).includes('I see a tree'));await done(p);
  p=await page({data:fresh,reduced:true});await dismiss(p);await p.click('#btn-buddy');await p.click('#buddy-mic');
  assert.equal(await p.locator('#buddy-mic').evaluate(e=>getComputedStyle(e).animationName),'none');assert.equal(await p.locator('#buddy-mic').evaluate(e=>e.classList.contains('mic-recording')),true);await p.click('#buddy-close');await mic(p,'buddy-mic',false);await done(p);
  report('all three mics glow during synthetic recognition and clear on result/end/error/timeout/close/start failure; reduced motion stays static');
  const petData=structuredClone(fresh);petData.animals.forEach(a=>{if(a[0]==='dog'){a[1]=petData.px+32;a[2]=petData.py;a[4]=1;}else a[1]=7000;});
- p=await page({data:petData});await dismiss(p);const buddy=await p.evaluate(()=>BW.screenAnimal('dog'));await p.mouse.click(buddy.x,buddy.y);assert.equal((await saved(p)).small_talk_count,1);assert(await p.locator('#buddy-chat').isVisible());assert.equal(await p.evaluate(()=>spoken.at(-1)),'Do you like cat or dog?');await done(p);
+ p=await page({data:petData});await dismiss(p);const buddy=await p.evaluate(()=>BW.screenAnimal('dog'));await p.mouse.click(buddy.x,buddy.y);assert.equal((await saved(p)).small_talk_count,0);assert(await p.locator('#buddy-chat').isVisible());assert.equal(await p.locator('#buddy-line').innerText(),'Look! A dog!');assert.equal(await p.evaluate(()=>spoken.at(-1)),'Dog');assert((await saved(p)).adventure.discoveries.dog);await done(p);
  p=await page({data:fresh});await dismiss(p);await p.clock.fastForward(60001);assert.equal((await saved(p)).small_talk_count,1);
  for(const input of [{event:'name_ask'}, {event:'small_talk',topic:'learn_pref_animal'}, {event:'small_talk',topic:'learn_pref_build'}, {event:'small_talk',topic:'learn_pref_food'}, {event:'small_talk',prefs:{build:'house'}}, ...['rain','sun','cloud','moon','star'].map(weather=>({event:'weather_chat',weather,time_of_day:'evening'})), ...[['cat',1],['a cat',2],['I see a cat',3],['dragon',1],['hello',1],['jump',1],['follow',1],['pet',1],['home',1],['rod',1],['a rod',2],['hello cat',2]].map(([child_said,target_tier])=>({event:'recast',child_said,target_tier}))]) {
    const q=normalize(input);assert.deepEqual(await p.evaluate(q=>BW.testLines(q),q),conversationLines(q));

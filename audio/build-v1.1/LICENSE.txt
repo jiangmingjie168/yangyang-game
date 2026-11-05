@@ -1,0 +1,5 @@
+Original self-synthesized instrumental composition and sound effects.
+No third-party samples, recordings, lyrics, or voices.
+Dedicated to the public domain under CC0 1.0 Universal.
+License: https://creativecommons.org/publicdomain/zero/1.0/
+Source: tools/make-build-v1.1-audio.py
