@@ -575,7 +575,7 @@
 <div id="app">
   <canvas id="view" width="800" height="400"></canvas>
   <div id="hud">
-    <span id="build-version" aria-label="Build version">build cd91b62+ux18</span>
+    <span id="build-version" aria-label="Build version">build cd91b62+ux19</span>
     <div class="topbar">
       <button id="quest" type="button">
         <canvas id="quest-icon" width="128" height="128"></canvas>
@@ -588,7 +588,7 @@
       <button id="btn-words" class="topbtn" type="button">Words</button>
       <button id="btn-zh" class="topbtn" type="button" aria-expanded="false" aria-label="Parent settings">⚙</button>
     </div>
-    <button id="btn-home" type="button" hidden>
+    <button id="btn-home" type="button" hidden aria-label="Go home">
       <strong>Go home</strong>
     </button>
     <div class="bottom">
@@ -696,7 +696,7 @@
 
   <div id="chest-panel" class="panel" hidden>
     <header>
-      <h2>Chest</h2>
+      <h2>Chest <small id="chest-kinds-label" style="font-weight:700;opacity:.72"></small></h2>
       <button id="chest-back" class="back" type="button">Back</button>
     </header>
     <div class="panel-body" id="chest-grid"></div>
@@ -2008,7 +2008,11 @@ function validConversation(value, p) {
     }
     return !buildObjects.some(function(o){return o!==b&&x<o.x+o.w&&x+b.w>o.x&&b.y<o.y+o.h&&b.y+b.h>o.y;});
   }
-  function seatDriver(b) {player.x=(b.x+1.4)*TILE;player.y=(b.y+1.55)*TILE;player.dir=b.dir||1;player.vx=0;player.vy=0;onGround=true;}
+  function seatDriver(b) {
+    // Sit in the cabin on the facing side so left/right drives stay visually matched.
+    var seat = b.dir === -1 ? (b.x + b.w - 1.4) : (b.x + 1.4);
+    player.x = seat * TILE; player.y = (b.y + 1.55) * TILE; player.dir = b.dir || 1; player.vx = 0; player.vy = 0; onGround = true;
+  }
   function boardCar(b) {
     if(riding||drivingCar||quiz||dialogue||nameFlow)return;
     if(!nearBuild(b)||Math.abs(player.x-(b.x+b.w/2)*TILE)>8*TILE){showToast('Move a little closer!',2);return;}
@@ -2020,11 +2024,18 @@ function validConversation(value, p) {
     buildFeedback('Hop in! Let\'s drive!','car_ride');playSfx('enter-car');save();
   }
   function driveCar(dt) {
-    var b=drivingCar,ax=axis();jumpBuf=0;carMoving=false;
-    if(ax){b.dir=ax;var left=MOVE*1.18*dt;
-      while(left>.0001){var step=Math.min(1,left),nx=b.x+ax*step/TILE;if(!carClear(b,nx))break;b.x=nx;left-=step;carMoving=true;saveSoon();}
+    var b = drivingCar, ax = axis(); jumpBuf = 0; carMoving = false;
+    // Same screen-space sign as walking: joy/keys right => +x (never invert here).
+    if (ax) {
+      b.dir = ax;
+      var left = MOVE * 1.18 * dt;
+      while (left > 0.0001) {
+        var step = Math.min(1, left), nx = b.x + ax * step / TILE;
+        if (!carClear(b, nx)) break;
+        b.x = nx; left -= step; carMoving = true; saveSoon();
+      }
     }
-    seatDriver(b);player.anim+=dt*2;
+    seatDriver(b); player.anim += dt * 2;
   }
   function exitCar() {
     var b=drivingCar;if(!b)return;
@@ -4443,7 +4454,7 @@ function validConversation(value, p) {
       drawBoatShape(ctx);
       ctx.restore();
     }
-    if(drivingCar){ctx.save();ctx.beginPath();ctx.rect(drivingCar.x*TILE+26,drivingCar.y*TILE+8,39,27);ctx.clip();drawPlayer(ctx);ctx.restore();}else drawPlayer(ctx);
+    if(drivingCar){ctx.save();ctx.beginPath();var cx=drivingCar.dir===-1?(drivingCar.x*TILE+drivingCar.w*TILE-65):(drivingCar.x*TILE+26);ctx.rect(cx,drivingCar.y*TILE+8,39,27);ctx.clip();drawPlayer(ctx);ctx.restore();}else drawPlayer(ctx);
     if (fishing) {
       var fbob = Math.sin(sec * 5) * 1.6;
       ctx.strokeStyle = 'rgba(255,255,255,0.65)';
@@ -5010,7 +5021,13 @@ function validConversation(value, p) {
     var key = hotbar[sel];
     document.getElementById('held-en').textContent = key && WORD[key] ? (key==='house'?'Roof blocks':WORD[key][0]) : 'Tap a block';
     var cc = document.getElementById('chest-count');
-    if (cc) cc.textContent = String(chestKeys().length);
+    if (cc) {
+      var n = chestKindCount();
+      cc.textContent = String(n);
+      cc.title = n === 1 ? '1 kind' : (n + ' kinds');
+      var btn = document.getElementById('btn-chest');
+      if (btn) btn.setAttribute('aria-label', n ? ('Open chest, ' + n + (n === 1 ? ' kind' : ' kinds')) : 'Open chest');
+    }
   }
   function canCraft(r) {
     var k;
@@ -5188,7 +5205,10 @@ function validConversation(value, p) {
     if (log) renderSpeakingLog();
   }
   var CHEST_STASH = { grass:1, dirt:1, leaves:1, sand:1, flower:1, wool:1, seed:1, wheat:1, stone:1 };
-  function chestKeys() { return hotbar.filter(function (k) { return CHEST_STASH[k] && inv[k]; }); }
+  // Badge + panel share the same kind list (every hotbar key with stock).
+  // CHEST_STASH still marks bulk blocks that skip the one-slot quick bar.
+  function chestKeys() { return hotbar.filter(function (k) { return inv[k]; }); }
+  function chestKindCount() { return chestKeys().length; }
   function quickHotbarKeys() {
     // Chest is the full inventory picker; bottom bar keeps only the held slot.
     var selKey = sel >= 0 ? hotbar[sel] : null;
@@ -5217,7 +5237,9 @@ function validConversation(value, p) {
   }
   function renderChest() {
     var root = document.getElementById('chest-grid'); root.replaceChildren();
-    var keys = hotbar.filter(function (k) { return inv[k]; });
+    var keys = chestKeys();
+    var lab = document.getElementById('chest-kinds-label');
+    if (lab) lab.textContent = keys.length ? ('· ' + keys.length + (keys.length === 1 ? ' kind' : ' kinds')) : '';
     if (!keys.length) { var empty = document.createElement('p'); empty.textContent = 'Empty for now.'; root.appendChild(empty); return; }
     keys.forEach(function (key) {
       var b = document.createElement('button'); b.type = 'button'; b.className = 'chest-item';
@@ -5838,7 +5860,9 @@ function validConversation(value, p) {
       var depth = Math.floor((player.y - 2) / TILE);
       if (depth >= GROUND + 4) deepTime += dt;
       else deepTime = 0;
-      document.getElementById('btn-home').hidden = !(deepTime > 1.15);
+      var farHome = Math.hypot(player.x - homeX, player.y - homeY) > 18 * TILE;
+      // Rescue when stuck deep, or a clear Go home when far from spawn.
+      document.getElementById('btn-home').hidden = !((deepTime > 1.15) || (started && farHome && !drivingCar && !chatBlocked()));
       adventureStep(dt);
       // Walking and pet following must persist even without a new world action.
       // saveSoon uses the same 2.5-second throttle as inventory/build changes.
