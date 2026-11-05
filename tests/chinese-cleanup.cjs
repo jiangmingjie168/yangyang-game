@@ -19,7 +19,7 @@ const assert = require('node:assert/strict');
     await page.click('#btn-start'); if(await page.locator('#name-entry').isVisible())await page.click('#welcome-play');
     await page.waitForTimeout(300);
     assert.equal(await page.evaluate(() => BW.layout().started), true);
-    assert.equal(await page.evaluate(() => BW.totalWords()), 47);
+    assert.equal(await page.evaluate(() => BW.totalWords()), 49);
     assert.equal(await page.locator('#btn-zh').innerText(), '⚙');
     assert.equal(await page.locator('#btn-zh').getAttribute('aria-label'), 'Parent settings');
     assert(!/\p{Script=Han}/u.test(await page.locator('body').innerText()), 'child-visible UI, including the gear, has zero CJK');

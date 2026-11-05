@@ -1,0 +1,10 @@
+{"case":"J-desktop-clean","status":"PASS","idle_start_ms":7139,"cheer_ms":2762,"show_ms":4236,"video":"build-v1-fix3-video/page@d3db8ec42f8227ca3c94eb1633751d84.webm"}
+{"case":"S-desktop-clean","status":"PASS","video":"build-v1-fix3-video/page@1288c59c382af5b7da04ddfa8cdb5da6.webm"}
+{"case":"B-desktop-clean","status":"PASS","video":"build-v1-fix3-video/page@f31c19ac7c74ab85ee50e88fa8f25a3e.webm"}
+{"case":"P-desktop-clean","status":"PASS","video":"build-v1-fix3-video/page@8f40542559f87e0c69d59438f300568b.webm"}
+{"case":"G-desktop-clean","status":"PASS","video":"build-v1-fix3-video/page@171e46b695f275c49813f463f931423a.webm"}
+{"case":"J-mobile-clean","status":"PASS","idle_start_ms":9250,"cheer_ms":2698,"show_ms":4233,"video":"build-v1-fix3-video/page@92b1ce5ca5d6f86e7c0e64c4f7df9654.webm"}
+{"case":"S-mobile-clean","status":"PASS","video":"build-v1-fix3-video/page@8943929af01061d851aed398e0cb2277.webm"}
+{"case":"B-mobile-clean","status":"PASS","video":"build-v1-fix3-video/page@503e9685d9352a7d9f2df5ac5cf608ff.webm"}
+{"case":"P-mobile-clean","status":"FAIL","error":"Error: Wood harvest did not increase visible inventory","errors":[],"video":"build-v1-fix3-video/page@547b5775a08c7cf4dae6c897cbeb4353.webm"}
+{"case":"G-mobile-clean","status":"PASS","video":"build-v1-fix3-video/page@713d06211abfd045635e73fe7ebb2998.webm"}

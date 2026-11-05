@@ -1,0 +1,6721 @@
+{
+  "sha256": "04ef30cd2adae06d4ef6963d4dfac729159da4a653af19d6ad6e8de5c5fe0ec6",
+  "results": [
+    {
+      "case": "C-desktop",
+      "status": "PASS",
+      "seconds": 12.4
+    },
+    {
+      "case": "U-desktop",
+      "status": "PASS",
+      "seconds": 17.2
+    },
+    {
+      "case": "P-desktop",
+      "status": "PASS",
+      "seconds": 11.4
+    },
+    {
+      "case": "M-desktop",
+      "status": "PASS",
+      "seconds": 7.9
+    },
+    {
+      "case": "Otree-desktop",
+      "status": "PASS",
+      "seconds": 7.9
+    },
+    {
+      "case": "Owater-desktop",
+      "status": "PASS",
+      "seconds": 7.9
+    },
+    {
+      "case": "Obuilding-desktop",
+      "status": "PASS",
+      "seconds": 8.3
+    },
+    {
+      "case": "Ofence-desktop",
+      "status": "PASS",
+      "seconds": 8.1
+    },
+    {
+      "case": "C-mobile",
+      "status": "PASS",
+      "seconds": 11.7
+    },
+    {
+      "case": "U-mobile",
+      "status": "PASS",
+      "seconds": 18.1
+    },
+    {
+      "case": "P-mobile",
+      "status": "PASS",
+      "seconds": 11.5
+    },
+    {
+      "case": "M-mobile",
+      "status": "PASS",
+      "seconds": 7.8
+    },
+    {
+      "case": "Otree-mobile",
+      "status": "PASS",
+      "seconds": 7.7
+    },
+    {
+      "case": "Owater-mobile",
+      "status": "PASS",
+      "seconds": 7.7
+    },
+    {
+      "case": "Obuilding-mobile",
+      "status": "PASS",
+      "seconds": 8.2
+    },
+    {
+      "case": "Ofence-mobile",
+      "status": "PASS",
+      "seconds": 7.9
+    }
+  ],
+  "frames": [
+    {
+      "case": "C-desktop",
+      "file": "build-v1.1-C-desktop-wheel-chain.png",
+      "label": "wheel-chain",
+      "line": "",
+      "options": [],
+      "state": {
+        "objects": [],
+        "driving": null,
+        "crafted": [],
+        "shows": 0
+      }
+    },
+    {
+      "case": "C-desktop",
+      "file": "build-v1.1-C-desktop-recipe.png",
+      "label": "recipe",
+      "line": "",
+      "options": [],
+      "state": {
+        "objects": [],
+        "driving": null,
+        "crafted": [
+          {
+            "item": "car",
+            "kind": "car",
+            "level": 1,
+            "parts": {
+              "body": {
+                "material": "wood",
+                "tier": 1
+              },
+              "wheel": {
+                "material": "stone",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 2
+          }
+        ],
+        "shows": 0
+      }
+    },
+    {
+      "case": "C-desktop",
+      "file": "build-v1.1-C-desktop-placed-celebration.png",
+      "label": "placed-celebration",
+      "confettiPixels": 659,
+      "line": "Wow! It's all closed!",
+      "options": [],
+      "state": {
+        "objects": [
+          {
+            "item": "car",
+            "kind": "car",
+            "level": 1,
+            "parts": {
+              "body": {
+                "material": "wood",
+                "tier": 1
+              },
+              "wheel": {
+                "material": "stone",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 2,
+            "id": "object:77:14",
+            "x": 77,
+            "y": 14,
+            "createdAt": 1793867588110,
+            "roofed": false,
+            "shown": false,
+            "closed": true,
+            "autoOffered": false,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679
+            ]
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 0
+      }
+    },
+    {
+      "case": "C-desktop",
+      "file": "build-v1.1-C-desktop-seated.png",
+      "label": "seated",
+      "line": "Hop in! Let's drive!",
+      "options": [],
+      "state": {
+        "objects": [
+          {
+            "item": "car",
+            "kind": "car",
+            "level": 1,
+            "parts": {
+              "body": {
+                "material": "wood",
+                "tier": 1
+              },
+              "wheel": {
+                "material": "stone",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 2,
+            "id": "object:77:14",
+            "x": 77,
+            "y": 14,
+            "createdAt": 1793867588110,
+            "roofed": false,
+            "shown": false,
+            "closed": true,
+            "autoOffered": false,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679
+            ],
+            "dir": 1
+          }
+        ],
+        "driving": "object:77:14",
+        "crafted": [],
+        "shows": 0
+      }
+    },
+    {
+      "case": "C-desktop",
+      "file": "build-v1.1-C-desktop-rock-stop.png",
+      "label": "rock-stop",
+      "line": "Hop in! Let's drive!",
+      "options": [],
+      "state": {
+        "objects": [
+          {
+            "item": "car",
+            "kind": "car",
+            "level": 1,
+            "parts": {
+              "body": {
+                "material": "wood",
+                "tier": 1
+              },
+              "wheel": {
+                "material": "stone",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 2,
+            "id": "object:77:14",
+            "x": 81.00074575000056,
+            "y": 14,
+            "createdAt": 1793867588110,
+            "roofed": false,
+            "shown": false,
+            "closed": true,
+            "autoOffered": false,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679
+            ],
+            "dir": 1
+          }
+        ],
+        "driving": "object:77:14",
+        "crafted": [],
+        "shows": 0
+      }
+    },
+    {
+      "case": "C-desktop",
+      "file": "build-v1.1-C-desktop-turned.png",
+      "label": "turned",
+      "line": "Hop in! Let's drive!",
+      "options": [],
+      "state": {
+        "objects": [
+          {
+            "item": "car",
+            "kind": "car",
+            "level": 1,
+            "parts": {
+              "body": {
+                "material": "wood",
+                "tier": 1
+              },
+              "wheel": {
+                "material": "stone",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 2,
+            "id": "object:77:14",
+            "x": 80.00280500000042,
+            "y": 14,
+            "createdAt": 1793867588110,
+            "roofed": false,
+            "shown": false,
+            "closed": true,
+            "autoOffered": false,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679
+            ],
+            "dir": -1
+          }
+        ],
+        "driving": "object:77:14",
+        "crafted": [],
+        "shows": 0
+      }
+    },
+    {
+      "case": "C-desktop",
+      "file": "build-v1.1-C-desktop-parked.png",
+      "label": "parked",
+      "line": "Parked! Ready to explore?",
+      "options": [],
+      "state": {
+        "objects": [
+          {
+            "item": "car",
+            "kind": "car",
+            "level": 1,
+            "parts": {
+              "body": {
+                "material": "wood",
+                "tier": 1
+              },
+              "wheel": {
+                "material": "stone",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 2,
+            "id": "object:77:14",
+            "x": 80.00280500000042,
+            "y": 14,
+            "createdAt": 1793867588110,
+            "roofed": false,
+            "shown": false,
+            "closed": true,
+            "autoOffered": false,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679
+            ],
+            "dir": -1
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 0
+      }
+    },
+    {
+      "case": "C-desktop",
+      "file": "build-v1.1-C-desktop-parked-persists.png",
+      "label": "parked-persists",
+      "line": "Wow! Show me!",
+      "options": [
+        "☝ Show"
+      ],
+      "state": {
+        "objects": [
+          {
+            "item": "car",
+            "kind": "car",
+            "level": 1,
+            "parts": {
+              "body": {
+                "material": "wood",
+                "tier": 1
+              },
+              "wheel": {
+                "material": "stone",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 2,
+            "x": 80.00280500000042,
+            "y": 14,
+            "dir": -1,
+            "id": "object:80.00280500000042:14",
+            "createdAt": 1793867588110,
+            "roofed": false,
+            "shown": false,
+            "closed": true,
+            "autoOffered": true,
+            "invited": true,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679
+            ]
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 0
+      }
+    },
+    {
+      "case": "C-desktop",
+      "file": "build-v1.1-C-desktop-car-wheel-question.png",
+      "label": "car-wheel-question",
+      "line": "What is this?",
+      "options": [
+        "Car",
+        "Wheel"
+      ],
+      "state": {
+        "objects": [
+          {
+            "item": "car",
+            "kind": "car",
+            "level": 1,
+            "parts": {
+              "body": {
+                "material": "wood",
+                "tier": 1
+              },
+              "wheel": {
+                "material": "stone",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 2,
+            "x": 80.00280500000042,
+            "y": 14,
+            "dir": -1,
+            "id": "object:80.00280500000042:14",
+            "createdAt": 1793867588110,
+            "roofed": false,
+            "shown": false,
+            "closed": true,
+            "autoOffered": true,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3440,
+              3441,
+              3442,
+              3443,
+              3680,
+              3681,
+              3682,
+              3683
+            ]
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 1
+      }
+    },
+    {
+      "case": "C-desktop",
+      "file": "build-v1.1-C-desktop-car-wheel-finale.png",
+      "label": "car-wheel-finale",
+      "confettiPixels": 708,
+      "line": "You built a car! Look at the wheels! Good job!",
+      "options": [],
+      "state": {
+        "objects": [
+          {
+            "item": "car",
+            "kind": "car",
+            "level": 1,
+            "parts": {
+              "body": {
+                "material": "wood",
+                "tier": 1
+              },
+              "wheel": {
+                "material": "stone",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 2,
+            "x": 80.00280500000042,
+            "y": 14,
+            "dir": -1,
+            "id": "object:80.00280500000042:14",
+            "createdAt": 1793867588110,
+            "roofed": false,
+            "shown": true,
+            "closed": true,
+            "autoOffered": true,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3440,
+              3441,
+              3442,
+              3443,
+              3680,
+              3681,
+              3682,
+              3683
+            ]
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 1
+      }
+    },
+    {
+      "case": "C-desktop",
+      "file": "build-v1.1-C-desktop-car-recovered.png",
+      "label": "car-recovered",
+      "line": "You built a car! Look at the wheels! Good job!",
+      "options": [],
+      "state": {
+        "objects": [],
+        "driving": null,
+        "crafted": [
+          {
+            "item": "car",
+            "kind": "car",
+            "level": 1,
+            "parts": {
+              "body": {
+                "material": "wood",
+                "tier": 1
+              },
+              "wheel": {
+                "material": "stone",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 2
+          }
+        ],
+        "shows": 1
+      }
+    },
+    {
+      "case": "U-desktop",
+      "file": "build-v1.1-U-desktop-house-celebration.png",
+      "label": "house-celebration",
+      "confettiPixels": 658,
+      "line": "Wow! It's all closed!",
+      "options": [],
+      "state": {
+        "objects": [
+          {
+            "item": "houseKit",
+            "kind": "house",
+            "level": 1,
+            "parts": {
+              "wall": {
+                "material": "wood",
+                "tier": 1
+              },
+              "roof": {
+                "material": "planks",
+                "tier": 1
+              },
+              "yard": {
+                "material": "grass",
+                "tier": 1
+              },
+              "window": {
+                "material": "wood",
+                "tier": 1
+              },
+              "foundation": {
+                "material": "stone",
+                "tier": 1
+              },
+              "door": {
+                "material": "wood",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 3,
+            "id": "object:77:13",
+            "x": 77,
+            "y": 13,
+            "createdAt": 1793867595296,
+            "roofed": true,
+            "shown": false,
+            "closed": true,
+            "autoOffered": false,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3197,
+              3198,
+              3199,
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679
+            ]
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 0
+      }
+    },
+    {
+      "case": "U-desktop",
+      "file": "build-v1.1-U-desktop-wall-menu.png",
+      "label": "wall-menu",
+      "line": "Wow! It's all closed!",
+      "options": [],
+      "state": {
+        "objects": [
+          {
+            "item": "houseKit",
+            "kind": "house",
+            "level": 1,
+            "parts": {
+              "wall": {
+                "material": "wood",
+                "tier": 1
+              },
+              "roof": {
+                "material": "planks",
+                "tier": 1
+              },
+              "yard": {
+                "material": "grass",
+                "tier": 1
+              },
+              "window": {
+                "material": "wood",
+                "tier": 1
+              },
+              "foundation": {
+                "material": "stone",
+                "tier": 1
+              },
+              "door": {
+                "material": "wood",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 3,
+            "id": "object:77:13",
+            "x": 77,
+            "y": 13,
+            "createdAt": 1793867595296,
+            "roofed": true,
+            "shown": false,
+            "closed": true,
+            "autoOffered": false,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3197,
+              3198,
+              3199,
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679
+            ]
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 0
+      }
+    },
+    {
+      "case": "U-desktop",
+      "file": "build-v1.1-U-desktop-wall-celebration.png",
+      "label": "wall-celebration",
+      "confettiPixels": 1243,
+      "line": "Strong stone walls! You made this!",
+      "options": [],
+      "state": {
+        "objects": [
+          {
+            "item": "houseKit",
+            "kind": "house",
+            "level": 2,
+            "parts": {
+              "wall": {
+                "material": "stone",
+                "tier": 2
+              },
+              "roof": {
+                "material": "planks",
+                "tier": 1
+              },
+              "yard": {
+                "material": "grass",
+                "tier": 1
+              },
+              "window": {
+                "material": "wood",
+                "tier": 1
+              },
+              "foundation": {
+                "material": "stone",
+                "tier": 1
+              },
+              "door": {
+                "material": "wood",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 3,
+            "id": "object:77:13",
+            "x": 77,
+            "y": 13,
+            "createdAt": 1793867595296,
+            "roofed": true,
+            "shown": false,
+            "closed": true,
+            "autoOffered": false,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3197,
+              3198,
+              3199,
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679
+            ],
+            "showWord": "stone"
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 0
+      }
+    },
+    {
+      "case": "U-desktop",
+      "file": "build-v1.1-U-desktop-wall-question.png",
+      "label": "wall-question",
+      "line": "What is this?",
+      "options": [
+        "Stone",
+        "Wood"
+      ],
+      "state": {
+        "objects": [
+          {
+            "item": "houseKit",
+            "kind": "house",
+            "level": 2,
+            "parts": {
+              "wall": {
+                "material": "stone",
+                "tier": 2
+              },
+              "roof": {
+                "material": "planks",
+                "tier": 1
+              },
+              "yard": {
+                "material": "grass",
+                "tier": 1
+              },
+              "window": {
+                "material": "wood",
+                "tier": 1
+              },
+              "foundation": {
+                "material": "stone",
+                "tier": 1
+              },
+              "door": {
+                "material": "wood",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 3,
+            "id": "object:77:13",
+            "x": 77,
+            "y": 13,
+            "createdAt": 1793867595296,
+            "roofed": true,
+            "shown": false,
+            "closed": true,
+            "autoOffered": true,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3197,
+              3198,
+              3199,
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679
+            ],
+            "showWord": "stone"
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 1
+      }
+    },
+    {
+      "case": "U-desktop",
+      "file": "build-v1.1-U-desktop-wall-finale.png",
+      "label": "wall-finale",
+      "confettiPixels": 760,
+      "line": "Strong stone walls! Well done!",
+      "options": [],
+      "state": {
+        "objects": [
+          {
+            "item": "houseKit",
+            "kind": "house",
+            "level": 2,
+            "parts": {
+              "wall": {
+                "material": "stone",
+                "tier": 2
+              },
+              "roof": {
+                "material": "planks",
+                "tier": 1
+              },
+              "yard": {
+                "material": "grass",
+                "tier": 1
+              },
+              "window": {
+                "material": "wood",
+                "tier": 1
+              },
+              "foundation": {
+                "material": "stone",
+                "tier": 1
+              },
+              "door": {
+                "material": "wood",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 3,
+            "id": "object:77:13",
+            "x": 77,
+            "y": 13,
+            "createdAt": 1793867595296,
+            "roofed": true,
+            "shown": true,
+            "closed": true,
+            "autoOffered": true,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3197,
+              3198,
+              3199,
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679
+            ],
+            "showWord": "stone"
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 1
+      }
+    },
+    {
+      "case": "U-desktop",
+      "file": "build-v1.1-U-desktop-yard-menu.png",
+      "label": "yard-menu",
+      "line": "Strong stone walls! Well done!",
+      "options": [],
+      "state": {
+        "objects": [
+          {
+            "item": "houseKit",
+            "kind": "house",
+            "level": 2,
+            "parts": {
+              "wall": {
+                "material": "stone",
+                "tier": 2
+              },
+              "roof": {
+                "material": "planks",
+                "tier": 1
+              },
+              "yard": {
+                "material": "grass",
+                "tier": 1
+              },
+              "window": {
+                "material": "wood",
+                "tier": 1
+              },
+              "foundation": {
+                "material": "stone",
+                "tier": 1
+              },
+              "door": {
+                "material": "wood",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 3,
+            "id": "object:77:13",
+            "x": 77,
+            "y": 13,
+            "createdAt": 1793867595296,
+            "roofed": true,
+            "shown": true,
+            "closed": true,
+            "autoOffered": true,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3197,
+              3198,
+              3199,
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679
+            ],
+            "showWord": "stone"
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 1
+      }
+    },
+    {
+      "case": "U-desktop",
+      "file": "build-v1.1-U-desktop-yard-celebration.png",
+      "label": "yard-celebration",
+      "confettiPixels": 1250,
+      "line": "Flowers in our yard! You made this!",
+      "options": [],
+      "state": {
+        "objects": [
+          {
+            "item": "houseKit",
+            "kind": "house",
+            "level": 2,
+            "parts": {
+              "wall": {
+                "material": "stone",
+                "tier": 2
+              },
+              "roof": {
+                "material": "planks",
+                "tier": 1
+              },
+              "yard": {
+                "material": "flower",
+                "tier": 2
+              },
+              "window": {
+                "material": "wood",
+                "tier": 1
+              },
+              "foundation": {
+                "material": "stone",
+                "tier": 1
+              },
+              "door": {
+                "material": "wood",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 3,
+            "id": "object:77:13",
+            "x": 77,
+            "y": 13,
+            "createdAt": 1793867595296,
+            "roofed": true,
+            "shown": false,
+            "closed": true,
+            "autoOffered": false,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3197,
+              3198,
+              3199,
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679
+            ],
+            "showWord": "flower"
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 1
+      }
+    },
+    {
+      "case": "U-desktop",
+      "file": "build-v1.1-U-desktop-yard-question.png",
+      "label": "yard-question",
+      "line": "What is this?",
+      "options": [
+        "Flower",
+        "Stone"
+      ],
+      "state": {
+        "objects": [
+          {
+            "item": "houseKit",
+            "kind": "house",
+            "level": 2,
+            "parts": {
+              "wall": {
+                "material": "stone",
+                "tier": 2
+              },
+              "roof": {
+                "material": "planks",
+                "tier": 1
+              },
+              "yard": {
+                "material": "flower",
+                "tier": 2
+              },
+              "window": {
+                "material": "wood",
+                "tier": 1
+              },
+              "foundation": {
+                "material": "stone",
+                "tier": 1
+              },
+              "door": {
+                "material": "wood",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 3,
+            "id": "object:77:13",
+            "x": 77,
+            "y": 13,
+            "createdAt": 1793867595296,
+            "roofed": true,
+            "shown": false,
+            "closed": true,
+            "autoOffered": true,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3197,
+              3198,
+              3199,
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679
+            ],
+            "showWord": "flower"
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 2
+      }
+    },
+    {
+      "case": "U-desktop",
+      "file": "build-v1.1-U-desktop-yard-finale.png",
+      "label": "yard-finale",
+      "confettiPixels": 783,
+      "line": "Flowers in our yard! Well done!",
+      "options": [],
+      "state": {
+        "objects": [
+          {
+            "item": "houseKit",
+            "kind": "house",
+            "level": 2,
+            "parts": {
+              "wall": {
+                "material": "stone",
+                "tier": 2
+              },
+              "roof": {
+                "material": "planks",
+                "tier": 1
+              },
+              "yard": {
+                "material": "flower",
+                "tier": 2
+              },
+              "window": {
+                "material": "wood",
+                "tier": 1
+              },
+              "foundation": {
+                "material": "stone",
+                "tier": 1
+              },
+              "door": {
+                "material": "wood",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 3,
+            "id": "object:77:13",
+            "x": 77,
+            "y": 13,
+            "createdAt": 1793867595296,
+            "roofed": true,
+            "shown": true,
+            "closed": true,
+            "autoOffered": true,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3197,
+              3198,
+              3199,
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679
+            ],
+            "showWord": "flower"
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 2
+      }
+    },
+    {
+      "case": "U-desktop",
+      "file": "build-v1.1-U-desktop-roof-menu.png",
+      "label": "roof-menu",
+      "line": "Flowers in our yard! Well done!",
+      "options": [],
+      "state": {
+        "objects": [
+          {
+            "item": "houseKit",
+            "kind": "house",
+            "level": 2,
+            "parts": {
+              "wall": {
+                "material": "stone",
+                "tier": 2
+              },
+              "roof": {
+                "material": "planks",
+                "tier": 1
+              },
+              "yard": {
+                "material": "flower",
+                "tier": 2
+              },
+              "window": {
+                "material": "wood",
+                "tier": 1
+              },
+              "foundation": {
+                "material": "stone",
+                "tier": 1
+              },
+              "door": {
+                "material": "wood",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 3,
+            "id": "object:77:13",
+            "x": 77,
+            "y": 13,
+            "createdAt": 1793867595296,
+            "roofed": true,
+            "shown": true,
+            "closed": true,
+            "autoOffered": true,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3197,
+              3198,
+              3199,
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679
+            ],
+            "showWord": "flower"
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 2
+      }
+    },
+    {
+      "case": "U-desktop",
+      "file": "build-v1.1-U-desktop-roof-celebration.png",
+      "label": "roof-celebration",
+      "confettiPixels": 1220,
+      "line": "A lovely tiled roof! You made this!",
+      "options": [],
+      "state": {
+        "objects": [
+          {
+            "item": "houseKit",
+            "kind": "house",
+            "level": 2,
+            "parts": {
+              "wall": {
+                "material": "stone",
+                "tier": 2
+              },
+              "roof": {
+                "material": "planks",
+                "tier": 2
+              },
+              "yard": {
+                "material": "flower",
+                "tier": 2
+              },
+              "window": {
+                "material": "wood",
+                "tier": 1
+              },
+              "foundation": {
+                "material": "stone",
+                "tier": 1
+              },
+              "door": {
+                "material": "wood",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 3,
+            "id": "object:77:13",
+            "x": 77,
+            "y": 13,
+            "createdAt": 1793867595296,
+            "roofed": true,
+            "shown": false,
+            "closed": true,
+            "autoOffered": false,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3197,
+              3198,
+              3199,
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679
+            ],
+            "showWord": "roof"
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 2
+      }
+    },
+    {
+      "case": "U-desktop",
+      "file": "build-v1.1-U-desktop-roof-question.png",
+      "label": "roof-question",
+      "line": "What is this?",
+      "options": [
+        "Roof",
+        "Window"
+      ],
+      "state": {
+        "objects": [
+          {
+            "item": "houseKit",
+            "kind": "house",
+            "level": 2,
+            "parts": {
+              "wall": {
+                "material": "stone",
+                "tier": 2
+              },
+              "roof": {
+                "material": "planks",
+                "tier": 2
+              },
+              "yard": {
+                "material": "flower",
+                "tier": 2
+              },
+              "window": {
+                "material": "wood",
+                "tier": 1
+              },
+              "foundation": {
+                "material": "stone",
+                "tier": 1
+              },
+              "door": {
+                "material": "wood",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 3,
+            "id": "object:77:13",
+            "x": 77,
+            "y": 13,
+            "createdAt": 1793867595296,
+            "roofed": true,
+            "shown": false,
+            "closed": true,
+            "autoOffered": true,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3197,
+              3198,
+              3199,
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679
+            ],
+            "showWord": "roof"
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 3
+      }
+    },
+    {
+      "case": "U-desktop",
+      "file": "build-v1.1-U-desktop-roof-finale.png",
+      "label": "roof-finale",
+      "confettiPixels": 577,
+      "line": "A lovely roof! Well done!",
+      "options": [],
+      "state": {
+        "objects": [
+          {
+            "item": "houseKit",
+            "kind": "house",
+            "level": 2,
+            "parts": {
+              "wall": {
+                "material": "stone",
+                "tier": 2
+              },
+              "roof": {
+                "material": "planks",
+                "tier": 2
+              },
+              "yard": {
+                "material": "flower",
+                "tier": 2
+              },
+              "window": {
+                "material": "wood",
+                "tier": 1
+              },
+              "foundation": {
+                "material": "stone",
+                "tier": 1
+              },
+              "door": {
+                "material": "wood",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 3,
+            "id": "object:77:13",
+            "x": 77,
+            "y": 13,
+            "createdAt": 1793867595296,
+            "roofed": true,
+            "shown": true,
+            "closed": true,
+            "autoOffered": true,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3197,
+              3198,
+              3199,
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679
+            ],
+            "showWord": "roof"
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 3
+      }
+    },
+    {
+      "case": "U-desktop",
+      "file": "build-v1.1-U-desktop-window-menu.png",
+      "label": "window-menu",
+      "line": "A lovely roof! Well done!",
+      "options": [],
+      "state": {
+        "objects": [
+          {
+            "item": "houseKit",
+            "kind": "house",
+            "level": 2,
+            "parts": {
+              "wall": {
+                "material": "stone",
+                "tier": 2
+              },
+              "roof": {
+                "material": "planks",
+                "tier": 2
+              },
+              "yard": {
+                "material": "flower",
+                "tier": 2
+              },
+              "window": {
+                "material": "wood",
+                "tier": 1
+              },
+              "foundation": {
+                "material": "stone",
+                "tier": 1
+              },
+              "door": {
+                "material": "wood",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 3,
+            "id": "object:77:13",
+            "x": 77,
+            "y": 13,
+            "createdAt": 1793867595296,
+            "roofed": true,
+            "shown": true,
+            "closed": true,
+            "autoOffered": true,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3197,
+              3198,
+              3199,
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679
+            ],
+            "showWord": "roof"
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 3
+      }
+    },
+    {
+      "case": "U-desktop",
+      "file": "build-v1.1-U-desktop-window-celebration.png",
+      "label": "window-celebration",
+      "confettiPixels": 1316,
+      "line": "A bright glass window! You made this!",
+      "options": [],
+      "state": {
+        "objects": [
+          {
+            "item": "houseKit",
+            "kind": "house",
+            "level": 2,
+            "parts": {
+              "wall": {
+                "material": "stone",
+                "tier": 2
+              },
+              "roof": {
+                "material": "planks",
+                "tier": 2
+              },
+              "yard": {
+                "material": "flower",
+                "tier": 2
+              },
+              "window": {
+                "material": "glass",
+                "tier": 2
+              },
+              "foundation": {
+                "material": "stone",
+                "tier": 1
+              },
+              "door": {
+                "material": "wood",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 3,
+            "id": "object:77:13",
+            "x": 77,
+            "y": 13,
+            "createdAt": 1793867595296,
+            "roofed": true,
+            "shown": false,
+            "closed": true,
+            "autoOffered": false,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3197,
+              3198,
+              3199,
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679
+            ],
+            "showWord": "window"
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 3
+      }
+    },
+    {
+      "case": "U-desktop",
+      "file": "build-v1.1-U-desktop-window-question.png",
+      "label": "window-question",
+      "line": "What is this?",
+      "options": [
+        "Window",
+        "Roof"
+      ],
+      "state": {
+        "objects": [
+          {
+            "item": "houseKit",
+            "kind": "house",
+            "level": 2,
+            "parts": {
+              "wall": {
+                "material": "stone",
+                "tier": 2
+              },
+              "roof": {
+                "material": "planks",
+                "tier": 2
+              },
+              "yard": {
+                "material": "flower",
+                "tier": 2
+              },
+              "window": {
+                "material": "glass",
+                "tier": 2
+              },
+              "foundation": {
+                "material": "stone",
+                "tier": 1
+              },
+              "door": {
+                "material": "wood",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 3,
+            "id": "object:77:13",
+            "x": 77,
+            "y": 13,
+            "createdAt": 1793867595296,
+            "roofed": true,
+            "shown": false,
+            "closed": true,
+            "autoOffered": true,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3197,
+              3198,
+              3199,
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679
+            ],
+            "showWord": "window"
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 4
+      }
+    },
+    {
+      "case": "U-desktop",
+      "file": "build-v1.1-U-desktop-window-finale.png",
+      "label": "window-finale",
+      "confettiPixels": 494,
+      "line": "A bright window! Well done!",
+      "options": [],
+      "state": {
+        "objects": [
+          {
+            "item": "houseKit",
+            "kind": "house",
+            "level": 2,
+            "parts": {
+              "wall": {
+                "material": "stone",
+                "tier": 2
+              },
+              "roof": {
+                "material": "planks",
+                "tier": 2
+              },
+              "yard": {
+                "material": "flower",
+                "tier": 2
+              },
+              "window": {
+                "material": "glass",
+                "tier": 2
+              },
+              "foundation": {
+                "material": "stone",
+                "tier": 1
+              },
+              "door": {
+                "material": "wood",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 3,
+            "id": "object:77:13",
+            "x": 77,
+            "y": 13,
+            "createdAt": 1793867595296,
+            "roofed": true,
+            "shown": true,
+            "closed": true,
+            "autoOffered": true,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3197,
+              3198,
+              3199,
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679
+            ],
+            "showWord": "window"
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 4
+      }
+    },
+    {
+      "case": "U-desktop",
+      "file": "build-v1.1-U-desktop-upgrades-persist.png",
+      "label": "upgrades-persist",
+      "line": "Look! Our house! I like it!",
+      "options": [],
+      "state": {
+        "objects": [
+          {
+            "item": "houseKit",
+            "kind": "house",
+            "level": 2,
+            "parts": {
+              "wall": {
+                "material": "stone",
+                "tier": 2
+              },
+              "roof": {
+                "material": "planks",
+                "tier": 2
+              },
+              "yard": {
+                "material": "flower",
+                "tier": 2
+              },
+              "window": {
+                "material": "glass",
+                "tier": 2
+              },
+              "foundation": {
+                "material": "stone",
+                "tier": 1
+              },
+              "door": {
+                "material": "wood",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 3,
+            "x": 77,
+            "y": 13,
+            "dir": 1,
+            "showWord": "window",
+            "id": "object:77:13",
+            "createdAt": 1793867595296,
+            "roofed": true,
+            "shown": true,
+            "closed": true,
+            "autoOffered": true,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3197,
+              3198,
+              3199,
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679
+            ]
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 4
+      }
+    },
+    {
+      "case": "U-desktop",
+      "file": "build-v1.1-U-desktop-all-finished.png",
+      "label": "all-finished",
+      "line": "Look! Our house! I like it!",
+      "options": [],
+      "state": {
+        "objects": [
+          {
+            "item": "houseKit",
+            "kind": "house",
+            "level": 2,
+            "parts": {
+              "wall": {
+                "material": "stone",
+                "tier": 2
+              },
+              "roof": {
+                "material": "planks",
+                "tier": 2
+              },
+              "yard": {
+                "material": "flower",
+                "tier": 2
+              },
+              "window": {
+                "material": "glass",
+                "tier": 2
+              },
+              "foundation": {
+                "material": "stone",
+                "tier": 1
+              },
+              "door": {
+                "material": "wood",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 3,
+            "x": 77,
+            "y": 13,
+            "dir": 1,
+            "showWord": "window",
+            "id": "object:77:13",
+            "createdAt": 1793867595296,
+            "roofed": true,
+            "shown": true,
+            "closed": true,
+            "autoOffered": true,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3197,
+              3198,
+              3199,
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679
+            ]
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 4
+      }
+    },
+    {
+      "case": "U-desktop",
+      "file": "build-v1.1-U-desktop-upgrades-recovered.png",
+      "label": "upgrades-recovered",
+      "line": "Wow! It's all closed!",
+      "options": [],
+      "state": {
+        "objects": [
+          {
+            "item": "houseKit",
+            "kind": "house",
+            "level": 2,
+            "parts": {
+              "wall": {
+                "material": "stone",
+                "tier": 2
+              },
+              "roof": {
+                "material": "planks",
+                "tier": 2
+              },
+              "yard": {
+                "material": "flower",
+                "tier": 2
+              },
+              "window": {
+                "material": "glass",
+                "tier": 2
+              },
+              "foundation": {
+                "material": "stone",
+                "tier": 1
+              },
+              "door": {
+                "material": "wood",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 3,
+            "id": "object:77:13",
+            "x": 77,
+            "y": 13,
+            "createdAt": 1793867610712,
+            "roofed": true,
+            "shown": false,
+            "closed": true,
+            "autoOffered": false,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3197,
+              3198,
+              3199,
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679
+            ]
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 4
+      }
+    },
+    {
+      "case": "P-desktop",
+      "file": "build-v1.1-P-desktop-recipe.png",
+      "label": "recipe",
+      "line": "",
+      "options": [],
+      "state": {
+        "objects": [],
+        "driving": null,
+        "crafted": [
+          {
+            "item": "pen",
+            "kind": "pen",
+            "level": 1,
+            "parts": {
+              "fence": {
+                "material": "wood",
+                "tier": 1
+              },
+              "gate": {
+                "material": "wood",
+                "tier": 1
+              },
+              "yard": {
+                "material": "grass",
+                "tier": 1
+              }
+            },
+            "w": 4,
+            "h": 2
+          }
+        ],
+        "shows": 0
+      }
+    },
+    {
+      "case": "P-desktop",
+      "file": "build-v1.1-P-desktop-placed-celebration.png",
+      "label": "placed-celebration",
+      "confettiPixels": 559,
+      "line": "Wow! It's all closed!",
+      "options": [],
+      "state": {
+        "objects": [
+          {
+            "item": "pen",
+            "kind": "pen",
+            "level": 1,
+            "parts": {
+              "fence": {
+                "material": "wood",
+                "tier": 1
+              },
+              "gate": {
+                "material": "wood",
+                "tier": 1
+              },
+              "yard": {
+                "material": "grass",
+                "tier": 1
+              }
+            },
+            "w": 4,
+            "h": 2,
+            "id": "object:77:14",
+            "x": 77,
+            "y": 14,
+            "createdAt": 1793867617731,
+            "roofed": false,
+            "shown": false,
+            "closed": true,
+            "autoOffered": false,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3437,
+              3438,
+              3439,
+              3440,
+              3677,
+              3678,
+              3679,
+              3680
+            ]
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 0
+      }
+    },
+    {
+      "case": "P-desktop",
+      "file": "build-v1.1-P-desktop-pen-question.png",
+      "label": "pen-question",
+      "line": "What is this?",
+      "options": [
+        "House",
+        "Fence"
+      ],
+      "state": {
+        "objects": [
+          {
+            "item": "pen",
+            "kind": "pen",
+            "level": 1,
+            "parts": {
+              "fence": {
+                "material": "wood",
+                "tier": 1
+              },
+              "gate": {
+                "material": "wood",
+                "tier": 1
+              },
+              "yard": {
+                "material": "grass",
+                "tier": 1
+              }
+            },
+            "w": 4,
+            "h": 2,
+            "id": "object:77:14",
+            "x": 77,
+            "y": 14,
+            "createdAt": 1793867617731,
+            "roofed": false,
+            "shown": false,
+            "closed": true,
+            "autoOffered": true,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3437,
+              3438,
+              3439,
+              3440,
+              3677,
+              3678,
+              3679,
+              3680
+            ]
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 1
+      }
+    },
+    {
+      "case": "P-desktop",
+      "file": "build-v1.1-P-desktop-pen-finale.png",
+      "label": "pen-finale",
+      "confettiPixels": 1425,
+      "line": "You built a fence! Wow! It's so big!",
+      "options": [],
+      "state": {
+        "objects": [
+          {
+            "item": "pen",
+            "kind": "pen",
+            "level": 1,
+            "parts": {
+              "fence": {
+                "material": "wood",
+                "tier": 1
+              },
+              "gate": {
+                "material": "wood",
+                "tier": 1
+              },
+              "yard": {
+                "material": "grass",
+                "tier": 1
+              }
+            },
+            "w": 4,
+            "h": 2,
+            "id": "object:77:14",
+            "x": 77,
+            "y": 14,
+            "createdAt": 1793867617731,
+            "roofed": false,
+            "shown": true,
+            "closed": true,
+            "autoOffered": true,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3437,
+              3438,
+              3439,
+              3440,
+              3677,
+              3678,
+              3679,
+              3680
+            ]
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 1
+      }
+    },
+    {
+      "case": "P-desktop",
+      "file": "build-v1.1-P-desktop-pen-persists.png",
+      "label": "pen-persists",
+      "line": "Look! Our fence! Let's build more!",
+      "options": [],
+      "state": {
+        "objects": [
+          {
+            "item": "pen",
+            "kind": "pen",
+            "level": 1,
+            "parts": {
+              "fence": {
+                "material": "wood",
+                "tier": 1
+              },
+              "gate": {
+                "material": "wood",
+                "tier": 1
+              },
+              "yard": {
+                "material": "grass",
+                "tier": 1
+              }
+            },
+            "w": 4,
+            "h": 2,
+            "x": 77,
+            "y": 14,
+            "dir": 1,
+            "id": "object:77:14",
+            "createdAt": 1793867617731,
+            "roofed": false,
+            "shown": true,
+            "closed": true,
+            "autoOffered": true,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3437,
+              3438,
+              3439,
+              3440,
+              3677,
+              3678,
+              3679,
+              3680
+            ]
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 1
+      }
+    },
+    {
+      "case": "M-desktop",
+      "file": "build-v1.1-M-desktop-missing-materials.png",
+      "label": "missing-materials",
+      "line": "Wow! It's all closed!",
+      "options": [],
+      "state": {
+        "objects": [
+          {
+            "item": "houseKit",
+            "kind": "house",
+            "level": 1,
+            "parts": {
+              "wall": {
+                "material": "wood",
+                "tier": 1
+              },
+              "roof": {
+                "material": "planks",
+                "tier": 1
+              },
+              "yard": {
+                "material": "grass",
+                "tier": 1
+              },
+              "window": {
+                "material": "wood",
+                "tier": 1
+              },
+              "foundation": {
+                "material": "stone",
+                "tier": 1
+              },
+              "door": {
+                "material": "wood",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 3,
+            "id": "object:77:13",
+            "x": 77,
+            "y": 13,
+            "createdAt": 1793867623933,
+            "roofed": true,
+            "shown": false,
+            "closed": true,
+            "autoOffered": false,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3197,
+              3198,
+              3199,
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679
+            ]
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 4
+      }
+    },
+    {
+      "case": "M-desktop",
+      "file": "build-v1.1-M-desktop-capped-upgrade-celebration.png",
+      "label": "capped-upgrade-celebration",
+      "confettiPixels": 1235,
+      "line": "A lovely tiled roof! You made this!",
+      "options": [],
+      "state": {
+        "objects": [
+          {
+            "item": "houseKit",
+            "kind": "house",
+            "level": 2,
+            "parts": {
+              "wall": {
+                "material": "wood",
+                "tier": 1
+              },
+              "roof": {
+                "material": "planks",
+                "tier": 2
+              },
+              "yard": {
+                "material": "grass",
+                "tier": 1
+              },
+              "window": {
+                "material": "wood",
+                "tier": 1
+              },
+              "foundation": {
+                "material": "stone",
+                "tier": 1
+              },
+              "door": {
+                "material": "wood",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 3,
+            "id": "object:77:13",
+            "x": 77,
+            "y": 13,
+            "createdAt": 1793867623933,
+            "roofed": true,
+            "shown": false,
+            "closed": true,
+            "autoOffered": false,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3197,
+              3198,
+              3199,
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679
+            ],
+            "showWord": "roof"
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 4
+      }
+    },
+    {
+      "case": "M-desktop",
+      "file": "build-v1.1-M-desktop-cap-no-question.png",
+      "label": "cap-no-question",
+      "line": "A lovely tiled roof! You made this!",
+      "options": [],
+      "state": {
+        "objects": [
+          {
+            "item": "houseKit",
+            "kind": "house",
+            "level": 2,
+            "parts": {
+              "wall": {
+                "material": "wood",
+                "tier": 1
+              },
+              "roof": {
+                "material": "planks",
+                "tier": 2
+              },
+              "yard": {
+                "material": "grass",
+                "tier": 1
+              },
+              "window": {
+                "material": "wood",
+                "tier": 1
+              },
+              "foundation": {
+                "material": "stone",
+                "tier": 1
+              },
+              "door": {
+                "material": "wood",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 3,
+            "id": "object:77:13",
+            "x": 77,
+            "y": 13,
+            "createdAt": 1793867623933,
+            "roofed": true,
+            "shown": false,
+            "closed": true,
+            "autoOffered": false,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3197,
+              3198,
+              3199,
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679
+            ],
+            "showWord": "roof"
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 4
+      }
+    },
+    {
+      "case": "Otree-desktop",
+      "file": "build-v1.1-Otree-desktop-blocked-no-charge.png",
+      "label": "blocked-no-charge",
+      "line": "",
+      "options": [],
+      "state": {
+        "objects": [],
+        "driving": null,
+        "crafted": [
+          {
+            "item": "car",
+            "kind": "car",
+            "level": 1,
+            "parts": {
+              "body": {
+                "material": "wood",
+                "tier": 1
+              },
+              "wheel": {
+                "material": "stone",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 2
+          }
+        ],
+        "shows": 0
+      }
+    },
+    {
+      "case": "Otree-desktop",
+      "file": "build-v1.1-Otree-desktop-before-obstacle.png",
+      "label": "before-obstacle",
+      "line": "Wow! It's all closed!",
+      "options": [],
+      "state": {
+        "objects": [
+          {
+            "item": "car",
+            "kind": "car",
+            "level": 1,
+            "parts": {
+              "body": {
+                "material": "wood",
+                "tier": 1
+              },
+              "wheel": {
+                "material": "stone",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 2,
+            "id": "object:100:14",
+            "x": 100,
+            "y": 14,
+            "createdAt": 1793867632507,
+            "roofed": false,
+            "shown": false,
+            "closed": true,
+            "autoOffered": false,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3460,
+              3461,
+              3462,
+              3700,
+              3701,
+              3702
+            ]
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 0
+      }
+    },
+    {
+      "case": "Otree-desktop",
+      "file": "build-v1.1-Otree-desktop-gentle-stop.png",
+      "label": "gentle-stop",
+      "line": "Hop in! Let's drive!",
+      "options": [],
+      "state": {
+        "objects": [
+          {
+            "item": "car",
+            "kind": "car",
+            "level": 1,
+            "parts": {
+              "body": {
+                "material": "wood",
+                "tier": 1
+              },
+              "wheel": {
+                "material": "stone",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 2,
+            "id": "object:100:14",
+            "x": 101.00093500000014,
+            "y": 14,
+            "createdAt": 1793867632507,
+            "roofed": false,
+            "shown": false,
+            "closed": true,
+            "autoOffered": false,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3460,
+              3461,
+              3462,
+              3700,
+              3701,
+              3702
+            ],
+            "dir": 1
+          }
+        ],
+        "driving": "object:100:14",
+        "crafted": [],
+        "shows": 0
+      }
+    },
+    {
+      "case": "Otree-desktop",
+      "file": "build-v1.1-Otree-desktop-tap-exit.png",
+      "label": "tap-exit",
+      "line": "Parked! Ready to explore?",
+      "options": [],
+      "state": {
+        "objects": [
+          {
+            "item": "car",
+            "kind": "car",
+            "level": 1,
+            "parts": {
+              "body": {
+                "material": "wood",
+                "tier": 1
+              },
+              "wheel": {
+                "material": "stone",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 2,
+            "id": "object:100:14",
+            "x": 101.00093500000014,
+            "y": 14,
+            "createdAt": 1793867632507,
+            "roofed": false,
+            "shown": false,
+            "closed": true,
+            "autoOffered": false,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3460,
+              3461,
+              3462,
+              3700,
+              3701,
+              3702
+            ],
+            "dir": 1
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 0
+      }
+    },
+    {
+      "case": "Owater-desktop",
+      "file": "build-v1.1-Owater-desktop-blocked-no-charge.png",
+      "label": "blocked-no-charge",
+      "line": "",
+      "options": [],
+      "state": {
+        "objects": [],
+        "driving": null,
+        "crafted": [
+          {
+            "item": "car",
+            "kind": "car",
+            "level": 1,
+            "parts": {
+              "body": {
+                "material": "wood",
+                "tier": 1
+              },
+              "wheel": {
+                "material": "stone",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 2
+          }
+        ],
+        "shows": 0
+      }
+    },
+    {
+      "case": "Owater-desktop",
+      "file": "build-v1.1-Owater-desktop-before-obstacle.png",
+      "label": "before-obstacle",
+      "line": "Wow! It's all closed!",
+      "options": [],
+      "state": {
+        "objects": [
+          {
+            "item": "car",
+            "kind": "car",
+            "level": 1,
+            "parts": {
+              "body": {
+                "material": "wood",
+                "tier": 1
+              },
+              "wheel": {
+                "material": "stone",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 2,
+            "id": "object:114:14",
+            "x": 114,
+            "y": 14,
+            "createdAt": 1793867640388,
+            "roofed": false,
+            "shown": false,
+            "closed": true,
+            "autoOffered": false,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3474,
+              3475,
+              3476,
+              3714,
+              3715,
+              3716
+            ]
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 0
+      }
+    },
+    {
+      "case": "Owater-desktop",
+      "file": "build-v1.1-Owater-desktop-gentle-stop.png",
+      "label": "gentle-stop",
+      "line": "Hop in! Let's drive!",
+      "options": [],
+      "state": {
+        "objects": [
+          {
+            "item": "car",
+            "kind": "car",
+            "level": 1,
+            "parts": {
+              "body": {
+                "material": "wood",
+                "tier": 1
+              },
+              "wheel": {
+                "material": "stone",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 2,
+            "id": "object:114:14",
+            "x": 116.99981075000042,
+            "y": 14,
+            "createdAt": 1793867640388,
+            "roofed": false,
+            "shown": false,
+            "closed": true,
+            "autoOffered": false,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3474,
+              3475,
+              3476,
+              3714,
+              3715,
+              3716
+            ],
+            "dir": 1
+          }
+        ],
+        "driving": "object:114:14",
+        "crafted": [],
+        "shows": 0
+      }
+    },
+    {
+      "case": "Owater-desktop",
+      "file": "build-v1.1-Owater-desktop-tap-exit.png",
+      "label": "tap-exit",
+      "line": "Parked! Ready to explore?",
+      "options": [],
+      "state": {
+        "objects": [
+          {
+            "item": "car",
+            "kind": "car",
+            "level": 1,
+            "parts": {
+              "body": {
+                "material": "wood",
+                "tier": 1
+              },
+              "wheel": {
+                "material": "stone",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 2,
+            "id": "object:114:14",
+            "x": 116.99981075000042,
+            "y": 14,
+            "createdAt": 1793867640388,
+            "roofed": false,
+            "shown": false,
+            "closed": true,
+            "autoOffered": false,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3474,
+              3475,
+              3476,
+              3714,
+              3715,
+              3716
+            ],
+            "dir": 1
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 0
+      }
+    },
+    {
+      "case": "Obuilding-desktop",
+      "file": "build-v1.1-Obuilding-desktop-blocked-no-charge.png",
+      "label": "blocked-no-charge",
+      "line": "Wow! It's all closed!",
+      "options": [],
+      "state": {
+        "objects": [
+          {
+            "item": "houseKit",
+            "kind": "house",
+            "level": 1,
+            "parts": {
+              "wall": {
+                "material": "wood",
+                "tier": 1
+              },
+              "roof": {
+                "material": "planks",
+                "tier": 1
+              },
+              "yard": {
+                "material": "grass",
+                "tier": 1
+              },
+              "window": {
+                "material": "wood",
+                "tier": 1
+              },
+              "foundation": {
+                "material": "stone",
+                "tier": 1
+              },
+              "door": {
+                "material": "wood",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 3,
+            "id": "object:81:13",
+            "x": 81,
+            "y": 13,
+            "createdAt": 1793867648313,
+            "roofed": true,
+            "shown": false,
+            "closed": true,
+            "autoOffered": false,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3201,
+              3202,
+              3203,
+              3441,
+              3442,
+              3443,
+              3681,
+              3682,
+              3683
+            ]
+          }
+        ],
+        "driving": null,
+        "crafted": [
+          {
+            "item": "car",
+            "kind": "car",
+            "level": 1,
+            "parts": {
+              "body": {
+                "material": "wood",
+                "tier": 1
+              },
+              "wheel": {
+                "material": "stone",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 2
+          }
+        ],
+        "shows": 0
+      }
+    },
+    {
+      "case": "Obuilding-desktop",
+      "file": "build-v1.1-Obuilding-desktop-before-obstacle.png",
+      "label": "before-obstacle",
+      "line": "Wow! It's all closed!",
+      "options": [],
+      "state": {
+        "objects": [
+          {
+            "item": "houseKit",
+            "kind": "house",
+            "level": 1,
+            "parts": {
+              "wall": {
+                "material": "wood",
+                "tier": 1
+              },
+              "roof": {
+                "material": "planks",
+                "tier": 1
+              },
+              "yard": {
+                "material": "grass",
+                "tier": 1
+              },
+              "window": {
+                "material": "wood",
+                "tier": 1
+              },
+              "foundation": {
+                "material": "stone",
+                "tier": 1
+              },
+              "door": {
+                "material": "wood",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 3,
+            "id": "object:81:13",
+            "x": 81,
+            "y": 13,
+            "createdAt": 1793867648313,
+            "roofed": true,
+            "shown": false,
+            "closed": false,
+            "autoOffered": false,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3201,
+              3202,
+              3203,
+              3441,
+              3442,
+              3443,
+              3681,
+              3682,
+              3683
+            ]
+          },
+          {
+            "item": "car",
+            "kind": "car",
+            "level": 1,
+            "parts": {
+              "body": {
+                "material": "wood",
+                "tier": 1
+              },
+              "wheel": {
+                "material": "stone",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 2,
+            "id": "object:77:14",
+            "x": 77,
+            "y": 14,
+            "createdAt": 1793867648722,
+            "roofed": false,
+            "shown": false,
+            "closed": true,
+            "autoOffered": false,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679,
+              3201,
+              3202,
+              3203,
+              3441,
+              3442,
+              3443,
+              3681,
+              3682,
+              3683
+            ]
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 0
+      }
+    },
+    {
+      "case": "Obuilding-desktop",
+      "file": "build-v1.1-Obuilding-desktop-gentle-stop.png",
+      "label": "gentle-stop",
+      "line": "Hop in! Let's drive!",
+      "options": [],
+      "state": {
+        "objects": [
+          {
+            "item": "houseKit",
+            "kind": "house",
+            "level": 1,
+            "parts": {
+              "wall": {
+                "material": "wood",
+                "tier": 1
+              },
+              "roof": {
+                "material": "planks",
+                "tier": 1
+              },
+              "yard": {
+                "material": "grass",
+                "tier": 1
+              },
+              "window": {
+                "material": "wood",
+                "tier": 1
+              },
+              "foundation": {
+                "material": "stone",
+                "tier": 1
+              },
+              "door": {
+                "material": "wood",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 3,
+            "id": "object:81:13",
+            "x": 81,
+            "y": 13,
+            "createdAt": 1793867648313,
+            "roofed": true,
+            "shown": false,
+            "closed": false,
+            "autoOffered": false,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3201,
+              3202,
+              3203,
+              3441,
+              3442,
+              3443,
+              3681,
+              3682,
+              3683
+            ]
+          },
+          {
+            "item": "car",
+            "kind": "car",
+            "level": 1,
+            "parts": {
+              "body": {
+                "material": "wood",
+                "tier": 1
+              },
+              "wheel": {
+                "material": "stone",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 2,
+            "id": "object:77:14",
+            "x": 77.99836850000014,
+            "y": 14,
+            "createdAt": 1793867648722,
+            "roofed": false,
+            "shown": false,
+            "closed": true,
+            "autoOffered": false,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679,
+              3201,
+              3202,
+              3203,
+              3441,
+              3442,
+              3443,
+              3681,
+              3682,
+              3683
+            ],
+            "dir": 1
+          }
+        ],
+        "driving": "object:77:14",
+        "crafted": [],
+        "shows": 0
+      }
+    },
+    {
+      "case": "Obuilding-desktop",
+      "file": "build-v1.1-Obuilding-desktop-tap-exit.png",
+      "label": "tap-exit",
+      "line": "Parked! Ready to explore?",
+      "options": [],
+      "state": {
+        "objects": [
+          {
+            "item": "houseKit",
+            "kind": "house",
+            "level": 1,
+            "parts": {
+              "wall": {
+                "material": "wood",
+                "tier": 1
+              },
+              "roof": {
+                "material": "planks",
+                "tier": 1
+              },
+              "yard": {
+                "material": "grass",
+                "tier": 1
+              },
+              "window": {
+                "material": "wood",
+                "tier": 1
+              },
+              "foundation": {
+                "material": "stone",
+                "tier": 1
+              },
+              "door": {
+                "material": "wood",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 3,
+            "id": "object:81:13",
+            "x": 81,
+            "y": 13,
+            "createdAt": 1793867648313,
+            "roofed": true,
+            "shown": false,
+            "closed": false,
+            "autoOffered": false,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3201,
+              3202,
+              3203,
+              3441,
+              3442,
+              3443,
+              3681,
+              3682,
+              3683
+            ]
+          },
+          {
+            "item": "car",
+            "kind": "car",
+            "level": 1,
+            "parts": {
+              "body": {
+                "material": "wood",
+                "tier": 1
+              },
+              "wheel": {
+                "material": "stone",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 2,
+            "id": "object:77:14",
+            "x": 77.99836850000014,
+            "y": 14,
+            "createdAt": 1793867648722,
+            "roofed": false,
+            "shown": false,
+            "closed": true,
+            "autoOffered": false,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679,
+              3201,
+              3202,
+              3203,
+              3441,
+              3442,
+              3443,
+              3681,
+              3682,
+              3683
+            ],
+            "dir": 1
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 0
+      }
+    },
+    {
+      "case": "Ofence-desktop",
+      "file": "build-v1.1-Ofence-desktop-blocked-no-charge.png",
+      "label": "blocked-no-charge",
+      "line": "Nice start!",
+      "options": [],
+      "state": {
+        "objects": [],
+        "driving": null,
+        "crafted": [
+          {
+            "item": "car",
+            "kind": "car",
+            "level": 1,
+            "parts": {
+              "body": {
+                "material": "wood",
+                "tier": 1
+              },
+              "wheel": {
+                "material": "stone",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 2
+          }
+        ],
+        "shows": 0
+      }
+    },
+    {
+      "case": "Ofence-desktop",
+      "file": "build-v1.1-Ofence-desktop-before-obstacle.png",
+      "label": "before-obstacle",
+      "line": "Wow! It's all closed!",
+      "options": [],
+      "state": {
+        "objects": [
+          {
+            "item": "car",
+            "kind": "car",
+            "level": 1,
+            "parts": {
+              "body": {
+                "material": "wood",
+                "tier": 1
+              },
+              "wheel": {
+                "material": "stone",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 2,
+            "id": "object:77:14",
+            "x": 77,
+            "y": 14,
+            "createdAt": 1793867656854,
+            "roofed": false,
+            "shown": false,
+            "closed": true,
+            "autoOffered": false,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679
+            ]
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 0
+      }
+    },
+    {
+      "case": "Ofence-desktop",
+      "file": "build-v1.1-Ofence-desktop-gentle-stop.png",
+      "label": "gentle-stop",
+      "line": "Hop in! Let's drive!",
+      "options": [],
+      "state": {
+        "objects": [
+          {
+            "item": "car",
+            "kind": "car",
+            "level": 1,
+            "parts": {
+              "body": {
+                "material": "wood",
+                "tier": 1
+              },
+              "wheel": {
+                "material": "stone",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 2,
+            "id": "object:77:14",
+            "x": 79.99981075000042,
+            "y": 14,
+            "createdAt": 1793867656854,
+            "roofed": false,
+            "shown": false,
+            "closed": true,
+            "autoOffered": false,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679
+            ],
+            "dir": 1
+          }
+        ],
+        "driving": "object:77:14",
+        "crafted": [],
+        "shows": 0
+      }
+    },
+    {
+      "case": "Ofence-desktop",
+      "file": "build-v1.1-Ofence-desktop-tap-exit.png",
+      "label": "tap-exit",
+      "line": "Parked! Ready to explore?",
+      "options": [],
+      "state": {
+        "objects": [
+          {
+            "item": "car",
+            "kind": "car",
+            "level": 1,
+            "parts": {
+              "body": {
+                "material": "wood",
+                "tier": 1
+              },
+              "wheel": {
+                "material": "stone",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 2,
+            "id": "object:77:14",
+            "x": 79.99981075000042,
+            "y": 14,
+            "createdAt": 1793867656854,
+            "roofed": false,
+            "shown": false,
+            "closed": false,
+            "autoOffered": false,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679
+            ],
+            "dir": 1
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 0
+      }
+    },
+    {
+      "case": "C-mobile",
+      "file": "build-v1.1-C-mobile-wheel-chain.png",
+      "label": "wheel-chain",
+      "line": "",
+      "options": [],
+      "state": {
+        "objects": [],
+        "driving": null,
+        "crafted": [],
+        "shows": 0
+      }
+    },
+    {
+      "case": "C-mobile",
+      "file": "build-v1.1-C-mobile-recipe.png",
+      "label": "recipe",
+      "line": "",
+      "options": [],
+      "state": {
+        "objects": [],
+        "driving": null,
+        "crafted": [
+          {
+            "item": "car",
+            "kind": "car",
+            "level": 1,
+            "parts": {
+              "body": {
+                "material": "wood",
+                "tier": 1
+              },
+              "wheel": {
+                "material": "stone",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 2
+          }
+        ],
+        "shows": 0
+      }
+    },
+    {
+      "case": "C-mobile",
+      "file": "build-v1.1-C-mobile-placed-celebration.png",
+      "label": "placed-celebration",
+      "confettiPixels": 185,
+      "line": "Wow! It's all closed!",
+      "options": [],
+      "state": {
+        "objects": [
+          {
+            "item": "car",
+            "kind": "car",
+            "level": 1,
+            "parts": {
+              "body": {
+                "material": "wood",
+                "tier": 1
+              },
+              "wheel": {
+                "material": "stone",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 2,
+            "id": "object:77:14",
+            "x": 77,
+            "y": 14,
+            "createdAt": 1793867669026,
+            "roofed": false,
+            "shown": false,
+            "closed": true,
+            "autoOffered": false,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679
+            ]
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 0
+      }
+    },
+    {
+      "case": "C-mobile",
+      "file": "build-v1.1-C-mobile-seated.png",
+      "label": "seated",
+      "line": "Hop in! Let's drive!",
+      "options": [],
+      "state": {
+        "objects": [
+          {
+            "item": "car",
+            "kind": "car",
+            "level": 1,
+            "parts": {
+              "body": {
+                "material": "wood",
+                "tier": 1
+              },
+              "wheel": {
+                "material": "stone",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 2,
+            "id": "object:77:14",
+            "x": 77,
+            "y": 14,
+            "createdAt": 1793867669026,
+            "roofed": false,
+            "shown": false,
+            "closed": true,
+            "autoOffered": false,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679
+            ],
+            "dir": 1
+          }
+        ],
+        "driving": "object:77:14",
+        "crafted": [],
+        "shows": 0
+      }
+    },
+    {
+      "case": "C-mobile",
+      "file": "build-v1.1-C-mobile-rock-stop.png",
+      "label": "rock-stop",
+      "line": "Hop in! Let's drive!",
+      "options": [],
+      "state": {
+        "objects": [
+          {
+            "item": "car",
+            "kind": "car",
+            "level": 1,
+            "parts": {
+              "body": {
+                "material": "wood",
+                "tier": 1
+              },
+              "wheel": {
+                "material": "stone",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 2,
+            "id": "object:77:14",
+            "x": 81.00074575000056,
+            "y": 14,
+            "createdAt": 1793867669026,
+            "roofed": false,
+            "shown": false,
+            "closed": true,
+            "autoOffered": false,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679
+            ],
+            "dir": 1
+          }
+        ],
+        "driving": "object:77:14",
+        "crafted": [],
+        "shows": 0
+      }
+    },
+    {
+      "case": "C-mobile",
+      "file": "build-v1.1-C-mobile-turned.png",
+      "label": "turned",
+      "line": "Hop in! Let's drive!",
+      "options": [],
+      "state": {
+        "objects": [
+          {
+            "item": "car",
+            "kind": "car",
+            "level": 1,
+            "parts": {
+              "body": {
+                "material": "wood",
+                "tier": 1
+              },
+              "wheel": {
+                "material": "stone",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 2,
+            "id": "object:77:14",
+            "x": 80.00237725000042,
+            "y": 14,
+            "createdAt": 1793867669026,
+            "roofed": false,
+            "shown": false,
+            "closed": true,
+            "autoOffered": false,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679
+            ],
+            "dir": -1
+          }
+        ],
+        "driving": "object:77:14",
+        "crafted": [],
+        "shows": 0
+      }
+    },
+    {
+      "case": "C-mobile",
+      "file": "build-v1.1-C-mobile-parked.png",
+      "label": "parked",
+      "line": "Parked! Ready to explore?",
+      "options": [],
+      "state": {
+        "objects": [
+          {
+            "item": "car",
+            "kind": "car",
+            "level": 1,
+            "parts": {
+              "body": {
+                "material": "wood",
+                "tier": 1
+              },
+              "wheel": {
+                "material": "stone",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 2,
+            "id": "object:77:14",
+            "x": 80.00237725000042,
+            "y": 14,
+            "createdAt": 1793867669026,
+            "roofed": false,
+            "shown": false,
+            "closed": true,
+            "autoOffered": false,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679
+            ],
+            "dir": -1
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 0
+      }
+    },
+    {
+      "case": "C-mobile",
+      "file": "build-v1.1-C-mobile-parked-persists.png",
+      "label": "parked-persists",
+      "line": "Wow! Show me!",
+      "options": [
+        "☝ Show"
+      ],
+      "state": {
+        "objects": [
+          {
+            "item": "car",
+            "kind": "car",
+            "level": 1,
+            "parts": {
+              "body": {
+                "material": "wood",
+                "tier": 1
+              },
+              "wheel": {
+                "material": "stone",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 2,
+            "x": 80.00237725000042,
+            "y": 14,
+            "dir": -1,
+            "id": "object:80.00237725000042:14",
+            "createdAt": 1793867669026,
+            "roofed": false,
+            "shown": false,
+            "closed": true,
+            "autoOffered": true,
+            "invited": true,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679
+            ]
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 0
+      }
+    },
+    {
+      "case": "C-mobile",
+      "file": "build-v1.1-C-mobile-car-wheel-question.png",
+      "label": "car-wheel-question",
+      "line": "What is this?",
+      "options": [
+        "Car",
+        "Wheel"
+      ],
+      "state": {
+        "objects": [
+          {
+            "item": "car",
+            "kind": "car",
+            "level": 1,
+            "parts": {
+              "body": {
+                "material": "wood",
+                "tier": 1
+              },
+              "wheel": {
+                "material": "stone",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 2,
+            "x": 80.00237725000042,
+            "y": 14,
+            "dir": -1,
+            "id": "object:80.00237725000042:14",
+            "createdAt": 1793867669026,
+            "roofed": false,
+            "shown": false,
+            "closed": true,
+            "autoOffered": true,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3440,
+              3441,
+              3442,
+              3443,
+              3680,
+              3681,
+              3682,
+              3683
+            ]
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 1
+      }
+    },
+    {
+      "case": "C-mobile",
+      "file": "build-v1.1-C-mobile-car-wheel-finale.png",
+      "label": "car-wheel-finale",
+      "confettiPixels": 321,
+      "line": "You built a car! Look at the wheels! Good job!",
+      "options": [],
+      "state": {
+        "objects": [
+          {
+            "item": "car",
+            "kind": "car",
+            "level": 1,
+            "parts": {
+              "body": {
+                "material": "wood",
+                "tier": 1
+              },
+              "wheel": {
+                "material": "stone",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 2,
+            "x": 80.00237725000042,
+            "y": 14,
+            "dir": -1,
+            "id": "object:80.00237725000042:14",
+            "createdAt": 1793867669026,
+            "roofed": false,
+            "shown": true,
+            "closed": true,
+            "autoOffered": true,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3440,
+              3441,
+              3442,
+              3443,
+              3680,
+              3681,
+              3682,
+              3683
+            ]
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 1
+      }
+    },
+    {
+      "case": "C-mobile",
+      "file": "build-v1.1-C-mobile-car-recovered.png",
+      "label": "car-recovered",
+      "line": "You built a car! Look at the wheels! Good job!",
+      "options": [],
+      "state": {
+        "objects": [],
+        "driving": null,
+        "crafted": [
+          {
+            "item": "car",
+            "kind": "car",
+            "level": 1,
+            "parts": {
+              "body": {
+                "material": "wood",
+                "tier": 1
+              },
+              "wheel": {
+                "material": "stone",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 2
+          }
+        ],
+        "shows": 1
+      }
+    },
+    {
+      "case": "U-mobile",
+      "file": "build-v1.1-U-mobile-house-celebration.png",
+      "label": "house-celebration",
+      "confettiPixels": 442,
+      "line": "Wow! It's all closed!",
+      "options": [],
+      "state": {
+        "objects": [
+          {
+            "item": "houseKit",
+            "kind": "house",
+            "level": 1,
+            "parts": {
+              "wall": {
+                "material": "wood",
+                "tier": 1
+              },
+              "roof": {
+                "material": "planks",
+                "tier": 1
+              },
+              "yard": {
+                "material": "grass",
+                "tier": 1
+              },
+              "window": {
+                "material": "wood",
+                "tier": 1
+              },
+              "foundation": {
+                "material": "stone",
+                "tier": 1
+              },
+              "door": {
+                "material": "wood",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 3,
+            "id": "object:77:13",
+            "x": 77,
+            "y": 13,
+            "createdAt": 1793867675770,
+            "roofed": true,
+            "shown": false,
+            "closed": true,
+            "autoOffered": false,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3197,
+              3198,
+              3199,
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679
+            ]
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 0
+      }
+    },
+    {
+      "case": "U-mobile",
+      "file": "build-v1.1-U-mobile-wall-menu.png",
+      "label": "wall-menu",
+      "line": "Wow! It's all closed!",
+      "options": [],
+      "state": {
+        "objects": [
+          {
+            "item": "houseKit",
+            "kind": "house",
+            "level": 1,
+            "parts": {
+              "wall": {
+                "material": "wood",
+                "tier": 1
+              },
+              "roof": {
+                "material": "planks",
+                "tier": 1
+              },
+              "yard": {
+                "material": "grass",
+                "tier": 1
+              },
+              "window": {
+                "material": "wood",
+                "tier": 1
+              },
+              "foundation": {
+                "material": "stone",
+                "tier": 1
+              },
+              "door": {
+                "material": "wood",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 3,
+            "id": "object:77:13",
+            "x": 77,
+            "y": 13,
+            "createdAt": 1793867675770,
+            "roofed": true,
+            "shown": false,
+            "closed": true,
+            "autoOffered": false,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3197,
+              3198,
+              3199,
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679
+            ]
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 0
+      }
+    },
+    {
+      "case": "U-mobile",
+      "file": "build-v1.1-U-mobile-wall-celebration.png",
+      "label": "wall-celebration",
+      "confettiPixels": 834,
+      "line": "Strong stone walls! You made this!",
+      "options": [],
+      "state": {
+        "objects": [
+          {
+            "item": "houseKit",
+            "kind": "house",
+            "level": 2,
+            "parts": {
+              "wall": {
+                "material": "stone",
+                "tier": 2
+              },
+              "roof": {
+                "material": "planks",
+                "tier": 1
+              },
+              "yard": {
+                "material": "grass",
+                "tier": 1
+              },
+              "window": {
+                "material": "wood",
+                "tier": 1
+              },
+              "foundation": {
+                "material": "stone",
+                "tier": 1
+              },
+              "door": {
+                "material": "wood",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 3,
+            "id": "object:77:13",
+            "x": 77,
+            "y": 13,
+            "createdAt": 1793867675770,
+            "roofed": true,
+            "shown": false,
+            "closed": true,
+            "autoOffered": false,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3197,
+              3198,
+              3199,
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679
+            ],
+            "showWord": "stone"
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 0
+      }
+    },
+    {
+      "case": "U-mobile",
+      "file": "build-v1.1-U-mobile-wall-question.png",
+      "label": "wall-question",
+      "line": "What is this?",
+      "options": [
+        "Stone",
+        "Wood"
+      ],
+      "state": {
+        "objects": [
+          {
+            "item": "houseKit",
+            "kind": "house",
+            "level": 2,
+            "parts": {
+              "wall": {
+                "material": "stone",
+                "tier": 2
+              },
+              "roof": {
+                "material": "planks",
+                "tier": 1
+              },
+              "yard": {
+                "material": "grass",
+                "tier": 1
+              },
+              "window": {
+                "material": "wood",
+                "tier": 1
+              },
+              "foundation": {
+                "material": "stone",
+                "tier": 1
+              },
+              "door": {
+                "material": "wood",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 3,
+            "id": "object:77:13",
+            "x": 77,
+            "y": 13,
+            "createdAt": 1793867675770,
+            "roofed": true,
+            "shown": false,
+            "closed": true,
+            "autoOffered": true,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3197,
+              3198,
+              3199,
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679
+            ],
+            "showWord": "stone"
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 1
+      }
+    },
+    {
+      "case": "U-mobile",
+      "file": "build-v1.1-U-mobile-wall-finale.png",
+      "label": "wall-finale",
+      "confettiPixels": 427,
+      "line": "Strong stone walls! Well done!",
+      "options": [],
+      "state": {
+        "objects": [
+          {
+            "item": "houseKit",
+            "kind": "house",
+            "level": 2,
+            "parts": {
+              "wall": {
+                "material": "stone",
+                "tier": 2
+              },
+              "roof": {
+                "material": "planks",
+                "tier": 1
+              },
+              "yard": {
+                "material": "grass",
+                "tier": 1
+              },
+              "window": {
+                "material": "wood",
+                "tier": 1
+              },
+              "foundation": {
+                "material": "stone",
+                "tier": 1
+              },
+              "door": {
+                "material": "wood",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 3,
+            "id": "object:77:13",
+            "x": 77,
+            "y": 13,
+            "createdAt": 1793867675770,
+            "roofed": true,
+            "shown": true,
+            "closed": true,
+            "autoOffered": true,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3197,
+              3198,
+              3199,
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679
+            ],
+            "showWord": "stone"
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 1
+      }
+    },
+    {
+      "case": "U-mobile",
+      "file": "build-v1.1-U-mobile-yard-menu.png",
+      "label": "yard-menu",
+      "line": "Strong stone walls! Well done!",
+      "options": [],
+      "state": {
+        "objects": [
+          {
+            "item": "houseKit",
+            "kind": "house",
+            "level": 2,
+            "parts": {
+              "wall": {
+                "material": "stone",
+                "tier": 2
+              },
+              "roof": {
+                "material": "planks",
+                "tier": 1
+              },
+              "yard": {
+                "material": "grass",
+                "tier": 1
+              },
+              "window": {
+                "material": "wood",
+                "tier": 1
+              },
+              "foundation": {
+                "material": "stone",
+                "tier": 1
+              },
+              "door": {
+                "material": "wood",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 3,
+            "id": "object:77:13",
+            "x": 77,
+            "y": 13,
+            "createdAt": 1793867675770,
+            "roofed": true,
+            "shown": true,
+            "closed": true,
+            "autoOffered": true,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3197,
+              3198,
+              3199,
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679
+            ],
+            "showWord": "stone"
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 1
+      }
+    },
+    {
+      "case": "U-mobile",
+      "file": "build-v1.1-U-mobile-yard-celebration.png",
+      "label": "yard-celebration",
+      "confettiPixels": 904,
+      "line": "Flowers in our yard! You made this!",
+      "options": [],
+      "state": {
+        "objects": [
+          {
+            "item": "houseKit",
+            "kind": "house",
+            "level": 2,
+            "parts": {
+              "wall": {
+                "material": "stone",
+                "tier": 2
+              },
+              "roof": {
+                "material": "planks",
+                "tier": 1
+              },
+              "yard": {
+                "material": "flower",
+                "tier": 2
+              },
+              "window": {
+                "material": "wood",
+                "tier": 1
+              },
+              "foundation": {
+                "material": "stone",
+                "tier": 1
+              },
+              "door": {
+                "material": "wood",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 3,
+            "id": "object:77:13",
+            "x": 77,
+            "y": 13,
+            "createdAt": 1793867675770,
+            "roofed": true,
+            "shown": false,
+            "closed": true,
+            "autoOffered": false,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3197,
+              3198,
+              3199,
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679
+            ],
+            "showWord": "flower"
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 1
+      }
+    },
+    {
+      "case": "U-mobile",
+      "file": "build-v1.1-U-mobile-yard-question.png",
+      "label": "yard-question",
+      "line": "What is this?",
+      "options": [
+        "Flower",
+        "Stone"
+      ],
+      "state": {
+        "objects": [
+          {
+            "item": "houseKit",
+            "kind": "house",
+            "level": 2,
+            "parts": {
+              "wall": {
+                "material": "stone",
+                "tier": 2
+              },
+              "roof": {
+                "material": "planks",
+                "tier": 1
+              },
+              "yard": {
+                "material": "flower",
+                "tier": 2
+              },
+              "window": {
+                "material": "wood",
+                "tier": 1
+              },
+              "foundation": {
+                "material": "stone",
+                "tier": 1
+              },
+              "door": {
+                "material": "wood",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 3,
+            "id": "object:77:13",
+            "x": 77,
+            "y": 13,
+            "createdAt": 1793867675770,
+            "roofed": true,
+            "shown": false,
+            "closed": true,
+            "autoOffered": true,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3197,
+              3198,
+              3199,
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679
+            ],
+            "showWord": "flower"
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 2
+      }
+    },
+    {
+      "case": "U-mobile",
+      "file": "build-v1.1-U-mobile-yard-finale.png",
+      "label": "yard-finale",
+      "confettiPixels": 486,
+      "line": "Flowers in our yard! Well done!",
+      "options": [],
+      "state": {
+        "objects": [
+          {
+            "item": "houseKit",
+            "kind": "house",
+            "level": 2,
+            "parts": {
+              "wall": {
+                "material": "stone",
+                "tier": 2
+              },
+              "roof": {
+                "material": "planks",
+                "tier": 1
+              },
+              "yard": {
+                "material": "flower",
+                "tier": 2
+              },
+              "window": {
+                "material": "wood",
+                "tier": 1
+              },
+              "foundation": {
+                "material": "stone",
+                "tier": 1
+              },
+              "door": {
+                "material": "wood",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 3,
+            "id": "object:77:13",
+            "x": 77,
+            "y": 13,
+            "createdAt": 1793867675770,
+            "roofed": true,
+            "shown": true,
+            "closed": true,
+            "autoOffered": true,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3197,
+              3198,
+              3199,
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679
+            ],
+            "showWord": "flower"
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 2
+      }
+    },
+    {
+      "case": "U-mobile",
+      "file": "build-v1.1-U-mobile-roof-menu.png",
+      "label": "roof-menu",
+      "line": "Flowers in our yard! Well done!",
+      "options": [],
+      "state": {
+        "objects": [
+          {
+            "item": "houseKit",
+            "kind": "house",
+            "level": 2,
+            "parts": {
+              "wall": {
+                "material": "stone",
+                "tier": 2
+              },
+              "roof": {
+                "material": "planks",
+                "tier": 1
+              },
+              "yard": {
+                "material": "flower",
+                "tier": 2
+              },
+              "window": {
+                "material": "wood",
+                "tier": 1
+              },
+              "foundation": {
+                "material": "stone",
+                "tier": 1
+              },
+              "door": {
+                "material": "wood",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 3,
+            "id": "object:77:13",
+            "x": 77,
+            "y": 13,
+            "createdAt": 1793867675770,
+            "roofed": true,
+            "shown": true,
+            "closed": true,
+            "autoOffered": true,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3197,
+              3198,
+              3199,
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679
+            ],
+            "showWord": "flower"
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 2
+      }
+    },
+    {
+      "case": "U-mobile",
+      "file": "build-v1.1-U-mobile-roof-celebration.png",
+      "label": "roof-celebration",
+      "confettiPixels": 884,
+      "line": "A lovely tiled roof! You made this!",
+      "options": [],
+      "state": {
+        "objects": [
+          {
+            "item": "houseKit",
+            "kind": "house",
+            "level": 2,
+            "parts": {
+              "wall": {
+                "material": "stone",
+                "tier": 2
+              },
+              "roof": {
+                "material": "planks",
+                "tier": 2
+              },
+              "yard": {
+                "material": "flower",
+                "tier": 2
+              },
+              "window": {
+                "material": "wood",
+                "tier": 1
+              },
+              "foundation": {
+                "material": "stone",
+                "tier": 1
+              },
+              "door": {
+                "material": "wood",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 3,
+            "id": "object:77:13",
+            "x": 77,
+            "y": 13,
+            "createdAt": 1793867675770,
+            "roofed": true,
+            "shown": false,
+            "closed": true,
+            "autoOffered": false,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3197,
+              3198,
+              3199,
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679
+            ],
+            "showWord": "roof"
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 2
+      }
+    },
+    {
+      "case": "U-mobile",
+      "file": "build-v1.1-U-mobile-roof-question.png",
+      "label": "roof-question",
+      "line": "What is this?",
+      "options": [
+        "Roof",
+        "Window"
+      ],
+      "state": {
+        "objects": [
+          {
+            "item": "houseKit",
+            "kind": "house",
+            "level": 2,
+            "parts": {
+              "wall": {
+                "material": "stone",
+                "tier": 2
+              },
+              "roof": {
+                "material": "planks",
+                "tier": 2
+              },
+              "yard": {
+                "material": "flower",
+                "tier": 2
+              },
+              "window": {
+                "material": "wood",
+                "tier": 1
+              },
+              "foundation": {
+                "material": "stone",
+                "tier": 1
+              },
+              "door": {
+                "material": "wood",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 3,
+            "id": "object:77:13",
+            "x": 77,
+            "y": 13,
+            "createdAt": 1793867675770,
+            "roofed": true,
+            "shown": false,
+            "closed": true,
+            "autoOffered": true,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3197,
+              3198,
+              3199,
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679
+            ],
+            "showWord": "roof"
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 3
+      }
+    },
+    {
+      "case": "U-mobile",
+      "file": "build-v1.1-U-mobile-roof-finale.png",
+      "label": "roof-finale",
+      "confettiPixels": 375,
+      "line": "A lovely roof! Well done!",
+      "options": [],
+      "state": {
+        "objects": [
+          {
+            "item": "houseKit",
+            "kind": "house",
+            "level": 2,
+            "parts": {
+              "wall": {
+                "material": "stone",
+                "tier": 2
+              },
+              "roof": {
+                "material": "planks",
+                "tier": 2
+              },
+              "yard": {
+                "material": "flower",
+                "tier": 2
+              },
+              "window": {
+                "material": "wood",
+                "tier": 1
+              },
+              "foundation": {
+                "material": "stone",
+                "tier": 1
+              },
+              "door": {
+                "material": "wood",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 3,
+            "id": "object:77:13",
+            "x": 77,
+            "y": 13,
+            "createdAt": 1793867675770,
+            "roofed": true,
+            "shown": true,
+            "closed": true,
+            "autoOffered": true,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3197,
+              3198,
+              3199,
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679
+            ],
+            "showWord": "roof"
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 3
+      }
+    },
+    {
+      "case": "U-mobile",
+      "file": "build-v1.1-U-mobile-window-menu.png",
+      "label": "window-menu",
+      "line": "A lovely roof! Well done!",
+      "options": [],
+      "state": {
+        "objects": [
+          {
+            "item": "houseKit",
+            "kind": "house",
+            "level": 2,
+            "parts": {
+              "wall": {
+                "material": "stone",
+                "tier": 2
+              },
+              "roof": {
+                "material": "planks",
+                "tier": 2
+              },
+              "yard": {
+                "material": "flower",
+                "tier": 2
+              },
+              "window": {
+                "material": "wood",
+                "tier": 1
+              },
+              "foundation": {
+                "material": "stone",
+                "tier": 1
+              },
+              "door": {
+                "material": "wood",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 3,
+            "id": "object:77:13",
+            "x": 77,
+            "y": 13,
+            "createdAt": 1793867675770,
+            "roofed": true,
+            "shown": true,
+            "closed": true,
+            "autoOffered": true,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3197,
+              3198,
+              3199,
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679
+            ],
+            "showWord": "roof"
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 3
+      }
+    },
+    {
+      "case": "U-mobile",
+      "file": "build-v1.1-U-mobile-window-celebration.png",
+      "label": "window-celebration",
+      "confettiPixels": 946,
+      "line": "A bright glass window! You made this!",
+      "options": [],
+      "state": {
+        "objects": [
+          {
+            "item": "houseKit",
+            "kind": "house",
+            "level": 2,
+            "parts": {
+              "wall": {
+                "material": "stone",
+                "tier": 2
+              },
+              "roof": {
+                "material": "planks",
+                "tier": 2
+              },
+              "yard": {
+                "material": "flower",
+                "tier": 2
+              },
+              "window": {
+                "material": "glass",
+                "tier": 2
+              },
+              "foundation": {
+                "material": "stone",
+                "tier": 1
+              },
+              "door": {
+                "material": "wood",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 3,
+            "id": "object:77:13",
+            "x": 77,
+            "y": 13,
+            "createdAt": 1793867675770,
+            "roofed": true,
+            "shown": false,
+            "closed": true,
+            "autoOffered": false,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3197,
+              3198,
+              3199,
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679
+            ],
+            "showWord": "window"
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 3
+      }
+    },
+    {
+      "case": "U-mobile",
+      "file": "build-v1.1-U-mobile-window-question.png",
+      "label": "window-question",
+      "line": "What is this?",
+      "options": [
+        "Window",
+        "Roof"
+      ],
+      "state": {
+        "objects": [
+          {
+            "item": "houseKit",
+            "kind": "house",
+            "level": 2,
+            "parts": {
+              "wall": {
+                "material": "stone",
+                "tier": 2
+              },
+              "roof": {
+                "material": "planks",
+                "tier": 2
+              },
+              "yard": {
+                "material": "flower",
+                "tier": 2
+              },
+              "window": {
+                "material": "glass",
+                "tier": 2
+              },
+              "foundation": {
+                "material": "stone",
+                "tier": 1
+              },
+              "door": {
+                "material": "wood",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 3,
+            "id": "object:77:13",
+            "x": 77,
+            "y": 13,
+            "createdAt": 1793867675770,
+            "roofed": true,
+            "shown": false,
+            "closed": true,
+            "autoOffered": true,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3197,
+              3198,
+              3199,
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679
+            ],
+            "showWord": "window"
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 4
+      }
+    },
+    {
+      "case": "U-mobile",
+      "file": "build-v1.1-U-mobile-window-finale.png",
+      "label": "window-finale",
+      "confettiPixels": 569,
+      "line": "A bright window! Well done!",
+      "options": [],
+      "state": {
+        "objects": [
+          {
+            "item": "houseKit",
+            "kind": "house",
+            "level": 2,
+            "parts": {
+              "wall": {
+                "material": "stone",
+                "tier": 2
+              },
+              "roof": {
+                "material": "planks",
+                "tier": 2
+              },
+              "yard": {
+                "material": "flower",
+                "tier": 2
+              },
+              "window": {
+                "material": "glass",
+                "tier": 2
+              },
+              "foundation": {
+                "material": "stone",
+                "tier": 1
+              },
+              "door": {
+                "material": "wood",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 3,
+            "id": "object:77:13",
+            "x": 77,
+            "y": 13,
+            "createdAt": 1793867675770,
+            "roofed": true,
+            "shown": true,
+            "closed": true,
+            "autoOffered": true,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3197,
+              3198,
+              3199,
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679
+            ],
+            "showWord": "window"
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 4
+      }
+    },
+    {
+      "case": "U-mobile",
+      "file": "build-v1.1-U-mobile-upgrades-persist.png",
+      "label": "upgrades-persist",
+      "line": "Look! Our house! I like it!",
+      "options": [],
+      "state": {
+        "objects": [
+          {
+            "item": "houseKit",
+            "kind": "house",
+            "level": 2,
+            "parts": {
+              "wall": {
+                "material": "stone",
+                "tier": 2
+              },
+              "roof": {
+                "material": "planks",
+                "tier": 2
+              },
+              "yard": {
+                "material": "flower",
+                "tier": 2
+              },
+              "window": {
+                "material": "glass",
+                "tier": 2
+              },
+              "foundation": {
+                "material": "stone",
+                "tier": 1
+              },
+              "door": {
+                "material": "wood",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 3,
+            "x": 77,
+            "y": 13,
+            "dir": 1,
+            "showWord": "window",
+            "id": "object:77:13",
+            "createdAt": 1793867675770,
+            "roofed": true,
+            "shown": true,
+            "closed": true,
+            "autoOffered": true,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3197,
+              3198,
+              3199,
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679
+            ]
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 4
+      }
+    },
+    {
+      "case": "U-mobile",
+      "file": "build-v1.1-U-mobile-all-finished.png",
+      "label": "all-finished",
+      "line": "Look! Our house! I like it!",
+      "options": [],
+      "state": {
+        "objects": [
+          {
+            "item": "houseKit",
+            "kind": "house",
+            "level": 2,
+            "parts": {
+              "wall": {
+                "material": "stone",
+                "tier": 2
+              },
+              "roof": {
+                "material": "planks",
+                "tier": 2
+              },
+              "yard": {
+                "material": "flower",
+                "tier": 2
+              },
+              "window": {
+                "material": "glass",
+                "tier": 2
+              },
+              "foundation": {
+                "material": "stone",
+                "tier": 1
+              },
+              "door": {
+                "material": "wood",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 3,
+            "x": 77,
+            "y": 13,
+            "dir": 1,
+            "showWord": "window",
+            "id": "object:77:13",
+            "createdAt": 1793867675770,
+            "roofed": true,
+            "shown": true,
+            "closed": true,
+            "autoOffered": true,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3197,
+              3198,
+              3199,
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679
+            ]
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 4
+      }
+    },
+    {
+      "case": "U-mobile",
+      "file": "build-v1.1-U-mobile-upgrades-recovered.png",
+      "label": "upgrades-recovered",
+      "line": "Wow! It's all closed!",
+      "options": [],
+      "state": {
+        "objects": [
+          {
+            "item": "houseKit",
+            "kind": "house",
+            "level": 2,
+            "parts": {
+              "wall": {
+                "material": "stone",
+                "tier": 2
+              },
+              "roof": {
+                "material": "planks",
+                "tier": 2
+              },
+              "yard": {
+                "material": "flower",
+                "tier": 2
+              },
+              "window": {
+                "material": "glass",
+                "tier": 2
+              },
+              "foundation": {
+                "material": "stone",
+                "tier": 1
+              },
+              "door": {
+                "material": "wood",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 3,
+            "id": "object:77:13",
+            "x": 77,
+            "y": 13,
+            "createdAt": 1793867692107,
+            "roofed": true,
+            "shown": false,
+            "closed": true,
+            "autoOffered": false,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3197,
+              3198,
+              3199,
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679
+            ]
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 4
+      }
+    },
+    {
+      "case": "P-mobile",
+      "file": "build-v1.1-P-mobile-recipe.png",
+      "label": "recipe",
+      "line": "",
+      "options": [],
+      "state": {
+        "objects": [],
+        "driving": null,
+        "crafted": [
+          {
+            "item": "pen",
+            "kind": "pen",
+            "level": 1,
+            "parts": {
+              "fence": {
+                "material": "wood",
+                "tier": 1
+              },
+              "gate": {
+                "material": "wood",
+                "tier": 1
+              },
+              "yard": {
+                "material": "grass",
+                "tier": 1
+              }
+            },
+            "w": 4,
+            "h": 2
+          }
+        ],
+        "shows": 0
+      }
+    },
+    {
+      "case": "P-mobile",
+      "file": "build-v1.1-P-mobile-placed-celebration.png",
+      "label": "placed-celebration",
+      "confettiPixels": 349,
+      "line": "Wow! It's all closed!",
+      "options": [],
+      "state": {
+        "objects": [
+          {
+            "item": "pen",
+            "kind": "pen",
+            "level": 1,
+            "parts": {
+              "fence": {
+                "material": "wood",
+                "tier": 1
+              },
+              "gate": {
+                "material": "wood",
+                "tier": 1
+              },
+              "yard": {
+                "material": "grass",
+                "tier": 1
+              }
+            },
+            "w": 4,
+            "h": 2,
+            "id": "object:77:14",
+            "x": 77,
+            "y": 14,
+            "createdAt": 1793867699042,
+            "roofed": false,
+            "shown": false,
+            "closed": true,
+            "autoOffered": false,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3437,
+              3438,
+              3439,
+              3440,
+              3677,
+              3678,
+              3679,
+              3680
+            ]
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 0
+      }
+    },
+    {
+      "case": "P-mobile",
+      "file": "build-v1.1-P-mobile-pen-question.png",
+      "label": "pen-question",
+      "line": "What is this?",
+      "options": [
+        "House",
+        "Fence"
+      ],
+      "state": {
+        "objects": [
+          {
+            "item": "pen",
+            "kind": "pen",
+            "level": 1,
+            "parts": {
+              "fence": {
+                "material": "wood",
+                "tier": 1
+              },
+              "gate": {
+                "material": "wood",
+                "tier": 1
+              },
+              "yard": {
+                "material": "grass",
+                "tier": 1
+              }
+            },
+            "w": 4,
+            "h": 2,
+            "id": "object:77:14",
+            "x": 77,
+            "y": 14,
+            "createdAt": 1793867699042,
+            "roofed": false,
+            "shown": false,
+            "closed": true,
+            "autoOffered": true,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3437,
+              3438,
+              3439,
+              3440,
+              3677,
+              3678,
+              3679,
+              3680
+            ]
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 1
+      }
+    },
+    {
+      "case": "P-mobile",
+      "file": "build-v1.1-P-mobile-pen-finale.png",
+      "label": "pen-finale",
+      "confettiPixels": 432,
+      "line": "You built a fence! Wow! It's so big!",
+      "options": [],
+      "state": {
+        "objects": [
+          {
+            "item": "pen",
+            "kind": "pen",
+            "level": 1,
+            "parts": {
+              "fence": {
+                "material": "wood",
+                "tier": 1
+              },
+              "gate": {
+                "material": "wood",
+                "tier": 1
+              },
+              "yard": {
+                "material": "grass",
+                "tier": 1
+              }
+            },
+            "w": 4,
+            "h": 2,
+            "id": "object:77:14",
+            "x": 77,
+            "y": 14,
+            "createdAt": 1793867699042,
+            "roofed": false,
+            "shown": true,
+            "closed": true,
+            "autoOffered": true,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3437,
+              3438,
+              3439,
+              3440,
+              3677,
+              3678,
+              3679,
+              3680
+            ]
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 1
+      }
+    },
+    {
+      "case": "P-mobile",
+      "file": "build-v1.1-P-mobile-pen-persists.png",
+      "label": "pen-persists",
+      "line": "Look! Our fence! Let's build more!",
+      "options": [],
+      "state": {
+        "objects": [
+          {
+            "item": "pen",
+            "kind": "pen",
+            "level": 1,
+            "parts": {
+              "fence": {
+                "material": "wood",
+                "tier": 1
+              },
+              "gate": {
+                "material": "wood",
+                "tier": 1
+              },
+              "yard": {
+                "material": "grass",
+                "tier": 1
+              }
+            },
+            "w": 4,
+            "h": 2,
+            "x": 77,
+            "y": 14,
+            "dir": 1,
+            "id": "object:77:14",
+            "createdAt": 1793867699042,
+            "roofed": false,
+            "shown": true,
+            "closed": true,
+            "autoOffered": true,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3437,
+              3438,
+              3439,
+              3440,
+              3677,
+              3678,
+              3679,
+              3680
+            ]
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 1
+      }
+    },
+    {
+      "case": "M-mobile",
+      "file": "build-v1.1-M-mobile-missing-materials.png",
+      "label": "missing-materials",
+      "line": "Wow! It's all closed!",
+      "options": [],
+      "state": {
+        "objects": [
+          {
+            "item": "houseKit",
+            "kind": "house",
+            "level": 1,
+            "parts": {
+              "wall": {
+                "material": "wood",
+                "tier": 1
+              },
+              "roof": {
+                "material": "planks",
+                "tier": 1
+              },
+              "yard": {
+                "material": "grass",
+                "tier": 1
+              },
+              "window": {
+                "material": "wood",
+                "tier": 1
+              },
+              "foundation": {
+                "material": "stone",
+                "tier": 1
+              },
+              "door": {
+                "material": "wood",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 3,
+            "id": "object:77:13",
+            "x": 77,
+            "y": 13,
+            "createdAt": 1793867705419,
+            "roofed": true,
+            "shown": false,
+            "closed": true,
+            "autoOffered": false,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3197,
+              3198,
+              3199,
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679
+            ]
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 4
+      }
+    },
+    {
+      "case": "M-mobile",
+      "file": "build-v1.1-M-mobile-capped-upgrade-celebration.png",
+      "label": "capped-upgrade-celebration",
+      "confettiPixels": 1045,
+      "line": "A lovely tiled roof! You made this!",
+      "options": [],
+      "state": {
+        "objects": [
+          {
+            "item": "houseKit",
+            "kind": "house",
+            "level": 2,
+            "parts": {
+              "wall": {
+                "material": "wood",
+                "tier": 1
+              },
+              "roof": {
+                "material": "planks",
+                "tier": 2
+              },
+              "yard": {
+                "material": "grass",
+                "tier": 1
+              },
+              "window": {
+                "material": "wood",
+                "tier": 1
+              },
+              "foundation": {
+                "material": "stone",
+                "tier": 1
+              },
+              "door": {
+                "material": "wood",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 3,
+            "id": "object:77:13",
+            "x": 77,
+            "y": 13,
+            "createdAt": 1793867705419,
+            "roofed": true,
+            "shown": false,
+            "closed": true,
+            "autoOffered": false,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3197,
+              3198,
+              3199,
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679
+            ],
+            "showWord": "roof"
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 4
+      }
+    },
+    {
+      "case": "M-mobile",
+      "file": "build-v1.1-M-mobile-cap-no-question.png",
+      "label": "cap-no-question",
+      "line": "A lovely tiled roof! You made this!",
+      "options": [],
+      "state": {
+        "objects": [
+          {
+            "item": "houseKit",
+            "kind": "house",
+            "level": 2,
+            "parts": {
+              "wall": {
+                "material": "wood",
+                "tier": 1
+              },
+              "roof": {
+                "material": "planks",
+                "tier": 2
+              },
+              "yard": {
+                "material": "grass",
+                "tier": 1
+              },
+              "window": {
+                "material": "wood",
+                "tier": 1
+              },
+              "foundation": {
+                "material": "stone",
+                "tier": 1
+              },
+              "door": {
+                "material": "wood",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 3,
+            "id": "object:77:13",
+            "x": 77,
+            "y": 13,
+            "createdAt": 1793867705419,
+            "roofed": true,
+            "shown": false,
+            "closed": true,
+            "autoOffered": false,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3197,
+              3198,
+              3199,
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679
+            ],
+            "showWord": "roof"
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 4
+      }
+    },
+    {
+      "case": "Otree-mobile",
+      "file": "build-v1.1-Otree-mobile-blocked-no-charge.png",
+      "label": "blocked-no-charge",
+      "line": "",
+      "options": [],
+      "state": {
+        "objects": [],
+        "driving": null,
+        "crafted": [
+          {
+            "item": "car",
+            "kind": "car",
+            "level": 1,
+            "parts": {
+              "body": {
+                "material": "wood",
+                "tier": 1
+              },
+              "wheel": {
+                "material": "stone",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 2
+          }
+        ],
+        "shows": 0
+      }
+    },
+    {
+      "case": "Otree-mobile",
+      "file": "build-v1.1-Otree-mobile-before-obstacle.png",
+      "label": "before-obstacle",
+      "line": "Wow! It's all closed!",
+      "options": [],
+      "state": {
+        "objects": [
+          {
+            "item": "car",
+            "kind": "car",
+            "level": 1,
+            "parts": {
+              "body": {
+                "material": "wood",
+                "tier": 1
+              },
+              "wheel": {
+                "material": "stone",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 2,
+            "id": "object:100:14",
+            "x": 100,
+            "y": 14,
+            "createdAt": 1793867713858,
+            "roofed": false,
+            "shown": false,
+            "closed": true,
+            "autoOffered": false,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3460,
+              3461,
+              3462,
+              3700,
+              3701,
+              3702
+            ]
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 0
+      }
+    },
+    {
+      "case": "Otree-mobile",
+      "file": "build-v1.1-Otree-mobile-gentle-stop.png",
+      "label": "gentle-stop",
+      "line": "Hop in! Let's drive!",
+      "options": [],
+      "state": {
+        "objects": [
+          {
+            "item": "car",
+            "kind": "car",
+            "level": 1,
+            "parts": {
+              "body": {
+                "material": "wood",
+                "tier": 1
+              },
+              "wheel": {
+                "material": "stone",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 2,
+            "id": "object:100:14",
+            "x": 101.00093500000014,
+            "y": 14,
+            "createdAt": 1793867713858,
+            "roofed": false,
+            "shown": false,
+            "closed": true,
+            "autoOffered": false,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3460,
+              3461,
+              3462,
+              3700,
+              3701,
+              3702
+            ],
+            "dir": 1
+          }
+        ],
+        "driving": "object:100:14",
+        "crafted": [],
+        "shows": 0
+      }
+    },
+    {
+      "case": "Otree-mobile",
+      "file": "build-v1.1-Otree-mobile-tap-exit.png",
+      "label": "tap-exit",
+      "line": "Parked! Ready to explore?",
+      "options": [],
+      "state": {
+        "objects": [
+          {
+            "item": "car",
+            "kind": "car",
+            "level": 1,
+            "parts": {
+              "body": {
+                "material": "wood",
+                "tier": 1
+              },
+              "wheel": {
+                "material": "stone",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 2,
+            "id": "object:100:14",
+            "x": 101.00093500000014,
+            "y": 14,
+            "createdAt": 1793867713858,
+            "roofed": false,
+            "shown": false,
+            "closed": true,
+            "autoOffered": false,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3460,
+              3461,
+              3462,
+              3700,
+              3701,
+              3702
+            ],
+            "dir": 1
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 0
+      }
+    },
+    {
+      "case": "Owater-mobile",
+      "file": "build-v1.1-Owater-mobile-blocked-no-charge.png",
+      "label": "blocked-no-charge",
+      "line": "",
+      "options": [],
+      "state": {
+        "objects": [],
+        "driving": null,
+        "crafted": [
+          {
+            "item": "car",
+            "kind": "car",
+            "level": 1,
+            "parts": {
+              "body": {
+                "material": "wood",
+                "tier": 1
+              },
+              "wheel": {
+                "material": "stone",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 2
+          }
+        ],
+        "shows": 0
+      }
+    },
+    {
+      "case": "Owater-mobile",
+      "file": "build-v1.1-Owater-mobile-before-obstacle.png",
+      "label": "before-obstacle",
+      "line": "Wow! It's all closed!",
+      "options": [],
+      "state": {
+        "objects": [
+          {
+            "item": "car",
+            "kind": "car",
+            "level": 1,
+            "parts": {
+              "body": {
+                "material": "wood",
+                "tier": 1
+              },
+              "wheel": {
+                "material": "stone",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 2,
+            "id": "object:114:14",
+            "x": 114,
+            "y": 14,
+            "createdAt": 1793867721557,
+            "roofed": false,
+            "shown": false,
+            "closed": true,
+            "autoOffered": false,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3474,
+              3475,
+              3476,
+              3714,
+              3715,
+              3716
+            ]
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 0
+      }
+    },
+    {
+      "case": "Owater-mobile",
+      "file": "build-v1.1-Owater-mobile-gentle-stop.png",
+      "label": "gentle-stop",
+      "line": "Hop in! Let's drive!",
+      "options": [],
+      "state": {
+        "objects": [
+          {
+            "item": "car",
+            "kind": "car",
+            "level": 1,
+            "parts": {
+              "body": {
+                "material": "wood",
+                "tier": 1
+              },
+              "wheel": {
+                "material": "stone",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 2,
+            "id": "object:114:14",
+            "x": 116.99938300000042,
+            "y": 14,
+            "createdAt": 1793867721557,
+            "roofed": false,
+            "shown": false,
+            "closed": true,
+            "autoOffered": false,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3474,
+              3475,
+              3476,
+              3714,
+              3715,
+              3716
+            ],
+            "dir": 1
+          }
+        ],
+        "driving": "object:114:14",
+        "crafted": [],
+        "shows": 0
+      }
+    },
+    {
+      "case": "Owater-mobile",
+      "file": "build-v1.1-Owater-mobile-tap-exit.png",
+      "label": "tap-exit",
+      "line": "Parked! Ready to explore?",
+      "options": [],
+      "state": {
+        "objects": [
+          {
+            "item": "car",
+            "kind": "car",
+            "level": 1,
+            "parts": {
+              "body": {
+                "material": "wood",
+                "tier": 1
+              },
+              "wheel": {
+                "material": "stone",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 2,
+            "id": "object:114:14",
+            "x": 116.99938300000042,
+            "y": 14,
+            "createdAt": 1793867721557,
+            "roofed": false,
+            "shown": false,
+            "closed": true,
+            "autoOffered": false,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3474,
+              3475,
+              3476,
+              3714,
+              3715,
+              3716
+            ],
+            "dir": 1
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 0
+      }
+    },
+    {
+      "case": "Obuilding-mobile",
+      "file": "build-v1.1-Obuilding-mobile-blocked-no-charge.png",
+      "label": "blocked-no-charge",
+      "line": "Wow! It's all closed!",
+      "options": [],
+      "state": {
+        "objects": [
+          {
+            "item": "houseKit",
+            "kind": "house",
+            "level": 1,
+            "parts": {
+              "wall": {
+                "material": "wood",
+                "tier": 1
+              },
+              "roof": {
+                "material": "planks",
+                "tier": 1
+              },
+              "yard": {
+                "material": "grass",
+                "tier": 1
+              },
+              "window": {
+                "material": "wood",
+                "tier": 1
+              },
+              "foundation": {
+                "material": "stone",
+                "tier": 1
+              },
+              "door": {
+                "material": "wood",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 3,
+            "id": "object:81:13",
+            "x": 81,
+            "y": 13,
+            "createdAt": 1793867729353,
+            "roofed": true,
+            "shown": false,
+            "closed": true,
+            "autoOffered": false,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3201,
+              3202,
+              3203,
+              3441,
+              3442,
+              3443,
+              3681,
+              3682,
+              3683
+            ]
+          }
+        ],
+        "driving": null,
+        "crafted": [
+          {
+            "item": "car",
+            "kind": "car",
+            "level": 1,
+            "parts": {
+              "body": {
+                "material": "wood",
+                "tier": 1
+              },
+              "wheel": {
+                "material": "stone",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 2
+          }
+        ],
+        "shows": 0
+      }
+    },
+    {
+      "case": "Obuilding-mobile",
+      "file": "build-v1.1-Obuilding-mobile-before-obstacle.png",
+      "label": "before-obstacle",
+      "line": "Wow! It's all closed!",
+      "options": [],
+      "state": {
+        "objects": [
+          {
+            "item": "houseKit",
+            "kind": "house",
+            "level": 1,
+            "parts": {
+              "wall": {
+                "material": "wood",
+                "tier": 1
+              },
+              "roof": {
+                "material": "planks",
+                "tier": 1
+              },
+              "yard": {
+                "material": "grass",
+                "tier": 1
+              },
+              "window": {
+                "material": "wood",
+                "tier": 1
+              },
+              "foundation": {
+                "material": "stone",
+                "tier": 1
+              },
+              "door": {
+                "material": "wood",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 3,
+            "id": "object:81:13",
+            "x": 81,
+            "y": 13,
+            "createdAt": 1793867729353,
+            "roofed": true,
+            "shown": false,
+            "closed": false,
+            "autoOffered": false,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3201,
+              3202,
+              3203,
+              3441,
+              3442,
+              3443,
+              3681,
+              3682,
+              3683
+            ]
+          },
+          {
+            "item": "car",
+            "kind": "car",
+            "level": 1,
+            "parts": {
+              "body": {
+                "material": "wood",
+                "tier": 1
+              },
+              "wheel": {
+                "material": "stone",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 2,
+            "id": "object:77:14",
+            "x": 77,
+            "y": 14,
+            "createdAt": 1793867729742,
+            "roofed": false,
+            "shown": false,
+            "closed": true,
+            "autoOffered": false,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679,
+              3201,
+              3202,
+              3203,
+              3441,
+              3442,
+              3443,
+              3681,
+              3682,
+              3683
+            ]
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 0
+      }
+    },
+    {
+      "case": "Obuilding-mobile",
+      "file": "build-v1.1-Obuilding-mobile-gentle-stop.png",
+      "label": "gentle-stop",
+      "line": "Hop in! Let's drive!",
+      "options": [],
+      "state": {
+        "objects": [
+          {
+            "item": "houseKit",
+            "kind": "house",
+            "level": 1,
+            "parts": {
+              "wall": {
+                "material": "wood",
+                "tier": 1
+              },
+              "roof": {
+                "material": "planks",
+                "tier": 1
+              },
+              "yard": {
+                "material": "grass",
+                "tier": 1
+              },
+              "window": {
+                "material": "wood",
+                "tier": 1
+              },
+              "foundation": {
+                "material": "stone",
+                "tier": 1
+              },
+              "door": {
+                "material": "wood",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 3,
+            "id": "object:81:13",
+            "x": 81,
+            "y": 13,
+            "createdAt": 1793867729353,
+            "roofed": true,
+            "shown": false,
+            "closed": false,
+            "autoOffered": false,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3201,
+              3202,
+              3203,
+              3441,
+              3442,
+              3443,
+              3681,
+              3682,
+              3683
+            ]
+          },
+          {
+            "item": "car",
+            "kind": "car",
+            "level": 1,
+            "parts": {
+              "body": {
+                "material": "wood",
+                "tier": 1
+              },
+              "wheel": {
+                "material": "stone",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 2,
+            "id": "object:77:14",
+            "x": 77.99794075000014,
+            "y": 14,
+            "createdAt": 1793867729742,
+            "roofed": false,
+            "shown": false,
+            "closed": true,
+            "autoOffered": false,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679,
+              3201,
+              3202,
+              3203,
+              3441,
+              3442,
+              3443,
+              3681,
+              3682,
+              3683
+            ],
+            "dir": 1
+          }
+        ],
+        "driving": "object:77:14",
+        "crafted": [],
+        "shows": 0
+      }
+    },
+    {
+      "case": "Obuilding-mobile",
+      "file": "build-v1.1-Obuilding-mobile-tap-exit.png",
+      "label": "tap-exit",
+      "line": "Parked! Ready to explore?",
+      "options": [],
+      "state": {
+        "objects": [
+          {
+            "item": "houseKit",
+            "kind": "house",
+            "level": 1,
+            "parts": {
+              "wall": {
+                "material": "wood",
+                "tier": 1
+              },
+              "roof": {
+                "material": "planks",
+                "tier": 1
+              },
+              "yard": {
+                "material": "grass",
+                "tier": 1
+              },
+              "window": {
+                "material": "wood",
+                "tier": 1
+              },
+              "foundation": {
+                "material": "stone",
+                "tier": 1
+              },
+              "door": {
+                "material": "wood",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 3,
+            "id": "object:81:13",
+            "x": 81,
+            "y": 13,
+            "createdAt": 1793867729353,
+            "roofed": true,
+            "shown": false,
+            "closed": false,
+            "autoOffered": false,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3201,
+              3202,
+              3203,
+              3441,
+              3442,
+              3443,
+              3681,
+              3682,
+              3683
+            ]
+          },
+          {
+            "item": "car",
+            "kind": "car",
+            "level": 1,
+            "parts": {
+              "body": {
+                "material": "wood",
+                "tier": 1
+              },
+              "wheel": {
+                "material": "stone",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 2,
+            "id": "object:77:14",
+            "x": 77.99794075000014,
+            "y": 14,
+            "createdAt": 1793867729742,
+            "roofed": false,
+            "shown": false,
+            "closed": true,
+            "autoOffered": false,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679,
+              3201,
+              3202,
+              3203,
+              3441,
+              3442,
+              3443,
+              3681,
+              3682,
+              3683
+            ],
+            "dir": 1
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 0
+      }
+    },
+    {
+      "case": "Ofence-mobile",
+      "file": "build-v1.1-Ofence-mobile-blocked-no-charge.png",
+      "label": "blocked-no-charge",
+      "line": "Nice start!",
+      "options": [],
+      "state": {
+        "objects": [],
+        "driving": null,
+        "crafted": [
+          {
+            "item": "car",
+            "kind": "car",
+            "level": 1,
+            "parts": {
+              "body": {
+                "material": "wood",
+                "tier": 1
+              },
+              "wheel": {
+                "material": "stone",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 2
+          }
+        ],
+        "shows": 0
+      }
+    },
+    {
+      "case": "Ofence-mobile",
+      "file": "build-v1.1-Ofence-mobile-before-obstacle.png",
+      "label": "before-obstacle",
+      "line": "Wow! It's all closed!",
+      "options": [],
+      "state": {
+        "objects": [
+          {
+            "item": "car",
+            "kind": "car",
+            "level": 1,
+            "parts": {
+              "body": {
+                "material": "wood",
+                "tier": 1
+              },
+              "wheel": {
+                "material": "stone",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 2,
+            "id": "object:77:14",
+            "x": 77,
+            "y": 14,
+            "createdAt": 1793867737692,
+            "roofed": false,
+            "shown": false,
+            "closed": true,
+            "autoOffered": false,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679
+            ]
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 0
+      }
+    },
+    {
+      "case": "Ofence-mobile",
+      "file": "build-v1.1-Ofence-mobile-gentle-stop.png",
+      "label": "gentle-stop",
+      "line": "Hop in! Let's drive!",
+      "options": [],
+      "state": {
+        "objects": [
+          {
+            "item": "car",
+            "kind": "car",
+            "level": 1,
+            "parts": {
+              "body": {
+                "material": "wood",
+                "tier": 1
+              },
+              "wheel": {
+                "material": "stone",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 2,
+            "id": "object:77:14",
+            "x": 79.99981075000042,
+            "y": 14,
+            "createdAt": 1793867737692,
+            "roofed": false,
+            "shown": false,
+            "closed": true,
+            "autoOffered": false,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679
+            ],
+            "dir": 1
+          }
+        ],
+        "driving": "object:77:14",
+        "crafted": [],
+        "shows": 0
+      }
+    },
+    {
+      "case": "Ofence-mobile",
+      "file": "build-v1.1-Ofence-mobile-tap-exit.png",
+      "label": "tap-exit",
+      "line": "Parked! Ready to explore?",
+      "options": [],
+      "state": {
+        "objects": [
+          {
+            "item": "car",
+            "kind": "car",
+            "level": 1,
+            "parts": {
+              "body": {
+                "material": "wood",
+                "tier": 1
+              },
+              "wheel": {
+                "material": "stone",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 2,
+            "id": "object:77:14",
+            "x": 79.99981075000042,
+            "y": 14,
+            "createdAt": 1793867737692,
+            "roofed": false,
+            "shown": false,
+            "closed": false,
+            "autoOffered": false,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679
+            ],
+            "dir": 1
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 0
+      }
+    }
+  ]
+}

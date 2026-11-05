@@ -1,0 +1,60 @@
+{
+  "source_sha256": "04ef30cd2adae06d4ef6963d4dfac729159da4a653af19d6ad6e8de5c5fe0ec6",
+  "results": [
+    {
+      "case": "P-mobile-clean",
+      "status": "PASS",
+      "video": "build-v1-fix3-video/page@dafcda4577800886113ad016fa8f0f6d.webm"
+    }
+  ],
+  "frames": [
+    {
+      "case": "P-mobile-clean",
+      "t_ms": 956,
+      "file": "build-v1-fix3-P-mobile-clean-912-fresh.png",
+      "label": "fresh"
+    },
+    {
+      "case": "P-mobile-clean",
+      "t_ms": 4868,
+      "file": "build-v1-fix3-P-mobile-clean-4823-crafted.png",
+      "label": "crafted"
+    },
+    {
+      "case": "P-mobile-clean",
+      "t_ms": 5310,
+      "file": "build-v1-fix3-P-mobile-clean-5265-P-pulse.png",
+      "label": "P-pulse"
+    },
+    {
+      "case": "P-mobile-clean",
+      "t_ms": 7461,
+      "file": "build-v1-fix3-P-mobile-clean-7411-P-two-planks-show.png",
+      "label": "P-two-planks-show"
+    },
+    {
+      "case": "P-mobile-clean",
+      "t_ms": 7610,
+      "file": "build-v1-fix3-P-mobile-clean-7563-P-occupied.png",
+      "label": "P-occupied"
+    },
+    {
+      "case": "P-mobile-clean",
+      "t_ms": 7761,
+      "file": "build-v1-fix3-P-mobile-clean-7712-P-reach.png",
+      "label": "P-reach"
+    },
+    {
+      "case": "P-mobile-clean",
+      "t_ms": 8010,
+      "file": "build-v1-fix3-P-mobile-clean-7961-P-remove.png",
+      "label": "P-remove"
+    },
+    {
+      "case": "P-mobile-clean",
+      "t_ms": 8261,
+      "file": "build-v1-fix3-P-mobile-clean-8207-P-HUD-yields.png",
+      "label": "P-HUD-yields"
+    }
+  ]
+}

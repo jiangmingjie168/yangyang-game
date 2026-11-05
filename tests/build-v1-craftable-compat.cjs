@@ -5,7 +5,7 @@
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
 const {chromium}=require(process.env.PLAYWRIGHT_MODULE||'playwright');
 const root=path.resolve(__dirname,'..'),source=fs.readFileSync(path.join(root,'index.html'));
-const out=path.join(root,'screens/build-v1-craftable-compat');fs.mkdirSync(out,{recursive:true});
+const out=process.env.BW_COMPAT_ROOT||path.join(root,'screens/build-v1-craftable-compat');fs.mkdirSync(out,{recursive:true});
 (async()=>{const browser=await chromium.launch({executablePath:process.env.CHROME||'/usr/bin/google-chrome',args:['--no-sandbox']});const results=[];
 try{for(const mobile of [false,true]){const data=JSON.parse(fs.readFileSync(path.join(__dirname,'fixtures/build-v1-main-save.json')));for(let x=81;x<=84;x++)data.mods.push(12*240+x,14);for(let y=13;y<=15;y++)data.mods.push(y*240+81,9,y*240+84,9);data.builds=[{id:'82:13:83:15',kind:'house',x:82,y:13,w:2,h:3,roofed:true,closed:true,shown:false}];
 const c=await browser.newContext({viewport:mobile?{width:844,height:390}:{width:1366,height:768}});await c.route('http://legacy.test/**',r=>r.fulfill({contentType:'text/html',body:source}));await c.route('https://brain.yydriver.cn/**',r=>r.fulfill({contentType:'application/json',body:'{}'}));await c.addInitScript(data=>{if(!sessionStorage.loaded){localStorage.setItem('block-world-save-v1',JSON.stringify(data));sessionStorage.loaded='1';}},data);

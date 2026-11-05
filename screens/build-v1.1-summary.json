@@ -1,0 +1,223 @@
+{
+  "phase": "main features before sound addendum",
+  "md5": "4f34eca55d8f18cf326cccf39ffe8953",
+  "sha256": "04ef30cd2adae06d4ef6963d4dfac729159da4a653af19d6ad6e8de5c5fe0ec6",
+  "new_feature_cases": [
+    {
+      "case": "C-desktop",
+      "status": "PASS",
+      "seconds": 12.4
+    },
+    {
+      "case": "U-desktop",
+      "status": "PASS",
+      "seconds": 17.2
+    },
+    {
+      "case": "P-desktop",
+      "status": "PASS",
+      "seconds": 11.4
+    },
+    {
+      "case": "M-desktop",
+      "status": "PASS",
+      "seconds": 7.9
+    },
+    {
+      "case": "Otree-desktop",
+      "status": "PASS",
+      "seconds": 7.9
+    },
+    {
+      "case": "Owater-desktop",
+      "status": "PASS",
+      "seconds": 7.9
+    },
+    {
+      "case": "Obuilding-desktop",
+      "status": "PASS",
+      "seconds": 8.3
+    },
+    {
+      "case": "Ofence-desktop",
+      "status": "PASS",
+      "seconds": 8.1
+    },
+    {
+      "case": "C-mobile",
+      "status": "PASS",
+      "seconds": 11.7
+    },
+    {
+      "case": "U-mobile",
+      "status": "PASS",
+      "seconds": 18.1
+    },
+    {
+      "case": "P-mobile",
+      "status": "PASS",
+      "seconds": 11.5
+    },
+    {
+      "case": "M-mobile",
+      "status": "PASS",
+      "seconds": 7.8
+    },
+    {
+      "case": "Otree-mobile",
+      "status": "PASS",
+      "seconds": 7.7
+    },
+    {
+      "case": "Owater-mobile",
+      "status": "PASS",
+      "seconds": 7.7
+    },
+    {
+      "case": "Obuilding-mobile",
+      "status": "PASS",
+      "seconds": 8.2
+    },
+    {
+      "case": "Ofence-mobile",
+      "status": "PASS",
+      "seconds": 7.9
+    }
+  ],
+  "craftable_cases": [
+    {
+      "case": "C-desktop",
+      "status": "PASS"
+    },
+    {
+      "case": "C-mobile",
+      "status": "PASS"
+    },
+    {
+      "case": "P-desktop",
+      "status": "PASS"
+    },
+    {
+      "case": "P-mobile",
+      "status": "PASS"
+    },
+    {
+      "case": "F-desktop",
+      "status": "PASS"
+    },
+    {
+      "case": "F-mobile",
+      "status": "PASS"
+    },
+    {
+      "case": "Q-desktop",
+      "status": "PASS"
+    },
+    {
+      "case": "Q-mobile",
+      "status": "PASS"
+    },
+    {
+      "case": "R-desktop",
+      "status": "PASS"
+    },
+    {
+      "case": "R-mobile",
+      "status": "PASS"
+    },
+    {
+      "case": "I-desktop",
+      "status": "PASS",
+      "invite_ms": 29716
+    },
+    {
+      "case": "I-mobile",
+      "status": "PASS",
+      "invite_ms": 29607
+    },
+    {
+      "case": "V-desktop",
+      "status": "PASS"
+    },
+    {
+      "case": "V-mobile",
+      "status": "PASS"
+    },
+    {
+      "case": "T2-desktop",
+      "status": "PASS"
+    },
+    {
+      "case": "T2-mobile",
+      "status": "PASS"
+    },
+    {
+      "case": "T3-desktop",
+      "status": "PASS"
+    },
+    {
+      "case": "T3-mobile",
+      "status": "PASS"
+    },
+    {
+      "case": "N-desktop",
+      "status": "PASS"
+    },
+    {
+      "case": "N-mobile",
+      "status": "PASS"
+    }
+  ],
+  "regression_run": [
+    {
+      "suite": "build-v1-craftable-compat",
+      "exit": 0,
+      "seconds": 24.4,
+      "log": "screens/build-v1.1-regression-final/build-v1-craftable-compat.log"
+    },
+    {
+      "suite": "build-v1-fix3",
+      "exit": 1,
+      "seconds": 152.9,
+      "log": "screens/build-v1.1-regression-final/build-v1-fix3.log"
+    },
+    {
+      "suite": "build-placement-fix3",
+      "exit": 0,
+      "seconds": 0,
+      "log": "screens/build-v1.1-regression-final/build-placement-fix3.log"
+    },
+    {
+      "suite": "chinese-cleanup",
+      "exit": 0,
+      "seconds": 4.9,
+      "log": "screens/build-v1.1-regression-final/chinese-cleanup.log"
+    },
+    {
+      "suite": "natural-pointer-v4r",
+      "exit": 0,
+      "seconds": 18,
+      "log": "screens/build-v1.1-regression-final/natural-pointer-v4r.log"
+    },
+    {
+      "suite": "world-v2",
+      "exit": 0,
+      "seconds": 18.7,
+      "log": "screens/build-v1.1-regression-final/world-v2.log"
+    },
+    {
+      "suite": "memory-chat",
+      "exit": 0,
+      "seconds": 18.6,
+      "log": "screens/build-v1.1-regression-final/memory-chat.log"
+    },
+    {
+      "suite": "server",
+      "exit": 0,
+      "seconds": 1,
+      "log": "screens/build-v1.1-regression-final/server.log"
+    }
+  ],
+  "fix3_retry_evidence": "build-v1.1-fix3-retry-clean/build-v1-fix3-results.json",
+  "notes": "Original failures preserved; targeted passing reruns documented in CODEX-REPORT-build-v1.1.md."
+}
