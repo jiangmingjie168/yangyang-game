@@ -107,33 +107,33 @@
 
   .topbar {
     position: absolute;
-    top: calc(6px + var(--sat));
-    left: calc(8px + var(--sal));
-    right: calc(8px + var(--sar));
-    display: flex; gap: 8px; align-items: stretch;
+    top: calc(4px + var(--sat));
+    left: calc(6px + var(--sal));
+    right: calc(6px + var(--sar));
+    display: flex; gap: 4px; align-items: stretch;
     pointer-events: none;
   }
   .topbar > * { pointer-events: auto; }
   #quest {
-    flex: 1; min-width: 0; min-height: 56px;
-    display: flex; align-items: center; gap: 8px;
+    flex: 1; min-width: 0; min-height: 44px;
+    display: flex; align-items: center; gap: 6px;
     text-align: left;
     background: rgba(255,248,238,0.96);
-    border-radius: 16px;
-    padding: 4px 12px 4px 6px;
-    box-shadow: 0 4px 0 rgba(58,42,28,0.12);
+    border-radius: 12px;
+    padding: 2px 8px 2px 4px;
+    box-shadow: 0 3px 0 rgba(58,42,28,0.12);
   }
-  #quest canvas { width: 40px; height: 40px; flex: 0 0 auto; }
+  #quest canvas { width: 32px; height: 32px; flex: 0 0 auto; }
   .qtext { min-width: 0; display: flex; flex-direction: column; }
-  #quest-en { font-size: 18px; font-weight: 800; line-height: 1.15; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  #quest-en { font-size: 15px; font-weight: 800; line-height: 1.15; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .topbtn {
-    min-width: 76px; height: 56px; padding: 0 12px;
-    border-radius: 16px; background: #fff;
-    font-size: 18px; font-weight: 800;
-    box-shadow: 0 4px 0 rgba(58,42,28,0.14);
+    min-width: 52px; height: 44px; padding: 0 8px;
+    border-radius: 12px; background: #fff;
+    font-size: 14px; font-weight: 800;
+    box-shadow: 0 3px 0 rgba(58,42,28,0.14);
     flex: 0 0 auto;
   }
-  .topbtn:active { transform: translateY(3px); box-shadow: 0 1px 0 rgba(58,42,28,0.14); }
+  .topbtn:active { transform: translateY(2px); box-shadow: 0 1px 0 rgba(58,42,28,0.14); }
   #btn-craft { background: #b7f0c4; }
   #btn-words { background: #d9e4ff; }
   #btn-zh { background: #fff; }
@@ -203,18 +203,24 @@
     background: rgba(255,248,238,0.7); border-radius: 14px;
     border: 2px dashed rgba(58,42,28,0.25);
   }
-  .acts { display: flex; gap: 8px; flex: 0 0 auto; }
+  .slot.chest-btn { width: 58px; background: #f3e2c4; outline: 2px dashed #b99260; }
+  .slot.chest-btn strong { display:block; font-size:11px; line-height:1; margin-top:-2px; }
+  #chest-panel .body { display:grid; grid-template-columns:repeat(auto-fill,minmax(72px,1fr)); gap:8px; align-content:start; }
+  #chest-panel .chest-item { min-height:72px; border-radius:14px; background:#fff8ee; border:2px solid #c6d9ad; padding:6px; font-weight:800; }
+  #chest-panel .chest-item em { display:block; font-style:normal; font-size:14px; }
+  .acts { display: flex; gap: 6px; flex: 0 0 auto; align-items: flex-end; }
   .act {
-    width: 74px; height: 74px; border-radius: 20px;
+    width: 64px; height: 64px; border-radius: 16px;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
     color: #fff; font-weight: 800; line-height: 1.05;
-    box-shadow: 0 4px 0 rgba(58,42,28,0.2);
+    box-shadow: 0 3px 0 rgba(58,42,28,0.2);
   }
-  .act strong { font-size: 16px; }
-  .act:active { transform: translateY(3px); box-shadow: 0 1px 0 rgba(58,42,28,0.2); }
+  .act strong { font-size: 14px; }
+  .act:active { transform: translateY(2px); box-shadow: 0 1px 0 rgba(58,42,28,0.2); }
   .act.break { background: var(--coral); }
   .act.place { background: var(--sky); }
-  .act.jump { background: var(--sun); color: var(--ink); }
+  .act.jump { width: 48px; height: 48px; border-radius: 14px; background: var(--sun); color: var(--ink); }
+  .act.jump strong { font-size: 18px; line-height: 1; }
   #btn-home {
     position: absolute; left: 50%;
     bottom: calc(148px + var(--sab));
@@ -425,8 +431,8 @@
     #joy-knob { width: 56px; height: 56px; margin: -28px 0 0 -28px; }
     .act { width: 64px; height: 64px; }
     .act strong { font-size: 15px; }
-    .topbtn { min-width: 56px; padding: 0 6px; font-size: 15px; }
-    #btn-speak { width: 46px; height: 46px; }
+    .topbtn { min-width: 44px; padding: 0 5px; font-size: 13px; }
+    #btn-speak { width: 40px; height: 40px; }
     #quest canvas { width: 34px; height: 34px; }
     #quest-en { font-size: 16px; }
     .brand { font-size: 34px; }
@@ -468,9 +474,10 @@
   #buddy-chat button { min-height: 48px; min-width: 64px; border-radius: 13px; padding: 8px 14px; font: inherit; background: #dcf1d1; margin: 3px; }
   #buddy-options { display: flex; justify-content: center; gap: 10px; }
   @media (max-height: 450px) { #name-letters { grid-template-columns: repeat(13, 1fr); } #name-letters button { min-height: 28px; } #btn-buddy { top: calc(110px + var(--sat)); } }
-  #build-tools { position:absolute; z-index:15; top:76px; left:12px; right:100px; display:flex; gap:5px; overflow-x:auto; touch-action:pan-x; }
+  #build-tools { position:absolute; z-index:15; top:76px; left:12px; right:100px; display:flex; gap:5px; overflow-x:auto; overflow-y:hidden; touch-action:pan-x; -webkit-overflow-scrolling:touch; overscroll-behavior-x:contain; scrollbar-width:none; }
+  #build-tools::-webkit-scrollbar { display:none; }
   #build-tools[hidden], #build-status[hidden] { display:none; }
-  #build-tools button { flex:0 0 auto; min-width:64px; min-height:48px; padding:5px 9px; background:#fff8ee; border:2px solid #c6d9ad; border-radius:12px; font-weight:800; }
+  #build-tools button { flex:0 0 auto; min-width:64px; min-height:48px; padding:5px 9px; background:#fff8ee; border:2px solid #c6d9ad; border-radius:12px; font-weight:800; touch-action:pan-x; }
   #build-tools button[aria-pressed="true"] { background:#ffe29a; border-color:#986c25; }
   #build-show { display:flex; align-items:center; justify-content:center; gap:4px; }
   #build-show.is-off { opacity:.45; filter:grayscale(1); }
@@ -483,7 +490,7 @@
   #build-version { position:absolute; z-index:16; left:8px; bottom:calc(3px + var(--sab)); padding:2px 5px; border-radius:4px; background:#fff8eee6; color:#4c493f; font:10px/1.2 monospace; pointer-events:none; }
   #build-debug { position:absolute; z-index:45; left:8px; bottom:115px; max-width:calc(100% - 16px); background:#152030e8; color:#fff; padding:6px; font:11px/1.3 monospace; white-space:pre-wrap; pointer-events:none; }
   #build-tools small { display:block; font-size:12px; }
-  #build-status { position:absolute; left:16px; top:130px; font-size:14px; pointer-events:none; background:#fff8eedd; border-radius:8px; padding:4px 8px; }
+  #build-status { position:absolute; left:10px; top:112px; width:max-content; max-width:min(72vw,320px); font-size:12px; line-height:1.25; pointer-events:none; background:#fff8eedd; border-radius:6px; padding:2px 6px; box-shadow:0 1px 0 #0001; }
   #buddy-chat.build-bubble { left:auto; right:8px; top:164px; transform:none; width:210px; max-height:calc(100dvh - 285px); padding:7px; border-width:2px; }
   #buddy-chat.build-bubble #buddy-line { font-size:16px; margin:0 0 4px; }
   #buddy-chat.build-bubble #buddy-picture { width:48px; height:48px; float:left; margin:0; }
@@ -491,7 +498,7 @@
   #buddy-chat.build-bubble button { min-width:48px; padding:3px 5px; margin:1px; font-size:13px; }
   /* Immediate action feedback lives in the HUD strip, above the build grid.
      It never intercepts a placement tap and folds away on the next action. */
-  #buddy-chat.build-feedback { top:130px; right:108px; width:max-content; max-width:250px; max-height:none; padding:4px 8px; pointer-events:none; }
+  #buddy-chat.build-feedback { top:112px; right:96px; width:max-content; max-width:min(70vw,220px); max-height:none; padding:2px 6px; pointer-events:none; font-size:13px; }
   #buddy-chat.build-feedback #buddy-line { margin:0; }
   #buddy-chat.build-feedback button, #buddy-chat.build-feedback #buddy-options { display:none; }
   @media (max-width:600px) { #buddy-chat.build-feedback { top:160px; right:8px; max-width:220px; } }
@@ -502,7 +509,7 @@
   #buddy-options button { min-height:44px; }
   #buddy-options canvas { width:34px; height:34px; display:block; margin:auto; }
   #btn-build[aria-pressed="true"] { background:#ffe29a; }
-  @media (max-width:600px) { .topbtn { min-width:48px; padding:0 7px; font-size:14px; } #btn-speak { width:48px; } #build-tools { right:12px; } }
+  @media (max-width:600px) { .topbtn { min-width:42px; padding:0 5px; font-size:12px; } #btn-speak { width:40px; height:40px; } #build-tools { right:12px; top:64px; } }
   body.driving .acts, body.driving #held {visibility:hidden;}
   #car-exit { position:absolute;right:18px;top:106px;z-index:25;background:#ffe4a0; }
   #house-upgrade .body { max-width:760px;margin:auto; }
@@ -521,7 +528,7 @@
 <div id="app">
   <canvas id="view" width="800" height="400"></canvas>
   <div id="hud">
-    <span id="build-version" aria-label="Build version">build a0b0871+v11qa</span>
+    <span id="build-version" aria-label="Build version">build cd91b62+ux11</span>
     <div class="topbar">
       <button id="quest" type="button">
         <canvas id="quest-icon" width="128" height="128"></canvas>
@@ -550,9 +557,9 @@
         <div id="hotbar" class="hotbar"></div>
       </div>
       <div class="acts">
-        <button id="btn-break" class="act break" type="button"><strong>Break</strong></button>
-        <button id="btn-place" class="act place" type="button"><strong>Place</strong></button>
-        <button id="btn-jump" class="act jump" type="button"><strong>Jump</strong></button>
+        <button id="btn-break" class="act break" type="button" aria-label="Break"><strong>Break</strong></button>
+        <button id="btn-place" class="act place" type="button" aria-label="Place"><strong>Place</strong></button>
+        <button id="btn-jump" class="act jump" type="button" aria-label="Jump"><strong>↑</strong></button>
       </div>
     </div>
   </div>
@@ -568,7 +575,7 @@
       <p id="name-hint" role="status" hidden>You can say it or tap!</p>
       <div id="name-letters" aria-label="Tap letters"></div>
     </div>
-    <button id="welcome-play" type="button">Let's play!</button>
+    <button id="welcome-play" type="button">Go!</button>
   </section>
   <button id="btn-buddy" type="button" aria-label="Chat with Buddy">Buddy</button>
   <section id="buddy-chat" hidden aria-label="Buddy chat">
@@ -578,10 +585,10 @@
   </section>
   <div id="chat-shade" hidden aria-hidden="true"></div>
   <section id="dialogue" hidden role="dialog" aria-modal="true" aria-labelledby="chat-question">
-    <div class="chat-head"><canvas id="chat-face" width="128" height="128" aria-hidden="true"></canvas><p id="chat-question"></p><button id="chat-close" hidden type="button" aria-label="Keep exploring">×</button></div>
+    <div class="chat-head"><canvas id="chat-face" width="128" height="128" aria-hidden="true"></canvas><p id="chat-question"></p><button id="chat-close" hidden type="button" aria-label="Close">×</button></div>
     <canvas id="chat-picture" width="128" height="128" role="img" aria-label="Picture to talk about"></canvas>
     <div id="chat-options"></div>
-    <div class="chat-tools"><button id="chat-listen" type="button" aria-label="Listen again"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M3 9h4l6-4v14l-6-4H3z"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M16 9a4 4 0 0 1 0 6m3-9a8 8 0 0 1 0 12"/></svg><span>Listen</span></button><button id="chat-mic" type="button" aria-label="Answer by voice"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="2" width="6" height="12" rx="3" fill="currentColor"/><path d="M5 10v2a7 7 0 0 0 14 0v-2M12 19v3m-4 0h8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>Speak</span></button><button id="chat-choices" type="button" hidden>Show choices</button><button id="chat-confirm" type="button" hidden>I said it</button><button id="chat-continue" type="button" hidden>Continue</button></div>
+    <div class="chat-tools"><button id="chat-listen" type="button" aria-label="Listen again"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M3 9h4l6-4v14l-6-4H3z"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M16 9a4 4 0 0 1 0 6m3-9a8 8 0 0 1 0 12"/></svg><span>Listen</span></button><button id="chat-mic" type="button" aria-label="Answer by voice"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="2" width="6" height="12" rx="3" fill="currentColor"/><path d="M5 10v2a7 7 0 0 0 14 0v-2M12 19v3m-4 0h8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>Speak</span></button><button id="chat-choices" type="button" hidden aria-hidden="true" tabindex="-1"></button><button id="chat-confirm" type="button" hidden>I said it</button><button id="chat-continue" type="button" hidden>Continue</button></div>
     <p id="chat-status" role="status" aria-live="polite"></p>
   </section>
   <aside id="parent-help" hidden aria-label="家长设置">
@@ -642,6 +649,14 @@
     <div class="body" id="recipes"></div>
   </div>
 
+  <div id="chest-panel" class="panel" hidden>
+    <header>
+      <h2>Chest</h2>
+      <button id="chest-back" class="back" type="button">Back</button>
+    </header>
+    <div class="body" id="chest-grid"></div>
+  </div>
+
   <div id="book" class="panel" hidden>
     <header>
       <h2>Word Book</h2>
@@ -670,7 +685,7 @@
       <p class="soundnote">Tap once to turn sound on.</p>
       <p id="save-note" hidden>Your world is saved.</p>
       <button id="btn-new" type="button" hidden>New world</button>
-      <p class="desktop-hint">Arrows move · Space jump · Click a block</p>
+      <p class="desktop-hint" hidden>Stick moves and jumps · Tap Break or Place</p>
     </div>
   </div>
 
@@ -824,7 +839,7 @@ const BRAIN_TIMEOUT_MS = 6500;
   var seek = null, joyId = null;
   var trailSpots = [], dialogue = null, chatQueue = [], chatIdle = 0, chatCooldown = 0;
   var chatClock = 0, chatRecognizer = null, chatTimer = null, recognitionTimer = null, chatLastInput = 0;
-  var taskSnapshot = null, followTravel = 0, followLastX = 0, followReady = false;
+  var taskSnapshot = null, followTravel = 0, followLastX = 0, followReady = false, lastPetChatAt = -999;
   var boatStartX = null, boatLanding = false, sceneNow = '';
   var childName = '', recentEvents = [], recentLines = [], lastAnswer = '';
   var welcome = null, lastGreeting = { id: -1, text: '' }, returningVisit = false;
@@ -1389,8 +1404,8 @@ function validConversation(value, p) {
   }
   function queueChat(anchor, key) {
     if (!started || quiz) return;
+    if (anchor === 'pet' && chatClock - lastPetChatAt < 90 && trail.discoveries[key]) return;
     if (anchor !== 'task' || !recentEvents.length || recentEvents[recentEvents.length - 1].word !== key) rememberEvent(({ fish: 'caught', pet: 'met', boat: 'rode', task: 'task', scene: 'scene' })[anchor], key);
-    // Specific moments take priority over a task celebration from the same action.
     if (anchor === 'task' && chatQueue.some(function (q) { return q.key === key && q.anchor !== 'task'; })) return;
     chatQueue = chatQueue.filter(function (q) { return q.anchor !== anchor && !(q.anchor === 'task' && q.key === key); });
     chatQueue.push({ anchor: anchor, key: key, at: chatClock });
@@ -1411,7 +1426,7 @@ function validConversation(value, p) {
     stopChatListening();
     if (dialogue) {
       if (dialogue.controller) dialogue.controller.abort();
-      chatCooldown = 12;
+      chatCooldown = dialogue.anchor === 'pet' ? 45 : 12;
       if (window.speechSynthesis) { try { speechSynthesis.cancel(); } catch (err) { /* optional */ } }
     }
     var coach = dialogue && dialogue.answered && dialogue.feedback === 'success' ? (dialogue.coachSaid || dialogue.key) : '';
@@ -1447,7 +1462,7 @@ function validConversation(value, p) {
   }
   function chatTemplate(d, feedback) {
     var done = d.turn >= 3 || feedback === 'success', say;
-    if (done) say = 'Great! Keep exploring!';
+    if (done) say = 'Great!';
     else if (d.tier === 2 && !d.choices) say = "What's this?";
     else if (d.tier === 3 && !d.choices) {
       var mass = ['grass', 'dirt', 'stone', 'wood', 'leaves', 'sand', 'water', 'planks', 'wool', 'rain', 'wheat'];
@@ -1472,7 +1487,7 @@ function validConversation(value, p) {
     var body = reply.say.trim().replace(praise, '').toLowerCase();
     var lead = chatContextLeads(d).find(function (line) { return body.indexOf(line.toLowerCase() + ' ') === 0; });
     if (lead) body = body.slice(lead.length + 1);
-    if (expected.done) return /^(let's )?keep exploring!$/.test(body);
+    if (expected.done) return body === '' || /^(let's )?keep exploring!$/.test(body);
     if (d.choices || d.tier === 1) {
       return body === 'what is this?';
     }
@@ -1485,7 +1500,7 @@ function validConversation(value, p) {
     document.getElementById('chat-picture').hidden = false;
     document.getElementById('chat-face').hidden = d.choices || d.tier === 1;
     d.audio_url = reply.audio_url;
-    d.pending = false; d.controller = null; d.question = d.reveal && !reply.done ? "Let's say " + WORD[d.key][0].toLowerCase() + ' together!' : reply.say; d.at = chatClock;
+    d.pending = false; d.controller = null; d.question = d.reveal && !reply.done ? "Let's say " + WORD[d.key][0].toLowerCase() + ' together!' : (reply.done ? (d.selfClaim ? 'Thanks for trying!' : WORD[d.key][0] + '!') : reply.say); d.at = chatClock;
     var listening = false;
     document.getElementById('chat-question').textContent = listening ? 'Listen and choose!' : d.question;
     document.getElementById('chat-status').textContent = listening ? '' : d.answered ? (d.selfClaim?'Thanks for trying!':WORD[d.key][0]+' ★') : (d.reveal ? 'Tap ' + WORD[d.key][0] + ' or say it with me.' : d.hint ? 'Good try! Look at the glowing answer.' : '');
@@ -1506,9 +1521,10 @@ function validConversation(value, p) {
     });
     document.getElementById('chat-mic').setAttribute('aria-label', 'Answer by voice');
     document.getElementById('chat-mic').disabled = reply.done;
-    document.getElementById('chat-choices').disabled = false;
+    document.getElementById('chat-choices').disabled = true;
     document.getElementById('chat-listen').disabled = false;
-    document.getElementById('chat-choices').hidden = d.choices || reply.done;
+    // Child UI: never surface the leftover "Show choices" control; options still open after a miss or two Speak failures.
+    document.getElementById('chat-choices').hidden = true;
     document.getElementById('chat-confirm').hidden = !d.fallback || reply.done;
     document.getElementById('chat-confirm').disabled = reply.done;
     ['chat-listen','chat-mic'].forEach(function(id){document.getElementById(id).hidden=reply.done;});
@@ -1662,6 +1678,7 @@ function validConversation(value, p) {
     if (!dialogue || dialogue.answered || dialogue.pending) return;
     dialogue.voiceFailures=(dialogue.voiceFailures||0)+1;
     dialogue.fallback=dialogue.voiceFailures>=2;
+    if (dialogue.fallback) dialogue.choices = true;
     renderChat(dialogue,chatTemplate(dialogue,'prompt'),true);
     document.getElementById('chat-status').textContent=dialogue.fallback?'Try Speak again, or tap I said it.':'Try Speak again.';
   }
@@ -1708,9 +1725,9 @@ function validConversation(value, p) {
     if (buddy) {
       if (!riding && Math.abs(player.x - followLastX) < TILE * 2) followTravel += Math.abs(player.x - followLastX);
       followLastX = player.x;
-      if (followTravel > TILE * 6) followReady = true;
-      if (followReady && safe && Math.abs(buddy.x - player.x) < TILE * 3) {
-        queueChat('pet', buddy.type); followReady = false; followTravel = 0;
+      if (followTravel > TILE * 28) followReady = true;
+      if (followReady && safe && Math.abs(buddy.x - player.x) < TILE * 3 && chatClock - lastPetChatAt >= 90) {
+        queueChat('pet', buddy.type); followReady = false; followTravel = 0; lastPetChatAt = chatClock;
       }
     }
     var scene = sceneAt(player.x);
@@ -1741,7 +1758,7 @@ function validConversation(value, p) {
     });
     chatQueue = chatQueue.filter(function (e) { return chatClock - e.at < 18; });
     if (!buildSessionBusy() && !dialogue && chatIdle > 0.8 && chatCooldown <= 0 && cardLeft <= 0 && chatQueue.length) {
-      var priority = { fish: 4, boat: 4, pet: 3, task: 2, scene: 1 };
+      var priority = { fish: 4, boat: 4, pet: 1, task: 2, scene: 1 };
       chatQueue.sort(function (a, b) { return priority[b.anchor] - priority[a.anchor] || b.at - a.at; });
       var event = chatQueue.shift();
       if (chatWords().length >= 2) { openChat(event); chatQueue = []; }
@@ -2363,7 +2380,7 @@ function validConversation(value, p) {
       }
       if(!d.manual && buildQuota())spendBuildQuestion();
     }
-    d.stage='question';if(d.upgrade)d.deferSpeech=true;d.tier=d.event==='house_part'?1:buildTier(d.options);d.misses=0;
+    d.stage='question';d.deferSpeech=false;d.tier=d.event==='house_part'?1:buildTier(d.options);d.misses=0;
     var text=d.event==='build_plan'?(d.tier===3?(BUILD_LINES[8] + ' Say it!'):lineVariant([BUILD_LINES[2],BUILD_LINES[3],BUILD_LINES[4]])):d.tier===1?(d.event==='build_short'?BUILD_LINES[10]:'What is this?'):d.tier===2?"What's this?":d.event==='build_short'?(d.key==='stick'?BUILD_LINES[20]:buildNeedLine(d.key))+' Say it!':(d.key==='house'?BUILD_LINES[33]:d.key==='fence'?BUILD_LINES[34]:'I made a '+d.key+'.')+' Say it!';
     if(d.event==='build_plan'){var prefix=buildName();d.named=!!prefix;text=prefix+text;}
     if(d.upgrade)text=d.tier===3?'Look! '+WORD[d.key][0]+'. Say it!':'What is this?';
@@ -3144,24 +3161,28 @@ function validConversation(value, p) {
     var ahead = Math.floor((nx + a.dir * 12) / TILE);
     var body = Math.floor((a.y - 10) / TILE);
     var belowId = get(tx, under);
-    var canSwim = a.tamed || a.type === 'duck';
+    var canSwim = a.tamed || a.type === 'duck' || a.type === 'dog' || a.type === 'cat';
     var floorOk = solid(belowId) || (belowId === WATER && canSwim);
     var blocked = solid(get(ahead, body));
     if (floorOk && !blocked && nx > TILE && nx < (W - 1) * TILE) a.x = nx;
-    else if (a.tamed && !blocked && nx > TILE && nx < (W - 1) * TILE) a.x = nx;
+    else if ((a.tamed || canSwim) && !blocked && nx > TILE && nx < (W - 1) * TILE) a.x = nx;
     else if (a.tamed && blocked) {
       if (!solid(get(ahead, body - 1)) && !solid(get(tx, body - 1))) { a.y = body * TILE - 0.01; a.x = nx; }
     }
-    else if (!a.tamed) { a.vx = -a.vx; a.timer = 0.7; }
+    else if (!a.tamed && !(canSwim && (belowId === WATER || get(ahead, under) === WATER))) { a.vx = -a.vx; a.timer = 0.7; }
     var underId2 = get(Math.floor(a.x / TILE), Math.floor((a.y + 2) / TILE));
-    if (underId2 === WATER && canSwim) {
-      a.y = Math.floor((a.y + 2) / TILE) * TILE - 0.01;
+    var inWaterBody = underId2 === WATER || get(Math.floor(a.x / TILE), Math.floor((a.y - 8) / TILE)) === WATER;
+    if (inWaterBody && canSwim) {
+      var waterRow = underId2 === WATER ? Math.floor((a.y + 2) / TILE) : Math.floor((a.y - 8) / TILE);
+      a.y = waterRow * TILE - 0.01 + Math.sin(a.phase * 2.2) * 2.5;
+      a.swim = true;
     } else if (!solid(underId2)) {
+      a.swim = false;
       a.y += 90 * dt;
       var gy = Math.floor(a.y / TILE);
       if (solid(get(Math.floor(a.x / TILE), gy))) a.y = gy * TILE - 0.01;
       else if (get(Math.floor(a.x / TILE), gy) === WATER && canSwim) a.y = gy * TILE - 0.01;
-    }
+    } else a.swim = false;
     if (a.tamed && (a.x !== previousX || a.y !== previousY)) saveSoon();
   }
 
@@ -4803,22 +4824,19 @@ function validConversation(value, p) {
     }
   }
   function renderHotbar() {
-    var sig = invSignature();
+    var sig = invSignature() + '|chest:' + chestKeys().length;
     var bar = document.getElementById('hotbar');
-    if (sig === invSig && bar.childElementCount) {
-      var nodes = bar.querySelectorAll('.slot');
-      var i;
-      for (i = 0; i < nodes.length; i++) nodes[i].classList.toggle('on', i === sel);
+    var visible = quickHotbarKeys();
+    var keep = bar.scrollLeft;
+    bar.innerHTML = '';
+    if (!hotbar.length) {
+      var empty = document.createElement('div');
+      empty.className = 'emptybar';
+      empty.textContent = 'Tap a block';
+      bar.appendChild(empty);
     } else {
-      var keep = bar.scrollLeft;
-      bar.innerHTML = '';
-      if (!hotbar.length) {
-        var empty = document.createElement('div');
-        empty.className = 'emptybar';
-        empty.textContent = 'Tap a block';
-        bar.appendChild(empty);
-      }
-      hotbar.forEach(function (key, i) {
+      visible.forEach(function (key) {
+        var i = hotbar.indexOf(key);
         var b = document.createElement('button');
         b.type = 'button';
         b.className = 'slot' + (i === sel ? ' on' : '');
@@ -4838,9 +4856,18 @@ function validConversation(value, p) {
         });
         bar.appendChild(b);
       });
-      bar.scrollLeft = keep;
-      invSig = sig;
+      var stashN = chestKeys().length;
+      var chest = document.createElement('button');
+      chest.type = 'button';
+      chest.className = 'slot chest-btn';
+      chest.setAttribute('aria-label', 'Open chest');
+      chest.innerHTML = '<canvas width="128" height="128" style="width:44px;height:44px;display:block;margin:4px auto 0"></canvas><strong>Chest</strong><em>' + stashN + '</em>';
+      paintIcon(chest.querySelector('canvas'), 'table');
+      tapButton(chest, openChest);
+      bar.appendChild(chest);
     }
+    bar.scrollLeft = keep;
+    invSig = sig;
     var key = hotbar[sel];
     document.getElementById('held-en').textContent = key && WORD[key] ? (key==='house'?'Roof blocks':WORD[key][0]) : 'Tap a block';
   }
@@ -4973,7 +5000,7 @@ function validConversation(value, p) {
       tapButton(spk, function () { showWord(key); });
       tapButton(row, function () { showWord(key); });
       var practice=document.createElement('button');practice.type='button';practice.textContent='Speak';practice.setAttribute('aria-label','Practice '+WORD[key][0]);
-      tapButton(practice,function(){document.getElementById('book').hidden=true;hideCard();var d={event:'word_practice',key:key,options:[key],tier:3,stage:'question',deferSpeech:true};buildBubble('Say '+WORD[key][0].toLowerCase()+'!',d);paintIcon(document.getElementById('buddy-picture'),key);document.getElementById('buddy-picture').hidden=false;});
+      tapButton(practice,function(){document.getElementById('book').hidden=true;hideCard();var d={event:'word_practice',key:key,options:[key],tier:3,stage:'question',deferSpeech:false};buildBubble('Say '+WORD[key][0].toLowerCase()+'!',d);paintIcon(document.getElementById('buddy-picture'),key);document.getElementById('buddy-picture').hidden=false;});
       row.appendChild(cv); row.appendChild(txt); row.appendChild(spk);row.appendChild(practice);
       grid.appendChild(row);
     });
@@ -5019,8 +5046,40 @@ function validConversation(value, p) {
     document.getElementById('brain-status').textContent = '本次伙伴回应：AI ' + brainStats.brain + '，模板 ' + brainStats.template + '，预生成音频 ' + brainStats.audio + '，合成回落 ' + brainStats.tts + '，来源未标注 ' + brainStats.unknown + '。最多每分钟 8 次、每个标签页会话 60 次请求（刷新不重置）；重试使用本地提示。';
     if (log) renderSpeakingLog();
   }
+  var CHEST_STASH = { grass:1, dirt:1, leaves:1, sand:1, flower:1, wool:1, seed:1, wheat:1, stone:1 };
+  function chestKeys() { return hotbar.filter(function (k) { return CHEST_STASH[k] && inv[k]; }); }
+  function quickHotbarKeys() {
+    var quick = hotbar.filter(function (k) { return inv[k] && !CHEST_STASH[k]; });
+    var selKey = sel >= 0 ? hotbar[sel] : null;
+    if (selKey && inv[selKey] && quick.indexOf(selKey) < 0) quick.unshift(selKey);
+    return quick.slice(0, 6);
+  }
+  function openChest() {
+    if (!started || dialogue || quiz || nameFlow) return;
+    closePanels(); renderChest(); document.getElementById('chest-panel').hidden = false;
+  }
+  function closeChest() { document.getElementById('chest-panel').hidden = true; }
+  function renderChest() {
+    var root = document.getElementById('chest-grid'); root.replaceChildren();
+    var keys = hotbar.filter(function (k) { return inv[k]; });
+    if (!keys.length) { var empty = document.createElement('p'); empty.textContent = 'Empty for now.'; root.appendChild(empty); return; }
+    keys.forEach(function (key) {
+      var b = document.createElement('button'); b.type = 'button'; b.className = 'chest-item';
+      b.setAttribute('aria-label', WORD[key][0]);
+      var cv = document.createElement('canvas'); cv.width = 96; cv.height = 96; cv.style.cssText = 'width:40px;height:40px;image-rendering:pixelated';
+      paintIcon(cv, key); b.appendChild(cv);
+      b.appendChild(document.createTextNode(WORD[key][0]));
+      var em = document.createElement('em'); em.textContent = 'x' + inv[key]; b.appendChild(em);
+      tapButton(b, function () {
+        var i = hotbar.indexOf(key); if (i >= 0) sel = i; invSig = '';
+        if (buildMode && (BLOCK_OF[key] || CRAFTABLES[key])) { buildTool = key; renderBuildTools(); }
+        closeChest(); showWord(key); renderHotbar();
+      });
+      root.appendChild(b);
+    });
+  }
   function panelOpen() {
-    return !document.getElementById('house-upgrade').hidden || !document.getElementById('craft').hidden || !document.getElementById('book').hidden || !document.getElementById('parent-help').hidden;
+    return !document.getElementById('house-upgrade').hidden || !document.getElementById('craft').hidden || !document.getElementById('book').hidden || !document.getElementById('parent-help').hidden || !document.getElementById('chest-panel').hidden;
   }
   function openCraft() {
     if (chatBlocked()) return;
@@ -5039,7 +5098,7 @@ function validConversation(value, p) {
     speak('Word book');
   }
   function closeBook() { document.getElementById('book').hidden = true; }
-  function closePanels() { closeUpgrade(); closeCraft(); closeBook(); document.getElementById('parent-help').hidden = true; document.getElementById('btn-zh').setAttribute('aria-expanded', 'false'); }
+  function closePanels() { closeUpgrade(); closeCraft(); closeBook(); closeChest(); document.getElementById('parent-help').hidden = true; document.getElementById('btn-zh').setAttribute('aria-expanded', 'false'); }
   function setZh() {
     // Legacy save setting cannot turn on translations in child-facing UI.
     zhOn = false;
@@ -5297,6 +5356,7 @@ function validConversation(value, p) {
     });
     tapButton(document.getElementById('btn-craft'), openCraft);
     tapButton(document.getElementById('btn-words'), openBook);
+    tapButton(document.getElementById('chest-back'), closeChest);
     bindDialogue();
     function toggleParent() {
       stopChatListening(); releaseChatInput(); closeCraft(); closeBook();
@@ -5348,7 +5408,7 @@ function validConversation(value, p) {
     tapButton(document.getElementById('quest'), function () {
       if (quiz) { speakEn('Find the ' + WORD[quiz.key][0] + '!'); return; }
       var q = currentQuest();
-      speak(q ? q.en : 'Explore and play');
+      speak(q ? q.en : 'All done!');
     });
     tapButton(document.getElementById('btn-speak'), speakTask);
     tapButton(document.getElementById('btn-quiz'), function () {
@@ -5489,7 +5549,7 @@ function validConversation(value, p) {
     window.addEventListener('blur', function () { keys={};joyEnd({pointerId:joyId}); });
     document.addEventListener('touchmove', function (e) {
       var t = e.target;
-      if (t && t.closest && t.closest('.body, .hotbar, #parent-help, #dialogue, #welcome, #buddy-chat')) return;
+      if (t && t.closest && t.closest('.body, .hotbar, #build-tools, #chest-panel, #parent-help, #dialogue, #welcome, #buddy-chat')) return;
       e.preventDefault();
     }, { passive: false });
     ['gesturestart', 'gesturechange', 'gestureend'].forEach(function (ev) {
