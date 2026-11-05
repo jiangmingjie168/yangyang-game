@@ -1,0 +1,221 @@
+{
+  "html_md5": "b00bd982582bc60c9ee39dd6e7666fc4",
+  "html_sha256": "ffac2b846bf371a2f0371e5e81a307fe8b7dff36aff244ca877f0dc904774c25",
+  "matrix": [
+    {
+      "case": "C-desktop",
+      "status": "PASS"
+    },
+    {
+      "case": "P-desktop",
+      "status": "PASS"
+    },
+    {
+      "case": "F-desktop",
+      "status": "PASS"
+    },
+    {
+      "case": "Q-desktop",
+      "status": "PASS"
+    },
+    {
+      "case": "R-desktop",
+      "status": "PASS"
+    },
+    {
+      "case": "I-desktop",
+      "status": "PASS",
+      "invite_ms": 29722
+    },
+    {
+      "case": "V-desktop",
+      "status": "PASS"
+    },
+    {
+      "case": "T2-desktop",
+      "status": "PASS"
+    },
+    {
+      "case": "T3-desktop",
+      "status": "PASS"
+    },
+    {
+      "case": "N-desktop",
+      "status": "PASS"
+    },
+    {
+      "case": "C-mobile",
+      "status": "PASS"
+    },
+    {
+      "case": "P-mobile",
+      "status": "PASS"
+    },
+    {
+      "case": "F-mobile",
+      "status": "PASS"
+    },
+    {
+      "case": "Q-mobile",
+      "status": "PASS"
+    },
+    {
+      "case": "R-mobile",
+      "status": "PASS"
+    },
+    {
+      "case": "I-mobile",
+      "status": "PASS",
+      "invite_ms": 29578
+    },
+    {
+      "case": "V-mobile",
+      "status": "PASS"
+    },
+    {
+      "case": "T2-mobile",
+      "status": "PASS"
+    },
+    {
+      "case": "T3-mobile",
+      "status": "PASS"
+    },
+    {
+      "case": "N-mobile",
+      "status": "PASS"
+    }
+  ],
+  "matrix_frames": 176,
+  "legacy": [
+    {
+      "case": "legacy-desktop",
+      "status": "PASS",
+      "mods": 11
+    },
+    {
+      "case": "legacy-mobile",
+      "status": "PASS",
+      "mods": 11
+    }
+  ],
+  "fix3": [
+    {
+      "case": "J-desktop-clean",
+      "status": "PASS",
+      "idle_start_ms": 7205,
+      "cheer_ms": 2756,
+      "show_ms": 4251,
+      "video": "build-v1-fix3-video/page@17ecc88a9ea7f6c97dda777cc9cabf10.webm"
+    },
+    {
+      "case": "S-desktop-clean",
+      "status": "PASS",
+      "video": "build-v1-fix3-video/page@f13b0b7f53f7a50687d2c59cf9b5058c.webm"
+    },
+    {
+      "case": "B-desktop-clean",
+      "status": "PASS",
+      "video": "build-v1-fix3-video/page@0342a8ec36da2c2624d6cb2ec3180e8c.webm"
+    },
+    {
+      "case": "P-desktop-clean",
+      "status": "PASS",
+      "video": "build-v1-fix3-video/page@4e88434346065271c18f4883efa78558.webm"
+    },
+    {
+      "case": "G-desktop-clean",
+      "status": "PASS",
+      "video": "build-v1-fix3-video/page@c5aaae18591b947b4bdc534a9515980e.webm"
+    },
+    {
+      "case": "J-mobile-clean",
+      "status": "PASS",
+      "idle_start_ms": 7962,
+      "cheer_ms": 2712,
+      "show_ms": 4241,
+      "video": "build-v1-fix3-video/page@4669765cdceaa478d3e04d935f21fcdc.webm"
+    },
+    {
+      "case": "S-mobile-clean",
+      "status": "PASS",
+      "video": "build-v1-fix3-video/page@e2207d31e2ab25e217b65866658aaf5b.webm"
+    },
+    {
+      "case": "B-mobile-clean",
+      "status": "PASS",
+      "video": "build-v1-fix3-video/page@5c69ac663879b941d48a14642094c170.webm"
+    },
+    {
+      "case": "P-mobile-clean",
+      "status": "PASS",
+      "video": "build-v1-fix3-video/page@2b2a1b0da47ca137b506eeb63ae799a1.webm"
+    },
+    {
+      "case": "G-mobile-clean",
+      "status": "PASS",
+      "video": "build-v1-fix3-video/page@ca50688305dd74065bc4c26ddf59e29e.webm"
+    }
+  ],
+  "regressions": [
+    {
+      "suite": "build-v1-craftable-compat",
+      "exit": 0,
+      "seconds": 24.9,
+      "log": "screens/build-v1-craftable-regression/build-v1-craftable-compat.log"
+    },
+    {
+      "suite": "build-v1-fix3",
+      "exit": 0,
+      "seconds": 130.1,
+      "log": "screens/build-v1-craftable-regression/build-v1-fix3.log"
+    },
+    {
+      "suite": "build-placement-fix3",
+      "exit": 0,
+      "seconds": 0,
+      "log": "screens/build-v1-craftable-regression/build-placement-fix3.log"
+    },
+    {
+      "suite": "chinese-cleanup",
+      "exit": 0,
+      "seconds": 5,
+      "log": "screens/build-v1-craftable-regression/chinese-cleanup.log"
+    },
+    {
+      "suite": "natural-pointer-v4r",
+      "exit": 0,
+      "seconds": 18.5,
+      "log": "screens/build-v1-craftable-regression/natural-pointer-v4r.log"
+    },
+    {
+      "suite": "world-v2",
+      "exit": 0,
+      "seconds": 19.1,
+      "log": "screens/build-v1-craftable-regression/world-v2.log"
+    },
+    {
+      "suite": "server",
+      "exit": 0,
+      "seconds": 1.1,
+      "log": "screens/build-v1-craftable-regression/server.log"
+    },
+    {
+      "suite": "memory-chat",
+      "exit": 0,
+      "seconds": 20.1,
+      "log": "screens/build-v1-craftable-regression/memory-chat.log"
+    }
+  ],
+  "assets": [
+    "icons/build-v1-craftable-house.png",
+    "icons/build-v1-craftable-pen.png"
+  ],
+  "non_delivery_attempts": [
+    "build-v1-craftable-dev2",
+    "build-v1-craftable-dev3",
+    "build-v1-craftable-dev4",
+    "build-v1-craftable-extra-dev",
+    "build-v1-craftable-extra-dev2",
+    "build-v1-craftable-release"
+  ]
+}

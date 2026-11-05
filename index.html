@@ -504,7 +504,7 @@
 <div id="app">
   <canvas id="view" width="800" height="400"></canvas>
   <div id="hud">
-    <span id="build-version" aria-label="Build version">build 1d8d3b7+fix5</span>
+    <span id="build-version" aria-label="Build version">build fdec124+craft</span>
     <div class="topbar">
       <button id="quest" type="button">
         <canvas id="quest-icon" width="128" height="128"></canvas>
@@ -689,6 +689,8 @@ const BRAIN_TIMEOUT_MS = 6500;
     rod: ['Fishing Rod'], boat: ['Boat'], pet: ['Pet'],
     follow: ['Follow'], wall: ['Wall'], roof: ['Roof'], window: ['Window'], room: ['Room'], gate: ['Gate']
   };
+  // Inventory aliases reuse learned words; they are not extra vocabulary.
+  Object.defineProperties(WORD, {houseKit:{value:['House']},pen:{value:['Pen']}});
   var BLOCK_OF = {
     grass: GRASS, dirt: DIRT, stone: STONE, wood: WOOD, leaves: LEAVES, sand: SAND,
     water: WATER, flower: FLOWER, planks: PLANKS, torch: TORCH, door: DOOR,
@@ -710,8 +712,10 @@ const BRAIN_TIMEOUT_MS = 6500;
     { out: 'door', n: 1, need: { planks: 6 } },
     { out: 'torch', n: 4, need: { stick: 1, wood: 1 } },
     { out: 'bed', n: 1, need: { planks: 3, wool: 2 } },
-    // The starter clearing guarantees one surface stone. One harvest makes a roof affordable.
-    { out: 'house', n: 4, need: { stone: 1, planks: 2 } },
+    // Whole kits are distinct from the legacy four-block roof recipe.
+    { out: 'houseKit', n: 1, need: { stone: 1, planks: 4 } },
+    { out: 'pen', n: 1, need: { fence: 4 } },
+    { out: 'house', label: 'Roof blocks', n: 4, need: { stone: 1, planks: 2 } },
     { out: 'fence', n: 2, need: { planks: 2, stick: 1 } },
     { out: 'rod', n: 1, need: { stick: 2, wool: 1 } },
     { out: 'boat', n: 1, need: { planks: 5 } },
@@ -1703,6 +1707,107 @@ function validConversation(value, p) {
   var buildLogEnabled=new URLSearchParams(location.search).get('buildlog')==='1', buildClicks=[], buildClick=null, buildDebugAt=-1;
   var buildMode = false, buildTool = 'planks', buildSavedIds = new Set(), builds = [], buildWords = {}, buildChat = {}, buildQueue = [], buildLevel = 0;
   var buildSession = newBuildSession(), buildRegions = [], buildClusters = [], buildClusterDirty = true, buildDirty = false, buildShowingWord = false, buildWordPending = {}, buildGhost = null, buildArrow = null;
+  // Whole buildings reserve air cells but are walkable scenery: no child/pet trap.
+  // Instances, including their part materials, survive pickup and save/reload.
+  var CRAFTABLES={houseKit:{kind:'house',w:3,h:3,parts:{wall:'wood',roof:'planks',yard:'grass',window:'glass',foundation:'stone',door:'wood'}},pen:{kind:'pen',w:4,h:2,parts:{fence:'wood',gate:'wood',yard:'grass'}}};
+  var buildObjects=[],craftedObjects=[],craftableArt={};
+  function newCraftable(item,raw) {
+    var def=CRAFTABLES[item],parts={};raw=raw||{};
+    Object.keys(def.parts).forEach(function(k){var p=raw.parts&&raw.parts[k];parts[k]={material:p&&['wood','planks','grass','glass','stone','sand','flower'].includes(p.material)?p.material:def.parts[k],tier:p&&Number.isInteger(p.tier)?Math.max(1,Math.min(9,p.tier)):1};});
+    return {item:item,kind:def.kind,level:Number.isInteger(raw.level)?Math.max(1,Math.min(99,raw.level)):1,parts:parts,w:def.w,h:def.h};
+  }
+  function restoreCraftables(data) {
+    buildObjects=[];craftedObjects=[];
+    (Array.isArray(data.build_objects)?data.build_objects:[]).slice(0,64).forEach(function(raw){
+      if(!raw||!CRAFTABLES[raw.item]||!Number.isInteger(raw.x)||!Number.isInteger(raw.y))return;
+      var b=newCraftable(raw.item,raw);b.x=raw.x;b.y=raw.y;
+      if(b.x<1||b.y<1||b.x+b.w>=W||b.y+b.h>=H||buildObjects.some(function(o){return b.x<o.x+o.w&&b.x+b.w>o.x&&b.y<o.y+o.h&&b.y+b.h>o.y;}))return;
+      Object.assign(b,{id:'object:'+b.x+':'+b.y,createdAt:Number(raw.createdAt)||Date.now(),roofed:b.kind==='house',shown:!!raw.shown,closed:!!raw.closed,autoOffered:!!raw.autoOffered,invited:false,roofPraise:true});
+      b.feedbackMembers=Array.isArray(raw.feedbackMembers)?raw.feedbackMembers.filter(function(at){return Number.isInteger(at)&&at>=0&&at<W*H;}).slice(0,200):null;
+      buildObjects.push(b);
+    });
+    Object.keys(CRAFTABLES).forEach(function(item){
+      var n=Math.max(0,Math.min(99,Math.floor(Number(data.inv&&data.inv[item])||0)));
+      var saved=(Array.isArray(data.crafted_objects)?data.crafted_objects:[]).filter(function(b){return b&&b.item===item;});
+      for(var i=0;i<n;i++)craftedObjects.push(newCraftable(item,saved[i]));
+    });
+  }
+  function craftableAt(x,y){return buildObjects.find(function(b){return x>=b.x&&x<b.x+b.w&&y>=b.y&&y<b.y+b.h;});}
+  function craftableCells(b){var a=[];for(var y=b.y;y<b.y+b.h;y++)for(var x=b.x;x<b.x+b.w;x++)a.push(idx(x,y));return a;}
+  function craftableRegion(b){return {building:b,inside:[],members:craftableCells(b),ready:!b.shown&&!b.autoOffered,near:true};}
+  function craftableTarget(item,x,y) {
+    var d=CRAFTABLES[item];
+    // The clicked empty cell is the lower-left anchor; tapping ground uses its top.
+    if(solid(get(x,y)))y--;
+    var r={x:x,y:y-d.h+1,w:d.w,h:d.h,ok:false};
+    if(!(inv[item]>0)){r.reason='stock';return r;}
+    if(buildObjects.length>=64){r.reason='limit';return r;}
+    if(x<1||r.y<1||x+d.w>=W||y+1>=H||!buildReach(x,y)||!buildReach(x+d.w-1,r.y)){r.reason='reach';return r;}
+    for(var xx=x;xx<x+d.w;xx++)for(var yy=r.y;yy<=y;yy++)if(get(xx,yy)!==AIR||craftableAt(xx,yy)){r.reason='space';return r;}
+    for(var xx=x;xx<x+d.w;xx++)if(!solid(get(xx,y+1))){r.reason='ground';return r;}
+    r.ok=true;return r;
+  }
+  function placeCraftable(item,r) {
+    var at=craftedObjects.findIndex(function(b){return b.item===item;}),b=at<0?newCraftable(item):craftedObjects.splice(at,1)[0];
+    Object.assign(b,{id:'object:'+r.x+':'+r.y,x:r.x,y:r.y,createdAt:Date.now(),roofed:b.kind==='house',shown:false,closed:false,autoOffered:false,invited:false,roofPraise:true,feedbackMembers:null});
+    buildObjects.push(b);consume(item);craftableCells(b).forEach(function(at){placedThisRun.add(at);});
+    buildSession.placed++;buildSession.lastObjectId=b.id;buildSession.firstDone=true;buildSession.lastPoint={x:b.x,y:b.y};buildDirty=true;
+    progress.placed[item]=1;rememberEvent('built',b.kind==='house'?'house':'fence');
+    detectBuilds();buildCompletion(craftableRegion(b));tone(520,.06,'sine',0,.035,760);
+    logBuildResult(b.x,b.y,'placed whole '+b.kind);updateQuest();save();renderHotbar();renderBuildTools();
+  }
+  function removeCraftable(b) {
+    // End an invitation to a removed object, without charging a Show slot.
+    if(ambient&&ambient.build&&ambient.build.building===b)closeAmbient();
+    buildObjects.splice(buildObjects.indexOf(b),1);craftedObjects.push(newCraftable(b.item,b));addItem(b.item,1,true);
+    craftableCells(b).forEach(function(at){placedThisRun.delete(at);});buildSession.removed++;buildDirty=true;
+    detectBuilds();logBuildResult(b.x,b.y,'recovered whole '+b.kind);save();renderHotbar();renderBuildTools();
+  }
+  // Native pixel-art master, drawn with integer canvas rectangles, cached by parts.
+  // Independent wall/roof/yard/window palettes leave room for material upgrades.
+  function drawCraftableArt(g,b) {
+    function box(x,y,w,h,c){g.fillStyle=c;g.fillRect(x,y,w,h);}
+    var timber=b.parts[b.kind==='house'?'wall':'fence'].material!=='stone';
+    var dark=timber?'#684733':'#546676',mid=timber?'#bc854b':'#8b9fac',light=timber?'#efc788':'#c8d8dd';
+    function post(x,y,h){box(x,y,6,h,dark);box(x+1,y+1,4,h-2,mid);box(x+1,y+1,1,h-3,light);box(x-1,y-2,8,3,light);box(x+4,y,2,h,'#92643e');}
+    function rail(x,y,w){box(x,y,w,5,dark);box(x,y,w,2,light);box(x,y+2,w,2,mid);}
+    if(b.kind==='house'){
+      // Lawn, stone plinth and warm half-timber walls.
+      box(4,89,88,6,'#426b3b');box(7,87,82,6,'#76a751');box(10,43,76,43,dark);
+      box(13,45,70,38,b.parts.wall.material==='stone'?'#bccbd1':'#f4ddb0');box(75,46,8,36,b.parts.wall.material==='stone'?'#93a7b1':'#d9b785');
+      for(var y=51;y<82;y+=8){box(14,y,60,1,'#dfc193');}
+      [13,44,78].forEach(function(x){box(x,44,4,39,dark);box(x,45,1,37,mid);});box(13,78,69,4,dark);
+      box(10,82,76,7,'#5e6a77');box(12,83,72,4,'#acbac4');for(var x=15;x<84;x+=12){box(x,83,1,5,'#768b9b');box(x+2,83,8,1,'#d5dfe0');}
+      // Shaded chimney behind a stepped terracotta gable.
+      box(65,7,11,24,'#815746');box(66,8,8,21,'#c58b69');box(64,6,13,4,'#e2b28c');box(69,14,6,2,'#9c674d');box(66,21,6,2,'#9c674d');
+      var roof=b.parts.roof.material==='stone'?'#798d9e':'#bd6046',roofHi=b.parts.roof.material==='stone'?'#b5c9d4':'#eeaa70';
+      for(var row=0;row<10;row++){var x=43-row*4,y=9+row*4,w=10+row*8;box(x-2,y,w+4,6,'#704534');box(x,y,w,4,roof);box(x,y,w,1,roofHi);for(var tx=x+8+(row%2)*4;tx<x+w;tx+=12)box(tx,y+1,1,3,'#914e3d');}
+      box(5,47,86,4,'#5c4236');box(8,47,80,1,'#e4ae72');
+      // Recessed door, two glazed windows with highlights and window boxes.
+      box(49,57,20,26,dark);box(51,59,16,23,'#a3673e');box(52,60,2,21,'#d6a56a');box(58,60,1,21,'#825231');box(63,70,2,2,'#ffe49c');
+      [21,70].forEach(function(x){var w=x===21?17:9;box(x-2,55,w+4,18,dark);box(x,57,w,13,b.parts.window.material==='sand'?'#f2db9b':'#75b8ce');box(x+1,57,w-2,3,'#c8f0ef');box(x+2,61,3,3,'#e9ffff');box(x+Math.floor(w/2),56,2,16,'#f5dcb3');box(x,63,w,2,'#f5dcb3');box(x-2,72,w+4,3,mid);});
+      box(48,85,24,4,'#c9c8b7');box(50,89,20,4,'#e0d4b3');
+      [[14,83],[34,84],[80,84]].forEach(function(p){box(p[0],p[1],5,5,'#4c803d');box(p[0]+1,p[1]-2,3,3,'#f1bc70');box(p[0]+2,p[1]-1,1,1,'#fff2ba');});
+    }else{
+      // A visible four-sided enclosure: back rail, perspective returns, front gate.
+      box(6,31,116,30,'#456d39');box(10,28,108,29,b.parts.yard.material==='sand'?'#d6bd7e':'#8ab25d');box(15,31,98,24,'#a5c773');
+      for(var x=16;x<115;x+=13){box(x,40+(x%3)*4,3,1,'#709a4a');box(x+4,49,2,2,'#bdd786');}
+      rail(12,12,104);rail(12,23,104);[10,35,61,87,112].forEach(function(x){post(x,7,27);});
+      // Stepped side rails give depth without smoothing the pixel edges.
+      for(var j=0;j<5;j++){rail(8-j,29+j*4,7);rail(115+j,29+j*4,7);}
+      rail(5,41,39);rail(84,41,39);rail(5,52,39);rail(84,52,39);
+      [4,22,40,82,101,119].forEach(function(x){post(x,35,27);});
+      var gate=b.parts.gate.material==='stone'?'#bdcbd3':'#e8b875';box(47,40,33,21,dark);box(49,42,29,16,gate);
+      for(var x=51;x<77;x+=6)box(x,43,1,14,mid);box(49,43,29,2,'#ffe0a3');box(49,55,29,3,mid);
+      for(var j=0;j<8;j++)box(51+j*3,53-j,4,3,'#97653d');box(74,47,3,4,'#586879');box(75,47,1,2,'#d5e1dd');
+      [[15,57],[105,57]].forEach(function(p){box(p[0],p[1],3,5,'#477e46');box(p[0]-1,p[1]-1,5,2,'#e8c473');box(p[0]+1,p[1]-2,1,4,'#fff1b1');});
+    }
+  }
+  function craftableSprite(b) {
+    var key=b.kind+':'+JSON.stringify(b.parts);
+    if(!craftableArt[key]){var c=document.createElement('canvas');c.width=b.w*TILE;c.height=b.h*TILE;drawCraftableArt(c.getContext('2d'),b);craftableArt[key]=c;}
+    return craftableArt[key];
+  }
   function newBuildSession() { return { active:false, placed:0, removed:0, lastActionAt:-100, selectedAt:-100, startedAt:0, asked:0, praised:0, closed:0, lastBubbleAt:-100, lastQuestionAt:-100, lastPraiseAt:-100, plan:null, firstDone:false, shorts:{}, roomAt:0, revisit:false }; }
   function resetBuildDay() {
     var day = localChatDay();
@@ -1710,10 +1815,11 @@ function validConversation(value, p) {
   }
   function restoreBuild(data) {
     buildLevel = [1,2,3].includes(data.build_level) ? data.build_level : 0;
+    restoreCraftables(data);
     placedThisRun.clear(); buildStill=0; buildLastPosition=null; manualShowPending=null;
     buildMode = false; buildSession = newBuildSession(); buildQueue = []; buildRegions = []; buildClusters = []; buildClusterDirty = true; buildGhost = null; buildWordPending = {};
     builds = Array.isArray(data.builds) ? data.builds.filter(function (b) { return b && ['house','pen','free'].includes(b.kind) && Number.isInteger(b.x) && Number.isInteger(b.y) && b.x >= 0 && b.x < W && b.y >= 0 && b.y < H && b.w > 0 && b.w <= 14 && b.h > 0 && b.h <= 10; }).slice(0,8).map(function (b) { return {id:String(b.id).slice(0,40),kind:b.kind,x:b.x,y:b.y,w:b.w,h:b.h,roofed:!!b.roofed,createdAt:Number(b.createdAt)||Date.now(),shown:!!b.shown,invited:false,autoOffered:!!(b.autoOffered||b.invited||b.shown),closed:!!b.closed,roofPraise:!!b.roofPraise,feedbackMembers:Array.isArray(b.feedbackMembers)?b.feedbackMembers.filter(function(at){return Number.isInteger(at)&&at>=0&&at<W*H;}).slice(0,140):null}; }) : [];
-    buildSavedIds = new Set(builds.map(function(b){return b.id;}));
+    buildSavedIds = new Set(buildObjects.concat(builds).map(function(b){return b.id;}));
     buildChat = {}; var raw = data.build_chat || {};
     ['asked','plans','shorts','shows','revisits','offers','praised','manualShows','offerIgnored','offerPausedUntil'].forEach(function (k) { buildChat[k] = Number.isFinite(raw[k]) ? Math.max(0, Math.min(k === 'offerPausedUntil' ? Date.now()+7*86400000 : 100, Math.floor(raw[k]))) : 0; });
     buildChat.day = typeof raw.day === 'string' ? raw.day : ''; resetBuildDay();
@@ -1757,14 +1863,15 @@ function validConversation(value, p) {
     var show=document.createElement('button'); show.id='build-show'; show.type='button'; show.setAttribute('aria-label','Show');
     show.innerHTML='<svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 2 3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1z" fill="#ffc23d" stroke="#986c25"/></svg><span>Show</span>';
     show.onclick=function(){requestManualShow('button');}; root.appendChild(show); updateShowButton();
-    ['planks','stone','wood','fence','door','roof','window','remove'].forEach(function (key) {
+    ['houseKit','pen','remove','planks','stone','wood','fence','door','roof','window'].forEach(function (key) {
       var b = document.createElement('button'); b.type = 'button'; b.dataset.build = key;
       b.setAttribute('aria-pressed', String(buildTool === key));
       b.textContent = key === 'remove' ? 'Remove' : WORD[key][0];
-      if (key !== 'remove') { var n = document.createElement('small'); n.textContent = key === 'roof' ? (inv.house || 0) + ' / 4 House' : String(inv[key] || 0); b.appendChild(n); }
+      if (key !== 'remove') { var n = document.createElement('small'); n.textContent = key === 'roof' ? (inv.house || 0) + ' / 4 blocks' : String(inv[key] || 0); b.appendChild(n); }
+      if(CRAFTABLES[key]){var icon=document.createElement('canvas');icon.width=96;icon.height=96;icon.style.cssText='width:32px;height:32px;float:left;image-rendering:pixelated';paintIcon(icon,key);b.prepend(icon);}
       b.addEventListener('click', function () { selectBuildTool(key); }); root.appendChild(b);
     });
-    document.getElementById('build-status').textContent = buildTool === 'remove' ? 'Tap a placed block · Materials come back' : 'Tap an empty square · ' + (buildTool === 'roof' ? 'Roof: 4 House blocks' : WORD[buildTool][0]);
+    document.getElementById('build-status').textContent = buildTool === 'remove' ? 'Tap a building or block · Get it back' : (CRAFTABLES[buildTool]?'Tap empty ground · '+CRAFTABLES[buildTool].w+' × '+CRAFTABLES[buildTool].h+' · ':'Tap an empty square · ') + (buildTool === 'roof' ? 'Roof: 4 roof blocks' : WORD[buildTool][0]);
   }
   function buildOwned(x,y) { return x >= 0 && x < W && y >= 0 && y < H && get(x,y) !== AIR && get(x,y) !== base[idx(x,y)]; }
   function buildingBlock(id) { return [PLANKS,HOUSE,STONE,WOOD].includes(id); }
@@ -1804,6 +1911,9 @@ function validConversation(value, p) {
     return animals.some(function(a){return a.x+12>x*TILE && a.x-12<(x+1)*TILE && a.y>y*TILE && a.y-24<(y+1)*TILE;});
   }
   function resolveBuildTarget(x,y,fy) {
+    if(CRAFTABLES[buildTool])return craftableTarget(buildTool,x,y);
+    var object=craftableAt(x,y);
+    if(buildTool==='remove'&&object)return {x:object.x,y:object.y,w:object.w,h:object.h,object:object,ok:buildReach(x,y)&&(inv[object.item]||0)<99,reason:buildReach(x,y)?'full':'reach'};
     var from=null, width=buildTool==='roof'?4:1;
     if(buildTool!=='remove' && solid(get(x,y)) && get(x,y-1)===AIR && (buildOwned(x,y)||fy<.4)){from={x:x,y:y};y--;}
     var r={x:x,y:y,w:width,ok:false,from:from};
@@ -1814,7 +1924,7 @@ function validConversation(value, p) {
       if(buildTool==='remove') {
         if(!buildOwned(x,y)||!KEY_OF[get(x,y)]){r.reason='owned';return r;}
         if((inv[KEY_OF[get(x,y)]]||0)>=99){r.reason='full';return r;}
-      } else if(get(x+i,y)!==AIR||overlapsPlayer(x+i,y)){r.reason='occupied';return r;}
+      } else if(craftableAt(x+i,y)||get(x+i,y)!==AIR||overlapsPlayer(x+i,y)){r.reason='occupied';return r;}
       else if(cellHasAnimal(x+i,y)){r.reason='animal';return r;}
     }
     r.ok=true;return r;
@@ -1826,7 +1936,7 @@ function validConversation(value, p) {
   }
   function placementFailure(x,y,reason,block) {
     if(block)buildSession.blockHint={x:block.x,y:block.y,until:chatClock+.8};
-    var lines={reach:'Move a little closer!',sight:'Move around the wall!',owned:'Tap a block you built!',occupied:'Choose empty squares!',animal:'Choose empty squares!',full:'Use some materials first!'};
+    var lines={space:'Find a clear '+(CRAFTABLES[buildTool]?CRAFTABLES[buildTool].w+' by '+CRAFTABLES[buildTool].h:'')+' space!',ground:'Choose flat ground!',limit:'Remove a building first!',reach:'Move a little closer!',sight:'Move around the wall!',owned:'Tap a block you built!',occupied:'Choose empty squares!',animal:'Choose empty squares!',full:'Use some materials first!'};
     document.getElementById('toast').style.visibility='';showToast(lines[reason]||'Choose empty squares!',1.5);
     logBuildResult(x,y,'fail:'+reason+(block?'@('+block.x+','+block.y+')':''));
   }
@@ -1850,6 +1960,8 @@ function validConversation(value, p) {
     buildAction('tap');
     var r=resolveBuildTarget(x,y,fy);x=r.x;y=r.y;
     if(!r.ok){if(r.reason==='stock'){buildShort(buildMaterial());logBuildResult(x,y,'fail:stock');}else placementFailure(x,y,r.reason,r.block);return;}
+    if(r.object){removeCraftable(r.object);return;}
+    if(CRAFTABLES[buildTool]){placeCraftable(buildTool,r);return;}
     if(buildTool==='remove') {
       var key=KEY_OF[get(x,y)];setCell(x,y,AIR);addItem(key,1,true);placedThisRun.delete(idx(x,y));buildSession.removed++;buildDirty=true;
       logBuildResult(x,y,'removed '+key);save();renderBuildTools();return;
@@ -1908,46 +2020,8 @@ function validConversation(value, p) {
   }
   function detectBuilds() {
     buildDirty = false;
-    var centers = builds.map(function(b){return {x:b.x+Math.floor(b.w/2),y:b.y+Math.floor(b.h/2)};});
-    centers=centers.concat(buildSession.dirtyPoints||[]);buildSession.dirtyPoints=[];
-    if (buildSession.lastPoint) centers.push(buildSession.lastPoint);
-    var regions = [], known = new Set();
-    centers.forEach(function(c){
-      scanBuildWord(c.x,c.y);
-      var x0=Math.max(0,c.x-7),x1=Math.min(W-1,c.x+6),y0=Math.max(0,c.y-5),y1=Math.min(H-1,c.y+4),seen=new Set();
-      function sealed(x,y){return solid(get(x,y)) || get(x,y)===DOOR;}
-      for(var y=y0;y<=y1;y++) for(var x=x0;x<=x1;x++) {
-        var start=idx(x,y); if(sealed(x,y)||seen.has(start)) continue;
-        var todo=[[x,y]],inside=[],edge=false,boundary=new Set(); seen.add(start);
-        for(var q=0;q<todo.length;q++) {
-          var point=todo[q],xx=point[0],yy=point[1]; inside.push(idx(xx,yy));
-          if(xx===x0||xx===x1||yy===y0||yy===y1) edge=true;
-          [[1,0],[-1,0],[0,1],[0,-1]].forEach(function(d){var nx=xx+d[0],ny=yy+d[1],at=idx(nx,ny);if(nx<x0||nx>x1||ny<y0||ny>y1)return;if(sealed(nx,ny)){boundary.add(at);return;}if(!seen.has(at)){seen.add(at);todo.push([nx,ny]);}});
-        }
-        var owned=[...boundary].filter(function(at){return cells[at]!==base[at] && (buildingBlock(cells[at]) || [FENCE,DOOR,WINDOW].includes(cells[at]));});
-        // A one-column, two-high room touches four wall cells and one roof cell.
-        // Roof corners do not touch the interior and must not inflate this count.
-        if(edge||owned.length<5)continue;
-        var xs=inside.map(function(at){return at%W;}),ys=inside.map(function(at){return Math.floor(at/W);}),minX=Math.min(...xs),maxX=Math.max(...xs),minY=Math.min(...ys),maxY=Math.max(...ys);
-        var id=minX+':'+minY+':'+maxX+':'+maxY; if(known.has(id))continue; known.add(id);
-        var roofed=true;
-        for(var rx=minX;rx<=maxX;rx++) {
-          var cap=false;
-          for(var ry=minY-1;ry>=Math.max(0,minY-4);ry--) if(buildOwned(rx,ry) && solid(get(rx,ry)) && get(rx,ry)!==FENCE){cap=true;break;}
-          if(!cap)roofed=false;
-        }
-        var hasFence=owned.some(function(at){return cells[at]===FENCE;});
-        var kind=roofed?'house':hasFence?'pen':null;
-        if(!kind || (owned.length<6 && !(roofed && minX===maxX && maxY-minY+1>=2)))continue;
-        var old=builds.find(function(b){return b.id===id;});
-        if(old && old.kind!==kind)Object.assign(old,{shown:false,invited:false,autoOffered:false,closed:false,roofPraise:false,feedbackMembers:null});
-        var b=Object.assign(old||{id:id,x:minX,y:minY,w:maxX-minX+1,h:maxY-minY+1,createdAt:Date.now(),shown:false},{kind:kind,roofed:roofed});
-        var region={building:b,inside:inside,members:owned};
-        refreshBuildFeedback(b,buildFeedbackMembers(region));
-        regions.push(region);
-      }
-    });
-    buildRegions=regions.slice(0,8);
+    // Only crafted instances create typed Show regions. Legacy tiles stay toys.
+    buildRegions=buildObjects.map(function(b){var r=craftableRegion(b);refreshBuildFeedback(b,buildFeedbackMembers(r));r.ready=!b.shown&&!b.autoOffered;return r;});
     scanFreeBuilds();
     builds=buildRegions.concat(buildClusters.filter(function(r){return r.ready;})).slice(0,8).map(function(r){return r.building;}); updateShowButton(); saveSoon();
   }
@@ -1983,9 +2057,10 @@ function validConversation(value, p) {
   // autoOffered prevents idle retry loops; shown means the child completed Show.
   function buildFeedbackMembers(r) {
     if(r.building.kind==='free')return r.members;
-    // Include roof corners and the adjacent outer ring: extending a closed
-    // house is new work even when its flood-fill boundary stays identical.
-    var b=r.building,members=[];
+    // Include the whole footprint and nearby additions. One new block or
+    // another building can rearm a completed instance; no geometry classification.
+    var b=r.building,members=b.item?craftableCells(b):[];
+    buildObjects.forEach(function(o){if(o!==b&&Math.abs(o.x-b.x)<=b.w+2&&Math.abs(o.y-b.y)<=b.h+2)members=members.concat(craftableCells(o));});
     for(var y=Math.max(0,b.y-2);y<=Math.min(H-1,b.y+b.h+1);y++)for(var x=Math.max(0,b.x-2);x<=Math.min(W-1,b.x+b.w+1);x++){
       var id=get(x,y);if(buildOwned(x,y)&&(buildingBlock(id)||[FENCE,DOOR,WINDOW].includes(id)))members.push(idx(x,y));
     }
@@ -2006,6 +2081,8 @@ function validConversation(value, p) {
     celebrate((b.x+b.w/2)*TILE,y,true,true);
   }
   function buildCompletion(r) {
+    // A second nearby piece must not replace the Show finale being read.
+    if(ambient&&ambient.build&&['build_show','build_revisit'].includes(ambient.build.event)&&ambient.build.praise)return;
     var b=r.building;
     b.closed=true;b.feedbackMembers=buildFeedbackMembers(r).slice();buildSession.closed++;buildSession.completionAt=chatClock;
     buildFeedback(BUILD_LINES[0]+' '+BUILD_LINES[b.kind==='free'?38:25],b.kind==='free'?'build_free':'build_closed');
@@ -2070,10 +2147,10 @@ function validConversation(value, p) {
     if(d.stage==='invite' && ['build_show','build_revisit'].includes(d.event)) {
       resetBuildDay();
       if(showsToday()>=SHOW_DAILY_MAX){closeAmbient();showToast('No more shows today!',2);return;}
-      // The child may have finished a roof while an earlier free invitation waited.
+      // Keep a live invited instance; otherwise choose the current nearby work.
       if(buildDirty)detectBuilds();else if(buildClusterDirty)scanFreeBuilds();
-      var target=manualShowTarget();
-      if(!target){closeAmbient();showToast('Build 2 blocks first!',2);return;}
+      var target=buildRegions.find(function(r){return r.building===d.building&&nearBuild(r.building);})||manualShowTarget();
+      if(!target){closeAmbient();showToast('Place a building or 2 blocks first!',2);return;}
       if(target.building!==d.building){
         d.building.invited=false;d.building=target.building;d.key=d.building.kind==='house'?'house':'fence';
       }
@@ -2140,7 +2217,7 @@ function validConversation(value, p) {
     if(['wood','planks','stick','stone'].includes(key))pointBuildMaterial(key);
     // Name the selected material that actually ran out, even if another tool
     // still has stock. A partial four-block roof also needs a clear response.
-    var text=material==='house' && (inv.house||0)>0 ? 'A roof needs 4 House blocks.' : 'No more '+WORD[material][0].toLowerCase()+'!';
+    var text=material==='house' && (inv.house||0)>0 ? 'A roof needs 4 roof blocks.' : 'No more '+WORD[material][0].toLowerCase()+'!';
     buildFeedback(text,'build_short');
   }
   function showsToday() { return (buildChat.shows||0)+(buildChat.manualShows||0); }
@@ -2151,6 +2228,7 @@ function validConversation(value, p) {
   function nearBuild(b) { return Math.abs((b.x+b.w/2)*TILE-player.x)<14*TILE || bboxOnScreen(b); }
   function liveOwnedNear() {
     var seen=new Set();
+    buildObjects.filter(nearBuild).forEach(function(b){craftableCells(b).forEach(function(at){seen.add(at);});});
     function add(at){var x=at%W,y=Math.floor(at/W);if(buildOwned(x,y)&&(buildingBlock(cells[at])||[FENCE,DOOR,WINDOW].includes(cells[at]))&&Math.abs((x+.5)*TILE-player.x)<=14*TILE&&Math.abs((y+.5)*TILE-player.y)<=10*TILE)seen.add(at);}
     buildClusters.forEach(function(r){r.members.forEach(add);});
     buildRegions.forEach(function(r){var b=r.building;for(var y=b.y-1;y<=b.y+b.h;y++)for(var x=b.x-1;x<=b.x+b.w;x++)if(x>=0&&x<W&&y>=0&&y<H)add(idx(x,y));});
@@ -2173,7 +2251,7 @@ function validConversation(value, p) {
   function manualShowTarget() {
     var live=liveOwnedNear(),set=new Set(live);
     function distance(r){var b=r.building;return Math.hypot((b.x+b.w/2)*TILE-player.x,(b.y+b.h/2)*TILE-player.y);}
-    var regions=buildRegions.filter(function(r){return (r.members||[]).filter(function(at){return set.has(at);}).length>=2;}).sort(function(a,b){return distance(a)-distance(b);});
+    var regions=buildRegions.filter(function(r){return (r.members||[]).filter(function(at){return set.has(at);}).length>=2;}).sort(function(a,b){var doneA=!!(a.building.shown||a.building.autoOffered),doneB=!!(b.building.shown||b.building.autoOffered);return Number(doneA)-Number(doneB)||Number(b.building.id===buildSession.lastObjectId)-Number(a.building.id===buildSession.lastObjectId)||distance(a)-distance(b);});
     if(regions.length)return regions[0];
     var clusters=buildClusters.filter(function(r){return r.members.filter(function(at){return set.has(at);}).length>=2;}).sort(function(a,b){return b.members.length-a.members.length||distance(a)-distance(b);});
     if(clusters.length)return clusters[0];
@@ -2189,12 +2267,12 @@ function validConversation(value, p) {
     if(buildDirty)detectBuilds();else if(buildClusterDirty)scanFreeBuilds();
     var state=showButtonState();
     if(state==='spent'){document.getElementById('toast').style.visibility='';showToast('No more shows today!',2);return;}
-    if(state==='few'){document.getElementById('toast').style.visibility='';showToast('Build 2 blocks first!',2);return;}
-    if(state==='done'){document.getElementById('toast').style.visibility='';showToast('Add 1 more block, then Show!',2);return;}
+    if(state==='few'){document.getElementById('toast').style.visibility='';showToast('Place a building or 2 blocks first!',2);return;}
+    if(state==='done'){document.getElementById('toast').style.visibility='';showToast('Add 1 building or block, then Show!',2);return;}
     if(state==='busy'||manualShowPending)return;
     // Repeated toolbar taps keep the same invitation and spend no extra slot.
     if(ambient&&ambient.build&&ambient.build.event==='build_show'&&!ambient.build.praise)return;
-    var r=manualShowTarget();if(!r){showToast('Build 2 blocks first!',2);return;}
+    var r=manualShowTarget();if(!r){showToast('Place a building or 2 blocks first!',2);return;}
     seek=null;var b=r.building,delay=0,token={};manualShowPending=token;
     if(!b.closed){buildCompletion(r);delay=1500;}
     setTimeout(function(){if(manualShowPending!==token)return;manualShowPending=null;if(showButtonState()==='ready')startShow(r,'manual');},delay);
@@ -2205,7 +2283,7 @@ function validConversation(value, p) {
     updateShowButton();
   }
   function autoShowCandidate() {
-    return buildRegions.concat(buildClusters.filter(function(r){return r.ready;})).find(function(r){var b=r.building;return b.closed&&!b.invited&&!b.autoOffered&&!b.shown&&nearBuild(b);});
+    return buildRegions.concat(buildClusters.filter(function(r){return r.ready;})).sort(function(a,b){return Number(b.building.id===buildSession.lastObjectId)-Number(a.building.id===buildSession.lastObjectId);}).find(function(r){var b=r.building;return b.closed&&!b.invited&&!b.autoOffered&&!b.shown&&nearBuild(b);});
   }
   function inviteBuildShow(manual) {
     if(manual){requestManualShow('buddy');return;}
@@ -2283,7 +2361,7 @@ function validConversation(value, p) {
       if(b.roofed && inside && b.w>=2 && b.h>=2){r.roomTime=(r.roomTime||0)+dt;if(r.roomTime>=1.5&&!r.roomEntered){r.roomEntered=true;recognizeBuildWord('room','made');}}
       else {r.roomTime=0;r.roomEntered=false;}
       if(!quiet || buildShowActive())return;
-      if(b.roofed&&!buildWords.roof)recognizeBuildWord('roof','built');
+      if(!b.item&&b.roofed&&!buildWords.roof)recognizeBuildWord('roof','built');
       if(!b.closed&&(r.members||[]).some(function(at){return placedThisRun.has(at);}))buildCompletion(r);
       if(b.roofed&&!b.roofPraise&&buildWords.roof&&!buildWordPending.roof){b.roofPraise=true;queueBuild('build_roof',{});}
       animals.filter(function(a){return a.tamed&&['dog','cat'].includes(a.type);}).forEach(function(a){
@@ -2319,16 +2397,47 @@ function validConversation(value, p) {
     el.textContent=lines.concat(buildClicks).join('\n');
   }
   function drawBuildHover(g) {
-    if(!buildHover)return;var r=resolveBuildTarget(buildHover.x,buildHover.y,buildHover.fy);
+    if(!buildHover)return;var r=resolveBuildTarget(buildHover.x,buildHover.y,buildHover.fy);if(r.reason==='stock')return;
     g.save();g.strokeStyle=r.ok?'#178a42':'#d93232';g.lineWidth=r.ok?2.5:1.5;
-    if(r.ok&&buildTool!=='remove'){g.globalAlpha=.3;for(var i=0;i<r.w;i++)g.drawImage(spr(BLOCK_OF[buildMaterial()],0),(r.x+i)*TILE,r.y*TILE,TILE,TILE);g.globalAlpha=1;}
-    g.strokeRect(r.x*TILE+1,r.y*TILE+1,r.w*TILE-2,TILE-2);g.restore();
+    if(CRAFTABLES[buildTool]&&r.ok){g.globalAlpha=.45;g.drawImage(craftableSprite(newCraftable(buildTool)),r.x*TILE,r.y*TILE,r.w*TILE,r.h*TILE);g.globalAlpha=1;}
+    else if(r.ok&&buildTool!=='remove'){g.globalAlpha=.3;for(var i=0;i<r.w;i++)g.drawImage(spr(BLOCK_OF[buildMaterial()],0),(r.x+i)*TILE,r.y*TILE,TILE,TILE);g.globalAlpha=1;}
+    g.strokeRect(r.x*TILE+1,r.y*TILE+1,r.w*TILE-2,(r.h||1)*TILE-2);g.restore();
+  }
+  // Celebration ribbons stay bright above the building glow and night tint.
+  function drawParticles(ctx,building) {
+    var pi;
+    for (pi = parts.length - 1; pi >= 0; pi--) {
+      var p = parts[pi];
+      if(!!p.buildCelebration!==building)continue;
+      var a = 1 - p.age / p.life;
+      ctx.globalAlpha = Math.max(0, a);
+      ctx.fillStyle = p.color;
+      if (p.heart) {
+        ctx.beginPath();
+        ctx.moveTo(p.x, p.y);
+        ctx.bezierCurveTo(p.x - 6, p.y - 8, p.x + 6, p.y - 8, p.x, p.y);
+        ctx.arc(p.x - 2.2, p.y - 3, 2.4, 0, 6.3);
+        ctx.arc(p.x + 2.2, p.y - 3, 2.4, 0, 6.3);
+        ctx.fill();
+      } else if (p.star || p.confetti) {
+        ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.still ? 0 : p.age * 3);
+        if (p.star) {
+          ctx.beginPath();
+          for (var si = 0; si < 10; si++) { var sr = si % 2 ? p.s * 0.45 : p.s, sa = si * Math.PI / 5 - Math.PI / 2; ctx.lineTo(Math.cos(sa) * sr, Math.sin(sa) * sr); }
+          ctx.closePath(); ctx.fill();
+        } else ctx.fillRect(-p.s / 2, -p.s / 2, p.s, p.s * 0.5);
+        ctx.restore();
+      } else {
+        ctx.fillRect(p.x, p.y, p.s, p.s);
+      }
+      ctx.globalAlpha = 1;
+    }
   }
   function drawBuildOverlay(g) {
-    buildClusters.forEach(function(r){
-      var b=r.building;if(!r.near||b.invited||!bboxOnScreen(b)||(!buildMode&&!r.ready))return;
+    buildRegions.concat(buildClusters).forEach(function(r){
+      var b=r.building,ready=b.item?!b.shown&&!b.autoOffered:r.ready;if(!r.near||b.invited||!bboxOnScreen(b)||(!buildMode&&!ready))return;
       var x=b.x*TILE-3,y=b.y*TILE-3,w=b.w*TILE+6,h=b.h*TILE+6;g.save();
-      if(r.ready){
+      if(ready){
         g.strokeStyle='#7a4a00';g.lineWidth=5;g.globalAlpha=.35;g.strokeRect(x,y,w,h);
         g.globalAlpha=reducedMotion?.9:.875+.125*Math.sin(chatClock*4*Math.PI);g.fillStyle='rgba(255,214,90,.16)';g.fillRect(x,y,w,h);
         g.strokeStyle='#ffc23d';g.lineWidth=3;g.shadowColor='#ffd86b';g.shadowBlur=14;
@@ -2336,7 +2445,7 @@ function validConversation(value, p) {
       g.strokeRect(x,y,w,h);g.restore();
     });
     var flash=buildSession.flash;
-    if(flash&&chatClock<flash.until){var b=flash.building;g.save();g.fillStyle='rgba(255,236,150,.35)';g.strokeStyle='#ffc23d';g.lineWidth=3;g.fillRect(b.x*TILE-4,b.y*TILE-4,b.w*TILE+8,b.h*TILE+8);g.strokeRect(b.x*TILE-4,b.y*TILE-4,b.w*TILE+8,b.h*TILE+8);g.restore();}
+    if(flash&&chatClock<flash.until){var b=flash.building;g.save();g.fillStyle=b.item?'rgba(255,236,150,.08)':'rgba(255,236,150,.35)';g.strokeStyle='#ffc23d';g.lineWidth=3;g.fillRect(b.x*TILE-4,b.y*TILE-4,b.w*TILE+8,b.h*TILE+8);g.strokeRect(b.x*TILE-4,b.y*TILE-4,b.w*TILE+8,b.h*TILE+8);g.restore();}
     var pulse=buildSession.pulse;
     if(pulse&&chatClock<pulse.until){g.save();g.globalAlpha=Math.min(1,(pulse.until-chatClock)/1.2);g.fillStyle='#ffffff88';g.strokeStyle='#ffc23d';g.lineWidth=3;g.fillRect(pulse.x*TILE,pulse.y*TILE,pulse.w*TILE,TILE);g.strokeRect(pulse.x*TILE,pulse.y*TILE,pulse.w*TILE,TILE);g.restore();}
     var hint=buildSession.blockHint;
@@ -2894,6 +3003,7 @@ function validConversation(value, p) {
     return k;
   }
   function learn(key) {
+    key=key==='houseKit'?'house':key==='pen'?'fence':key;
     if (!WORD[key]) return;
     if (learned.indexOf(key) < 0) learned.push(key);
   }
@@ -3009,6 +3119,7 @@ function validConversation(value, p) {
   function tryPlace(tx, ty) {
     var key = selectedKey();
     if (!key) return;
+    if(CRAFTABLES[key]){var prior=buildTool;buildTool=key;buildTap(tx,ty,0);if(!buildMode)buildTool=prior;return;}
     if (key !== 'seed' && key !== 'boat' && !BLOCK_OF[key]) { showWord(key); return; }
     if (!placementReach(tx,ty)) { placementFailure(tx,ty,'reach'); return; }
     if (!placementSight(tx,ty)) { placementFailure(tx,ty,'sight',sightBlock); return; }
@@ -3017,7 +3128,7 @@ function validConversation(value, p) {
       placeBoat(tx, ty);
       return;
     }
-    if (get(tx,ty)!==AIR || overlapsPlayer(tx,ty)) { placementFailure(tx,ty,'occupied'); return; }
+    if (craftableAt(tx,ty) || get(tx,ty)!==AIR || overlapsPlayer(tx,ty)) { placementFailure(tx,ty,'occupied'); return; }
     if(cellHasAnimal(tx,ty)){placementFailure(tx,ty,'animal');return;}
     if (key === 'seed') {
       var below = get(tx, ty + 1);
@@ -3245,6 +3356,7 @@ function validConversation(value, p) {
     return x > player.x ? 1 : -1;
   }
   function tapWorld(wx, wy, sx, sy, fy) {
+    if(CRAFTABLES[selectedKey()]){var prior=buildTool;buildTool=selectedKey();buildTap(Math.floor(wx/TILE),Math.floor(wy/TILE),fy);if(!buildMode)buildTool=prior;return;}
     if (boat) {
       var bdx = wx - boat.x, bdy = wy - (boat.y - 8);
       if (bdx * bdx + bdy * bdy < 46 * 46) {
@@ -3485,7 +3597,8 @@ function validConversation(value, p) {
   function paintIcon(canvasEl, key, phase) {
     var g = canvasEl.getContext('2d'), S = canvasEl.width;
     g.clearRect(0, 0, S, S);
-    if (ANIMALS[key]) drawAnimalIcon(g, key, S, phase);
+    if(CRAFTABLES[key]){var b=newCraftable(key),art=craftableSprite(b),scale=S/Math.max(art.width,art.height);g.imageSmoothingEnabled=false;g.drawImage(art,0,(S-art.height*scale)/2,art.width*scale,art.height*scale);}
+    else if (ANIMALS[key]) drawAnimalIcon(g, key, S, phase);
     else specialIcon(g, key, S, phase);
   }
   var artFrameAt = 0;
@@ -3950,6 +4063,7 @@ function validConversation(value, p) {
 
     ctx.setTransform(dpr * z, 0, 0, dpr * z, -drawCamX * dpr * z, -drawCamY * dpr * z);
     drawWorld(ctx, sec);
+    buildObjects.forEach(function(b){if(bboxOnScreen(b))ctx.drawImage(craftableSprite(b),b.x*TILE,b.y*TILE,b.w*TILE,b.h*TILE);});
     var ai;
     for (ai = 0; ai < animals.length; ai++) {
       var an = animals[ai];
@@ -3974,32 +4088,7 @@ function validConversation(value, p) {
       ctx.save(); ctx.strokeStyle = '#ffdc69'; ctx.lineWidth = 3 / z;
       ctx.beginPath(); ctx.ellipse(targetX, targetY - 2, 22, 7, 0, 0, Math.PI * 2); ctx.stroke(); ctx.restore();
     }
-    var pi;
-    for (pi = parts.length - 1; pi >= 0; pi--) {
-      var p = parts[pi];
-      var a = 1 - p.age / p.life;
-      ctx.globalAlpha = Math.max(0, a);
-      ctx.fillStyle = p.color;
-      if (p.heart) {
-        ctx.beginPath();
-        ctx.moveTo(p.x, p.y);
-        ctx.bezierCurveTo(p.x - 6, p.y - 8, p.x + 6, p.y - 8, p.x, p.y);
-        ctx.arc(p.x - 2.2, p.y - 3, 2.4, 0, 6.3);
-        ctx.arc(p.x + 2.2, p.y - 3, 2.4, 0, 6.3);
-        ctx.fill();
-      } else if (p.star || p.confetti) {
-        ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.still ? 0 : p.age * 3);
-        if (p.star) {
-          ctx.beginPath();
-          for (var si = 0; si < 10; si++) { var sr = si % 2 ? p.s * 0.45 : p.s, sa = si * Math.PI / 5 - Math.PI / 2; ctx.lineTo(Math.cos(sa) * sr, Math.sin(sa) * sr); }
-          ctx.closePath(); ctx.fill();
-        } else ctx.fillRect(-p.s / 2, -p.s / 2, p.s, p.s * 0.5);
-        ctx.restore();
-      } else {
-        ctx.fillRect(p.x, p.y, p.s, p.s);
-      }
-      ctx.globalAlpha = 1;
-    }
+    drawParticles(ctx,false);
     if (boat && !riding) {
       ctx.save();
       ctx.translate(boat.x, boat.y + Math.sin(sec * 2 + 1) * 1.3);
@@ -4083,6 +4172,7 @@ function validConversation(value, p) {
     ctx.setTransform(dpr * z, 0, 0, dpr * z, -drawCamX * dpr * z, -drawCamY * dpr * z);
     drawTrail(ctx, sec);
     if (started && !panelOpen()) {drawBuildOverlay(ctx);drawHighlight(ctx);}
+    drawParticles(ctx,true);
     if (rainOn) {
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.fillStyle = 'rgba(70,110,160,0.08)';
@@ -4129,6 +4219,7 @@ function validConversation(value, p) {
   }
 
   function showWord(key) {
+    key=key==='houseKit'?'house':key==='pen'?'fence':key;
     var w = WORD[key];
     if (!w) return;
     learn(key);
@@ -4472,7 +4563,7 @@ function validConversation(value, p) {
         var b = document.createElement('button');
         b.type = 'button';
         b.className = 'slot' + (i === sel ? ' on' : '');
-        b.setAttribute('aria-label', WORD[key][0]);
+        b.setAttribute('aria-label', key==='house'?'Roof blocks':WORD[key][0]);
         var cv = document.createElement('canvas');
         cv.width = 128; cv.height = 128;
         paintIcon(cv, key);
@@ -4482,7 +4573,7 @@ function validConversation(value, p) {
         tapButton(b, function () {
           sel = i;
           if (buildSessionBusy()) buildAction('select');
-          if (buildMode && BLOCK_OF[key]) { buildTool = key; renderBuildTools(); }
+          if (buildMode && (BLOCK_OF[key]||CRAFTABLES[key])) { buildTool = key; renderBuildTools(); }
           invSig = '';
           showWord(key);
         });
@@ -4492,12 +4583,12 @@ function validConversation(value, p) {
       invSig = sig;
     }
     var key = hotbar[sel];
-    document.getElementById('held-en').textContent = key && WORD[key] ? WORD[key][0] : 'Tap a block';
+    document.getElementById('held-en').textContent = key && WORD[key] ? (key==='house'?'Roof blocks':WORD[key][0]) : 'Tap a block';
   }
   function canCraft(r) {
     var k;
     for (k in r.need) if ((inv[k] || 0) < r.need[k]) return false;
-    return true;
+    return (inv[r.out]||0)+r.n<=99;
   }
   function renderRecipes() {
     var root = document.getElementById('recipes');
@@ -4531,7 +4622,7 @@ function validConversation(value, p) {
       ocv.width = 128; ocv.height = 128;
       paintIcon(ocv, r.out);
       var nm = document.createElement('b');
-      nm.textContent = WORD[r.out][0] + (r.n > 1 ? ' ×' + r.n : '');
+      nm.textContent = (r.label || WORD[r.out][0]) + (r.n > 1 ? ' ×' + r.n : '');
       out.appendChild(ocv); out.appendChild(nm);
       tapButton(out, function () { showWord(r.out); });
       var btn = document.createElement('button');
@@ -4575,6 +4666,7 @@ function validConversation(value, p) {
     });
     if (!quiz) { progress.crafted[r.out] = 1; rememberEvent('made', r.out); }
     addItem(r.out, r.n, true);
+    if(CRAFTABLES[r.out]){craftedObjects.push(newCraftable(r.out));progress.crafted[r.out==='houseKit'?'house':'fence']=1;}
     if (r.out === 'window') recognizeBuildWord('window', 'made');
     else showWord(r.out);
     chime();
@@ -4726,7 +4818,7 @@ function validConversation(value, p) {
     for (i = 0; i < cells.length; i++) if (cells[i] !== base[i]) mods.push(i, cells[i]);
     var data = {
       v: 1, seed: seed, time: timeOfDay,
-      builds: builds, build_chat: buildChat, build_words: buildWords, build_level: buildLevel,
+      build_objects: buildObjects, crafted_objects: craftedObjects, builds: builds, build_chat: buildChat, build_words: buildWords, build_level: buildLevel,
       px: player.x, py: player.y, dir: player.dir,
       mods: mods, inv: inv, hotbar: hotbar, sel: sel,
       words: learned, stars: quizStars, progress: progress, intros: intros, zh: zhOn,
@@ -5047,7 +5139,6 @@ function validConversation(value, p) {
         buildTap(Math.floor(w.x / TILE), Math.floor(w.y / TILE), w.y/TILE-Math.floor(w.y/TILE));
         return;
       }
-      if (ambient && ambient.build && ambient.build.stage === 'invite') { showBuildQuestion(ambient.build); return; }
       if (e.button === 2) {
         var tx = Math.floor(w.x / TILE), ty = Math.floor(w.y / TILE);
         lock = { tx: tx, ty: ty }; lockAge = 0;

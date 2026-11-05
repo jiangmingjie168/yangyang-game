@@ -1,0 +1,50 @@
+[
+  {
+    "suite": "build-v1-craftable-compat",
+    "exit": 0,
+    "seconds": 24.9,
+    "log": "screens/build-v1-craftable-regression/build-v1-craftable-compat.log"
+  },
+  {
+    "suite": "build-v1-fix3",
+    "exit": 0,
+    "seconds": 130.1,
+    "log": "screens/build-v1-craftable-regression/build-v1-fix3.log"
+  },
+  {
+    "suite": "build-placement-fix3",
+    "exit": 0,
+    "seconds": 0,
+    "log": "screens/build-v1-craftable-regression/build-placement-fix3.log"
+  },
+  {
+    "suite": "chinese-cleanup",
+    "exit": 0,
+    "seconds": 5,
+    "log": "screens/build-v1-craftable-regression/chinese-cleanup.log"
+  },
+  {
+    "suite": "natural-pointer-v4r",
+    "exit": 0,
+    "seconds": 18.5,
+    "log": "screens/build-v1-craftable-regression/natural-pointer-v4r.log"
+  },
+  {
+    "suite": "world-v2",
+    "exit": 0,
+    "seconds": 19.1,
+    "log": "screens/build-v1-craftable-regression/world-v2.log"
+  },
+  {
+    "suite": "server",
+    "exit": 0,
+    "seconds": 1.1,
+    "log": "screens/build-v1-craftable-regression/server.log"
+  },
+  {
+    "suite": "memory-chat",
+    "exit": 0,
+    "seconds": 20.1,
+    "log": "screens/build-v1-craftable-regression/memory-chat.log"
+  }
+]

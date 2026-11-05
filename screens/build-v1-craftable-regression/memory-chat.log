@@ -1,0 +1,9 @@
+PASS first visit name flow allows movement; letter taps + keyboard save one name; return greet uses it
+PASS 30-second default preserves typed names; letters, typing and mic reset it; 10-second hint and editable ASR require confirmation
+PASS preference chips save whitelist values and coach; unanswered slots never re-ask; chat stays nonblocking and caps at five across reload
+PASS parent preference reset persists without clearing name, progress, speech records or daily limits
+PASS local calendar resets counters; weather matches rain, waits at least 60s after start and persists once per day
+PASS noun-only recasts label fishing rod; tier-1 mic works eight seconds after TTS, closes at nine; gated Buddy waves silently
+PASS valid brain response, rejected response, timeout and fully offline file templates remain usable
+PASS all three mics glow during synthetic recognition and clear on result/end/error/timeout/close/start failure; reduced motion stays static
+PASS portrait SVG buttons are visible and touch clickable; 60-second idle triggers small talk; client/server phrase slots match
