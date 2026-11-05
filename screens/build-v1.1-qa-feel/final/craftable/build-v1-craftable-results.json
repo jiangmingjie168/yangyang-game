@@ -1,0 +1,1849 @@
+{
+  "sha256": "0210373a05563464fb0982247aeac578bf3003e94266967d2f44c18fb2b99a82",
+  "results": [
+    {
+      "case": "C-desktop",
+      "status": "PASS"
+    },
+    {
+      "case": "P-desktop",
+      "status": "PASS"
+    },
+    {
+      "case": "F-desktop",
+      "status": "PASS"
+    },
+    {
+      "case": "Q-desktop",
+      "status": "PASS"
+    },
+    {
+      "case": "R-desktop",
+      "status": "PASS"
+    },
+    {
+      "case": "I-desktop",
+      "status": "PASS",
+      "invite_ms": 29653
+    },
+    {
+      "case": "V-desktop",
+      "status": "PASS"
+    },
+    {
+      "case": "T2-desktop",
+      "status": "PASS"
+    },
+    {
+      "case": "T3-desktop",
+      "status": "PASS"
+    },
+    {
+      "case": "N-desktop",
+      "status": "PASS"
+    },
+    {
+      "case": "C-mobile",
+      "status": "PASS"
+    },
+    {
+      "case": "P-mobile",
+      "status": "PASS"
+    },
+    {
+      "case": "F-mobile",
+      "status": "PASS"
+    },
+    {
+      "case": "Q-mobile",
+      "status": "PASS"
+    },
+    {
+      "case": "R-mobile",
+      "status": "PASS"
+    },
+    {
+      "case": "I-mobile",
+      "status": "PASS",
+      "invite_ms": 29507
+    },
+    {
+      "case": "V-mobile",
+      "status": "PASS"
+    },
+    {
+      "case": "T2-mobile",
+      "status": "PASS"
+    },
+    {
+      "case": "T3-mobile",
+      "status": "PASS"
+    },
+    {
+      "case": "N-mobile",
+      "status": "PASS"
+    }
+  ],
+  "frames": [
+    {
+      "case": "C-desktop",
+      "file": "build-v1-craftable-C-desktop-recipe.png",
+      "label": "recipe",
+      "ms": 1557,
+      "line": "",
+      "options": [],
+      "debug": "quiet: blockers=[panel]\nidle 101.3s / select 101.3s / still 0.8s\nsession active=false / placed this run=0\ncelebrate particles=0\nshows 0/4 (auto 0, manual 0; accepted Shows)"
+    },
+    {
+      "case": "C-desktop",
+      "file": "build-v1-craftable-C-desktop-invalid-no-charge.png",
+      "label": "invalid-no-charge",
+      "ms": 2198,
+      "line": "",
+      "options": [],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.1s / select 0.3s / still 1.3s\nsession active=true / placed this run=0\ncelebrate particles=0\nshows 0/4 (auto 0, manual 0; accepted Shows)\nt=1.7 click(474,478) -> cell(77,12) -> fail:ground\nt=1.8 click(824,528) -> cell(84,12) -> fail:tree"
+    },
+    {
+      "case": "C-desktop",
+      "file": "build-v1-craftable-C-desktop-placed-celebration.png",
+      "label": "placed-celebration",
+      "ms": 2542,
+      "confettiPixels": 682,
+      "line": "Wow! It's all closed!",
+      "options": [],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.2s / select 0.6s / still 1.5s\nsession active=true / placed this run=9\ncelebrate particles=30\nhouse interior=3x3 boundary=9 roofed=true\nshows 0/4 (auto 0, manual 0; accepted Shows)\nt=1.7 click(474,478) -> cell(77,12) -> fail:ground\nt=1.8 click(824,528) -> cell(84,12) -> fail:tree\nt=1.9 click(474,528) -> cell(77,13) -> placed whole house"
+    },
+    {
+      "case": "C-desktop",
+      "file": "build-v1-craftable-C-desktop-opening-invite.png",
+      "label": "opening-invite",
+      "ms": 2757,
+      "line": "Wow! Show me!",
+      "options": [
+        "☝ Show"
+      ],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.4s / select 0.8s / still 1.8s\nsession active=true / placed this run=9\ncelebrate particles=30\nhouse interior=3x3 boundary=9 roofed=true\nshows 0/4 (auto 0, manual 0; accepted Shows)\nt=1.7 click(474,478) -> cell(77,12) -> fail:ground\nt=1.8 click(824,528) -> cell(84,12) -> fail:tree\nt=1.9 click(474,528) -> cell(77,13) -> placed whole house"
+    },
+    {
+      "case": "C-desktop",
+      "file": "build-v1-craftable-C-desktop-house-question-options.png",
+      "label": "house-question-options",
+      "ms": 3091,
+      "line": "What is this?",
+      "options": [
+        "House",
+        "Fence"
+      ],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.7s / select 1.1s / still 2.1s\nsession active=true / placed this run=9\ncelebrate particles=30\nhouse interior=3x3 boundary=9 roofed=true\nshows 0/4 (auto 0, manual 0; accepted Shows)\nt=1.7 click(474,478) -> cell(77,12) -> fail:ground\nt=1.8 click(824,528) -> cell(84,12) -> fail:tree\nt=1.9 click(474,528) -> cell(77,13) -> placed whole house"
+    },
+    {
+      "case": "C-desktop",
+      "file": "build-v1-craftable-C-desktop-house-finale-confetti.png",
+      "label": "house-finale-confetti",
+      "ms": 3454,
+      "confettiPixels": 854,
+      "line": "You built a house! Wow! It's so big!",
+      "options": [],
+      "debug": "quiet: blockers=[recent,select]\nidle 1.2s / select 1.6s / still 2.6s\nsession active=true / placed this run=9\ncelebrate particles=60\nhouse interior=3x3 boundary=9 roofed=true\nshows 1/4 (auto 0, manual 1; accepted Shows)\nt=1.7 click(474,478) -> cell(77,12) -> fail:ground\nt=1.8 click(824,528) -> cell(84,12) -> fail:tree\nt=1.9 click(474,528) -> cell(77,13) -> placed whole house"
+    },
+    {
+      "case": "C-desktop",
+      "file": "build-v1-craftable-C-desktop-recovered-instance.png",
+      "label": "recovered-instance",
+      "ms": 4106,
+      "line": "No more house!",
+      "options": [],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.0s / select 0.1s / still 3.1s\nsession active=true / placed this run=0\ncelebrate particles=60\nshows 1/4 (auto 0, manual 1; accepted Shows)\nt=1.7 click(474,478) -> cell(77,12) -> fail:ground\nt=1.8 click(824,528) -> cell(84,12) -> fail:tree\nt=1.9 click(474,528) -> cell(77,13) -> placed whole house\nt=3.4 click(424,528) -> cell(76,13) -> fail:stock\nt=3.7 click(524,478) -> cell(77,13) -> recovered whole house"
+    },
+    {
+      "case": "C-desktop",
+      "file": "build-v1-craftable-C-desktop-replaced-after-reload.png",
+      "label": "replaced-after-reload",
+      "ms": 5324,
+      "line": "Wow! It's all closed!",
+      "options": [],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.0s / select 0.2s / still 1.0s\nsession active=true / placed this run=9\ncelebrate particles=30\nhouse interior=3x3 boundary=9 roofed=true\nshows 1/4 (auto 0, manual 1; accepted Shows)\nt=1.0 click(474,528) -> cell(77,13) -> placed whole house"
+    },
+    {
+      "case": "C-desktop",
+      "file": "build-v1-craftable-C-desktop-placed-persists.png",
+      "label": "placed-persists",
+      "ms": 6360,
+      "line": "Wow! Show me!",
+      "options": [
+        "☝ Show"
+      ],
+      "debug": "quiet: blockers=[recent]\nidle 0.2s / select 101.0s / still 0.9s\nsession active=true / placed this run=0\ncelebrate particles=0\nhouse interior=3x3 boundary=9 roofed=true\nshows 1/4 (auto 0, manual 1; accepted Shows)"
+    },
+    {
+      "case": "P-desktop",
+      "file": "build-v1-craftable-P-desktop-recipe.png",
+      "label": "recipe",
+      "ms": 2087,
+      "line": "",
+      "options": [],
+      "debug": "quiet: blockers=[panel]\nidle 101.8s / select 101.8s / still 1.4s\nsession active=false / placed this run=0\ncelebrate particles=0\nshows 0/4 (auto 0, manual 0; accepted Shows)"
+    },
+    {
+      "case": "P-desktop",
+      "file": "build-v1-craftable-P-desktop-invalid-no-charge.png",
+      "label": "invalid-no-charge",
+      "ms": 2738,
+      "line": "",
+      "options": [],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.2s / select 0.4s / still 2.1s\nsession active=true / placed this run=0\ncelebrate particles=0\nshows 0/4 (auto 0, manual 0; accepted Shows)\nt=2.3 click(474,478) -> cell(77,13) -> fail:ground\nt=2.4 click(824,528) -> cell(84,13) -> fail:tree"
+    },
+    {
+      "case": "P-desktop",
+      "file": "build-v1-craftable-P-desktop-placed-celebration.png",
+      "label": "placed-celebration",
+      "ms": 3111,
+      "confettiPixels": 546,
+      "line": "Wow! It's all closed!",
+      "options": [],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.2s / select 0.7s / still 2.3s\nsession active=true / placed this run=8\ncelebrate particles=30\npen interior=4x2 boundary=8 roofed=false\nshows 0/4 (auto 0, manual 0; accepted Shows)\nt=2.3 click(474,478) -> cell(77,13) -> fail:ground\nt=2.4 click(824,528) -> cell(84,13) -> fail:tree\nt=2.6 click(474,528) -> cell(77,14) -> placed whole pen"
+    },
+    {
+      "case": "P-desktop",
+      "file": "build-v1-craftable-P-desktop-opening-invite.png",
+      "label": "opening-invite",
+      "ms": 3320,
+      "line": "Wow! Show me!",
+      "options": [
+        "☝ Show"
+      ],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.5s / select 0.9s / still 2.6s\nsession active=true / placed this run=8\ncelebrate particles=30\npen interior=4x2 boundary=8 roofed=false\nshows 0/4 (auto 0, manual 0; accepted Shows)\nt=2.3 click(474,478) -> cell(77,13) -> fail:ground\nt=2.4 click(824,528) -> cell(84,13) -> fail:tree\nt=2.6 click(474,528) -> cell(77,14) -> placed whole pen"
+    },
+    {
+      "case": "P-desktop",
+      "file": "build-v1-craftable-P-desktop-pen-question-options.png",
+      "label": "pen-question-options",
+      "ms": 3636,
+      "line": "What is this?",
+      "options": [
+        "House",
+        "Fence"
+      ],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.8s / select 1.2s / still 2.9s\nsession active=true / placed this run=8\ncelebrate particles=30\npen interior=4x2 boundary=8 roofed=false\nshows 1/4 (auto 0, manual 1; accepted Shows)\nt=2.3 click(474,478) -> cell(77,13) -> fail:ground\nt=2.4 click(824,528) -> cell(84,13) -> fail:tree\nt=2.6 click(474,528) -> cell(77,14) -> placed whole pen"
+    },
+    {
+      "case": "P-desktop",
+      "file": "build-v1-craftable-P-desktop-pen-finale-confetti.png",
+      "label": "pen-finale-confetti",
+      "ms": 3975,
+      "confettiPixels": 1133,
+      "line": "You built a fence! Wow! It's so big!",
+      "options": [],
+      "debug": "quiet: blockers=[recent,select]\nidle 1.0s / select 1.5s / still 3.1s\nsession active=true / placed this run=8\ncelebrate particles=60\npen interior=4x2 boundary=8 roofed=false\nshows 1/4 (auto 0, manual 1; accepted Shows)\nt=2.3 click(474,478) -> cell(77,13) -> fail:ground\nt=2.4 click(824,528) -> cell(84,13) -> fail:tree\nt=2.6 click(474,528) -> cell(77,14) -> placed whole pen"
+    },
+    {
+      "case": "P-desktop",
+      "file": "build-v1-craftable-P-desktop-recovered-instance.png",
+      "label": "recovered-instance",
+      "ms": 4603,
+      "line": "No more pen!",
+      "options": [],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.2s / select 0.3s / still 3.9s\nsession active=true / placed this run=0\ncelebrate particles=60\nshows 1/4 (auto 0, manual 1; accepted Shows)\nt=2.3 click(474,478) -> cell(77,13) -> fail:ground\nt=2.4 click(824,528) -> cell(84,13) -> fail:tree\nt=2.6 click(474,528) -> cell(77,14) -> placed whole pen\nt=4.1 click(424,528) -> cell(76,14) -> fail:stock\nt=4.3 click(524,478) -> cell(77,14) -> recovered whole pen"
+    },
+    {
+      "case": "P-desktop",
+      "file": "build-v1-craftable-P-desktop-replaced-after-reload.png",
+      "label": "replaced-after-reload",
+      "ms": 5838,
+      "line": "Wow! It's all closed!",
+      "options": [],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.0s / select 0.1s / still 0.9s\nsession active=true / placed this run=8\ncelebrate particles=30\npen interior=4x2 boundary=8 roofed=false\nshows 1/4 (auto 0, manual 1; accepted Shows)\nt=1.0 click(474,528) -> cell(77,14) -> placed whole pen"
+    },
+    {
+      "case": "P-desktop",
+      "file": "build-v1-craftable-P-desktop-placed-persists.png",
+      "label": "placed-persists",
+      "ms": 6863,
+      "line": "Wow! Show me!",
+      "options": [
+        "☝ Show"
+      ],
+      "debug": "quiet: OK\nidle 100.8s / select 100.8s / still 0.7s\nsession active=false / placed this run=0\ncelebrate particles=0\npen interior=4x2 boundary=8 roofed=false\nshows 1/4 (auto 0, manual 1; accepted Shows)"
+    },
+    {
+      "case": "F-desktop",
+      "file": "build-v1-craftable-F-desktop-free-celebration.png",
+      "label": "free-celebration",
+      "ms": 4091,
+      "confettiPixels": 768,
+      "line": "Wow! You made this!",
+      "options": [],
+      "debug": "quiet: OK\nidle 2.8s / select 3.0s / still 3.8s\nfree m=2 f=2 ready=true closed=true invited=false dx=-1.5t\nsession active=true / placed this run=2\ncelebrate particles=30\nshows 0/4 (auto 0, manual 0; accepted Shows)\nt=1.0 click(474,528) -> cell(77,15) -> placed fence\nt=1.1 click(524,528) -> cell(78,15) -> placed fence"
+    },
+    {
+      "case": "F-desktop",
+      "file": "build-v1-craftable-F-desktop-free-finale-confetti.png",
+      "label": "free-finale-confetti",
+      "ms": 4555,
+      "confettiPixels": 1320,
+      "line": "Wow! You made this! I like it! Good job!",
+      "options": [],
+      "debug": "quiet: OK\nidle 3.3s / select 3.5s / still 4.3s\nfree m=2 f=2 ready=true closed=true invited=false dx=-1.5t\nsession active=true / placed this run=2\ncelebrate particles=60\nshows 1/4 (auto 0, manual 1; accepted Shows)\nt=1.0 click(474,528) -> cell(77,15) -> placed fence\nt=1.1 click(524,528) -> cell(78,15) -> placed fence"
+    },
+    {
+      "case": "F-desktop",
+      "file": "build-v1-craftable-F-desktop-loose-save-retained.png",
+      "label": "loose-save-retained",
+      "ms": 8408,
+      "line": "",
+      "options": [],
+      "debug": "quiet: OK\nidle 100.8s / select 100.8s / still 0.7s\nfree m=2 f=2 ready=true closed=true invited=false dx=-1.5t\nsession active=false / placed this run=0\ncelebrate particles=0\nshows 1/4 (auto 0, manual 1; accepted Shows)"
+    },
+    {
+      "case": "Q-desktop",
+      "file": "build-v1-craftable-Q-desktop-recipe.png",
+      "label": "recipe",
+      "ms": 1318,
+      "line": "",
+      "options": [],
+      "debug": "quiet: blockers=[panel,card]\nidle 101.0s / select 101.0s / still 0.7s\nsession active=false / placed this run=0\ncelebrate particles=0\nshows 0/4 (auto 0, manual 0; accepted Shows)"
+    },
+    {
+      "case": "Q-desktop",
+      "file": "build-v1-craftable-Q-desktop-invalid-no-charge.png",
+      "label": "invalid-no-charge",
+      "ms": 1951,
+      "line": "",
+      "options": [],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.2s / select 0.4s / still 1.3s\nsession active=true / placed this run=0\ncelebrate particles=0\nshows 0/4 (auto 0, manual 0; accepted Shows)\nt=1.6 click(474,478) -> cell(77,12) -> fail:ground\nt=1.7 click(824,528) -> cell(84,12) -> fail:tree"
+    },
+    {
+      "case": "Q-desktop",
+      "file": "build-v1-craftable-Q-desktop-placed-celebration.png",
+      "label": "placed-celebration",
+      "ms": 2290,
+      "confettiPixels": 642,
+      "line": "Wow! It's all closed!",
+      "options": [],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.2s / select 0.6s / still 1.6s\nsession active=true / placed this run=9\ncelebrate particles=30\nhouse interior=3x3 boundary=9 roofed=true\nshows 0/4 (auto 0, manual 0; accepted Shows)\nt=1.6 click(474,478) -> cell(77,12) -> fail:ground\nt=1.7 click(824,528) -> cell(84,12) -> fail:tree\nt=1.8 click(474,528) -> cell(77,13) -> placed whole house"
+    },
+    {
+      "case": "Q-desktop",
+      "file": "build-v1-craftable-Q-desktop-opening-invite.png",
+      "label": "opening-invite",
+      "ms": 2493,
+      "line": "Wow! Show me!",
+      "options": [
+        "☝ Show"
+      ],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.5s / select 0.9s / still 1.8s\nsession active=true / placed this run=9\ncelebrate particles=30\nhouse interior=3x3 boundary=9 roofed=true\nshows 0/4 (auto 0, manual 0; accepted Shows)\nt=1.6 click(474,478) -> cell(77,12) -> fail:ground\nt=1.7 click(824,528) -> cell(84,12) -> fail:tree\nt=1.8 click(474,528) -> cell(77,13) -> placed whole house"
+    },
+    {
+      "case": "Q-desktop",
+      "file": "build-v1-craftable-Q-desktop-quota-1-question-options.png",
+      "label": "quota-1-question-options",
+      "ms": 2808,
+      "line": "What is this?",
+      "options": [
+        "House",
+        "Fence"
+      ],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.8s / select 1.2s / still 2.1s\nsession active=true / placed this run=9\ncelebrate particles=30\nhouse interior=3x3 boundary=9 roofed=true\nshows 1/4 (auto 0, manual 1; accepted Shows)\nt=1.6 click(474,478) -> cell(77,12) -> fail:ground\nt=1.7 click(824,528) -> cell(84,12) -> fail:tree\nt=1.8 click(474,528) -> cell(77,13) -> placed whole house"
+    },
+    {
+      "case": "Q-desktop",
+      "file": "build-v1-craftable-Q-desktop-quota-1-finale-confetti.png",
+      "label": "quota-1-finale-confetti",
+      "ms": 3162,
+      "confettiPixels": 1179,
+      "line": "You built a house! Wow! It's so big!",
+      "options": [],
+      "debug": "quiet: blockers=[recent,select]\nidle 1.0s / select 1.4s / still 2.4s\nsession active=true / placed this run=9\ncelebrate particles=60\nhouse interior=3x3 boundary=9 roofed=true\nshows 1/4 (auto 0, manual 1; accepted Shows)\nt=1.6 click(474,478) -> cell(77,12) -> fail:ground\nt=1.7 click(824,528) -> cell(84,12) -> fail:tree\nt=1.8 click(474,528) -> cell(77,13) -> placed whole house"
+    },
+    {
+      "case": "Q-desktop",
+      "file": "build-v1-craftable-Q-desktop-rearmed-0.png",
+      "label": "rearmed-0",
+      "ms": 6375,
+      "line": "Wow! It's all closed!",
+      "options": [],
+      "debug": "quiet: OK\nidle 2.9s / select 3.0s / still 5.7s\nsession active=true / placed this run=10\ncelebrate particles=30\nhouse interior=3x3 boundary=9 roofed=true\nshows 1/4 (auto 0, manual 1; accepted Shows)\nt=1.6 click(474,478) -> cell(77,12) -> fail:ground\nt=1.7 click(824,528) -> cell(84,12) -> fail:tree\nt=1.8 click(474,528) -> cell(77,13) -> placed whole house\nt=3.3 click(474,378) -> cell(77,12) -> placed planks"
+    },
+    {
+      "case": "Q-desktop",
+      "file": "build-v1-craftable-Q-desktop-quota-2-question-options.png",
+      "label": "quota-2-question-options",
+      "ms": 6690,
+      "line": "What is this?",
+      "options": [
+        "House",
+        "Fence"
+      ],
+      "debug": "quiet: OK\nidle 3.2s / select 3.3s / still 5.9s\nsession active=true / placed this run=10\ncelebrate particles=30\nhouse interior=3x3 boundary=9 roofed=true\nshows 2/4 (auto 0, manual 2; accepted Shows)\nt=1.6 click(474,478) -> cell(77,12) -> fail:ground\nt=1.7 click(824,528) -> cell(84,12) -> fail:tree\nt=1.8 click(474,528) -> cell(77,13) -> placed whole house\nt=3.3 click(474,378) -> cell(77,12) -> placed planks"
+    },
+    {
+      "case": "Q-desktop",
+      "file": "build-v1-craftable-Q-desktop-quota-2-finale-confetti.png",
+      "label": "quota-2-finale-confetti",
+      "ms": 7039,
+      "confettiPixels": 1264,
+      "line": "You built a house! Wow! It's so big!",
+      "options": [],
+      "debug": "quiet: OK\nidle 3.5s / select 3.5s / still 6.2s\nsession active=true / placed this run=10\ncelebrate particles=60\nhouse interior=3x3 boundary=9 roofed=true\nshows 2/4 (auto 0, manual 2; accepted Shows)\nt=1.6 click(474,478) -> cell(77,12) -> fail:ground\nt=1.7 click(824,528) -> cell(84,12) -> fail:tree\nt=1.8 click(474,528) -> cell(77,13) -> placed whole house\nt=3.3 click(474,378) -> cell(77,12) -> placed planks"
+    },
+    {
+      "case": "Q-desktop",
+      "file": "build-v1-craftable-Q-desktop-rearmed-1.png",
+      "label": "rearmed-1",
+      "ms": 10373,
+      "line": "Wow! It's all closed!",
+      "options": [],
+      "debug": "quiet: OK\nidle 2.9s / select 3.0s / still 9.6s\nsession active=true / placed this run=11\ncelebrate particles=30\nhouse interior=3x3 boundary=9 roofed=true\nshows 2/4 (auto 0, manual 2; accepted Shows)\nt=1.6 click(474,478) -> cell(77,12) -> fail:ground\nt=1.7 click(824,528) -> cell(84,12) -> fail:tree\nt=1.8 click(474,528) -> cell(77,13) -> placed whole house\nt=3.3 click(474,378) -> cell(77,12) -> placed planks\nt=7.3 click(524,378) -> cell(78,12) -> placed planks"
+    },
+    {
+      "case": "Q-desktop",
+      "file": "build-v1-craftable-Q-desktop-quota-3-question-options.png",
+      "label": "quota-3-question-options",
+      "ms": 10691,
+      "line": "What is this?",
+      "options": [
+        "House",
+        "Fence"
+      ],
+      "debug": "quiet: OK\nidle 3.1s / select 3.2s / still 9.9s\nsession active=true / placed this run=11\ncelebrate particles=30\nhouse interior=3x3 boundary=9 roofed=true\nshows 2/4 (auto 0, manual 2; accepted Shows)\nt=1.6 click(474,478) -> cell(77,12) -> fail:ground\nt=1.7 click(824,528) -> cell(84,12) -> fail:tree\nt=1.8 click(474,528) -> cell(77,13) -> placed whole house\nt=3.3 click(474,378) -> cell(77,12) -> placed planks\nt=7.3 click(524,378) -> cell(78,12) -> placed planks"
+    },
+    {
+      "case": "Q-desktop",
+      "file": "build-v1-craftable-Q-desktop-quota-3-finale-confetti.png",
+      "label": "quota-3-finale-confetti",
+      "ms": 11049,
+      "confettiPixels": 1147,
+      "line": "You built a house! Wow! It's so big!",
+      "options": [],
+      "debug": "quiet: OK\nidle 3.6s / select 3.8s / still 10.4s\nsession active=true / placed this run=11\ncelebrate particles=60\nhouse interior=3x3 boundary=9 roofed=true\nshows 3/4 (auto 0, manual 3; accepted Shows)\nt=1.6 click(474,478) -> cell(77,12) -> fail:ground\nt=1.7 click(824,528) -> cell(84,12) -> fail:tree\nt=1.8 click(474,528) -> cell(77,13) -> placed whole house\nt=3.3 click(474,378) -> cell(77,12) -> placed planks\nt=7.3 click(524,378) -> cell(78,12) -> placed planks"
+    },
+    {
+      "case": "Q-desktop",
+      "file": "build-v1-craftable-Q-desktop-rearmed-2.png",
+      "label": "rearmed-2",
+      "ms": 14324,
+      "line": "Wow! It's all closed!",
+      "options": [],
+      "debug": "quiet: OK\nidle 2.9s / select 3.0s / still 13.6s\nsession active=true / placed this run=12\ncelebrate particles=30\nhouse interior=3x3 boundary=9 roofed=true\nshows 3/4 (auto 0, manual 3; accepted Shows)\nt=1.6 click(474,478) -> cell(77,12) -> fail:ground\nt=1.7 click(824,528) -> cell(84,12) -> fail:tree\nt=1.8 click(474,528) -> cell(77,13) -> placed whole house\nt=3.3 click(474,378) -> cell(77,12) -> placed planks\nt=7.3 click(524,378) -> cell(78,12) -> placed planks\nt=11.2 click(574,378) -> cell(79,12) -> placed planks"
+    },
+    {
+      "case": "Q-desktop",
+      "file": "build-v1-craftable-Q-desktop-quota-4-question-options.png",
+      "label": "quota-4-question-options",
+      "ms": 14640,
+      "line": "What is this?",
+      "options": [
+        "House",
+        "Fence"
+      ],
+      "debug": "quiet: OK\nidle 3.2s / select 3.3s / still 13.9s\nsession active=true / placed this run=12\ncelebrate particles=30\nhouse interior=3x3 boundary=9 roofed=true\nshows 4/4 (auto 0, manual 4; accepted Shows)\nt=1.6 click(474,478) -> cell(77,12) -> fail:ground\nt=1.7 click(824,528) -> cell(84,12) -> fail:tree\nt=1.8 click(474,528) -> cell(77,13) -> placed whole house\nt=3.3 click(474,378) -> cell(77,12) -> placed planks\nt=7.3 click(524,378) -> cell(78,12) -> placed planks\nt=11.2 click(574,378) -> cell(79,12) -> placed planks"
+    },
+    {
+      "case": "Q-desktop",
+      "file": "build-v1-craftable-Q-desktop-quota-4-finale-confetti.png",
+      "label": "quota-4-finale-confetti",
+      "ms": 14978,
+      "confettiPixels": 1285,
+      "line": "You built a house! Wow! It's so big!",
+      "options": [],
+      "debug": "quiet: OK\nidle 3.4s / select 3.5s / still 14.1s\nsession active=true / placed this run=12\ncelebrate particles=60\nhouse interior=3x3 boundary=9 roofed=true\nshows 4/4 (auto 0, manual 4; accepted Shows)\nt=1.6 click(474,478) -> cell(77,12) -> fail:ground\nt=1.7 click(824,528) -> cell(84,12) -> fail:tree\nt=1.8 click(474,528) -> cell(77,13) -> placed whole house\nt=3.3 click(474,378) -> cell(77,12) -> placed planks\nt=7.3 click(524,378) -> cell(78,12) -> placed planks\nt=11.2 click(574,378) -> cell(79,12) -> placed planks"
+    },
+    {
+      "case": "Q-desktop",
+      "file": "build-v1-craftable-Q-desktop-fifth-blocked.png",
+      "label": "fifth-blocked",
+      "ms": 15290,
+      "line": "You built a house! Wow! It's so big!",
+      "options": [],
+      "debug": "quiet: OK\nidle 4.0s / select 4.1s / still 14.7s\nsession active=true / placed this run=12\ncelebrate particles=60\nhouse interior=3x3 boundary=9 roofed=true\nshows 4/4 (auto 0, manual 4; accepted Shows)\nt=1.6 click(474,478) -> cell(77,12) -> fail:ground\nt=1.7 click(824,528) -> cell(84,12) -> fail:tree\nt=1.8 click(474,528) -> cell(77,13) -> placed whole house\nt=3.3 click(474,378) -> cell(77,12) -> placed planks\nt=7.3 click(524,378) -> cell(78,12) -> placed planks\nt=11.2 click(574,378) -> cell(79,12) -> placed planks"
+    },
+    {
+      "case": "Q-desktop",
+      "file": "build-v1-craftable-Q-desktop-quota-persists.png",
+      "label": "quota-persists",
+      "ms": 19099,
+      "line": "Look! Our house! Let's build more!",
+      "options": [],
+      "debug": "quiet: OK\nidle 100.8s / select 100.8s / still 0.7s\nsession active=false / placed this run=0\ncelebrate particles=0\nhouse interior=3x3 boundary=9 roofed=true\nshows 4/4 (auto 0, manual 4; accepted Shows)"
+    },
+    {
+      "case": "Q-desktop",
+      "file": "build-v1-craftable-Q-desktop-new-world-zero.png",
+      "label": "new-world-zero",
+      "ms": 20331,
+      "line": "",
+      "options": [],
+      "debug": "quiet: OK\nidle 101.0s / select 101.0s / still 0.7s\nsession active=false / placed this run=0\ncelebrate particles=0\nshows 0/4 (auto 0, manual 0; accepted Shows)"
+    },
+    {
+      "case": "R-desktop",
+      "file": "build-v1-craftable-R-desktop-recipe.png",
+      "label": "recipe",
+      "ms": 1316,
+      "line": "",
+      "options": [],
+      "debug": "quiet: blockers=[panel,card]\nidle 101.0s / select 101.0s / still 0.7s\nsession active=false / placed this run=0\ncelebrate particles=0\nshows 0/4 (auto 0, manual 0; accepted Shows)"
+    },
+    {
+      "case": "R-desktop",
+      "file": "build-v1-craftable-R-desktop-invalid-no-charge.png",
+      "label": "invalid-no-charge",
+      "ms": 1957,
+      "line": "",
+      "options": [],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.2s / select 0.4s / still 1.3s\nsession active=true / placed this run=0\ncelebrate particles=0\nshows 0/4 (auto 0, manual 0; accepted Shows)\nt=1.5 click(474,478) -> cell(77,12) -> fail:ground\nt=1.7 click(824,528) -> cell(84,12) -> fail:tree"
+    },
+    {
+      "case": "R-desktop",
+      "file": "build-v1-craftable-R-desktop-placed-celebration.png",
+      "label": "placed-celebration",
+      "ms": 2290,
+      "confettiPixels": 696,
+      "line": "Wow! It's all closed!",
+      "options": [],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.2s / select 0.6s / still 1.6s\nsession active=true / placed this run=9\ncelebrate particles=30\nhouse interior=3x3 boundary=9 roofed=true\nshows 0/4 (auto 0, manual 0; accepted Shows)\nt=1.5 click(474,478) -> cell(77,12) -> fail:ground\nt=1.7 click(824,528) -> cell(84,12) -> fail:tree\nt=1.8 click(474,528) -> cell(77,13) -> placed whole house"
+    },
+    {
+      "case": "R-desktop",
+      "file": "build-v1-craftable-R-desktop-opening-invite.png",
+      "label": "opening-invite",
+      "ms": 2490,
+      "line": "Wow! Show me!",
+      "options": [
+        "☝ Show"
+      ],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.5s / select 0.9s / still 1.8s\nsession active=true / placed this run=9\ncelebrate particles=30\nhouse interior=3x3 boundary=9 roofed=true\nshows 0/4 (auto 0, manual 0; accepted Shows)\nt=1.5 click(474,478) -> cell(77,12) -> fail:ground\nt=1.7 click(824,528) -> cell(84,12) -> fail:tree\nt=1.8 click(474,528) -> cell(77,13) -> placed whole house"
+    },
+    {
+      "case": "R-desktop",
+      "file": "build-v1-craftable-R-desktop-expiry-no-slot.png",
+      "label": "expiry-no-slot",
+      "ms": 37438,
+      "line": "Wow! You made this! I like it! Good job!",
+      "options": [],
+      "debug": "quiet: OK\nidle 35.3s / select 35.7s / still 36.6s\nsession active=true / placed this run=9\ncelebrate particles=0\nhouse interior=3x3 boundary=9 roofed=true\nshows 0/4 (auto 0, manual 0; accepted Shows)\nt=1.5 click(474,478) -> cell(77,12) -> fail:ground\nt=1.7 click(824,528) -> cell(84,12) -> fail:tree\nt=1.8 click(474,528) -> cell(77,13) -> placed whole house"
+    },
+    {
+      "case": "R-desktop",
+      "file": "build-v1-craftable-R-desktop-rearmed-0.png",
+      "label": "rearmed-0",
+      "ms": 40555,
+      "line": "Wow! It's all closed!",
+      "options": [],
+      "debug": "quiet: OK\nidle 3.0s / select 3.1s / still 39.9s\nsession active=true / placed this run=10\ncelebrate particles=30\nhouse interior=3x3 boundary=9 roofed=true\nshows 0/4 (auto 0, manual 0; accepted Shows)\nt=1.5 click(474,478) -> cell(77,12) -> fail:ground\nt=1.7 click(824,528) -> cell(84,12) -> fail:tree\nt=1.8 click(474,528) -> cell(77,13) -> placed whole house\nt=37.4 click(474,378) -> cell(77,12) -> placed planks"
+    },
+    {
+      "case": "R-desktop",
+      "file": "build-v1-craftable-R-desktop-after-expiry-question-options.png",
+      "label": "after-expiry-question-options",
+      "ms": 40871,
+      "line": "What is this?",
+      "options": [
+        "House",
+        "Fence"
+      ],
+      "debug": "quiet: OK\nidle 3.2s / select 3.3s / still 40.2s\nsession active=true / placed this run=10\ncelebrate particles=30\nhouse interior=3x3 boundary=9 roofed=true\nshows 1/4 (auto 0, manual 1; accepted Shows)\nt=1.5 click(474,478) -> cell(77,12) -> fail:ground\nt=1.7 click(824,528) -> cell(84,12) -> fail:tree\nt=1.8 click(474,528) -> cell(77,13) -> placed whole house\nt=37.4 click(474,378) -> cell(77,12) -> placed planks"
+    },
+    {
+      "case": "R-desktop",
+      "file": "build-v1-craftable-R-desktop-after-expiry-finale-confetti.png",
+      "label": "after-expiry-finale-confetti",
+      "ms": 41212,
+      "confettiPixels": 2285,
+      "line": "You built a house! Wow! It's so big!",
+      "options": [],
+      "debug": "quiet: OK\nidle 3.5s / select 3.6s / still 40.4s\nsession active=true / placed this run=10\ncelebrate particles=60\nhouse interior=3x3 boundary=9 roofed=true\nshows 1/4 (auto 0, manual 1; accepted Shows)\nt=1.5 click(474,478) -> cell(77,12) -> fail:ground\nt=1.7 click(824,528) -> cell(84,12) -> fail:tree\nt=1.8 click(474,528) -> cell(77,13) -> placed whole house\nt=37.4 click(474,378) -> cell(77,12) -> placed planks"
+    },
+    {
+      "case": "R-desktop",
+      "file": "build-v1-craftable-R-desktop-rearmed-1.png",
+      "label": "rearmed-1",
+      "ms": 44426,
+      "line": "Wow! It's all closed!",
+      "options": [],
+      "debug": "quiet: OK\nidle 2.9s / select 3.0s / still 43.7s\nsession active=true / placed this run=11\ncelebrate particles=30\nhouse interior=3x3 boundary=9 roofed=true\nshows 1/4 (auto 0, manual 1; accepted Shows)\nt=1.5 click(474,478) -> cell(77,12) -> fail:ground\nt=1.7 click(824,528) -> cell(84,12) -> fail:tree\nt=1.8 click(474,528) -> cell(77,13) -> placed whole house\nt=37.4 click(474,378) -> cell(77,12) -> placed planks\nt=41.3 click(524,378) -> cell(78,12) -> placed planks"
+    },
+    {
+      "case": "R-desktop",
+      "file": "build-v1-craftable-R-desktop-after-completion-question-options.png",
+      "label": "after-completion-question-options",
+      "ms": 44738,
+      "line": "What is this?",
+      "options": [
+        "House",
+        "Fence"
+      ],
+      "debug": "quiet: OK\nidle 3.2s / select 3.3s / still 44.0s\nsession active=true / placed this run=11\ncelebrate particles=30\nhouse interior=3x3 boundary=9 roofed=true\nshows 2/4 (auto 0, manual 2; accepted Shows)\nt=1.5 click(474,478) -> cell(77,12) -> fail:ground\nt=1.7 click(824,528) -> cell(84,12) -> fail:tree\nt=1.8 click(474,528) -> cell(77,13) -> placed whole house\nt=37.4 click(474,378) -> cell(77,12) -> placed planks\nt=41.3 click(524,378) -> cell(78,12) -> placed planks"
+    },
+    {
+      "case": "R-desktop",
+      "file": "build-v1-craftable-R-desktop-after-completion-finale-confetti.png",
+      "label": "after-completion-finale-confetti",
+      "ms": 45095,
+      "confettiPixels": 2147,
+      "line": "You built a house! Wow! It's so big!",
+      "options": [],
+      "debug": "quiet: OK\nidle 3.4s / select 3.5s / still 44.3s\nsession active=true / placed this run=11\ncelebrate particles=60\nhouse interior=3x3 boundary=9 roofed=true\nshows 2/4 (auto 0, manual 2; accepted Shows)\nt=1.5 click(474,478) -> cell(77,12) -> fail:ground\nt=1.7 click(824,528) -> cell(84,12) -> fail:tree\nt=1.8 click(474,528) -> cell(77,13) -> placed whole house\nt=37.4 click(474,378) -> cell(77,12) -> placed planks\nt=41.3 click(524,378) -> cell(78,12) -> placed planks"
+    },
+    {
+      "case": "I-desktop",
+      "file": "build-v1-craftable-I-desktop-recipe.png",
+      "label": "recipe",
+      "ms": 1320,
+      "line": "",
+      "options": [],
+      "debug": "quiet: blockers=[panel,card]\nidle 101.0s / select 101.0s / still 0.7s\nsession active=false / placed this run=0\ncelebrate particles=0\nshows 0/4 (auto 0, manual 0; accepted Shows)"
+    },
+    {
+      "case": "I-desktop",
+      "file": "build-v1-craftable-I-desktop-invalid-no-charge.png",
+      "label": "invalid-no-charge",
+      "ms": 1954,
+      "line": "",
+      "options": [],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.1s / select 0.4s / still 1.3s\nsession active=true / placed this run=0\ncelebrate particles=0\nshows 0/4 (auto 0, manual 0; accepted Shows)\nt=1.5 click(474,478) -> cell(77,12) -> fail:ground\nt=1.7 click(824,528) -> cell(84,12) -> fail:tree"
+    },
+    {
+      "case": "I-desktop",
+      "file": "build-v1-craftable-I-desktop-placed-celebration.png",
+      "label": "placed-celebration",
+      "ms": 2308,
+      "confettiPixels": 658,
+      "line": "Wow! It's all closed!",
+      "options": [],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.2s / select 0.6s / still 1.6s\nsession active=true / placed this run=9\ncelebrate particles=30\nhouse interior=3x3 boundary=9 roofed=true\nshows 0/4 (auto 0, manual 0; accepted Shows)\nt=1.5 click(474,478) -> cell(77,12) -> fail:ground\nt=1.7 click(824,528) -> cell(84,12) -> fail:tree\nt=1.8 click(474,528) -> cell(77,13) -> placed whole house"
+    },
+    {
+      "case": "I-desktop",
+      "file": "build-v1-craftable-I-desktop-opening-invite.png",
+      "label": "opening-invite",
+      "ms": 2520,
+      "line": "Wow! Show me!",
+      "options": [
+        "☝ Show"
+      ],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.5s / select 0.9s / still 1.8s\nsession active=true / placed this run=9\ncelebrate particles=30\nhouse interior=3x3 boundary=9 roofed=true\nshows 0/4 (auto 0, manual 0; accepted Shows)\nt=1.5 click(474,478) -> cell(77,12) -> fail:ground\nt=1.7 click(824,528) -> cell(84,12) -> fail:tree\nt=1.8 click(474,528) -> cell(77,13) -> placed whole house"
+    },
+    {
+      "case": "I-desktop",
+      "file": "build-v1-craftable-I-desktop-invite-29s.png",
+      "label": "invite-29s",
+      "ms": 31723,
+      "line": "Wow! Show me!",
+      "options": [
+        "☝ Show"
+      ],
+      "debug": "quiet: OK\nidle 18.4s / select 18.9s / still 18.4s\nsession active=true / placed this run=10\ncelebrate particles=0\nhouse interior=3x3 boundary=9 roofed=true\nshows 0/4 (auto 0, manual 0; accepted Shows)\nt=1.5 click(474,478) -> cell(77,12) -> fail:ground\nt=1.7 click(824,528) -> cell(84,12) -> fail:tree\nt=1.8 click(474,528) -> cell(77,13) -> placed whole house\nt=12.6 click(474,378) -> cell(77,12) -> placed planks"
+    },
+    {
+      "case": "I-desktop",
+      "file": "build-v1-craftable-I-desktop-waited-question-options.png",
+      "label": "waited-question-options",
+      "ms": 31920,
+      "line": "What is this?",
+      "options": [
+        "House",
+        "Fence"
+      ],
+      "debug": "quiet: OK\nidle 18.7s / select 19.2s / still 18.6s\nsession active=true / placed this run=10\ncelebrate particles=0\nhouse interior=3x3 boundary=9 roofed=true\nshows 1/4 (auto 0, manual 1; accepted Shows)\nt=1.5 click(474,478) -> cell(77,12) -> fail:ground\nt=1.7 click(824,528) -> cell(84,12) -> fail:tree\nt=1.8 click(474,528) -> cell(77,13) -> placed whole house\nt=12.6 click(474,378) -> cell(77,12) -> placed planks"
+    },
+    {
+      "case": "I-desktop",
+      "file": "build-v1-craftable-I-desktop-waited-finale-confetti.png",
+      "label": "waited-finale-confetti",
+      "ms": 32284,
+      "confettiPixels": 553,
+      "line": "You built a house! Wow! It's so big!",
+      "options": [],
+      "debug": "quiet: OK\nidle 18.9s / select 19.4s / still 18.9s\nsession active=true / placed this run=10\ncelebrate particles=30\nhouse interior=3x3 boundary=9 roofed=true\nshows 1/4 (auto 0, manual 1; accepted Shows)\nt=1.5 click(474,478) -> cell(77,12) -> fail:ground\nt=1.7 click(824,528) -> cell(84,12) -> fail:tree\nt=1.8 click(474,528) -> cell(77,13) -> placed whole house\nt=12.6 click(474,378) -> cell(77,12) -> placed planks"
+    },
+    {
+      "case": "V-desktop",
+      "file": "build-v1-craftable-V-desktop-version.png",
+      "label": "version",
+      "ms": 992,
+      "line": "",
+      "options": [],
+      "debug": "quiet: OK\nidle 100.8s / select 100.8s / still 0.7s\nsession active=false / placed this run=0\ncelebrate particles=0\nshows 0/4 (auto 0, manual 0; accepted Shows)"
+    },
+    {
+      "case": "T2-desktop",
+      "file": "build-v1-craftable-T2-desktop-recipe.png",
+      "label": "recipe",
+      "ms": 1738,
+      "line": "",
+      "options": [],
+      "debug": "quiet: blockers=[panel]\nidle 101.6s / select 101.6s / still 0.8s\nsession active=false / placed this run=0\ncelebrate particles=0\nshows 0/4 (auto 0, manual 0; accepted Shows)"
+    },
+    {
+      "case": "T2-desktop",
+      "file": "build-v1-craftable-T2-desktop-invalid-no-charge.png",
+      "label": "invalid-no-charge",
+      "ms": 2388,
+      "line": "",
+      "options": [],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.1s / select 0.2s / still 1.3s\nsession active=true / placed this run=0\ncelebrate particles=0\nshows 0/4 (auto 0, manual 0; accepted Shows)\nt=2.0 click(474,478) -> cell(77,12) -> fail:ground"
+    },
+    {
+      "case": "T2-desktop",
+      "file": "build-v1-craftable-T2-desktop-placed-celebration.png",
+      "label": "placed-celebration",
+      "ms": 2732,
+      "confettiPixels": 770,
+      "line": "Wow! It's all closed!",
+      "options": [],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.3s / select 0.8s / still 1.8s\nsession active=true / placed this run=9\ncelebrate particles=30\nhouse interior=3x3 boundary=9 roofed=true\nshows 0/4 (auto 0, manual 0; accepted Shows)\nt=2.0 click(474,478) -> cell(77,12) -> fail:ground\nt=2.1 click(824,528) -> cell(84,12) -> fail:tree\nt=2.3 click(474,528) -> cell(77,13) -> placed whole house"
+    },
+    {
+      "case": "T2-desktop",
+      "file": "build-v1-craftable-T2-desktop-opening-invite.png",
+      "label": "opening-invite",
+      "ms": 2938,
+      "line": "Wow! Show me!",
+      "options": [
+        "☝ Show"
+      ],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.3s / select 0.8s / still 1.8s\nsession active=true / placed this run=9\ncelebrate particles=30\nhouse interior=3x3 boundary=9 roofed=true\nshows 0/4 (auto 0, manual 0; accepted Shows)\nt=2.0 click(474,478) -> cell(77,12) -> fail:ground\nt=2.1 click(824,528) -> cell(84,12) -> fail:tree\nt=2.3 click(474,528) -> cell(77,13) -> placed whole house"
+    },
+    {
+      "case": "T2-desktop",
+      "file": "build-v1-craftable-T2-desktop-house-spoken-question.png",
+      "label": "house-spoken-question",
+      "ms": 3238,
+      "line": "What's this?",
+      "options": [],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.6s / select 1.0s / still 2.1s\nsession active=true / placed this run=9\ncelebrate particles=30\nhouse interior=3x3 boundary=9 roofed=true\nshows 0/4 (auto 0, manual 0; accepted Shows)\nt=2.0 click(474,478) -> cell(77,12) -> fail:ground\nt=2.1 click(824,528) -> cell(84,12) -> fail:tree\nt=2.3 click(474,528) -> cell(77,13) -> placed whole house"
+    },
+    {
+      "case": "T2-desktop",
+      "file": "build-v1-craftable-T2-desktop-house-question-options.png",
+      "label": "house-question-options",
+      "ms": 11172,
+      "line": "What's this?",
+      "options": [
+        "House",
+        "Fence"
+      ],
+      "debug": "quiet: OK\nidle 8.7s / select 9.1s / still 10.1s\nsession active=true / placed this run=9\ncelebrate particles=0\nhouse interior=3x3 boundary=9 roofed=true\nshows 1/4 (auto 0, manual 1; accepted Shows)\nt=2.0 click(474,478) -> cell(77,12) -> fail:ground\nt=2.1 click(824,528) -> cell(84,12) -> fail:tree\nt=2.3 click(474,528) -> cell(77,13) -> placed whole house"
+    },
+    {
+      "case": "T2-desktop",
+      "file": "build-v1-craftable-T2-desktop-house-finale-confetti.png",
+      "label": "house-finale-confetti",
+      "ms": 11536,
+      "confettiPixels": 640,
+      "line": "You built a house! Wow! It's so big!",
+      "options": [],
+      "debug": "quiet: OK\nidle 9.0s / select 9.4s / still 10.4s\nsession active=true / placed this run=9\ncelebrate particles=30\nhouse interior=3x3 boundary=9 roofed=true\nshows 1/4 (auto 0, manual 1; accepted Shows)\nt=2.0 click(474,478) -> cell(77,12) -> fail:ground\nt=2.1 click(824,528) -> cell(84,12) -> fail:tree\nt=2.3 click(474,528) -> cell(77,13) -> placed whole house"
+    },
+    {
+      "case": "T2-desktop",
+      "file": "build-v1-craftable-T2-desktop-recovered-instance.png",
+      "label": "recovered-instance",
+      "ms": 12171,
+      "line": "No more house!",
+      "options": [],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.2s / select 0.3s / still 11.2s\nsession active=true / placed this run=0\ncelebrate particles=30\nshows 1/4 (auto 0, manual 1; accepted Shows)\nt=2.0 click(474,478) -> cell(77,12) -> fail:ground\nt=2.1 click(824,528) -> cell(84,12) -> fail:tree\nt=2.3 click(474,528) -> cell(77,13) -> placed whole house\nt=11.6 click(424,528) -> cell(76,13) -> fail:stock\nt=11.9 click(524,478) -> cell(77,13) -> recovered whole house"
+    },
+    {
+      "case": "T2-desktop",
+      "file": "build-v1-craftable-T2-desktop-replaced-after-reload.png",
+      "label": "replaced-after-reload",
+      "ms": 13438,
+      "line": "Wow! It's all closed!",
+      "options": [],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.1s / select 0.1s / still 0.9s\nsession active=true / placed this run=0\ncelebrate particles=0\nshows 1/4 (auto 0, manual 1; accepted Shows)"
+    },
+    {
+      "case": "T2-desktop",
+      "file": "build-v1-craftable-T2-desktop-placed-persists.png",
+      "label": "placed-persists",
+      "ms": 14472,
+      "line": "Wow! Show me!",
+      "options": [
+        "☝ Show"
+      ],
+      "debug": "quiet: OK\nidle 100.8s / select 100.8s / still 0.7s\nsession active=false / placed this run=0\ncelebrate particles=0\nhouse interior=3x3 boundary=9 roofed=true\nshows 1/4 (auto 0, manual 1; accepted Shows)"
+    },
+    {
+      "case": "T3-desktop",
+      "file": "build-v1-craftable-T3-desktop-recipe.png",
+      "label": "recipe",
+      "ms": 2445,
+      "line": "",
+      "options": [],
+      "debug": "quiet: blockers=[panel]\nidle 102.3s / select 102.3s / still 1.6s\nsession active=false / placed this run=0\ncelebrate particles=0\nshows 0/4 (auto 0, manual 0; accepted Shows)"
+    },
+    {
+      "case": "T3-desktop",
+      "file": "build-v1-craftable-T3-desktop-invalid-no-charge.png",
+      "label": "invalid-no-charge",
+      "ms": 3079,
+      "line": "",
+      "options": [],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.1s / select 0.3s / still 2.1s\nsession active=true / placed this run=0\ncelebrate particles=0\nshows 0/4 (auto 0, manual 0; accepted Shows)\nt=2.7 click(474,478) -> cell(77,13) -> fail:ground\nt=2.8 click(824,528) -> cell(84,13) -> fail:tree"
+    },
+    {
+      "case": "T3-desktop",
+      "file": "build-v1-craftable-T3-desktop-placed-celebration.png",
+      "label": "placed-celebration",
+      "ms": 3437,
+      "confettiPixels": 740,
+      "line": "Wow! It's all closed!",
+      "options": [],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.2s / select 0.6s / still 2.3s\nsession active=true / placed this run=8\ncelebrate particles=30\npen interior=4x2 boundary=8 roofed=false\nshows 0/4 (auto 0, manual 0; accepted Shows)\nt=2.7 click(474,478) -> cell(77,13) -> fail:ground\nt=2.8 click(824,528) -> cell(84,13) -> fail:tree\nt=3.0 click(474,528) -> cell(77,14) -> placed whole pen"
+    },
+    {
+      "case": "T3-desktop",
+      "file": "build-v1-craftable-T3-desktop-opening-invite.png",
+      "label": "opening-invite",
+      "ms": 3636,
+      "line": "Wow! Show me!",
+      "options": [
+        "☝ Show"
+      ],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.4s / select 0.8s / still 2.6s\nsession active=true / placed this run=8\ncelebrate particles=30\npen interior=4x2 boundary=8 roofed=false\nshows 0/4 (auto 0, manual 0; accepted Shows)\nt=2.7 click(474,478) -> cell(77,13) -> fail:ground\nt=2.8 click(824,528) -> cell(84,13) -> fail:tree\nt=3.0 click(474,528) -> cell(77,14) -> placed whole pen"
+    },
+    {
+      "case": "T3-desktop",
+      "file": "build-v1-craftable-T3-desktop-pen-spoken-question.png",
+      "label": "pen-spoken-question",
+      "ms": 3951,
+      "line": "I made a fence. Say it!",
+      "options": [],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.7s / select 1.1s / still 2.8s\nsession active=true / placed this run=8\ncelebrate particles=30\npen interior=4x2 boundary=8 roofed=false\nshows 0/4 (auto 0, manual 0; accepted Shows)\nt=2.7 click(474,478) -> cell(77,13) -> fail:ground\nt=2.8 click(824,528) -> cell(84,13) -> fail:tree\nt=3.0 click(474,528) -> cell(77,14) -> placed whole pen"
+    },
+    {
+      "case": "T3-desktop",
+      "file": "build-v1-craftable-T3-desktop-pen-question-options.png",
+      "label": "pen-question-options",
+      "ms": 11887,
+      "line": "I made a fence. Say it!",
+      "options": [
+        "House",
+        "Fence"
+      ],
+      "debug": "quiet: OK\nidle 8.7s / select 9.1s / still 10.9s\nsession active=true / placed this run=8\ncelebrate particles=0\npen interior=4x2 boundary=8 roofed=false\nshows 1/4 (auto 0, manual 1; accepted Shows)\nt=2.7 click(474,478) -> cell(77,13) -> fail:ground\nt=2.8 click(824,528) -> cell(84,13) -> fail:tree\nt=3.0 click(474,528) -> cell(77,14) -> placed whole pen"
+    },
+    {
+      "case": "T3-desktop",
+      "file": "build-v1-craftable-T3-desktop-pen-finale-confetti.png",
+      "label": "pen-finale-confetti",
+      "ms": 12257,
+      "confettiPixels": 584,
+      "line": "You built a fence! Wow! It's so big!",
+      "options": [],
+      "debug": "quiet: OK\nidle 9.0s / select 9.4s / still 11.1s\nsession active=true / placed this run=8\ncelebrate particles=30\npen interior=4x2 boundary=8 roofed=false\nshows 1/4 (auto 0, manual 1; accepted Shows)\nt=2.7 click(474,478) -> cell(77,13) -> fail:ground\nt=2.8 click(824,528) -> cell(84,13) -> fail:tree\nt=3.0 click(474,528) -> cell(77,14) -> placed whole pen"
+    },
+    {
+      "case": "T3-desktop",
+      "file": "build-v1-craftable-T3-desktop-recovered-instance.png",
+      "label": "recovered-instance",
+      "ms": 12918,
+      "line": "No more pen!",
+      "options": [],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.1s / select 0.2s / still 11.9s\nsession active=true / placed this run=0\ncelebrate particles=30\nshows 1/4 (auto 0, manual 1; accepted Shows)\nt=2.7 click(474,478) -> cell(77,13) -> fail:ground\nt=2.8 click(824,528) -> cell(84,13) -> fail:tree\nt=3.0 click(474,528) -> cell(77,14) -> placed whole pen\nt=12.4 click(424,528) -> cell(76,14) -> fail:stock\nt=12.6 click(524,478) -> cell(77,14) -> recovered whole pen"
+    },
+    {
+      "case": "T3-desktop",
+      "file": "build-v1-craftable-T3-desktop-replaced-after-reload.png",
+      "label": "replaced-after-reload",
+      "ms": 14203,
+      "line": "Wow! It's all closed!",
+      "options": [],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.1s / select 0.1s / still 0.9s\nsession active=true / placed this run=0\ncelebrate particles=0\nshows 1/4 (auto 0, manual 1; accepted Shows)"
+    },
+    {
+      "case": "T3-desktop",
+      "file": "build-v1-craftable-T3-desktop-placed-persists.png",
+      "label": "placed-persists",
+      "ms": 15252,
+      "line": "Wow! Show me!",
+      "options": [
+        "☝ Show"
+      ],
+      "debug": "quiet: OK\nidle 100.8s / select 100.8s / still 0.7s\nsession active=false / placed this run=0\ncelebrate particles=0\npen interior=4x2 boundary=8 roofed=false\nshows 1/4 (auto 0, manual 1; accepted Shows)"
+    },
+    {
+      "case": "N-desktop",
+      "file": "build-v1-craftable-N-desktop-recipe.png",
+      "label": "recipe",
+      "ms": 1644,
+      "line": "",
+      "options": [],
+      "debug": "quiet: blockers=[panel,card]\nidle 101.3s / select 101.3s / still 0.7s\nsession active=false / placed this run=0\ncelebrate particles=0\nshows 0/4 (auto 0, manual 0; accepted Shows)"
+    },
+    {
+      "case": "N-desktop",
+      "file": "build-v1-craftable-N-desktop-invalid-no-charge.png",
+      "label": "invalid-no-charge",
+      "ms": 2280,
+      "line": "",
+      "options": [],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.1s / select 0.3s / still 1.3s\nsession active=true / placed this run=0\ncelebrate particles=0\nshows 0/4 (auto 0, manual 0; accepted Shows)\nt=1.9 click(474,478) -> cell(77,12) -> fail:ground\nt=2.0 click(824,528) -> cell(84,12) -> fail:tree"
+    },
+    {
+      "case": "N-desktop",
+      "file": "build-v1-craftable-N-desktop-placed-celebration.png",
+      "label": "placed-celebration",
+      "ms": 2650,
+      "confettiPixels": 625,
+      "line": "Wow! It's all closed!",
+      "options": [],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.2s / select 0.6s / still 1.5s\nsession active=true / placed this run=9\ncelebrate particles=30\nhouse interior=3x3 boundary=9 roofed=true\nshows 0/4 (auto 0, manual 0; accepted Shows)\nt=1.9 click(474,478) -> cell(77,12) -> fail:ground\nt=2.0 click(824,528) -> cell(84,12) -> fail:tree\nt=2.2 click(474,528) -> cell(77,13) -> placed whole house"
+    },
+    {
+      "case": "N-desktop",
+      "file": "build-v1-craftable-N-desktop-overlap-no-charge.png",
+      "label": "overlap-no-charge",
+      "ms": 2842,
+      "line": "Wow! It's all closed!",
+      "options": [],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.1s / select 0.9s / still 1.8s\nsession active=true / placed this run=9\ncelebrate particles=30\nhouse interior=3x3 boundary=9 roofed=true\nshows 0/4 (auto 0, manual 0; accepted Shows)\nt=1.9 click(474,478) -> cell(77,12) -> fail:ground\nt=2.0 click(824,528) -> cell(84,12) -> fail:tree\nt=2.2 click(474,528) -> cell(77,13) -> placed whole house\nt=2.5 click(474,528) -> cell(77,13) -> fail:building"
+    },
+    {
+      "case": "N-desktop",
+      "file": "build-v1-craftable-N-desktop-opening-invite.png",
+      "label": "opening-invite",
+      "ms": 3043,
+      "line": "Wow! Show me!",
+      "options": [
+        "☝ Show"
+      ],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.3s / select 1.1s / still 2.1s\nsession active=true / placed this run=9\ncelebrate particles=30\nhouse interior=3x3 boundary=9 roofed=true\nshows 0/4 (auto 0, manual 0; accepted Shows)\nt=1.9 click(474,478) -> cell(77,12) -> fail:ground\nt=2.0 click(824,528) -> cell(84,12) -> fail:tree\nt=2.2 click(474,528) -> cell(77,13) -> placed whole house\nt=2.5 click(474,528) -> cell(77,13) -> fail:building"
+    },
+    {
+      "case": "N-desktop",
+      "file": "build-v1-craftable-N-desktop-first-object-question-options.png",
+      "label": "first-object-question-options",
+      "ms": 3343,
+      "line": "What is this?",
+      "options": [
+        "House",
+        "Fence"
+      ],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.6s / select 1.4s / still 2.3s\nsession active=true / placed this run=9\ncelebrate particles=30\nhouse interior=3x3 boundary=9 roofed=true\nshows 1/4 (auto 0, manual 1; accepted Shows)\nt=1.9 click(474,478) -> cell(77,12) -> fail:ground\nt=2.0 click(824,528) -> cell(84,12) -> fail:tree\nt=2.2 click(474,528) -> cell(77,13) -> placed whole house\nt=2.5 click(474,528) -> cell(77,13) -> fail:building"
+    },
+    {
+      "case": "N-desktop",
+      "file": "build-v1-craftable-N-desktop-first-object-finale-confetti.png",
+      "label": "first-object-finale-confetti",
+      "ms": 3706,
+      "confettiPixels": 937,
+      "line": "You built a house! Wow! It's so big!",
+      "options": [],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.9s / select 1.7s / still 2.6s\nsession active=true / placed this run=9\ncelebrate particles=60\nhouse interior=3x3 boundary=9 roofed=true\nshows 1/4 (auto 0, manual 1; accepted Shows)\nt=1.9 click(474,478) -> cell(77,12) -> fail:ground\nt=2.0 click(824,528) -> cell(84,12) -> fail:tree\nt=2.2 click(474,528) -> cell(77,13) -> placed whole house\nt=2.5 click(474,528) -> cell(77,13) -> fail:building"
+    },
+    {
+      "case": "N-desktop",
+      "file": "build-v1-craftable-N-desktop-one-piece-rearmed.png",
+      "label": "one-piece-rearmed",
+      "ms": 4344,
+      "line": "Wow! It's all closed!",
+      "options": [],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.2s / select 0.4s / still 3.4s\nsession active=true / placed this run=18\ncelebrate particles=90\nhouse interior=3x3 boundary=9 roofed=true\nhouse interior=3x3 boundary=9 roofed=true\nshows 1/4 (auto 0, manual 1; accepted Shows)\nt=1.9 click(474,478) -> cell(77,12) -> fail:ground\nt=2.0 click(824,528) -> cell(84,12) -> fail:tree\nt=2.2 click(474,528) -> cell(77,13) -> placed whole house\nt=2.5 click(474,528) -> cell(77,13) -> fail:building\nt=3.9 click(674,528) -> cell(81,13) -> placed whole house"
+    },
+    {
+      "case": "N-desktop",
+      "file": "build-v1-craftable-N-desktop-new-object-question-options.png",
+      "label": "new-object-question-options",
+      "ms": 4668,
+      "line": "What is this?",
+      "options": [
+        "House",
+        "Fence"
+      ],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.4s / select 0.7s / still 3.6s\nsession active=true / placed this run=18\ncelebrate particles=90\nhouse interior=3x3 boundary=9 roofed=true\nhouse interior=3x3 boundary=9 roofed=true\nshows 2/4 (auto 0, manual 2; accepted Shows)\nt=1.9 click(474,478) -> cell(77,12) -> fail:ground\nt=2.0 click(824,528) -> cell(84,12) -> fail:tree\nt=2.2 click(474,528) -> cell(77,13) -> placed whole house\nt=2.5 click(474,528) -> cell(77,13) -> fail:building\nt=3.9 click(674,528) -> cell(81,13) -> placed whole house"
+    },
+    {
+      "case": "N-desktop",
+      "file": "build-v1-craftable-N-desktop-new-object-finale-confetti.png",
+      "label": "new-object-finale-confetti",
+      "ms": 5023,
+      "confettiPixels": 1051,
+      "line": "You built a house! Wow! It's so big!",
+      "options": [],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.7s / select 0.9s / still 3.9s\nsession active=true / placed this run=18\ncelebrate particles=90\nhouse interior=3x3 boundary=9 roofed=true\nhouse interior=3x3 boundary=9 roofed=true\nshows 2/4 (auto 0, manual 2; accepted Shows)\nt=1.9 click(474,478) -> cell(77,12) -> fail:ground\nt=2.0 click(824,528) -> cell(84,12) -> fail:tree\nt=2.2 click(474,528) -> cell(77,13) -> placed whole house\nt=2.5 click(474,528) -> cell(77,13) -> fail:building\nt=3.9 click(674,528) -> cell(81,13) -> placed whole house"
+    },
+    {
+      "case": "C-mobile",
+      "file": "build-v1-craftable-C-mobile-recipe.png",
+      "label": "recipe",
+      "ms": 1359,
+      "line": "",
+      "options": [],
+      "debug": "quiet: blockers=[panel,card]\nidle 101.0s / select 101.0s / still 0.7s\nsession active=false / placed this run=0\ncelebrate particles=0\nshows 0/4 (auto 0, manual 0; accepted Shows)"
+    },
+    {
+      "case": "C-mobile",
+      "file": "build-v1-craftable-C-mobile-invalid-no-charge.png",
+      "label": "invalid-no-charge",
+      "ms": 1983,
+      "line": "",
+      "options": [],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.1s / select 0.4s / still 1.3s\nsession active=true / placed this run=0\ncelebrate particles=0\nshows 0/4 (auto 0, manual 0; accepted Shows)\nt=1.6 click(278,224) -> cell(77,12) -> fail:ground\nt=1.7 click(544,262) -> cell(84,12) -> fail:tree"
+    },
+    {
+      "case": "C-mobile",
+      "file": "build-v1-craftable-C-mobile-placed-celebration.png",
+      "label": "placed-celebration",
+      "ms": 2270,
+      "confettiPixels": 528,
+      "line": "Wow! It's all closed!",
+      "options": [],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.2s / select 0.6s / still 1.6s\nsession active=true / placed this run=9\ncelebrate particles=30\nhouse interior=3x3 boundary=9 roofed=true\nshows 0/4 (auto 0, manual 0; accepted Shows)\nt=1.6 click(278,224) -> cell(77,12) -> fail:ground\nt=1.7 click(544,262) -> cell(84,12) -> fail:tree\nt=1.9 click(278,262) -> cell(77,13) -> placed whole house"
+    },
+    {
+      "case": "C-mobile",
+      "file": "build-v1-craftable-C-mobile-opening-invite.png",
+      "label": "opening-invite",
+      "ms": 2466,
+      "line": "Wow! Show me!",
+      "options": [
+        "☝ Show"
+      ],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.2s / select 0.6s / still 1.6s\nsession active=true / placed this run=9\ncelebrate particles=30\nhouse interior=3x3 boundary=9 roofed=true\nshows 0/4 (auto 0, manual 0; accepted Shows)\nt=1.6 click(278,224) -> cell(77,12) -> fail:ground\nt=1.7 click(544,262) -> cell(84,12) -> fail:tree\nt=1.9 click(278,262) -> cell(77,13) -> placed whole house"
+    },
+    {
+      "case": "C-mobile",
+      "file": "build-v1-craftable-C-mobile-house-question-options.png",
+      "label": "house-question-options",
+      "ms": 2763,
+      "line": "What is this?",
+      "options": [
+        "House",
+        "Fence"
+      ],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.8s / select 1.2s / still 2.1s\nsession active=true / placed this run=9\ncelebrate particles=30\nhouse interior=3x3 boundary=9 roofed=true\nshows 1/4 (auto 0, manual 1; accepted Shows)\nt=1.6 click(278,224) -> cell(77,12) -> fail:ground\nt=1.7 click(544,262) -> cell(84,12) -> fail:tree\nt=1.9 click(278,262) -> cell(77,13) -> placed whole house"
+    },
+    {
+      "case": "C-mobile",
+      "file": "build-v1-craftable-C-mobile-house-finale-confetti.png",
+      "label": "house-finale-confetti",
+      "ms": 3040,
+      "confettiPixels": 711,
+      "line": "You built a house! Wow! It's so big!",
+      "options": [],
+      "debug": "quiet: blockers=[recent,select]\nidle 1.0s / select 1.4s / still 2.4s\nsession active=true / placed this run=9\ncelebrate particles=60\nhouse interior=3x3 boundary=9 roofed=true\nshows 1/4 (auto 0, manual 1; accepted Shows)\nt=1.6 click(278,224) -> cell(77,12) -> fail:ground\nt=1.7 click(544,262) -> cell(84,12) -> fail:tree\nt=1.9 click(278,262) -> cell(77,13) -> placed whole house"
+    },
+    {
+      "case": "C-mobile",
+      "file": "build-v1-craftable-C-mobile-recovered-instance.png",
+      "label": "recovered-instance",
+      "ms": 3640,
+      "line": "No more house!",
+      "options": [],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.1s / select 0.2s / still 2.9s\nsession active=true / placed this run=0\ncelebrate particles=60\nshows 1/4 (auto 0, manual 1; accepted Shows)\nt=1.6 click(278,224) -> cell(77,12) -> fail:ground\nt=1.7 click(544,262) -> cell(84,12) -> fail:tree\nt=1.9 click(278,262) -> cell(77,13) -> placed whole house\nt=3.1 click(240,262) -> cell(76,13) -> fail:stock\nt=3.3 click(316,224) -> cell(77,13) -> recovered whole house"
+    },
+    {
+      "case": "C-mobile",
+      "file": "build-v1-craftable-C-mobile-replaced-after-reload.png",
+      "label": "replaced-after-reload",
+      "ms": 4859,
+      "line": "Wow! It's all closed!",
+      "options": [],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.0s / select 0.1s / still 0.9s\nsession active=true / placed this run=9\ncelebrate particles=30\nhouse interior=3x3 boundary=9 roofed=true\nshows 1/4 (auto 0, manual 1; accepted Shows)\nt=1.0 click(278,262) -> cell(77,13) -> placed whole house"
+    },
+    {
+      "case": "C-mobile",
+      "file": "build-v1-craftable-C-mobile-placed-persists.png",
+      "label": "placed-persists",
+      "ms": 5828,
+      "line": "Wow! Show me!",
+      "options": [
+        "☝ Show"
+      ],
+      "debug": "quiet: OK\nidle 100.8s / select 100.8s / still 0.7s\nsession active=false / placed this run=0\ncelebrate particles=0\nhouse interior=3x3 boundary=9 roofed=true\nshows 1/4 (auto 0, manual 1; accepted Shows)"
+    },
+    {
+      "case": "P-mobile",
+      "file": "build-v1-craftable-P-mobile-recipe.png",
+      "label": "recipe",
+      "ms": 2153,
+      "line": "",
+      "options": [],
+      "debug": "quiet: blockers=[panel,card]\nidle 101.8s / select 101.8s / still 1.4s\nsession active=false / placed this run=0\ncelebrate particles=0\nshows 0/4 (auto 0, manual 0; accepted Shows)"
+    },
+    {
+      "case": "P-mobile",
+      "file": "build-v1-craftable-P-mobile-invalid-no-charge.png",
+      "label": "invalid-no-charge",
+      "ms": 2764,
+      "line": "",
+      "options": [],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.2s / select 0.4s / still 2.0s\nsession active=true / placed this run=0\ncelebrate particles=0\nshows 0/4 (auto 0, manual 0; accepted Shows)\nt=2.3 click(278,224) -> cell(77,13) -> fail:ground\nt=2.4 click(544,262) -> cell(84,13) -> fail:tree"
+    },
+    {
+      "case": "P-mobile",
+      "file": "build-v1-craftable-P-mobile-placed-celebration.png",
+      "label": "placed-celebration",
+      "ms": 3058,
+      "confettiPixels": 411,
+      "line": "Wow! It's all closed!",
+      "options": [],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.3s / select 0.7s / still 2.3s\nsession active=true / placed this run=8\ncelebrate particles=30\npen interior=4x2 boundary=8 roofed=false\nshows 0/4 (auto 0, manual 0; accepted Shows)\nt=2.3 click(278,224) -> cell(77,13) -> fail:ground\nt=2.4 click(544,262) -> cell(84,13) -> fail:tree\nt=2.6 click(278,262) -> cell(77,14) -> placed whole pen"
+    },
+    {
+      "case": "P-mobile",
+      "file": "build-v1-craftable-P-mobile-opening-invite.png",
+      "label": "opening-invite",
+      "ms": 3264,
+      "line": "Wow! Show me!",
+      "options": [
+        "☝ Show"
+      ],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.3s / select 0.7s / still 2.3s\nsession active=true / placed this run=8\ncelebrate particles=30\npen interior=4x2 boundary=8 roofed=false\nshows 0/4 (auto 0, manual 0; accepted Shows)\nt=2.3 click(278,224) -> cell(77,13) -> fail:ground\nt=2.4 click(544,262) -> cell(84,13) -> fail:tree\nt=2.6 click(278,262) -> cell(77,14) -> placed whole pen"
+    },
+    {
+      "case": "P-mobile",
+      "file": "build-v1-craftable-P-mobile-pen-question-options.png",
+      "label": "pen-question-options",
+      "ms": 3556,
+      "line": "What is this?",
+      "options": [
+        "House",
+        "Fence"
+      ],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.5s / select 0.9s / still 2.6s\nsession active=true / placed this run=8\ncelebrate particles=30\npen interior=4x2 boundary=8 roofed=false\nshows 0/4 (auto 0, manual 0; accepted Shows)\nt=2.3 click(278,224) -> cell(77,13) -> fail:ground\nt=2.4 click(544,262) -> cell(84,13) -> fail:tree\nt=2.6 click(278,262) -> cell(77,14) -> placed whole pen"
+    },
+    {
+      "case": "P-mobile",
+      "file": "build-v1-craftable-P-mobile-pen-finale-confetti.png",
+      "label": "pen-finale-confetti",
+      "ms": 3827,
+      "confettiPixels": 770,
+      "line": "You built a fence! Wow! It's so big!",
+      "options": [],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.8s / select 1.2s / still 2.8s\nsession active=true / placed this run=8\ncelebrate particles=60\npen interior=4x2 boundary=8 roofed=false\nshows 1/4 (auto 0, manual 1; accepted Shows)\nt=2.3 click(278,224) -> cell(77,13) -> fail:ground\nt=2.4 click(544,262) -> cell(84,13) -> fail:tree\nt=2.6 click(278,262) -> cell(77,14) -> placed whole pen"
+    },
+    {
+      "case": "P-mobile",
+      "file": "build-v1-craftable-P-mobile-recovered-instance.png",
+      "label": "recovered-instance",
+      "ms": 4426,
+      "line": "No more pen!",
+      "options": [],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.1s / select 0.2s / still 3.6s\nsession active=true / placed this run=0\ncelebrate particles=60\nshows 1/4 (auto 0, manual 1; accepted Shows)\nt=2.3 click(278,224) -> cell(77,13) -> fail:ground\nt=2.4 click(544,262) -> cell(84,13) -> fail:tree\nt=2.6 click(278,262) -> cell(77,14) -> placed whole pen\nt=3.9 click(240,262) -> cell(76,14) -> fail:stock\nt=4.1 click(316,224) -> cell(77,14) -> recovered whole pen"
+    },
+    {
+      "case": "P-mobile",
+      "file": "build-v1-craftable-P-mobile-replaced-after-reload.png",
+      "label": "replaced-after-reload",
+      "ms": 5598,
+      "line": "Wow! It's all closed!",
+      "options": [],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.0s / select 0.1s / still 0.9s\nsession active=true / placed this run=8\ncelebrate particles=30\npen interior=4x2 boundary=8 roofed=false\nshows 1/4 (auto 0, manual 1; accepted Shows)\nt=1.0 click(278,262) -> cell(77,14) -> placed whole pen"
+    },
+    {
+      "case": "P-mobile",
+      "file": "build-v1-craftable-P-mobile-placed-persists.png",
+      "label": "placed-persists",
+      "ms": 6579,
+      "line": "Wow! Show me!",
+      "options": [
+        "☝ Show"
+      ],
+      "debug": "quiet: OK\nidle 100.8s / select 100.8s / still 0.7s\nsession active=false / placed this run=0\ncelebrate particles=0\npen interior=4x2 boundary=8 roofed=false\nshows 1/4 (auto 0, manual 1; accepted Shows)"
+    },
+    {
+      "case": "F-mobile",
+      "file": "build-v1-craftable-F-mobile-free-celebration.png",
+      "label": "free-celebration",
+      "ms": 3997,
+      "confettiPixels": 397,
+      "line": "Wow! You made this!",
+      "options": [],
+      "debug": "quiet: OK\nidle 2.5s / select 2.8s / still 3.6s\nfree m=2 f=2 ready=true closed=true invited=false dx=-1.5t\nsession active=true / placed this run=2\ncelebrate particles=30\nshows 0/4 (auto 0, manual 0; accepted Shows)\nt=1.0 click(278,262) -> cell(77,15) -> placed fence\nt=1.1 click(316,262) -> cell(78,15) -> placed fence"
+    },
+    {
+      "case": "F-mobile",
+      "file": "build-v1-craftable-F-mobile-free-finale-confetti.png",
+      "label": "free-finale-confetti",
+      "ms": 4495,
+      "confettiPixels": 634,
+      "line": "Wow! You made this! I like it! Good job!",
+      "options": [],
+      "debug": "quiet: OK\nidle 3.1s / select 3.3s / still 4.1s\nfree m=2 f=2 ready=true closed=true invited=false dx=-1.5t\nsession active=true / placed this run=2\ncelebrate particles=60\nshows 1/4 (auto 0, manual 1; accepted Shows)\nt=1.0 click(278,262) -> cell(77,15) -> placed fence\nt=1.1 click(316,262) -> cell(78,15) -> placed fence"
+    },
+    {
+      "case": "F-mobile",
+      "file": "build-v1-craftable-F-mobile-loose-save-retained.png",
+      "label": "loose-save-retained",
+      "ms": 8276,
+      "line": "",
+      "options": [],
+      "debug": "quiet: OK\nidle 100.8s / select 100.8s / still 0.7s\nfree m=2 f=2 ready=true closed=true invited=false dx=-1.5t\nsession active=false / placed this run=0\ncelebrate particles=0\nshows 1/4 (auto 0, manual 1; accepted Shows)"
+    },
+    {
+      "case": "Q-mobile",
+      "file": "build-v1-craftable-Q-mobile-recipe.png",
+      "label": "recipe",
+      "ms": 1312,
+      "line": "",
+      "options": [],
+      "debug": "quiet: blockers=[panel,card]\nidle 101.0s / select 101.0s / still 0.7s\nsession active=false / placed this run=0\ncelebrate particles=0\nshows 0/4 (auto 0, manual 0; accepted Shows)"
+    },
+    {
+      "case": "Q-mobile",
+      "file": "build-v1-craftable-Q-mobile-invalid-no-charge.png",
+      "label": "invalid-no-charge",
+      "ms": 1920,
+      "line": "",
+      "options": [],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.0s / select 0.1s / still 1.1s\nsession active=true / placed this run=0\ncelebrate particles=0\nshows 0/4 (auto 0, manual 0; accepted Shows)\nt=1.5 click(278,224) -> cell(77,12) -> fail:ground"
+    },
+    {
+      "case": "Q-mobile",
+      "file": "build-v1-craftable-Q-mobile-placed-celebration.png",
+      "label": "placed-celebration",
+      "ms": 2182,
+      "confettiPixels": 398,
+      "line": "Wow! It's all closed!",
+      "options": [],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.0s / select 0.4s / still 1.3s\nsession active=true / placed this run=9\ncelebrate particles=30\nhouse interior=3x3 boundary=9 roofed=true\nshows 0/4 (auto 0, manual 0; accepted Shows)\nt=1.5 click(278,224) -> cell(77,12) -> fail:ground\nt=1.6 click(544,262) -> cell(84,12) -> fail:tree\nt=1.8 click(278,262) -> cell(77,13) -> placed whole house"
+    },
+    {
+      "case": "Q-mobile",
+      "file": "build-v1-craftable-Q-mobile-opening-invite.png",
+      "label": "opening-invite",
+      "ms": 2354,
+      "line": "Wow! Show me!",
+      "options": [
+        "☝ Show"
+      ],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.3s / select 0.7s / still 1.6s\nsession active=true / placed this run=9\ncelebrate particles=30\nhouse interior=3x3 boundary=9 roofed=true\nshows 0/4 (auto 0, manual 0; accepted Shows)\nt=1.5 click(278,224) -> cell(77,12) -> fail:ground\nt=1.6 click(544,262) -> cell(84,12) -> fail:tree\nt=1.8 click(278,262) -> cell(77,13) -> placed whole house"
+    },
+    {
+      "case": "Q-mobile",
+      "file": "build-v1-craftable-Q-mobile-quota-1-question-options.png",
+      "label": "quota-1-question-options",
+      "ms": 2638,
+      "line": "What is this?",
+      "options": [
+        "House",
+        "Fence"
+      ],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.5s / select 0.9s / still 1.8s\nsession active=true / placed this run=9\ncelebrate particles=30\nhouse interior=3x3 boundary=9 roofed=true\nshows 0/4 (auto 0, manual 0; accepted Shows)\nt=1.5 click(278,224) -> cell(77,12) -> fail:ground\nt=1.6 click(544,262) -> cell(84,12) -> fail:tree\nt=1.8 click(278,262) -> cell(77,13) -> placed whole house"
+    },
+    {
+      "case": "Q-mobile",
+      "file": "build-v1-craftable-Q-mobile-quota-1-finale-confetti.png",
+      "label": "quota-1-finale-confetti",
+      "ms": 2905,
+      "confettiPixels": 675,
+      "line": "You built a house! Wow! It's so big!",
+      "options": [],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.8s / select 1.2s / still 2.1s\nsession active=true / placed this run=9\ncelebrate particles=60\nhouse interior=3x3 boundary=9 roofed=true\nshows 1/4 (auto 0, manual 1; accepted Shows)\nt=1.5 click(278,224) -> cell(77,12) -> fail:ground\nt=1.6 click(544,262) -> cell(84,12) -> fail:tree\nt=1.8 click(278,262) -> cell(77,13) -> placed whole house"
+    },
+    {
+      "case": "Q-mobile",
+      "file": "build-v1-craftable-Q-mobile-rearmed-0.png",
+      "label": "rearmed-0",
+      "ms": 6088,
+      "line": "Wow! It's all closed!",
+      "options": [],
+      "debug": "quiet: OK\nidle 3.0s / select 3.1s / still 5.5s\nsession active=true / placed this run=10\ncelebrate particles=30\nhouse interior=3x3 boundary=9 roofed=true\nshows 1/4 (auto 0, manual 1; accepted Shows)\nt=1.5 click(278,224) -> cell(77,12) -> fail:ground\nt=1.6 click(544,262) -> cell(84,12) -> fail:tree\nt=1.8 click(278,262) -> cell(77,13) -> placed whole house\nt=3.0 click(278,148) -> cell(77,12) -> placed planks"
+    },
+    {
+      "case": "Q-mobile",
+      "file": "build-v1-craftable-Q-mobile-quota-2-question-options.png",
+      "label": "quota-2-question-options",
+      "ms": 6372,
+      "line": "What is this?",
+      "options": [
+        "House",
+        "Fence"
+      ],
+      "debug": "quiet: OK\nidle 3.2s / select 3.3s / still 5.7s\nsession active=true / placed this run=10\ncelebrate particles=30\nhouse interior=3x3 boundary=9 roofed=true\nshows 2/4 (auto 0, manual 2; accepted Shows)\nt=1.5 click(278,224) -> cell(77,12) -> fail:ground\nt=1.6 click(544,262) -> cell(84,12) -> fail:tree\nt=1.8 click(278,262) -> cell(77,13) -> placed whole house\nt=3.0 click(278,148) -> cell(77,12) -> placed planks"
+    },
+    {
+      "case": "Q-mobile",
+      "file": "build-v1-craftable-Q-mobile-quota-2-finale-confetti.png",
+      "label": "quota-2-finale-confetti",
+      "ms": 6633,
+      "confettiPixels": 669,
+      "line": "You built a house! Wow! It's so big!",
+      "options": [],
+      "debug": "quiet: OK\nidle 3.5s / select 3.6s / still 6.0s\nsession active=true / placed this run=10\ncelebrate particles=60\nhouse interior=3x3 boundary=9 roofed=true\nshows 2/4 (auto 0, manual 2; accepted Shows)\nt=1.5 click(278,224) -> cell(77,12) -> fail:ground\nt=1.6 click(544,262) -> cell(84,12) -> fail:tree\nt=1.8 click(278,262) -> cell(77,13) -> placed whole house\nt=3.0 click(278,148) -> cell(77,12) -> placed planks"
+    },
+    {
+      "case": "Q-mobile",
+      "file": "build-v1-craftable-Q-mobile-rearmed-1.png",
+      "label": "rearmed-1",
+      "ms": 9940,
+      "line": "Wow! It's all closed!",
+      "options": [],
+      "debug": "quiet: OK\nidle 2.7s / select 2.8s / still 9.1s\nsession active=true / placed this run=11\ncelebrate particles=30\nhouse interior=3x3 boundary=9 roofed=true\nshows 2/4 (auto 0, manual 2; accepted Shows)\nt=1.5 click(278,224) -> cell(77,12) -> fail:ground\nt=1.6 click(544,262) -> cell(84,12) -> fail:tree\nt=1.8 click(278,262) -> cell(77,13) -> placed whole house\nt=3.0 click(278,148) -> cell(77,12) -> placed planks\nt=6.9 click(316,148) -> cell(78,12) -> placed planks"
+    },
+    {
+      "case": "Q-mobile",
+      "file": "build-v1-craftable-Q-mobile-quota-3-question-options.png",
+      "label": "quota-3-question-options",
+      "ms": 10241,
+      "line": "What is this?",
+      "options": [
+        "House",
+        "Fence"
+      ],
+      "debug": "quiet: OK\nidle 3.3s / select 3.4s / still 9.6s\nsession active=true / placed this run=11\ncelebrate particles=30\nhouse interior=3x3 boundary=9 roofed=true\nshows 3/4 (auto 0, manual 3; accepted Shows)\nt=1.5 click(278,224) -> cell(77,12) -> fail:ground\nt=1.6 click(544,262) -> cell(84,12) -> fail:tree\nt=1.8 click(278,262) -> cell(77,13) -> placed whole house\nt=3.0 click(278,148) -> cell(77,12) -> placed planks\nt=6.9 click(316,148) -> cell(78,12) -> placed planks"
+    },
+    {
+      "case": "Q-mobile",
+      "file": "build-v1-craftable-Q-mobile-quota-3-finale-confetti.png",
+      "label": "quota-3-finale-confetti",
+      "ms": 10503,
+      "confettiPixels": 830,
+      "line": "You built a house! Wow! It's so big!",
+      "options": [],
+      "debug": "quiet: OK\nidle 3.5s / select 3.6s / still 9.9s\nsession active=true / placed this run=11\ncelebrate particles=60\nhouse interior=3x3 boundary=9 roofed=true\nshows 3/4 (auto 0, manual 3; accepted Shows)\nt=1.5 click(278,224) -> cell(77,12) -> fail:ground\nt=1.6 click(544,262) -> cell(84,12) -> fail:tree\nt=1.8 click(278,262) -> cell(77,13) -> placed whole house\nt=3.0 click(278,148) -> cell(77,12) -> placed planks\nt=6.9 click(316,148) -> cell(78,12) -> placed planks"
+    },
+    {
+      "case": "Q-mobile",
+      "file": "build-v1-craftable-Q-mobile-rearmed-2.png",
+      "label": "rearmed-2",
+      "ms": 13705,
+      "line": "Wow! It's all closed!",
+      "options": [],
+      "debug": "quiet: OK\nidle 2.9s / select 3.0s / still 13.1s\nsession active=true / placed this run=12\ncelebrate particles=30\nhouse interior=3x3 boundary=9 roofed=true\nshows 3/4 (auto 0, manual 3; accepted Shows)\nt=1.5 click(278,224) -> cell(77,12) -> fail:ground\nt=1.6 click(544,262) -> cell(84,12) -> fail:tree\nt=1.8 click(278,262) -> cell(77,13) -> placed whole house\nt=3.0 click(278,148) -> cell(77,12) -> placed planks\nt=6.9 click(316,148) -> cell(78,12) -> placed planks\nt=10.6 click(354,148) -> cell(79,12) -> placed planks"
+    },
+    {
+      "case": "Q-mobile",
+      "file": "build-v1-craftable-Q-mobile-quota-4-question-options.png",
+      "label": "quota-4-question-options",
+      "ms": 13988,
+      "line": "What is this?",
+      "options": [
+        "House",
+        "Fence"
+      ],
+      "debug": "quiet: OK\nidle 3.2s / select 3.3s / still 13.3s\nsession active=true / placed this run=12\ncelebrate particles=30\nhouse interior=3x3 boundary=9 roofed=true\nshows 4/4 (auto 0, manual 4; accepted Shows)\nt=1.5 click(278,224) -> cell(77,12) -> fail:ground\nt=1.6 click(544,262) -> cell(84,12) -> fail:tree\nt=1.8 click(278,262) -> cell(77,13) -> placed whole house\nt=3.0 click(278,148) -> cell(77,12) -> placed planks\nt=6.9 click(316,148) -> cell(78,12) -> placed planks\nt=10.6 click(354,148) -> cell(79,12) -> placed planks"
+    },
+    {
+      "case": "Q-mobile",
+      "file": "build-v1-craftable-Q-mobile-quota-4-finale-confetti.png",
+      "label": "quota-4-finale-confetti",
+      "ms": 14344,
+      "confettiPixels": 710,
+      "line": "You built a house! Wow! It's so big!",
+      "options": [],
+      "debug": "quiet: OK\nidle 3.5s / select 3.6s / still 13.6s\nsession active=true / placed this run=12\ncelebrate particles=60\nhouse interior=3x3 boundary=9 roofed=true\nshows 4/4 (auto 0, manual 4; accepted Shows)\nt=1.5 click(278,224) -> cell(77,12) -> fail:ground\nt=1.6 click(544,262) -> cell(84,12) -> fail:tree\nt=1.8 click(278,262) -> cell(77,13) -> placed whole house\nt=3.0 click(278,148) -> cell(77,12) -> placed planks\nt=6.9 click(316,148) -> cell(78,12) -> placed planks\nt=10.6 click(354,148) -> cell(79,12) -> placed planks"
+    },
+    {
+      "case": "Q-mobile",
+      "file": "build-v1-craftable-Q-mobile-fifth-blocked.png",
+      "label": "fifth-blocked",
+      "ms": 14639,
+      "line": "You built a house! Wow! It's so big!",
+      "options": [],
+      "debug": "quiet: OK\nidle 3.7s / select 3.8s / still 13.9s\nsession active=true / placed this run=12\ncelebrate particles=60\nhouse interior=3x3 boundary=9 roofed=true\nshows 4/4 (auto 0, manual 4; accepted Shows)\nt=1.5 click(278,224) -> cell(77,12) -> fail:ground\nt=1.6 click(544,262) -> cell(84,12) -> fail:tree\nt=1.8 click(278,262) -> cell(77,13) -> placed whole house\nt=3.0 click(278,148) -> cell(77,12) -> placed planks\nt=6.9 click(316,148) -> cell(78,12) -> placed planks\nt=10.6 click(354,148) -> cell(79,12) -> placed planks"
+    },
+    {
+      "case": "Q-mobile",
+      "file": "build-v1-craftable-Q-mobile-quota-persists.png",
+      "label": "quota-persists",
+      "ms": 18423,
+      "line": "Look! Our house! Let's build more!",
+      "options": [],
+      "debug": "quiet: blockers=[recent]\nidle 0.0s / select 100.8s / still 0.7s\nsession active=true / placed this run=0\ncelebrate particles=0\nhouse interior=3x3 boundary=9 roofed=true\nshows 4/4 (auto 0, manual 4; accepted Shows)"
+    },
+    {
+      "case": "Q-mobile",
+      "file": "build-v1-craftable-Q-mobile-new-world-zero.png",
+      "label": "new-world-zero",
+      "ms": 19633,
+      "line": "",
+      "options": [],
+      "debug": "quiet: blockers=[recent]\nidle 0.0s / select 101.0s / still 0.7s\nsession active=true / placed this run=0\ncelebrate particles=0\nshows 0/4 (auto 0, manual 0; accepted Shows)"
+    },
+    {
+      "case": "R-mobile",
+      "file": "build-v1-craftable-R-mobile-recipe.png",
+      "label": "recipe",
+      "ms": 1338,
+      "line": "",
+      "options": [],
+      "debug": "quiet: blockers=[panel,card]\nidle 101.0s / select 101.0s / still 0.7s\nsession active=false / placed this run=0\ncelebrate particles=0\nshows 0/4 (auto 0, manual 0; accepted Shows)"
+    },
+    {
+      "case": "R-mobile",
+      "file": "build-v1-craftable-R-mobile-invalid-no-charge.png",
+      "label": "invalid-no-charge",
+      "ms": 1962,
+      "line": "",
+      "options": [],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.1s / select 0.4s / still 1.3s\nsession active=true / placed this run=0\ncelebrate particles=0\nshows 0/4 (auto 0, manual 0; accepted Shows)\nt=1.6 click(278,224) -> cell(77,12) -> fail:ground\nt=1.7 click(544,262) -> cell(84,12) -> fail:tree"
+    },
+    {
+      "case": "R-mobile",
+      "file": "build-v1-craftable-R-mobile-placed-celebration.png",
+      "label": "placed-celebration",
+      "ms": 2240,
+      "confettiPixels": 599,
+      "line": "Wow! It's all closed!",
+      "options": [],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.2s / select 0.6s / still 1.5s\nsession active=true / placed this run=9\ncelebrate particles=30\nhouse interior=3x3 boundary=9 roofed=true\nshows 0/4 (auto 0, manual 0; accepted Shows)\nt=1.6 click(278,224) -> cell(77,12) -> fail:ground\nt=1.7 click(544,262) -> cell(84,12) -> fail:tree\nt=1.8 click(278,262) -> cell(77,13) -> placed whole house"
+    },
+    {
+      "case": "R-mobile",
+      "file": "build-v1-craftable-R-mobile-opening-invite.png",
+      "label": "opening-invite",
+      "ms": 2450,
+      "line": "Wow! Show me!",
+      "options": [
+        "☝ Show"
+      ],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.2s / select 0.6s / still 1.5s\nsession active=true / placed this run=9\ncelebrate particles=30\nhouse interior=3x3 boundary=9 roofed=true\nshows 0/4 (auto 0, manual 0; accepted Shows)\nt=1.6 click(278,224) -> cell(77,12) -> fail:ground\nt=1.7 click(544,262) -> cell(84,12) -> fail:tree\nt=1.8 click(278,262) -> cell(77,13) -> placed whole house"
+    },
+    {
+      "case": "R-mobile",
+      "file": "build-v1-craftable-R-mobile-expiry-no-slot.png",
+      "label": "expiry-no-slot",
+      "ms": 37360,
+      "line": "Wow! You made this! I like it! Good job!",
+      "options": [],
+      "debug": "quiet: OK\nidle 35.1s / select 35.5s / still 36.5s\nsession active=true / placed this run=9\ncelebrate particles=0\nhouse interior=3x3 boundary=9 roofed=true\nshows 0/4 (auto 0, manual 0; accepted Shows)\nt=1.6 click(278,224) -> cell(77,12) -> fail:ground\nt=1.7 click(544,262) -> cell(84,12) -> fail:tree\nt=1.8 click(278,262) -> cell(77,13) -> placed whole house"
+    },
+    {
+      "case": "R-mobile",
+      "file": "build-v1-craftable-R-mobile-rearmed-0.png",
+      "label": "rearmed-0",
+      "ms": 40443,
+      "line": "Wow! It's all closed!",
+      "options": [],
+      "debug": "quiet: OK\nidle 2.9s / select 3.0s / still 39.7s\nsession active=true / placed this run=10\ncelebrate particles=30\nhouse interior=3x3 boundary=9 roofed=true\nshows 0/4 (auto 0, manual 0; accepted Shows)\nt=1.6 click(278,224) -> cell(77,12) -> fail:ground\nt=1.7 click(544,262) -> cell(84,12) -> fail:tree\nt=1.8 click(278,262) -> cell(77,13) -> placed whole house\nt=37.3 click(278,148) -> cell(77,12) -> placed planks"
+    },
+    {
+      "case": "R-mobile",
+      "file": "build-v1-craftable-R-mobile-after-expiry-question-options.png",
+      "label": "after-expiry-question-options",
+      "ms": 40727,
+      "line": "What is this?",
+      "options": [
+        "House",
+        "Fence"
+      ],
+      "debug": "quiet: OK\nidle 3.2s / select 3.3s / still 40.0s\nsession active=true / placed this run=10\ncelebrate particles=30\nhouse interior=3x3 boundary=9 roofed=true\nshows 1/4 (auto 0, manual 1; accepted Shows)\nt=1.6 click(278,224) -> cell(77,12) -> fail:ground\nt=1.7 click(544,262) -> cell(84,12) -> fail:tree\nt=1.8 click(278,262) -> cell(77,13) -> placed whole house\nt=37.3 click(278,148) -> cell(77,12) -> placed planks"
+    },
+    {
+      "case": "R-mobile",
+      "file": "build-v1-craftable-R-mobile-after-expiry-finale-confetti.png",
+      "label": "after-expiry-finale-confetti",
+      "ms": 40993,
+      "confettiPixels": 1012,
+      "line": "You built a house! Wow! It's so big!",
+      "options": [],
+      "debug": "quiet: OK\nidle 3.4s / select 3.5s / still 40.2s\nsession active=true / placed this run=10\ncelebrate particles=60\nhouse interior=3x3 boundary=9 roofed=true\nshows 1/4 (auto 0, manual 1; accepted Shows)\nt=1.6 click(278,224) -> cell(77,12) -> fail:ground\nt=1.7 click(544,262) -> cell(84,12) -> fail:tree\nt=1.8 click(278,262) -> cell(77,13) -> placed whole house\nt=37.3 click(278,148) -> cell(77,12) -> placed planks"
+    },
+    {
+      "case": "R-mobile",
+      "file": "build-v1-craftable-R-mobile-rearmed-1.png",
+      "label": "rearmed-1",
+      "ms": 44177,
+      "line": "Wow! It's all closed!",
+      "options": [],
+      "debug": "quiet: OK\nidle 2.8s / select 2.9s / still 43.3s\nsession active=true / placed this run=11\ncelebrate particles=30\nhouse interior=3x3 boundary=9 roofed=true\nshows 1/4 (auto 0, manual 1; accepted Shows)\nt=1.6 click(278,224) -> cell(77,12) -> fail:ground\nt=1.7 click(544,262) -> cell(84,12) -> fail:tree\nt=1.8 click(278,262) -> cell(77,13) -> placed whole house\nt=37.3 click(278,148) -> cell(77,12) -> placed planks\nt=41.1 click(316,148) -> cell(78,12) -> placed planks"
+    },
+    {
+      "case": "R-mobile",
+      "file": "build-v1-craftable-R-mobile-after-completion-question-options.png",
+      "label": "after-completion-question-options",
+      "ms": 44477,
+      "line": "What is this?",
+      "options": [
+        "House",
+        "Fence"
+      ],
+      "debug": "quiet: OK\nidle 3.3s / select 3.4s / still 43.8s\nsession active=true / placed this run=11\ncelebrate particles=30\nhouse interior=3x3 boundary=9 roofed=true\nshows 2/4 (auto 0, manual 2; accepted Shows)\nt=1.6 click(278,224) -> cell(77,12) -> fail:ground\nt=1.7 click(544,262) -> cell(84,12) -> fail:tree\nt=1.8 click(278,262) -> cell(77,13) -> placed whole house\nt=37.3 click(278,148) -> cell(77,12) -> placed planks\nt=41.1 click(316,148) -> cell(78,12) -> placed planks"
+    },
+    {
+      "case": "R-mobile",
+      "file": "build-v1-craftable-R-mobile-after-completion-finale-confetti.png",
+      "label": "after-completion-finale-confetti",
+      "ms": 44753,
+      "confettiPixels": 890,
+      "line": "You built a house! Wow! It's so big!",
+      "options": [],
+      "debug": "quiet: OK\nidle 3.5s / select 3.6s / still 44.1s\nsession active=true / placed this run=11\ncelebrate particles=60\nhouse interior=3x3 boundary=9 roofed=true\nshows 2/4 (auto 0, manual 2; accepted Shows)\nt=1.6 click(278,224) -> cell(77,12) -> fail:ground\nt=1.7 click(544,262) -> cell(84,12) -> fail:tree\nt=1.8 click(278,262) -> cell(77,13) -> placed whole house\nt=37.3 click(278,148) -> cell(77,12) -> placed planks\nt=41.1 click(316,148) -> cell(78,12) -> placed planks"
+    },
+    {
+      "case": "I-mobile",
+      "file": "build-v1-craftable-I-mobile-recipe.png",
+      "label": "recipe",
+      "ms": 1310,
+      "line": "",
+      "options": [],
+      "debug": "quiet: blockers=[panel,card]\nidle 101.0s / select 101.0s / still 0.7s\nsession active=false / placed this run=0\ncelebrate particles=0\nshows 0/4 (auto 0, manual 0; accepted Shows)"
+    },
+    {
+      "case": "I-mobile",
+      "file": "build-v1-craftable-I-mobile-invalid-no-charge.png",
+      "label": "invalid-no-charge",
+      "ms": 1918,
+      "line": "",
+      "options": [],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.0s / select 0.1s / still 1.1s\nsession active=true / placed this run=0\ncelebrate particles=0\nshows 0/4 (auto 0, manual 0; accepted Shows)\nt=1.5 click(278,224) -> cell(77,12) -> fail:ground"
+    },
+    {
+      "case": "I-mobile",
+      "file": "build-v1-craftable-I-mobile-placed-celebration.png",
+      "label": "placed-celebration",
+      "ms": 2183,
+      "confettiPixels": 357,
+      "line": "Wow! It's all closed!",
+      "options": [],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.0s / select 0.4s / still 1.3s\nsession active=true / placed this run=9\ncelebrate particles=30\nhouse interior=3x3 boundary=9 roofed=true\nshows 0/4 (auto 0, manual 0; accepted Shows)\nt=1.5 click(278,224) -> cell(77,12) -> fail:ground\nt=1.7 click(544,262) -> cell(84,12) -> fail:tree\nt=1.8 click(278,262) -> cell(77,13) -> placed whole house"
+    },
+    {
+      "case": "I-mobile",
+      "file": "build-v1-craftable-I-mobile-opening-invite.png",
+      "label": "opening-invite",
+      "ms": 2352,
+      "line": "Wow! Show me!",
+      "options": [
+        "☝ Show"
+      ],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.3s / select 0.7s / still 1.6s\nsession active=true / placed this run=9\ncelebrate particles=30\nhouse interior=3x3 boundary=9 roofed=true\nshows 0/4 (auto 0, manual 0; accepted Shows)\nt=1.5 click(278,224) -> cell(77,12) -> fail:ground\nt=1.7 click(544,262) -> cell(84,12) -> fail:tree\nt=1.8 click(278,262) -> cell(77,13) -> placed whole house"
+    },
+    {
+      "case": "I-mobile",
+      "file": "build-v1-craftable-I-mobile-invite-29s.png",
+      "label": "invite-29s",
+      "ms": 31534,
+      "line": "Wow! Show me!",
+      "options": [
+        "☝ Show"
+      ],
+      "debug": "quiet: OK\nidle 18.5s / select 19.0s / still 18.4s\nsession active=true / placed this run=10\ncelebrate particles=0\nhouse interior=3x3 boundary=9 roofed=true\nshows 0/4 (auto 0, manual 0; accepted Shows)\nt=1.5 click(278,224) -> cell(77,12) -> fail:ground\nt=1.7 click(544,262) -> cell(84,12) -> fail:tree\nt=1.8 click(278,262) -> cell(77,13) -> placed whole house\nt=12.5 click(278,148) -> cell(77,12) -> placed planks"
+    },
+    {
+      "case": "I-mobile",
+      "file": "build-v1-craftable-I-mobile-waited-question-options.png",
+      "label": "waited-question-options",
+      "ms": 31702,
+      "line": "What is this?",
+      "options": [
+        "House",
+        "Fence"
+      ],
+      "debug": "quiet: OK\nidle 18.5s / select 19.0s / still 18.4s\nsession active=true / placed this run=10\ncelebrate particles=0\nhouse interior=3x3 boundary=9 roofed=true\nshows 0/4 (auto 0, manual 0; accepted Shows)\nt=1.5 click(278,224) -> cell(77,12) -> fail:ground\nt=1.7 click(544,262) -> cell(84,12) -> fail:tree\nt=1.8 click(278,262) -> cell(77,13) -> placed whole house\nt=12.5 click(278,148) -> cell(77,12) -> placed planks"
+    },
+    {
+      "case": "I-mobile",
+      "file": "build-v1-craftable-I-mobile-waited-finale-confetti.png",
+      "label": "waited-finale-confetti",
+      "ms": 31969,
+      "confettiPixels": 298,
+      "line": "You built a house! Wow! It's so big!",
+      "options": [],
+      "debug": "quiet: OK\nidle 18.7s / select 19.3s / still 18.7s\nsession active=true / placed this run=10\ncelebrate particles=30\nhouse interior=3x3 boundary=9 roofed=true\nshows 1/4 (auto 0, manual 1; accepted Shows)\nt=1.5 click(278,224) -> cell(77,12) -> fail:ground\nt=1.7 click(544,262) -> cell(84,12) -> fail:tree\nt=1.8 click(278,262) -> cell(77,13) -> placed whole house\nt=12.5 click(278,148) -> cell(77,12) -> placed planks"
+    },
+    {
+      "case": "V-mobile",
+      "file": "build-v1-craftable-V-mobile-version.png",
+      "label": "version",
+      "ms": 942,
+      "line": "",
+      "options": [],
+      "debug": "quiet: OK\nidle 100.8s / select 100.8s / still 0.7s\nsession active=false / placed this run=0\ncelebrate particles=0\nshows 0/4 (auto 0, manual 0; accepted Shows)"
+    },
+    {
+      "case": "T2-mobile",
+      "file": "build-v1-craftable-T2-mobile-recipe.png",
+      "label": "recipe",
+      "ms": 1696,
+      "line": "",
+      "options": [],
+      "debug": "quiet: blockers=[panel]\nidle 101.6s / select 101.6s / still 0.8s\nsession active=false / placed this run=0\ncelebrate particles=0\nshows 0/4 (auto 0, manual 0; accepted Shows)"
+    },
+    {
+      "case": "T2-mobile",
+      "file": "build-v1-craftable-T2-mobile-invalid-no-charge.png",
+      "label": "invalid-no-charge",
+      "ms": 2304,
+      "line": "",
+      "options": [],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.0s / select 0.2s / still 1.3s\nsession active=true / placed this run=0\ncelebrate particles=0\nshows 0/4 (auto 0, manual 0; accepted Shows)\nt=1.9 click(278,224) -> cell(77,12) -> fail:ground\nt=2.0 click(544,262) -> cell(84,12) -> fail:tree"
+    },
+    {
+      "case": "T2-mobile",
+      "file": "build-v1-craftable-T2-mobile-placed-celebration.png",
+      "label": "placed-celebration",
+      "ms": 2571,
+      "confettiPixels": 524,
+      "line": "Wow! It's all closed!",
+      "options": [],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.1s / select 0.5s / still 1.5s\nsession active=true / placed this run=9\ncelebrate particles=30\nhouse interior=3x3 boundary=9 roofed=true\nshows 0/4 (auto 0, manual 0; accepted Shows)\nt=1.9 click(278,224) -> cell(77,12) -> fail:ground\nt=2.0 click(544,262) -> cell(84,12) -> fail:tree\nt=2.2 click(278,262) -> cell(77,13) -> placed whole house"
+    },
+    {
+      "case": "T2-mobile",
+      "file": "build-v1-craftable-T2-mobile-opening-invite.png",
+      "label": "opening-invite",
+      "ms": 2740,
+      "line": "Wow! Show me!",
+      "options": [
+        "☝ Show"
+      ],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.4s / select 0.8s / still 1.8s\nsession active=true / placed this run=9\ncelebrate particles=30\nhouse interior=3x3 boundary=9 roofed=true\nshows 0/4 (auto 0, manual 0; accepted Shows)\nt=1.9 click(278,224) -> cell(77,12) -> fail:ground\nt=2.0 click(544,262) -> cell(84,12) -> fail:tree\nt=2.2 click(278,262) -> cell(77,13) -> placed whole house"
+    },
+    {
+      "case": "T2-mobile",
+      "file": "build-v1-craftable-T2-mobile-house-spoken-question.png",
+      "label": "house-spoken-question",
+      "ms": 3021,
+      "line": "What's this?",
+      "options": [],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.6s / select 1.0s / still 2.1s\nsession active=true / placed this run=9\ncelebrate particles=30\nhouse interior=3x3 boundary=9 roofed=true\nshows 1/4 (auto 0, manual 1; accepted Shows)\nt=1.9 click(278,224) -> cell(77,12) -> fail:ground\nt=2.0 click(544,262) -> cell(84,12) -> fail:tree\nt=2.2 click(278,262) -> cell(77,13) -> placed whole house"
+    },
+    {
+      "case": "T2-mobile",
+      "file": "build-v1-craftable-T2-mobile-house-question-options.png",
+      "label": "house-question-options",
+      "ms": 11405,
+      "line": "What's this?",
+      "options": [
+        "House",
+        "Fence"
+      ],
+      "debug": "quiet: OK\nidle 9.0s / select 9.3s / still 10.4s\nsession active=true / placed this run=9\ncelebrate particles=0\nhouse interior=3x3 boundary=9 roofed=true\nshows 1/4 (auto 0, manual 1; accepted Shows)\nt=1.9 click(278,224) -> cell(77,12) -> fail:ground\nt=2.0 click(544,262) -> cell(84,12) -> fail:tree\nt=2.2 click(278,262) -> cell(77,13) -> placed whole house"
+    },
+    {
+      "case": "T2-mobile",
+      "file": "build-v1-craftable-T2-mobile-house-finale-confetti.png",
+      "label": "house-finale-confetti",
+      "ms": 11680,
+      "confettiPixels": 448,
+      "line": "You built a house! Wow! It's so big!",
+      "options": [],
+      "debug": "quiet: OK\nidle 9.2s / select 9.6s / still 10.6s\nsession active=true / placed this run=9\ncelebrate particles=30\nhouse interior=3x3 boundary=9 roofed=true\nshows 1/4 (auto 0, manual 1; accepted Shows)\nt=1.9 click(278,224) -> cell(77,12) -> fail:ground\nt=2.0 click(544,262) -> cell(84,12) -> fail:tree\nt=2.2 click(278,262) -> cell(77,13) -> placed whole house"
+    },
+    {
+      "case": "T2-mobile",
+      "file": "build-v1-craftable-T2-mobile-recovered-instance.png",
+      "label": "recovered-instance",
+      "ms": 12305,
+      "line": "No more house!",
+      "options": [],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.0s / select 0.0s / still 11.2s\nsession active=true / placed this run=9\ncelebrate particles=30\nhouse interior=3x3 boundary=9 roofed=true\nshows 1/4 (auto 0, manual 1; accepted Shows)\nt=1.9 click(278,224) -> cell(77,12) -> fail:ground\nt=2.0 click(544,262) -> cell(84,12) -> fail:tree\nt=2.2 click(278,262) -> cell(77,13) -> placed whole house\nt=11.8 click(240,262) -> cell(76,13) -> fail:stock"
+    },
+    {
+      "case": "T2-mobile",
+      "file": "build-v1-craftable-T2-mobile-replaced-after-reload.png",
+      "label": "replaced-after-reload",
+      "ms": 13521,
+      "line": "Wow! It's all closed!",
+      "options": [],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.1s / select 0.1s / still 0.9s\nsession active=true / placed this run=0\ncelebrate particles=0\nshows 1/4 (auto 0, manual 1; accepted Shows)"
+    },
+    {
+      "case": "T2-mobile",
+      "file": "build-v1-craftable-T2-mobile-placed-persists.png",
+      "label": "placed-persists",
+      "ms": 14471,
+      "line": "Wow! Show me!",
+      "options": [
+        "☝ Show"
+      ],
+      "debug": "quiet: OK\nidle 100.8s / select 100.8s / still 0.7s\nsession active=false / placed this run=0\ncelebrate particles=0\nhouse interior=3x3 boundary=9 roofed=true\nshows 1/4 (auto 0, manual 1; accepted Shows)"
+    },
+    {
+      "case": "T3-mobile",
+      "file": "build-v1-craftable-T3-mobile-recipe.png",
+      "label": "recipe",
+      "ms": 2426,
+      "line": "",
+      "options": [],
+      "debug": "quiet: blockers=[panel,card]\nidle 102.1s / select 102.1s / still 1.5s\nsession active=false / placed this run=0\ncelebrate particles=0\nshows 0/4 (auto 0, manual 0; accepted Shows)"
+    },
+    {
+      "case": "T3-mobile",
+      "file": "build-v1-craftable-T3-mobile-invalid-no-charge.png",
+      "label": "invalid-no-charge",
+      "ms": 3052,
+      "line": "",
+      "options": [],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.1s / select 0.3s / still 2.1s\nsession active=true / placed this run=0\ncelebrate particles=0\nshows 0/4 (auto 0, manual 0; accepted Shows)\nt=2.7 click(278,224) -> cell(77,13) -> fail:ground\nt=2.8 click(544,262) -> cell(84,13) -> fail:tree"
+    },
+    {
+      "case": "T3-mobile",
+      "file": "build-v1-craftable-T3-mobile-placed-celebration.png",
+      "label": "placed-celebration",
+      "ms": 3322,
+      "confettiPixels": 385,
+      "line": "Wow! It's all closed!",
+      "options": [],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.2s / select 0.6s / still 2.3s\nsession active=true / placed this run=8\ncelebrate particles=30\npen interior=4x2 boundary=8 roofed=false\nshows 0/4 (auto 0, manual 0; accepted Shows)\nt=2.7 click(278,224) -> cell(77,13) -> fail:ground\nt=2.8 click(544,262) -> cell(84,13) -> fail:tree\nt=3.0 click(278,262) -> cell(77,14) -> placed whole pen"
+    },
+    {
+      "case": "T3-mobile",
+      "file": "build-v1-craftable-T3-mobile-opening-invite.png",
+      "label": "opening-invite",
+      "ms": 3503,
+      "line": "Wow! Show me!",
+      "options": [
+        "☝ Show"
+      ],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.2s / select 0.6s / still 2.3s\nsession active=true / placed this run=8\ncelebrate particles=30\npen interior=4x2 boundary=8 roofed=false\nshows 0/4 (auto 0, manual 0; accepted Shows)\nt=2.7 click(278,224) -> cell(77,13) -> fail:ground\nt=2.8 click(544,262) -> cell(84,13) -> fail:tree\nt=3.0 click(278,262) -> cell(77,14) -> placed whole pen"
+    },
+    {
+      "case": "T3-mobile",
+      "file": "build-v1-craftable-T3-mobile-pen-spoken-question.png",
+      "label": "pen-spoken-question",
+      "ms": 3785,
+      "line": "I made a fence. Say it!",
+      "options": [],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.7s / select 1.1s / still 2.9s\nsession active=true / placed this run=8\ncelebrate particles=30\npen interior=4x2 boundary=8 roofed=false\nshows 1/4 (auto 0, manual 1; accepted Shows)\nt=2.7 click(278,224) -> cell(77,13) -> fail:ground\nt=2.8 click(544,262) -> cell(84,13) -> fail:tree\nt=3.0 click(278,262) -> cell(77,14) -> placed whole pen"
+    },
+    {
+      "case": "T3-mobile",
+      "file": "build-v1-craftable-T3-mobile-pen-question-options.png",
+      "label": "pen-question-options",
+      "ms": 12184,
+      "line": "I made a fence. Say it!",
+      "options": [
+        "House",
+        "Fence"
+      ],
+      "debug": "quiet: OK\nidle 9.0s / select 9.4s / still 11.1s\nsession active=true / placed this run=8\ncelebrate particles=0\npen interior=4x2 boundary=8 roofed=false\nshows 1/4 (auto 0, manual 1; accepted Shows)\nt=2.7 click(278,224) -> cell(77,13) -> fail:ground\nt=2.8 click(544,262) -> cell(84,13) -> fail:tree\nt=3.0 click(278,262) -> cell(77,14) -> placed whole pen"
+    },
+    {
+      "case": "T3-mobile",
+      "file": "build-v1-craftable-T3-mobile-pen-finale-confetti.png",
+      "label": "pen-finale-confetti",
+      "ms": 12452,
+      "confettiPixels": 468,
+      "line": "You built a fence! Wow! It's so big!",
+      "options": [],
+      "debug": "quiet: OK\nidle 9.3s / select 9.6s / still 11.4s\nsession active=true / placed this run=8\ncelebrate particles=30\npen interior=4x2 boundary=8 roofed=false\nshows 1/4 (auto 0, manual 1; accepted Shows)\nt=2.7 click(278,224) -> cell(77,13) -> fail:ground\nt=2.8 click(544,262) -> cell(84,13) -> fail:tree\nt=3.0 click(278,262) -> cell(77,14) -> placed whole pen"
+    },
+    {
+      "case": "T3-mobile",
+      "file": "build-v1-craftable-T3-mobile-recovered-instance.png",
+      "label": "recovered-instance",
+      "ms": 13067,
+      "line": "No more pen!",
+      "options": [],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.1s / select 0.1s / still 11.9s\nsession active=true / placed this run=8\ncelebrate particles=30\npen interior=4x2 boundary=8 roofed=false\nshows 1/4 (auto 0, manual 1; accepted Shows)\nt=2.7 click(278,224) -> cell(77,13) -> fail:ground\nt=2.8 click(544,262) -> cell(84,13) -> fail:tree\nt=3.0 click(278,262) -> cell(77,14) -> placed whole pen\nt=12.6 click(240,262) -> cell(76,14) -> fail:stock"
+    },
+    {
+      "case": "T3-mobile",
+      "file": "build-v1-craftable-T3-mobile-replaced-after-reload.png",
+      "label": "replaced-after-reload",
+      "ms": 14285,
+      "line": "Wow! It's all closed!",
+      "options": [],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.0s / select 0.2s / still 1.0s\nsession active=true / placed this run=8\ncelebrate particles=30\npen interior=4x2 boundary=8 roofed=false\nshows 1/4 (auto 0, manual 1; accepted Shows)\nt=1.0 click(278,262) -> cell(77,14) -> placed whole pen"
+    },
+    {
+      "case": "T3-mobile",
+      "file": "build-v1-craftable-T3-mobile-placed-persists.png",
+      "label": "placed-persists",
+      "ms": 15270,
+      "line": "Wow! Show me!",
+      "options": [
+        "☝ Show"
+      ],
+      "debug": "quiet: OK\nidle 100.8s / select 100.8s / still 0.7s\nsession active=false / placed this run=0\ncelebrate particles=0\npen interior=4x2 boundary=8 roofed=false\nshows 1/4 (auto 0, manual 1; accepted Shows)"
+    },
+    {
+      "case": "N-mobile",
+      "file": "build-v1-craftable-N-mobile-recipe.png",
+      "label": "recipe",
+      "ms": 1535,
+      "line": "",
+      "options": [],
+      "debug": "quiet: blockers=[panel]\nidle 101.3s / select 101.3s / still 0.7s\nsession active=false / placed this run=0\ncelebrate particles=0\nshows 0/4 (auto 0, manual 0; accepted Shows)"
+    },
+    {
+      "case": "N-mobile",
+      "file": "build-v1-craftable-N-mobile-invalid-no-charge.png",
+      "label": "invalid-no-charge",
+      "ms": 2160,
+      "line": "",
+      "options": [],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.1s / select 0.1s / still 1.1s\nsession active=true / placed this run=0\ncelebrate particles=0\nshows 0/4 (auto 0, manual 0; accepted Shows)\nt=1.8 click(278,224) -> cell(77,12) -> fail:ground"
+    },
+    {
+      "case": "N-mobile",
+      "file": "build-v1-craftable-N-mobile-placed-celebration.png",
+      "label": "placed-celebration",
+      "ms": 2444,
+      "confettiPixels": 307,
+      "line": "Wow! It's all closed!",
+      "options": [],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.0s / select 0.4s / still 1.3s\nsession active=true / placed this run=9\ncelebrate particles=30\nhouse interior=3x3 boundary=9 roofed=true\nshows 0/4 (auto 0, manual 0; accepted Shows)\nt=1.8 click(278,224) -> cell(77,12) -> fail:ground\nt=1.9 click(544,262) -> cell(84,12) -> fail:tree\nt=2.0 click(278,262) -> cell(77,13) -> placed whole house"
+    },
+    {
+      "case": "N-mobile",
+      "file": "build-v1-craftable-N-mobile-overlap-no-charge.png",
+      "label": "overlap-no-charge",
+      "ms": 2627,
+      "line": "Wow! It's all closed!",
+      "options": [],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.3s / select 0.7s / still 1.6s\nsession active=true / placed this run=9\ncelebrate particles=30\nhouse interior=3x3 boundary=9 roofed=true\nshows 0/4 (auto 0, manual 0; accepted Shows)\nt=1.8 click(278,224) -> cell(77,12) -> fail:ground\nt=1.9 click(544,262) -> cell(84,12) -> fail:tree\nt=2.0 click(278,262) -> cell(77,13) -> placed whole house"
+    },
+    {
+      "case": "N-mobile",
+      "file": "build-v1-craftable-N-mobile-opening-invite.png",
+      "label": "opening-invite",
+      "ms": 2793,
+      "line": "Wow! Show me!",
+      "options": [
+        "☝ Show"
+      ],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.3s / select 0.9s / still 1.9s\nsession active=true / placed this run=9\ncelebrate particles=30\nhouse interior=3x3 boundary=9 roofed=true\nshows 0/4 (auto 0, manual 0; accepted Shows)\nt=1.8 click(278,224) -> cell(77,12) -> fail:ground\nt=1.9 click(544,262) -> cell(84,12) -> fail:tree\nt=2.0 click(278,262) -> cell(77,13) -> placed whole house\nt=2.3 click(278,262) -> cell(77,13) -> fail:building"
+    },
+    {
+      "case": "N-mobile",
+      "file": "build-v1-craftable-N-mobile-first-object-question-options.png",
+      "label": "first-object-question-options",
+      "ms": 3077,
+      "line": "What is this?",
+      "options": [
+        "House",
+        "Fence"
+      ],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.5s / select 1.2s / still 2.1s\nsession active=true / placed this run=9\ncelebrate particles=30\nhouse interior=3x3 boundary=9 roofed=true\nshows 1/4 (auto 0, manual 1; accepted Shows)\nt=1.8 click(278,224) -> cell(77,12) -> fail:ground\nt=1.9 click(544,262) -> cell(84,12) -> fail:tree\nt=2.0 click(278,262) -> cell(77,13) -> placed whole house\nt=2.3 click(278,262) -> cell(77,13) -> fail:building"
+    },
+    {
+      "case": "N-mobile",
+      "file": "build-v1-craftable-N-mobile-first-object-finale-confetti.png",
+      "label": "first-object-finale-confetti",
+      "ms": 3353,
+      "confettiPixels": 617,
+      "line": "You built a house! Wow! It's so big!",
+      "options": [],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.8s / select 1.5s / still 2.4s\nsession active=true / placed this run=9\ncelebrate particles=60\nhouse interior=3x3 boundary=9 roofed=true\nshows 1/4 (auto 0, manual 1; accepted Shows)\nt=1.8 click(278,224) -> cell(77,12) -> fail:ground\nt=1.9 click(544,262) -> cell(84,12) -> fail:tree\nt=2.0 click(278,262) -> cell(77,13) -> placed whole house\nt=2.3 click(278,262) -> cell(77,13) -> fail:building"
+    },
+    {
+      "case": "N-mobile",
+      "file": "build-v1-craftable-N-mobile-one-piece-rearmed.png",
+      "label": "one-piece-rearmed",
+      "ms": 3978,
+      "line": "Wow! It's all closed!",
+      "options": [],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.1s / select 0.2s / still 2.9s\nsession active=true / placed this run=18\ncelebrate particles=90\nhouse interior=3x3 boundary=9 roofed=true\nhouse interior=3x3 boundary=9 roofed=true\nshows 1/4 (auto 0, manual 1; accepted Shows)\nt=1.8 click(278,224) -> cell(77,12) -> fail:ground\nt=1.9 click(544,262) -> cell(84,12) -> fail:tree\nt=2.0 click(278,262) -> cell(77,13) -> placed whole house\nt=2.3 click(278,262) -> cell(77,13) -> fail:building\nt=3.6 click(430,262) -> cell(81,13) -> placed whole house"
+    },
+    {
+      "case": "N-mobile",
+      "file": "build-v1-craftable-N-mobile-new-object-question-options.png",
+      "label": "new-object-question-options",
+      "ms": 4259,
+      "line": "What is this?",
+      "options": [
+        "House",
+        "Fence"
+      ],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.2s / select 0.5s / still 3.2s\nsession active=true / placed this run=18\ncelebrate particles=90\nhouse interior=3x3 boundary=9 roofed=true\nhouse interior=3x3 boundary=9 roofed=true\nshows 1/4 (auto 0, manual 1; accepted Shows)\nt=1.8 click(278,224) -> cell(77,12) -> fail:ground\nt=1.9 click(544,262) -> cell(84,12) -> fail:tree\nt=2.0 click(278,262) -> cell(77,13) -> placed whole house\nt=2.3 click(278,262) -> cell(77,13) -> fail:building\nt=3.6 click(430,262) -> cell(81,13) -> placed whole house"
+    },
+    {
+      "case": "N-mobile",
+      "file": "build-v1-craftable-N-mobile-new-object-finale-confetti.png",
+      "label": "new-object-finale-confetti",
+      "ms": 4541,
+      "confettiPixels": 725,
+      "line": "You built a house! Wow! It's so big!",
+      "options": [],
+      "debug": "quiet: blockers=[recent,select]\nidle 0.5s / select 0.7s / still 3.5s\nsession active=true / placed this run=18\ncelebrate particles=90\nhouse interior=3x3 boundary=9 roofed=true\nhouse interior=3x3 boundary=9 roofed=true\nshows 2/4 (auto 0, manual 2; accepted Shows)\nt=1.8 click(278,224) -> cell(77,12) -> fail:ground\nt=1.9 click(544,262) -> cell(84,12) -> fail:tree\nt=2.0 click(278,262) -> cell(77,13) -> placed whole house\nt=2.3 click(278,262) -> cell(77,13) -> fail:building\nt=3.6 click(430,262) -> cell(81,13) -> placed whole house"
+    }
+  ]
+}

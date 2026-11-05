@@ -1,0 +1,14 @@
+{"case":"house-desktop","status":"PASS","seconds":2.9}
+{"case":"speak-desktop","status":"PASS","seconds":7.6}
+{"case":"recognized-desktop","status":"PASS","seconds":6.6}
+{"case":"explore-desktop","status":"PASS","seconds":3.6}
+{"case":"quota-desktop","status":"PASS","seconds":55.5}
+{"case":"physical-desktop","status":"PASS","seconds":1.9}
+{"case":"proportion-desktop","status":"PASS","seconds":1.2}
+{"case":"house-mobile","status":"PASS","seconds":2.5}
+{"case":"speak-mobile","status":"PASS","seconds":7.4}
+{"case":"recognized-mobile","status":"PASS","seconds":6.5}
+{"case":"explore-mobile","status":"PASS","seconds":3.5}
+{"case":"quota-mobile","status":"PASS","seconds":54.8}
+{"case":"physical-mobile","status":"PASS","seconds":1.9}
+{"case":"proportion-mobile","status":"PASS","seconds":1.2}

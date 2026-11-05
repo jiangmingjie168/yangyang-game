@@ -1,0 +1,119 @@
+[
+  {
+    "file": "audio/build-v1.1/garden-loop.ogg",
+    "bytes": 113584,
+    "seconds": 18.46153125,
+    "rms": 0.049942731857299805,
+    "peak": 0.28791797161102295,
+    "loop_seam_delta": 0.0004302710294723511,
+    "status": "PASS"
+  },
+  {
+    "file": "audio/build-v1.1/harvest.ogg",
+    "bytes": 5097,
+    "seconds": 0.196,
+    "rms": 0.09204273670911789,
+    "peak": 0.4038873314857483,
+    "loop_seam_delta": null,
+    "status": "PASS"
+  },
+  {
+    "file": "audio/build-v1.1/place.ogg",
+    "bytes": 4469,
+    "seconds": 0.156,
+    "rms": 0.09681270271539688,
+    "peak": 0.28017300367355347,
+    "loop_seam_delta": null,
+    "status": "PASS"
+  },
+  {
+    "file": "audio/build-v1.1/remove.ogg",
+    "bytes": 4369,
+    "seconds": 0.336,
+    "rms": 0.09559351950883865,
+    "peak": 0.3494811952114105,
+    "loop_seam_delta": null,
+    "status": "PASS"
+  },
+  {
+    "file": "audio/build-v1.1/craft.ogg",
+    "bytes": 5163,
+    "seconds": 0.586,
+    "rms": 0.08919926732778549,
+    "peak": 0.32158607244491577,
+    "loop_seam_delta": null,
+    "status": "PASS"
+  },
+  {
+    "file": "audio/build-v1.1/confetti.ogg",
+    "bytes": 5384,
+    "seconds": 0.386,
+    "rms": 0.06467840820550919,
+    "peak": 0.24718162417411804,
+    "loop_seam_delta": null,
+    "status": "PASS"
+  },
+  {
+    "file": "audio/build-v1.1/star.ogg",
+    "bytes": 5883,
+    "seconds": 0.631,
+    "rms": 0.08543398231267929,
+    "peak": 0.3195400834083557,
+    "loop_seam_delta": null,
+    "status": "PASS"
+  },
+  {
+    "file": "audio/build-v1.1/correct.ogg",
+    "bytes": 4735,
+    "seconds": 0.476,
+    "rms": 0.08076057583093643,
+    "peak": 0.30376672744750977,
+    "loop_seam_delta": null,
+    "status": "PASS"
+  },
+  {
+    "file": "audio/build-v1.1/wrong.ogg",
+    "bytes": 4663,
+    "seconds": 0.446,
+    "rms": 0.04975526034832001,
+    "peak": 0.1696036159992218,
+    "loop_seam_delta": null,
+    "status": "PASS"
+  },
+  {
+    "file": "audio/build-v1.1/enter-car.ogg",
+    "bytes": 5178,
+    "seconds": 0.416,
+    "rms": 0.12276087701320648,
+    "peak": 0.6617714166641235,
+    "loop_seam_delta": null,
+    "status": "PASS"
+  },
+  {
+    "file": "audio/build-v1.1/engine.ogg",
+    "bytes": 6792,
+    "seconds": 2.0,
+    "rms": 0.05611497163772583,
+    "peak": 0.12201964110136032,
+    "loop_seam_delta": 0.008010677993297577,
+    "status": "PASS"
+  },
+  {
+    "file": "audio/build-v1.1/horn.ogg",
+    "bytes": 3967,
+    "seconds": 0.276,
+    "rms": 0.1465580016374588,
+    "peak": 0.31014811992645264,
+    "loop_seam_delta": null,
+    "status": "PASS"
+  },
+  {
+    "file": "audio/build-v1.1/pet.ogg",
+    "bytes": 4513,
+    "seconds": 0.356,
+    "rms": 0.055730294436216354,
+    "peak": 0.19594955444335938,
+    "loop_seam_delta": null,
+    "status": "PASS"
+  }
+]

@@ -495,6 +495,11 @@
   #buddy-chat.build-feedback #buddy-line { margin:0; }
   #buddy-chat.build-feedback button, #buddy-chat.build-feedback #buddy-options { display:none; }
   @media (max-width:600px) { #buddy-chat.build-feedback { top:160px; right:8px; max-width:220px; } }
+  #buddy-chat.build-question { width:min(300px, calc(100% - 28px)); top:clamp(130px, calc(100dvh - 230px), 164px); max-height:calc(100dvh - 220px); }
+  #buddy-confirm, #chat-confirm { font-size:13px; min-height:36px; padding:5px 10px; background:#fff8ee; }
+  #buddy-chat #buddy-confirm { min-height:36px; min-width:0; padding:4px 8px; font-size:12px; background:#fff8ee; border:1px solid #d8cbbd; box-shadow:none; vertical-align:middle; }
+  #chat-continue, #buddy-chat.build-bubble #buddy-close { min-height:48px; min-width:130px; font-size:18px; }
+  #buddy-options button { min-height:44px; }
   #buddy-options canvas { width:34px; height:34px; display:block; margin:auto; }
   #btn-build[aria-pressed="true"] { background:#ffe29a; }
   @media (max-width:600px) { .topbtn { min-width:48px; padding:0 7px; font-size:14px; } #btn-speak { width:48px; } #build-tools { right:12px; } }
@@ -516,7 +521,7 @@
 <div id="app">
   <canvas id="view" width="800" height="400"></canvas>
   <div id="hud">
-    <span id="build-version" aria-label="Build version">build a0b0871+v11</span>
+    <span id="build-version" aria-label="Build version">build a0b0871+v11qa</span>
     <div class="topbar">
       <button id="quest" type="button">
         <canvas id="quest-icon" width="128" height="128"></canvas>
@@ -569,14 +574,14 @@
   <section id="buddy-chat" hidden aria-label="Buddy chat">
     <canvas id="buddy-picture" width="128" height="128" hidden role="img" aria-label="Weather picture"></canvas>
     <p id="buddy-line" role="status" aria-live="polite"></p><div id="buddy-options"></div>
-    <button id="buddy-mic" type="button" aria-label="Speak to Buddy"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="2" width="6" height="12" rx="3" fill="currentColor"/><path d="M5 10v2a7 7 0 0 0 14 0v-2M12 19v3m-4 0h8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>Speak</span></button><button id="buddy-close" type="button" aria-label="Keep playing">OK!</button>
+    <button id="buddy-mic" type="button" aria-label="Speak to Buddy"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="2" width="6" height="12" rx="3" fill="currentColor"/><path d="M5 10v2a7 7 0 0 0 14 0v-2M12 19v3m-4 0h8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>Speak</span></button><button id="buddy-confirm" type="button" hidden>I said it</button><button id="buddy-close" type="button" aria-label="Keep playing">OK!</button>
   </section>
   <div id="chat-shade" hidden aria-hidden="true"></div>
   <section id="dialogue" hidden role="dialog" aria-modal="true" aria-labelledby="chat-question">
     <div class="chat-head"><canvas id="chat-face" width="128" height="128" aria-hidden="true"></canvas><p id="chat-question"></p><button id="chat-close" hidden type="button" aria-label="Keep exploring">×</button></div>
     <canvas id="chat-picture" width="128" height="128" role="img" aria-label="Picture to talk about"></canvas>
     <div id="chat-options"></div>
-    <div class="chat-tools"><button id="chat-listen" type="button" aria-label="Listen again"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M3 9h4l6-4v14l-6-4H3z"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M16 9a4 4 0 0 1 0 6m3-9a8 8 0 0 1 0 12"/></svg><span>Listen</span></button><button id="chat-mic" type="button" aria-label="Answer by voice"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="2" width="6" height="12" rx="3" fill="currentColor"/><path d="M5 10v2a7 7 0 0 0 14 0v-2M12 19v3m-4 0h8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>Speak</span></button><button id="chat-choices" type="button" hidden>Show choices</button><button id="chat-confirm" type="button" hidden>I said it</button></div>
+    <div class="chat-tools"><button id="chat-listen" type="button" aria-label="Listen again"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M3 9h4l6-4v14l-6-4H3z"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M16 9a4 4 0 0 1 0 6m3-9a8 8 0 0 1 0 12"/></svg><span>Listen</span></button><button id="chat-mic" type="button" aria-label="Answer by voice"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="2" width="6" height="12" rx="3" fill="currentColor"/><path d="M5 10v2a7 7 0 0 0 14 0v-2M12 19v3m-4 0h8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>Speak</span></button><button id="chat-choices" type="button" hidden>Show choices</button><button id="chat-confirm" type="button" hidden>I said it</button><button id="chat-continue" type="button" hidden>Continue</button></div>
     <p id="chat-status" role="status" aria-live="polite"></p>
   </section>
   <aside id="parent-help" hidden aria-label="家长设置">
@@ -600,10 +605,10 @@
       <p id="speaking-empty">本周还没有开口记录。可以按麦克风说词，也可以继续点选玩。</p>
       <table id="speaking-table" hidden>
         <caption>本周说过的词</caption>
-        <thead><tr><th scope="col">单词</th><th scope="col">次数</th><th scope="col">场景（次数）</th></tr></thead>
+        <thead><tr><th scope="col">单词</th><th scope="col">识别开口</th><th scope="col">自认 I said it</th><th scope="col">场景（次数）</th></tr></thead>
         <tbody id="speaking-rows"></tbody>
       </table>
-      <p>以本机时间每周一零点起算；只统计麦克风识别到的具体单词，不保存语音和原话。点选、未匹配的语音不计入词次数。记录保存在本设备存档中（最多最近 2000 条对话事件）；清空存档会删除记录。</p>
+      <p>以本机时间每周一零点起算；只统计麦克风识别到的具体单词，不保存语音和原话。点选、未匹配的语音不计入识别次数；两次识别失败后的 I said it 单独记为自认，不给星、不计识别通过。记录保存在本设备存档中（最多最近 2000 条对话事件）；清空存档会删除记录。</p>
     </div>
     <p id="parent-memory"></p>
     <button id="parent-reset-prefs" type="button">重置喜好（保留姓名和游戏进度）</button>
@@ -617,6 +622,7 @@
   <div id="wordcard" hidden role="status" aria-live="polite">
     <canvas id="card-icon" width="256" height="256"></canvas>
     <div id="card-en">Hello</div>
+    <button id="card-continue" type="button" hidden>Continue</button>
   </div>
 
   <div id="toast" hidden role="status" aria-live="polite">
@@ -812,7 +818,7 @@ const BRAIN_TIMEOUT_MS = 6500;
   var fps = 0, fpsN = 0, fpsT = 0, frameErr = '';
   var armReset = false;
   var lastTs = 0;
-  var trail = { found: {}, reviews: {}, turns: 0, scenes: {}, levels: {}, speaking: [], rounds: 0, lastRound: {} };
+  var trail = { found: {}, reviews: {}, turns: 0, scenes: {}, levels: {}, speaking: [], rounds: 0, lastRound: {}, discoveries:{}, quizDay:new Date().toISOString().slice(0,10), quizzes:0 };
   var trailPickupDelay = 0;
   var reducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var seek = null, joyId = null;
@@ -912,8 +918,10 @@ function validConversation(value, p) {
     if(active && active.build && active.build.building){active.build.building.invited=false;saveSoon();}
     if (active && window.speechSynthesis) { try { speechSynthesis.cancel(); } catch (err) { /* optional */ } }
     document.getElementById('buddy-chat').hidden = true;
-    document.getElementById('buddy-chat').classList.remove('build-bubble', 'build-feedback', 'build-done');
+    document.getElementById('buddy-chat').classList.remove('build-bubble', 'build-feedback', 'build-done', 'build-question');
     document.getElementById('buddy-mic').hidden = false;
+    document.getElementById('buddy-confirm').hidden=true;
+    document.getElementById('buddy-close').hidden=false;document.getElementById('buddy-close').textContent='OK!';
   }
   function fetchSocial(p, w, current, show) {
     var expected = conversationTemplate(p), limited = brainLimited();
@@ -966,6 +974,7 @@ function validConversation(value, p) {
     if (dialogue || quiz || nameFlow || buildShowActive()) return false;
     dismissGreeting(); closeAmbient();
     var w = { payload: p }; ambient = w;
+    document.getElementById('buddy-close').hidden=p.event==='recast';
     document.getElementById('buddy-chat').hidden = false;
     var picture = document.getElementById('buddy-picture');
     picture.hidden = p.event !== 'weather_chat';
@@ -1021,12 +1030,14 @@ function validConversation(value, p) {
     // Daylight clouds count when they cross the sun, rather than only at night.
     return cloudPos.some(function (c) { return Math.abs(c.x - sunPos.x) < 42 * c.scale && Math.abs(c.y - sunPos.y) < 24 * c.scale; }) ? 'cloud' : 'sun';
   }
+  function socialPracticeKey(a){return a&&a.payload&&learned.find(function(k){return normalAnswer(a.payload.child_said||'').split(' ').includes(k);});}
+  function socialSpeechFailure(a){if(!a||ambient!==a||a.payload.event!=='recast')return;a.voiceFailures=(a.voiceFailures||0)+1;clearTimeout(a.timer);document.getElementById('buddy-confirm').hidden=a.voiceFailures<2;}
   function listenSocial() {
     if (ambient && ambient.build) { listenBuild(); return; }
     if ((!nameFlow && determineMode('speech') !== 'recast') || socialRecognizer) return;
     if (nameFlow) armNameTimer();
     var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (!SR) { if (nameFlow) document.getElementById('name-input').focus(); return; }
+    if (!SR) { if (nameFlow) document.getElementById('name-input').focus();else socialSpeechFailure(ambient); return; }
     var n = nameFlow, a = ambient;
     try {
       var r = new SR(); socialRecognizer = r; r.lang = 'en-US'; r.interimResults = false; r.continuous = false;
@@ -1036,7 +1047,7 @@ function validConversation(value, p) {
       if (window.speechSynthesis) speechSynthesis.cancel();
       r.onresult = function (e) {
         var result = e.results[e.resultIndex || 0], said = result && result[0] && result[0].transcript;
-        stopSocialListening(); if (!said) return;
+        stopSocialListening(); if (!said){socialSpeechFailure(a);return;}
         if (n && nameFlow === n) {
           var name = cleanName(said.replace(/^(my name is|i am|i'm)\s+/i, ''));
           if (!name) return;
@@ -1052,16 +1063,19 @@ function validConversation(value, p) {
           var matches = PREF_VALUES[slot].slice(0, 2).filter(function (word) { return tokens.indexOf(word) >= 0; });
           if (matches.length === 1) { learnPreference(slot, matches[0]); return; }
         }
+        var key=socialPracticeKey(a);if(key&&normalAnswer(said).split(' ').includes(key))logPractice(key,'words',true,false,1);
         recastSpeech(said);
       };
-      r.onend = r.onerror = stopSocialListening; r.start();
-      socialWatchdog = setTimeout(stopSocialListening, 8000);
-    } catch (err) { stopSocialListening(); }
+      r.onend = r.onerror = function(){stopSocialListening();socialSpeechFailure(a);};r.start();
+      socialWatchdog = setTimeout(function(){stopSocialListening();socialSpeechFailure(a);},8000);
+    } catch (err) { stopSocialListening();socialSpeechFailure(a); }
   }
   function bindSocial() {
     document.getElementById('btn-buddy').addEventListener('click', smallTalk);
     document.getElementById('btn-buddy').addEventListener('animationend', function (e) { if (e.animationName === 'buddy-wave') e.currentTarget.classList.remove('buddy-wave'); });
     document.getElementById('buddy-close').addEventListener('click', closeAmbient);
+    document.getElementById('buddy-chat').addEventListener('click',function(e){if(ambient&&ambient.build&&ambient.build.reward&&!e.target.closest('button'))closeAmbient();});
+    document.getElementById('buddy-confirm').addEventListener('click',function(){if(ambient&&!ambient.build&&ambient.voiceFailures>=2){var key=socialPracticeKey(ambient);if(key)logPractice(key,'words',false,true,1);closeAmbient();return;}var d=ambient&&ambient.build;if(!d||d.voiceFailures<2||d.answered)return;d.selfClaim=true;logPractice(d.key,d.event==='word_practice'?'words':'build',false,true,d.tier);finishBuildAnswer(d,d.key,false);});
     document.getElementById('buddy-mic').addEventListener('click', listenSocial);
     document.getElementById('name-mic').addEventListener('click', listenSocial);
     document.getElementById('name-form').addEventListener('submit', function (e) { e.preventDefault(); finishName(document.getElementById('name-input').value); });
@@ -1218,6 +1232,7 @@ function validConversation(value, p) {
   // Small optional conversations: events queue ideas; only a safe idle opens one.
   function allowedChatWord(key) {
     if (learned.indexOf(key) < 0 || !WORD[key]) return false;
+    if(ANIMALS[key])return true; // A met animal always keeps its own name in the follow-up.
     var qi = questIndex();
     if (qi < CHAPTER2 && CH3_WORDS.indexOf(key) >= 0) return false;
     if (qi < CHAPTER1 && CH2_WORDS.indexOf(key) >= 0) return false;
@@ -1237,7 +1252,7 @@ function validConversation(value, p) {
   function resetAdventure() {
     closeChat(true);
     recentEvents = []; recentLines = []; lastAnswer = '';
-    trail = { found: {}, reviews: {}, turns: 0, scenes: {}, levels: {}, speaking: [], rounds: 0, lastRound: {} };
+    trail = { found: {}, reviews: {}, turns: 0, scenes: {}, levels: {}, speaking: [], rounds: 0, lastRound: {}, discoveries:{}, quizDay:new Date().toISOString().slice(0,10), quizzes:0 };
     chatQueue = []; chatIdle = 0; chatCooldown = 0; taskSnapshot = null;
     boatStartX = null; boatLanding = false;
     followTravel = 0; followLastX = player.x; followReady = false;
@@ -1287,6 +1302,8 @@ function validConversation(value, p) {
       });
       // A completion stamp requires a complete saved set, never just a claimed count.
       if (Object.keys(trail.lastRound).length !== 7) { trail.rounds = 0; trail.lastRound = {}; buildTrailSpots(); }
+      trail.quizDay=typeof data.quizDay==='string'?data.quizDay:trail.quizDay;trail.quizzes=Math.max(0,Math.floor(Number(data.quizzes)||0));
+      Object.keys(ANIMALS).forEach(function(k){if(data.discoveries&&data.discoveries[k])trail.discoveries[k]=true;});
       trail.turns = Math.max(0, Math.min(1000000, Number(data.turns) || 0));
       trailSpots.forEach(function (spot) {
         var key = data.found && data.found[spot.id];
@@ -1305,9 +1322,9 @@ function validConversation(value, p) {
       });
       if (Array.isArray(data.speaking)) trail.speaking = data.speaking.filter(function (r) {
         return r && isFinite(r.time) && r.time > 0 && WORD[r.word] &&
-          ['task', 'fish', 'pet', 'boat', 'scene'].indexOf(r.scene) >= 0 && typeof r.spoke === 'boolean';
+          ['task', 'fish', 'pet', 'boat', 'scene', 'build', 'words'].indexOf(r.scene) >= 0 && typeof r.spoke === 'boolean';
       }).slice(-2000).map(function (r) {
-        return { time: +r.time, scene: r.scene, word: r.word, spoke: r.spoke,
+        return { time: +r.time, scene: r.scene, word: r.word, spoke: r.spoke, self_claim: r.self_claim===true,
           spoken_word: WORD[r.spoken_word] ? r.spoken_word : null, tier: [1, 2, 3].indexOf(r.tier) >= 0 ? r.tier : 1 };
       });
       ['home', 'trees', 'water', 'far', 'meadow'].forEach(function (key) {
@@ -1399,7 +1416,7 @@ function validConversation(value, p) {
     }
     var coach = dialogue && dialogue.answered && dialogue.feedback === 'success' ? (dialogue.coachSaid || dialogue.key) : '';
     dialogue = null;
-    if (coach) setTimeout(function () { recastSpeech(coach); }, 100);
+    // Voluntary follow-up practice is available in the Word Book.
     document.getElementById('dialogue').hidden = true;
     document.getElementById('chat-shade').hidden = true;
     document.body.classList.remove('chat-blocked');
@@ -1419,12 +1436,13 @@ function validConversation(value, p) {
     var options = trail.turns % 2 ? [other, target] : [target, other];
     var level = trail.levels[target] || {};
     var tier = level.t1 >= 2 ? (level.t2 >= 2 ? 3 : 2) : 1;
+    var day=new Date().toISOString().slice(0,10);if(trail.quizDay!==day){trail.quizDay=day;trail.quizzes=0;}trail.quizzes++;saveSoon();
     releaseChatInput();
     dialogue = { context: { child_name: childName || undefined, recent_events: recentEvents.filter(function (e) { return allowedChatWord(e.word); }).slice(-6), last_answer: allowedChatWord(lastAnswer) ? lastAnswer : undefined }, misses: 0, anchor: event.anchor, scene: sceneNow, key: target, options: options, tier: tier,
       turn: 0, at: chatClock, answered: false, pending: false, choices: tier === 1, sequence: 0 };
     paintIcon(document.getElementById('chat-face'), 'dog');
     document.getElementById('chat-picture').hidden = false;
-    paintIcon(document.getElementById('chat-picture'), target);
+    paintIcon(document.getElementById('chat-picture'), target);document.getElementById('chat-picture').setAttribute('aria-label',WORD[target][0]);
     requestChat(dialogue, 'prompt');
   }
   function chatTemplate(d, feedback) {
@@ -1470,14 +1488,14 @@ function validConversation(value, p) {
     d.pending = false; d.controller = null; d.question = d.reveal && !reply.done ? "Let's say " + WORD[d.key][0].toLowerCase() + ' together!' : reply.say; d.at = chatClock;
     var listening = false;
     document.getElementById('chat-question').textContent = listening ? 'Listen and choose!' : d.question;
-    document.getElementById('chat-status').textContent = listening ? '' : d.answered ? '★ ★ ★' : (d.reveal ? 'Tap ' + WORD[d.key][0] + ' or say it with me.' : d.hint ? 'Good try! Look at the glowing answer.' : '');
+    document.getElementById('chat-status').textContent = listening ? '' : d.answered ? (d.selfClaim?'Thanks for trying!':WORD[d.key][0]+' ★') : (d.reveal ? 'Tap ' + WORD[d.key][0] + ' or say it with me.' : d.hint ? 'Good try! Look at the glowing answer.' : '');
     var root = document.getElementById('chat-options'); root.innerHTML = ''; root.hidden = !d.choices || reply.done;
     d.options.forEach(function (key) {
       var b = document.createElement('button'); b.type = 'button'; b.dataset.word = key;
       b.disabled = reply.done || (d.reveal && key !== d.key);
       b.classList.toggle('hint-answer', !!d.hint && key === d.key);
       var icon = document.createElement('canvas'); icon.width = 128; icon.height = 128; icon.setAttribute('aria-hidden', 'true'); paintIcon(icon, key);
-      b.appendChild(icon); b.setAttribute('aria-label', WORD[key][0]); if (!listening) b.appendChild(document.createTextNode(WORD[key][0])); tapButton(b, function () {
+      if(d.reveal && key===d.key)b.appendChild(icon); b.setAttribute('aria-label', WORD[key][0]); if (!listening) b.appendChild(document.createTextNode(WORD[key][0])); tapButton(b, function () {
         if (d.answerPending) return;
         d.answerPending = true;
         var settled = false;
@@ -1493,12 +1511,14 @@ function validConversation(value, p) {
     document.getElementById('chat-choices').hidden = d.choices || reply.done;
     document.getElementById('chat-confirm').hidden = !d.fallback || reply.done;
     document.getElementById('chat-confirm').disabled = reply.done;
+    ['chat-listen','chat-mic'].forEach(function(id){document.getElementById(id).hidden=reply.done;});
+    document.getElementById('chat-continue').hidden=!reply.done;
     document.getElementById('chat-close').hidden = !d.answered;
     document.getElementById('dialogue').hidden = false;
     document.getElementById('chat-shade').hidden = false;
     document.body.classList.add('chat-blocked');
     document.getElementById('parent-skip').hidden = d.answered;
-    if (reply.done) { d.answered = true; chatTimer = setTimeout(closeChat, 1800); }
+    if (reply.done) { d.answered = true;if(!d.rewardRead&&!d.selfClaim){d.rewardRead=true;speakEn(WORD[d.key][0]);}return; }
     if (!quiet) speakEn(d.question, { named: !!(childName && d.question.includes(childName)), audio_url: !d.reveal ? d.audio_url : undefined });
   }
   function requestChat(d, feedback, childSaid, spokenKey) {
@@ -1563,7 +1583,9 @@ function validConversation(value, p) {
     if (!dialogue || dialogue.pending || dialogue.answered) return;
     playSfx('wrong');stopChatListening();
     var d = dialogue; d.misses++; d.turn = Math.min(2, d.misses); d.choices = true; d.hint = true;
-    if (d.misses >= 3) { d.reveal = true; d.fallback = true; }
+    if(childSaid!==undefined)d.voiceFailures=(d.voiceFailures||0)+1;
+    d.fallback=(d.voiceFailures||0)>=2;
+    if (d.misses >= 3) d.reveal = true;
     requestChat(d, 'retry', childSaid, spokenKey);
   }
   function answerChat(key, childSaid) {
@@ -1582,6 +1604,10 @@ function validConversation(value, p) {
     trail.levels[key] = level;
     celebrate(player.x, player.y - 40, false);
     requestChat(d, 'success', childSaid, key);
+  }
+  function logPractice(key,scene,recognized,selfClaim,tier) {
+    trail.speaking.push({time:Date.now(),scene:scene,word:key,spoke:!!recognized,self_claim:!!selfClaim,spoken_word:recognized?key:null,tier:tier||1});
+    trail.speaking=trail.speaking.slice(-2000);saveSoon();
   }
   function normalAnswer(text) { return String(text).toLowerCase().replace(/[^a-z ]/g, ' ').replace(/\s+/g, ' ').trim(); }
   function nearWord(a, b) {
@@ -1634,18 +1660,21 @@ function validConversation(value, p) {
   }
   function speechFallback() {
     if (!dialogue || dialogue.answered || dialogue.pending) return;
-    dialogue.fallback = true;
-    showChatChoices();
-    document.getElementById('chat-status').textContent = 'Tap an answer, or say it and tap "I said it".';
+    dialogue.voiceFailures=(dialogue.voiceFailures||0)+1;
+    dialogue.fallback=dialogue.voiceFailures>=2;
+    renderChat(dialogue,chatTemplate(dialogue,'prompt'),true);
+    document.getElementById('chat-status').textContent=dialogue.fallback?'Try Speak again, or tap I said it.':'Try Speak again.';
   }
   function confirmChat() {
     if (!dialogue || !dialogue.fallback || dialogue.pending || dialogue.answered) return;
-    // Self-confirmation is a speaking attempt, never recognized speech/mastery credit.
-    dialogue.choices = true;
-    answerChat(dialogue.key);
+    var d=dialogue;logPractice(d.key,d.anchor,false,true,d.tier);
+    d.selfClaim=true;d.answered=true;d.feedback='self_claim';
+    renderChat(d,{say:'Thanks for trying!',options:d.options,done:true},true);
   }
   function bindDialogue() {
     tapButton(document.getElementById('chat-close'), closeChat);
+    tapButton(document.getElementById('chat-continue'), closeChat);
+    document.getElementById('dialogue').addEventListener('click',function(e){if(dialogue&&dialogue.answered&&!e.target.closest('button'))closeChat();});
     tapButton(document.getElementById('chat-listen'), function () { if (dialogue) speakEn(dialogue.question, { audio_url: !dialogue.reveal ? dialogue.audio_url : undefined }); });
     tapButton(document.getElementById('chat-mic'), listenChat);
     tapButton(document.getElementById('chat-choices'), showChatChoices);
@@ -1731,7 +1760,7 @@ function validConversation(value, p) {
   // Whole buildings reserve air cells but are walkable scenery: no child/pet trap.
   // Instances, including their part materials, survive pickup and save/reload.
   var CRAFTABLES={houseKit:{kind:'house',w:3,h:3,parts:{wall:'wood',roof:'planks',yard:'grass',window:'wood',foundation:'stone',door:'wood'}},pen:{kind:'pen',w:4,h:2,parts:{fence:'wood',gate:'wood',yard:'grass'}},car:{kind:'car',w:3,h:2,parts:{body:'wood',wheel:'stone'}}};
-  var buildObjects=[],craftedObjects=[],craftableArt={},drivingCar=null,upgradeHouse=null,upgradePart=null;
+  var buildObjects=[],craftedObjects=[],craftableArt={},drivingCar=null,upgradeHouse=null,upgradePart=null,partQuestionAt=0;
   function newCraftable(item,raw) {
     var def=CRAFTABLES[item],parts={};raw=raw||{};
     Object.keys(def.parts).forEach(function(k){var p=raw.parts&&raw.parts[k];parts[k]={material:p&&['wood','planks','grass','glass','stone','sand','flower'].includes(p.material)?p.material:def.parts[k],tier:p&&Number.isInteger(p.tier)?Math.max(1,Math.min(9,p.tier)):1};});
@@ -1743,6 +1772,7 @@ function validConversation(value, p) {
       if(!raw||!CRAFTABLES[raw.item]||!(raw.item==='car'?Number.isFinite(raw.x):Number.isInteger(raw.x))||!Number.isInteger(raw.y))return;
       var b=newCraftable(raw.item,raw);b.x=raw.x;b.y=raw.y;b.dir=raw.dir===-1?-1:1;
       if(['stone','roof','flower','window'].includes(raw.showWord)&&b.kind==='house')b.showWord=raw.showWord;
+      if(b.showWord&&raw.partQuestion===b.showWord)b.partQuestion=raw.partQuestion;
       if(b.x<1||b.y<1||b.x+b.w>=W||b.y+b.h>=H||buildObjects.some(function(o){return b.x<o.x+o.w&&b.x+b.w>o.x&&b.y<o.y+o.h&&b.y+b.h>o.y;}))return;
       Object.assign(b,{id:'object:'+b.x+':'+b.y,createdAt:Number(raw.createdAt)||Date.now(),roofed:b.kind==='house',shown:!!raw.shown,closed:!!raw.closed,autoOffered:!!raw.autoOffered,invited:false,roofPraise:true});
       b.feedbackMembers=Array.isArray(raw.feedbackMembers)?raw.feedbackMembers.filter(function(at){return Number.isInteger(at)&&at>=0&&at<W*H;}).slice(0,200):null;
@@ -1760,14 +1790,15 @@ function validConversation(value, p) {
   function craftableTarget(item,x,y) {
     var d=CRAFTABLES[item];
     // The clicked empty cell is the lower-left anchor; tapping ground uses its top.
-    if(solid(get(x,y)))y--;
+    if([GRASS,DIRT,SAND,STONE].includes(get(x,y))&&!buildOwned(x,y)){var floorY=y;while(floorY>1&&y-floorY<3&&[GRASS,DIRT,SAND,STONE].includes(get(x,floorY-1)))floorY--;y=floorY-1;}
+    else if(solid(get(x,y)))y--;
     var r={x:x,y:y-d.h+1,w:d.w,h:d.h,ok:false};
     if(!(inv[item]>0)){r.reason='stock';return r;}
     if(buildObjects.length>=64){r.reason='limit';return r;}
     if(x<1||r.y<1||x+d.w>=W||y+1>=H||!buildReach(x,y)){r.reason='reach';return r;}
-    for(var xx=x;xx<x+d.w;xx++)for(var yy=r.y;yy<=y;yy++){var id=get(xx,yy);if(craftableAt(xx,yy)){r.reason='building';return r;}if(id!==AIR && !([FLOWER,WHEAT1,WHEAT2,WHEAT3].includes(id)&&item!=='houseKit')){r.reason=[WOOD,LEAVES].includes(id)?'tree':id===STONE?'rock':id===WATER?'water':id===FENCE?'fence':id===FLOWER?'flower':'block';return r;}}
+    for(var xx=x;xx<x+d.w;xx++)for(var yy=r.y;yy<=y;yy++){var id=get(xx,yy);if(craftableAt(xx,yy)){r.reason='building';return r;}if(id!==AIR && !([FLOWER,WHEAT1,WHEAT2,WHEAT3].includes(id))){r.reason=[WOOD,LEAVES].includes(id)?'tree':id===STONE?'rock':id===WATER?'water':id===FENCE?'fence':id===FLOWER?'flower':'block';return r;}}
     var supports=0;
-    for(var xx=x;xx<x+d.w;xx++){var floor=get(xx,y+1);if(solid(floor)&&![WOOD,LEAVES,FENCE,DOOR].includes(floor))supports++;else if(item!=='pen'){r.reason=floor===WATER?'water':'ground';return r;}}
+    for(var xx=x;xx<x+d.w;xx++){var floor=get(xx,y+1);if(solid(floor)&&![WOOD,LEAVES,FENCE,DOOR].includes(floor))supports++;else if(item==='car'){r.reason=floor===WATER?'water':'ground';return r;}}
     if(!supports){r.reason='ground';return r;}
     r.ok=true;return r;
   }
@@ -1934,7 +1965,8 @@ function validConversation(value, p) {
     window:{label:'Window',cost:'sand',material:'glass',word:'window',change:'Wood → Bright glass',praise:'A bright glass window!'}
   };
   function openUpgrade(b) {
-    if(quiz||dialogue||nameFlow)return;
+    if(b.partQuestion){partQuestionAt=chatClock;return;} // Finish the pending part before another remodel.
+    if(quiz||dialogue||nameFlow||buildShowActive())return;
     if(ambient&&ambient.build&&ambient.build.building===b&&ambient.build.stage==='invite'){b.invited=false;if(!b.shown)b.autoOffered=false;}
     closeAmbient();hideCard();seek=null;upgradeHouse=b;upgradePart=null;
     document.getElementById('house-upgrade').hidden=false;renderUpgrades();
@@ -1956,12 +1988,11 @@ function validConversation(value, p) {
     var b=upgradeHouse,part=upgradePart,u=HOUSE_UPGRADES[part];
     if(!b||!u||!buildObjects.includes(b)||b.parts[part].tier>=2||(inv[u.cost]||0)<2)return;
     consume(u.cost);consume(u.cost);b.parts[part]={material:u.material,tier:2};b.level=2;
-    b.showWord=u.word;b.shown=false;b.autoOffered=false;b.invited=false;b.closed=true;
+    learn(u.word);b.showWord=u.word;b.partQuestion=u.word;b.shown=false;b.autoOffered=true;b.invited=false;b.closed=true;
     closeUpgrade();closeAmbient();buildSession.lastObjectId=b.id;buildSession.lastActionAt=chatClock;buildSession.active=true;buildQueue=[];manualShowPending=null;
     detectBuilds();celebrateBuild(b);buildFeedback(u.praise+' You made this!','house_upgrade');save();renderHotbar();renderBuildTools();
-    // The upgrade is always allowed. Only accepting its Show spends the shared
-    // daily budget; a spent budget keeps the celebration without another quiz.
-    setTimeout(function(){if(!drivingCar&&buildObjects.includes(b)&&b.showWord===u.word&&!panelOpen()&&!buildShowActive()&&!b.autoOffered&&showsToday()<SHOW_DAILY_MAX)startShow(craftableRegion(b),'manual');},1600);
+    partQuestionAt=chatClock+1.6;
+
   }
   function newBuildSession() { return { active:false, placed:0, removed:0, lastActionAt:-100, selectedAt:-100, startedAt:0, asked:0, praised:0, closed:0, lastBubbleAt:-100, lastQuestionAt:-100, lastPraiseAt:-100, plan:null, firstDone:false, shorts:{}, roomAt:0, revisit:false }; }
   function resetBuildDay() {
@@ -2240,7 +2271,7 @@ function validConversation(value, p) {
   }
   function buildCompletion(r) {
     // A second nearby piece must not replace the Show finale being read.
-    if(ambient&&ambient.build&&['build_show','build_revisit'].includes(ambient.build.event)&&ambient.build.praise)return;
+    if(ambient&&ambient.build&&['build_show','build_revisit','house_part'].includes(ambient.build.event)&&ambient.build.praise)return;
     var b=r.building;
     b.closed=true;b.feedbackMembers=buildFeedbackMembers(r).slice();buildSession.closed++;buildSession.completionAt=chatClock;
     buildFeedback(BUILD_LINES[0]+' '+BUILD_LINES[b.kind==='free'?38:25],b.kind==='free'?'build_free':'build_closed');
@@ -2264,7 +2295,7 @@ function validConversation(value, p) {
   function buildNeedLine(key,variant) { var at={planks:11,wood:14,stone:17,stick:20}[key];return variant?lineVariant(BUILD_LINES.slice(at,at+3)):BUILD_LINES[at]; }
   function buildTier(words) { return buildLevel || Math.min(...words.map(function(k){var l=trail.levels[k]||{};return l.t1>=2?(l.t2>=2?3:2):1;})); }
   function buildSpeak(text,named) { speakEn(text,{soft:true,named:!!named}); }
-  function buildShowActive() { return !!(ambient && ambient.build && ['build_show','build_revisit'].includes(ambient.build.event) && ['invite','question'].includes(ambient.build.stage) && !ambient.build.praise); }
+  function buildShowActive() { return !!(ambient && ambient.build && ['build_show','build_revisit','house_part'].includes(ambient.build.event) && ['invite','question'].includes(ambient.build.stage) && !ambient.build.praise); }
   function buildInviteActive() { return !!(ambient && ambient.build && ambient.build.stage==='invite' && !ambient.build.praise); }
   function buildFeedback(text,event) {
     // An action result is not an optional conversation: no idle gate, queue,
@@ -2280,24 +2311,29 @@ function validConversation(value, p) {
     // Delayed word/roof feedback and new completions cannot replace an invitation.
     if(buildShowActive() && ambient.build!==data)return null;
     closeAmbient(); var a={build:data,payload:{event:data.event}}; ambient=a;
-    var box=document.getElementById('buddy-chat'); box.classList.add('build-bubble'); box.hidden=false;box.scrollTop=0;
+    var box=document.getElementById('buddy-chat'); box.classList.add('build-bubble');box.classList.toggle('build-question',data.stage==='question'||!!data.reward); box.hidden=false;box.scrollTop=0;
     document.getElementById('buddy-line').textContent=text;
     document.getElementById('buddy-picture').hidden=true;
     document.getElementById('buddy-options').replaceChildren();
-    document.getElementById('buddy-mic').hidden=!!data.praise;
+    document.getElementById('buddy-mic').hidden=!!data.praise||data.stage==='invite';
+    document.getElementById('buddy-close').hidden=!data.praise&&data.stage!=='invite';
+    document.getElementById('buddy-close').textContent=data.reward?'Continue':'OK!';
+    document.getElementById('buddy-confirm').hidden=!(data.voiceFailures>=2)||!!data.praise;
     a.timer=setTimeout(function(){if(ambient!==a)return;closeAmbient();if(['build_show','build_revisit'].includes(data.event)&&!data.praise&&!data.answered){if(data.building)celebrateBuild(data.building);buildBubble((BUILD_LINES[0] + ' ' + BUILD_LINES[38] + ' ' + BUILD_LINES[36] + ' Good job!'),{event:data.event,praise:true});}},data.stage==='invite'?35000:14000);
     if(!data.feedback)buildSession.lastBubbleAt=chatClock;
-    if(!data.deferSpeech)buildSpeak(text,data.named);
+    if(data.event==='house_part')clearTimeout(a.timer);
+    if(data.reward){clearTimeout(a.timer);buildSpeak(WORD[data.key][0],false);}
+    else if(!data.deferSpeech)buildSpeak(text,data.named);
     return a;
   }
   function buildChoiceButton(word,fn) {
     var b=document.createElement('button');b.type='button';b.dataset.word=word;b.setAttribute('aria-label',WORD[word][0]);
-    var cv=document.createElement('canvas');cv.width=128;cv.height=128;paintIcon(cv,word);b.appendChild(cv);b.appendChild(document.createTextNode(WORD[word][0]));b.onclick=fn;document.getElementById('buddy-options').appendChild(b);return b;
+    b.appendChild(document.createTextNode(WORD[word][0]));b.onclick=fn;document.getElementById('buddy-options').appendChild(b);return b;
   }
   function buildChoices(d) {
     document.getElementById('buddy-options').replaceChildren();
     d.options.forEach(function(k){var b=buildChoiceButton(k,function(){answerBuild(d,k,true);}); if(d.misses)b.classList.toggle('hint-answer',k===d.key);});
-    if(d.misses>=3) {var b=document.createElement('button');b.textContent='I said it';b.onclick=function(){finishBuildAnswer(d,d.key,false);};document.getElementById('buddy-options').appendChild(b);}
+    if(d.misses>=3){var answer=document.querySelector('#buddy-options [data-word="'+d.key+'"]');var cv=document.createElement('canvas');cv.width=cv.height=128;paintIcon(cv,d.key);answer.prepend(cv);}
   }
   function showBuildQuestion(d) {
     if(drivingCar)return;
@@ -2327,10 +2363,9 @@ function validConversation(value, p) {
       }
       if(!d.manual && buildQuota())spendBuildQuestion();
     }
-    d.stage='question';if(d.upgrade)d.deferSpeech=true;d.tier=buildTier(d.options);d.misses=0;
+    d.stage='question';if(d.upgrade)d.deferSpeech=true;d.tier=d.event==='house_part'?1:buildTier(d.options);d.misses=0;
     var text=d.event==='build_plan'?(d.tier===3?(BUILD_LINES[8] + ' Say it!'):lineVariant([BUILD_LINES[2],BUILD_LINES[3],BUILD_LINES[4]])):d.tier===1?(d.event==='build_short'?BUILD_LINES[10]:'What is this?'):d.tier===2?"What's this?":d.event==='build_short'?(d.key==='stick'?BUILD_LINES[20]:buildNeedLine(d.key))+' Say it!':(d.key==='house'?BUILD_LINES[33]:d.key==='fence'?BUILD_LINES[34]:'I made a '+d.key+'.')+' Say it!';
-    if(d.event==='build_plan'){var prefix=buildName();d.named=!!prefix;
-      if(d.building.kind==='car'||d.upgrade){d.deferSpeech=true;if(event==='build_revisit')prefix+='Look! '+(d.upgrade?'Our house!':'Our car!')+' ';}text=prefix+text;}
+    if(d.event==='build_plan'){var prefix=buildName();d.named=!!prefix;text=prefix+text;}
     if(d.upgrade)text=d.tier===3?'Look! '+WORD[d.key][0]+'. Say it!':'What is this?';
     var a=buildBubble(text,d), picture=document.getElementById('buddy-picture');
     if(d.event!=='build_plan'){picture.hidden=false;paintIcon(picture,d.key);picture.setAttribute('aria-label',WORD[d.key][0]);}
@@ -2350,26 +2385,33 @@ function validConversation(value, p) {
     if(!ambient||ambient.build!==d||d.answered)return; d.answered=true;playSfx('correct');
     if(d.event==='build_plan'){buildSession.plan=key;buildSession.planAnswered=true;}
     else if(d.tier===1 && clicked){var l=trail.levels[key]||{t1:0,t2:0,t3:0};l.t1++;trail.levels[key]=l;}
-    if(d.building){d.building.shown=true;d.stage='done';celebrateBuild(d.building);learn(key);quizStars[key]=1;playSfx('star');}
+    if(d.building){if(d.event==='house_part')delete d.building.partQuestion;d.building.shown=true;d.stage='done';celebrateBuild(d.building);learn(key);if(!d.selfClaim){quizStars[key]=1;playSfx('star');}}
+    if(!clicked&&!d.selfClaim)logPractice(key,d.event==='word_practice'?'words':'build',true,false,d.tier);
     var text=d.event==='build_plan'?(key==='house'?BUILD_LINES[5]:BUILD_LINES[6])+' '+BUILD_LINES[7]:d.event==='build_short'?(key==='stick'?'Great! '+BUILD_LINES[20]:'Great! '+buildNeedLine(key)):'You built a '+key+'! '+lineVariant([(BUILD_LINES[0] + ' ' + BUILD_LINES[35]),(BUILD_LINES[36] + ' Good job!'),(BUILD_LINES[37] + ' Well done!')]);
     if(d.upgrade)text={stone:'Strong stone walls! Well done!',roof:'A lovely roof! Well done!',flower:'Flowers in our yard! Well done!',window:'A bright window! Well done!'}[key];
     if(d.building&&d.building.kind==='car')text='You built a car! Look at the wheels! Good job!';
     if(d.event==='build_short')pointBuildMaterial(key);
-    closeAmbient();buildBubble(text,{event:d.event,praise:true,deferSpeech:clicked});
-    if(clicked && !d.upgrade && !(d.building&&d.building.kind==='car')) {cancelEnAudio();buildSpeak(WORD[key][0],false);var a=ambient;a.hintTimer=setTimeout(function(){if(ambient===a)buildSpeak(text,false);},1200);}
+    closeAmbient();buildBubble(d.selfClaim?'Thanks for trying!':text,{event:d.event,praise:true,deferSpeech:true,reward:!d.selfClaim,key:key});
     saveSoon();
   }
+  function buildVoiceFailure(a) {
+    if(ambient!==a)return;var d=a.build;d.voiceFailures=(d.voiceFailures||0)+1;
+    document.getElementById('buddy-confirm').hidden=d.voiceFailures<2;
+    document.getElementById('buddy-line').textContent=d.voiceFailures>=2?'Try Speak again, or tap I said it.':'Try Speak again.';
+    clearTimeout(a.timer); // Allow an unhurried second attempt.
+  }
   function listenBuild() {
-    var a=ambient,d=a&&a.build;if(!d||d.praise)return;
+    var a=ambient,d=a&&a.build;if(!d||d.praise||socialRecognizer)return;
     if(d.stage==='invite'){showBuildQuestion(d);return;}
     var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-    if(!SR){buildChoices(d);return;}
-    stopSocialListening();cancelEnAudio();
+    if(!SR){buildVoiceFailure(a);return;}
+    cancelEnAudio();if(window.speechSynthesis)speechSynthesis.cancel();clearTimeout(a.timer);
     try {var r=new SR();socialRecognizer=r;r.lang='en-US';r.interimResults=false;r.continuous=false;
-      r.onresult=function(e){var text=normalAnswer(e.results[0][0].transcript);stopSocialListening();if(ambient!==a)return;var key=d.options.find(function(k){return text.split(' ').includes(k);});if(key)answerBuild(d,key,false);else if(d.event==='build_plan'){buildSession.planAnswered=true;buildSession.plan=null;closeAmbient();buildBubble('Good job! '+BUILD_LINES[1],{event:'build_plan',praise:true});}else buildChoices(d);};
-      r.onerror=r.onend=function(){stopSocialListening();if(ambient===a)buildChoices(d);};r.start();
-      socialWatchdog=setTimeout(function(){stopSocialListening();if(ambient===a)buildChoices(d);},8000);
-    }catch(e){stopSocialListening();buildChoices(d);}
+      r.onstart=function(){if(socialRecognizer===r)micRecording('buddy-mic',true);};
+      r.onresult=function(e){var text=normalAnswer(e.results[0][0].transcript);stopSocialListening();if(ambient!==a)return;var key=d.options.find(function(k){return text.split(' ').includes(k);});if(key===d.key||key&&d.event==='build_plan')answerBuild(d,key,false);else buildVoiceFailure(a);};
+      r.onerror=r.onend=function(){stopSocialListening();buildVoiceFailure(a);};r.start();
+      socialWatchdog=setTimeout(function(){stopSocialListening();buildVoiceFailure(a);},8000);
+    }catch(e){stopSocialListening();buildVoiceFailure(a);}
   }
   function pointBuildMaterial(key) {
     var wanted=key==='stone'?STONE:WOOD,best=null,dist=Infinity;
@@ -2514,6 +2556,11 @@ function validConversation(value, p) {
   }
   function buildStep(dt) {
     if(drivingCar)return;
+    var pendingPart=buildObjects.find(function(b){return b.partQuestion;});
+    if(pendingPart&&chatClock>=partQuestionAt&&!panelOpen()&&!welcome&&!nameFlow&&!dialogue&&!quiz&&!buildShowActive()){
+      var key=pendingPart.partQuestion,other=learned.find(function(k){return k!==key&&['stone','wood','flower','roof','window','planks','sand'].includes(k);});
+      if(other){closeAmbient();showBuildQuestion({event:'house_part',building:pendingPart,key:key,options:[key,other],upgrade:true,deferSpeech:true});saveSoon();}
+    }
     if(buildLastPosition && Math.hypot(player.x-buildLastPosition.x,player.y-buildLastPosition.y)<.5)buildStill+=dt;else buildStill=0;
     buildLastPosition={x:player.x,y:player.y};
     resetBuildDay();updateShowButton();
@@ -2835,7 +2882,7 @@ function validConversation(value, p) {
     var i, dx, dy;
     for (i = 1; i <= 3; i++) base[idx(x, groundY - i)] = WOOD;
     var top = groundY - 3;
-    for (dy = -2; dy <= 1; dy++) {
+    for (dy = 0; dy <= 1; dy++) {
       for (dx = -2; dx <= 2; dx++) {
         if (Math.abs(dx) + Math.abs(dy) >= 4) continue;
         var tx = x + dx, ty = top + dy;
@@ -2928,6 +2975,8 @@ function validConversation(value, p) {
       var h = surfaceAt(x);
       fillPond(x, h); fillPond(x + 1, h); fillPond(x + 2, h);
     }
+    // Guaranteed clear, level 5-column pad beside spawn; saved modifications still apply.
+    for(x=origin+6;x<=origin+10;x++)fillLand(x,GROUND,GRASS);
     cells = new Uint8Array(base);
     animals = [];
     addAnimal('dog', origin + 1);
@@ -3445,19 +3494,22 @@ function validConversation(value, p) {
     }
   }
   function pet(a) {
+    function animalCard(){if(quiz&&quiz.key===a.type)quizWin();else showWord(a.type);}
     playSfx('pet');
     a.pet = 1.2;
     a.wait = 4; a.vx = 0; a.timer = 2;
     if (!quiz) progress.tapped[a.type] = 1;
     if (quiz && a.type !== quiz.key) quizWrong();
     learn(a.type); rememberEvent('met', a.type);
+    if(!trail.discoveries[a.type]){trail.discoveries[a.type]=true;queueChat('pet',a.type);}
+    if(!quiz&&!dialogue&&!buildShowActive())buildFeedback('Look! A '+a.type+'!','animal_meet');
     if (a.type === 'sheep') { addItem('wool', 1, true); learn('wool'); }
     if (a.tamed) {
-      showWord('pet');
+      animalCard();
       cry(a.type);
       burst(a.x, a.y - 24, '#ff6b8a', true);
       updateQuest();
-      saveSoon(); smallTalk();
+      saveSoon();
       return;
     }
     if ((a.type === 'dog' || a.type === 'cat') && !animals.some(function (o) { return o.tamed; })) {
@@ -3469,7 +3521,7 @@ function validConversation(value, p) {
         learn('pet');
         learn('follow');
         followLastX = player.x; followTravel = 0; followReady = false;
-        showWord('pet');
+        animalCard();
         cry(a.type);
         burst(a.x, a.y - 24, '#ff6b8a', true);
         burst(a.x, a.y - 42, '#ffc53d', false);
@@ -3480,7 +3532,7 @@ function validConversation(value, p) {
         return;
       }
     }
-    showWord(a.type);
+    animalCard();
     cry(a.type);
     burst(a.x, a.y - 24, '#ff6b8a', true);
     updateQuest();
@@ -3609,6 +3661,7 @@ function validConversation(value, p) {
     if (blink) inkPath(g, [[x - 1.2, y], [x + 1.2, y]]);
     else { g.fillStyle = '#51493c'; g.beginPath(); g.arc(x, y, 1.1, 0, Math.PI * 2); g.fill(); }
   }
+  var ANIMAL_SCALE={dog:[.68,.68],cat:[.43,.43],cow:[1.12,.95],pig:[.75,.7],sheep:[.8,.8],chicken:[.45,.45],duck:[.45,.45],horse:[1.08,1.03],rabbit:[.38,.38]};
   function drawAnimal(g, type, phase) {
     g.save(); inkStyle(g);
     var frame = reducedMotion ? 1 : Math.floor(phase * 1.5) % 8;
@@ -4034,7 +4087,7 @@ function validConversation(value, p) {
           g.save();
           g.translate(px + 16, py + 30);
           g.rotate(Math.sin(sec * 2 + x) * 0.08);
-          g.drawImage(fs, -16, -30, 32, 32);
+          g.drawImage(fs, -8, -13, 16, 16);
           g.restore();
           continue;
         }
@@ -4246,7 +4299,7 @@ function validConversation(value, p) {
       ctx.save();
       ctx.translate(an.x, an.y);
       var squash = an.pet > 0 ? 0.1 : 0;
-      ctx.scale(an.dir * (1 + squash), 1 - squash);
+      var size=ANIMAL_SCALE[an.type]||[1,1];ctx.scale(an.dir * (1 + squash)*size[0], (1 - squash)*size[1]);
       ctx.fillStyle = 'rgba(40,30,20,0.16)';
       ctx.beginPath(); ctx.ellipse(0, -1, 10, 3, 0, 0, 6.3); ctx.fill();
       drawAnimal(ctx, an.type, an.phase);
@@ -4393,7 +4446,7 @@ function validConversation(value, p) {
     drawCamY = Math.round(camY * z) / z;
   }
 
-  function showWord(key) {
+  function showWord(key, reward) {
     key=key==='houseKit'?'house':key==='pen'?'fence':key;
     var w = WORD[key];
     if (!w) return;
@@ -4404,7 +4457,8 @@ function validConversation(value, p) {
     card.hidden = false;
     document.getElementById('card-en').textContent = w[0];
     paintIcon(document.getElementById('card-icon'), key);
-    cardLeft = 2.15;
+    cardLeft = reward ? 3600 : 2.15;
+    document.getElementById('card-continue').hidden=!reward;
     speak(w[0]);
     renderHotbar();
   }
@@ -4675,8 +4729,7 @@ function validConversation(value, p) {
     quizStars[key] = 1;playSfx('correct');playSfx('star');
     updateQuest();
     celebrate(player.x, player.y - 40, false);
-    showWord(key);
-    speakEn(WORD[key][0]);
+    showWord(key,true);
     showToast('Great job!', 2.4);
     saveSoon();
   }
@@ -4915,11 +4968,13 @@ function validConversation(value, p) {
       var spk = document.createElement('button');
       spk.type = 'button';
       spk.className = 'spk';
-      spk.setAttribute('aria-label', 'Speak ' + WORD[key][0]);
+      spk.setAttribute('aria-label', 'Listen to ' + WORD[key][0]);
       spk.innerHTML = '<svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true"><path fill="#3a2a1c" d="M4 9h4l5-4v14l-5-4H4z"/><path fill="none" stroke="#3a2a1c" stroke-width="2" stroke-linecap="round" d="M16 9.2a4 4 0 0 1 0 5.6M18.2 7a7 7 0 0 1 0 10"/></svg>';
       tapButton(spk, function () { showWord(key); });
       tapButton(row, function () { showWord(key); });
-      row.appendChild(cv); row.appendChild(txt); row.appendChild(spk);
+      var practice=document.createElement('button');practice.type='button';practice.textContent='Speak';practice.setAttribute('aria-label','Practice '+WORD[key][0]);
+      tapButton(practice,function(){document.getElementById('book').hidden=true;hideCard();var d={event:'word_practice',key:key,options:[key],tier:3,stage:'question',deferSpeech:true};buildBubble('Say '+WORD[key][0].toLowerCase()+'!',d);paintIcon(document.getElementById('buddy-picture'),key);document.getElementById('buddy-picture').hidden=false;});
+      row.appendChild(cv); row.appendChild(txt); row.appendChild(spk);row.appendChild(practice);
       grid.appendChild(row);
     });
   }
@@ -4929,18 +4984,19 @@ function validConversation(value, p) {
     start.setDate(start.getDate() - (start.getDay() + 6) % 7);
     function dateLabel(d) { return (d.getMonth() + 1) + '/' + d.getDate(); }
     document.getElementById('speaking-week').textContent = '本周 ' + dateLabel(start) + ' — ' + dateLabel(now) + '（本机时间）';
-    var groups = {}, scenes = { task: '任务', fish: '钓鱼', pet: '宠物', boat: '乘船', scene: '新场景' };
+    var groups = {}, scenes = { task: '任务', fish: '钓鱼', pet: '宠物', boat: '乘船', scene: '新场景', build:'建筑', words:'图鉴' };
     trail.speaking.forEach(function (r) {
-      if (!r.spoke || !WORD[r.spoken_word] || r.time < +start || r.time > +now) return;
-      var row = groups[r.spoken_word] || { n: 0, scenes: {} };
-      row.n++; row.scenes[r.scene] = (row.scenes[r.scene] || 0) + 1;
-      groups[r.spoken_word] = row;
+      if ((!r.spoke && !r.self_claim) || r.time < +start || r.time > +now) return;
+      var key=r.self_claim?r.word:r.spoken_word;if(!WORD[key])return;
+      var row = groups[key] || { n: 0, claims:0, scenes: {} };
+      if(r.self_claim)row.claims++;else row.n++;row.scenes[r.scene] = (row.scenes[r.scene] || 0) + 1;
+      groups[key] = row;
     });
     var root = document.getElementById('speaking-rows'); root.replaceChildren();
     var words = Object.keys(groups).sort(function (a, b) { return groups[b].n - groups[a].n || a.localeCompare(b); });
     words.forEach(function (key) {
       var row = document.createElement('tr'), group = groups[key];
-      [WORD[key][0], String(group.n), Object.keys(scenes).filter(function (scene) { return group.scenes[scene]; }).map(function (scene) {
+      [WORD[key][0], String(group.n), String(group.claims), Object.keys(scenes).filter(function (scene) { return group.scenes[scene]; }).map(function (scene) {
         return scenes[scene] + '（' + group.scenes[scene] + '）';
       }).join('、')].forEach(function (text) { var cell = document.createElement('td'); cell.textContent = text; row.appendChild(cell); });
       root.appendChild(row);
@@ -5610,7 +5666,7 @@ function validConversation(value, p) {
     window.BW = {
       ready: true,
       audioState:function(){var players={};Object.keys(packPlayers).forEach(function(k){var a=packPlayers[k];players[k]={paused:a.paused,volume:a.volume,loop:a.loop,time:a.currentTime,ready:a.readyState};});return JSON.parse(JSON.stringify({music:musicOn,sfx:sfxOn,unlocked:packUnlocked,suspended:packSuspended,requests:packRequests,played:packPlayed,players:players}));},
-      buildState: function(){return JSON.parse(JSON.stringify({objects:buildObjects,driving:drivingCar&&drivingCar.id,crafted:craftedObjects,shows:showsToday()}));},
+      buildState: function(){return JSON.parse(JSON.stringify({objects:buildObjects,driving:drivingCar&&drivingCar.id,crafted:craftedObjects,shows:showsToday(),exploreQuizzes:trail.quizzes}));},
       adventure: function () {
         return JSON.parse(JSON.stringify({ trail: trail, spots: trailSpots, active: dialogue, queue: chatQueue,
           idle: chatIdle, cooldown: chatCooldown, scene: sceneNow, brain: brainStats, memory: memory, mode: nameFlow ? 'name_ask' : dialogue ? 'exercise' : ambient ? ambient.payload.event : welcome ? 'greet' : 'idle' }));

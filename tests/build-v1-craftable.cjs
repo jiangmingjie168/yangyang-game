@@ -37,7 +37,7 @@ try{for(const mobile of (process.env.BW_MOBILE==='0'?[false]:process.env.BW_MOBI
  try{
  await p.goto('http://craft.test/?buildlog=1#seed=42');await enter();
  if(test==='T2'||test==='T3'){await button('#btn-zh','Open parent difficulty');await button('[data-build-level="'+test.slice(1)+'"]','Set build difficulty');await button('#parent-close','Return from parent settings');}
- assert.equal(await p.locator('#build-version').innerText(),'build a0b0871+v11');assert(await p.locator('#build-version').isVisible());
+ assert.equal(await p.locator('#build-version').innerText(),'build a0b0871+v11qa');assert(await p.locator('#build-version').isVisible());
  if(test==='V'){await snap('version');}
  else{
   // Raw materials only; crafting itself must create the instance and count.

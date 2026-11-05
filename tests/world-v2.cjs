@@ -73,13 +73,13 @@ async function collect(p, id) {
   ];
   p=await page(log);await openLog(p);
   assert.match(await p.locator('#speaking-week').innerText(),/11\/2 — 11\/4/);
-  assert.deepEqual(await p.locator('#speaking-rows tr').allTextContents(),['Tree5任务（1）、钓鱼（1）、宠物（1）、乘船（1）、新场景（1）','Fish2钓鱼（1）、乘船（1）','Wood1任务（1）']);
+  assert.deepEqual(await p.locator('#speaking-rows tr').allTextContents(),['Tree50任务（1）、钓鱼（1）、宠物（1）、乘船（1）、新场景（1）','Fish20钓鱼（1）、乘船（1）','Wood10任务（1）']);
   assert.equal(await p.locator('#parent-info').isVisible(),false);
   assert.equal(await p.locator('#parent-log-tab').getAttribute('aria-selected'),'true');
   await p.locator('#parent-log-tab').focus();await p.keyboard.press('ArrowLeft');assert(await p.locator('#parent-info').isVisible());
   await p.keyboard.press('End');assert(await p.locator('#parent-log').isVisible());
   await p.screenshot({path:'/tmp/bw-v2-parent-log.png'});
-  const saved=await snapshot(p);assert.deepEqual(saved.adventure.speaking,log.adventure.speaking);
+  const saved=await snapshot(p);assert.deepEqual(saved.adventure.speaking,log.adventure.speaking.map(r=>({...r,self_claim:false})));
   await p.reload();await p.click('#btn-start'); if(await p.locator('#name-entry').isVisible())await p.click('#welcome-play');await openLog(p);assert.equal(await p.locator('#speaking-rows tr').count(),3);
   await p.click('#parent-close');assert(!/[\u3400-\u9fff]/u.test(await p.locator('body').innerText()));await check(p);await p.context().close();
   report('parent page: local Monday/DST boundary, all five scenes, exact counts, excludes taps/unmatched/old/future events, saves unchanged, keyboard tabs');
@@ -92,7 +92,7 @@ async function collect(p, id) {
   p=await page(voice);await p.evaluate(()=>BW.hideCard());const pos=await p.evaluate(()=>BW.worldToScreen(87.5*32,15.5*32));await p.mouse.click(pos.x,pos.y);await p.evaluate(()=>BW.hideCard());
   await p.waitForFunction(()=>BW.adventure().active&&!BW.adventure().active.pending);
   await p.click('#chat-mic');await p.evaluate(()=>voiceResult('three'));await openLog(p);
-  assert.match(await p.locator('#speaking-rows').innerText(),/Tree\s+1\s+新场景/);await check(p);await p.context().close();
+  assert.match(await p.locator('#speaking-rows').innerText(),/Tree\s+1\s+0\s+新场景/);await check(p);await p.context().close();
   report('mock recognition near-sound answer → saved event → parent speaking count');
   // Collect two complete sets through normal gravity/landing at travel checkpoints.
   const gifts=structuredClone(fixture);gifts.words=['tree','wood','stone','water'];gifts.animals.forEach(a=>a[1]=7000);
@@ -159,7 +159,7 @@ async function collect(p, id) {
   const offData=structuredClone(full);offData.adventure.speaking=[{time:Date.now(),word:'tree',spoken_word:'tree',scene:'task',spoke:true,tier:2}];
   await f.addInitScript(data=>{localStorage.setItem('block-world-save-v1',JSON.stringify(data));Object.defineProperty(window,'speechSynthesis',{value:undefined});window.SpeechRecognition=undefined;window.webkitSpeechRecognition=undefined;},offData);
   await f.goto('file://'+path.resolve(__dirname,'../index.html'));await f.click('#btn-start'); if(await f.locator('#name-entry').isVisible())await f.click('#welcome-play');await f.evaluate(()=>BW.hideCard());await openLog(f);
-  assert.match(await f.locator('#speaking-rows').innerText(),/Tree\s+1\s+任务/);await f.click('#parent-close');await f.click('#btn-words');assert.equal(await f.locator('#album-completion').innerText(),'✓ 1 round complete!');assert.equal(await f.locator('#album-last button').count(),7);await offline.close();
+  assert.match(await f.locator('#speaking-rows').innerText(),/Tree\s+1\s+0\s+任务/);await f.click('#parent-close');await f.click('#btn-words');assert.equal(await f.locator('#album-completion').innerText(),'✓ 1 round complete!');assert.equal(await f.locator('#album-last button').count(),7);await offline.close();
   report('actual file:// offline: saved speaking log, legacy gift-round migration, completed album, no speech service');
 
 })().catch(e=>{console.error(e);process.exitCode=1;}).finally(async()=>{await browser?.close();});

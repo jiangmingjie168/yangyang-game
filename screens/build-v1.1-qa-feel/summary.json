@@ -1,0 +1,31 @@
+{
+  "baseline": "4ebf8aacafa30f800bc54acc0c4d076eac3cb432",
+  "hud": "build a0b0871+v11qa",
+  "md5": "495c83e41ceae1b4a818502cf24f0526",
+  "sha256": "0210373a05563464fb0982247aeac578bf3003e94266967d2f44c18fb2b99a82",
+  "suite_exits": "11/11 zero",
+  "browser_cases": {
+    "targeted": 14,
+    "regression": 18,
+    "craftable": 20,
+    "fix3": 10,
+    "compat": 2
+  },
+  "core_browser_total": 64,
+  "server_tests": 52,
+  "audio_assets": 13,
+  "pointer_records": {
+    "targeted": 225,
+    "regression": 508,
+    "craftable": 494,
+    "fix3": 330
+  },
+  "pngs": 410,
+  "videos": 10,
+  "before_pngs": 4,
+  "limitations": [
+    "Browser speech fixtures validate UI and accounting, not microphone recognition quality.",
+    "Mobile viewports do not replace a real-device retest.",
+    "Preview deployment belongs to the orchestrator."
+  ]
+}

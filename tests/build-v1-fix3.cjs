@@ -29,6 +29,7 @@ async function run(){
  async function world(x,y,purpose){const ax=facing<0?.58:.42;if(!mobile){x=(x-844*ax)*50/38+1366*ax;y=(y-390*.72)*50/38+768*.72;}await click(x,y,purpose);}
  async function settleEncounter(){
  for(let i=0;i<8&&await p.locator('#dialogue').isVisible();i++){
+   if(await p.locator('#chat-continue').isVisible()){await button('#chat-continue','Continue after encounter reward');break;}
    await wait(500);const hint=p.locator('#chat-options .hint-answer').first(),choice=await hint.isVisible()?hint:p.locator('#chat-options button').first();
    if(await choice.isVisible() && await choice.getAttribute('disabled')===null)await button(choice,'Answer visible encounter picture choice');
    await wait(1300);
@@ -52,7 +53,8 @@ async function run(){
  }
  async function prep(fence=true){
  await harvest(658,262,'Harvest first Wood');await wait(700);if(await p.locator('#wordcard').isVisible())await button('#wordcard','Dismiss Wood card');
- await harvest(459,224,'Harvest second Wood');await wait(250);if(await p.locator('#wordcard').isVisible())await button('#wordcard','Dismiss Wood card');
+ await harvest(459,224,'Harvest second Wood');await wait(700); // Let the camera settle before the third screen-coordinate tap.
+ if(await p.locator('#wordcard').isVisible())await button('#wordcard','Dismiss Wood card');
  await harvest(459,262,'Harvest third Wood');await settleEncounter();
  if(await p.locator('#wordcard').isVisible())await button('#wordcard','Dismiss Wood card');await button('#btn-craft','Open Craft');await craft('Planks ×4',3);if(fence){await craft('Stick ×4',1);await craft('Fence ×2',4);}await snap('crafted');await button('#craft-back','Close Craft');await button('#btn-build','Open Build');await button(`[data-build="${fence?'fence':'planks'}"]`,'Select material');
  }

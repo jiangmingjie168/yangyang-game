@@ -1,0 +1,5781 @@
+{
+  "sha256": "0210373a05563464fb0982247aeac578bf3003e94266967d2f44c18fb2b99a82",
+  "results": [
+    {
+      "case": "house-desktop",
+      "status": "PASS",
+      "seconds": 2.9
+    },
+    {
+      "case": "speak-desktop",
+      "status": "PASS",
+      "seconds": 7.6
+    },
+    {
+      "case": "recognized-desktop",
+      "status": "PASS",
+      "seconds": 6.6
+    },
+    {
+      "case": "explore-desktop",
+      "status": "PASS",
+      "seconds": 3.6
+    },
+    {
+      "case": "quota-desktop",
+      "status": "PASS",
+      "seconds": 55.5
+    },
+    {
+      "case": "physical-desktop",
+      "status": "PASS",
+      "seconds": 1.9
+    },
+    {
+      "case": "proportion-desktop",
+      "status": "PASS",
+      "seconds": 1.2
+    },
+    {
+      "case": "house-mobile",
+      "status": "PASS",
+      "seconds": 2.5
+    },
+    {
+      "case": "speak-mobile",
+      "status": "PASS",
+      "seconds": 7.4
+    },
+    {
+      "case": "recognized-mobile",
+      "status": "PASS",
+      "seconds": 6.5
+    },
+    {
+      "case": "explore-mobile",
+      "status": "PASS",
+      "seconds": 3.5
+    },
+    {
+      "case": "quota-mobile",
+      "status": "PASS",
+      "seconds": 54.8
+    },
+    {
+      "case": "physical-mobile",
+      "status": "PASS",
+      "seconds": 1.9
+    },
+    {
+      "case": "proportion-mobile",
+      "status": "PASS",
+      "seconds": 1.2
+    }
+  ],
+  "frames": [
+    {
+      "case": "house-desktop",
+      "file": "house-desktop-relaxed-ground-snap.png",
+      "label": "relaxed-ground-snap",
+      "state": {
+        "objects": [
+          {
+            "item": "houseKit",
+            "kind": "house",
+            "level": 1,
+            "parts": {
+              "wall": {
+                "material": "wood",
+                "tier": 1
+              },
+              "roof": {
+                "material": "planks",
+                "tier": 1
+              },
+              "yard": {
+                "material": "grass",
+                "tier": 1
+              },
+              "window": {
+                "material": "wood",
+                "tier": 1
+              },
+              "foundation": {
+                "material": "stone",
+                "tier": 1
+              },
+              "door": {
+                "material": "wood",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 3,
+            "id": "object:77:13",
+            "x": 77,
+            "y": 13,
+            "createdAt": 1793879189573,
+            "roofed": true,
+            "shown": false,
+            "closed": true,
+            "autoOffered": false,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3197,
+              3198,
+              3199,
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679
+            ]
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 0,
+        "exploreQuizzes": 0
+      },
+      "adventure": {
+        "trail": {
+          "found": {},
+          "reviews": {},
+          "turns": 0,
+          "scenes": {
+            "home": 1
+          },
+          "levels": {},
+          "speaking": [],
+          "rounds": 0,
+          "lastRound": {},
+          "discoveries": {},
+          "quizDay": "2026-11-05",
+          "quizzes": 0
+        },
+        "spots": [
+          {
+            "id": "0",
+            "x": 2128,
+            "y": 497
+          },
+          {
+            "id": "1",
+            "x": 2896,
+            "y": 497
+          },
+          {
+            "id": "2",
+            "x": 3472,
+            "y": 497
+          },
+          {
+            "id": "3",
+            "x": 3760,
+            "y": 497
+          },
+          {
+            "id": "4",
+            "x": 4432,
+            "y": 497
+          },
+          {
+            "id": "5",
+            "x": 4912,
+            "y": 529
+          },
+          {
+            "id": "6",
+            "x": 1744,
+            "y": 529
+          }
+        ],
+        "active": null,
+        "queue": [
+          {
+            "anchor": "task",
+            "key": "house",
+            "at": 0.8327000000000002
+          }
+        ],
+        "idle": 0,
+        "cooldown": 0,
+        "scene": "home",
+        "brain": {
+          "brain": 0,
+          "template": 1,
+          "unknown": 0,
+          "requests": 1,
+          "limited": 0,
+          "audio": 0,
+          "tts": 3,
+          "reasons": {
+            "client-validation": 1
+          }
+        },
+        "memory": {
+          "prefs": {
+            "color": null,
+            "animal": null,
+            "food": null,
+            "build": "house"
+          },
+          "prefsLearnedAt": {
+            "build": 1793879189574
+          },
+          "name_asked": true,
+          "chat_day": "2026-11-05",
+          "small_talk_count": 0,
+          "weather_chat_done": false
+        },
+        "mode": "build_closed"
+      },
+      "speech": [
+        "Hi! What is your name?",
+        "Craft",
+        "House"
+      ]
+    },
+    {
+      "case": "house-desktop",
+      "file": "house-desktop-text-only-house.png",
+      "label": "text-only-house",
+      "state": {
+        "objects": [
+          {
+            "item": "houseKit",
+            "kind": "house",
+            "level": 1,
+            "parts": {
+              "wall": {
+                "material": "wood",
+                "tier": 1
+              },
+              "roof": {
+                "material": "planks",
+                "tier": 1
+              },
+              "yard": {
+                "material": "grass",
+                "tier": 1
+              },
+              "window": {
+                "material": "wood",
+                "tier": 1
+              },
+              "foundation": {
+                "material": "stone",
+                "tier": 1
+              },
+              "door": {
+                "material": "wood",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 3,
+            "id": "object:77:13",
+            "x": 77,
+            "y": 13,
+            "createdAt": 1793879189573,
+            "roofed": true,
+            "shown": false,
+            "closed": true,
+            "autoOffered": true,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3197,
+              3198,
+              3199,
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679
+            ]
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 1,
+        "exploreQuizzes": 0
+      },
+      "adventure": {
+        "trail": {
+          "found": {},
+          "reviews": {},
+          "turns": 0,
+          "scenes": {
+            "home": 1
+          },
+          "levels": {},
+          "speaking": [],
+          "rounds": 0,
+          "lastRound": {},
+          "discoveries": {},
+          "quizDay": "2026-11-05",
+          "quizzes": 0
+        },
+        "spots": [
+          {
+            "id": "0",
+            "x": 2128,
+            "y": 497
+          },
+          {
+            "id": "1",
+            "x": 2896,
+            "y": 497
+          },
+          {
+            "id": "2",
+            "x": 3472,
+            "y": 497
+          },
+          {
+            "id": "3",
+            "x": 3760,
+            "y": 497
+          },
+          {
+            "id": "4",
+            "x": 4432,
+            "y": 497
+          },
+          {
+            "id": "5",
+            "x": 4912,
+            "y": 529
+          },
+          {
+            "id": "6",
+            "x": 1744,
+            "y": 529
+          }
+        ],
+        "active": null,
+        "queue": [
+          {
+            "anchor": "task",
+            "key": "house",
+            "at": 0.8327000000000002
+          }
+        ],
+        "idle": 0,
+        "cooldown": 0,
+        "scene": "home",
+        "brain": {
+          "brain": 0,
+          "template": 1,
+          "unknown": 0,
+          "requests": 1,
+          "limited": 0,
+          "audio": 0,
+          "tts": 5,
+          "reasons": {
+            "client-validation": 1
+          }
+        },
+        "memory": {
+          "prefs": {
+            "color": null,
+            "animal": null,
+            "food": null,
+            "build": "house"
+          },
+          "prefsLearnedAt": {
+            "build": 1793879189574
+          },
+          "name_asked": true,
+          "chat_day": "2026-11-05",
+          "small_talk_count": 0,
+          "weather_chat_done": false
+        },
+        "mode": "build_show"
+      },
+      "speech": [
+        "Hi! What is your name?",
+        "Craft",
+        "House",
+        "Wow! Show me!",
+        "What is this?"
+      ]
+    },
+    {
+      "case": "house-desktop",
+      "file": "house-desktop-reward-continue.png",
+      "label": "reward-continue",
+      "state": {
+        "objects": [
+          {
+            "item": "houseKit",
+            "kind": "house",
+            "level": 1,
+            "parts": {
+              "wall": {
+                "material": "wood",
+                "tier": 1
+              },
+              "roof": {
+                "material": "planks",
+                "tier": 1
+              },
+              "yard": {
+                "material": "grass",
+                "tier": 1
+              },
+              "window": {
+                "material": "wood",
+                "tier": 1
+              },
+              "foundation": {
+                "material": "stone",
+                "tier": 1
+              },
+              "door": {
+                "material": "wood",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 3,
+            "id": "object:77:13",
+            "x": 77,
+            "y": 13,
+            "createdAt": 1793879189573,
+            "roofed": true,
+            "shown": true,
+            "closed": true,
+            "autoOffered": true,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3197,
+              3198,
+              3199,
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679
+            ]
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 1,
+        "exploreQuizzes": 0
+      },
+      "adventure": {
+        "trail": {
+          "found": {},
+          "reviews": {},
+          "turns": 0,
+          "scenes": {
+            "home": 1
+          },
+          "levels": {
+            "house": {
+              "t1": 1,
+              "t2": 0,
+              "t3": 0
+            }
+          },
+          "speaking": [],
+          "rounds": 0,
+          "lastRound": {},
+          "discoveries": {},
+          "quizDay": "2026-11-05",
+          "quizzes": 0
+        },
+        "spots": [
+          {
+            "id": "0",
+            "x": 2128,
+            "y": 497
+          },
+          {
+            "id": "1",
+            "x": 2896,
+            "y": 497
+          },
+          {
+            "id": "2",
+            "x": 3472,
+            "y": 497
+          },
+          {
+            "id": "3",
+            "x": 3760,
+            "y": 497
+          },
+          {
+            "id": "4",
+            "x": 4432,
+            "y": 497
+          },
+          {
+            "id": "5",
+            "x": 4912,
+            "y": 529
+          },
+          {
+            "id": "6",
+            "x": 1744,
+            "y": 529
+          }
+        ],
+        "active": null,
+        "queue": [
+          {
+            "anchor": "task",
+            "key": "house",
+            "at": 0.8327000000000002
+          }
+        ],
+        "idle": 0,
+        "cooldown": 0,
+        "scene": "home",
+        "brain": {
+          "brain": 0,
+          "template": 1,
+          "unknown": 0,
+          "requests": 1,
+          "limited": 0,
+          "audio": 0,
+          "tts": 7,
+          "reasons": {
+            "client-validation": 1
+          }
+        },
+        "memory": {
+          "prefs": {
+            "color": null,
+            "animal": null,
+            "food": null,
+            "build": "house"
+          },
+          "prefsLearnedAt": {
+            "build": 1793879189574
+          },
+          "name_asked": true,
+          "chat_day": "2026-11-05",
+          "small_talk_count": 0,
+          "weather_chat_done": false
+        },
+        "mode": "build_show"
+      },
+      "speech": [
+        "Hi! What is your name?",
+        "Craft",
+        "House",
+        "Wow! Show me!",
+        "What is this?",
+        "Fence",
+        "House"
+      ]
+    },
+    {
+      "case": "speak-desktop",
+      "file": "speak-desktop-speak-default.png",
+      "label": "speak-default",
+      "state": {
+        "objects": [
+          {
+            "item": "houseKit",
+            "kind": "house",
+            "level": 1,
+            "parts": {
+              "wall": {
+                "material": "wood",
+                "tier": 1
+              },
+              "roof": {
+                "material": "planks",
+                "tier": 1
+              },
+              "yard": {
+                "material": "grass",
+                "tier": 1
+              },
+              "window": {
+                "material": "wood",
+                "tier": 1
+              },
+              "foundation": {
+                "material": "stone",
+                "tier": 1
+              },
+              "door": {
+                "material": "wood",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 3,
+            "id": "object:77:13",
+            "x": 77,
+            "y": 13,
+            "createdAt": 1793879192176,
+            "roofed": true,
+            "shown": false,
+            "closed": true,
+            "autoOffered": true,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3197,
+              3198,
+              3199,
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679
+            ]
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 1,
+        "exploreQuizzes": 0
+      },
+      "adventure": {
+        "trail": {
+          "found": {},
+          "reviews": {},
+          "turns": 0,
+          "scenes": {
+            "home": 1
+          },
+          "levels": {},
+          "speaking": [],
+          "rounds": 0,
+          "lastRound": {},
+          "discoveries": {},
+          "quizDay": "2026-11-05",
+          "quizzes": 0
+        },
+        "spots": [
+          {
+            "id": "0",
+            "x": 2128,
+            "y": 497
+          },
+          {
+            "id": "1",
+            "x": 2896,
+            "y": 497
+          },
+          {
+            "id": "2",
+            "x": 3472,
+            "y": 497
+          },
+          {
+            "id": "3",
+            "x": 3760,
+            "y": 497
+          },
+          {
+            "id": "4",
+            "x": 4432,
+            "y": 497
+          },
+          {
+            "id": "5",
+            "x": 4912,
+            "y": 529
+          },
+          {
+            "id": "6",
+            "x": 1744,
+            "y": 529
+          }
+        ],
+        "active": null,
+        "queue": [
+          {
+            "anchor": "task",
+            "key": "house",
+            "at": 0.7659000000000001
+          }
+        ],
+        "idle": 0,
+        "cooldown": 0,
+        "scene": "home",
+        "brain": {
+          "brain": 0,
+          "template": 1,
+          "unknown": 0,
+          "requests": 1,
+          "limited": 0,
+          "audio": 0,
+          "tts": 5,
+          "reasons": {
+            "client-validation": 1
+          }
+        },
+        "memory": {
+          "prefs": {
+            "color": null,
+            "animal": null,
+            "food": null,
+            "build": "house"
+          },
+          "prefsLearnedAt": {
+            "build": 1793879192176
+          },
+          "name_asked": true,
+          "chat_day": "2026-11-05",
+          "small_talk_count": 0,
+          "weather_chat_done": false
+        },
+        "mode": "build_show"
+      },
+      "speech": [
+        "Hi! What is your name?",
+        "Craft",
+        "House",
+        "Wow! Show me!",
+        "I made a house. Say it!"
+      ]
+    },
+    {
+      "case": "speak-desktop",
+      "file": "speak-desktop-two-failures.png",
+      "label": "two-failures",
+      "state": {
+        "objects": [
+          {
+            "item": "houseKit",
+            "kind": "house",
+            "level": 1,
+            "parts": {
+              "wall": {
+                "material": "wood",
+                "tier": 1
+              },
+              "roof": {
+                "material": "planks",
+                "tier": 1
+              },
+              "yard": {
+                "material": "grass",
+                "tier": 1
+              },
+              "window": {
+                "material": "wood",
+                "tier": 1
+              },
+              "foundation": {
+                "material": "stone",
+                "tier": 1
+              },
+              "door": {
+                "material": "wood",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 3,
+            "id": "object:77:13",
+            "x": 77,
+            "y": 13,
+            "createdAt": 1793879192176,
+            "roofed": true,
+            "shown": false,
+            "closed": true,
+            "autoOffered": true,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3197,
+              3198,
+              3199,
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679
+            ]
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 1,
+        "exploreQuizzes": 0
+      },
+      "adventure": {
+        "trail": {
+          "found": {},
+          "reviews": {},
+          "turns": 0,
+          "scenes": {
+            "home": 1
+          },
+          "levels": {},
+          "speaking": [],
+          "rounds": 0,
+          "lastRound": {},
+          "discoveries": {},
+          "quizDay": "2026-11-05",
+          "quizzes": 0
+        },
+        "spots": [
+          {
+            "id": "0",
+            "x": 2128,
+            "y": 497
+          },
+          {
+            "id": "1",
+            "x": 2896,
+            "y": 497
+          },
+          {
+            "id": "2",
+            "x": 3472,
+            "y": 497
+          },
+          {
+            "id": "3",
+            "x": 3760,
+            "y": 497
+          },
+          {
+            "id": "4",
+            "x": 4432,
+            "y": 497
+          },
+          {
+            "id": "5",
+            "x": 4912,
+            "y": 529
+          },
+          {
+            "id": "6",
+            "x": 1744,
+            "y": 529
+          }
+        ],
+        "active": null,
+        "queue": [
+          {
+            "anchor": "task",
+            "key": "house",
+            "at": 0.7659000000000001
+          }
+        ],
+        "idle": 0,
+        "cooldown": 0,
+        "scene": "home",
+        "brain": {
+          "brain": 0,
+          "template": 1,
+          "unknown": 0,
+          "requests": 1,
+          "limited": 0,
+          "audio": 0,
+          "tts": 5,
+          "reasons": {
+            "client-validation": 1
+          }
+        },
+        "memory": {
+          "prefs": {
+            "color": null,
+            "animal": null,
+            "food": null,
+            "build": "house"
+          },
+          "prefsLearnedAt": {
+            "build": 1793879192176
+          },
+          "name_asked": true,
+          "chat_day": "2026-11-05",
+          "small_talk_count": 0,
+          "weather_chat_done": false
+        },
+        "mode": "build_show"
+      },
+      "speech": [
+        "Hi! What is your name?",
+        "Craft",
+        "House",
+        "Wow! Show me!",
+        "I made a house. Say it!"
+      ]
+    },
+    {
+      "case": "speak-desktop",
+      "file": "speak-desktop-parent-real-vs-claim.png",
+      "label": "parent-real-vs-claim",
+      "state": {
+        "objects": [
+          {
+            "item": "houseKit",
+            "kind": "house",
+            "level": 1,
+            "parts": {
+              "wall": {
+                "material": "wood",
+                "tier": 1
+              },
+              "roof": {
+                "material": "planks",
+                "tier": 1
+              },
+              "yard": {
+                "material": "grass",
+                "tier": 1
+              },
+              "window": {
+                "material": "wood",
+                "tier": 1
+              },
+              "foundation": {
+                "material": "stone",
+                "tier": 1
+              },
+              "door": {
+                "material": "wood",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 3,
+            "id": "object:77:13",
+            "x": 77,
+            "y": 13,
+            "createdAt": 1793879192176,
+            "roofed": true,
+            "shown": true,
+            "closed": true,
+            "autoOffered": true,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3197,
+              3198,
+              3199,
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679
+            ]
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 1,
+        "exploreQuizzes": 0
+      },
+      "adventure": {
+        "trail": {
+          "found": {},
+          "reviews": {},
+          "turns": 0,
+          "scenes": {
+            "home": 1
+          },
+          "levels": {},
+          "speaking": [
+            {
+              "time": 1793879192965,
+              "scene": "build",
+              "word": "house",
+              "spoke": false,
+              "self_claim": true,
+              "spoken_word": null,
+              "tier": 3
+            },
+            {
+              "time": 1793879193681,
+              "scene": "words",
+              "word": "house",
+              "spoke": true,
+              "self_claim": false,
+              "spoken_word": "house",
+              "tier": 3
+            }
+          ],
+          "rounds": 0,
+          "lastRound": {},
+          "discoveries": {},
+          "quizDay": "2026-11-05",
+          "quizzes": 0
+        },
+        "spots": [
+          {
+            "id": "0",
+            "x": 2128,
+            "y": 497
+          },
+          {
+            "id": "1",
+            "x": 2896,
+            "y": 497
+          },
+          {
+            "id": "2",
+            "x": 3472,
+            "y": 497
+          },
+          {
+            "id": "3",
+            "x": 3760,
+            "y": 497
+          },
+          {
+            "id": "4",
+            "x": 4432,
+            "y": 497
+          },
+          {
+            "id": "5",
+            "x": 4912,
+            "y": 529
+          },
+          {
+            "id": "6",
+            "x": 1744,
+            "y": 529
+          }
+        ],
+        "active": null,
+        "queue": [
+          {
+            "anchor": "task",
+            "key": "house",
+            "at": 0.7659000000000001
+          }
+        ],
+        "idle": 0,
+        "cooldown": 0,
+        "scene": "home",
+        "brain": {
+          "brain": 0,
+          "template": 1,
+          "unknown": 0,
+          "requests": 1,
+          "limited": 0,
+          "audio": 0,
+          "tts": 7,
+          "reasons": {
+            "client-validation": 1
+          }
+        },
+        "memory": {
+          "prefs": {
+            "color": null,
+            "animal": null,
+            "food": null,
+            "build": "house"
+          },
+          "prefsLearnedAt": {
+            "build": 1793879192176
+          },
+          "name_asked": true,
+          "chat_day": "2026-11-05",
+          "small_talk_count": 0,
+          "weather_chat_done": false
+        },
+        "mode": "idle"
+      },
+      "speech": [
+        "Hi! What is your name?",
+        "Craft",
+        "House",
+        "Wow! Show me!",
+        "I made a house. Say it!",
+        "Word book",
+        "House"
+      ]
+    },
+    {
+      "case": "recognized-desktop",
+      "file": "recognized-desktop-speak-default.png",
+      "label": "speak-default",
+      "state": {
+        "objects": [
+          {
+            "item": "houseKit",
+            "kind": "house",
+            "level": 1,
+            "parts": {
+              "wall": {
+                "material": "wood",
+                "tier": 1
+              },
+              "roof": {
+                "material": "planks",
+                "tier": 1
+              },
+              "yard": {
+                "material": "grass",
+                "tier": 1
+              },
+              "window": {
+                "material": "wood",
+                "tier": 1
+              },
+              "foundation": {
+                "material": "stone",
+                "tier": 1
+              },
+              "door": {
+                "material": "wood",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 3,
+            "id": "object:77:13",
+            "x": 77,
+            "y": 13,
+            "createdAt": 1793879199757,
+            "roofed": true,
+            "shown": false,
+            "closed": true,
+            "autoOffered": true,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3197,
+              3198,
+              3199,
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679
+            ]
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 1,
+        "exploreQuizzes": 0
+      },
+      "adventure": {
+        "trail": {
+          "found": {},
+          "reviews": {},
+          "turns": 0,
+          "scenes": {
+            "home": 1
+          },
+          "levels": {},
+          "speaking": [],
+          "rounds": 0,
+          "lastRound": {},
+          "discoveries": {},
+          "quizDay": "2026-11-05",
+          "quizzes": 0
+        },
+        "spots": [
+          {
+            "id": "0",
+            "x": 2128,
+            "y": 497
+          },
+          {
+            "id": "1",
+            "x": 2896,
+            "y": 497
+          },
+          {
+            "id": "2",
+            "x": 3472,
+            "y": 497
+          },
+          {
+            "id": "3",
+            "x": 3760,
+            "y": 497
+          },
+          {
+            "id": "4",
+            "x": 4432,
+            "y": 497
+          },
+          {
+            "id": "5",
+            "x": 4912,
+            "y": 529
+          },
+          {
+            "id": "6",
+            "x": 1744,
+            "y": 529
+          }
+        ],
+        "active": null,
+        "queue": [
+          {
+            "anchor": "task",
+            "key": "house",
+            "at": 0.7660000000000001
+          }
+        ],
+        "idle": 0,
+        "cooldown": 0,
+        "scene": "home",
+        "brain": {
+          "brain": 0,
+          "template": 1,
+          "unknown": 0,
+          "requests": 1,
+          "limited": 0,
+          "audio": 0,
+          "tts": 5,
+          "reasons": {
+            "client-validation": 1
+          }
+        },
+        "memory": {
+          "prefs": {
+            "color": null,
+            "animal": null,
+            "food": null,
+            "build": "house"
+          },
+          "prefsLearnedAt": {
+            "build": 1793879199757
+          },
+          "name_asked": true,
+          "chat_day": "2026-11-05",
+          "small_talk_count": 0,
+          "weather_chat_done": false
+        },
+        "mode": "build_show"
+      },
+      "speech": [
+        "Hi! What is your name?",
+        "Craft",
+        "House",
+        "Wow! Show me!",
+        "I made a house. Say it!"
+      ]
+    },
+    {
+      "case": "recognized-desktop",
+      "file": "recognized-desktop-recognized-reward.png",
+      "label": "recognized-reward",
+      "state": {
+        "objects": [
+          {
+            "item": "houseKit",
+            "kind": "house",
+            "level": 1,
+            "parts": {
+              "wall": {
+                "material": "wood",
+                "tier": 1
+              },
+              "roof": {
+                "material": "planks",
+                "tier": 1
+              },
+              "yard": {
+                "material": "grass",
+                "tier": 1
+              },
+              "window": {
+                "material": "wood",
+                "tier": 1
+              },
+              "foundation": {
+                "material": "stone",
+                "tier": 1
+              },
+              "door": {
+                "material": "wood",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 3,
+            "id": "object:77:13",
+            "x": 77,
+            "y": 13,
+            "createdAt": 1793879199757,
+            "roofed": true,
+            "shown": true,
+            "closed": true,
+            "autoOffered": true,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3197,
+              3198,
+              3199,
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679
+            ]
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 1,
+        "exploreQuizzes": 0
+      },
+      "adventure": {
+        "trail": {
+          "found": {},
+          "reviews": {},
+          "turns": 0,
+          "scenes": {
+            "home": 1
+          },
+          "levels": {},
+          "speaking": [
+            {
+              "time": 1793879200322,
+              "scene": "build",
+              "word": "house",
+              "spoke": true,
+              "self_claim": false,
+              "spoken_word": "house",
+              "tier": 3
+            }
+          ],
+          "rounds": 0,
+          "lastRound": {},
+          "discoveries": {},
+          "quizDay": "2026-11-05",
+          "quizzes": 0
+        },
+        "spots": [
+          {
+            "id": "0",
+            "x": 2128,
+            "y": 497
+          },
+          {
+            "id": "1",
+            "x": 2896,
+            "y": 497
+          },
+          {
+            "id": "2",
+            "x": 3472,
+            "y": 497
+          },
+          {
+            "id": "3",
+            "x": 3760,
+            "y": 497
+          },
+          {
+            "id": "4",
+            "x": 4432,
+            "y": 497
+          },
+          {
+            "id": "5",
+            "x": 4912,
+            "y": 529
+          },
+          {
+            "id": "6",
+            "x": 1744,
+            "y": 529
+          }
+        ],
+        "active": null,
+        "queue": [
+          {
+            "anchor": "task",
+            "key": "house",
+            "at": 0.7660000000000001
+          }
+        ],
+        "idle": 0,
+        "cooldown": 0,
+        "scene": "home",
+        "brain": {
+          "brain": 0,
+          "template": 1,
+          "unknown": 0,
+          "requests": 1,
+          "limited": 0,
+          "audio": 0,
+          "tts": 6,
+          "reasons": {
+            "client-validation": 1
+          }
+        },
+        "memory": {
+          "prefs": {
+            "color": null,
+            "animal": null,
+            "food": null,
+            "build": "house"
+          },
+          "prefsLearnedAt": {
+            "build": 1793879199757
+          },
+          "name_asked": true,
+          "chat_day": "2026-11-05",
+          "small_talk_count": 0,
+          "weather_chat_done": false
+        },
+        "mode": "build_show"
+      },
+      "speech": [
+        "Hi! What is your name?",
+        "Craft",
+        "House",
+        "Wow! Show me!",
+        "I made a house. Say it!",
+        "House"
+      ]
+    },
+    {
+      "case": "recognized-desktop",
+      "file": "recognized-desktop-parent-real-vs-claim.png",
+      "label": "parent-real-vs-claim",
+      "state": {
+        "objects": [
+          {
+            "item": "houseKit",
+            "kind": "house",
+            "level": 1,
+            "parts": {
+              "wall": {
+                "material": "wood",
+                "tier": 1
+              },
+              "roof": {
+                "material": "planks",
+                "tier": 1
+              },
+              "yard": {
+                "material": "grass",
+                "tier": 1
+              },
+              "window": {
+                "material": "wood",
+                "tier": 1
+              },
+              "foundation": {
+                "material": "stone",
+                "tier": 1
+              },
+              "door": {
+                "material": "wood",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 3,
+            "id": "object:77:13",
+            "x": 77,
+            "y": 13,
+            "createdAt": 1793879199757,
+            "roofed": true,
+            "shown": true,
+            "closed": true,
+            "autoOffered": true,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3197,
+              3198,
+              3199,
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679
+            ]
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 1,
+        "exploreQuizzes": 0
+      },
+      "adventure": {
+        "trail": {
+          "found": {},
+          "reviews": {},
+          "turns": 0,
+          "scenes": {
+            "home": 1
+          },
+          "levels": {},
+          "speaking": [
+            {
+              "time": 1793879200322,
+              "scene": "build",
+              "word": "house",
+              "spoke": true,
+              "self_claim": false,
+              "spoken_word": "house",
+              "tier": 3
+            }
+          ],
+          "rounds": 0,
+          "lastRound": {},
+          "discoveries": {},
+          "quizDay": "2026-11-05",
+          "quizzes": 0
+        },
+        "spots": [
+          {
+            "id": "0",
+            "x": 2128,
+            "y": 497
+          },
+          {
+            "id": "1",
+            "x": 2896,
+            "y": 497
+          },
+          {
+            "id": "2",
+            "x": 3472,
+            "y": 497
+          },
+          {
+            "id": "3",
+            "x": 3760,
+            "y": 497
+          },
+          {
+            "id": "4",
+            "x": 4432,
+            "y": 497
+          },
+          {
+            "id": "5",
+            "x": 4912,
+            "y": 529
+          },
+          {
+            "id": "6",
+            "x": 1744,
+            "y": 529
+          }
+        ],
+        "active": null,
+        "queue": [
+          {
+            "anchor": "task",
+            "key": "house",
+            "at": 0.7660000000000001
+          }
+        ],
+        "idle": 0,
+        "cooldown": 0,
+        "scene": "home",
+        "brain": {
+          "brain": 0,
+          "template": 1,
+          "unknown": 0,
+          "requests": 1,
+          "limited": 0,
+          "audio": 0,
+          "tts": 6,
+          "reasons": {
+            "client-validation": 1
+          }
+        },
+        "memory": {
+          "prefs": {
+            "color": null,
+            "animal": null,
+            "food": null,
+            "build": "house"
+          },
+          "prefsLearnedAt": {
+            "build": 1793879199757
+          },
+          "name_asked": true,
+          "chat_day": "2026-11-05",
+          "small_talk_count": 0,
+          "weather_chat_done": false
+        },
+        "mode": "idle"
+      },
+      "speech": [
+        "Hi! What is your name?",
+        "Craft",
+        "House",
+        "Wow! Show me!",
+        "I made a house. Say it!",
+        "House"
+      ]
+    },
+    {
+      "case": "explore-desktop",
+      "file": "explore-desktop-animal-name-hearts-bubble.png",
+      "label": "animal-name-hearts-bubble",
+      "state": {
+        "objects": [],
+        "driving": null,
+        "crafted": [],
+        "shows": 0,
+        "exploreQuizzes": 0
+      },
+      "adventure": {
+        "trail": {
+          "found": {},
+          "reviews": {},
+          "turns": 0,
+          "scenes": {
+            "home": 1
+          },
+          "levels": {
+            "dog": {
+              "t1": 2,
+              "t2": 2,
+              "t3": 0
+            }
+          },
+          "speaking": [],
+          "rounds": 0,
+          "lastRound": {},
+          "discoveries": {
+            "dog": true
+          },
+          "quizDay": "2026-11-05",
+          "quizzes": 0
+        },
+        "spots": [
+          {
+            "id": "0",
+            "x": 2128,
+            "y": 497
+          },
+          {
+            "id": "1",
+            "x": 2896,
+            "y": 497
+          },
+          {
+            "id": "2",
+            "x": 3472,
+            "y": 497
+          },
+          {
+            "id": "3",
+            "x": 3760,
+            "y": 497
+          },
+          {
+            "id": "4",
+            "x": 4432,
+            "y": 497
+          },
+          {
+            "id": "5",
+            "x": 4912,
+            "y": 529
+          },
+          {
+            "id": "6",
+            "x": 1744,
+            "y": 529
+          }
+        ],
+        "active": null,
+        "queue": [
+          {
+            "anchor": "pet",
+            "key": "dog",
+            "at": 0.6326
+          }
+        ],
+        "idle": 0,
+        "cooldown": 0,
+        "scene": "home",
+        "brain": {
+          "brain": 0,
+          "template": 1,
+          "unknown": 0,
+          "requests": 1,
+          "limited": 0,
+          "audio": 0,
+          "tts": 2,
+          "reasons": {
+            "client-validation": 1
+          }
+        },
+        "memory": {
+          "prefs": {
+            "color": null,
+            "animal": null,
+            "food": null,
+            "build": null
+          },
+          "prefsLearnedAt": {},
+          "name_asked": true,
+          "chat_day": "2026-11-05",
+          "small_talk_count": 0,
+          "weather_chat_done": false
+        },
+        "mode": "animal_meet"
+      },
+      "speech": [
+        "Hi! What is your name?",
+        "Dog"
+      ]
+    },
+    {
+      "case": "explore-desktop",
+      "file": "explore-desktop-explore-fallback.png",
+      "label": "explore-fallback",
+      "state": {
+        "objects": [],
+        "driving": null,
+        "crafted": [],
+        "shows": 0,
+        "exploreQuizzes": 1
+      },
+      "adventure": {
+        "trail": {
+          "found": {},
+          "reviews": {},
+          "turns": 0,
+          "scenes": {
+            "home": 1
+          },
+          "levels": {
+            "dog": {
+              "t1": 2,
+              "t2": 2,
+              "t3": 0
+            }
+          },
+          "speaking": [
+            {
+              "time": 1793879207799,
+              "scene": "pet",
+              "word": "dog",
+              "spoke": false,
+              "spoken_word": null,
+              "tier": 3
+            },
+            {
+              "time": 1793879208061,
+              "scene": "pet",
+              "word": "dog",
+              "spoke": true,
+              "spoken_word": null,
+              "tier": 1
+            }
+          ],
+          "rounds": 0,
+          "lastRound": {},
+          "discoveries": {
+            "dog": true
+          },
+          "quizDay": "2026-11-05",
+          "quizzes": 1
+        },
+        "spots": [
+          {
+            "id": "0",
+            "x": 2128,
+            "y": 497
+          },
+          {
+            "id": "1",
+            "x": 2896,
+            "y": 497
+          },
+          {
+            "id": "2",
+            "x": 3472,
+            "y": 497
+          },
+          {
+            "id": "3",
+            "x": 3760,
+            "y": 497
+          },
+          {
+            "id": "4",
+            "x": 4432,
+            "y": 497
+          },
+          {
+            "id": "5",
+            "x": 4912,
+            "y": 529
+          },
+          {
+            "id": "6",
+            "x": 1744,
+            "y": 529
+          }
+        ],
+        "active": {
+          "context": {
+            "recent_events": [
+              {
+                "action": "met",
+                "word": "dog"
+              },
+              {
+                "action": "met",
+                "word": "dog"
+              }
+            ]
+          },
+          "misses": 1,
+          "anchor": "pet",
+          "scene": "home",
+          "key": "dog",
+          "options": [
+            "dog",
+            "planks"
+          ],
+          "tier": 3,
+          "turn": 1,
+          "at": 3.0491999999999946,
+          "answered": false,
+          "pending": false,
+          "choices": true,
+          "sequence": 2,
+          "feedback": "retry",
+          "controller": null,
+          "question": "Great! What is this?",
+          "voiceFailures": 2,
+          "fallback": true,
+          "hint": true
+        },
+        "queue": [],
+        "idle": 1.266600000000001,
+        "cooldown": 0,
+        "scene": "home",
+        "brain": {
+          "brain": 0,
+          "template": 3,
+          "unknown": 0,
+          "requests": 2,
+          "limited": 0,
+          "audio": 0,
+          "tts": 4,
+          "reasons": {
+            "client-validation": 2,
+            "local-retry": 1
+          }
+        },
+        "memory": {
+          "prefs": {
+            "color": null,
+            "animal": null,
+            "food": null,
+            "build": null
+          },
+          "prefsLearnedAt": {},
+          "name_asked": true,
+          "chat_day": "2026-11-05",
+          "small_talk_count": 0,
+          "weather_chat_done": false
+        },
+        "mode": "exercise"
+      },
+      "speech": [
+        "Hi! What is your name?",
+        "Dog",
+        "I see a dog. Say it!",
+        "Great! What is this?"
+      ]
+    },
+    {
+      "case": "quota-desktop",
+      "file": "quota-desktop-explore-text-only.png",
+      "label": "explore-text-only",
+      "state": {
+        "objects": [],
+        "driving": null,
+        "crafted": [],
+        "shows": 0,
+        "exploreQuizzes": 1
+      },
+      "adventure": {
+        "trail": {
+          "found": {},
+          "reviews": {},
+          "turns": 0,
+          "scenes": {
+            "home": 1
+          },
+          "levels": {},
+          "speaking": [
+            {
+              "time": 1793879211415,
+              "scene": "pet",
+              "word": "dog",
+              "spoke": false,
+              "spoken_word": null,
+              "tier": 1
+            }
+          ],
+          "rounds": 0,
+          "lastRound": {},
+          "discoveries": {
+            "dog": true
+          },
+          "quizDay": "2026-11-05",
+          "quizzes": 1
+        },
+        "spots": [
+          {
+            "id": "0",
+            "x": 2128,
+            "y": 497
+          },
+          {
+            "id": "1",
+            "x": 2896,
+            "y": 497
+          },
+          {
+            "id": "2",
+            "x": 3472,
+            "y": 497
+          },
+          {
+            "id": "3",
+            "x": 3760,
+            "y": 497
+          },
+          {
+            "id": "4",
+            "x": 4432,
+            "y": 497
+          },
+          {
+            "id": "5",
+            "x": 4912,
+            "y": 529
+          },
+          {
+            "id": "6",
+            "x": 1744,
+            "y": 529
+          }
+        ],
+        "active": {
+          "context": {
+            "recent_events": [
+              {
+                "action": "met",
+                "word": "dog"
+              },
+              {
+                "action": "met",
+                "word": "dog"
+              }
+            ]
+          },
+          "misses": 0,
+          "anchor": "pet",
+          "scene": "home",
+          "key": "dog",
+          "options": [
+            "dog",
+            "planks"
+          ],
+          "tier": 1,
+          "turn": 0,
+          "at": 2.799199999999996,
+          "answered": false,
+          "pending": false,
+          "choices": true,
+          "sequence": 1,
+          "feedback": "prompt",
+          "controller": null,
+          "question": "What is this?"
+        },
+        "queue": [],
+        "idle": 1.2666000000000008,
+        "cooldown": 0,
+        "scene": "home",
+        "brain": {
+          "brain": 0,
+          "template": 2,
+          "unknown": 0,
+          "requests": 2,
+          "limited": 0,
+          "audio": 0,
+          "tts": 3,
+          "reasons": {
+            "client-validation": 2
+          }
+        },
+        "memory": {
+          "prefs": {
+            "color": null,
+            "animal": null,
+            "food": null,
+            "build": null
+          },
+          "prefsLearnedAt": {},
+          "name_asked": true,
+          "chat_day": "2026-11-05",
+          "small_talk_count": 0,
+          "weather_chat_done": false
+        },
+        "mode": "exercise"
+      },
+      "speech": [
+        "Hi! What is your name?",
+        "Dog",
+        "What is this?"
+      ]
+    },
+    {
+      "case": "quota-desktop",
+      "file": "quota-desktop-explore-reward-continue.png",
+      "label": "explore-reward-continue",
+      "state": {
+        "objects": [],
+        "driving": null,
+        "crafted": [],
+        "shows": 0,
+        "exploreQuizzes": 1
+      },
+      "adventure": {
+        "trail": {
+          "found": {},
+          "reviews": {
+            "dog": {
+              "n": 1,
+              "last": 1
+            }
+          },
+          "turns": 1,
+          "scenes": {
+            "home": 1
+          },
+          "levels": {
+            "dog": {
+              "t1": 1,
+              "t2": 0,
+              "t3": 0
+            }
+          },
+          "speaking": [
+            {
+              "time": 1793879211415,
+              "scene": "pet",
+              "word": "dog",
+              "spoke": false,
+              "spoken_word": null,
+              "tier": 1
+            },
+            {
+              "time": 1793879211806,
+              "scene": "pet",
+              "word": "dog",
+              "spoke": false,
+              "spoken_word": null,
+              "tier": 1
+            }
+          ],
+          "rounds": 0,
+          "lastRound": {},
+          "discoveries": {
+            "dog": true
+          },
+          "quizDay": "2026-11-05",
+          "quizzes": 1
+        },
+        "spots": [
+          {
+            "id": "0",
+            "x": 2128,
+            "y": 497
+          },
+          {
+            "id": "1",
+            "x": 2896,
+            "y": 497
+          },
+          {
+            "id": "2",
+            "x": 3472,
+            "y": 497
+          },
+          {
+            "id": "3",
+            "x": 3760,
+            "y": 497
+          },
+          {
+            "id": "4",
+            "x": 4432,
+            "y": 497
+          },
+          {
+            "id": "5",
+            "x": 4912,
+            "y": 529
+          },
+          {
+            "id": "6",
+            "x": 1744,
+            "y": 529
+          }
+        ],
+        "active": {
+          "context": {
+            "recent_events": [
+              {
+                "action": "met",
+                "word": "dog"
+              },
+              {
+                "action": "met",
+                "word": "dog"
+              }
+            ]
+          },
+          "misses": 0,
+          "anchor": "pet",
+          "scene": "home",
+          "key": "dog",
+          "options": [
+            "dog",
+            "planks"
+          ],
+          "tier": 1,
+          "turn": 1,
+          "at": 3.1824999999999948,
+          "answered": true,
+          "pending": false,
+          "choices": true,
+          "sequence": 2,
+          "feedback": "success",
+          "spokenKey": "dog",
+          "controller": null,
+          "question": "Great! Keep exploring!",
+          "answerPending": false,
+          "coachSaid": "dog",
+          "rewardRead": true
+        },
+        "queue": [],
+        "idle": 1.2666000000000008,
+        "cooldown": 0,
+        "scene": "home",
+        "brain": {
+          "brain": 0,
+          "template": 3,
+          "unknown": 0,
+          "requests": 3,
+          "limited": 0,
+          "audio": 0,
+          "tts": 5,
+          "reasons": {
+            "client-validation": 3
+          }
+        },
+        "memory": {
+          "prefs": {
+            "color": null,
+            "animal": null,
+            "food": null,
+            "build": null
+          },
+          "prefsLearnedAt": {},
+          "name_asked": true,
+          "chat_day": "2026-11-05",
+          "small_talk_count": 0,
+          "weather_chat_done": false
+        },
+        "mode": "exercise"
+      },
+      "speech": [
+        "Hi! What is your name?",
+        "Dog",
+        "What is this?",
+        "Dog",
+        "Dog"
+      ]
+    },
+    {
+      "case": "quota-desktop",
+      "file": "quota-desktop-car-show-after-five-explore.png",
+      "label": "car-show-after-five-explore",
+      "state": {
+        "objects": [
+          {
+            "item": "car",
+            "kind": "car",
+            "level": 1,
+            "parts": {
+              "body": {
+                "material": "wood",
+                "tier": 1
+              },
+              "wheel": {
+                "material": "stone",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 2,
+            "id": "object:71:14",
+            "x": 71,
+            "y": 14,
+            "createdAt": 1793879263222,
+            "roofed": false,
+            "shown": true,
+            "closed": true,
+            "autoOffered": true,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3431,
+              3432,
+              3433,
+              3671,
+              3672,
+              3673
+            ]
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 1,
+        "exploreQuizzes": 5
+      },
+      "adventure": {
+        "trail": {
+          "found": {},
+          "reviews": {
+            "dog": {
+              "n": 1,
+              "last": 1
+            },
+            "cat": {
+              "n": 1,
+              "last": 2
+            },
+            "cow": {
+              "n": 1,
+              "last": 3
+            },
+            "sheep": {
+              "n": 1,
+              "last": 4
+            },
+            "pig": {
+              "n": 1,
+              "last": 5
+            }
+          },
+          "turns": 5,
+          "scenes": {
+            "home": 1
+          },
+          "levels": {
+            "dog": {
+              "t1": 1,
+              "t2": 0,
+              "t3": 0
+            },
+            "cat": {
+              "t1": 1,
+              "t2": 0,
+              "t3": 0
+            },
+            "cow": {
+              "t1": 1,
+              "t2": 0,
+              "t3": 0
+            },
+            "sheep": {
+              "t1": 1,
+              "t2": 0,
+              "t3": 0
+            },
+            "pig": {
+              "t1": 1,
+              "t2": 0,
+              "t3": 0
+            },
+            "car": {
+              "t1": 1,
+              "t2": 0,
+              "t3": 0
+            }
+          },
+          "speaking": [
+            {
+              "time": 1793879211415,
+              "scene": "pet",
+              "word": "dog",
+              "spoke": false,
+              "spoken_word": null,
+              "tier": 1
+            },
+            {
+              "time": 1793879211806,
+              "scene": "pet",
+              "word": "dog",
+              "spoke": false,
+              "spoken_word": null,
+              "tier": 1
+            },
+            {
+              "time": 1793879223964,
+              "scene": "pet",
+              "word": "cat",
+              "spoke": false,
+              "spoken_word": null,
+              "tier": 1
+            },
+            {
+              "time": 1793879224262,
+              "scene": "pet",
+              "word": "cat",
+              "spoke": false,
+              "spoken_word": null,
+              "tier": 1
+            },
+            {
+              "time": 1793879236381,
+              "scene": "pet",
+              "word": "cow",
+              "spoke": false,
+              "spoken_word": null,
+              "tier": 1
+            },
+            {
+              "time": 1793879236570,
+              "scene": "pet",
+              "word": "cow",
+              "spoke": false,
+              "spoken_word": null,
+              "tier": 1
+            },
+            {
+              "time": 1793879248663,
+              "scene": "pet",
+              "word": "sheep",
+              "spoke": false,
+              "spoken_word": null,
+              "tier": 1
+            },
+            {
+              "time": 1793879249119,
+              "scene": "pet",
+              "word": "sheep",
+              "spoke": false,
+              "spoken_word": null,
+              "tier": 1
+            },
+            {
+              "time": 1793879261230,
+              "scene": "pet",
+              "word": "pig",
+              "spoke": false,
+              "spoken_word": null,
+              "tier": 1
+            },
+            {
+              "time": 1793879261753,
+              "scene": "pet",
+              "word": "pig",
+              "spoke": false,
+              "spoken_word": null,
+              "tier": 1
+            }
+          ],
+          "rounds": 0,
+          "lastRound": {},
+          "discoveries": {
+            "dog": true,
+            "cat": true,
+            "cow": true,
+            "sheep": true,
+            "pig": true
+          },
+          "quizDay": "2026-11-05",
+          "quizzes": 5
+        },
+        "spots": [
+          {
+            "id": "0",
+            "x": 2128,
+            "y": 497
+          },
+          {
+            "id": "1",
+            "x": 2896,
+            "y": 497
+          },
+          {
+            "id": "2",
+            "x": 3472,
+            "y": 497
+          },
+          {
+            "id": "3",
+            "x": 3760,
+            "y": 497
+          },
+          {
+            "id": "4",
+            "x": 4432,
+            "y": 497
+          },
+          {
+            "id": "5",
+            "x": 4912,
+            "y": 529
+          },
+          {
+            "id": "6",
+            "x": 1744,
+            "y": 529
+          }
+        ],
+        "active": null,
+        "queue": [],
+        "idle": 0,
+        "cooldown": 10.883400000000012,
+        "scene": "home",
+        "brain": {
+          "brain": 0,
+          "template": 11,
+          "unknown": 0,
+          "requests": 8,
+          "limited": 3,
+          "audio": 0,
+          "tts": 26,
+          "reasons": {
+            "client-validation": 8,
+            "session-limit": 3
+          }
+        },
+        "memory": {
+          "prefs": {
+            "color": null,
+            "animal": null,
+            "food": null,
+            "build": null
+          },
+          "prefsLearnedAt": {},
+          "name_asked": true,
+          "chat_day": "2026-11-05",
+          "small_talk_count": 0,
+          "weather_chat_done": false
+        },
+        "mode": "build_show"
+      },
+      "speech": [
+        "Hi! What is your name?",
+        "Dog",
+        "What is this?",
+        "Dog",
+        "Dog",
+        "Cat",
+        "What is this?",
+        "Cat",
+        "Cat",
+        "Cow",
+        "What is this?",
+        "Cow",
+        "Cow",
+        "Sheep",
+        "What is this?",
+        "Sheep",
+        "Sheep",
+        "Pig",
+        "What is this?",
+        "Pig",
+        "Pig",
+        "Craft",
+        "Wheel",
+        "Wheel",
+        "Car",
+        "Car"
+      ]
+    },
+    {
+      "case": "physical-desktop",
+      "file": "physical-desktop-find-dog-world-answer.png",
+      "label": "find-dog-world-answer",
+      "state": {
+        "objects": [],
+        "driving": null,
+        "crafted": [],
+        "shows": 0,
+        "exploreQuizzes": 0
+      },
+      "adventure": {
+        "trail": {
+          "found": {},
+          "reviews": {},
+          "turns": 0,
+          "scenes": {
+            "home": 1
+          },
+          "levels": {},
+          "speaking": [],
+          "rounds": 0,
+          "lastRound": {},
+          "discoveries": {},
+          "quizDay": "2026-11-05",
+          "quizzes": 0
+        },
+        "spots": [
+          {
+            "id": "0",
+            "x": 2128,
+            "y": 497
+          },
+          {
+            "id": "1",
+            "x": 2896,
+            "y": 497
+          },
+          {
+            "id": "2",
+            "x": 3472,
+            "y": 497
+          },
+          {
+            "id": "3",
+            "x": 3760,
+            "y": 497
+          },
+          {
+            "id": "4",
+            "x": 4432,
+            "y": 497
+          },
+          {
+            "id": "5",
+            "x": 4912,
+            "y": 529
+          },
+          {
+            "id": "6",
+            "x": 1744,
+            "y": 529
+          }
+        ],
+        "active": null,
+        "queue": [],
+        "idle": 0,
+        "cooldown": 0,
+        "scene": "home",
+        "brain": {
+          "brain": 0,
+          "template": 1,
+          "unknown": 0,
+          "requests": 1,
+          "limited": 0,
+          "audio": 0,
+          "tts": 3,
+          "reasons": {
+            "client-validation": 1
+          }
+        },
+        "memory": {
+          "prefs": {
+            "color": null,
+            "animal": null,
+            "food": null,
+            "build": null
+          },
+          "prefsLearnedAt": {},
+          "name_asked": true,
+          "chat_day": "2026-11-05",
+          "small_talk_count": 0,
+          "weather_chat_done": false
+        },
+        "mode": "idle"
+      },
+      "speech": [
+        "Hi! What is your name?",
+        "Word book",
+        "Find the Dog!"
+      ]
+    },
+    {
+      "case": "physical-desktop",
+      "file": "physical-desktop-physical-answer-complete.png",
+      "label": "physical-answer-complete",
+      "state": {
+        "objects": [],
+        "driving": null,
+        "crafted": [],
+        "shows": 0,
+        "exploreQuizzes": 0
+      },
+      "adventure": {
+        "trail": {
+          "found": {},
+          "reviews": {},
+          "turns": 0,
+          "scenes": {
+            "home": 1
+          },
+          "levels": {},
+          "speaking": [],
+          "rounds": 0,
+          "lastRound": {},
+          "discoveries": {
+            "dog": true
+          },
+          "quizDay": "2026-11-05",
+          "quizzes": 0
+        },
+        "spots": [
+          {
+            "id": "0",
+            "x": 2128,
+            "y": 497
+          },
+          {
+            "id": "1",
+            "x": 2896,
+            "y": 497
+          },
+          {
+            "id": "2",
+            "x": 3472,
+            "y": 497
+          },
+          {
+            "id": "3",
+            "x": 3760,
+            "y": 497
+          },
+          {
+            "id": "4",
+            "x": 4432,
+            "y": 497
+          },
+          {
+            "id": "5",
+            "x": 4912,
+            "y": 529
+          },
+          {
+            "id": "6",
+            "x": 1744,
+            "y": 529
+          }
+        ],
+        "active": null,
+        "queue": [],
+        "idle": 0,
+        "cooldown": 0,
+        "scene": "home",
+        "brain": {
+          "brain": 0,
+          "template": 1,
+          "unknown": 0,
+          "requests": 1,
+          "limited": 0,
+          "audio": 0,
+          "tts": 4,
+          "reasons": {
+            "client-validation": 1
+          }
+        },
+        "memory": {
+          "prefs": {
+            "color": null,
+            "animal": null,
+            "food": null,
+            "build": null
+          },
+          "prefsLearnedAt": {},
+          "name_asked": true,
+          "chat_day": "2026-11-05",
+          "small_talk_count": 0,
+          "weather_chat_done": false
+        },
+        "mode": "idle"
+      },
+      "speech": [
+        "Hi! What is your name?",
+        "Word book",
+        "Find the Dog!",
+        "Dog"
+      ]
+    },
+    {
+      "case": "proportion-desktop",
+      "file": "proportion-desktop-world-scale.png",
+      "label": "world-scale",
+      "state": {
+        "objects": [],
+        "driving": null,
+        "crafted": [],
+        "shows": 0,
+        "exploreQuizzes": 0
+      },
+      "adventure": {
+        "trail": {
+          "found": {},
+          "reviews": {},
+          "turns": 0,
+          "scenes": {
+            "home": 1
+          },
+          "levels": {},
+          "speaking": [],
+          "rounds": 0,
+          "lastRound": {},
+          "discoveries": {},
+          "quizDay": "2026-11-05",
+          "quizzes": 0
+        },
+        "spots": [
+          {
+            "id": "0",
+            "x": 2128,
+            "y": 497
+          },
+          {
+            "id": "1",
+            "x": 2896,
+            "y": 497
+          },
+          {
+            "id": "2",
+            "x": 3472,
+            "y": 497
+          },
+          {
+            "id": "3",
+            "x": 3760,
+            "y": 497
+          },
+          {
+            "id": "4",
+            "x": 4432,
+            "y": 497
+          },
+          {
+            "id": "5",
+            "x": 4912,
+            "y": 529
+          },
+          {
+            "id": "6",
+            "x": 1744,
+            "y": 529
+          }
+        ],
+        "active": null,
+        "queue": [],
+        "idle": 0,
+        "cooldown": 0,
+        "scene": "home",
+        "brain": {
+          "brain": 0,
+          "template": 1,
+          "unknown": 0,
+          "requests": 1,
+          "limited": 0,
+          "audio": 0,
+          "tts": 1,
+          "reasons": {
+            "client-validation": 1
+          }
+        },
+        "memory": {
+          "prefs": {
+            "color": null,
+            "animal": null,
+            "food": null,
+            "build": null
+          },
+          "prefsLearnedAt": {},
+          "name_asked": true,
+          "chat_day": "2026-11-05",
+          "small_talk_count": 0,
+          "weather_chat_done": false
+        },
+        "mode": "idle"
+      },
+      "speech": [
+        "Hi! What is your name?"
+      ]
+    },
+    {
+      "case": "proportion-desktop",
+      "file": "proportion-desktop-atlas-binding.png",
+      "label": "atlas-binding",
+      "state": {
+        "objects": [],
+        "driving": null,
+        "crafted": [],
+        "shows": 0,
+        "exploreQuizzes": 0
+      },
+      "adventure": {
+        "trail": {
+          "found": {},
+          "reviews": {},
+          "turns": 0,
+          "scenes": {
+            "home": 1
+          },
+          "levels": {},
+          "speaking": [],
+          "rounds": 0,
+          "lastRound": {},
+          "discoveries": {},
+          "quizDay": "2026-11-05",
+          "quizzes": 0
+        },
+        "spots": [
+          {
+            "id": "0",
+            "x": 2128,
+            "y": 497
+          },
+          {
+            "id": "1",
+            "x": 2896,
+            "y": 497
+          },
+          {
+            "id": "2",
+            "x": 3472,
+            "y": 497
+          },
+          {
+            "id": "3",
+            "x": 3760,
+            "y": 497
+          },
+          {
+            "id": "4",
+            "x": 4432,
+            "y": 497
+          },
+          {
+            "id": "5",
+            "x": 4912,
+            "y": 529
+          },
+          {
+            "id": "6",
+            "x": 1744,
+            "y": 529
+          }
+        ],
+        "active": null,
+        "queue": [],
+        "idle": 0,
+        "cooldown": 0,
+        "scene": "home",
+        "brain": {
+          "brain": 0,
+          "template": 1,
+          "unknown": 0,
+          "requests": 1,
+          "limited": 0,
+          "audio": 0,
+          "tts": 2,
+          "reasons": {
+            "client-validation": 1
+          }
+        },
+        "memory": {
+          "prefs": {
+            "color": null,
+            "animal": null,
+            "food": null,
+            "build": null
+          },
+          "prefsLearnedAt": {},
+          "name_asked": true,
+          "chat_day": "2026-11-05",
+          "small_talk_count": 0,
+          "weather_chat_done": false
+        },
+        "mode": "idle"
+      },
+      "speech": [
+        "Hi! What is your name?",
+        "Word book"
+      ]
+    },
+    {
+      "case": "house-mobile",
+      "file": "house-mobile-relaxed-ground-snap.png",
+      "label": "relaxed-ground-snap",
+      "state": {
+        "objects": [
+          {
+            "item": "houseKit",
+            "kind": "house",
+            "level": 1,
+            "parts": {
+              "wall": {
+                "material": "wood",
+                "tier": 1
+              },
+              "roof": {
+                "material": "planks",
+                "tier": 1
+              },
+              "yard": {
+                "material": "grass",
+                "tier": 1
+              },
+              "window": {
+                "material": "wood",
+                "tier": 1
+              },
+              "foundation": {
+                "material": "stone",
+                "tier": 1
+              },
+              "door": {
+                "material": "wood",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 3,
+            "id": "object:77:13",
+            "x": 77,
+            "y": 13,
+            "createdAt": 1793879268725,
+            "roofed": true,
+            "shown": false,
+            "closed": true,
+            "autoOffered": false,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3197,
+              3198,
+              3199,
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679
+            ]
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 0,
+        "exploreQuizzes": 0
+      },
+      "adventure": {
+        "trail": {
+          "found": {},
+          "reviews": {},
+          "turns": 0,
+          "scenes": {
+            "home": 1
+          },
+          "levels": {},
+          "speaking": [],
+          "rounds": 0,
+          "lastRound": {},
+          "discoveries": {},
+          "quizDay": "2026-11-05",
+          "quizzes": 0
+        },
+        "spots": [
+          {
+            "id": "0",
+            "x": 2128,
+            "y": 497
+          },
+          {
+            "id": "1",
+            "x": 2896,
+            "y": 497
+          },
+          {
+            "id": "2",
+            "x": 3472,
+            "y": 497
+          },
+          {
+            "id": "3",
+            "x": 3760,
+            "y": 497
+          },
+          {
+            "id": "4",
+            "x": 4432,
+            "y": 497
+          },
+          {
+            "id": "5",
+            "x": 4912,
+            "y": 529
+          },
+          {
+            "id": "6",
+            "x": 1744,
+            "y": 529
+          }
+        ],
+        "active": null,
+        "queue": [
+          {
+            "anchor": "task",
+            "key": "house",
+            "at": 0.7825000000000002
+          }
+        ],
+        "idle": 0,
+        "cooldown": 0,
+        "scene": "home",
+        "brain": {
+          "brain": 0,
+          "template": 1,
+          "unknown": 0,
+          "requests": 1,
+          "limited": 0,
+          "audio": 0,
+          "tts": 3,
+          "reasons": {
+            "client-validation": 1
+          }
+        },
+        "memory": {
+          "prefs": {
+            "color": null,
+            "animal": null,
+            "food": null,
+            "build": "house"
+          },
+          "prefsLearnedAt": {
+            "build": 1793879268725
+          },
+          "name_asked": true,
+          "chat_day": "2026-11-05",
+          "small_talk_count": 0,
+          "weather_chat_done": false
+        },
+        "mode": "build_closed"
+      },
+      "speech": [
+        "Hi! What is your name?",
+        "Craft",
+        "House"
+      ]
+    },
+    {
+      "case": "house-mobile",
+      "file": "house-mobile-text-only-house.png",
+      "label": "text-only-house",
+      "state": {
+        "objects": [
+          {
+            "item": "houseKit",
+            "kind": "house",
+            "level": 1,
+            "parts": {
+              "wall": {
+                "material": "wood",
+                "tier": 1
+              },
+              "roof": {
+                "material": "planks",
+                "tier": 1
+              },
+              "yard": {
+                "material": "grass",
+                "tier": 1
+              },
+              "window": {
+                "material": "wood",
+                "tier": 1
+              },
+              "foundation": {
+                "material": "stone",
+                "tier": 1
+              },
+              "door": {
+                "material": "wood",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 3,
+            "id": "object:77:13",
+            "x": 77,
+            "y": 13,
+            "createdAt": 1793879268725,
+            "roofed": true,
+            "shown": false,
+            "closed": true,
+            "autoOffered": true,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3197,
+              3198,
+              3199,
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679
+            ]
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 1,
+        "exploreQuizzes": 0
+      },
+      "adventure": {
+        "trail": {
+          "found": {},
+          "reviews": {},
+          "turns": 0,
+          "scenes": {
+            "home": 1
+          },
+          "levels": {},
+          "speaking": [],
+          "rounds": 0,
+          "lastRound": {},
+          "discoveries": {},
+          "quizDay": "2026-11-05",
+          "quizzes": 0
+        },
+        "spots": [
+          {
+            "id": "0",
+            "x": 2128,
+            "y": 497
+          },
+          {
+            "id": "1",
+            "x": 2896,
+            "y": 497
+          },
+          {
+            "id": "2",
+            "x": 3472,
+            "y": 497
+          },
+          {
+            "id": "3",
+            "x": 3760,
+            "y": 497
+          },
+          {
+            "id": "4",
+            "x": 4432,
+            "y": 497
+          },
+          {
+            "id": "5",
+            "x": 4912,
+            "y": 529
+          },
+          {
+            "id": "6",
+            "x": 1744,
+            "y": 529
+          }
+        ],
+        "active": null,
+        "queue": [
+          {
+            "anchor": "task",
+            "key": "house",
+            "at": 0.7825000000000002
+          }
+        ],
+        "idle": 0,
+        "cooldown": 0,
+        "scene": "home",
+        "brain": {
+          "brain": 0,
+          "template": 1,
+          "unknown": 0,
+          "requests": 1,
+          "limited": 0,
+          "audio": 0,
+          "tts": 5,
+          "reasons": {
+            "client-validation": 1
+          }
+        },
+        "memory": {
+          "prefs": {
+            "color": null,
+            "animal": null,
+            "food": null,
+            "build": "house"
+          },
+          "prefsLearnedAt": {
+            "build": 1793879268725
+          },
+          "name_asked": true,
+          "chat_day": "2026-11-05",
+          "small_talk_count": 0,
+          "weather_chat_done": false
+        },
+        "mode": "build_show"
+      },
+      "speech": [
+        "Hi! What is your name?",
+        "Craft",
+        "House",
+        "Wow! Show me!",
+        "What is this?"
+      ]
+    },
+    {
+      "case": "house-mobile",
+      "file": "house-mobile-reward-continue.png",
+      "label": "reward-continue",
+      "state": {
+        "objects": [
+          {
+            "item": "houseKit",
+            "kind": "house",
+            "level": 1,
+            "parts": {
+              "wall": {
+                "material": "wood",
+                "tier": 1
+              },
+              "roof": {
+                "material": "planks",
+                "tier": 1
+              },
+              "yard": {
+                "material": "grass",
+                "tier": 1
+              },
+              "window": {
+                "material": "wood",
+                "tier": 1
+              },
+              "foundation": {
+                "material": "stone",
+                "tier": 1
+              },
+              "door": {
+                "material": "wood",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 3,
+            "id": "object:77:13",
+            "x": 77,
+            "y": 13,
+            "createdAt": 1793879268725,
+            "roofed": true,
+            "shown": true,
+            "closed": true,
+            "autoOffered": true,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3197,
+              3198,
+              3199,
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679
+            ]
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 1,
+        "exploreQuizzes": 0
+      },
+      "adventure": {
+        "trail": {
+          "found": {},
+          "reviews": {},
+          "turns": 0,
+          "scenes": {
+            "home": 1
+          },
+          "levels": {
+            "house": {
+              "t1": 1,
+              "t2": 0,
+              "t3": 0
+            }
+          },
+          "speaking": [],
+          "rounds": 0,
+          "lastRound": {},
+          "discoveries": {},
+          "quizDay": "2026-11-05",
+          "quizzes": 0
+        },
+        "spots": [
+          {
+            "id": "0",
+            "x": 2128,
+            "y": 497
+          },
+          {
+            "id": "1",
+            "x": 2896,
+            "y": 497
+          },
+          {
+            "id": "2",
+            "x": 3472,
+            "y": 497
+          },
+          {
+            "id": "3",
+            "x": 3760,
+            "y": 497
+          },
+          {
+            "id": "4",
+            "x": 4432,
+            "y": 497
+          },
+          {
+            "id": "5",
+            "x": 4912,
+            "y": 529
+          },
+          {
+            "id": "6",
+            "x": 1744,
+            "y": 529
+          }
+        ],
+        "active": null,
+        "queue": [
+          {
+            "anchor": "task",
+            "key": "house",
+            "at": 0.7825000000000002
+          }
+        ],
+        "idle": 0,
+        "cooldown": 0,
+        "scene": "home",
+        "brain": {
+          "brain": 0,
+          "template": 1,
+          "unknown": 0,
+          "requests": 1,
+          "limited": 0,
+          "audio": 0,
+          "tts": 7,
+          "reasons": {
+            "client-validation": 1
+          }
+        },
+        "memory": {
+          "prefs": {
+            "color": null,
+            "animal": null,
+            "food": null,
+            "build": "house"
+          },
+          "prefsLearnedAt": {
+            "build": 1793879268725
+          },
+          "name_asked": true,
+          "chat_day": "2026-11-05",
+          "small_talk_count": 0,
+          "weather_chat_done": false
+        },
+        "mode": "build_show"
+      },
+      "speech": [
+        "Hi! What is your name?",
+        "Craft",
+        "House",
+        "Wow! Show me!",
+        "What is this?",
+        "Fence",
+        "House"
+      ]
+    },
+    {
+      "case": "speak-mobile",
+      "file": "speak-mobile-speak-default.png",
+      "label": "speak-default",
+      "state": {
+        "objects": [
+          {
+            "item": "houseKit",
+            "kind": "house",
+            "level": 1,
+            "parts": {
+              "wall": {
+                "material": "wood",
+                "tier": 1
+              },
+              "roof": {
+                "material": "planks",
+                "tier": 1
+              },
+              "yard": {
+                "material": "grass",
+                "tier": 1
+              },
+              "window": {
+                "material": "wood",
+                "tier": 1
+              },
+              "foundation": {
+                "material": "stone",
+                "tier": 1
+              },
+              "door": {
+                "material": "wood",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 3,
+            "id": "object:77:13",
+            "x": 77,
+            "y": 13,
+            "createdAt": 1793879271234,
+            "roofed": true,
+            "shown": false,
+            "closed": true,
+            "autoOffered": true,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3197,
+              3198,
+              3199,
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679
+            ]
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 1,
+        "exploreQuizzes": 0
+      },
+      "adventure": {
+        "trail": {
+          "found": {},
+          "reviews": {},
+          "turns": 0,
+          "scenes": {
+            "home": 1
+          },
+          "levels": {},
+          "speaking": [],
+          "rounds": 0,
+          "lastRound": {},
+          "discoveries": {},
+          "quizDay": "2026-11-05",
+          "quizzes": 0
+        },
+        "spots": [
+          {
+            "id": "0",
+            "x": 2128,
+            "y": 497
+          },
+          {
+            "id": "1",
+            "x": 2896,
+            "y": 497
+          },
+          {
+            "id": "2",
+            "x": 3472,
+            "y": 497
+          },
+          {
+            "id": "3",
+            "x": 3760,
+            "y": 497
+          },
+          {
+            "id": "4",
+            "x": 4432,
+            "y": 497
+          },
+          {
+            "id": "5",
+            "x": 4912,
+            "y": 529
+          },
+          {
+            "id": "6",
+            "x": 1744,
+            "y": 529
+          }
+        ],
+        "active": null,
+        "queue": [
+          {
+            "anchor": "task",
+            "key": "house",
+            "at": 0.7660000000000002
+          }
+        ],
+        "idle": 0,
+        "cooldown": 0,
+        "scene": "home",
+        "brain": {
+          "brain": 0,
+          "template": 1,
+          "unknown": 0,
+          "requests": 1,
+          "limited": 0,
+          "audio": 0,
+          "tts": 5,
+          "reasons": {
+            "client-validation": 1
+          }
+        },
+        "memory": {
+          "prefs": {
+            "color": null,
+            "animal": null,
+            "food": null,
+            "build": "house"
+          },
+          "prefsLearnedAt": {
+            "build": 1793879271234
+          },
+          "name_asked": true,
+          "chat_day": "2026-11-05",
+          "small_talk_count": 0,
+          "weather_chat_done": false
+        },
+        "mode": "build_show"
+      },
+      "speech": [
+        "Hi! What is your name?",
+        "Craft",
+        "House",
+        "Wow! Show me!",
+        "I made a house. Say it!"
+      ]
+    },
+    {
+      "case": "speak-mobile",
+      "file": "speak-mobile-two-failures.png",
+      "label": "two-failures",
+      "state": {
+        "objects": [
+          {
+            "item": "houseKit",
+            "kind": "house",
+            "level": 1,
+            "parts": {
+              "wall": {
+                "material": "wood",
+                "tier": 1
+              },
+              "roof": {
+                "material": "planks",
+                "tier": 1
+              },
+              "yard": {
+                "material": "grass",
+                "tier": 1
+              },
+              "window": {
+                "material": "wood",
+                "tier": 1
+              },
+              "foundation": {
+                "material": "stone",
+                "tier": 1
+              },
+              "door": {
+                "material": "wood",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 3,
+            "id": "object:77:13",
+            "x": 77,
+            "y": 13,
+            "createdAt": 1793879271234,
+            "roofed": true,
+            "shown": false,
+            "closed": true,
+            "autoOffered": true,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3197,
+              3198,
+              3199,
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679
+            ]
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 1,
+        "exploreQuizzes": 0
+      },
+      "adventure": {
+        "trail": {
+          "found": {},
+          "reviews": {},
+          "turns": 0,
+          "scenes": {
+            "home": 1
+          },
+          "levels": {},
+          "speaking": [],
+          "rounds": 0,
+          "lastRound": {},
+          "discoveries": {},
+          "quizDay": "2026-11-05",
+          "quizzes": 0
+        },
+        "spots": [
+          {
+            "id": "0",
+            "x": 2128,
+            "y": 497
+          },
+          {
+            "id": "1",
+            "x": 2896,
+            "y": 497
+          },
+          {
+            "id": "2",
+            "x": 3472,
+            "y": 497
+          },
+          {
+            "id": "3",
+            "x": 3760,
+            "y": 497
+          },
+          {
+            "id": "4",
+            "x": 4432,
+            "y": 497
+          },
+          {
+            "id": "5",
+            "x": 4912,
+            "y": 529
+          },
+          {
+            "id": "6",
+            "x": 1744,
+            "y": 529
+          }
+        ],
+        "active": null,
+        "queue": [
+          {
+            "anchor": "task",
+            "key": "house",
+            "at": 0.7660000000000002
+          }
+        ],
+        "idle": 0,
+        "cooldown": 0,
+        "scene": "home",
+        "brain": {
+          "brain": 0,
+          "template": 1,
+          "unknown": 0,
+          "requests": 1,
+          "limited": 0,
+          "audio": 0,
+          "tts": 5,
+          "reasons": {
+            "client-validation": 1
+          }
+        },
+        "memory": {
+          "prefs": {
+            "color": null,
+            "animal": null,
+            "food": null,
+            "build": "house"
+          },
+          "prefsLearnedAt": {
+            "build": 1793879271234
+          },
+          "name_asked": true,
+          "chat_day": "2026-11-05",
+          "small_talk_count": 0,
+          "weather_chat_done": false
+        },
+        "mode": "build_show"
+      },
+      "speech": [
+        "Hi! What is your name?",
+        "Craft",
+        "House",
+        "Wow! Show me!",
+        "I made a house. Say it!"
+      ]
+    },
+    {
+      "case": "speak-mobile",
+      "file": "speak-mobile-parent-real-vs-claim.png",
+      "label": "parent-real-vs-claim",
+      "state": {
+        "objects": [
+          {
+            "item": "houseKit",
+            "kind": "house",
+            "level": 1,
+            "parts": {
+              "wall": {
+                "material": "wood",
+                "tier": 1
+              },
+              "roof": {
+                "material": "planks",
+                "tier": 1
+              },
+              "yard": {
+                "material": "grass",
+                "tier": 1
+              },
+              "window": {
+                "material": "wood",
+                "tier": 1
+              },
+              "foundation": {
+                "material": "stone",
+                "tier": 1
+              },
+              "door": {
+                "material": "wood",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 3,
+            "id": "object:77:13",
+            "x": 77,
+            "y": 13,
+            "createdAt": 1793879271234,
+            "roofed": true,
+            "shown": true,
+            "closed": true,
+            "autoOffered": true,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3197,
+              3198,
+              3199,
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679
+            ]
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 1,
+        "exploreQuizzes": 0
+      },
+      "adventure": {
+        "trail": {
+          "found": {},
+          "reviews": {},
+          "turns": 0,
+          "scenes": {
+            "home": 1
+          },
+          "levels": {},
+          "speaking": [
+            {
+              "time": 1793879271976,
+              "scene": "build",
+              "word": "house",
+              "spoke": false,
+              "self_claim": true,
+              "spoken_word": null,
+              "tier": 3
+            },
+            {
+              "time": 1793879272694,
+              "scene": "words",
+              "word": "house",
+              "spoke": true,
+              "self_claim": false,
+              "spoken_word": "house",
+              "tier": 3
+            }
+          ],
+          "rounds": 0,
+          "lastRound": {},
+          "discoveries": {},
+          "quizDay": "2026-11-05",
+          "quizzes": 0
+        },
+        "spots": [
+          {
+            "id": "0",
+            "x": 2128,
+            "y": 497
+          },
+          {
+            "id": "1",
+            "x": 2896,
+            "y": 497
+          },
+          {
+            "id": "2",
+            "x": 3472,
+            "y": 497
+          },
+          {
+            "id": "3",
+            "x": 3760,
+            "y": 497
+          },
+          {
+            "id": "4",
+            "x": 4432,
+            "y": 497
+          },
+          {
+            "id": "5",
+            "x": 4912,
+            "y": 529
+          },
+          {
+            "id": "6",
+            "x": 1744,
+            "y": 529
+          }
+        ],
+        "active": null,
+        "queue": [
+          {
+            "anchor": "task",
+            "key": "house",
+            "at": 0.7660000000000002
+          }
+        ],
+        "idle": 0,
+        "cooldown": 0,
+        "scene": "home",
+        "brain": {
+          "brain": 0,
+          "template": 1,
+          "unknown": 0,
+          "requests": 1,
+          "limited": 0,
+          "audio": 0,
+          "tts": 7,
+          "reasons": {
+            "client-validation": 1
+          }
+        },
+        "memory": {
+          "prefs": {
+            "color": null,
+            "animal": null,
+            "food": null,
+            "build": "house"
+          },
+          "prefsLearnedAt": {
+            "build": 1793879271234
+          },
+          "name_asked": true,
+          "chat_day": "2026-11-05",
+          "small_talk_count": 0,
+          "weather_chat_done": false
+        },
+        "mode": "idle"
+      },
+      "speech": [
+        "Hi! What is your name?",
+        "Craft",
+        "House",
+        "Wow! Show me!",
+        "I made a house. Say it!",
+        "Word book",
+        "House"
+      ]
+    },
+    {
+      "case": "recognized-mobile",
+      "file": "recognized-mobile-speak-default.png",
+      "label": "speak-default",
+      "state": {
+        "objects": [
+          {
+            "item": "houseKit",
+            "kind": "house",
+            "level": 1,
+            "parts": {
+              "wall": {
+                "material": "wood",
+                "tier": 1
+              },
+              "roof": {
+                "material": "planks",
+                "tier": 1
+              },
+              "yard": {
+                "material": "grass",
+                "tier": 1
+              },
+              "window": {
+                "material": "wood",
+                "tier": 1
+              },
+              "foundation": {
+                "material": "stone",
+                "tier": 1
+              },
+              "door": {
+                "material": "wood",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 3,
+            "id": "object:77:13",
+            "x": 77,
+            "y": 13,
+            "createdAt": 1793879278656,
+            "roofed": true,
+            "shown": false,
+            "closed": true,
+            "autoOffered": true,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3197,
+              3198,
+              3199,
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679
+            ]
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 1,
+        "exploreQuizzes": 0
+      },
+      "adventure": {
+        "trail": {
+          "found": {},
+          "reviews": {},
+          "turns": 0,
+          "scenes": {
+            "home": 1
+          },
+          "levels": {},
+          "speaking": [],
+          "rounds": 0,
+          "lastRound": {},
+          "discoveries": {},
+          "quizDay": "2026-11-05",
+          "quizzes": 0
+        },
+        "spots": [
+          {
+            "id": "0",
+            "x": 2128,
+            "y": 497
+          },
+          {
+            "id": "1",
+            "x": 2896,
+            "y": 497
+          },
+          {
+            "id": "2",
+            "x": 3472,
+            "y": 497
+          },
+          {
+            "id": "3",
+            "x": 3760,
+            "y": 497
+          },
+          {
+            "id": "4",
+            "x": 4432,
+            "y": 497
+          },
+          {
+            "id": "5",
+            "x": 4912,
+            "y": 529
+          },
+          {
+            "id": "6",
+            "x": 1744,
+            "y": 529
+          }
+        ],
+        "active": null,
+        "queue": [
+          {
+            "anchor": "task",
+            "key": "house",
+            "at": 0.7827000000000002
+          }
+        ],
+        "idle": 0,
+        "cooldown": 0,
+        "scene": "home",
+        "brain": {
+          "brain": 0,
+          "template": 1,
+          "unknown": 0,
+          "requests": 1,
+          "limited": 0,
+          "audio": 0,
+          "tts": 5,
+          "reasons": {
+            "client-validation": 1
+          }
+        },
+        "memory": {
+          "prefs": {
+            "color": null,
+            "animal": null,
+            "food": null,
+            "build": "house"
+          },
+          "prefsLearnedAt": {
+            "build": 1793879278656
+          },
+          "name_asked": true,
+          "chat_day": "2026-11-05",
+          "small_talk_count": 0,
+          "weather_chat_done": false
+        },
+        "mode": "build_show"
+      },
+      "speech": [
+        "Hi! What is your name?",
+        "Craft",
+        "House",
+        "Wow! Show me!",
+        "I made a house. Say it!"
+      ]
+    },
+    {
+      "case": "recognized-mobile",
+      "file": "recognized-mobile-recognized-reward.png",
+      "label": "recognized-reward",
+      "state": {
+        "objects": [
+          {
+            "item": "houseKit",
+            "kind": "house",
+            "level": 1,
+            "parts": {
+              "wall": {
+                "material": "wood",
+                "tier": 1
+              },
+              "roof": {
+                "material": "planks",
+                "tier": 1
+              },
+              "yard": {
+                "material": "grass",
+                "tier": 1
+              },
+              "window": {
+                "material": "wood",
+                "tier": 1
+              },
+              "foundation": {
+                "material": "stone",
+                "tier": 1
+              },
+              "door": {
+                "material": "wood",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 3,
+            "id": "object:77:13",
+            "x": 77,
+            "y": 13,
+            "createdAt": 1793879278656,
+            "roofed": true,
+            "shown": true,
+            "closed": true,
+            "autoOffered": true,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3197,
+              3198,
+              3199,
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679
+            ]
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 1,
+        "exploreQuizzes": 0
+      },
+      "adventure": {
+        "trail": {
+          "found": {},
+          "reviews": {},
+          "turns": 0,
+          "scenes": {
+            "home": 1
+          },
+          "levels": {},
+          "speaking": [
+            {
+              "time": 1793879279166,
+              "scene": "build",
+              "word": "house",
+              "spoke": true,
+              "self_claim": false,
+              "spoken_word": "house",
+              "tier": 3
+            }
+          ],
+          "rounds": 0,
+          "lastRound": {},
+          "discoveries": {},
+          "quizDay": "2026-11-05",
+          "quizzes": 0
+        },
+        "spots": [
+          {
+            "id": "0",
+            "x": 2128,
+            "y": 497
+          },
+          {
+            "id": "1",
+            "x": 2896,
+            "y": 497
+          },
+          {
+            "id": "2",
+            "x": 3472,
+            "y": 497
+          },
+          {
+            "id": "3",
+            "x": 3760,
+            "y": 497
+          },
+          {
+            "id": "4",
+            "x": 4432,
+            "y": 497
+          },
+          {
+            "id": "5",
+            "x": 4912,
+            "y": 529
+          },
+          {
+            "id": "6",
+            "x": 1744,
+            "y": 529
+          }
+        ],
+        "active": null,
+        "queue": [
+          {
+            "anchor": "task",
+            "key": "house",
+            "at": 0.7827000000000002
+          }
+        ],
+        "idle": 0,
+        "cooldown": 0,
+        "scene": "home",
+        "brain": {
+          "brain": 0,
+          "template": 1,
+          "unknown": 0,
+          "requests": 1,
+          "limited": 0,
+          "audio": 0,
+          "tts": 6,
+          "reasons": {
+            "client-validation": 1
+          }
+        },
+        "memory": {
+          "prefs": {
+            "color": null,
+            "animal": null,
+            "food": null,
+            "build": "house"
+          },
+          "prefsLearnedAt": {
+            "build": 1793879278656
+          },
+          "name_asked": true,
+          "chat_day": "2026-11-05",
+          "small_talk_count": 0,
+          "weather_chat_done": false
+        },
+        "mode": "build_show"
+      },
+      "speech": [
+        "Hi! What is your name?",
+        "Craft",
+        "House",
+        "Wow! Show me!",
+        "I made a house. Say it!",
+        "House"
+      ]
+    },
+    {
+      "case": "recognized-mobile",
+      "file": "recognized-mobile-parent-real-vs-claim.png",
+      "label": "parent-real-vs-claim",
+      "state": {
+        "objects": [
+          {
+            "item": "houseKit",
+            "kind": "house",
+            "level": 1,
+            "parts": {
+              "wall": {
+                "material": "wood",
+                "tier": 1
+              },
+              "roof": {
+                "material": "planks",
+                "tier": 1
+              },
+              "yard": {
+                "material": "grass",
+                "tier": 1
+              },
+              "window": {
+                "material": "wood",
+                "tier": 1
+              },
+              "foundation": {
+                "material": "stone",
+                "tier": 1
+              },
+              "door": {
+                "material": "wood",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 3,
+            "id": "object:77:13",
+            "x": 77,
+            "y": 13,
+            "createdAt": 1793879278656,
+            "roofed": true,
+            "shown": true,
+            "closed": true,
+            "autoOffered": true,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3197,
+              3198,
+              3199,
+              3437,
+              3438,
+              3439,
+              3677,
+              3678,
+              3679
+            ]
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 1,
+        "exploreQuizzes": 0
+      },
+      "adventure": {
+        "trail": {
+          "found": {},
+          "reviews": {},
+          "turns": 0,
+          "scenes": {
+            "home": 1
+          },
+          "levels": {},
+          "speaking": [
+            {
+              "time": 1793879279166,
+              "scene": "build",
+              "word": "house",
+              "spoke": true,
+              "self_claim": false,
+              "spoken_word": "house",
+              "tier": 3
+            }
+          ],
+          "rounds": 0,
+          "lastRound": {},
+          "discoveries": {},
+          "quizDay": "2026-11-05",
+          "quizzes": 0
+        },
+        "spots": [
+          {
+            "id": "0",
+            "x": 2128,
+            "y": 497
+          },
+          {
+            "id": "1",
+            "x": 2896,
+            "y": 497
+          },
+          {
+            "id": "2",
+            "x": 3472,
+            "y": 497
+          },
+          {
+            "id": "3",
+            "x": 3760,
+            "y": 497
+          },
+          {
+            "id": "4",
+            "x": 4432,
+            "y": 497
+          },
+          {
+            "id": "5",
+            "x": 4912,
+            "y": 529
+          },
+          {
+            "id": "6",
+            "x": 1744,
+            "y": 529
+          }
+        ],
+        "active": null,
+        "queue": [
+          {
+            "anchor": "task",
+            "key": "house",
+            "at": 0.7827000000000002
+          }
+        ],
+        "idle": 0,
+        "cooldown": 0,
+        "scene": "home",
+        "brain": {
+          "brain": 0,
+          "template": 1,
+          "unknown": 0,
+          "requests": 1,
+          "limited": 0,
+          "audio": 0,
+          "tts": 6,
+          "reasons": {
+            "client-validation": 1
+          }
+        },
+        "memory": {
+          "prefs": {
+            "color": null,
+            "animal": null,
+            "food": null,
+            "build": "house"
+          },
+          "prefsLearnedAt": {
+            "build": 1793879278656
+          },
+          "name_asked": true,
+          "chat_day": "2026-11-05",
+          "small_talk_count": 0,
+          "weather_chat_done": false
+        },
+        "mode": "idle"
+      },
+      "speech": [
+        "Hi! What is your name?",
+        "Craft",
+        "House",
+        "Wow! Show me!",
+        "I made a house. Say it!",
+        "House"
+      ]
+    },
+    {
+      "case": "explore-mobile",
+      "file": "explore-mobile-animal-name-hearts-bubble.png",
+      "label": "animal-name-hearts-bubble",
+      "state": {
+        "objects": [],
+        "driving": null,
+        "crafted": [],
+        "shows": 0,
+        "exploreQuizzes": 0
+      },
+      "adventure": {
+        "trail": {
+          "found": {},
+          "reviews": {},
+          "turns": 0,
+          "scenes": {
+            "home": 1
+          },
+          "levels": {
+            "dog": {
+              "t1": 2,
+              "t2": 2,
+              "t3": 0
+            }
+          },
+          "speaking": [],
+          "rounds": 0,
+          "lastRound": {},
+          "discoveries": {
+            "dog": true
+          },
+          "quizDay": "2026-11-05",
+          "quizzes": 0
+        },
+        "spots": [
+          {
+            "id": "0",
+            "x": 2128,
+            "y": 497
+          },
+          {
+            "id": "1",
+            "x": 2896,
+            "y": 497
+          },
+          {
+            "id": "2",
+            "x": 3472,
+            "y": 497
+          },
+          {
+            "id": "3",
+            "x": 3760,
+            "y": 497
+          },
+          {
+            "id": "4",
+            "x": 4432,
+            "y": 497
+          },
+          {
+            "id": "5",
+            "x": 4912,
+            "y": 529
+          },
+          {
+            "id": "6",
+            "x": 1744,
+            "y": 529
+          }
+        ],
+        "active": null,
+        "queue": [
+          {
+            "anchor": "pet",
+            "key": "dog",
+            "at": 0.5993
+          }
+        ],
+        "idle": 0,
+        "cooldown": 0,
+        "scene": "home",
+        "brain": {
+          "brain": 0,
+          "template": 1,
+          "unknown": 0,
+          "requests": 1,
+          "limited": 0,
+          "audio": 0,
+          "tts": 2,
+          "reasons": {
+            "client-validation": 1
+          }
+        },
+        "memory": {
+          "prefs": {
+            "color": null,
+            "animal": null,
+            "food": null,
+            "build": null
+          },
+          "prefsLearnedAt": {},
+          "name_asked": true,
+          "chat_day": "2026-11-05",
+          "small_talk_count": 0,
+          "weather_chat_done": false
+        },
+        "mode": "animal_meet"
+      },
+      "speech": [
+        "Hi! What is your name?",
+        "Dog"
+      ]
+    },
+    {
+      "case": "explore-mobile",
+      "file": "explore-mobile-explore-fallback.png",
+      "label": "explore-fallback",
+      "state": {
+        "objects": [],
+        "driving": null,
+        "crafted": [],
+        "shows": 0,
+        "exploreQuizzes": 1
+      },
+      "adventure": {
+        "trail": {
+          "found": {},
+          "reviews": {},
+          "turns": 0,
+          "scenes": {
+            "home": 1
+          },
+          "levels": {
+            "dog": {
+              "t1": 2,
+              "t2": 2,
+              "t3": 0
+            }
+          },
+          "speaking": [
+            {
+              "time": 1793879286513,
+              "scene": "pet",
+              "word": "dog",
+              "spoke": false,
+              "spoken_word": null,
+              "tier": 3
+            },
+            {
+              "time": 1793879286731,
+              "scene": "pet",
+              "word": "dog",
+              "spoke": true,
+              "spoken_word": null,
+              "tier": 1
+            }
+          ],
+          "rounds": 0,
+          "lastRound": {},
+          "discoveries": {
+            "dog": true
+          },
+          "quizDay": "2026-11-05",
+          "quizzes": 1
+        },
+        "spots": [
+          {
+            "id": "0",
+            "x": 2128,
+            "y": 497
+          },
+          {
+            "id": "1",
+            "x": 2896,
+            "y": 497
+          },
+          {
+            "id": "2",
+            "x": 3472,
+            "y": 497
+          },
+          {
+            "id": "3",
+            "x": 3760,
+            "y": 497
+          },
+          {
+            "id": "4",
+            "x": 4432,
+            "y": 497
+          },
+          {
+            "id": "5",
+            "x": 4912,
+            "y": 529
+          },
+          {
+            "id": "6",
+            "x": 1744,
+            "y": 529
+          }
+        ],
+        "active": {
+          "context": {
+            "recent_events": [
+              {
+                "action": "met",
+                "word": "dog"
+              },
+              {
+                "action": "met",
+                "word": "dog"
+              }
+            ]
+          },
+          "misses": 1,
+          "anchor": "pet",
+          "scene": "home",
+          "key": "dog",
+          "options": [
+            "dog",
+            "planks"
+          ],
+          "tier": 3,
+          "turn": 1,
+          "at": 2.9824999999999955,
+          "answered": false,
+          "pending": false,
+          "choices": true,
+          "sequence": 2,
+          "feedback": "retry",
+          "controller": null,
+          "question": "Great! What is this?",
+          "voiceFailures": 2,
+          "fallback": true,
+          "hint": true
+        },
+        "queue": [],
+        "idle": 1.2667000000000002,
+        "cooldown": 0,
+        "scene": "home",
+        "brain": {
+          "brain": 0,
+          "template": 3,
+          "unknown": 0,
+          "requests": 2,
+          "limited": 0,
+          "audio": 0,
+          "tts": 4,
+          "reasons": {
+            "client-validation": 2,
+            "local-retry": 1
+          }
+        },
+        "memory": {
+          "prefs": {
+            "color": null,
+            "animal": null,
+            "food": null,
+            "build": null
+          },
+          "prefsLearnedAt": {},
+          "name_asked": true,
+          "chat_day": "2026-11-05",
+          "small_talk_count": 0,
+          "weather_chat_done": false
+        },
+        "mode": "exercise"
+      },
+      "speech": [
+        "Hi! What is your name?",
+        "Dog",
+        "I see a dog. Say it!",
+        "Great! What is this?"
+      ]
+    },
+    {
+      "case": "quota-mobile",
+      "file": "quota-mobile-explore-text-only.png",
+      "label": "explore-text-only",
+      "state": {
+        "objects": [],
+        "driving": null,
+        "crafted": [],
+        "shows": 0,
+        "exploreQuizzes": 1
+      },
+      "adventure": {
+        "trail": {
+          "found": {},
+          "reviews": {},
+          "turns": 0,
+          "scenes": {
+            "home": 1
+          },
+          "levels": {},
+          "speaking": [
+            {
+              "time": 1793879290029,
+              "scene": "pet",
+              "word": "dog",
+              "spoke": false,
+              "spoken_word": null,
+              "tier": 1
+            }
+          ],
+          "rounds": 0,
+          "lastRound": {},
+          "discoveries": {
+            "dog": true
+          },
+          "quizDay": "2026-11-05",
+          "quizzes": 1
+        },
+        "spots": [
+          {
+            "id": "0",
+            "x": 2128,
+            "y": 497
+          },
+          {
+            "id": "1",
+            "x": 2896,
+            "y": 497
+          },
+          {
+            "id": "2",
+            "x": 3472,
+            "y": 497
+          },
+          {
+            "id": "3",
+            "x": 3760,
+            "y": 497
+          },
+          {
+            "id": "4",
+            "x": 4432,
+            "y": 497
+          },
+          {
+            "id": "5",
+            "x": 4912,
+            "y": 529
+          },
+          {
+            "id": "6",
+            "x": 1744,
+            "y": 529
+          }
+        ],
+        "active": {
+          "context": {
+            "recent_events": [
+              {
+                "action": "met",
+                "word": "dog"
+              },
+              {
+                "action": "met",
+                "word": "dog"
+              }
+            ]
+          },
+          "misses": 0,
+          "anchor": "pet",
+          "scene": "home",
+          "key": "dog",
+          "options": [
+            "dog",
+            "planks"
+          ],
+          "tier": 1,
+          "turn": 0,
+          "at": 2.7825999999999973,
+          "answered": false,
+          "pending": false,
+          "choices": true,
+          "sequence": 1,
+          "feedback": "prompt",
+          "controller": null,
+          "question": "What is this?"
+        },
+        "queue": [],
+        "idle": 1.2666000000000008,
+        "cooldown": 0,
+        "scene": "home",
+        "brain": {
+          "brain": 0,
+          "template": 2,
+          "unknown": 0,
+          "requests": 2,
+          "limited": 0,
+          "audio": 0,
+          "tts": 3,
+          "reasons": {
+            "client-validation": 2
+          }
+        },
+        "memory": {
+          "prefs": {
+            "color": null,
+            "animal": null,
+            "food": null,
+            "build": null
+          },
+          "prefsLearnedAt": {},
+          "name_asked": true,
+          "chat_day": "2026-11-05",
+          "small_talk_count": 0,
+          "weather_chat_done": false
+        },
+        "mode": "exercise"
+      },
+      "speech": [
+        "Hi! What is your name?",
+        "Dog",
+        "What is this?"
+      ]
+    },
+    {
+      "case": "quota-mobile",
+      "file": "quota-mobile-explore-reward-continue.png",
+      "label": "explore-reward-continue",
+      "state": {
+        "objects": [],
+        "driving": null,
+        "crafted": [],
+        "shows": 0,
+        "exploreQuizzes": 1
+      },
+      "adventure": {
+        "trail": {
+          "found": {},
+          "reviews": {
+            "dog": {
+              "n": 1,
+              "last": 1
+            }
+          },
+          "turns": 1,
+          "scenes": {
+            "home": 1
+          },
+          "levels": {
+            "dog": {
+              "t1": 1,
+              "t2": 0,
+              "t3": 0
+            }
+          },
+          "speaking": [
+            {
+              "time": 1793879290029,
+              "scene": "pet",
+              "word": "dog",
+              "spoke": false,
+              "spoken_word": null,
+              "tier": 1
+            },
+            {
+              "time": 1793879290381,
+              "scene": "pet",
+              "word": "dog",
+              "spoke": false,
+              "spoken_word": null,
+              "tier": 1
+            }
+          ],
+          "rounds": 0,
+          "lastRound": {},
+          "discoveries": {
+            "dog": true
+          },
+          "quizDay": "2026-11-05",
+          "quizzes": 1
+        },
+        "spots": [
+          {
+            "id": "0",
+            "x": 2128,
+            "y": 497
+          },
+          {
+            "id": "1",
+            "x": 2896,
+            "y": 497
+          },
+          {
+            "id": "2",
+            "x": 3472,
+            "y": 497
+          },
+          {
+            "id": "3",
+            "x": 3760,
+            "y": 497
+          },
+          {
+            "id": "4",
+            "x": 4432,
+            "y": 497
+          },
+          {
+            "id": "5",
+            "x": 4912,
+            "y": 529
+          },
+          {
+            "id": "6",
+            "x": 1744,
+            "y": 529
+          }
+        ],
+        "active": {
+          "context": {
+            "recent_events": [
+              {
+                "action": "met",
+                "word": "dog"
+              },
+              {
+                "action": "met",
+                "word": "dog"
+              }
+            ]
+          },
+          "misses": 0,
+          "anchor": "pet",
+          "scene": "home",
+          "key": "dog",
+          "options": [
+            "dog",
+            "planks"
+          ],
+          "tier": 1,
+          "turn": 1,
+          "at": 3.1325999999999965,
+          "answered": true,
+          "pending": false,
+          "choices": true,
+          "sequence": 2,
+          "feedback": "success",
+          "spokenKey": "dog",
+          "controller": null,
+          "question": "Great! Keep exploring!",
+          "answerPending": false,
+          "coachSaid": "dog",
+          "rewardRead": true
+        },
+        "queue": [],
+        "idle": 1.2666000000000008,
+        "cooldown": 0,
+        "scene": "home",
+        "brain": {
+          "brain": 0,
+          "template": 3,
+          "unknown": 0,
+          "requests": 3,
+          "limited": 0,
+          "audio": 0,
+          "tts": 5,
+          "reasons": {
+            "client-validation": 3
+          }
+        },
+        "memory": {
+          "prefs": {
+            "color": null,
+            "animal": null,
+            "food": null,
+            "build": null
+          },
+          "prefsLearnedAt": {},
+          "name_asked": true,
+          "chat_day": "2026-11-05",
+          "small_talk_count": 0,
+          "weather_chat_done": false
+        },
+        "mode": "exercise"
+      },
+      "speech": [
+        "Hi! What is your name?",
+        "Dog",
+        "What is this?",
+        "Dog",
+        "Dog"
+      ]
+    },
+    {
+      "case": "quota-mobile",
+      "file": "quota-mobile-car-show-after-five-explore.png",
+      "label": "car-show-after-five-explore",
+      "state": {
+        "objects": [
+          {
+            "item": "car",
+            "kind": "car",
+            "level": 1,
+            "parts": {
+              "body": {
+                "material": "wood",
+                "tier": 1
+              },
+              "wheel": {
+                "material": "stone",
+                "tier": 1
+              }
+            },
+            "w": 3,
+            "h": 2,
+            "id": "object:78:14",
+            "x": 78,
+            "y": 14,
+            "createdAt": 1793879341217,
+            "roofed": false,
+            "shown": true,
+            "closed": true,
+            "autoOffered": true,
+            "invited": false,
+            "roofPraise": true,
+            "feedbackMembers": [
+              3438,
+              3439,
+              3440,
+              3678,
+              3679,
+              3680
+            ]
+          }
+        ],
+        "driving": null,
+        "crafted": [],
+        "shows": 1,
+        "exploreQuizzes": 5
+      },
+      "adventure": {
+        "trail": {
+          "found": {},
+          "reviews": {
+            "dog": {
+              "n": 1,
+              "last": 1
+            },
+            "cat": {
+              "n": 1,
+              "last": 2
+            },
+            "cow": {
+              "n": 1,
+              "last": 3
+            },
+            "sheep": {
+              "n": 1,
+              "last": 4
+            },
+            "pig": {
+              "n": 1,
+              "last": 5
+            }
+          },
+          "turns": 5,
+          "scenes": {
+            "home": 1
+          },
+          "levels": {
+            "dog": {
+              "t1": 1,
+              "t2": 0,
+              "t3": 0
+            },
+            "cat": {
+              "t1": 1,
+              "t2": 0,
+              "t3": 0
+            },
+            "cow": {
+              "t1": 1,
+              "t2": 0,
+              "t3": 0
+            },
+            "sheep": {
+              "t1": 1,
+              "t2": 0,
+              "t3": 0
+            },
+            "pig": {
+              "t1": 1,
+              "t2": 0,
+              "t3": 0
+            },
+            "car": {
+              "t1": 1,
+              "t2": 0,
+              "t3": 0
+            }
+          },
+          "speaking": [
+            {
+              "time": 1793879290029,
+              "scene": "pet",
+              "word": "dog",
+              "spoke": false,
+              "spoken_word": null,
+              "tier": 1
+            },
+            {
+              "time": 1793879290381,
+              "scene": "pet",
+              "word": "dog",
+              "spoke": false,
+              "spoken_word": null,
+              "tier": 1
+            },
+            {
+              "time": 1793879302528,
+              "scene": "pet",
+              "word": "cat",
+              "spoke": false,
+              "spoken_word": null,
+              "tier": 1
+            },
+            {
+              "time": 1793879302882,
+              "scene": "pet",
+              "word": "cat",
+              "spoke": false,
+              "spoken_word": null,
+              "tier": 1
+            },
+            {
+              "time": 1793879314994,
+              "scene": "pet",
+              "word": "cow",
+              "spoke": false,
+              "spoken_word": null,
+              "tier": 1
+            },
+            {
+              "time": 1793879315147,
+              "scene": "pet",
+              "word": "cow",
+              "spoke": false,
+              "spoken_word": null,
+              "tier": 1
+            },
+            {
+              "time": 1793879327244,
+              "scene": "pet",
+              "word": "sheep",
+              "spoke": false,
+              "spoken_word": null,
+              "tier": 1
+            },
+            {
+              "time": 1793879327317,
+              "scene": "pet",
+              "word": "sheep",
+              "spoke": false,
+              "spoken_word": null,
+              "tier": 1
+            },
+            {
+              "time": 1793879339428,
+              "scene": "pet",
+              "word": "pig",
+              "spoke": false,
+              "spoken_word": null,
+              "tier": 1
+            },
+            {
+              "time": 1793879339717,
+              "scene": "pet",
+              "word": "pig",
+              "spoke": false,
+              "spoken_word": null,
+              "tier": 1
+            }
+          ],
+          "rounds": 0,
+          "lastRound": {},
+          "discoveries": {
+            "dog": true,
+            "cat": true,
+            "cow": true,
+            "sheep": true,
+            "pig": true
+          },
+          "quizDay": "2026-11-05",
+          "quizzes": 5
+        },
+        "spots": [
+          {
+            "id": "0",
+            "x": 2128,
+            "y": 497
+          },
+          {
+            "id": "1",
+            "x": 2896,
+            "y": 497
+          },
+          {
+            "id": "2",
+            "x": 3472,
+            "y": 497
+          },
+          {
+            "id": "3",
+            "x": 3760,
+            "y": 497
+          },
+          {
+            "id": "4",
+            "x": 4432,
+            "y": 497
+          },
+          {
+            "id": "5",
+            "x": 4912,
+            "y": 529
+          },
+          {
+            "id": "6",
+            "x": 1744,
+            "y": 529
+          }
+        ],
+        "active": null,
+        "queue": [],
+        "idle": 0,
+        "cooldown": 10.950000000000014,
+        "scene": "home",
+        "brain": {
+          "brain": 0,
+          "template": 11,
+          "unknown": 0,
+          "requests": 8,
+          "limited": 3,
+          "audio": 0,
+          "tts": 26,
+          "reasons": {
+            "client-validation": 8,
+            "session-limit": 3
+          }
+        },
+        "memory": {
+          "prefs": {
+            "color": null,
+            "animal": null,
+            "food": null,
+            "build": null
+          },
+          "prefsLearnedAt": {},
+          "name_asked": true,
+          "chat_day": "2026-11-05",
+          "small_talk_count": 0,
+          "weather_chat_done": false
+        },
+        "mode": "build_show"
+      },
+      "speech": [
+        "Hi! What is your name?",
+        "Dog",
+        "What is this?",
+        "Dog",
+        "Dog",
+        "Cat",
+        "What is this?",
+        "Cat",
+        "Cat",
+        "Cow",
+        "What is this?",
+        "Cow",
+        "Cow",
+        "Sheep",
+        "What is this?",
+        "Sheep",
+        "Sheep",
+        "Pig",
+        "What is this?",
+        "Pig",
+        "Pig",
+        "Craft",
+        "Wheel",
+        "Wheel",
+        "Car",
+        "Car"
+      ]
+    },
+    {
+      "case": "physical-mobile",
+      "file": "physical-mobile-find-dog-world-answer.png",
+      "label": "find-dog-world-answer",
+      "state": {
+        "objects": [],
+        "driving": null,
+        "crafted": [],
+        "shows": 0,
+        "exploreQuizzes": 0
+      },
+      "adventure": {
+        "trail": {
+          "found": {},
+          "reviews": {},
+          "turns": 0,
+          "scenes": {
+            "home": 1
+          },
+          "levels": {},
+          "speaking": [],
+          "rounds": 0,
+          "lastRound": {},
+          "discoveries": {},
+          "quizDay": "2026-11-05",
+          "quizzes": 0
+        },
+        "spots": [
+          {
+            "id": "0",
+            "x": 2128,
+            "y": 497
+          },
+          {
+            "id": "1",
+            "x": 2896,
+            "y": 497
+          },
+          {
+            "id": "2",
+            "x": 3472,
+            "y": 497
+          },
+          {
+            "id": "3",
+            "x": 3760,
+            "y": 497
+          },
+          {
+            "id": "4",
+            "x": 4432,
+            "y": 497
+          },
+          {
+            "id": "5",
+            "x": 4912,
+            "y": 529
+          },
+          {
+            "id": "6",
+            "x": 1744,
+            "y": 529
+          }
+        ],
+        "active": null,
+        "queue": [],
+        "idle": 0,
+        "cooldown": 0,
+        "scene": "home",
+        "brain": {
+          "brain": 0,
+          "template": 1,
+          "unknown": 0,
+          "requests": 1,
+          "limited": 0,
+          "audio": 0,
+          "tts": 3,
+          "reasons": {
+            "client-validation": 1
+          }
+        },
+        "memory": {
+          "prefs": {
+            "color": null,
+            "animal": null,
+            "food": null,
+            "build": null
+          },
+          "prefsLearnedAt": {},
+          "name_asked": true,
+          "chat_day": "2026-11-05",
+          "small_talk_count": 0,
+          "weather_chat_done": false
+        },
+        "mode": "idle"
+      },
+      "speech": [
+        "Hi! What is your name?",
+        "Word book",
+        "Find the Dog!"
+      ]
+    },
+    {
+      "case": "physical-mobile",
+      "file": "physical-mobile-physical-answer-complete.png",
+      "label": "physical-answer-complete",
+      "state": {
+        "objects": [],
+        "driving": null,
+        "crafted": [],
+        "shows": 0,
+        "exploreQuizzes": 0
+      },
+      "adventure": {
+        "trail": {
+          "found": {},
+          "reviews": {},
+          "turns": 0,
+          "scenes": {
+            "home": 1
+          },
+          "levels": {},
+          "speaking": [],
+          "rounds": 0,
+          "lastRound": {},
+          "discoveries": {
+            "dog": true
+          },
+          "quizDay": "2026-11-05",
+          "quizzes": 0
+        },
+        "spots": [
+          {
+            "id": "0",
+            "x": 2128,
+            "y": 497
+          },
+          {
+            "id": "1",
+            "x": 2896,
+            "y": 497
+          },
+          {
+            "id": "2",
+            "x": 3472,
+            "y": 497
+          },
+          {
+            "id": "3",
+            "x": 3760,
+            "y": 497
+          },
+          {
+            "id": "4",
+            "x": 4432,
+            "y": 497
+          },
+          {
+            "id": "5",
+            "x": 4912,
+            "y": 529
+          },
+          {
+            "id": "6",
+            "x": 1744,
+            "y": 529
+          }
+        ],
+        "active": null,
+        "queue": [],
+        "idle": 0,
+        "cooldown": 0,
+        "scene": "home",
+        "brain": {
+          "brain": 0,
+          "template": 1,
+          "unknown": 0,
+          "requests": 1,
+          "limited": 0,
+          "audio": 0,
+          "tts": 4,
+          "reasons": {
+            "client-validation": 1
+          }
+        },
+        "memory": {
+          "prefs": {
+            "color": null,
+            "animal": null,
+            "food": null,
+            "build": null
+          },
+          "prefsLearnedAt": {},
+          "name_asked": true,
+          "chat_day": "2026-11-05",
+          "small_talk_count": 0,
+          "weather_chat_done": false
+        },
+        "mode": "idle"
+      },
+      "speech": [
+        "Hi! What is your name?",
+        "Word book",
+        "Find the Dog!",
+        "Dog"
+      ]
+    },
+    {
+      "case": "proportion-mobile",
+      "file": "proportion-mobile-world-scale.png",
+      "label": "world-scale",
+      "state": {
+        "objects": [],
+        "driving": null,
+        "crafted": [],
+        "shows": 0,
+        "exploreQuizzes": 0
+      },
+      "adventure": {
+        "trail": {
+          "found": {},
+          "reviews": {},
+          "turns": 0,
+          "scenes": {
+            "home": 1
+          },
+          "levels": {},
+          "speaking": [],
+          "rounds": 0,
+          "lastRound": {},
+          "discoveries": {},
+          "quizDay": "2026-11-05",
+          "quizzes": 0
+        },
+        "spots": [
+          {
+            "id": "0",
+            "x": 2128,
+            "y": 497
+          },
+          {
+            "id": "1",
+            "x": 2896,
+            "y": 497
+          },
+          {
+            "id": "2",
+            "x": 3472,
+            "y": 497
+          },
+          {
+            "id": "3",
+            "x": 3760,
+            "y": 497
+          },
+          {
+            "id": "4",
+            "x": 4432,
+            "y": 497
+          },
+          {
+            "id": "5",
+            "x": 4912,
+            "y": 529
+          },
+          {
+            "id": "6",
+            "x": 1744,
+            "y": 529
+          }
+        ],
+        "active": null,
+        "queue": [],
+        "idle": 0,
+        "cooldown": 0,
+        "scene": "home",
+        "brain": {
+          "brain": 0,
+          "template": 1,
+          "unknown": 0,
+          "requests": 1,
+          "limited": 0,
+          "audio": 0,
+          "tts": 1,
+          "reasons": {
+            "client-validation": 1
+          }
+        },
+        "memory": {
+          "prefs": {
+            "color": null,
+            "animal": null,
+            "food": null,
+            "build": null
+          },
+          "prefsLearnedAt": {},
+          "name_asked": true,
+          "chat_day": "2026-11-05",
+          "small_talk_count": 0,
+          "weather_chat_done": false
+        },
+        "mode": "idle"
+      },
+      "speech": [
+        "Hi! What is your name?"
+      ]
+    },
+    {
+      "case": "proportion-mobile",
+      "file": "proportion-mobile-atlas-binding.png",
+      "label": "atlas-binding",
+      "state": {
+        "objects": [],
+        "driving": null,
+        "crafted": [],
+        "shows": 0,
+        "exploreQuizzes": 0
+      },
+      "adventure": {
+        "trail": {
+          "found": {},
+          "reviews": {},
+          "turns": 0,
+          "scenes": {
+            "home": 1
+          },
+          "levels": {},
+          "speaking": [],
+          "rounds": 0,
+          "lastRound": {},
+          "discoveries": {},
+          "quizDay": "2026-11-05",
+          "quizzes": 0
+        },
+        "spots": [
+          {
+            "id": "0",
+            "x": 2128,
+            "y": 497
+          },
+          {
+            "id": "1",
+            "x": 2896,
+            "y": 497
+          },
+          {
+            "id": "2",
+            "x": 3472,
+            "y": 497
+          },
+          {
+            "id": "3",
+            "x": 3760,
+            "y": 497
+          },
+          {
+            "id": "4",
+            "x": 4432,
+            "y": 497
+          },
+          {
+            "id": "5",
+            "x": 4912,
+            "y": 529
+          },
+          {
+            "id": "6",
+            "x": 1744,
+            "y": 529
+          }
+        ],
+        "active": null,
+        "queue": [],
+        "idle": 0,
+        "cooldown": 0,
+        "scene": "home",
+        "brain": {
+          "brain": 0,
+          "template": 1,
+          "unknown": 0,
+          "requests": 1,
+          "limited": 0,
+          "audio": 0,
+          "tts": 2,
+          "reasons": {
+            "client-validation": 1
+          }
+        },
+        "memory": {
+          "prefs": {
+            "color": null,
+            "animal": null,
+            "food": null,
+            "build": null
+          },
+          "prefsLearnedAt": {},
+          "name_asked": true,
+          "chat_day": "2026-11-05",
+          "small_talk_count": 0,
+          "weather_chat_done": false
+        },
+        "mode": "idle"
+      },
+      "speech": [
+        "Hi! What is your name?",
+        "Word book"
+      ]
+    }
+  ]
+}

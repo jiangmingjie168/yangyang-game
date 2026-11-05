@@ -1,0 +1,1630 @@
+[
+  {
+    "case": "house-desktop",
+    "ms": 486,
+    "x": 683,
+    "y": 356.25,
+    "purpose": "#btn-start"
+  },
+  {
+    "case": "house-desktop",
+    "ms": 659,
+    "x": 683,
+    "y": 331.09375,
+    "purpose": "#welcome-play"
+  },
+  {
+    "case": "house-desktop",
+    "ms": 1085,
+    "x": 1148.328125,
+    "y": 34,
+    "purpose": "#btn-craft"
+  },
+  {
+    "case": "house-desktop",
+    "ms": 1225,
+    "x": 629,
+    "y": 414,
+    "purpose": "Craft House"
+  },
+  {
+    "case": "house-desktop",
+    "ms": 1351,
+    "x": 683,
+    "y": 152.00000381469727,
+    "purpose": "#wordcard"
+  },
+  {
+    "case": "house-desktop",
+    "ms": 1482,
+    "x": 1304,
+    "y": 38,
+    "purpose": "#craft-back"
+  },
+  {
+    "case": "house-desktop",
+    "ms": 1610,
+    "x": 1064.328125,
+    "y": 34,
+    "purpose": "#btn-build"
+  },
+  {
+    "case": "house-desktop",
+    "ms": 1735,
+    "x": 159.125,
+    "y": 100,
+    "purpose": "[data-build=\"houseKit\"]"
+  },
+  {
+    "case": "house-desktop",
+    "ms": 1858,
+    "x": 474.0000000000002,
+    "y": 527.9999999999999,
+    "purpose": "Click ground through flowers, with only one supporting column"
+  },
+  {
+    "case": "house-desktop",
+    "ms": 2080,
+    "x": 57.33593559265137,
+    "y": 100,
+    "purpose": "#build-show"
+  },
+  {
+    "case": "house-desktop",
+    "ms": 2209,
+    "x": 1252.9921875,
+    "y": 218,
+    "purpose": {
+      "_apiName": "Locator",
+      "_frame": {
+        "_type": "Frame",
+        "_guid": "frame@eb286d6641c7d29f564d0458e0c88457"
+      },
+      "_selector": "internal:role=button[name=\"Show my building\"i]"
+    }
+  },
+  {
+    "case": "house-desktop",
+    "ms": 2410,
+    "x": 1258,
+    "y": 218,
+    "purpose": "Wrong choice"
+  },
+  {
+    "case": "house-desktop",
+    "ms": 2532,
+    "x": 1206,
+    "y": 218,
+    "purpose": "#buddy-options [data-word=\"house\"]"
+  },
+  {
+    "case": "house-desktop",
+    "ms": 2744,
+    "x": 1208,
+    "y": 220,
+    "purpose": "#buddy-close"
+  },
+  {
+    "case": "speak-desktop",
+    "ms": 293,
+    "x": 683,
+    "y": 356.25,
+    "purpose": "#btn-start"
+  },
+  {
+    "case": "speak-desktop",
+    "ms": 424,
+    "x": 683,
+    "y": 331.09375,
+    "purpose": "#welcome-play"
+  },
+  {
+    "case": "speak-desktop",
+    "ms": 854,
+    "x": 1148.328125,
+    "y": 34,
+    "purpose": "#btn-craft"
+  },
+  {
+    "case": "speak-desktop",
+    "ms": 975,
+    "x": 629,
+    "y": 414,
+    "purpose": "Craft House"
+  },
+  {
+    "case": "speak-desktop",
+    "ms": 1104,
+    "x": 682.9999694824219,
+    "y": 152,
+    "purpose": "#wordcard"
+  },
+  {
+    "case": "speak-desktop",
+    "ms": 1224,
+    "x": 1304,
+    "y": 38,
+    "purpose": "#craft-back"
+  },
+  {
+    "case": "speak-desktop",
+    "ms": 1343,
+    "x": 1064.328125,
+    "y": 34,
+    "purpose": "#btn-build"
+  },
+  {
+    "case": "speak-desktop",
+    "ms": 1472,
+    "x": 159.125,
+    "y": 100,
+    "purpose": "[data-build=\"houseKit\"]"
+  },
+  {
+    "case": "speak-desktop",
+    "ms": 1587,
+    "x": 474.0000000000002,
+    "y": 577.9999999999999,
+    "purpose": "Place on clear spawn pad"
+  },
+  {
+    "case": "speak-desktop",
+    "ms": 1722,
+    "x": 57.3359375,
+    "y": 100,
+    "purpose": "#build-show"
+  },
+  {
+    "case": "speak-desktop",
+    "ms": 1852,
+    "x": 1252.9921875,
+    "y": 218,
+    "purpose": {
+      "_apiName": "Locator",
+      "_frame": {
+        "_type": "Frame",
+        "_guid": "frame@678983e7bc13e9491305d81143c24cdc"
+      },
+      "_selector": "internal:role=button[name=\"Show my building\"i]"
+    }
+  },
+  {
+    "case": "speak-desktop",
+    "ms": 2069,
+    "x": 1232,
+    "y": 220,
+    "purpose": "#buddy-mic"
+  },
+  {
+    "case": "speak-desktop",
+    "ms": 2192,
+    "x": 1232,
+    "y": 220,
+    "purpose": "#buddy-mic"
+  },
+  {
+    "case": "speak-desktop",
+    "ms": 2377,
+    "x": 1274.4296875,
+    "y": 246.265625,
+    "purpose": "#buddy-confirm"
+  },
+  {
+    "case": "speak-desktop",
+    "ms": 2507,
+    "x": 1253,
+    "y": 220,
+    "purpose": "#buddy-close"
+  },
+  {
+    "case": "speak-desktop",
+    "ms": 2624,
+    "x": 1064.328125,
+    "y": 34,
+    "purpose": "#btn-build"
+  },
+  {
+    "case": "speak-desktop",
+    "ms": 2745,
+    "x": 1234.1640625,
+    "y": 34,
+    "purpose": "#btn-words"
+  },
+  {
+    "case": "speak-desktop",
+    "ms": 2888,
+    "x": 754.96875,
+    "y": 421,
+    "purpose": "Voluntary atlas practice"
+  },
+  {
+    "case": "speak-desktop",
+    "ms": 3022,
+    "x": 1232,
+    "y": 220,
+    "purpose": "#buddy-mic"
+  },
+  {
+    "case": "speak-desktop",
+    "ms": 3156,
+    "x": 1208,
+    "y": 220,
+    "purpose": "#buddy-close"
+  },
+  {
+    "case": "speak-desktop",
+    "ms": 3287,
+    "x": 1320,
+    "y": 34,
+    "purpose": "#btn-zh"
+  },
+  {
+    "case": "speak-desktop",
+    "ms": 3408,
+    "x": 1168.0234375,
+    "y": 112,
+    "purpose": "#parent-log-tab"
+  },
+  {
+    "case": "speak-desktop",
+    "ms": 3690,
+    "x": 1068.0078125,
+    "y": 710.015625,
+    "purpose": "#parent-close"
+  },
+  {
+    "case": "speak-desktop",
+    "ms": 6624,
+    "x": 683,
+    "y": 356.25,
+    "purpose": "#btn-start"
+  },
+  {
+    "case": "speak-desktop",
+    "ms": 6760,
+    "x": 683,
+    "y": 238.28125,
+    "purpose": "#welcome-play"
+  },
+  {
+    "case": "speak-desktop",
+    "ms": 7178,
+    "x": 1320,
+    "y": 34,
+    "purpose": "#btn-zh"
+  },
+  {
+    "case": "speak-desktop",
+    "ms": 7307,
+    "x": 1168.0234375,
+    "y": 112,
+    "purpose": "#parent-log-tab"
+  },
+  {
+    "case": "speak-desktop",
+    "ms": 7474,
+    "x": 1068.0078125,
+    "y": 710.015625,
+    "purpose": "#parent-close"
+  },
+  {
+    "case": "recognized-desktop",
+    "ms": 271,
+    "x": 683,
+    "y": 356.25,
+    "purpose": "#btn-start"
+  },
+  {
+    "case": "recognized-desktop",
+    "ms": 408,
+    "x": 683,
+    "y": 331.09375,
+    "purpose": "#welcome-play"
+  },
+  {
+    "case": "recognized-desktop",
+    "ms": 830,
+    "x": 1148.328125,
+    "y": 34,
+    "purpose": "#btn-craft"
+  },
+  {
+    "case": "recognized-desktop",
+    "ms": 957,
+    "x": 629,
+    "y": 414,
+    "purpose": "Craft House"
+  },
+  {
+    "case": "recognized-desktop",
+    "ms": 1081,
+    "x": 682.9999694824219,
+    "y": 151.99999618530273,
+    "purpose": "#wordcard"
+  },
+  {
+    "case": "recognized-desktop",
+    "ms": 1206,
+    "x": 1304,
+    "y": 38,
+    "purpose": "#craft-back"
+  },
+  {
+    "case": "recognized-desktop",
+    "ms": 1326,
+    "x": 1064.328125,
+    "y": 34,
+    "purpose": "#btn-build"
+  },
+  {
+    "case": "recognized-desktop",
+    "ms": 1448,
+    "x": 159.125,
+    "y": 100,
+    "purpose": "[data-build=\"houseKit\"]"
+  },
+  {
+    "case": "recognized-desktop",
+    "ms": 1567,
+    "x": 474.0000000000002,
+    "y": 577.9999999999999,
+    "purpose": "Place on clear spawn pad"
+  },
+  {
+    "case": "recognized-desktop",
+    "ms": 1712,
+    "x": 57.3359375,
+    "y": 100,
+    "purpose": "#build-show"
+  },
+  {
+    "case": "recognized-desktop",
+    "ms": 1842,
+    "x": 1252.9921875,
+    "y": 218,
+    "purpose": {
+      "_apiName": "Locator",
+      "_frame": {
+        "_type": "Frame",
+        "_guid": "frame@1ed747d01176f8cf5e87e651959d1a21"
+      },
+      "_selector": "internal:role=button[name=\"Show my building\"i]"
+    }
+  },
+  {
+    "case": "recognized-desktop",
+    "ms": 2063,
+    "x": 1232,
+    "y": 220,
+    "purpose": "#buddy-mic"
+  },
+  {
+    "case": "recognized-desktop",
+    "ms": 2256,
+    "x": 1208,
+    "y": 220,
+    "purpose": "#buddy-close"
+  },
+  {
+    "case": "recognized-desktop",
+    "ms": 2380,
+    "x": 1320,
+    "y": 34,
+    "purpose": "#btn-zh"
+  },
+  {
+    "case": "recognized-desktop",
+    "ms": 2507,
+    "x": 1168.0234375,
+    "y": 112,
+    "purpose": "#parent-log-tab"
+  },
+  {
+    "case": "recognized-desktop",
+    "ms": 2741,
+    "x": 1068.0078125,
+    "y": 710.234375,
+    "purpose": "#parent-close"
+  },
+  {
+    "case": "recognized-desktop",
+    "ms": 5661,
+    "x": 683,
+    "y": 356.25,
+    "purpose": "#btn-start"
+  },
+  {
+    "case": "recognized-desktop",
+    "ms": 5793,
+    "x": 683,
+    "y": 238.28125,
+    "purpose": "#welcome-play"
+  },
+  {
+    "case": "recognized-desktop",
+    "ms": 6212,
+    "x": 1320,
+    "y": 34,
+    "purpose": "#btn-zh"
+  },
+  {
+    "case": "recognized-desktop",
+    "ms": 6331,
+    "x": 1168.0234375,
+    "y": 112,
+    "purpose": "#parent-log-tab"
+  },
+  {
+    "case": "recognized-desktop",
+    "ms": 6509,
+    "x": 1068.0078125,
+    "y": 710.234375,
+    "purpose": "#parent-close"
+  },
+  {
+    "case": "explore-desktop",
+    "ms": 280,
+    "x": 683,
+    "y": 356.25,
+    "purpose": "#btn-start"
+  },
+  {
+    "case": "explore-desktop",
+    "ms": 410,
+    "x": 683,
+    "y": 331.09375,
+    "purpose": "#welcome-play"
+  },
+  {
+    "case": "explore-desktop",
+    "ms": 828,
+    "x": 499.0000000000002,
+    "y": 527.984375,
+    "purpose": "Tap dog"
+  },
+  {
+    "case": "explore-desktop",
+    "ms": 3049,
+    "x": 697,
+    "y": 249,
+    "purpose": "#chat-mic"
+  },
+  {
+    "case": "explore-desktop",
+    "ms": 3175,
+    "x": 697,
+    "y": 249,
+    "purpose": "#chat-mic"
+  },
+  {
+    "case": "explore-desktop",
+    "ms": 3361,
+    "x": 822.3359375,
+    "y": 294,
+    "purpose": "#chat-confirm"
+  },
+  {
+    "case": "explore-desktop",
+    "ms": 3492,
+    "x": 683,
+    "y": 249,
+    "purpose": "#chat-continue"
+  },
+  {
+    "case": "quota-desktop",
+    "ms": 278,
+    "x": 683,
+    "y": 356.25,
+    "purpose": "#btn-start"
+  },
+  {
+    "case": "quota-desktop",
+    "ms": 408,
+    "x": 683,
+    "y": 331.09375,
+    "purpose": "#welcome-play"
+  },
+  {
+    "case": "quota-desktop",
+    "ms": 827,
+    "x": 499.0000000000002,
+    "y": 527.984375,
+    "purpose": "Tap dog"
+  },
+  {
+    "case": "quota-desktop",
+    "ms": 3348,
+    "x": 580.5,
+    "y": 230,
+    "purpose": "#chat-options [data-word=\"dog\"]"
+  },
+  {
+    "case": "quota-desktop",
+    "ms": 3530,
+    "x": 683,
+    "y": 249,
+    "purpose": "#chat-continue"
+  },
+  {
+    "case": "quota-desktop",
+    "ms": 3647,
+    "x": 447.27080751892174,
+    "y": 527.984375,
+    "purpose": "Tap cat"
+  },
+  {
+    "case": "quota-desktop",
+    "ms": 15798,
+    "x": 785.5,
+    "y": 230,
+    "purpose": "#chat-options [data-word=\"cat\"]"
+  },
+  {
+    "case": "quota-desktop",
+    "ms": 15939,
+    "x": 683,
+    "y": 249,
+    "purpose": "#chat-continue"
+  },
+  {
+    "case": "quota-desktop",
+    "ms": 16056,
+    "x": 787.8667857782706,
+    "y": 527.984375,
+    "purpose": "Tap cow"
+  },
+  {
+    "case": "quota-desktop",
+    "ms": 28107,
+    "x": 580.5,
+    "y": 230,
+    "purpose": "#chat-options [data-word=\"cow\"]"
+  },
+  {
+    "case": "quota-desktop",
+    "ms": 28231,
+    "x": 683,
+    "y": 249,
+    "purpose": "#chat-continue"
+  },
+  {
+    "case": "quota-desktop",
+    "ms": 28344,
+    "x": 270.17167577929973,
+    "y": 527.984375,
+    "purpose": "Tap sheep"
+  },
+  {
+    "case": "quota-desktop",
+    "ms": 40657,
+    "x": 785.5,
+    "y": 230,
+    "purpose": "#chat-options [data-word=\"sheep\"]"
+  },
+  {
+    "case": "quota-desktop",
+    "ms": 40789,
+    "x": 683,
+    "y": 249,
+    "purpose": "#chat-continue"
+  },
+  {
+    "case": "quota-desktop",
+    "ms": 40907,
+    "x": 1051.7249604905296,
+    "y": 527.984375,
+    "purpose": "Tap pig"
+  },
+  {
+    "case": "quota-desktop",
+    "ms": 53294,
+    "x": 580.5,
+    "y": 230,
+    "purpose": "#chat-options [data-word=\"pig\"]"
+  },
+  {
+    "case": "quota-desktop",
+    "ms": 53424,
+    "x": 683,
+    "y": 249,
+    "purpose": "#chat-continue"
+  },
+  {
+    "case": "quota-desktop",
+    "ms": 53544,
+    "x": 1148.328125,
+    "y": 34,
+    "purpose": "#btn-craft"
+  },
+  {
+    "case": "quota-desktop",
+    "ms": 53664,
+    "x": 629,
+    "y": 514,
+    "purpose": "Craft Wheel"
+  },
+  {
+    "case": "quota-desktop",
+    "ms": 53794,
+    "x": 683.0000305175781,
+    "y": 151.99999618530273,
+    "purpose": "#wordcard"
+  },
+  {
+    "case": "quota-desktop",
+    "ms": 53923,
+    "x": 629,
+    "y": 514,
+    "purpose": "Craft Wheel"
+  },
+  {
+    "case": "quota-desktop",
+    "ms": 54044,
+    "x": 683.0000305175781,
+    "y": 152,
+    "purpose": "#wordcard"
+  },
+  {
+    "case": "quota-desktop",
+    "ms": 54164,
+    "x": 1306,
+    "y": 514,
+    "purpose": "Craft Car"
+  },
+  {
+    "case": "quota-desktop",
+    "ms": 54295,
+    "x": 683,
+    "y": 152,
+    "purpose": "#wordcard"
+  },
+  {
+    "case": "quota-desktop",
+    "ms": 54413,
+    "x": 1304,
+    "y": 38,
+    "purpose": "#craft-back"
+  },
+  {
+    "case": "quota-desktop",
+    "ms": 54542,
+    "x": 1064.328125,
+    "y": 34,
+    "purpose": "#btn-build"
+  },
+  {
+    "case": "quota-desktop",
+    "ms": 54671,
+    "x": 344.265625,
+    "y": 100,
+    "purpose": "[data-build=\"car\"]"
+  },
+  {
+    "case": "quota-desktop",
+    "ms": 54789,
+    "x": 464.00000000000006,
+    "y": 577.9999999999999,
+    "purpose": "Place Car after five explore quizzes"
+  },
+  {
+    "case": "quota-desktop",
+    "ms": 54922,
+    "x": 57.3359375,
+    "y": 100,
+    "purpose": "#build-show"
+  },
+  {
+    "case": "quota-desktop",
+    "ms": 55056,
+    "x": 1252.9921875,
+    "y": 218,
+    "purpose": {
+      "_apiName": "Locator",
+      "_frame": {
+        "_type": "Frame",
+        "_guid": "frame@e795ea021ce199a46ae8921ac310663e"
+      },
+      "_selector": "internal:role=button[name=\"Show my building\"i]"
+    }
+  },
+  {
+    "case": "quota-desktop",
+    "ms": 55195,
+    "x": 1206,
+    "y": 218,
+    "purpose": "#buddy-options [data-word=\"car\"]"
+  },
+  {
+    "case": "quota-desktop",
+    "ms": 55427,
+    "x": 1208,
+    "y": 238,
+    "purpose": "#buddy-close"
+  },
+  {
+    "case": "physical-desktop",
+    "ms": 282,
+    "x": 683,
+    "y": 356.25,
+    "purpose": "#btn-start"
+  },
+  {
+    "case": "physical-desktop",
+    "ms": 408,
+    "x": 683,
+    "y": 331.09375,
+    "purpose": "#welcome-play"
+  },
+  {
+    "case": "physical-desktop",
+    "ms": 839,
+    "x": 1234.1640625,
+    "y": 34,
+    "purpose": "#btn-words"
+  },
+  {
+    "case": "physical-desktop",
+    "ms": 959,
+    "x": 683,
+    "y": 100,
+    "purpose": "#btn-quiz"
+  },
+  {
+    "case": "physical-desktop",
+    "ms": 1129,
+    "x": 349.0000000000002,
+    "y": 527.984375,
+    "purpose": "Tap dog"
+  },
+  {
+    "case": "proportion-desktop",
+    "ms": 269,
+    "x": 683,
+    "y": 356.25,
+    "purpose": "#btn-start"
+  },
+  {
+    "case": "proportion-desktop",
+    "ms": 406,
+    "x": 683,
+    "y": 331.09375,
+    "purpose": "#welcome-play"
+  },
+  {
+    "case": "proportion-desktop",
+    "ms": 896,
+    "x": 1234.1640625,
+    "y": 34,
+    "purpose": "#btn-words"
+  },
+  {
+    "case": "proportion-desktop",
+    "ms": 1079,
+    "x": 1304,
+    "y": 38,
+    "purpose": "#book-back"
+  },
+  {
+    "case": "house-mobile",
+    "ms": 261,
+    "x": 422,
+    "y": 179.25,
+    "purpose": "#btn-start"
+  },
+  {
+    "case": "house-mobile",
+    "ms": 387,
+    "x": 422,
+    "y": 256,
+    "purpose": "#welcome-play"
+  },
+  {
+    "case": "house-mobile",
+    "ms": 812,
+    "x": 626.328125,
+    "y": 34,
+    "purpose": "#btn-craft"
+  },
+  {
+    "case": "house-mobile",
+    "ms": 975,
+    "x": 368,
+    "y": 225,
+    "purpose": "Craft House"
+  },
+  {
+    "case": "house-mobile",
+    "ms": 1100,
+    "x": 422.00001525878906,
+    "y": 100,
+    "purpose": "#wordcard"
+  },
+  {
+    "case": "house-mobile",
+    "ms": 1223,
+    "x": 782,
+    "y": 38,
+    "purpose": "#craft-back"
+  },
+  {
+    "case": "house-mobile",
+    "ms": 1342,
+    "x": 542.328125,
+    "y": 34,
+    "purpose": "#btn-build"
+  },
+  {
+    "case": "house-mobile",
+    "ms": 1463,
+    "x": 159.125,
+    "y": 100,
+    "purpose": "[data-build=\"houseKit\"]"
+  },
+  {
+    "case": "house-mobile",
+    "ms": 1578,
+    "x": 277.9999999999998,
+    "y": 262,
+    "purpose": "Click ground through flowers, with only one supporting column"
+  },
+  {
+    "case": "house-mobile",
+    "ms": 1765,
+    "x": 57.3359375,
+    "y": 100,
+    "purpose": "#build-show"
+  },
+  {
+    "case": "house-mobile",
+    "ms": 1892,
+    "x": 730.9921875,
+    "y": 218,
+    "purpose": {
+      "_apiName": "Locator",
+      "_frame": {
+        "_type": "Frame",
+        "_guid": "frame@0b4ebbdcd322ea408ffcb1c7a62de9c2"
+      },
+      "_selector": "internal:role=button[name=\"Show my building\"i]"
+    }
+  },
+  {
+    "case": "house-mobile",
+    "ms": 2063,
+    "x": 736,
+    "y": 214,
+    "purpose": "Wrong choice"
+  },
+  {
+    "case": "house-mobile",
+    "ms": 2182,
+    "x": 684,
+    "y": 214,
+    "purpose": "#buddy-options [data-word=\"house\"]"
+  },
+  {
+    "case": "house-mobile",
+    "ms": 2373,
+    "x": 686,
+    "y": 216,
+    "purpose": "#buddy-close"
+  },
+  {
+    "case": "speak-mobile",
+    "ms": 268,
+    "x": 422,
+    "y": 179.25,
+    "purpose": "#btn-start"
+  },
+  {
+    "case": "speak-mobile",
+    "ms": 393,
+    "x": 422,
+    "y": 256,
+    "purpose": "#welcome-play"
+  },
+  {
+    "case": "speak-mobile",
+    "ms": 814,
+    "x": 626.328125,
+    "y": 34,
+    "purpose": "#btn-craft"
+  },
+  {
+    "case": "speak-mobile",
+    "ms": 973,
+    "x": 368,
+    "y": 225,
+    "purpose": "Craft House"
+  },
+  {
+    "case": "speak-mobile",
+    "ms": 1097,
+    "x": 422.00001525878906,
+    "y": 100.00000381469727,
+    "purpose": "#wordcard"
+  },
+  {
+    "case": "speak-mobile",
+    "ms": 1220,
+    "x": 782,
+    "y": 38,
+    "purpose": "#craft-back"
+  },
+  {
+    "case": "speak-mobile",
+    "ms": 1344,
+    "x": 542.328125,
+    "y": 34,
+    "purpose": "#btn-build"
+  },
+  {
+    "case": "speak-mobile",
+    "ms": 1468,
+    "x": 159.125,
+    "y": 100,
+    "purpose": "[data-build=\"houseKit\"]"
+  },
+  {
+    "case": "speak-mobile",
+    "ms": 1585,
+    "x": 277.9999999999998,
+    "y": 300,
+    "purpose": "Place on clear spawn pad"
+  },
+  {
+    "case": "speak-mobile",
+    "ms": 1712,
+    "x": 57.33593940734863,
+    "y": 100,
+    "purpose": "#build-show"
+  },
+  {
+    "case": "speak-mobile",
+    "ms": 1840,
+    "x": 730.9921875,
+    "y": 218,
+    "purpose": {
+      "_apiName": "Locator",
+      "_frame": {
+        "_type": "Frame",
+        "_guid": "frame@62d2c8ad933539dd6cc0f34935b463da"
+      },
+      "_selector": "internal:role=button[name=\"Show my building\"i]"
+    }
+  },
+  {
+    "case": "speak-mobile",
+    "ms": 2041,
+    "x": 710,
+    "y": 216,
+    "purpose": "#buddy-mic"
+  },
+  {
+    "case": "speak-mobile",
+    "ms": 2160,
+    "x": 710,
+    "y": 216,
+    "purpose": "#buddy-mic"
+  },
+  {
+    "case": "speak-mobile",
+    "ms": 2328,
+    "x": 752.4296875,
+    "y": 242.265625,
+    "purpose": "#buddy-confirm"
+  },
+  {
+    "case": "speak-mobile",
+    "ms": 2459,
+    "x": 731,
+    "y": 220,
+    "purpose": "#buddy-close"
+  },
+  {
+    "case": "speak-mobile",
+    "ms": 2577,
+    "x": 542.328125,
+    "y": 34,
+    "purpose": "#btn-build"
+  },
+  {
+    "case": "speak-mobile",
+    "ms": 2696,
+    "x": 712.1640625,
+    "y": 34,
+    "purpose": "#btn-words"
+  },
+  {
+    "case": "speak-mobile",
+    "ms": 2856,
+    "x": 597.3125,
+    "y": 336,
+    "purpose": "Voluntary atlas practice"
+  },
+  {
+    "case": "speak-mobile",
+    "ms": 2975,
+    "x": 710,
+    "y": 216,
+    "purpose": "#buddy-mic"
+  },
+  {
+    "case": "speak-mobile",
+    "ms": 3096,
+    "x": 686,
+    "y": 216,
+    "purpose": "#buddy-close"
+  },
+  {
+    "case": "speak-mobile",
+    "ms": 3216,
+    "x": 798,
+    "y": 34,
+    "purpose": "#btn-zh"
+  },
+  {
+    "case": "speak-mobile",
+    "ms": 3339,
+    "x": 646.0234375,
+    "y": 112,
+    "purpose": "#parent-log-tab"
+  },
+  {
+    "case": "speak-mobile",
+    "ms": 3572,
+    "x": 546.0078125,
+    "y": 332.015625,
+    "purpose": "#parent-close"
+  },
+  {
+    "case": "speak-mobile",
+    "ms": 6485,
+    "x": 422,
+    "y": 179.25,
+    "purpose": "#btn-start"
+  },
+  {
+    "case": "speak-mobile",
+    "ms": 6608,
+    "x": 422,
+    "y": 163,
+    "purpose": "#welcome-play"
+  },
+  {
+    "case": "speak-mobile",
+    "ms": 7029,
+    "x": 798,
+    "y": 34,
+    "purpose": "#btn-zh"
+  },
+  {
+    "case": "speak-mobile",
+    "ms": 7148,
+    "x": 646.0234375,
+    "y": 112,
+    "purpose": "#parent-log-tab"
+  },
+  {
+    "case": "speak-mobile",
+    "ms": 7305,
+    "x": 546.0078125,
+    "y": 332.015625,
+    "purpose": "#parent-close"
+  },
+  {
+    "case": "recognized-mobile",
+    "ms": 272,
+    "x": 422,
+    "y": 179.25,
+    "purpose": "#btn-start"
+  },
+  {
+    "case": "recognized-mobile",
+    "ms": 399,
+    "x": 422,
+    "y": 256,
+    "purpose": "#welcome-play"
+  },
+  {
+    "case": "recognized-mobile",
+    "ms": 824,
+    "x": 626.328125,
+    "y": 34,
+    "purpose": "#btn-craft"
+  },
+  {
+    "case": "recognized-mobile",
+    "ms": 976,
+    "x": 368,
+    "y": 225,
+    "purpose": "Craft House"
+  },
+  {
+    "case": "recognized-mobile",
+    "ms": 1099,
+    "x": 422.00001525878906,
+    "y": 100,
+    "purpose": "#wordcard"
+  },
+  {
+    "case": "recognized-mobile",
+    "ms": 1218,
+    "x": 782,
+    "y": 38,
+    "purpose": "#craft-back"
+  },
+  {
+    "case": "recognized-mobile",
+    "ms": 1336,
+    "x": 542.328125,
+    "y": 34,
+    "purpose": "#btn-build"
+  },
+  {
+    "case": "recognized-mobile",
+    "ms": 1463,
+    "x": 159.125,
+    "y": 100,
+    "purpose": "[data-build=\"houseKit\"]"
+  },
+  {
+    "case": "recognized-mobile",
+    "ms": 1579,
+    "x": 277.9999999999998,
+    "y": 300,
+    "purpose": "Place on clear spawn pad"
+  },
+  {
+    "case": "recognized-mobile",
+    "ms": 1711,
+    "x": 57.3359375,
+    "y": 100,
+    "purpose": "#build-show"
+  },
+  {
+    "case": "recognized-mobile",
+    "ms": 1835,
+    "x": 730.9921875,
+    "y": 218,
+    "purpose": {
+      "_apiName": "Locator",
+      "_frame": {
+        "_type": "Frame",
+        "_guid": "frame@8437c11708112906cda0041ad276ef6e"
+      },
+      "_selector": "internal:role=button[name=\"Show my building\"i]"
+    }
+  },
+  {
+    "case": "recognized-mobile",
+    "ms": 2016,
+    "x": 710,
+    "y": 216,
+    "purpose": "#buddy-mic"
+  },
+  {
+    "case": "recognized-mobile",
+    "ms": 2185,
+    "x": 686,
+    "y": 216,
+    "purpose": "#buddy-close"
+  },
+  {
+    "case": "recognized-mobile",
+    "ms": 2302,
+    "x": 798,
+    "y": 34,
+    "purpose": "#btn-zh"
+  },
+  {
+    "case": "recognized-mobile",
+    "ms": 2427,
+    "x": 646.0234375,
+    "y": 112,
+    "purpose": "#parent-log-tab"
+  },
+  {
+    "case": "recognized-mobile",
+    "ms": 2660,
+    "x": 546.0078125,
+    "y": 332.234375,
+    "purpose": "#parent-close"
+  },
+  {
+    "case": "recognized-mobile",
+    "ms": 5555,
+    "x": 422,
+    "y": 179.25,
+    "purpose": "#btn-start"
+  },
+  {
+    "case": "recognized-mobile",
+    "ms": 5679,
+    "x": 422,
+    "y": 163,
+    "purpose": "#welcome-play"
+  },
+  {
+    "case": "recognized-mobile",
+    "ms": 6098,
+    "x": 798,
+    "y": 34,
+    "purpose": "#btn-zh"
+  },
+  {
+    "case": "recognized-mobile",
+    "ms": 6216,
+    "x": 646.0234375,
+    "y": 112,
+    "purpose": "#parent-log-tab"
+  },
+  {
+    "case": "recognized-mobile",
+    "ms": 6376,
+    "x": 546.0078125,
+    "y": 332.234375,
+    "purpose": "#parent-close"
+  },
+  {
+    "case": "explore-mobile",
+    "ms": 230,
+    "x": 422,
+    "y": 179.25,
+    "purpose": "#btn-start"
+  },
+  {
+    "case": "explore-mobile",
+    "ms": 356,
+    "x": 422,
+    "y": 256,
+    "purpose": "#welcome-play"
+  },
+  {
+    "case": "explore-mobile",
+    "ms": 776,
+    "x": 296.9999999999998,
+    "y": 261.988125,
+    "purpose": "Tap dog"
+  },
+  {
+    "case": "explore-mobile",
+    "ms": 2964,
+    "x": 468.9921875,
+    "y": 152,
+    "purpose": "#chat-mic"
+  },
+  {
+    "case": "explore-mobile",
+    "ms": 3085,
+    "x": 468.9921875,
+    "y": 152,
+    "purpose": "#chat-mic"
+  },
+  {
+    "case": "explore-mobile",
+    "ms": 3252,
+    "x": 555,
+    "y": 189,
+    "purpose": "#chat-confirm"
+  },
+  {
+    "case": "explore-mobile",
+    "ms": 3377,
+    "x": 455,
+    "y": 152,
+    "purpose": "#chat-continue"
+  },
+  {
+    "case": "quota-mobile",
+    "ms": 246,
+    "x": 422,
+    "y": 179.25,
+    "purpose": "#btn-start"
+  },
+  {
+    "case": "quota-mobile",
+    "ms": 368,
+    "x": 422,
+    "y": 256,
+    "purpose": "#welcome-play"
+  },
+  {
+    "case": "quota-mobile",
+    "ms": 789,
+    "x": 296.9999999999998,
+    "y": 261.988125,
+    "purpose": "Tap dog"
+  },
+  {
+    "case": "quota-mobile",
+    "ms": 3278,
+    "x": 382,
+    "y": 133,
+    "purpose": "#chat-options [data-word=\"dog\"]"
+  },
+  {
+    "case": "quota-mobile",
+    "ms": 3445,
+    "x": 455,
+    "y": 152,
+    "purpose": "#chat-continue"
+  },
+  {
+    "case": "quota-mobile",
+    "ms": 3560,
+    "x": 241.2357060841005,
+    "y": 261.988125,
+    "purpose": "Tap cat"
+  },
+  {
+    "case": "quota-mobile",
+    "ms": 15778,
+    "x": 528,
+    "y": 133,
+    "purpose": "#chat-options [data-word=\"cat\"]"
+  },
+  {
+    "case": "quota-mobile",
+    "ms": 15905,
+    "x": 455,
+    "y": 152,
+    "purpose": "#chat-continue"
+  },
+  {
+    "case": "quota-mobile",
+    "ms": 16022,
+    "x": 640.0126556634012,
+    "y": 261.988125,
+    "purpose": "Tap cow"
+  },
+  {
+    "case": "quota-mobile",
+    "ms": 28044,
+    "x": 382,
+    "y": 133,
+    "purpose": "#chat-options [data-word=\"cow\"]"
+  },
+  {
+    "case": "quota-mobile",
+    "ms": 28167,
+    "x": 455,
+    "y": 152,
+    "purpose": "#chat-continue"
+  },
+  {
+    "case": "quota-mobile",
+    "ms": 28291,
+    "purpose": "Joystick to uncover sheep",
+    "dir": -1
+  },
+  {
+    "case": "quota-mobile",
+    "ms": 28991,
+    "purpose": "Joystick to uncover sheep",
+    "dir": -1
+  },
+  {
+    "case": "quota-mobile",
+    "ms": 29680,
+    "x": 183.97141836845248,
+    "y": 261.988125,
+    "purpose": "Tap sheep"
+  },
+  {
+    "case": "quota-mobile",
+    "ms": 40215,
+    "x": 528,
+    "y": 133,
+    "purpose": "#chat-options [data-word=\"sheep\"]"
+  },
+  {
+    "case": "quota-mobile",
+    "ms": 40341,
+    "x": 455,
+    "y": 152,
+    "purpose": "#chat-continue"
+  },
+  {
+    "case": "quota-mobile",
+    "ms": 40460,
+    "purpose": "Joystick to uncover pig",
+    "dir": 1
+  },
+  {
+    "case": "quota-mobile",
+    "ms": 41146,
+    "x": 707.1981355402877,
+    "y": 261.988125,
+    "purpose": "Tap pig"
+  },
+  {
+    "case": "quota-mobile",
+    "ms": 52614,
+    "x": 382,
+    "y": 133,
+    "purpose": "#chat-options [data-word=\"pig\"]"
+  },
+  {
+    "case": "quota-mobile",
+    "ms": 52742,
+    "x": 455,
+    "y": 152,
+    "purpose": "#chat-continue"
+  },
+  {
+    "case": "quota-mobile",
+    "ms": 52859,
+    "x": 626.328125,
+    "y": 34,
+    "purpose": "#btn-craft"
+  },
+  {
+    "case": "quota-mobile",
+    "ms": 53025,
+    "x": 368,
+    "y": 225,
+    "purpose": "Craft Wheel"
+  },
+  {
+    "case": "quota-mobile",
+    "ms": 53148,
+    "x": 422.00001525878906,
+    "y": 100,
+    "purpose": "#wordcard"
+  },
+  {
+    "case": "quota-mobile",
+    "ms": 53272,
+    "x": 368,
+    "y": 225,
+    "purpose": "Craft Wheel"
+  },
+  {
+    "case": "quota-mobile",
+    "ms": 53395,
+    "x": 422,
+    "y": 100,
+    "purpose": "#wordcard"
+  },
+  {
+    "case": "quota-mobile",
+    "ms": 53531,
+    "x": 784,
+    "y": 225,
+    "purpose": "Craft Car"
+  },
+  {
+    "case": "quota-mobile",
+    "ms": 53659,
+    "x": 422,
+    "y": 100,
+    "purpose": "#wordcard"
+  },
+  {
+    "case": "quota-mobile",
+    "ms": 53780,
+    "x": 782,
+    "y": 38,
+    "purpose": "#craft-back"
+  },
+  {
+    "case": "quota-mobile",
+    "ms": 53898,
+    "x": 542.328125,
+    "y": 34,
+    "purpose": "#btn-build"
+  },
+  {
+    "case": "quota-mobile",
+    "ms": 54022,
+    "x": 344.265625,
+    "y": 100,
+    "purpose": "[data-build=\"car\"]"
+  },
+  {
+    "case": "quota-mobile",
+    "ms": 54140,
+    "x": 290.0000000000001,
+    "y": 300,
+    "purpose": "Place Car after five explore quizzes"
+  },
+  {
+    "case": "quota-mobile",
+    "ms": 54275,
+    "x": 57.3359375,
+    "y": 100,
+    "purpose": "#build-show"
+  },
+  {
+    "case": "quota-mobile",
+    "ms": 54399,
+    "x": 730.9921875,
+    "y": 218,
+    "purpose": {
+      "_apiName": "Locator",
+      "_frame": {
+        "_type": "Frame",
+        "_guid": "frame@47479fa4be8d3a9866183cb519a487d9"
+      },
+      "_selector": "internal:role=button[name=\"Show my building\"i]"
+    }
+  },
+  {
+    "case": "quota-mobile",
+    "ms": 54526,
+    "x": 684,
+    "y": 214,
+    "purpose": "#buddy-options [data-word=\"car\"]"
+  },
+  {
+    "case": "quota-mobile",
+    "ms": 54715,
+    "x": 686,
+    "y": 234,
+    "purpose": "#buddy-close"
+  },
+  {
+    "case": "physical-mobile",
+    "ms": 257,
+    "x": 422,
+    "y": 179.25,
+    "purpose": "#btn-start"
+  },
+  {
+    "case": "physical-mobile",
+    "ms": 384,
+    "x": 422,
+    "y": 256,
+    "purpose": "#welcome-play"
+  },
+  {
+    "case": "physical-mobile",
+    "ms": 806,
+    "x": 712.1640625,
+    "y": 34,
+    "purpose": "#btn-words"
+  },
+  {
+    "case": "physical-mobile",
+    "ms": 924,
+    "x": 422,
+    "y": 100,
+    "purpose": "#btn-quiz"
+  },
+  {
+    "case": "physical-mobile",
+    "ms": 1084,
+    "x": 182.9999999999998,
+    "y": 261.988125,
+    "purpose": "Tap dog"
+  },
+  {
+    "case": "proportion-mobile",
+    "ms": 304,
+    "x": 422,
+    "y": 179.25,
+    "purpose": "#btn-start"
+  },
+  {
+    "case": "proportion-mobile",
+    "ms": 430,
+    "x": 422,
+    "y": 256,
+    "purpose": "#welcome-play"
+  },
+  {
+    "case": "proportion-mobile",
+    "ms": 895,
+    "x": 712.1640625,
+    "y": 34,
+    "purpose": "#btn-words"
+  },
+  {
+    "case": "proportion-mobile",
+    "ms": 1057,
+    "x": 782,
+    "y": 38,
+    "purpose": "#book-back"
+  }
+]

@@ -1,0 +1,58 @@
+[
+  {
+    "case": "proportion-desktop",
+    "ms": 652,
+    "x": 683,
+    "y": 356.25,
+    "purpose": "#btn-start"
+  },
+  {
+    "case": "proportion-desktop",
+    "ms": 826,
+    "x": 683,
+    "y": 331.09375,
+    "purpose": "#welcome-play"
+  },
+  {
+    "case": "proportion-desktop",
+    "ms": 1364,
+    "x": 1234.1640625,
+    "y": 34,
+    "purpose": "#btn-words"
+  },
+  {
+    "case": "proportion-desktop",
+    "ms": 1583,
+    "x": 1304,
+    "y": 38,
+    "purpose": "#book-back"
+  },
+  {
+    "case": "proportion-mobile",
+    "ms": 406,
+    "x": 422,
+    "y": 179.25,
+    "purpose": "#btn-start"
+  },
+  {
+    "case": "proportion-mobile",
+    "ms": 559,
+    "x": 422,
+    "y": 256,
+    "purpose": "#welcome-play"
+  },
+  {
+    "case": "proportion-mobile",
+    "ms": 1040,
+    "x": 712.1640625,
+    "y": 34,
+    "purpose": "#btn-words"
+  },
+  {
+    "case": "proportion-mobile",
+    "ms": 1208,
+    "x": 782,
+    "y": 38,
+    "purpose": "#book-back"
+  }
+]

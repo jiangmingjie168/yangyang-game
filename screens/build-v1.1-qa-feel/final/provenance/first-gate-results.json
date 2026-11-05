@@ -1,0 +1,73 @@
+{
+  "sha256": "0210373a05563464fb0982247aeac578bf3003e94266967d2f44c18fb2b99a82",
+  "md5": "495c83e41ceae1b4a818502cf24f0526",
+  "hud": "build a0b0871+v11qa",
+  "results": [
+    {
+      "suite": "targeted",
+      "exit": 0,
+      "seconds": 157.8,
+      "log": "targeted/run.log"
+    },
+    {
+      "suite": "regression",
+      "exit": 0,
+      "seconds": 159.3,
+      "log": "regression/run.log"
+    },
+    {
+      "suite": "compat",
+      "exit": 0,
+      "seconds": 24.5,
+      "log": "compat/run.log"
+    },
+    {
+      "suite": "world-v2",
+      "exit": 0,
+      "seconds": 19.3,
+      "log": "world-v2/run.log"
+    },
+    {
+      "suite": "memory-chat",
+      "exit": 0,
+      "seconds": 21,
+      "log": "memory-chat/run.log"
+    },
+    {
+      "suite": "chinese",
+      "exit": 0,
+      "seconds": 4.9,
+      "log": "chinese/run.log"
+    },
+    {
+      "suite": "server",
+      "exit": 0,
+      "seconds": 1,
+      "log": "server/run.log"
+    },
+    {
+      "suite": "geometry",
+      "exit": 0,
+      "seconds": 0,
+      "log": "geometry/run.log"
+    },
+    {
+      "suite": "audio",
+      "exit": 0,
+      "seconds": 0.9,
+      "log": "audio/run.log"
+    },
+    {
+      "suite": "fix3",
+      "exit": 1,
+      "seconds": 147.1,
+      "log": "fix3/run.log"
+    },
+    {
+      "suite": "craftable",
+      "exit": 0,
+      "seconds": 313.9,
+      "log": "craftable/run.log"
+    }
+  ]
+}
