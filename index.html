@@ -528,7 +528,7 @@
 <div id="app">
   <canvas id="view" width="800" height="400"></canvas>
   <div id="hud">
-    <span id="build-version" aria-label="Build version">build cd91b62+ux11</span>
+    <span id="build-version" aria-label="Build version">build cd91b62+ux12</span>
     <div class="topbar">
       <button id="quest" type="button">
         <canvas id="quest-icon" width="128" height="128"></canvas>
@@ -2431,9 +2431,8 @@ function validConversation(value, p) {
     }catch(e){stopSocialListening();buildVoiceFailure(a);}
   }
   function pointBuildMaterial(key) {
-    var wanted=key==='stone'?STONE:WOOD,best=null,dist=Infinity;
-    for(var x=Math.max(0,Math.floor(player.x/TILE)-30);x<Math.min(W,Math.floor(player.x/TILE)+30);x++)for(var y=0;y<H;y++)if(get(x,y)===wanted){var dd=Math.hypot(x*TILE-player.x,y*TILE-player.y);if(dd<dist){dist=dd;best={x:x,y:y,until:chatClock+10};}}
-    buildArrow=best;
+    // UX12: no on-world ↓ guide arrow (山锦绣); keep call sites for short-material feedback only.
+    buildArrow = null;
   }
   function buildShort(material) {
     var key=material==='house'?'stone':material==='fence'?'stick':material==='door'||material==='window'?'planks':material;
@@ -2685,7 +2684,6 @@ function validConversation(value, p) {
   function drawBuildGuide(g) {
     if(buildMode){g.save();g.strokeStyle='#ffffff44';g.lineWidth=0.7;var px=Math.floor(player.x/TILE),py=Math.floor(player.y/TILE);for(var x=px-8;x<=px+8;x++)for(var y=py-6;y<=py;y++)if(get(x,y)===AIR)g.strokeRect(x*TILE,y*TILE,TILE,TILE);g.restore();}
     if(buildGhost&&chatClock<buildGhost.until){g.save();g.fillStyle='#fff8cc44';g.strokeStyle='#fff8cc';g.setLineDash([5,4]);g.fillRect(buildGhost.x*TILE,buildGhost.y*TILE,4*TILE,3*TILE);g.strokeRect(buildGhost.x*TILE,buildGhost.y*TILE,4*TILE,3*TILE);g.restore();}
-    if(buildArrow&&chatClock<buildArrow.until){g.save();g.fillStyle='#fff089';g.font='bold 28px sans-serif';g.fillText('↓',buildArrow.x*TILE,buildArrow.y*TILE-5);g.restore();}
   }
 
   function blankProgress() {
