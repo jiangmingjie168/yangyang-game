@@ -574,7 +574,7 @@
 <div id="app">
   <canvas id="view" width="800" height="400"></canvas>
   <div id="hud">
-    <span id="build-version" aria-label="Build version">build cd91b62+ux20</span>
+    <span id="build-version" aria-label="Build version">build cd91b62+ux21</span>
     <div class="topbar">
       <button id="quest" type="button">
         <canvas id="quest-icon" width="128" height="128"></canvas>
@@ -1994,18 +1994,80 @@ function validConversation(value, p) {
     return craftableArt[key];
   }
   // Car movement is continuous in this side-on world. Full footprint collision,
-  // one-pixel substeps, and dry support prevent tunnelling, falling or water rides.
-  function carClear(b,x) {
-    if(x<1||x+b.w>=W)return false;
-    for(var xx=Math.floor(x+.001);xx<Math.ceil(x+b.w-.001);xx++){
-      for(var yy=b.y;yy<b.y+b.h;yy++){
-        var id=get(xx,yy);
-        if(solid(id)||id===WATER||id===DOOR)return false;
+  // one-pixel substeps, and dry support prevent tunnelling or water rides.
+  // A missing floor drops the car onto the next solid; a one-block step is drivable.
+  function carColumns(b, x) {
+    var cols = [], xx;
+    for (xx = Math.floor(x + 0.001); xx < Math.ceil(x + b.w - 0.001); xx++) cols.push(xx);
+    return cols;
+  }
+  function carDryFloor(id) { return solid(id) && id !== WOOD && id !== LEAVES && id !== FENCE && id !== DOOR; }
+  function carHits(b, x, y) {
+    return buildObjects.some(function (o) {
+      return o !== b && x < o.x + o.w && x + b.w > o.x && y < o.y + o.h && y + b.h > o.y;
+    });
+  }
+  function carBodyBlocked(b, x, y) {
+    var cols = carColumns(b, x), i, yy, id;
+    for (i = 0; i < cols.length; i++) {
+      for (yy = y; yy < y + b.h; yy++) {
+        id = get(cols[i], yy);
+        if (solid(id) || id === WATER || id === DOOR) return true;
       }
-      var floor=get(xx,b.y+b.h);
-      if(!solid(floor)||[WOOD,LEAVES,FENCE,DOOR].includes(floor))return false;
     }
-    return !buildObjects.some(function(o){return o!==b&&x<o.x+o.w&&x+b.w>o.x&&b.y<o.y+o.h&&b.y+b.h>o.y;});
+    return false;
+  }
+  // Any solid block directly under the footprint counts as a rest, including a
+  // partial ledge. Water and air do not, so a dug-out car cannot hover.
+  function carTouchesGround(b, x, y) {
+    var row = y + b.h, cols = carColumns(b, x), i;
+    for (i = 0; i < cols.length; i++) if (solid(get(cols[i], row))) return true;
+    return false;
+  }
+  function settleCar(b) {
+    var guard = 0, moved = false, ny, cols, i, yy, blocked;
+    while (guard++ < H && !carTouchesGround(b, b.x, b.y)) {
+      ny = b.y + 1;
+      if (ny < 1 || ny + b.h >= H || carHits(b, b.x, ny)) break;
+      cols = carColumns(b, b.x);
+      blocked = false;
+      for (yy = ny; yy < ny + b.h && !blocked; yy++) {
+        for (i = 0; i < cols.length; i++) if (solid(get(cols[i], yy))) blocked = true;
+      }
+      if (blocked) break;
+      b.y = ny;
+      moved = true;
+    }
+    if (moved) {
+      saveSoon();
+      if (drivingCar === b) seatDriver(b);
+    }
+    return moved;
+  }
+  function settleLooseCars() {
+    var i;
+    for (i = 0; i < buildObjects.length; i++) if (buildObjects[i].kind === 'car') settleCar(buildObjects[i]);
+  }
+  // Drive pose: every column needs dry ground within one block of the current
+  // floor (level, or a single step). The car rests on the highest of those.
+  // Water, trees, fences and a deeper drop return null so the old edge-stop stays.
+  function carDriveY(b, x) {
+    var floor = b.y + b.h, cols = carColumns(b, x), i, yy, id, surface, highest = null, ny;
+    if (x < 1 || x + b.w >= W) return null;
+    for (i = 0; i < cols.length; i++) {
+      surface = null;
+      // Two rows of slack: a 3-block car spans a rise of two on a one-step ramp.
+      for (yy = floor - 2; yy <= floor + 2; yy++) {
+        id = get(cols[i], yy);
+        if (id === WATER || id === DOOR || id === WOOD || id === LEAVES || id === FENCE) return null;
+        if (carDryFloor(id)) { surface = yy; break; }
+      }
+      if (surface == null) return null;
+      if (highest == null || surface < highest) highest = surface;
+    }
+    ny = highest - b.h;
+    if (ny < 1 || ny + b.h >= H || carBodyBlocked(b, x, ny) || carHits(b, x, ny)) return null;
+    return ny;
   }
   function seatDriver(b) {
     // Sit in the cabin on the facing side so left/right drives stay visually matched.
@@ -2019,21 +2081,23 @@ function validConversation(value, p) {
     closeAmbient();hideCard();cancelEnAudio();seek=null;fishing=null;jumpBuf=0;manualShowPending=null;buildQueue=[];
     drivingCar=b;b.dir=b.dir||1;document.body.classList.add('driving');
     buildMode=false;document.getElementById('btn-build').setAttribute('aria-pressed','false');document.getElementById('build-tools').hidden=true;document.getElementById('build-status').hidden=true;
-    document.getElementById('car-exit').hidden=false;seatDriver(b);
+    document.getElementById('car-exit').hidden=false;settleCar(b);seatDriver(b);
     buildFeedback('Hop in! Let\'s drive!','car_ride');playSfx('enter-car');save();
   }
   function driveCar(dt) {
-    var b = drivingCar, ax = axis(); jumpBuf = 0; carMoving = false;
+    var b = drivingCar, ax = axis(); jumpBuf = 0;
     // Same screen-space sign as walking: joy/keys right => +x (never invert here).
+    var moving = !!settleCar(b);
     if (ax) {
       b.dir = ax;
       var left = MOVE * 1.18 * dt;
       while (left > 0.0001) {
-        var step = Math.min(1, left), nx = b.x + ax * step / TILE;
-        if (!carClear(b, nx)) break;
-        b.x = nx; left -= step; carMoving = true; saveSoon();
+        var step = Math.min(1, left), nx = b.x + ax * step / TILE, ny = carDriveY(b, nx);
+        if (ny == null) break;
+        b.x = nx; b.y = ny; left -= step; moving = true; saveSoon();
       }
     }
+    carMoving = moving;
     seatDriver(b); player.anim += dt * 2;
   }
   function exitCar() {
@@ -2822,6 +2886,8 @@ function validConversation(value, p) {
     buildClusterDirty=true;
     if (x < 0 || y < 0 || x >= W || y >= H) return;
     cells[idx(x, y)] = id;
+    // A dug-out floor must drop a car on the same turn, before the next paint.
+    if (buildObjects && buildObjects.length) settleLooseCars();
   }
   function mix(a, b, t) { return a + (b - a) * t; }
   function mixc(a, b, t) { return [mix(a[0], b[0], t), mix(a[1], b[1], t), mix(a[2], b[2], t)]; }
@@ -4770,7 +4836,7 @@ function validConversation(value, p) {
   var musicOn=true,sfxOn=true,packUnlocked=false,packSuspended=false,carMoving=false;
   var packPlayers={},packWanted={},packRequests={},packPlayed={},hornAt=-100;
   function packAudio(key,loop) {
-    if(!packPlayers[key]){var a=new Audio('audio/build-v1.1/'+key+'.ogg');a.preload='none';a.loop=!!loop;a.volume=key==='garden-loop'?.30:key==='engine'?.14:.42;packPlayers[key]=a;}
+    if(!packPlayers[key]){var a=new Audio('audio/build-v1.1/'+key+'.ogg');a.preload='none';a.loop=!!loop;a.volume=key==='garden-loop'?.30:key==='engine'?.36:.42;packPlayers[key]=a;}
     return packPlayers[key];
   }
   function packPlay(key,loop) {
@@ -4782,7 +4848,12 @@ function validConversation(value, p) {
   function playSfx(key){packPlay(key,false);}
   function packLoop(key,wanted) {
     wanted=!!(wanted&&packUnlocked&&!packSuspended&&!document.hidden);
-    if(packWanted[key]===wanted)return;packWanted[key]=wanted;
+    if(packWanted[key]===wanted){
+      // A failed play() must not stick the engine silent for the rest of the drive.
+      if(wanted&&packPlayers[key]&&packPlayers[key].paused)packPlay(key,true);
+      return;
+    }
+    packWanted[key]=wanted;
     if(wanted)packPlay(key,true);else if(packPlayers[key])packPlayers[key].pause();
   }
   function syncSoundPack() {
@@ -5432,6 +5503,7 @@ function validConversation(value, p) {
     packSeen = hasPack();
     camReady = false;
     invSig = '';
+    settleLooseCars();
   }
   function freshGame(newSeed) {
     restoreBuild({});
@@ -5781,6 +5853,7 @@ function validConversation(value, p) {
     var playing = started && !rotateBlock() && !panelOpen() && !chatBlocked();
     if (playing) {
       var previousPlayerX = player.x, previousPlayerY = player.y;
+      settleLooseCars();
       buildStep(dt);
       rainbowLeft = Math.max(0, rainbowLeft - dt);
       rainTimer -= dt;
