@@ -553,20 +553,23 @@
     visibility: hidden !important;
     pointer-events: none !important;
   }
-  #hotbar {
-    position: absolute;
-    right: calc(6px + var(--sar));
-    bottom: calc(70px + var(--sab));
+  #hud > #hotbar {
+    position: absolute !important;
+    left: auto !important;
+    right: calc(6px + var(--sar)) !important;
+    bottom: calc(70px + var(--sab)) !important;
     z-index: 26;
     width: 58px;
     max-width: 58px;
     margin: 0;
     padding: 0;
     overflow: hidden;
-    display: flex;
+    display: flex !important;
     justify-content: center;
     pointer-events: auto;
   }
+  /* One held slot only, under Home. A copy inside the joystick row stays hidden. */
+  .bottom #hotbar, .mid #hotbar, .mid > * { display: none !important; }
   #hotbar .slot.empty {
     border: 2px dashed rgba(58,42,28,0.28);
     background: rgba(255,248,238,0.72);
@@ -592,7 +595,7 @@
 <div id="app">
   <canvas id="view" width="800" height="400"></canvas>
   <div id="hud">
-    <span id="build-version" aria-label="Build version">build cd91b62+ux24</span>
+    <span id="build-version" aria-label="Build version">build cd91b62+ux25</span>
     <div class="topbar">
       <button id="quest" type="button">
         <canvas id="quest-icon" width="128" height="128"></canvas>
@@ -886,6 +889,7 @@ const BRAIN_TIMEOUT_MS = 6500;
   var keys = {};
   var parts = [];
   var audioCtx = null, speechOn = false, cardKey = '', cardLeft = 0, cardFlyChest = false, cardFlyTimer = null;
+  var queuedQuest = '', queuedHint = '', lastPromptSpoken = '', promptLock = false, lastBuildHint = '';
   var quiz = null, quizStars = {}, lastQuizKey = '', toastLeft = 0, wrongAt = 0;
   var deepTime = 0, saveIn = 0, dirtySave = false;
   var swimPhase = 0, wasSwim = false, splashT = 0;
@@ -1150,7 +1154,12 @@ function validConversation(value, p) {
   function bindSocial() {
     document.getElementById('btn-buddy').addEventListener('click', smallTalk);
     document.getElementById('btn-buddy').addEventListener('animationend', function (e) { if (e.animationName === 'buddy-wave') e.currentTarget.classList.remove('buddy-wave'); });
-    document.getElementById('buddy-close').addEventListener('click', closeAmbient);
+    document.getElementById('buddy-close').addEventListener('click', function () {
+      var d = ambient && ambient.build;
+      // OK/Continue cannot finish a question. Speech, or I said it after two tries, does.
+      if (d && !d.praise && !d.answered && d.stage === 'question') return;
+      closeAmbient();
+    });
     document.getElementById('buddy-chat').addEventListener('click',function(e){if(ambient&&ambient.build&&ambient.build.reward&&!e.target.closest('button'))closeAmbient();});
     document.getElementById('buddy-confirm').addEventListener('click',function(){if(ambient&&!ambient.build&&ambient.voiceFailures>=2){var key=socialPracticeKey(ambient);if(key)logPractice(key,'words',false,true,1);closeAmbient();return;}var d=ambient&&ambient.build;if(!d||d.voiceFailures<2||d.answered)return;d.selfClaim=true;logPractice(d.key,d.event==='word_practice'?'words':'build',false,true,d.tier);finishBuildAnswer(d,d.key,false);});
     document.getElementById('buddy-mic').addEventListener('click', listenSocial);
@@ -1223,6 +1232,7 @@ function validConversation(value, p) {
     clearTimeout(w.timer); clearTimeout(w.deadline);
     if (w.controller) w.controller.abort();
     if (w.utterance && window.speechSynthesis) { try { speechSynthesis.cancel(); } catch (err) { /* optional */ } }
+    setTimeout(flushPrompt, 40);
   }
   function openGreeting() {
     dismissGreeting();
@@ -1578,21 +1588,16 @@ function validConversation(value, p) {
     d.pending = false; d.controller = null; d.question = d.reveal && !reply.done ? "Let's say " + WORD[d.key][0].toLowerCase() + ' together!' : (reply.done ? (d.selfClaim ? 'Thanks for trying!' : WORD[d.key][0] + '!') : reply.say); d.at = chatClock;
     var listening = false;
     document.getElementById('chat-question').textContent = listening ? 'Listen and choose!' : d.question;
-    document.getElementById('chat-status').textContent = listening ? '' : d.answered ? (d.selfClaim?'Thanks for trying!':WORD[d.key][0]+' ★') : (d.reveal ? 'Tap ' + WORD[d.key][0] + ' or say it with me.' : d.hint ? 'Good try! Look at the glowing answer.' : '');
+    document.getElementById('chat-status').textContent = listening ? '' : d.answered ? (d.selfClaim?'Thanks for trying!':WORD[d.key][0]+' ★') : (d.reveal ? 'Say ' + WORD[d.key][0] + '!' : d.hint ? 'Good try! Say it again.' : '');
     var root = document.getElementById('chat-options'); root.innerHTML = ''; root.hidden = !d.choices || reply.done;
     d.options.forEach(function (key) {
       var b = document.createElement('button'); b.type = 'button'; b.dataset.word = key;
       b.disabled = reply.done || (d.reveal && key !== d.key);
       b.classList.toggle('hint-answer', !!d.hint && key === d.key);
       var icon = document.createElement('canvas'); icon.width = 128; icon.height = 128; icon.setAttribute('aria-hidden', 'true'); paintIcon(icon, key);
-      if(d.reveal && key===d.key)b.appendChild(icon); b.setAttribute('aria-label', WORD[key][0]); if (!listening) b.appendChild(document.createTextNode(WORD[key][0])); tapButton(b, function () {
-        // Tier 2/3 are spoken. Tapping a word button must not pass them.
-        if (d.tier >= 2 || d.answerPending) return;
-        d.answerPending = true;
-        var settled = false;
-        function finishChoice() { if (settled) return; settled = true; d.answerPending = false; if (dialogue === d && !d.answered) answerChat(key); }
-        speakEn(WORD[key][0], { onend: finishChoice });
-        setTimeout(finishChoice, 1400);
+      if(d.reveal && key===d.key)b.appendChild(icon); b.setAttribute('aria-label', 'Listen: ' + WORD[key][0]); if (!listening) b.appendChild(document.createTextNode(WORD[key][0])); tapButton(b, function () {
+        // Hearing a choice is not an answer. Every tier must Speak to pass.
+        speakEn(WORD[key][0]);
       }); root.appendChild(b);
     });
     document.getElementById('chat-mic').setAttribute('aria-label', 'Answer by voice');
@@ -1689,7 +1694,7 @@ function validConversation(value, p) {
     if (!dialogue || dialogue.pending || dialogue.answered) return;
     playSfx('wrong');stopChatListening();
     var d = dialogue; d.misses++; d.turn = Math.min(2, d.misses);
-    // Picture choices stay a tier-1 path. Spoken tiers keep Speak until two failures.
+    // Choices may be shown so the child can hear them. They never score the question.
     if (d.tier < 2) { d.choices = true; d.hint = true; if (d.misses >= 3) d.reveal = true; }
     if(childSaid!==undefined)d.voiceFailures=(d.voiceFailures||0)+1;
     d.fallback=(d.voiceFailures||0)>=2;
@@ -1697,7 +1702,7 @@ function validConversation(value, p) {
   }
   function answerChat(key, childSaid) {
     if (!dialogue || dialogue.pending || dialogue.answered) return;
-    if (dialogue.tier >= 2 && !childSaid) return;
+    if (!childSaid) return;
     if (key !== dialogue.key) { retryChat(childSaid, key); return; }
     playSfx('correct');stopChatListening();
     var d = dialogue;
@@ -1806,7 +1811,7 @@ function validConversation(value, p) {
         if (e.target && e.target.id === 'chat-picture') replayChatPrompt();
         return;
       }
-      if (b.dataset.word) { if (!dialogue || dialogue.tier < 2) answerChat(b.dataset.word); }
+      if (b.dataset.word && WORD[b.dataset.word]) speakEn(WORD[b.dataset.word][0]);
       else if (b.id === 'chat-close') closeChat();
       else if (b.id === 'chat-mic') listenChat();
       else if (b.id === 'chat-choices') showChatChoices();
@@ -2259,7 +2264,9 @@ function validConversation(value, p) {
       if(CRAFTABLES[key]){var icon=document.createElement('canvas');icon.width=96;icon.height=96;icon.style.cssText='width:32px;height:32px;float:left;image-rendering:pixelated';paintIcon(icon,key);b.prepend(icon);}
       b.addEventListener('click', function () { selectBuildTool(key); }); root.appendChild(b);
     });
-    document.getElementById('build-status').textContent = buildTool === 'remove' ? 'Tap a building or block · Get it back' : (CRAFTABLES[buildTool]?'Tap empty ground · '+CRAFTABLES[buildTool].w+' × '+CRAFTABLES[buildTool].h+' · ':'Tap an empty square · ') + (buildTool === 'roof' ? 'Roof: 4 roof blocks' : WORD[buildTool][0]);
+    var hint = buildTool === 'remove' ? 'Tap a building or block. Get it back.' : (CRAFTABLES[buildTool]?'Tap empty ground. '+CRAFTABLES[buildTool].w+' by '+CRAFTABLES[buildTool].h+'. ':'Tap an empty square. ') + (buildTool === 'roof' ? 'Roof. 4 roof blocks.' : WORD[buildTool][0]);
+    document.getElementById('build-status').textContent = hint;
+    if (hint !== lastBuildHint) { lastBuildHint = hint; speakPrompt(hint, 'hint'); }
   }
   function buildOwned(x,y) { return x >= 0 && x < W && y >= 0 && y < H && get(x,y) !== AIR && get(x,y) !== base[idx(x,y)]; }
   function buildingBlock(id) { return [PLANKS,HOUSE,STONE,WOOD].includes(id); }
@@ -2542,7 +2549,7 @@ function validConversation(value, p) {
   }
   function buildChoices(d) {
     document.getElementById('buddy-options').replaceChildren();
-    d.options.forEach(function(k){var b=buildChoiceButton(k,function(){answerBuild(d,k,true);}); if(d.misses)b.classList.toggle('hint-answer',k===d.key);});
+    d.options.forEach(function(k){var b=buildChoiceButton(k,function(){buildSpeak(WORD[k][0], false);}); b.setAttribute('aria-label','Listen: '+WORD[k][0]); if(d.misses)b.classList.toggle('hint-answer',k===d.key);});
     if(d.misses>=3){var answer=document.querySelector('#buddy-options [data-word="'+d.key+'"]');var cv=document.createElement('canvas');cv.width=cv.height=128;paintIcon(cv,d.key);answer.prepend(cv);}
   }
   function showBuildQuestion(d) {
@@ -2579,12 +2586,12 @@ function validConversation(value, p) {
     if(d.upgrade)text=d.tier===3?'Look! '+WORD[d.key][0]+'. Say it!':'What is this?';
     var a=buildBubble(text,d), picture=document.getElementById('buddy-picture');
     if(d.event!=='build_plan'){picture.hidden=false;paintIcon(picture,d.key);picture.setAttribute('aria-label','Listen: '+WORD[d.key][0]);}
-    // Tier 1 is tap-the-picture. Tier 2/3 expect Speak; picture taps must not pass.
+    // Pictures and choice words can be heard. None of them pass the question.
     if(d.tier<2)buildChoices(d);
   }
   function answerBuild(d,key,clicked) {
     if(!ambient || ambient.build!==d || d.answered)return;
-    if(clicked && d.tier>=2)return;
+    if(clicked){ if(WORD[key]) buildSpeak(WORD[key][0], false); return; }
     if(d.event!=='build_plan' && key!==d.key){
       playSfx('wrong');
       d.misses++;buildSpeak(WORD[key][0],false);buildChoices(d);
@@ -4931,6 +4938,33 @@ function validConversation(value, p) {
       return u;
     } catch (err) { /* speech is optional */ }
   }
+  function cleanPrompt(text) { return String(text || '').replace(/★/g, ' ').replace(/\s+/g, ' ').trim(); }
+  function promptBusy() {
+    if (welcome || nameFlow || dialogue) return true;
+    if (enAudio && !enAudio.ended && !enAudio.paused) return true;
+    try { if (window.speechSynthesis && (speechSynthesis.speaking || speechSynthesis.pending)) return true; } catch (err) { /* optional */ }
+    return false;
+  }
+  function speakPrompt(text, kind) {
+    if (!speechOn) return;
+    var line = cleanPrompt(text);
+    if (!line || line === lastPromptSpoken) return;
+    if (kind === 'quest') queuedQuest = line;
+    else if (line !== queuedQuest) queuedHint = line;
+    flushPrompt();
+  }
+  function flushPrompt() {
+    if (!speechOn) return;
+    if (promptLock) { if (!promptBusy()) promptLock = false; else return; }
+    if (promptBusy()) return;
+    var line = queuedQuest || queuedHint;
+    if (!line) return;
+    if (queuedQuest) queuedQuest = ''; else queuedHint = '';
+    if (line === lastPromptSpoken) return;
+    lastPromptSpoken = line;
+    promptLock = true;
+    speakEn(line, { onend: function () { promptLock = false; flushPrompt(); } });
+  }
   function speakTask() {
     if (dialogue) { if (!dialogue.pending && dialogue.question) speakEn(dialogue.question, { audio_url: !dialogue.reveal ? dialogue.audio_url : undefined }); return; }
     if (quiz) { speakEn('Find the ' + WORD[quiz.key][0] + '!'); return; }
@@ -4941,6 +4975,7 @@ function validConversation(value, p) {
     document.getElementById('toast-en').textContent = en;
     document.getElementById('toast').hidden = false;
     toastLeft = secs || 2.2;
+    speakPrompt(en, 'hint');
   }
   // Optional local sound pack: lazy HTMLAudio loads never block starting play.
   // Speech has its own existing switch/path; these settings control music/SFX.
@@ -5111,7 +5146,6 @@ function validConversation(value, p) {
     lastQuizKey = key;
     quiz = { key: key };
     updateQuest();
-    speakEn('Find the ' + WORD[key][0] + '!');
     return true;
   }
   function endQuiz() {
@@ -5138,6 +5172,7 @@ function validConversation(value, p) {
       en.textContent = 'Find the ' + WORD[quiz.key][0].toUpperCase() + '!';
       paintIcon(document.getElementById('quest-icon'), 'star');
       questBtn.classList.add('quiz');
+      speakPrompt('Find the ' + WORD[quiz.key][0] + '!', 'quest');
       return;
     }
     questBtn.classList.remove('quiz');
@@ -5156,6 +5191,7 @@ function validConversation(value, p) {
       en.textContent = q.en;
       paintIcon(document.getElementById('quest-icon'), q.icon);
     }
+    speakPrompt(q ? q.en : 'Level 3 Complete! Explore and play!', 'quest');
     if (hasPack() && !packSeen) {
       packSeen = true;
       showToast('You got a backpack!', 3);
@@ -5651,6 +5687,7 @@ function validConversation(value, p) {
     document.getElementById('start').hidden = true;
     learn('hello');
     if (determineMode('gameLoad') === 'name_ask') openNameAsk(); else openGreeting();
+    speakPrompt(quiz ? ('Find the ' + WORD[quiz.key][0] + '!') : (currentQuest() ? currentQuest().en : 'Level 3 Complete! Explore and play!'), 'quest');
   }
   function hardReset() {
     cancelSocial(nameFlow); nameFlow = null; closeAmbient(); memory = blankMemory(); childName = ''; weatherPending = false; socialLastInput = Date.now();
@@ -6057,6 +6094,7 @@ function validConversation(value, p) {
     }
     // Dialogue also pauses physics; opening a parent panel keeps it intact.
     syncSoundPack();
+    flushPrompt();
     updateCamera(playing ? dt : 1);
     if (invSignature() !== invSig) { renderHotbar(); renderBuildTools(); }
     drawFrame(sec);
