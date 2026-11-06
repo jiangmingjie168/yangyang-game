@@ -574,7 +574,7 @@
 <div id="app">
   <canvas id="view" width="800" height="400"></canvas>
   <div id="hud">
-    <span id="build-version" aria-label="Build version">build cd91b62+ux30</span>
+    <span id="build-version" aria-label="Build version">build cd91b62+ux31</span>
     <div class="topbar">
       <button id="quest" type="button">
         <canvas id="quest-icon" width="128" height="128"></canvas>
@@ -3391,14 +3391,54 @@ function validConversation(value, p) {
     }
     return best || { x: player.x, y: cap * TILE - 0.01 };
   }
+  function petInPit(a, shaftX) {
+    if (!a || !a.tamed || (a.type !== 'dog' && a.type !== 'cat')) return false;
+    if (Math.abs(a.x - shaftX) > 6 * TILE) return false;
+    var cap = columnCap(Math.floor(a.x / TILE));
+    if (cap == null) return false;
+    return Math.floor((a.y - 1) / TILE) - (cap - 1) >= 4;
+  }
+  function ropePets(shaftX) {
+    var list = [];
+    var i;
+    for (i = 0; i < animals.length; i++) if (petInPit(animals[i], shaftX)) list.push(animals[i]);
+    return list;
+  }
+  function moveRopePet(c, pet, vu, hu) {
+    var side = c.tx >= c.sx ? 1 : -1;
+    var joinX = c.sx - side * 16;
+    var endX = c.tx + side * 14;
+    var x = vu < 1 ? pet.sx + (joinX - pet.sx) * vu : joinX + (endX - joinX) * hu;
+    var y = pet.sy + (c.ty - pet.sy) * vu;
+    pet.a.x = x;
+    pet.a.y = y;
+    pet.a.vx = 0;
+    pet.a.dir = side;
+  }
+  function settleRopePet(a, x, y) {
+    a.x = x;
+    a.y = y;
+    a.vx = 0;
+    var n = 0;
+    while (n++ < 8 && solid(get(Math.floor(a.x / TILE), Math.floor((a.y - 6) / TILE)))) a.y -= 4;
+    var under = get(Math.floor(a.x / TILE), Math.floor((a.y + 2) / TILE));
+    if (!solid(under)) a.y = y;
+  }
   function climbRope() {
     if (!ropeShown || ropeClimb || drivingCar || riding) return;
     var land = ropeLanding();
     if (land.y > player.y - TILE) return;
     seek = null; fishing = null; joyX = 0;
     var dist = Math.hypot(land.x - player.x, land.y - player.y);
-    ropeClimb = { sx: player.x, sy: player.y, tx: land.x, ty: land.y, t: 0, dur: Math.max(0.85, dist / (TILE * 3.5)) };
+    var pals = ropePets(player.x);
+    ropeClimb = {
+      sx: player.x, sy: player.y, tx: land.x, ty: land.y, t: 0,
+      dur: Math.max(0.85, dist / (TILE * 3.5)),
+      pets: pals.map(function (a) { return { a: a, sx: a.x, sy: a.y }; })
+    };
     if (land.x !== player.x) player.dir = land.x > player.x ? 1 : -1;
+    if (pals.length === 1) showToast('The ' + pals[0].type + ' climbs too!', 2.2);
+    else if (pals.length > 1) showToast('Come with me!', 2.2);
   }
   function stepRopeClimb(dt) {
     var c = ropeClimb;
@@ -3411,11 +3451,17 @@ function validConversation(value, p) {
     player.x = c.sx + (c.tx - c.sx) * hu;
     player.y = c.sy + (c.ty - c.sy) * vu;
     onGround = false;
+    var i;
+    for (i = 0; i < c.pets.length; i++) moveRopePet(c, c.pets[i], vu, hu);
     if (u >= 1) {
       player.x = c.tx; player.y = c.ty;
       var n = 0;
       while (n++ < 8 && collides(player.x, player.y)) player.y -= 2;
       player.vy = 0; onGround = true; coyote = 0.14;
+      var side = c.tx >= c.sx ? 1 : -1;
+      for (i = 0; i < c.pets.length; i++) settleRopePet(c.pets[i].a, c.tx + side * 14, c.ty);
+      var extra = ropePets(c.sx);
+      for (i = 0; i < extra.length; i++) settleRopePet(extra[i], c.tx + side * 14, c.ty);
       ropeClimb = null; pitTime = 0; ropeShown = false; ropeAnnounced = false; ropeAnchor = null;
       if (lastPromptSpoken === 'A rope! Climb up!') lastPromptSpoken = '';
       saveSoon();
@@ -3758,6 +3804,12 @@ function validConversation(value, p) {
     if (player.y > H * TILE) player.y = homeY;
   }
   function animalStep(a, dt) {
+    if (ropeClimb && ropeClimb.pets) {
+      var pi;
+      for (pi = 0; pi < ropeClimb.pets.length; pi++) if (ropeClimb.pets[pi].a === a) {
+        a.phase += dt * 8; a.vx = 0; return;
+      }
+    }
     if(drivingCar&&a.tamed){a.vx=0;return;}
     if (Math.abs(a.x - player.x) > 1100 && !a.tamed) return;
     var previousX = a.x, previousY = a.y;
