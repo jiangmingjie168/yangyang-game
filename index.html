@@ -234,17 +234,20 @@
   .act.place { background: var(--sky); }
   .act.jump { width: 48px; height: 48px; border-radius: 14px; background: var(--sun); color: var(--ink); }
   .act.jump strong { font-size: 18px; line-height: 1; }
+  /* UX20: compact house icon on the right edge, just above the chest.
+     Visibility is unchanged (far from spawn, or stuck deep; hidden while driving). */
   #btn-home {
-    position: absolute; left: 50%;
-    bottom: calc(148px + var(--sab));
-    transform: translateX(-50%);
+    position: absolute; right: calc(10px + var(--sar)); left: auto;
+    bottom: calc(76px + var(--sab));
+    transform: none;
     z-index: 26; pointer-events: auto;
-    min-width: 148px; min-height: 56px; padding: 6px 16px;
-    border-radius: 18px; background: #fff;
+    width: 56px; height: 56px; min-width: 56px; min-height: 56px; padding: 6px;
+    border-radius: 16px; background: #fff;
     box-shadow: 0 4px 0 rgba(58,42,28,0.16);
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    display: flex; align-items: center; justify-content: center;
   }
-  #btn-home strong { font-size: 18px; }
+  #btn-home canvas { width: 40px; height: 40px; display: block; pointer-events: none; }
+  #btn-home:active { transform: translateY(2px); box-shadow: 0 1px 0 rgba(58,42,28,0.16); }
 
   #welcome {
     position: absolute; z-index: 45; left: 50%; top: calc(78px + var(--sat));
@@ -539,19 +542,15 @@
   #parent-help #btn-speak { width:auto; min-width:120px; height:48px; padding:0 14px; border-radius:12px; display:inline-flex; align-items:center; gap:8px; }
 
   body.driving .acts, body.driving #held {visibility:hidden;}
-  /* UX17: chest-open must fully remove Break/Place/Jump (not only visibility).
-     Prior UX15 used visibility on .acts .act; Tesla still showed the buttons.
-     Use display:none + id selectors; keep #btn-chest. Also hard-cap hotbar to 1 slot. */
-  body.chest-open #btn-break,
-  body.chest-open #btn-place,
-  body.chest-open #btn-jump,
-  body.chest-open .acts > .act {
-    display: none !important;
-    visibility: hidden !important;
-    pointer-events: none !important;
-  }
-  body.chest-open #held,
-  body.chest-open #hotbar {
+  /* UX20: Break, Place, and Jump are gone for good (UX15/UX17 only hid them
+     while the chest was open). The joystick still covers direction and jump.
+     The quick slot and its floating name (#held, e.g. "Leaves") are gone too.
+     Keep #btn-chest. Inventory picking stays in the chest. */
+  #btn-break,
+  #btn-place,
+  #btn-jump,
+  #held,
+  #hotbar {
     display: none !important;
     visibility: hidden !important;
     pointer-events: none !important;
@@ -575,7 +574,7 @@
 <div id="app">
   <canvas id="view" width="800" height="400"></canvas>
   <div id="hud">
-    <span id="build-version" aria-label="Build version">build cd91b62+ux19</span>
+    <span id="build-version" aria-label="Build version">build cd91b62+ux20</span>
     <div class="topbar">
       <button id="quest" type="button">
         <canvas id="quest-icon" width="128" height="128"></canvas>
@@ -589,7 +588,7 @@
       <button id="btn-zh" class="topbtn" type="button" aria-expanded="false" aria-label="Parent settings">⚙</button>
     </div>
     <button id="btn-home" type="button" hidden aria-label="Go home">
-      <strong>Go home</strong>
+      <canvas width="128" height="128" aria-hidden="true"></canvas>
     </button>
     <div class="bottom">
       <div id="joy" aria-label="Move">
@@ -5217,14 +5216,11 @@ function validConversation(value, p) {
   }
   function setChestOpenUi(open) {
     document.body.classList.toggle('chest-open', !!open);
-    ['btn-break', 'btn-place', 'btn-jump'].forEach(function (id) {
+    // UX20: never reveal Break/Place/Jump, the quick slot, or the held-name caption.
+    ['btn-break', 'btn-place', 'btn-jump', 'held', 'hotbar'].forEach(function (id) {
       var el = document.getElementById(id);
-      if (el) el.hidden = !!open;
+      if (el) el.hidden = true;
     });
-    var held = document.getElementById('held');
-    var bar = document.getElementById('hotbar');
-    if (held) held.hidden = !!open;
-    if (bar) bar.hidden = !!open;
   }
   function openChest() {
     if (!started || dialogue || quiz || nameFlow) return;
@@ -5538,6 +5534,8 @@ function validConversation(value, p) {
     document.getElementById('btn-words').addEventListener('click', function (e) { if (e.detail === 0) openBook(); });
     tapButton(document.getElementById('chest-back'), closeChest);
     (function () { var c = document.getElementById('btn-chest'); if (c) { paintIcon(c.querySelector('canvas'), 'table'); tapButton(c, openChest); c.addEventListener('click', function (e) { if (e.detail === 0) openChest(); }); } })();
+    (function () { var h = document.getElementById('btn-home'); if (h) paintIcon(h.querySelector('canvas'), 'home'); })();
+    setChestOpenUi(false);
     bindDialogue();
     function toggleParent() {
       stopChatListening(); releaseChatInput(); closeCraft(); closeBook();
