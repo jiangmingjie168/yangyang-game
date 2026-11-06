@@ -235,7 +235,8 @@
   .act.jump { width: 48px; height: 48px; border-radius: 14px; background: var(--sun); color: var(--ink); }
   .act.jump strong { font-size: 18px; line-height: 1; }
   /* UX23: right column is Home, then the one held slot, then the chest.
-     Home stays a house icon (far from spawn, or stuck deep; hidden while driving). */
+     Home is for a long walk from spawn. A deep pit uses the rope, not Home.
+     Home stays hidden while driving. */
   #btn-home {
     position: absolute; right: calc(7px + var(--sar)); left: auto;
     bottom: calc(136px + var(--sab));
@@ -595,7 +596,7 @@
 <div id="app">
   <canvas id="view" width="800" height="400"></canvas>
   <div id="hud">
-    <span id="build-version" aria-label="Build version">build cd91b62+ux26</span>
+    <span id="build-version" aria-label="Build version">build cd91b62+ux27</span>
     <div class="topbar">
       <button id="quest" type="button">
         <canvas id="quest-icon" width="128" height="128"></canvas>
@@ -780,7 +781,7 @@ const BRAIN_TIMEOUT_MS = 6500;
     grass: ['Grass'], dirt: ['Dirt'], stone: ['Stone'],
     wood: ['Wood'], leaves: ['Leaves'], sand: ['Sand'],
     water: ['Water'], flower: ['Flower'], planks: ['Planks'],
-    stick: ['Stick'], table: ['Table'], door: ['Door'],
+    stick: ['Stick'], rope: ['Rope'], table: ['Table'], door: ['Door'],
     torch: ['Torch'], bed: ['Bed'], house: ['House'],
     wool: ['Wool'], tree: ['Tree'],
     cow: ['Cow'], pig: ['Pig'], sheep: ['Sheep'],
@@ -891,7 +892,8 @@ const BRAIN_TIMEOUT_MS = 6500;
   var audioCtx = null, speechOn = false, cardKey = '', cardLeft = 0, cardFlyChest = false, cardFlyTimer = null;
   var queuedQuest = '', queuedHint = '', lastPromptSpoken = '', promptLock = false, lastBuildHint = '';
   var quiz = null, quizStars = {}, lastQuizKey = '', toastLeft = 0, wrongAt = 0;
-  var deepTime = 0, saveIn = 0, dirtySave = false;
+  var saveIn = 0, dirtySave = false;
+  var pitTime = 0, ropeShown = false, ropeAnnounced = false, ropeAnchor = null, ropeClimb = null;
   var swimPhase = 0, wasSwim = false, splashT = 0;
   var crops = [], boat = null, riding = false, fishing = null, boatPhase = 0, packSeen = false;
   var sunPos = { x: 0, y: 0 }, moonPos = { x: 0, y: 0 }, sunOn = false, moonOn = false, starPos = [], cloudPos = [];
@@ -1867,7 +1869,9 @@ function validConversation(value, p) {
     });
     // Keep exploration events long enough to survive a short stand-still after walking.
     chatQueue = chatQueue.filter(function (e) { return chatClock - e.at < 40; });
-    if (!(buildMode || buildSession.active) && !dialogue && chatIdle > 0.8 && chatCooldown <= 0 && cardLeft <= 0 && chatQueue.length) {
+    // A deep pit is a rescue, not a question. Hold the Speak prompt until they are out.
+    var pitLocked = ropeShown || ropeClimb || (pitDepthTiles() >= 8 && !canWalkOut());
+    if (!(buildMode || buildSession.active) && !dialogue && chatIdle > 0.8 && chatCooldown <= 0 && cardLeft <= 0 && chatQueue.length && !pitLocked) {
       var priority = { fish: 4, boat: 4, pet: 2, task: 2, scene: 1 };
       chatQueue.sort(function (a, b) { return priority[b.anchor] - priority[a.anchor] || b.at - a.at; });
       var event = chatQueue.shift();
@@ -3302,6 +3306,198 @@ function validConversation(value, p) {
       left -= step;
     }
   }
+  // Original ground in this column (grass, sand, or pond), ignoring trees and dug cells.
+  function columnCap(tx) {
+    if (!base || tx < 0 || tx >= W) return null;
+    var y, fallback = null;
+    for (y = 1; y < H - 1; y++) {
+      var id = base[idx(tx, y)];
+      if (id === GRASS || id === SAND || id === WATER) return y;
+      if (fallback == null && (id === DIRT || id === STONE)) fallback = y;
+    }
+    return fallback;
+  }
+  function pitDepthTiles() {
+    var tx = Math.floor(player.x / TILE);
+    var cap = columnCap(tx);
+    if (cap == null) return 0;
+    var feet = Math.floor((player.y - 1) / TILE);
+    return feet - (cap - 1);
+  }
+  // A dug staircase is a path of one-block steps back to the surface. A sheer shaft is not.
+  function canWalkOut() {
+    var startX = Math.floor(player.x / TILE);
+    var startFeet = Math.floor((player.y - 1) / TILE);
+    var seen = {};
+    var q = [[startX, startFeet]];
+    var guard = 0;
+    while (q.length && guard++ < 90) {
+      var cur = q.shift();
+      var tx = cur[0], feet = cur[1];
+      var key = tx + ',' + feet;
+      if (seen[key]) continue;
+      seen[key] = 1;
+      var cap = columnCap(tx);
+      if (cap != null && feet - (cap - 1) < 3) return true;
+      var dir;
+      for (dir = -1; dir <= 1; dir += 2) {
+        var nx = tx + dir;
+        if (nx < 1 || nx >= W - 1) continue;
+        var df;
+        for (df = -1; df <= 6; df++) {
+          var nf = feet + df;
+          if (nf < 1 || nf >= H - 2) continue;
+          var px = (nx + 0.5) * TILE;
+          var py = (nf + 1) * TILE - 0.01;
+          if (collides(px, py)) continue;
+          if (!collides(px, py + 1.5)) continue;
+          var nkey = nx + ',' + nf;
+          if (!seen[nkey]) q.push([nx, nf]);
+          break;
+        }
+      }
+    }
+    return false;
+  }
+  function syncRopeAnchor() {
+    if (!ropeShown) { ropeAnchor = null; return; }
+    var tx = Math.floor(player.x / TILE);
+    var cap = columnCap(tx);
+    if (cap == null) cap = Math.max(1, Math.floor(player.y / TILE) - 8);
+    var topY = cap * TILE;
+    var botY = Math.max(topY + 20, player.y - 16);
+    ropeAnchor = { x: (tx + 0.5) * TILE + 10, topY: topY, botY: botY };
+  }
+  function ropeLanding() {
+    var tx = Math.floor(player.x / TILE);
+    var cap = columnCap(tx);
+    if (cap == null) cap = GROUND;
+    var best = null, bestD = 1e9, dx;
+    for (dx = 0; dx <= 12; dx++) {
+      var sides = dx === 0 ? [0] : [-dx, dx], s;
+      for (s = 0; s < sides.length; s++) {
+        var x = tx + sides[s];
+        if (x < 1 || x >= W - 1) continue;
+        var y;
+        for (y = Math.max(1, cap - 1); y <= cap + 1; y++) {
+          if (!solid(get(x, y))) continue;
+          var px = (x + 0.5) * TILE, py = y * TILE - 0.01;
+          if (collides(px, py) || !collides(px, py + 1.5)) continue;
+          var d = Math.abs(sides[s]) + Math.abs(y - cap) * 3;
+          if (d < bestD) { bestD = d; best = { x: px, y: py }; }
+          break;
+        }
+      }
+      if (best && dx > 0) break;
+    }
+    return best || { x: player.x, y: cap * TILE - 0.01 };
+  }
+  function climbRope() {
+    if (!ropeShown || ropeClimb || drivingCar || riding) return;
+    var land = ropeLanding();
+    if (land.y > player.y - TILE) return;
+    seek = null; fishing = null; joyX = 0;
+    var dist = Math.hypot(land.x - player.x, land.y - player.y);
+    ropeClimb = { sx: player.x, sy: player.y, tx: land.x, ty: land.y, t: 0, dur: Math.max(0.85, dist / (TILE * 3.5)) };
+    if (land.x !== player.x) player.dir = land.x > player.x ? 1 : -1;
+  }
+  function stepRopeClimb(dt) {
+    var c = ropeClimb;
+    if (!c) return;
+    c.t += dt;
+    var u = Math.min(1, c.t / c.dur);
+    var vu = Math.min(1, u / 0.75);
+    var hu = u <= 0.75 ? 0 : (u - 0.75) / 0.25;
+    player.vy = 0;
+    player.x = c.sx + (c.tx - c.sx) * hu;
+    player.y = c.sy + (c.ty - c.sy) * vu;
+    onGround = false;
+    if (u >= 1) {
+      player.x = c.tx; player.y = c.ty;
+      var n = 0;
+      while (n++ < 8 && collides(player.x, player.y)) player.y -= 2;
+      player.vy = 0; onGround = true; coyote = 0.14;
+      ropeClimb = null; pitTime = 0; ropeShown = false; ropeAnnounced = false; ropeAnchor = null;
+      if (lastPromptSpoken === 'A rope! Climb up!') lastPromptSpoken = '';
+      saveSoon();
+    }
+  }
+  function ropeHit(wx, wy) {
+    var a = ropeAnchor;
+    if (!ropeShown || ropeClimb || drivingCar || !a) return false;
+    if (wy < a.topY - 6 || wy > a.botY + 24) return false;
+    if (Math.hypot(wx - a.x, wy - a.botY) <= 26) return true;
+    return Math.abs(wx - a.x) <= 16 && wy >= a.topY && wy <= a.botY + 8;
+  }
+  function liftChatForRope() {
+    if (!dialogue || dialogue.answered || !dialogue.key) return;
+    chatQueue.push({ anchor: dialogue.anchor || 'scene', key: dialogue.key, at: chatClock });
+    if (chatQueue.length > 2) chatQueue.shift();
+    closeChat(true);
+    chatCooldown = 2;
+  }
+  function clearRopeRescue() {
+    pitTime = 0; ropeShown = false; ropeAnnounced = false; ropeAnchor = null; ropeClimb = null;
+  }
+  function updateRopeRescue(dt) {
+    var physicsRuns = started && !rotateBlock() && !panelOpen() && !chatBlocked();
+    if (ropeClimb && !physicsRuns) stepRopeClimb(dt);
+    if (ropeClimb) { ropeShown = true; syncRopeAnchor(); return; }
+    var allow = started && !drivingCar && !riding;
+    var depth = allow ? pitDepthTiles() : 0;
+    var stairs = depth >= 8 && canWalkOut();
+    if (allow && onGround && depth >= 8 && !stairs) pitTime += dt;
+    else if (!(allow && !onGround && depth >= 8 && pitTime > 0 && !stairs)) pitTime = 0;
+    var show = allow && depth >= 8 && !stairs && pitTime >= 2.5;
+    if (!show) {
+      if (ropeShown && lastPromptSpoken === 'A rope! Climb up!') lastPromptSpoken = '';
+      ropeShown = false; ropeAnnounced = false; ropeAnchor = null;
+      return;
+    }
+    if (!ropeShown) {
+      ropeShown = true;
+      if (!(inv.rope > 0)) {
+        addItem('rope', 1, true);
+        var ri = hotbar.indexOf('rope');
+        if (ri >= 0) sel = ri;
+        invSig = '';
+        renderHotbar();
+        saveSoon();
+      }
+      if (!ropeAnnounced) { ropeAnnounced = true; liftChatForRope(); showToast('A rope! Climb up!', 2.6); }
+    }
+    syncRopeAnchor();
+  }
+  function drawRescueRope(g) {
+    var a = ropeAnchor;
+    if (!ropeShown || drivingCar || !a) return;
+    g.save();
+    inkStyle(g);
+    g.lineCap = 'round';
+    var y, sway;
+    g.strokeStyle = '#c98448'; g.lineWidth = 4;
+    g.beginPath();
+    for (y = a.topY; y <= a.botY; y += 8) {
+      sway = Math.sin(y * 0.16) * 2.4;
+      if (y === a.topY) g.moveTo(a.x + sway, y); else g.lineTo(a.x + sway, y);
+    }
+    g.stroke();
+    g.strokeStyle = '#f3ddb4'; g.lineWidth = 1.6;
+    g.beginPath();
+    for (y = a.topY; y <= a.botY; y += 8) {
+      sway = Math.sin(y * 0.16 + 1.1) * 2.2;
+      if (y === a.topY) g.moveTo(a.x + sway, y); else g.lineTo(a.x + sway, y);
+    }
+    g.stroke();
+    g.fillStyle = '#a86430'; g.strokeStyle = '#51493c'; g.lineWidth = 1.35;
+    var k;
+    for (k = a.topY + 22; k < a.botY - 10; k += 32) {
+      g.beginPath(); g.arc(a.x + Math.sin(k * 0.16) * 2, k, 3.3, 0, 6.3); g.fill(); g.stroke();
+    }
+    g.beginPath(); g.ellipse(a.x, a.botY + 6, 8, 5.5, 0, 0, 6.3);
+    g.fillStyle = '#e2b06a'; g.fill(); g.stroke();
+    g.restore();
+  }
   function moveY(dy) {
     if (!dy) return;
     var sign = dy > 0 ? 1 : -1;
@@ -3319,6 +3515,7 @@ function validConversation(value, p) {
     }
   }
   function physics(dt) {
+    if (ropeClimb) { stepRopeClimb(dt); return; }
     if(drivingCar){driveCar(dt);return;}
     if (riding) { player.anim += dt * 2; return; }
     var water = inWater();
@@ -3842,6 +4039,7 @@ function validConversation(value, p) {
     return x > player.x ? 1 : -1;
   }
   function tapWorld(wx, wy, sx, sy, fy) {
+    if (ropeHit(wx, wy)) { climbRope(); return; }
     if(interactObject(wx,wy))return;
     if(CRAFTABLES[selectedKey()]){var prior=buildTool;buildTool=selectedKey();buildTap(Math.floor(wx/TILE),Math.floor(wy/TILE),fy);if(!buildMode)buildTool=prior;return;}
     if (boat) {
@@ -4103,6 +4301,13 @@ function validConversation(value, p) {
         g.strokeStyle = '#51493c'; g.lineWidth = 1.1; g.beginPath(); g.moveTo(16, 8); g.quadraticCurveTo(28, 12, 24, 22); g.stroke();
         inkEllipse(g, 24, 24, 2.4, 2.4, '#e25b6a'); speck(24, 24, 0.8, '#fff');
       }
+    } else if (key === 'rope') {
+      inkEllipse(g, 16, 13, 8, 6, '#e2b06a');
+      g.strokeStyle = '#f6e2b8'; g.lineWidth = 2.2; g.lineCap = 'round';
+      g.beginPath(); g.arc(16, 13, 4.2, 0.6, 5.6); g.stroke();
+      g.strokeStyle = '#a86430'; g.lineWidth = 2.4;
+      g.beginPath(); g.moveTo(21, 16); g.quadraticCurveTo(26, 21, 22, 27); g.stroke();
+      speck(22, 28, 1.8, '#c98448');
     } else if (key === 'table') {
       inkBox(g, 6, 16, 4, 12, bark); inkBox(g, 22, 16, 4, 12, bark); inkBox(g, 2, 10, 28, 7, wood, 2);
       inkEllipse(g, 22, 12, 3, 2.2, cream);
@@ -4714,6 +4919,7 @@ function validConversation(value, p) {
       drawBoatShape(ctx);
       ctx.restore();
     }
+    drawRescueRope(ctx);
     if(drivingCar){ctx.save();ctx.beginPath();var cx=drivingCar.dir===-1?(drivingCar.x*TILE+drivingCar.w*TILE-65):(drivingCar.x*TILE+26);ctx.rect(cx,drivingCar.y*TILE+8,39,27);ctx.clip();drawPlayer(ctx);ctx.restore();}else drawPlayer(ctx);
     if (fishing) {
       var fbob = Math.sin(sec * 5) * 1.6;
@@ -5301,6 +5507,7 @@ function validConversation(value, p) {
         em.textContent = String(inv[key] || 0);
         b.appendChild(cv); b.appendChild(em);
         tapButton(b, function () {
+          if (key === 'rope' && ropeShown && !ropeClimb) { climbRope(); return; }
           sel = i;
           if (buildSessionBusy()) buildAction('select');
           if (buildMode && (BLOCK_OF[key]||CRAFTABLES[key])) { buildTool = key; renderBuildTools(); }
@@ -5737,6 +5944,7 @@ function validConversation(value, p) {
     progress = blankProgress(); intros = {};
     packSeen = false;
     timeOfDay = 0.30;
+    clearRopeRescue();
     generate(newSeed);
     taskSnapshot = QUESTS.map(function () { return false; });
     invSig = '';
@@ -5747,7 +5955,7 @@ function validConversation(value, p) {
     closeChat(); chatQueue = []; boatLanding = false; boatStartX = null;
     riding = false; fishing = null;
     player.x = homeX; player.y = homeY; player.vy = 0; player.dir = 1;
-    onGround = true; deepTime = 0; camReady = false;
+    onGround = true; clearRopeRescue(); camReady = false;
     document.getElementById('btn-home').hidden = true;
     showWord('home');
     chime();
@@ -5942,6 +6150,7 @@ function validConversation(value, p) {
       var sy = (e.clientY - rect.top) * viewH / rect.height;
       var w = screenToWorld(sx, sy);
       buildClick={x:Math.round(e.clientX),y:Math.round(e.clientY)};
+      if (ropeHit(w.x, w.y)) { climbRope(); return; }
       if(interactObject(w.x,w.y))return;
       if (buildMode) {
         buildTap(Math.floor(w.x / TILE), Math.floor(w.y / TILE), w.y/TILE-Math.floor(w.y/TILE));
@@ -6154,12 +6363,10 @@ function validConversation(value, p) {
       }
       wasSwim = swimNow;
       if (quiz && quizNear()) quizWin();
-      var depth = Math.floor((player.y - 2) / TILE);
-      if (depth >= GROUND + 4) deepTime += dt;
-      else deepTime = 0;
-      var farHome = Math.hypot(player.x - homeX, player.y - homeY) > 18 * TILE;
-      // Rescue when stuck deep, or a clear Go home when far from spawn.
-      document.getElementById('btn-home').hidden = !((deepTime > 1.15) || (started && farHome && !drivingCar && !chatBlocked()));
+      // Home is a long horizontal walk. A deep pit gets the rope instead, so both never show together.
+      var farHome = Math.abs(player.x - homeX) > 18 * TILE;
+      var deepPit = pitDepthTiles() >= 8 || ropeShown || !!ropeClimb;
+      document.getElementById('btn-home').hidden = !(started && farHome && !deepPit && !drivingCar && !chatBlocked());
       adventureStep(dt);
       // Walking and pet following must persist even without a new world action.
       // saveSoon uses the same 2.5-second throttle as inventory/build changes.
@@ -6170,6 +6377,7 @@ function validConversation(value, p) {
       }
     }
     // Dialogue also pauses physics; opening a parent panel keeps it intact.
+    if (started && !document.hidden) updateRopeRescue(dt);
     syncSoundPack();
     flushPrompt();
     updateCamera(playing ? dt : 1);
@@ -6289,7 +6497,10 @@ function validConversation(value, p) {
       layout: function () {
         return { viewW: viewW, viewH: viewH, tileScreen: tileScreen, dpr: dpr, portrait: portrait, started: started };
       },
-      seed: function () { return seed; }
+      seed: function () { return seed; },
+      rope: function () {
+        return { shown: !!ropeShown, depth: pitDepthTiles(), walk: pitDepthTiles() >= 8 ? canWalkOut() : false, climbing: !!ropeClimb, wait: Math.round(pitTime * 10) / 10, anchor: ropeAnchor };
+      }
     };
   }
   boot();
