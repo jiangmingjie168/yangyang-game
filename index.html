@@ -596,7 +596,7 @@
 <div id="app">
   <canvas id="view" width="800" height="400"></canvas>
   <div id="hud">
-    <span id="build-version" aria-label="Build version">build cd91b62+ux27</span>
+    <span id="build-version" aria-label="Build version">build cd91b62+ux28</span>
     <div class="topbar">
       <button id="quest" type="button">
         <canvas id="quest-icon" width="128" height="128"></canvas>
@@ -894,6 +894,7 @@ const BRAIN_TIMEOUT_MS = 6500;
   var quiz = null, quizStars = {}, lastQuizKey = '', toastLeft = 0, wrongAt = 0;
   var saveIn = 0, dirtySave = false;
   var pitTime = 0, ropeShown = false, ropeAnnounced = false, ropeAnchor = null, ropeClimb = null;
+  var indoors = null, indoorX = 0.42, houseGrace = 0;
   var swimPhase = 0, wasSwim = false, splashT = 0;
   var crops = [], boat = null, riding = false, fishing = null, boatPhase = 0, packSeen = false;
   var sunPos = { x: 0, y: 0 }, moonPos = { x: 0, y: 0 }, sunOn = false, moonOn = false, starPos = [], cloudPos = [];
@@ -1909,6 +1910,7 @@ function validConversation(value, p) {
       if(b.showWord&&raw.partQuestion===b.showWord)b.partQuestion=raw.partQuestion;
       if(b.x<1||b.y<1||b.x+b.w>=W||b.y+b.h>=H||buildObjects.some(function(o){return b.x<o.x+o.w&&b.x+b.w>o.x&&b.y<o.y+o.h&&b.y+b.h>o.y;}))return;
       Object.assign(b,{id:'object:'+b.x+':'+b.y,createdAt:Number(raw.createdAt)||Date.now(),roofed:b.kind==='house',shown:!!raw.shown,closed:!!raw.closed,autoOffered:!!raw.autoOffered,invited:false,roofPraise:true});
+      if (b.kind === 'house') b.furn = { bed: raw.furn && raw.furn.bed ? 1 : 0, table: raw.furn && raw.furn.table ? 1 : 0, torch: raw.furn && raw.furn.torch ? 1 : 0 };
       b.feedbackMembers=Array.isArray(raw.feedbackMembers)?raw.feedbackMembers.filter(function(at){return Number.isInteger(at)&&at>=0&&at<W*H;}).slice(0,200):null;
       buildObjects.push(b);
     });
@@ -1939,6 +1941,7 @@ function validConversation(value, p) {
   function placeCraftable(item,r) {
     var at=craftedObjects.findIndex(function(b){return b.item===item;}),b=at<0?newCraftable(item):craftedObjects.splice(at,1)[0];
     Object.assign(b,{id:'object:'+r.x+':'+r.y,x:r.x,y:r.y,createdAt:Date.now(),roofed:b.kind==='house',shown:false,closed:false,autoOffered:false,invited:false,roofPraise:true,feedbackMembers:null});
+    if (b.kind === 'house') b.furn = { bed: 0, table: 0, torch: 0 };
     playSfx('place');buildObjects.push(b);consume(item);craftableCells(b).forEach(function(at){placedThisRun.add(at);});
     buildSession.placed++;buildSession.lastObjectId=b.id;buildSession.firstDone=true;buildSession.lastPoint={x:b.x,y:b.y};buildDirty=true;
     progress.placed[item]=1;rememberEvent('built',b.kind==='house'?'house':b.kind==='car'?'car':'fence');
@@ -1947,6 +1950,12 @@ function validConversation(value, p) {
   }
   function removeCraftable(b) {
     if(drivingCar===b)return;
+    if (indoors === b) exitHouse(true);
+    if (b.kind === 'house' && b.furn) {
+      if (b.furn.bed) addItem('bed', 1, true);
+      if (b.furn.table) addItem('table', 1, true);
+      if (b.furn.torch) addItem('torch', 1, true);
+    }
     // End an invitation to a removed object, without charging a Show slot.
     if(ambient&&ambient.build&&ambient.build.building===b)closeAmbient();
     playSfx('remove');buildObjects.splice(buildObjects.indexOf(b),1);craftedObjects.push(newCraftable(b.item,b));addItem(b.item,1,true);
@@ -2153,7 +2162,11 @@ function validConversation(value, p) {
     if(buildMode&&(!b||buildTool!==b.item||(inv[buildTool]||0)>0))return false;
     if(!b)return false;
     if(b.kind==='car'){boardCar(b);return true;}
-    if(b.kind==='house'){if(!buildReach(Math.floor(wx/TILE),Math.floor(wy/TILE)))showToast('Move a little closer!',2);else openUpgrade(b);return true;}
+    if(b.kind==='house'){
+      if(!buildReach(Math.floor(wx/TILE),Math.floor(wy/TILE)) && !playerHitsDoor(b)){showToast('Move a little closer!',2);return true;}
+      if(pointInDoor(b, wx, wy)){enterHouse(b);return true;}
+      openUpgrade(b);return true;
+    }
     return false;
   }
   function objectQuestion(b) {
@@ -3266,6 +3279,7 @@ function validConversation(value, p) {
     return false;
   }
   function inWater() {
+    if (indoors) return false;
     var pts = [[player.x, player.y - 8], [player.x, player.y - PH * 0.55]];
     var i;
     for (i = 0; i < pts.length; i++) {
@@ -3514,7 +3528,205 @@ function validConversation(value, p) {
       left -= step;
     }
   }
+  // The crafted house keeps its 3×3 front. The door opens a room drawn over the world.
+  function houseDoorBox(b) {
+    return { x: b.x * TILE + 44, y: b.y * TILE + 54, w: 32, h: 42 };
+  }
+  function pointInDoor(b, wx, wy) {
+    var d = houseDoorBox(b);
+    return wx >= d.x - 8 && wx <= d.x + d.w + 8 && wy >= d.y - 8 && wy <= d.y + d.h + 10;
+  }
+  function playerHitsDoor(b) {
+    var d = houseDoorBox(b);
+    return player.x + PW > d.x && player.x - PW < d.x + d.w && player.y > d.y && player.y - PH < d.y + d.h;
+  }
+  function houseFurn(b) {
+    if (!b.furn) b.furn = { bed: 0, table: 0, torch: 0 };
+    return b.furn;
+  }
+  function sayHouse(line) {
+    if (lastPromptSpoken === line) lastPromptSpoken = '';
+    showToast(line, 2.2);
+  }
+  function standBesideDoor(b) {
+    var d = houseDoorBox(b);
+    var ground = (b.y + b.h) * TILE - 0.01;
+    var x = d.x + d.w + 22;
+    if (x > (b.x + b.w) * TILE - 8) x = d.x - 22;
+    player.x = x;
+    player.y = ground;
+    var n = 0;
+    while (n++ < 8 && collides(player.x, player.y)) player.y -= 4;
+    player.vy = 0;
+    onGround = true;
+  }
+  function enterHouse(b) {
+    if (!b || b.kind !== 'house' || indoors || drivingCar || riding || ropeClimb || houseGrace > 0) return;
+    if (quiz || dialogue || nameFlow) return;
+    closeUpgrade();
+    seek = null;
+    fishing = null;
+    jumpBuf = 0;
+    standBesideDoor(b);
+    indoors = b;
+    indoorX = 0.62;
+    houseFurn(b);
+    sayHouse('Go inside!');
+    saveSoon();
+  }
+  function exitHouse(silent) {
+    if (!indoors) return;
+    var b = indoors;
+    indoors = null;
+    indoorX = 0.42;
+    houseGrace = 0.65;
+    if (buildObjects.indexOf(b) >= 0) standBesideDoor(b);
+    if (!silent) sayHouse('Go outside!');
+    saveSoon();
+  }
+  function roomBoxes() {
+    var left = Math.max(36, viewW * 0.08);
+    var right = viewW - left;
+    var top = Math.max(54, viewH * 0.12);
+    var floor = Math.min(viewH * 0.72, viewH - 108);
+    if (floor < top + 150) floor = top + 150;
+    var doorH = Math.min(108, Math.max(72, floor - top - 28));
+    return {
+      left: left, right: right, top: top, floor: floor,
+      door: { x: left + 12, y: floor - doorH, w: 50, h: doorH },
+      bed: { x: right - 130, y: floor - 54, w: 96, h: 50 },
+      table: { x: left + (right - left) * 0.24, y: floor - 52, w: 76, h: 48 },
+      torch: { x: right - 54, y: top + 24, w: 36, h: 42 }
+    };
+  }
+  function indoorFeet() {
+    var R = roomBoxes();
+    var minX = R.door.x + R.door.w + 28;
+    var maxX = R.bed.x - 20;
+    if (maxX < minX + 24) maxX = minX + 24;
+    return { x: minX + indoorX * (maxX - minX), y: R.floor };
+  }
+  function hitRoom(box, x, y, pad) {
+    return x >= box.x - pad && x <= box.x + box.w + pad && y >= box.y - pad && y <= box.y + box.h + pad;
+  }
+  function placeIndoor(key) {
+    if (!indoors || (key !== 'bed' && key !== 'table' && key !== 'torch')) return;
+    var furn = houseFurn(indoors);
+    if (furn[key]) { showWord(key); return; }
+    if (selectedKey() !== key || !(inv[key] > 0)) {
+      showToast(key === 'torch' ? 'The torch goes on the wall!' : ('The ' + key + ' goes here!'), 2);
+      return;
+    }
+    consume(key);
+    furn[key] = 1;
+    if (!quiz) { progress.placed[key] = 1; rememberEvent('built', key); }
+    playSfx('place');
+    showWord(key);
+    updateQuest();
+    saveSoon();
+  }
+  function indoorTap(sx, sy) {
+    if (!indoors) return;
+    var R = roomBoxes();
+    if (hitRoom(R.door, sx, sy, 12)) { exitHouse(); return; }
+    var key = selectedKey();
+    if (hitRoom(R.bed, sx, sy, 18) || (key === 'bed' && sy > R.floor - 80 && sx > R.bed.x - 24)) { placeIndoor('bed'); return; }
+    if (hitRoom(R.table, sx, sy, 18) || (key === 'table' && sy > R.floor - 80 && sx > R.table.x - 20 && sx < R.table.x + R.table.w + 24)) { placeIndoor('table'); return; }
+    if (hitRoom(R.torch, sx, sy, 16) || (key === 'torch' && sy < R.floor - 90 && sx > R.torch.x - 20)) { placeIndoor('torch'); return; }
+    if (key === 'bed') showToast('The bed goes here!', 2);
+    else if (key === 'table') showToast('The table goes here!', 2);
+    else if (key === 'torch') showToast('The torch goes on the wall!', 2);
+  }
+  function indoorPhysics(dt) {
+    var ax = axis();
+    jumpBuf = 0;
+    onGround = true;
+    player.vy = 0;
+    if (ax) {
+      player.dir = ax > 0 ? 1 : -1;
+      indoorX = Math.max(0, Math.min(1, indoorX + ax * dt * 0.62));
+      player.anim += dt * 11;
+      if (ax < 0 && indoorX <= 0.001) exitHouse();
+    } else player.anim += dt * 2;
+  }
+  function updateHouse(dt) {
+    if (houseGrace > 0) houseGrace = Math.max(0, houseGrace - dt);
+    if (indoors) {
+      if (buildObjects.indexOf(indoors) < 0) indoors = null;
+      return;
+    }
+    if (houseGrace > 0 || drivingCar || riding || ropeClimb || !onGround || !started) return;
+    var i;
+    for (i = 0; i < buildObjects.length; i++) {
+      var b = buildObjects[i];
+      if (b.kind === 'house' && playerHitsDoor(b)) { enterHouse(b); return; }
+    }
+  }
+  function drawRoomItem(g, key, box, filled) {
+    g.save();
+    g.globalAlpha = filled ? 1 : 0.4;
+    g.translate(box.x + (box.w - Math.min(box.w, box.h)) / 2, box.y);
+    specialIcon(g, key, Math.min(box.w, box.h));
+    g.restore();
+    if (!filled) {
+      g.save();
+      g.strokeStyle = '#51493c';
+      g.globalAlpha = 0.4;
+      g.setLineDash([4, 3]);
+      g.lineWidth = 1.5;
+      roundRect(g, box.x - 4, box.y - 4, box.w + 8, box.h + 8, 8);
+      g.stroke();
+      g.restore();
+    }
+  }
+  function drawInterior(g) {
+    var R = roomBoxes();
+    var b = indoors;
+    var furn = houseFurn(b);
+    var stone = b.parts && b.parts.wall && b.parts.wall.material === 'stone';
+    var glass = b.parts && b.parts.window && b.parts.window.tier >= 2;
+    g.save();
+    g.setTransform(dpr, 0, 0, dpr, 0, 0);
+    g.fillStyle = '#f6e7cf';
+    g.fillRect(0, 0, viewW, viewH);
+    inkStyle(g);
+    g.lineWidth = 2.2;
+    inkBox(g, R.left, R.top, R.right - R.left, R.floor - R.top + 28, stone ? '#d7e2ea' : '#fff6e4', 10);
+    inkBox(g, R.left + 8, R.floor - 6, R.right - R.left - 16, 30, '#e7b56a', 4);
+    g.strokeStyle = '#c48a3e';
+    g.lineWidth = 1.2;
+    var plank;
+    for (plank = R.left + 18; plank < R.right - 10; plank += 22) {
+      g.beginPath(); g.moveTo(plank, R.floor - 2); g.lineTo(plank, R.floor + 20); g.stroke();
+    }
+    var ww = 78, wh = 52, winX = (R.left + R.right) / 2 - ww / 2, winY = R.top + 26;
+    inkBox(g, winX, winY, ww, wh, glass ? '#9fd8ea' : '#d7b98a', 4);
+    g.strokeStyle = '#51493c';
+    g.lineWidth = 1.6;
+    g.beginPath();
+    g.moveTo(winX + ww / 2, winY + 2); g.lineTo(winX + ww / 2, winY + wh - 2);
+    g.moveTo(winX + 2, winY + wh / 2); g.lineTo(winX + ww - 2, winY + wh / 2);
+    g.stroke();
+    inkBox(g, R.door.x, R.door.y, R.door.w, R.door.h, '#e2b06a', 5);
+    g.fillStyle = '#ffe08a';
+    g.beginPath(); g.arc(R.door.x + R.door.w - 12, R.door.y + R.door.h * 0.55, 4, 0, 6.3); g.fill();
+    inkBox(g, R.table.x - 10, R.floor - 8, R.table.w + 20, 16, '#f4b4c4', 7);
+    drawRoomItem(g, 'bed', R.bed, furn.bed);
+    drawRoomItem(g, 'table', R.table, furn.table);
+    drawRoomItem(g, 'torch', R.torch, furn.torch);
+    if (furn.torch) {
+      g.fillStyle = 'rgba(255, 196, 90, 0.2)';
+      g.beginPath(); g.arc(R.torch.x + 16, R.torch.y + 12, 56, 0, 6.3); g.fill();
+    }
+    var feet = indoorFeet();
+    g.translate(feet.x, feet.y);
+    g.scale(1.35, 1.35);
+    g.translate(-player.x, -player.y);
+    drawPlayer(g);
+    g.restore();
+  }
   function physics(dt) {
+    if (indoors) { indoorPhysics(dt); return; }
     if (ropeClimb) { stepRopeClimb(dt); return; }
     if(drivingCar){driveCar(dt);return;}
     if (riding) { player.anim += dt * 2; return; }
@@ -3797,6 +4009,12 @@ function validConversation(value, p) {
     if (!key) return;
     if(CRAFTABLES[key]){var prior=buildTool;buildTool=key;buildTap(tx,ty,0);if(!buildMode)buildTool=prior;return;}
     if (key !== 'seed' && key !== 'boat' && !BLOCK_OF[key]) { showWord(key); return; }
+    if (key === 'bed' || key === 'table') {
+      if (indoors) { placeIndoor(key); return; }
+      showToast(key === 'bed' ? 'The bed goes in the house!' : 'The table goes in the house!', 2.2);
+      return;
+    }
+    if (key === 'torch' && indoors) { placeIndoor('torch'); return; }
     if (!placementReach(tx,ty)) { placementFailure(tx,ty,'reach'); return; }
     if (!placementSight(tx,ty)) { placementFailure(tx,ty,'sight',sightBlock); return; }
     if (key === 'boat') {
@@ -4076,6 +4294,10 @@ function validConversation(value, p) {
     var tx = Math.floor(wx / TILE), ty = Math.floor(wy / TILE);
     var id = get(tx, ty);
     if (id !== AIR) {
+      if (selectedKey() === 'bed' || selectedKey() === 'table') {
+        showToast(selectedKey() === 'bed' ? 'The bed goes in the house!' : 'The table goes in the house!', 2.2);
+        return;
+      }
       lock = { tx: tx, ty: ty };
       lockAge = 0;
       if (mineable(id)) seekMine(tx, ty);
@@ -4093,6 +4315,10 @@ function validConversation(value, p) {
           if (Math.hypot(sx - starPos[i].x, sy - starPos[i].y) < 22) { showWord('star'); return; }
         }
       }
+    }
+    if (selectedKey() === 'bed' || selectedKey() === 'table') {
+      showToast(selectedKey() === 'bed' ? 'The bed goes in the house!' : 'The table goes in the house!', 2.2);
+      return;
     }
     if (placementReach(tx, ty)) {
       lock = { tx: tx, ty: ty };
@@ -4885,6 +5111,7 @@ function validConversation(value, p) {
     hillBand(hill2, 0.25, 16, viewH * 0.58);
     hillBand(hill, 0.45, 12, viewH * 0.66);
 
+    if (indoors) { drawInterior(ctx); return; }
     ctx.setTransform(dpr * z, 0, 0, dpr * z, -drawCamX * dpr * z, -drawCamY * dpr * z);
     drawWorld(ctx, sec);
     buildObjects.forEach(function(b){if(!bboxOnScreen(b))return;ctx.save();ctx.translate((b.x+(b.dir===-1?b.w:0))*TILE,b.y*TILE);if(b.dir===-1)ctx.scale(-1,1);ctx.drawImage(craftableSprite(b),0,0);ctx.restore();});
@@ -5945,6 +6172,7 @@ function validConversation(value, p) {
     packSeen = false;
     timeOfDay = 0.30;
     clearRopeRescue();
+    indoors = null; indoorX = 0.42; houseGrace = 0;
     generate(newSeed);
     taskSnapshot = QUESTS.map(function () { return false; });
     invSig = '';
@@ -5954,6 +6182,7 @@ function validConversation(value, p) {
     if (chatBlocked()) return;
     closeChat(); chatQueue = []; boatLanding = false; boatStartX = null;
     riding = false; fishing = null;
+    if (indoors) exitHouse(true);
     player.x = homeX; player.y = homeY; player.vy = 0; player.dir = 1;
     onGround = true; clearRopeRescue(); camReady = false;
     document.getElementById('btn-home').hidden = true;
@@ -6148,6 +6377,7 @@ function validConversation(value, p) {
       // Canvas input and drawing share CSS-pixel coordinates, including browser zoom.
       var sx = (e.clientX - rect.left) * viewW / rect.width;
       var sy = (e.clientY - rect.top) * viewH / rect.height;
+      if (indoors) { indoorTap(sx, sy); return; }
       var w = screenToWorld(sx, sy);
       buildClick={x:Math.round(e.clientX),y:Math.round(e.clientY)};
       if (ropeHit(w.x, w.y)) { climbRope(); return; }
@@ -6380,7 +6610,8 @@ function validConversation(value, p) {
     if (started && !document.hidden) updateRopeRescue(dt);
     syncSoundPack();
     flushPrompt();
-    updateCamera(playing ? dt : 1);
+      if (playing) updateHouse(dt);
+      updateCamera(playing ? dt : 1);
     if (invSignature() !== invSig) { renderHotbar(); renderBuildTools(); }
     drawFrame(sec);
   }
@@ -6500,6 +6731,16 @@ function validConversation(value, p) {
       seed: function () { return seed; },
       rope: function () {
         return { shown: !!ropeShown, depth: pitDepthTiles(), walk: pitDepthTiles() >= 8 ? canWalkOut() : false, climbing: !!ropeClimb, wait: Math.round(pitTime * 10) / 10, anchor: ropeAnchor };
+      },
+      house: function () {
+        return {
+          inside: !!(indoors && indoors.kind === 'house'),
+          furn: indoors && indoors.furn ? { bed: indoors.furn.bed || 0, table: indoors.furn.table || 0, torch: indoors.furn.torch || 0 } : null,
+          houses: buildObjects.filter(function (b) { return b.kind === 'house'; }).map(function (b) {
+            var d = houseDoorBox(b);
+            return { x: b.x, y: b.y, door: { x: d.x, y: d.y, w: d.w, h: d.h }, furn: b.furn || null };
+          })
+        };
       }
     };
   }
