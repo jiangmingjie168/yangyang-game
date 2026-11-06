@@ -574,7 +574,7 @@
 <div id="app">
   <canvas id="view" width="800" height="400"></canvas>
   <div id="hud">
-    <span id="build-version" aria-label="Build version">build cd91b62+ux21</span>
+    <span id="build-version" aria-label="Build version">build cd91b62+ux22</span>
     <div class="topbar">
       <button id="quest" type="button">
         <canvas id="quest-icon" width="128" height="128"></canvas>
@@ -1568,7 +1568,8 @@ function validConversation(value, p) {
       b.classList.toggle('hint-answer', !!d.hint && key === d.key);
       var icon = document.createElement('canvas'); icon.width = 128; icon.height = 128; icon.setAttribute('aria-hidden', 'true'); paintIcon(icon, key);
       if(d.reveal && key===d.key)b.appendChild(icon); b.setAttribute('aria-label', WORD[key][0]); if (!listening) b.appendChild(document.createTextNode(WORD[key][0])); tapButton(b, function () {
-        if (d.answerPending) return;
+        // Tier 2/3 are spoken. Tapping a word button must not pass them.
+        if (d.tier >= 2 || d.answerPending) return;
         d.answerPending = true;
         var settled = false;
         function finishChoice() { if (settled) return; settled = true; d.answerPending = false; if (dialogue === d && !d.answered) answerChat(key); }
@@ -1669,14 +1670,16 @@ function validConversation(value, p) {
   function retryChat(childSaid, spokenKey) {
     if (!dialogue || dialogue.pending || dialogue.answered) return;
     playSfx('wrong');stopChatListening();
-    var d = dialogue; d.misses++; d.turn = Math.min(2, d.misses); d.choices = true; d.hint = true;
+    var d = dialogue; d.misses++; d.turn = Math.min(2, d.misses);
+    // Picture choices stay a tier-1 path. Spoken tiers keep Speak until two failures.
+    if (d.tier < 2) { d.choices = true; d.hint = true; if (d.misses >= 3) d.reveal = true; }
     if(childSaid!==undefined)d.voiceFailures=(d.voiceFailures||0)+1;
     d.fallback=(d.voiceFailures||0)>=2;
-    if (d.misses >= 3) d.reveal = true;
     requestChat(d, 'retry', childSaid, spokenKey);
   }
   function answerChat(key, childSaid) {
     if (!dialogue || dialogue.pending || dialogue.answered) return;
+    if (dialogue.tier >= 2 && !childSaid) return;
     if (key !== dialogue.key) { retryChat(childSaid, key); return; }
     playSfx('correct');stopChatListening();
     var d = dialogue;
@@ -1732,25 +1735,29 @@ function validConversation(value, p) {
       r.lang = 'en-US'; r.interimResults = false; r.continuous = false; r.maxAlternatives = 3;
       status.textContent = '🎤 …';
       r.onstart = function () { if (chatRecognizer === r) micRecording('chat-mic', true); };
+      var handled = false;
       r.onresult = function (e) {
         if (dialogue !== active) return;
+        handled = true;
         var result = e.results[e.resultIndex || 0], choice = '', said = '';
         for (var i = 0; result && i < result.length; i++) { said = result[i].transcript; choice = voiceChoice(said); if (choice) break; }
         if (choice) answerChat(choice, said);
         else retryChat(said);
       };
-      r.onerror = function () { stopChatListening(); if (dialogue === active) speechFallback(); };
-      r.onend = function () { if (chatRecognizer === r) { stopChatListening(); if (dialogue === active && !active.answered && !active.pending) speechFallback(); } };
+      r.onerror = function () { if (handled) return; handled = true; stopChatListening(); if (dialogue === active) speechFallback(); };
+      // onend also runs after onresult. One Speak attempt must count once.
+      r.onend = function () { if (handled || chatRecognizer !== r) return; handled = true; stopChatListening(); if (dialogue === active && !active.answered && !active.pending) speechFallback(); };
       r.start();
       // Some engines never fire onend after permission or network problems.
-      recognitionTimer = setTimeout(function () { if (chatRecognizer === r) { stopChatListening(); if (dialogue === active && !active.answered && !active.pending) speechFallback(); } }, 8000);
+      recognitionTimer = setTimeout(function () { if (handled || chatRecognizer !== r) return; handled = true; stopChatListening(); if (dialogue === active && !active.answered && !active.pending) speechFallback(); }, 8000);
     } catch (err) { stopChatListening(); speechFallback(); }
   }
   function speechFallback() {
     if (!dialogue || dialogue.answered || dialogue.pending) return;
     dialogue.voiceFailures=(dialogue.voiceFailures||0)+1;
     dialogue.fallback=dialogue.voiceFailures>=2;
-    if (dialogue.fallback) dialogue.choices = true;
+    // Picture buttons are the tier-1 answer. Spoken questions do not grow a tap-to-pass.
+    if (dialogue.fallback && dialogue.tier < 2) dialogue.choices = true;
     renderChat(dialogue,chatTemplate(dialogue,'prompt'),true);
     document.getElementById('chat-status').textContent=dialogue.fallback?'Try Speak again, or tap I said it.':'Try Speak again.';
   }
@@ -1781,7 +1788,7 @@ function validConversation(value, p) {
         if (e.target && e.target.id === 'chat-picture') replayChatPrompt();
         return;
       }
-      if (b.dataset.word) answerChat(b.dataset.word);
+      if (b.dataset.word) { if (!dialogue || dialogue.tier < 2) answerChat(b.dataset.word); }
       else if (b.id === 'chat-close') closeChat();
       else if (b.id === 'chat-mic') listenChat();
       else if (b.id === 'chat-choices') showChatChoices();
@@ -2494,7 +2501,13 @@ function validConversation(value, p) {
     document.getElementById('buddy-close').hidden=(!data.praise&&data.stage!=='invite')||!!data.autoAdvance;
     document.getElementById('buddy-close').textContent=data.reward?'Continue':'OK!';
     document.getElementById('buddy-confirm').hidden=!(data.voiceFailures>=2)||!!data.praise;
-    a.timer=setTimeout(function(){if(ambient!==a)return;closeAmbient();if(['build_show','build_revisit'].includes(data.event)&&!data.praise&&!data.answered){if(data.building)celebrateBuild(data.building);buildBubble((BUILD_LINES[0] + ' ' + BUILD_LINES[38] + ' ' + BUILD_LINES[36] + ' Good job!'),{event:data.event,praise:true});}},data.stage==='invite'?35000:14000);
+    a.timer=setTimeout(function(){
+      if(ambient!==a)return;
+      // A speak/picture question stays until it is actually answered.
+      // The old 14s path celebrated and said Good job with no Speak and no tap.
+      if(data.stage==='question' && !data.praise && !data.answered) return;
+      closeAmbient();
+    }, data.stage==='invite'?35000:14000);
     if(!data.feedback)buildSession.lastBubbleAt=chatClock;
     if(data.event==='house_part')clearTimeout(a.timer);
     if(data.reward){clearTimeout(a.timer);buildSpeak(WORD[data.key][0],false);}
@@ -2547,12 +2560,13 @@ function validConversation(value, p) {
     if(d.event==='build_plan'){var prefix=buildName();d.named=!!prefix;text=prefix+text;}
     if(d.upgrade)text=d.tier===3?'Look! '+WORD[d.key][0]+'. Say it!':'What is this?';
     var a=buildBubble(text,d), picture=document.getElementById('buddy-picture');
-    if(d.event!=='build_plan'){picture.hidden=false;paintIcon(picture,d.key);picture.setAttribute('aria-label',WORD[d.key][0]);}
-    if(d.tier===1 || d.event==='build_plan')buildChoices(d);
-    else a.hintTimer=setTimeout(function(){if(ambient===a)buildChoices(d);},8000);
+    if(d.event!=='build_plan'){picture.hidden=false;paintIcon(picture,d.key);picture.setAttribute('aria-label','Listen: '+WORD[d.key][0]);}
+    // Tier 1 is tap-the-picture. Tier 2/3 expect Speak; picture taps must not pass.
+    if(d.tier<2)buildChoices(d);
   }
   function answerBuild(d,key,clicked) {
     if(!ambient || ambient.build!==d || d.answered)return;
+    if(clicked && d.tier>=2)return;
     if(d.event!=='build_plan' && key!==d.key){
       playSfx('wrong');
       d.misses++;buildSpeak(WORD[key][0],false);buildChoices(d);
@@ -2561,7 +2575,11 @@ function validConversation(value, p) {
     finishBuildAnswer(d,key,clicked);
   }
   function finishBuildAnswer(d,key,clicked) {
-    if(!ambient||ambient.build!==d||d.answered)return; d.answered=true;playSfx('correct');
+    if(!ambient||ambient.build!==d||d.answered)return;
+    // "I said it" is only the two-failure fallback, and it is not a speaking score.
+    if(d.selfClaim && (d.voiceFailures||0)<2)return;
+    d.answered=true;
+    if(!d.selfClaim)playSfx('correct');
     if(d.event==='build_plan'){buildSession.plan=key;buildSession.planAnswered=true;}
     else if(d.tier===1 && clicked){var l=trail.levels[key]||{t1:0,t2:0,t3:0};l.t1++;trail.levels[key]=l;}
     if(d.building){if(d.event==='house_part')delete d.building.partQuestion;d.building.shown=true;d.stage='done';celebrateBuild(d.building);learn(key);if(!d.selfClaim){quizStars[key]=1;playSfx('star');}}
@@ -2576,22 +2594,26 @@ function validConversation(value, p) {
     saveSoon();
   }
   function buildVoiceFailure(a) {
-    if(ambient!==a)return;var d=a.build;d.voiceFailures=(d.voiceFailures||0)+1;
+    if(ambient!==a||!a.build||a.build.answered||a.build.praise)return;
+    var d=a.build;d.voiceFailures=(d.voiceFailures||0)+1;
     document.getElementById('buddy-confirm').hidden=d.voiceFailures<2;
     document.getElementById('buddy-line').textContent=d.voiceFailures>=2?'Try Speak again, or tap I said it.':'Try Speak again.';
-    clearTimeout(a.timer); // Allow an unhurried second attempt.
+    clearTimeout(a.timer); // Allow an unhurried second attempt. Do not auto-pass.
   }
   function listenBuild() {
-    var a=ambient,d=a&&a.build;if(!d||d.praise||socialRecognizer)return;
+    var a=ambient,d=a&&a.build;if(!d||d.praise||d.answered||socialRecognizer)return;
     if(d.stage==='invite'){showBuildQuestion(d);return;}
     var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
     if(!SR){buildVoiceFailure(a);return;}
     cancelEnAudio();if(window.speechSynthesis)speechSynthesis.cancel();clearTimeout(a.timer);
-    try {var r=new SR();socialRecognizer=r;r.lang='en-US';r.interimResults=false;r.continuous=false;
+    try {var r=new SR(),handled=false;socialRecognizer=r;r.lang='en-US';r.interimResults=false;r.continuous=false;
       r.onstart=function(){if(socialRecognizer===r)micRecording('buddy-mic',true);};
-      r.onresult=function(e){var text=normalAnswer(e.results[0][0].transcript);stopSocialListening();if(ambient!==a)return;var key=d.options.find(function(k){return text.split(' ').includes(k);});if(key===d.key||key&&d.event==='build_plan')answerBuild(d,key,false);else buildVoiceFailure(a);};
-      r.onerror=r.onend=function(){stopSocialListening();buildVoiceFailure(a);};r.start();
-      socialWatchdog=setTimeout(function(){stopSocialListening();buildVoiceFailure(a);},8000);
+      r.onresult=function(e){handled=true;var text=normalAnswer(e.results[0][0].transcript);stopSocialListening();if(ambient!==a)return;var key=d.options.find(function(k){return text.split(' ').includes(k);});if(key===d.key||key&&d.event==='build_plan')answerBuild(d,key,false);else buildVoiceFailure(a);};
+      // onend follows onresult/onerror, and abort() can re-enter onend. Count once.
+      r.onerror=function(){if(handled)return;handled=true;stopSocialListening();buildVoiceFailure(a);};
+      r.onend=function(){if(handled)return;handled=true;stopSocialListening();buildVoiceFailure(a);};
+      r.start();
+      socialWatchdog=setTimeout(function(){if(handled||socialRecognizer!==r)return;handled=true;stopSocialListening();buildVoiceFailure(a);},8000);
     }catch(e){stopSocialListening();buildVoiceFailure(a);}
   }
   function pointBuildMaterial(key) {
