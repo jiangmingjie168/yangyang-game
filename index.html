@@ -69,7 +69,9 @@
   #chat-face { width: 44px; height: 44px; }
   #chat-question { flex: 1; font-size: 23px; font-weight: 900; margin: 0; }
   #chat-close { font-size: 26px; width: 44px; height: 44px; }
-  #chat-picture { width: 74px; height: 74px; display: block; margin: 2px auto; }
+  #chat-picture { width: 74px; height: 74px; display: block; margin: 2px auto; cursor: pointer; touch-action: manipulation; }
+  #chat-picture:active { transform: scale(0.96); }
+  #buddy-picture { cursor: pointer; touch-action: manipulation; }
   #chat-options[hidden], #chat-choices[hidden] { display: none; }
   #chat-options { display: flex; gap: 10px; }
   #chat-options button { flex: 1; min-height: 60px; border-radius: 14px; background: #dcf1d1; font-size: 21px; font-weight: 800; border: 2px solid #abd58f; }
@@ -107,33 +109,34 @@
 
   .topbar {
     position: absolute;
-    top: calc(6px + var(--sat));
-    left: calc(8px + var(--sal));
-    right: calc(8px + var(--sar));
-    display: flex; gap: 8px; align-items: stretch;
+    top: calc(4px + var(--sat));
+    left: calc(6px + var(--sal));
+    right: calc(6px + var(--sar));
+    display: flex; gap: 4px; align-items: stretch;
     pointer-events: none;
   }
   .topbar > * { pointer-events: auto; }
   #quest {
-    flex: 1; min-width: 0; min-height: 56px;
-    display: flex; align-items: center; gap: 8px;
+    flex: 0 1 auto; width: max-content; max-width: min(52vw, 280px); min-width: 0; min-height: 44px;
+    display: flex; align-items: center; gap: 6px;
     text-align: left;
     background: rgba(255,248,238,0.96);
-    border-radius: 16px;
-    padding: 4px 12px 4px 6px;
-    box-shadow: 0 4px 0 rgba(58,42,28,0.12);
+    border-radius: 12px;
+    padding: 2px 8px 2px 4px;
+    box-shadow: 0 3px 0 rgba(58,42,28,0.12);
   }
-  #quest canvas { width: 40px; height: 40px; flex: 0 0 auto; }
+  #quest canvas { width: 32px; height: 32px; flex: 0 0 auto; }
   .qtext { min-width: 0; display: flex; flex-direction: column; }
-  #quest-en { font-size: 18px; font-weight: 800; line-height: 1.15; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  #quest-en { font-size: 15px; font-weight: 800; line-height: 1.15; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .topbtn {
-    min-width: 76px; height: 56px; padding: 0 12px;
-    border-radius: 16px; background: #fff;
-    font-size: 18px; font-weight: 800;
-    box-shadow: 0 4px 0 rgba(58,42,28,0.14);
+    min-width: 56px; min-height: 48px; height: 48px; padding: 0 10px;
+    border-radius: 12px; background: #fff;
+    font-size: 14px; font-weight: 800;
+    box-shadow: 0 3px 0 rgba(58,42,28,0.14);
     flex: 0 0 auto;
+    touch-action: manipulation;
   }
-  .topbtn:active { transform: translateY(3px); box-shadow: 0 1px 0 rgba(58,42,28,0.14); }
+  .topbtn:active { transform: translateY(2px); box-shadow: 0 1px 0 rgba(58,42,28,0.14); }
   #btn-craft { background: #b7f0c4; }
   #btn-words { background: #d9e4ff; }
   #btn-zh { background: #fff; }
@@ -203,29 +206,51 @@
     background: rgba(255,248,238,0.7); border-radius: 14px;
     border: 2px dashed rgba(58,42,28,0.25);
   }
-  .acts { display: flex; gap: 8px; flex: 0 0 auto; }
+  #btn-chest {
+    width: 58px; height: 58px; flex: 0 0 auto; border-radius: 14px;
+    background: #f3e2c4; outline: 2px dashed #b99260; color: var(--ink);
+    box-shadow: 0 3px 0 rgba(58,42,28,0.12); pointer-events: auto;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    font-weight: 800; line-height: 1; position: relative; touch-action: manipulation;
+  }
+  #btn-chest canvas { width: 36px; height: 36px; display: block; pointer-events: none; }
+  #btn-chest strong { display:block; font-size:11px; margin-top:1px; pointer-events: none; }
+  #btn-chest em { position:absolute; font-style:normal; font-size:11px; font-weight:800; background:#fff; border-radius:8px; padding:0 3px; pointer-events: none; line-height: 1.2; }
+  #btn-chest #chest-held { top: 1px; right: 2px; }
+  #btn-chest #chest-count { right: 2px; bottom: 1px; }
+  .acts { gap: 6px; }
+  #chest-panel .panel-body { display:grid; grid-template-columns:repeat(auto-fill,minmax(72px,1fr)); gap:8px; align-content:start; }
+  #chest-panel .chest-item { min-height:72px; border-radius:14px; background:#fff8ee; border:2px solid #c6d9ad; padding:6px; font-weight:800; }
+  #chest-panel .chest-item em { display:block; font-style:normal; font-size:14px; }
+  .acts { display: flex; gap: 6px; flex: 0 0 auto; align-items: flex-end; }
   .act {
-    width: 74px; height: 74px; border-radius: 20px;
+    width: 64px; height: 64px; border-radius: 16px;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
     color: #fff; font-weight: 800; line-height: 1.05;
-    box-shadow: 0 4px 0 rgba(58,42,28,0.2);
+    box-shadow: 0 3px 0 rgba(58,42,28,0.2);
+    touch-action: manipulation;
   }
-  .act strong { font-size: 16px; }
-  .act:active { transform: translateY(3px); box-shadow: 0 1px 0 rgba(58,42,28,0.2); }
+  .act strong { font-size: 14px; }
+  .act:active { transform: translateY(2px); box-shadow: 0 1px 0 rgba(58,42,28,0.2); }
   .act.break { background: var(--coral); }
   .act.place { background: var(--sky); }
-  .act.jump { background: var(--sun); color: var(--ink); }
+  .act.jump { width: 48px; height: 48px; border-radius: 14px; background: var(--sun); color: var(--ink); }
+  .act.jump strong { font-size: 18px; line-height: 1; }
+  /* Home sits just above the Chest. The held item is drawn on the Chest button.
+     Home is for a long walk from spawn. A deep pit uses the rope, not Home.
+     Home stays hidden while driving. */
   #btn-home {
-    position: absolute; left: 50%;
-    bottom: calc(148px + var(--sab));
-    transform: translateX(-50%);
+    position: absolute; right: calc(7px + var(--sar)); left: auto;
+    bottom: calc(74px + var(--sab));
+    transform: none;
     z-index: 26; pointer-events: auto;
-    min-width: 148px; min-height: 56px; padding: 6px 16px;
-    border-radius: 18px; background: #fff;
+    width: 56px; height: 56px; min-width: 56px; min-height: 56px; padding: 6px;
+    border-radius: 16px; background: #fff;
     box-shadow: 0 4px 0 rgba(58,42,28,0.16);
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    display: flex; align-items: center; justify-content: center;
   }
-  #btn-home strong { font-size: 18px; }
+  #btn-home canvas { width: 40px; height: 40px; display: block; pointer-events: none; }
+  #btn-home:active { transform: translateY(2px); box-shadow: 0 1px 0 rgba(58,42,28,0.16); }
 
   #welcome {
     position: absolute; z-index: 45; left: 50%; top: calc(78px + var(--sat));
@@ -256,12 +281,24 @@
     pointer-events: auto;
     animation: pop 0.18s ease-out;
   }
+  #wordcard.fly-chest {
+    animation: none;
+    transition: transform 0.55s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.55s ease;
+    pointer-events: none;
+    z-index: 70;
+  }
+  #btn-chest.chest-catch { animation: chest-catch 0.45s ease; }
+  @keyframes chest-catch {
+    0% { transform: scale(1); }
+    40% { transform: scale(1.18); }
+    100% { transform: scale(1); }
+  }
   #wordcard canvas { width: 68px; height: 68px; display: block; margin: 0 auto; }
   #card-en { font-size: clamp(42px, 6.4vw, 64px); font-weight: 900; line-height: 1; letter-spacing: -0.5px; }
   @keyframes pop { from { transform: translateX(-50%) scale(0.86); } to { transform: translateX(-50%) scale(1); } }
 
   .panel {
-    position: absolute; inset: 0; z-index: 50;
+    position: absolute; inset: 0; z-index: 80;
     background: #fff6e8;
     display: flex; flex-direction: column;
     padding: calc(8px + var(--sat)) calc(10px + var(--sar)) calc(8px + var(--sab)) calc(10px + var(--sal));
@@ -275,7 +312,7 @@
     box-shadow: 0 4px 0 rgba(58,42,28,0.12);
   }
   .back:active { transform: translateY(3px); }
-  .body { flex: 1; min-height: 0; overflow: auto; -webkit-overflow-scrolling: touch; touch-action: pan-y; padding-bottom: 8px; }
+  .panel-body { flex: 1; min-height: 0; overflow: auto; -webkit-overflow-scrolling: touch; touch-action: pan-y; padding-bottom: 8px; }
   #recipes { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; align-content: start; }
   .recipe {
     display: flex; align-items: center; gap: 6px;
@@ -425,8 +462,8 @@
     #joy-knob { width: 56px; height: 56px; margin: -28px 0 0 -28px; }
     .act { width: 64px; height: 64px; }
     .act strong { font-size: 15px; }
-    .topbtn { min-width: 56px; padding: 0 6px; font-size: 15px; }
-    #btn-speak { width: 46px; height: 46px; }
+    .topbtn { min-width: 44px; padding: 0 5px; font-size: 13px; }
+    #btn-speak { width: 40px; height: 40px; }
     #quest canvas { width: 34px; height: 34px; }
     #quest-en { font-size: 16px; }
     .brand { font-size: 34px; }
@@ -441,7 +478,8 @@
   }
 
   .chat-tools { flex-wrap: wrap; }
-  #chat-listen, #chat-mic, #buddy-mic, #name-mic { display: inline-flex; align-items: center; justify-content: center; gap: 7px; min-width: 90px; min-height: 48px; padding: 8px 12px; border: 2px solid #81bad8; box-shadow: 0 3px 0 #7da8bd; color: #174962; background: #d5efff; }
+  #chat-listen { display: none !important; }
+  #chat-mic, #buddy-mic, #name-mic { display: inline-flex; align-items: center; justify-content: center; gap: 7px; min-width: 90px; min-height: 48px; padding: 8px 12px; border: 2px solid #81bad8; box-shadow: 0 3px 0 #7da8bd; color: #174962; background: #d5efff; }
   #chat-mic, #buddy-mic, #name-mic { background: #ffe0d4; border-color: #dc9a80; color: #7d3c2a; box-shadow: 0 3px 0 #c28a74; }
   #btn-speak { background: #d5efff; border: 2px solid #81bad8; }
   #chat-listen svg, #chat-mic svg, #buddy-mic svg, #name-mic svg { width: 25px; height: 25px; flex-shrink: 0; }
@@ -468,9 +506,10 @@
   #buddy-chat button { min-height: 48px; min-width: 64px; border-radius: 13px; padding: 8px 14px; font: inherit; background: #dcf1d1; margin: 3px; }
   #buddy-options { display: flex; justify-content: center; gap: 10px; }
   @media (max-height: 450px) { #name-letters { grid-template-columns: repeat(13, 1fr); } #name-letters button { min-height: 28px; } #btn-buddy { top: calc(110px + var(--sat)); } }
-  #build-tools { position:absolute; z-index:15; top:76px; left:12px; right:100px; display:flex; gap:5px; overflow-x:auto; touch-action:pan-x; }
+  #build-tools { position:absolute; z-index:15; top:76px; left:12px; right:100px; display:flex; gap:5px; overflow-x:auto; overflow-y:hidden; touch-action:pan-x; -webkit-overflow-scrolling:touch; overscroll-behavior-x:contain; scrollbar-width:none; }
+  #build-tools::-webkit-scrollbar { display:none; }
   #build-tools[hidden], #build-status[hidden] { display:none; }
-  #build-tools button { flex:0 0 auto; min-width:64px; min-height:48px; padding:5px 9px; background:#fff8ee; border:2px solid #c6d9ad; border-radius:12px; font-weight:800; }
+  #build-tools button { flex:0 0 auto; min-width:64px; min-height:48px; padding:5px 9px; background:#fff8ee; border:2px solid #c6d9ad; border-radius:12px; font-weight:800; touch-action:pan-x; }
   #build-tools button[aria-pressed="true"] { background:#ffe29a; border-color:#986c25; }
   #build-show { display:flex; align-items:center; justify-content:center; gap:4px; }
   #build-show.is-off { opacity:.45; filter:grayscale(1); }
@@ -483,7 +522,7 @@
   #build-version { position:absolute; z-index:16; left:8px; bottom:calc(3px + var(--sab)); padding:2px 5px; border-radius:4px; background:#fff8eee6; color:#4c493f; font:10px/1.2 monospace; pointer-events:none; }
   #build-debug { position:absolute; z-index:45; left:8px; bottom:115px; max-width:calc(100% - 16px); background:#152030e8; color:#fff; padding:6px; font:11px/1.3 monospace; white-space:pre-wrap; pointer-events:none; }
   #build-tools small { display:block; font-size:12px; }
-  #build-status { position:absolute; left:16px; top:130px; font-size:14px; pointer-events:none; background:#fff8eedd; border-radius:8px; padding:4px 8px; }
+  #build-status { position:absolute; left:10px; top:112px; width:max-content; max-width:min(72vw,320px); font-size:12px; line-height:1.25; pointer-events:none; background:#fff8eedd; border-radius:6px; padding:2px 6px; box-shadow:0 1px 0 #0001; }
   #buddy-chat.build-bubble { left:auto; right:8px; top:164px; transform:none; width:210px; max-height:calc(100dvh - 285px); padding:7px; border-width:2px; }
   #buddy-chat.build-bubble #buddy-line { font-size:16px; margin:0 0 4px; }
   #buddy-chat.build-bubble #buddy-picture { width:48px; height:48px; float:left; margin:0; }
@@ -491,7 +530,7 @@
   #buddy-chat.build-bubble button { min-width:48px; padding:3px 5px; margin:1px; font-size:13px; }
   /* Immediate action feedback lives in the HUD strip, above the build grid.
      It never intercepts a placement tap and folds away on the next action. */
-  #buddy-chat.build-feedback { top:130px; right:108px; width:max-content; max-width:250px; max-height:none; padding:4px 8px; pointer-events:none; }
+  #buddy-chat.build-feedback { top:112px; right:96px; width:max-content; max-width:min(70vw,220px); max-height:none; padding:2px 6px; pointer-events:none; font-size:13px; }
   #buddy-chat.build-feedback #buddy-line { margin:0; }
   #buddy-chat.build-feedback button, #buddy-chat.build-feedback #buddy-options { display:none; }
   @media (max-width:600px) { #buddy-chat.build-feedback { top:160px; right:8px; max-width:220px; } }
@@ -502,10 +541,24 @@
   #buddy-options button { min-height:44px; }
   #buddy-options canvas { width:34px; height:34px; display:block; margin:auto; }
   #btn-build[aria-pressed="true"] { background:#ffe29a; }
-  @media (max-width:600px) { .topbtn { min-width:48px; padding:0 7px; font-size:14px; } #btn-speak { width:48px; } #build-tools { right:12px; } }
+  @media (max-width:600px) { .topbtn { min-width:48px; min-height:48px; height:48px; padding:0 6px; font-size:12px; } #build-tools { right:12px; top:64px; } }
+  #parent-help #btn-speak { width:auto; min-width:120px; height:48px; padding:0 14px; border-radius:12px; display:inline-flex; align-items:center; gap:8px; }
+
   body.driving .acts, body.driving #held {visibility:hidden;}
+  /* UX20: Break, Place, and Jump stay gone. The joystick still jumps.
+     The floating held name (#held, e.g. "Leaves") stays gone.
+     UX29: no separate held slot. The Chest button shows what is in hand. */
+  #btn-break,
+  #btn-place,
+  #btn-jump,
+  #held,
+  #hotbar {
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
   #car-exit { position:absolute;right:18px;top:106px;z-index:25;background:#ffe4a0; }
-  #house-upgrade .body { max-width:760px;margin:auto; }
+  #house-upgrade .panel-body { max-width:760px;margin:auto; }
   .upgrade-preview {display:flex;align-items:center;gap:18px;flex-wrap:wrap;}
   #upgrade-preview {width:136px;height:136px;image-rendering:pixelated;}
   #upgrade-parts {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;}
@@ -521,7 +574,7 @@
 <div id="app">
   <canvas id="view" width="800" height="400"></canvas>
   <div id="hud">
-    <span id="build-version" aria-label="Build version">build a0b0871+v11qa</span>
+    <span id="build-version" aria-label="Build version">build cd91b62+ux32</span>
     <div class="topbar">
       <button id="quest" type="button">
         <canvas id="quest-icon" width="128" height="128"></canvas>
@@ -529,17 +582,15 @@
           <strong id="quest-en">Find a tree!</strong>
         </span>
       </button>
-      <button id="btn-speak" type="button" aria-label="Listen to the quest">
-        <svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true"><path fill="#3a2a1c" d="M4 9h4l5-4v14l-5-4H4z"/><path fill="none" stroke="#3a2a1c" stroke-width="2" stroke-linecap="round" d="M16 9.2a4 4 0 0 1 0 5.6M18.2 7a7 7 0 0 1 0 10"/></svg>
-      </button>
       <button id="btn-build" class="topbtn" type="button" aria-pressed="false">Build</button>
       <button id="btn-craft" class="topbtn" type="button">Craft</button>
       <button id="btn-words" class="topbtn" type="button">Words</button>
       <button id="btn-zh" class="topbtn" type="button" aria-expanded="false" aria-label="Parent settings">⚙</button>
     </div>
-    <button id="btn-home" type="button" hidden>
-      <strong>Go home</strong>
+    <button id="btn-home" type="button" hidden aria-label="Go home">
+      <canvas width="128" height="128" aria-hidden="true"></canvas>
     </button>
+    <div id="hotbar" class="hotbar"></div>
     <div class="bottom">
       <div id="joy" aria-label="Move">
         <div id="joy-base"></div>
@@ -547,12 +598,12 @@
       </div>
       <div class="mid">
         <div id="held"><strong id="held-en">Tap a block</strong></div>
-        <div id="hotbar" class="hotbar"></div>
       </div>
       <div class="acts">
-        <button id="btn-break" class="act break" type="button"><strong>Break</strong></button>
-        <button id="btn-place" class="act place" type="button"><strong>Place</strong></button>
-        <button id="btn-jump" class="act jump" type="button"><strong>Jump</strong></button>
+        <button id="btn-chest" type="button" aria-label="Open chest"><canvas width="128" height="128" aria-hidden="true"></canvas><strong>Chest</strong><em id="chest-held" hidden></em><em id="chest-count">0</em></button>
+        <button id="btn-break" class="act break" type="button" aria-label="Break"><strong>Break</strong></button>
+        <button id="btn-place" class="act place" type="button" aria-label="Place"><strong>Place</strong></button>
+        <button id="btn-jump" class="act jump" type="button" aria-label="Jump"><strong>↑</strong></button>
       </div>
     </div>
   </div>
@@ -568,7 +619,7 @@
       <p id="name-hint" role="status" hidden>You can say it or tap!</p>
       <div id="name-letters" aria-label="Tap letters"></div>
     </div>
-    <button id="welcome-play" type="button">Let's play!</button>
+    <button id="welcome-play" type="button">Go!</button>
   </section>
   <button id="btn-buddy" type="button" aria-label="Chat with Buddy">Buddy</button>
   <section id="buddy-chat" hidden aria-label="Buddy chat">
@@ -578,10 +629,10 @@
   </section>
   <div id="chat-shade" hidden aria-hidden="true"></div>
   <section id="dialogue" hidden role="dialog" aria-modal="true" aria-labelledby="chat-question">
-    <div class="chat-head"><canvas id="chat-face" width="128" height="128" aria-hidden="true"></canvas><p id="chat-question"></p><button id="chat-close" hidden type="button" aria-label="Keep exploring">×</button></div>
+    <div class="chat-head"><canvas id="chat-face" width="128" height="128" aria-hidden="true"></canvas><p id="chat-question"></p><button id="chat-close" hidden type="button" aria-label="Close">×</button></div>
     <canvas id="chat-picture" width="128" height="128" role="img" aria-label="Picture to talk about"></canvas>
     <div id="chat-options"></div>
-    <div class="chat-tools"><button id="chat-listen" type="button" aria-label="Listen again"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M3 9h4l6-4v14l-6-4H3z"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M16 9a4 4 0 0 1 0 6m3-9a8 8 0 0 1 0 12"/></svg><span>Listen</span></button><button id="chat-mic" type="button" aria-label="Answer by voice"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="2" width="6" height="12" rx="3" fill="currentColor"/><path d="M5 10v2a7 7 0 0 0 14 0v-2M12 19v3m-4 0h8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>Speak</span></button><button id="chat-choices" type="button" hidden>Show choices</button><button id="chat-confirm" type="button" hidden>I said it</button><button id="chat-continue" type="button" hidden>Continue</button></div>
+    <div class="chat-tools"><button id="chat-listen" type="button" hidden aria-hidden="true" tabindex="-1" aria-label="Listen again"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M3 9h4l6-4v14l-6-4H3z"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M16 9a4 4 0 0 1 0 6m3-9a8 8 0 0 1 0 12"/></svg><span>Listen</span></button><button id="chat-mic" type="button" aria-label="Answer by voice"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="2" width="6" height="12" rx="3" fill="currentColor"/><path d="M5 10v2a7 7 0 0 0 14 0v-2M12 19v3m-4 0h8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>Speak</span></button><button id="chat-choices" type="button" hidden aria-hidden="true" tabindex="-1"></button><button id="chat-confirm" type="button" hidden>I said it</button><button id="chat-continue" type="button" hidden>Continue</button></div>
     <p id="chat-status" role="status" aria-live="polite"></p>
   </section>
   <aside id="parent-help" hidden aria-label="家长设置">
@@ -592,7 +643,7 @@
     <button id="parent-skip" type="button" hidden>跳过本题</button>
     <div id="parent-info" role="tabpanel" aria-labelledby="parent-info-tab"><strong>家长说明</strong><p>游戏内只显示英语和图画。停稳后伙伴会提问；作答时暂停探索。可点选或尝试开口，没有发音评分。三次尝试后会显示答案，孩子可跟读或点选确认。仅家长可跳过。</p>
     <p>浏览器朗读可离线使用（需设备已有英语语音）。语音识别由浏览器提供，可能需要联网和麦克风权限；不可用时直接点图文选项。</p>
-    <fieldset><legend>音乐与音效（不改变台词语音）</legend><button id="parent-music" type="button" aria-pressed="true">Music: On</button><button id="parent-sfx" type="button" aria-pressed="true">SFX: On</button></fieldset>
+    <fieldset><legend>音乐与音效（不改变台词语音）</legend><button id="parent-music" type="button" aria-pressed="true">Music: On</button><button id="parent-sfx" type="button" aria-pressed="true">SFX: On</button><button id="btn-speak" type="button" aria-label="Listen to the quest"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="#3a2a1c" d="M4 9h4l5-4v14l-5-4H4z"/><path fill="none" stroke="#3a2a1c" stroke-width="2" stroke-linecap="round" d="M16 9.2a4 4 0 0 1 0 5.6M18.2 7a7 7 0 0 1 0 10"/></svg><span>Quest sound</span></button></fieldset>
     <fieldset id="parent-build-level"><legend>建造提问难度（不改掌握记录）</legend>
       <button type="button" data-build-level="0" aria-pressed="true">自动</button>
       <button type="button" data-build-level="1" aria-pressed="false">一级：点图</button>
@@ -632,14 +683,22 @@
   <button id="car-exit" class="topbtn" type="button" hidden>Get out</button>
   <section id="house-upgrade" class="panel" hidden aria-labelledby="upgrade-title">
     <header><h2 id="upgrade-title">Make it yours</h2><button id="upgrade-back" class="back" type="button">Back</button></header>
-    <div class="body"><div class="upgrade-preview"><canvas id="upgrade-preview" width="192" height="192"></canvas><p>Choose a part for your house.</p><button id="upgrade-show" class="back" type="button">Show</button></div><div id="upgrade-parts"></div><p id="upgrade-confirm-text" role="status"></p><button id="upgrade-confirm" class="back" type="button" hidden>Make it!</button></div>
+    <div class="panel-body"><div class="upgrade-preview"><canvas id="upgrade-preview" width="192" height="192"></canvas><p>Choose a part for your house.</p><button id="upgrade-show" class="back" type="button">Show</button></div><div id="upgrade-parts"></div><p id="upgrade-confirm-text" role="status"></p><button id="upgrade-confirm" class="back" type="button" hidden>Make it!</button></div>
   </section>
   <div id="craft" class="panel" hidden>
     <header>
       <h2>Craft</h2>
       <button id="craft-back" class="back" type="button">Back</button>
     </header>
-    <div class="body" id="recipes"></div>
+    <div class="panel-body" id="recipes"></div>
+  </div>
+
+  <div id="chest-panel" class="panel" hidden>
+    <header>
+      <h2>Chest <small id="chest-kinds-label" style="font-weight:700;opacity:.72"></small></h2>
+      <button id="chest-back" class="back" type="button">Back</button>
+    </header>
+    <div class="panel-body" id="chest-grid"></div>
   </div>
 
   <div id="book" class="panel" hidden>
@@ -647,7 +706,7 @@
       <h2>Word Book</h2>
       <button id="book-back" class="back" type="button">Back</button>
     </header>
-    <div class="body">
+    <div class="panel-body">
       <button id="btn-quiz" type="button"><span id="quiz-btn-en">Treasure Quiz</span></button>
       <p id="album-completion" hidden role="status"></p>
       <p id="album-round">Round 1 · Find seven gifts!</p>
@@ -670,7 +729,7 @@
       <p class="soundnote">Tap once to turn sound on.</p>
       <p id="save-note" hidden>Your world is saved.</p>
       <button id="btn-new" type="button" hidden>New world</button>
-      <p class="desktop-hint">Arrows move · Space jump · Click a block</p>
+      <p class="desktop-hint" hidden>Stick moves and jumps · Tap Break or Place</p>
     </div>
   </div>
 
@@ -700,7 +759,7 @@ const BRAIN_TIMEOUT_MS = 6500;
     grass: ['Grass'], dirt: ['Dirt'], stone: ['Stone'],
     wood: ['Wood'], leaves: ['Leaves'], sand: ['Sand'],
     water: ['Water'], flower: ['Flower'], planks: ['Planks'],
-    stick: ['Stick'], table: ['Table'], door: ['Door'],
+    stick: ['Stick'], rope: ['Rope'], table: ['Table'], door: ['Door'],
     torch: ['Torch'], bed: ['Bed'], house: ['House'],
     wool: ['Wool'], tree: ['Tree'],
     cow: ['Cow'], pig: ['Pig'], sheep: ['Sheep'],
@@ -808,9 +867,12 @@ const BRAIN_TIMEOUT_MS = 6500;
   var joyX = 0, joyY = 0, joyJumpLatch = false;
   var keys = {};
   var parts = [];
-  var audioCtx = null, speechOn = false, cardKey = '', cardLeft = 0;
+  var audioCtx = null, speechOn = false, cardKey = '', cardLeft = 0, cardFlyChest = false, cardFlyTimer = null;
+  var queuedQuest = '', queuedHint = '', lastPromptSpoken = '', promptLock = false, lastBuildHint = '';
   var quiz = null, quizStars = {}, lastQuizKey = '', toastLeft = 0, wrongAt = 0;
-  var deepTime = 0, saveIn = 0, dirtySave = false;
+  var saveIn = 0, dirtySave = false;
+  var pitTime = 0, ropeShown = false, ropeAnnounced = false, ropeAnchor = null, ropeClimb = null;
+  var indoors = null, indoorX = 0.42, houseGrace = 0;
   var swimPhase = 0, wasSwim = false, splashT = 0;
   var crops = [], boat = null, riding = false, fishing = null, boatPhase = 0, packSeen = false;
   var sunPos = { x: 0, y: 0 }, moonPos = { x: 0, y: 0 }, sunOn = false, moonOn = false, starPos = [], cloudPos = [];
@@ -824,7 +886,7 @@ const BRAIN_TIMEOUT_MS = 6500;
   var seek = null, joyId = null;
   var trailSpots = [], dialogue = null, chatQueue = [], chatIdle = 0, chatCooldown = 0;
   var chatClock = 0, chatRecognizer = null, chatTimer = null, recognitionTimer = null, chatLastInput = 0;
-  var taskSnapshot = null, followTravel = 0, followLastX = 0, followReady = false;
+  var taskSnapshot = null, followTravel = 0, followLastX = 0, followReady = false, lastPetChatAt = -999;
   var boatStartX = null, boatLanding = false, sceneNow = '';
   var childName = '', recentEvents = [], recentLines = [], lastAnswer = '';
   var welcome = null, lastGreeting = { id: -1, text: '' }, returningVisit = false;
@@ -1073,10 +1135,26 @@ function validConversation(value, p) {
   function bindSocial() {
     document.getElementById('btn-buddy').addEventListener('click', smallTalk);
     document.getElementById('btn-buddy').addEventListener('animationend', function (e) { if (e.animationName === 'buddy-wave') e.currentTarget.classList.remove('buddy-wave'); });
-    document.getElementById('buddy-close').addEventListener('click', closeAmbient);
+    document.getElementById('buddy-close').addEventListener('click', function () {
+      var d = ambient && ambient.build;
+      // OK/Continue cannot finish a question. Speech, or I said it after two tries, does.
+      if (d && !d.praise && !d.answered && d.stage === 'question') return;
+      closeAmbient();
+    });
     document.getElementById('buddy-chat').addEventListener('click',function(e){if(ambient&&ambient.build&&ambient.build.reward&&!e.target.closest('button'))closeAmbient();});
     document.getElementById('buddy-confirm').addEventListener('click',function(){if(ambient&&!ambient.build&&ambient.voiceFailures>=2){var key=socialPracticeKey(ambient);if(key)logPractice(key,'words',false,true,1);closeAmbient();return;}var d=ambient&&ambient.build;if(!d||d.voiceFailures<2||d.answered)return;d.selfClaim=true;logPractice(d.key,d.event==='word_practice'?'words':'build',false,true,d.tier);finishBuildAnswer(d,d.key,false);});
     document.getElementById('buddy-mic').addEventListener('click', listenSocial);
+    tapButton(document.getElementById('buddy-picture'), function () {
+      if (!ambient) return;
+      var line = (document.getElementById('buddy-line').textContent || '').trim();
+      if (!line) return;
+      if (ambient.build) {
+        if (ambient.build.answered || ambient.build.reward) return;
+        buildSpeak(line, !!ambient.build.named);
+        return;
+      }
+      speakEn(line, { soft: true });
+    });
     document.getElementById('name-mic').addEventListener('click', listenSocial);
     document.getElementById('name-form').addEventListener('submit', function (e) { e.preventDefault(); finishName(document.getElementById('name-input').value); });
     document.getElementById('name-input').addEventListener('input', armNameTimer);
@@ -1135,6 +1213,7 @@ function validConversation(value, p) {
     clearTimeout(w.timer); clearTimeout(w.deadline);
     if (w.controller) w.controller.abort();
     if (w.utterance && window.speechSynthesis) { try { speechSynthesis.cancel(); } catch (err) { /* optional */ } }
+    setTimeout(flushPrompt, 40);
   }
   function openGreeting() {
     dismissGreeting();
@@ -1389,8 +1468,9 @@ function validConversation(value, p) {
   }
   function queueChat(anchor, key) {
     if (!started || quiz) return;
+    // Pet re-prompts are cooldown-gated only (first meet and later pats share this).
+    if (anchor === 'pet' && chatClock - lastPetChatAt < 60) return;
     if (anchor !== 'task' || !recentEvents.length || recentEvents[recentEvents.length - 1].word !== key) rememberEvent(({ fish: 'caught', pet: 'met', boat: 'rode', task: 'task', scene: 'scene' })[anchor], key);
-    // Specific moments take priority over a task celebration from the same action.
     if (anchor === 'task' && chatQueue.some(function (q) { return q.key === key && q.anchor !== 'task'; })) return;
     chatQueue = chatQueue.filter(function (q) { return q.anchor !== anchor && !(q.anchor === 'task' && q.key === key); });
     chatQueue.push({ anchor: anchor, key: key, at: chatClock });
@@ -1411,7 +1491,7 @@ function validConversation(value, p) {
     stopChatListening();
     if (dialogue) {
       if (dialogue.controller) dialogue.controller.abort();
-      chatCooldown = 12;
+      chatCooldown = dialogue.anchor === 'pet' ? 22 : 12;
       if (window.speechSynthesis) { try { speechSynthesis.cancel(); } catch (err) { /* optional */ } }
     }
     var coach = dialogue && dialogue.answered && dialogue.feedback === 'success' ? (dialogue.coachSaid || dialogue.key) : '';
@@ -1425,7 +1505,8 @@ function validConversation(value, p) {
     chatIdle = 0;
   }
   function openChat(event) {
-    if (nameFlow || quiz || buildSessionBusy() || buildShowActive()) return;
+    // Exploration prompts may open during the post-build quiet window; only live building blocks them.
+    if (nameFlow || quiz || buildMode || buildSession.active || buildShowActive()) return;
     closeAmbient();
     dismissGreeting();
     var pool = chatWords();
@@ -1442,12 +1523,12 @@ function validConversation(value, p) {
       turn: 0, at: chatClock, answered: false, pending: false, choices: tier === 1, sequence: 0 };
     paintIcon(document.getElementById('chat-face'), 'dog');
     document.getElementById('chat-picture').hidden = false;
-    paintIcon(document.getElementById('chat-picture'), target);document.getElementById('chat-picture').setAttribute('aria-label',WORD[target][0]);
+    paintIcon(document.getElementById('chat-picture'), target);document.getElementById('chat-picture').setAttribute('aria-label','Listen: '+WORD[target][0]);
     requestChat(dialogue, 'prompt');
   }
   function chatTemplate(d, feedback) {
     var done = d.turn >= 3 || feedback === 'success', say;
-    if (done) say = 'Great! Keep exploring!';
+    if (done) say = 'Great!';
     else if (d.tier === 2 && !d.choices) say = "What's this?";
     else if (d.tier === 3 && !d.choices) {
       var mass = ['grass', 'dirt', 'stone', 'wood', 'leaves', 'sand', 'water', 'planks', 'wool', 'rain', 'wheat'];
@@ -1472,7 +1553,7 @@ function validConversation(value, p) {
     var body = reply.say.trim().replace(praise, '').toLowerCase();
     var lead = chatContextLeads(d).find(function (line) { return body.indexOf(line.toLowerCase() + ' ') === 0; });
     if (lead) body = body.slice(lead.length + 1);
-    if (expected.done) return /^(let's )?keep exploring!$/.test(body);
+    if (expected.done) return body === '' || /^(let's )?keep exploring!$/.test(body);
     if (d.choices || d.tier === 1) {
       return body === 'what is this?';
     }
@@ -1485,40 +1566,51 @@ function validConversation(value, p) {
     document.getElementById('chat-picture').hidden = false;
     document.getElementById('chat-face').hidden = d.choices || d.tier === 1;
     d.audio_url = reply.audio_url;
-    d.pending = false; d.controller = null; d.question = d.reveal && !reply.done ? "Let's say " + WORD[d.key][0].toLowerCase() + ' together!' : reply.say; d.at = chatClock;
+    d.pending = false; d.controller = null; d.question = d.reveal && !reply.done ? "Let's say " + WORD[d.key][0].toLowerCase() + ' together!' : (reply.done ? (d.selfClaim ? 'Thanks for trying!' : WORD[d.key][0] + '!') : reply.say); d.at = chatClock;
     var listening = false;
     document.getElementById('chat-question').textContent = listening ? 'Listen and choose!' : d.question;
-    document.getElementById('chat-status').textContent = listening ? '' : d.answered ? (d.selfClaim?'Thanks for trying!':WORD[d.key][0]+' ★') : (d.reveal ? 'Tap ' + WORD[d.key][0] + ' or say it with me.' : d.hint ? 'Good try! Look at the glowing answer.' : '');
+    document.getElementById('chat-status').textContent = listening ? '' : d.answered ? (d.selfClaim?'Thanks for trying!':WORD[d.key][0]+' ★') : (d.reveal ? 'Say ' + WORD[d.key][0] + '!' : d.hint ? 'Good try! Say it again.' : '');
     var root = document.getElementById('chat-options'); root.innerHTML = ''; root.hidden = !d.choices || reply.done;
     d.options.forEach(function (key) {
       var b = document.createElement('button'); b.type = 'button'; b.dataset.word = key;
       b.disabled = reply.done || (d.reveal && key !== d.key);
       b.classList.toggle('hint-answer', !!d.hint && key === d.key);
       var icon = document.createElement('canvas'); icon.width = 128; icon.height = 128; icon.setAttribute('aria-hidden', 'true'); paintIcon(icon, key);
-      if(d.reveal && key===d.key)b.appendChild(icon); b.setAttribute('aria-label', WORD[key][0]); if (!listening) b.appendChild(document.createTextNode(WORD[key][0])); tapButton(b, function () {
-        if (d.answerPending) return;
-        d.answerPending = true;
-        var settled = false;
-        function finishChoice() { if (settled) return; settled = true; d.answerPending = false; if (dialogue === d && !d.answered) answerChat(key); }
-        speakEn(WORD[key][0], { onend: finishChoice });
-        setTimeout(finishChoice, 1400);
+      if(d.reveal && key===d.key)b.appendChild(icon); b.setAttribute('aria-label', 'Listen: ' + WORD[key][0]); if (!listening) b.appendChild(document.createTextNode(WORD[key][0])); tapButton(b, function () {
+        // Hearing a choice is not an answer. Every tier must Speak to pass.
+        speakEn(WORD[key][0]);
       }); root.appendChild(b);
     });
     document.getElementById('chat-mic').setAttribute('aria-label', 'Answer by voice');
     document.getElementById('chat-mic').disabled = reply.done;
-    document.getElementById('chat-choices').disabled = false;
+    document.getElementById('chat-choices').disabled = true;
     document.getElementById('chat-listen').disabled = false;
-    document.getElementById('chat-choices').hidden = d.choices || reply.done;
+    // Child UI: never surface the leftover "Show choices" control; options still open after a miss or two Speak failures.
+    document.getElementById('chat-choices').hidden = true;
     document.getElementById('chat-confirm').hidden = !d.fallback || reply.done;
     document.getElementById('chat-confirm').disabled = reply.done;
-    ['chat-listen','chat-mic'].forEach(function(id){document.getElementById(id).hidden=reply.done;});
-    document.getElementById('chat-continue').hidden=!reply.done;
-    document.getElementById('chat-close').hidden = !d.answered;
+    document.getElementById('chat-listen').hidden = true;
+    document.getElementById('chat-mic').hidden = reply.done;
+    // Success: auto-advance after the reward word. Continue/× only for I said it.
+    document.getElementById('chat-continue').hidden = !reply.done || !d.selfClaim;
+    document.getElementById('chat-close').hidden = !d.answered || !d.selfClaim;
     document.getElementById('dialogue').hidden = false;
     document.getElementById('chat-shade').hidden = false;
     document.body.classList.add('chat-blocked');
     document.getElementById('parent-skip').hidden = d.answered;
-    if (reply.done) { d.answered = true;if(!d.rewardRead&&!d.selfClaim){d.rewardRead=true;speakEn(WORD[d.key][0]);}return; }
+    if (reply.done) {
+      d.answered = true;
+      if (!d.rewardRead && !d.selfClaim) {
+        d.rewardRead = true;
+        speakEn(WORD[d.key][0], { onend: function () { if (dialogue === d) closeChat(); } });
+        clearTimeout(d.autoAdvanceTimer);
+        d.autoAdvanceTimer = setTimeout(function () { if (dialogue === d) closeChat(); }, 1600);
+      } else if (!d.selfClaim) {
+        clearTimeout(d.autoAdvanceTimer);
+        d.autoAdvanceTimer = setTimeout(function () { if (dialogue === d) closeChat(); }, 600);
+      }
+      return;
+    }
     if (!quiet) speakEn(d.question, { named: !!(childName && d.question.includes(childName)), audio_url: !d.reveal ? d.audio_url : undefined });
   }
   function requestChat(d, feedback, childSaid, spokenKey) {
@@ -1582,18 +1674,21 @@ function validConversation(value, p) {
   function retryChat(childSaid, spokenKey) {
     if (!dialogue || dialogue.pending || dialogue.answered) return;
     playSfx('wrong');stopChatListening();
-    var d = dialogue; d.misses++; d.turn = Math.min(2, d.misses); d.choices = true; d.hint = true;
+    var d = dialogue; d.misses++; d.turn = Math.min(2, d.misses);
+    // Choices may be shown so the child can hear them. They never score the question.
+    if (d.tier < 2) { d.choices = true; d.hint = true; if (d.misses >= 3) d.reveal = true; }
     if(childSaid!==undefined)d.voiceFailures=(d.voiceFailures||0)+1;
     d.fallback=(d.voiceFailures||0)>=2;
-    if (d.misses >= 3) d.reveal = true;
     requestChat(d, 'retry', childSaid, spokenKey);
   }
   function answerChat(key, childSaid) {
     if (!dialogue || dialogue.pending || dialogue.answered) return;
+    if (!childSaid) return;
     if (key !== dialogue.key) { retryChat(childSaid, key); return; }
     playSfx('correct');stopChatListening();
     var d = dialogue;
-    d.answered = true; d.coachSaid = childSaid || key; d.turn = Math.min(2, d.turn + 1);
+    // Recognized answer / tap: auto-advance after reward (no Continue). I said it keeps dismiss.
+    d.voicePass = !!childSaid; d.answered = true; d.coachSaid = childSaid || key; d.turn = Math.min(2, d.turn + 1);
     lastAnswer = key;
     trail.turns++;
     var r = trail.reviews[key] || { n: 0, last: 0 }; r.n++; r.last = trail.turns; trail.reviews[key] = r;
@@ -1644,24 +1739,29 @@ function validConversation(value, p) {
       r.lang = 'en-US'; r.interimResults = false; r.continuous = false; r.maxAlternatives = 3;
       status.textContent = '🎤 …';
       r.onstart = function () { if (chatRecognizer === r) micRecording('chat-mic', true); };
+      var handled = false;
       r.onresult = function (e) {
         if (dialogue !== active) return;
+        handled = true;
         var result = e.results[e.resultIndex || 0], choice = '', said = '';
         for (var i = 0; result && i < result.length; i++) { said = result[i].transcript; choice = voiceChoice(said); if (choice) break; }
         if (choice) answerChat(choice, said);
         else retryChat(said);
       };
-      r.onerror = function () { stopChatListening(); if (dialogue === active) speechFallback(); };
-      r.onend = function () { if (chatRecognizer === r) { stopChatListening(); if (dialogue === active && !active.answered && !active.pending) speechFallback(); } };
+      r.onerror = function () { if (handled) return; handled = true; stopChatListening(); if (dialogue === active) speechFallback(); };
+      // onend also runs after onresult. One Speak attempt must count once.
+      r.onend = function () { if (handled || chatRecognizer !== r) return; handled = true; stopChatListening(); if (dialogue === active && !active.answered && !active.pending) speechFallback(); };
       r.start();
       // Some engines never fire onend after permission or network problems.
-      recognitionTimer = setTimeout(function () { if (chatRecognizer === r) { stopChatListening(); if (dialogue === active && !active.answered && !active.pending) speechFallback(); } }, 8000);
+      recognitionTimer = setTimeout(function () { if (handled || chatRecognizer !== r) return; handled = true; stopChatListening(); if (dialogue === active && !active.answered && !active.pending) speechFallback(); }, 8000);
     } catch (err) { stopChatListening(); speechFallback(); }
   }
   function speechFallback() {
     if (!dialogue || dialogue.answered || dialogue.pending) return;
     dialogue.voiceFailures=(dialogue.voiceFailures||0)+1;
     dialogue.fallback=dialogue.voiceFailures>=2;
+    // Picture buttons are the tier-1 answer. Spoken questions do not grow a tap-to-pass.
+    if (dialogue.fallback && dialogue.tier < 2) dialogue.choices = true;
     renderChat(dialogue,chatTemplate(dialogue,'prompt'),true);
     document.getElementById('chat-status').textContent=dialogue.fallback?'Try Speak again, or tap I said it.':'Try Speak again.';
   }
@@ -1671,11 +1771,16 @@ function validConversation(value, p) {
     d.selfClaim=true;d.answered=true;d.feedback='self_claim';
     renderChat(d,{say:'Thanks for trying!',options:d.options,done:true},true);
   }
+  function replayChatPrompt() {
+    if (!dialogue || dialogue.answered || dialogue.pending) return;
+    speakEn(dialogue.question, { audio_url: !dialogue.reveal ? dialogue.audio_url : undefined });
+  }
   function bindDialogue() {
     tapButton(document.getElementById('chat-close'), closeChat);
     tapButton(document.getElementById('chat-continue'), closeChat);
     document.getElementById('dialogue').addEventListener('click',function(e){if(dialogue&&dialogue.answered&&!e.target.closest('button'))closeChat();});
-    tapButton(document.getElementById('chat-listen'), function () { if (dialogue) speakEn(dialogue.question, { audio_url: !dialogue.reveal ? dialogue.audio_url : undefined }); });
+    // Listen button removed: tap the picture (or animal art) to hear the prompt again.
+    tapButton(document.getElementById('chat-picture'), replayChatPrompt);
     tapButton(document.getElementById('chat-mic'), listenChat);
     tapButton(document.getElementById('chat-choices'), showChatChoices);
     tapButton(document.getElementById('chat-confirm'), confirmChat);
@@ -1683,10 +1788,12 @@ function validConversation(value, p) {
     document.getElementById('dialogue').addEventListener('click', function (e) {
       if (e.detail !== 0) return;
       var b = e.target.closest('button');
-      if (!b) return;
-      if (b.dataset.word) answerChat(b.dataset.word);
+      if (!b) {
+        if (e.target && e.target.id === 'chat-picture') replayChatPrompt();
+        return;
+      }
+      if (b.dataset.word && WORD[b.dataset.word]) speakEn(WORD[b.dataset.word][0]);
       else if (b.id === 'chat-close') closeChat();
-      else if (b.id === 'chat-listen' && dialogue) speakEn(dialogue.question, { audio_url: !dialogue.reveal ? dialogue.audio_url : undefined });
       else if (b.id === 'chat-mic') listenChat();
       else if (b.id === 'chat-choices') showChatChoices();
       else if (b.id === 'chat-confirm') confirmChat();
@@ -1708,9 +1815,9 @@ function validConversation(value, p) {
     if (buddy) {
       if (!riding && Math.abs(player.x - followLastX) < TILE * 2) followTravel += Math.abs(player.x - followLastX);
       followLastX = player.x;
-      if (followTravel > TILE * 6) followReady = true;
-      if (followReady && safe && Math.abs(buddy.x - player.x) < TILE * 3) {
-        queueChat('pet', buddy.type); followReady = false; followTravel = 0;
+      if (followTravel > TILE * 28) followReady = true;
+      if (followReady && safe && Math.abs(buddy.x - player.x) < TILE * 3 && chatClock - lastPetChatAt >= 60) {
+        queueChat('pet', buddy.type); followReady = false; followTravel = 0; lastPetChatAt = chatClock;
       }
     }
     var scene = sceneAt(player.x);
@@ -1739,12 +1846,18 @@ function validConversation(value, p) {
       // Discoveries are scene-entry stops, with the same safety/cooldown as every other chat.
       queueChat('scene', sticker); rememberEvent('found', sticker); saveSoon();
     });
-    chatQueue = chatQueue.filter(function (e) { return chatClock - e.at < 18; });
-    if (!buildSessionBusy() && !dialogue && chatIdle > 0.8 && chatCooldown <= 0 && cardLeft <= 0 && chatQueue.length) {
-      var priority = { fish: 4, boat: 4, pet: 3, task: 2, scene: 1 };
+    // Keep exploration events long enough to survive a short stand-still after walking.
+    chatQueue = chatQueue.filter(function (e) { return chatClock - e.at < 40; });
+    // A deep pit is a rescue, not a question. Hold the Speak prompt until they are out.
+    var pitLocked = ropeShown || ropeClimb || (pitDepthTiles() >= 8 && !canWalkOut());
+    if (!(buildMode || buildSession.active) && !dialogue && chatIdle > 0.8 && chatCooldown <= 0 && cardLeft <= 0 && chatQueue.length && !pitLocked) {
+      var priority = { fish: 4, boat: 4, pet: 2, task: 2, scene: 1 };
       chatQueue.sort(function (a, b) { return priority[b.anchor] - priority[a.anchor] || b.at - a.at; });
       var event = chatQueue.shift();
-      if (chatWords().length >= 2) { openChat(event); chatQueue = []; }
+      if (chatWords().length >= 2) {
+        if (event.anchor === 'pet') lastPetChatAt = chatClock;
+        openChat(event); chatQueue = [];
+      }
     }
   }
 
@@ -1759,11 +1872,11 @@ function validConversation(value, p) {
   var buildSession = newBuildSession(), buildRegions = [], buildClusters = [], buildClusterDirty = true, buildDirty = false, buildShowingWord = false, buildWordPending = {}, buildGhost = null, buildArrow = null;
   // Whole buildings reserve air cells but are walkable scenery: no child/pet trap.
   // Instances, including their part materials, survive pickup and save/reload.
-  var CRAFTABLES={houseKit:{kind:'house',w:3,h:3,parts:{wall:'wood',roof:'planks',yard:'grass',window:'wood',foundation:'stone',door:'wood'}},pen:{kind:'pen',w:4,h:2,parts:{fence:'wood',gate:'wood',yard:'grass'}},car:{kind:'car',w:3,h:2,parts:{body:'wood',wheel:'stone'}}};
+  var CRAFTABLES={houseKit:{kind:'house',w:3,h:3,parts:{wall:'wood',roof:'planks',yard:'grass',window:'wood',foundation:'stone',door:'wood'}},pen:{kind:'pen',w:4,h:2,parts:{fence:'wood',gate:'wood',yard:'grass'}},car:{kind:'car',w:3,h:2,parts:{frame:'wood',wheel:'stone'}}};
   var buildObjects=[],craftedObjects=[],craftableArt={},drivingCar=null,upgradeHouse=null,upgradePart=null,partQuestionAt=0;
   function newCraftable(item,raw) {
     var def=CRAFTABLES[item],parts={};raw=raw||{};
-    Object.keys(def.parts).forEach(function(k){var p=raw.parts&&raw.parts[k];parts[k]={material:p&&['wood','planks','grass','glass','stone','sand','flower'].includes(p.material)?p.material:def.parts[k],tier:p&&Number.isInteger(p.tier)?Math.max(1,Math.min(9,p.tier)):1};});
+    Object.keys(def.parts).forEach(function(k){var p=raw.parts&&raw.parts[k];if(!p&&k==='frame'&&raw.parts&&raw.parts.body)p=raw.parts.body;parts[k]={material:p&&['wood','planks','grass','glass','stone','sand','flower'].includes(p.material)?p.material:def.parts[k],tier:p&&Number.isInteger(p.tier)?Math.max(1,Math.min(9,p.tier)):1};});
     return {item:item,kind:def.kind,level:Number.isInteger(raw.level)?Math.max(1,Math.min(99,raw.level)):1,parts:parts,w:def.w,h:def.h};
   }
   function restoreCraftables(data) {
@@ -1775,6 +1888,7 @@ function validConversation(value, p) {
       if(b.showWord&&raw.partQuestion===b.showWord)b.partQuestion=raw.partQuestion;
       if(b.x<1||b.y<1||b.x+b.w>=W||b.y+b.h>=H||buildObjects.some(function(o){return b.x<o.x+o.w&&b.x+b.w>o.x&&b.y<o.y+o.h&&b.y+b.h>o.y;}))return;
       Object.assign(b,{id:'object:'+b.x+':'+b.y,createdAt:Number(raw.createdAt)||Date.now(),roofed:b.kind==='house',shown:!!raw.shown,closed:!!raw.closed,autoOffered:!!raw.autoOffered,invited:false,roofPraise:true});
+      if (b.kind === 'house') b.furn = { bed: raw.furn && raw.furn.bed ? 1 : 0, table: raw.furn && raw.furn.table ? 1 : 0, torch: raw.furn && raw.furn.torch ? 1 : 0 };
       b.feedbackMembers=Array.isArray(raw.feedbackMembers)?raw.feedbackMembers.filter(function(at){return Number.isInteger(at)&&at>=0&&at<W*H;}).slice(0,200):null;
       buildObjects.push(b);
     });
@@ -1805,6 +1919,7 @@ function validConversation(value, p) {
   function placeCraftable(item,r) {
     var at=craftedObjects.findIndex(function(b){return b.item===item;}),b=at<0?newCraftable(item):craftedObjects.splice(at,1)[0];
     Object.assign(b,{id:'object:'+r.x+':'+r.y,x:r.x,y:r.y,createdAt:Date.now(),roofed:b.kind==='house',shown:false,closed:false,autoOffered:false,invited:false,roofPraise:true,feedbackMembers:null});
+    if (b.kind === 'house') b.furn = { bed: 0, table: 0, torch: 0 };
     playSfx('place');buildObjects.push(b);consume(item);craftableCells(b).forEach(function(at){placedThisRun.add(at);});
     buildSession.placed++;buildSession.lastObjectId=b.id;buildSession.firstDone=true;buildSession.lastPoint={x:b.x,y:b.y};buildDirty=true;
     progress.placed[item]=1;rememberEvent('built',b.kind==='house'?'house':b.kind==='car'?'car':'fence');
@@ -1813,6 +1928,12 @@ function validConversation(value, p) {
   }
   function removeCraftable(b) {
     if(drivingCar===b)return;
+    if (indoors === b) exitHouse(true);
+    if (b.kind === 'house' && b.furn) {
+      if (b.furn.bed) addItem('bed', 1, true);
+      if (b.furn.table) addItem('table', 1, true);
+      if (b.furn.torch) addItem('torch', 1, true);
+    }
     // End an invitation to a removed object, without charging a Show slot.
     if(ambient&&ambient.build&&ambient.build.building===b)closeAmbient();
     playSfx('remove');buildObjects.splice(buildObjects.indexOf(b),1);craftedObjects.push(newCraftable(b.item,b));addItem(b.item,1,true);
@@ -1894,20 +2015,86 @@ function validConversation(value, p) {
     return craftableArt[key];
   }
   // Car movement is continuous in this side-on world. Full footprint collision,
-  // one-pixel substeps, and dry support prevent tunnelling, falling or water rides.
-  function carClear(b,x) {
-    if(x<1||x+b.w>=W)return false;
-    for(var xx=Math.floor(x+.001);xx<Math.ceil(x+b.w-.001);xx++){
-      for(var yy=b.y;yy<b.y+b.h;yy++){
-        var id=get(xx,yy);
-        if(solid(id)||id===WATER||id===DOOR)return false;
-      }
-      var floor=get(xx,b.y+b.h);
-      if(!solid(floor)||[WOOD,LEAVES,FENCE,DOOR].includes(floor))return false;
-    }
-    return !buildObjects.some(function(o){return o!==b&&x<o.x+o.w&&x+b.w>o.x&&b.y<o.y+o.h&&b.y+b.h>o.y;});
+  // one-pixel substeps, and dry support prevent tunnelling or water rides.
+  // A missing floor drops the car onto the next solid; a one-block step is drivable.
+  function carColumns(b, x) {
+    var cols = [], xx;
+    for (xx = Math.floor(x + 0.001); xx < Math.ceil(x + b.w - 0.001); xx++) cols.push(xx);
+    return cols;
   }
-  function seatDriver(b) {player.x=(b.x+1.4)*TILE;player.y=(b.y+1.55)*TILE;player.dir=b.dir||1;player.vx=0;player.vy=0;onGround=true;}
+  function carDryFloor(id) { return solid(id) && id !== WOOD && id !== LEAVES && id !== FENCE && id !== DOOR; }
+  function carHits(b, x, y) {
+    return buildObjects.some(function (o) {
+      return o !== b && x < o.x + o.w && x + b.w > o.x && y < o.y + o.h && y + b.h > o.y;
+    });
+  }
+  function carBodyBlocked(b, x, y) {
+    var cols = carColumns(b, x), i, yy, id;
+    for (i = 0; i < cols.length; i++) {
+      for (yy = y; yy < y + b.h; yy++) {
+        id = get(cols[i], yy);
+        if (solid(id) || id === WATER || id === DOOR) return true;
+      }
+    }
+    return false;
+  }
+  // Any solid block directly under the footprint counts as a rest, including a
+  // partial ledge. Water and air do not, so a dug-out car cannot hover.
+  function carTouchesGround(b, x, y) {
+    var row = y + b.h, cols = carColumns(b, x), i;
+    for (i = 0; i < cols.length; i++) if (solid(get(cols[i], row))) return true;
+    return false;
+  }
+  function settleCar(b) {
+    var guard = 0, moved = false, ny, cols, i, yy, blocked;
+    while (guard++ < H && !carTouchesGround(b, b.x, b.y)) {
+      ny = b.y + 1;
+      if (ny < 1 || ny + b.h >= H || carHits(b, b.x, ny)) break;
+      cols = carColumns(b, b.x);
+      blocked = false;
+      for (yy = ny; yy < ny + b.h && !blocked; yy++) {
+        for (i = 0; i < cols.length; i++) if (solid(get(cols[i], yy))) blocked = true;
+      }
+      if (blocked) break;
+      b.y = ny;
+      moved = true;
+    }
+    if (moved) {
+      saveSoon();
+      if (drivingCar === b) seatDriver(b);
+    }
+    return moved;
+  }
+  function settleLooseCars() {
+    var i;
+    for (i = 0; i < buildObjects.length; i++) if (buildObjects[i].kind === 'car') settleCar(buildObjects[i]);
+  }
+  // Drive pose: every column needs dry ground within one block of the current
+  // floor (level, or a single step). The car rests on the highest of those.
+  // Water, trees, fences and a deeper drop return null so the old edge-stop stays.
+  function carDriveY(b, x) {
+    var floor = b.y + b.h, cols = carColumns(b, x), i, yy, id, surface, highest = null, ny;
+    if (x < 1 || x + b.w >= W) return null;
+    for (i = 0; i < cols.length; i++) {
+      surface = null;
+      // Two rows of slack: a 3-block car spans a rise of two on a one-step ramp.
+      for (yy = floor - 2; yy <= floor + 2; yy++) {
+        id = get(cols[i], yy);
+        if (id === WATER || id === DOOR || id === WOOD || id === LEAVES || id === FENCE) return null;
+        if (carDryFloor(id)) { surface = yy; break; }
+      }
+      if (surface == null) return null;
+      if (highest == null || surface < highest) highest = surface;
+    }
+    ny = highest - b.h;
+    if (ny < 1 || ny + b.h >= H || carBodyBlocked(b, x, ny) || carHits(b, x, ny)) return null;
+    return ny;
+  }
+  function seatDriver(b) {
+    // Sit in the cabin on the facing side so left/right drives stay visually matched.
+    var seat = b.dir === -1 ? (b.x + b.w - 1.4) : (b.x + 1.4);
+    player.x = seat * TILE; player.y = (b.y + 1.55) * TILE; player.dir = b.dir || 1; player.vx = 0; player.vy = 0; onGround = true;
+  }
   function boardCar(b) {
     if(riding||drivingCar||quiz||dialogue||nameFlow)return;
     if(!nearBuild(b)||Math.abs(player.x-(b.x+b.w/2)*TILE)>8*TILE){showToast('Move a little closer!',2);return;}
@@ -1915,15 +2102,24 @@ function validConversation(value, p) {
     closeAmbient();hideCard();cancelEnAudio();seek=null;fishing=null;jumpBuf=0;manualShowPending=null;buildQueue=[];
     drivingCar=b;b.dir=b.dir||1;document.body.classList.add('driving');
     buildMode=false;document.getElementById('btn-build').setAttribute('aria-pressed','false');document.getElementById('build-tools').hidden=true;document.getElementById('build-status').hidden=true;
-    document.getElementById('car-exit').hidden=false;seatDriver(b);
+    document.getElementById('car-exit').hidden=false;settleCar(b);seatDriver(b);
     buildFeedback('Hop in! Let\'s drive!','car_ride');playSfx('enter-car');save();
   }
   function driveCar(dt) {
-    var b=drivingCar,ax=axis();jumpBuf=0;carMoving=false;
-    if(ax){b.dir=ax;var left=MOVE*1.18*dt;
-      while(left>.0001){var step=Math.min(1,left),nx=b.x+ax*step/TILE;if(!carClear(b,nx))break;b.x=nx;left-=step;carMoving=true;saveSoon();}
+    var b = drivingCar, ax = axis(); jumpBuf = 0;
+    // Same screen-space sign as walking: joy/keys right => +x (never invert here).
+    var moving = !!settleCar(b);
+    if (ax) {
+      b.dir = ax;
+      var left = MOVE * 1.18 * dt;
+      while (left > 0.0001) {
+        var step = Math.min(1, left), nx = b.x + ax * step / TILE, ny = carDriveY(b, nx);
+        if (ny == null) break;
+        b.x = nx; b.y = ny; left -= step; moving = true; saveSoon();
+      }
     }
-    seatDriver(b);player.anim+=dt*2;
+    carMoving = moving;
+    seatDriver(b); player.anim += dt * 2;
   }
   function exitCar() {
     var b=drivingCar;if(!b)return;
@@ -1944,7 +2140,11 @@ function validConversation(value, p) {
     if(buildMode&&(!b||buildTool!==b.item||(inv[buildTool]||0)>0))return false;
     if(!b)return false;
     if(b.kind==='car'){boardCar(b);return true;}
-    if(b.kind==='house'){if(!buildReach(Math.floor(wx/TILE),Math.floor(wy/TILE)))showToast('Move a little closer!',2);else openUpgrade(b);return true;}
+    if(b.kind==='house'){
+      if(!buildReach(Math.floor(wx/TILE),Math.floor(wy/TILE)) && !playerHitsDoor(b)){showToast('Move a little closer!',2);return true;}
+      if(pointInDoor(b, wx, wy)){enterHouse(b);return true;}
+      openUpgrade(b);return true;
+    }
     return false;
   }
   function objectQuestion(b) {
@@ -2059,7 +2259,9 @@ function validConversation(value, p) {
       if(CRAFTABLES[key]){var icon=document.createElement('canvas');icon.width=96;icon.height=96;icon.style.cssText='width:32px;height:32px;float:left;image-rendering:pixelated';paintIcon(icon,key);b.prepend(icon);}
       b.addEventListener('click', function () { selectBuildTool(key); }); root.appendChild(b);
     });
-    document.getElementById('build-status').textContent = buildTool === 'remove' ? 'Tap a building or block · Get it back' : (CRAFTABLES[buildTool]?'Tap empty ground · '+CRAFTABLES[buildTool].w+' × '+CRAFTABLES[buildTool].h+' · ':'Tap an empty square · ') + (buildTool === 'roof' ? 'Roof: 4 roof blocks' : WORD[buildTool][0]);
+    var hint = buildTool === 'remove' ? 'Tap a building or block. Get it back.' : (CRAFTABLES[buildTool]?'Tap empty ground. '+CRAFTABLES[buildTool].w+' by '+CRAFTABLES[buildTool].h+'. ':'Tap an empty square. ') + (buildTool === 'roof' ? 'Roof. 4 roof blocks.' : WORD[buildTool][0]);
+    document.getElementById('build-status').textContent = hint;
+    if (hint !== lastBuildHint) { lastBuildHint = hint; speakPrompt(hint, 'hint'); }
   }
   function buildOwned(x,y) { return x >= 0 && x < W && y >= 0 && y < H && get(x,y) !== AIR && get(x,y) !== base[idx(x,y)]; }
   function buildingBlock(id) { return [PLANKS,HOUSE,STONE,WOOD].includes(id); }
@@ -2155,7 +2357,14 @@ function validConversation(value, p) {
       playSfx('remove');var key=KEY_OF[get(x,y)];setCell(x,y,AIR);addItem(key,1,true);placedThisRun.delete(idx(x,y));buildSession.removed++;buildDirty=true;
       logBuildResult(x,y,'removed '+key);save();renderBuildTools();return;
     }
-    playSfx('place');var material=buildMaterial(),width=r.w,id=BLOCK_OF[material];
+    var material=buildMaterial(),width=r.w,id=BLOCK_OF[material];
+    if (material === 'fence' || material === 'door' || material === 'window') {
+      for (var s = 0; s < width; s++) {
+        var spotLine = specialPlaceLine(material, x + s, y);
+        if (spotLine) { showToast(spotLine, 2.2); logBuildResult(x, y, 'fail:spot'); return; }
+      }
+    }
+    playSfx('place');
     // Atomic validation above: inventory is only consumed after writing tiles.
     for(var j=0;j<width;j++) {
       setCell(x+j,y,id);consume(material);progress.placed[material]=1;buildPlaced(x+j,y,material,true);
@@ -2300,8 +2509,8 @@ function validConversation(value, p) {
   function buildFeedback(text,event) {
     // An action result is not an optional conversation: no idle gate, queue,
     // praise/question budget, other-material test, or 25/45-second cooldown.
-    // Text is enough; do not start a voice or microphone for these messages.
-    var a=buildBubble(text,{event:event,praise:true,deferSpeech:true,feedback:true});
+    // Ordinary build feedback stays text-only; animal meet speaks English (respects speechOn).
+    var a=buildBubble(text,{event:event,praise:true,deferSpeech:event!=='animal_meet',feedback:true});
     if(!a)return;
     document.getElementById('buddy-chat').classList.add('build-feedback');
     clearTimeout(a.timer);
@@ -2316,14 +2525,24 @@ function validConversation(value, p) {
     document.getElementById('buddy-picture').hidden=true;
     document.getElementById('buddy-options').replaceChildren();
     document.getElementById('buddy-mic').hidden=!!data.praise||data.stage==='invite';
-    document.getElementById('buddy-close').hidden=!data.praise&&data.stage!=='invite';
+    document.getElementById('buddy-close').hidden=(!data.praise&&data.stage!=='invite')||!!data.autoAdvance;
     document.getElementById('buddy-close').textContent=data.reward?'Continue':'OK!';
     document.getElementById('buddy-confirm').hidden=!(data.voiceFailures>=2)||!!data.praise;
-    a.timer=setTimeout(function(){if(ambient!==a)return;closeAmbient();if(['build_show','build_revisit'].includes(data.event)&&!data.praise&&!data.answered){if(data.building)celebrateBuild(data.building);buildBubble((BUILD_LINES[0] + ' ' + BUILD_LINES[38] + ' ' + BUILD_LINES[36] + ' Good job!'),{event:data.event,praise:true});}},data.stage==='invite'?35000:14000);
+    a.timer=setTimeout(function(){
+      if(ambient!==a)return;
+      // A speak/picture question stays until it is actually answered.
+      // The old 14s path celebrated and said Good job with no Speak and no tap.
+      if(data.stage==='question' && !data.praise && !data.answered) return;
+      closeAmbient();
+    }, data.stage==='invite'?35000:14000);
     if(!data.feedback)buildSession.lastBubbleAt=chatClock;
     if(data.event==='house_part')clearTimeout(a.timer);
     if(data.reward){clearTimeout(a.timer);buildSpeak(WORD[data.key][0],false);}
     else if(!data.deferSpeech)buildSpeak(text,data.named);
+    if(data.autoAdvance){
+      clearTimeout(a.timer);
+      a.timer=setTimeout(function(){if(ambient===a)closeAmbient();}, data.reward ? 1500 : 900);
+    }
     return a;
   }
   function buildChoiceButton(word,fn) {
@@ -2332,7 +2551,7 @@ function validConversation(value, p) {
   }
   function buildChoices(d) {
     document.getElementById('buddy-options').replaceChildren();
-    d.options.forEach(function(k){var b=buildChoiceButton(k,function(){answerBuild(d,k,true);}); if(d.misses)b.classList.toggle('hint-answer',k===d.key);});
+    d.options.forEach(function(k){var b=buildChoiceButton(k,function(){buildSpeak(WORD[k][0], false);}); b.setAttribute('aria-label','Listen: '+WORD[k][0]); if(d.misses)b.classList.toggle('hint-answer',k===d.key);});
     if(d.misses>=3){var answer=document.querySelector('#buddy-options [data-word="'+d.key+'"]');var cv=document.createElement('canvas');cv.width=cv.height=128;paintIcon(cv,d.key);answer.prepend(cv);}
   }
   function showBuildQuestion(d) {
@@ -2363,17 +2582,18 @@ function validConversation(value, p) {
       }
       if(!d.manual && buildQuota())spendBuildQuestion();
     }
-    d.stage='question';if(d.upgrade)d.deferSpeech=true;d.tier=d.event==='house_part'?1:buildTier(d.options);d.misses=0;
+    d.stage='question';d.deferSpeech=false;d.tier=d.event==='house_part'?1:buildTier(d.options);d.misses=0;
     var text=d.event==='build_plan'?(d.tier===3?(BUILD_LINES[8] + ' Say it!'):lineVariant([BUILD_LINES[2],BUILD_LINES[3],BUILD_LINES[4]])):d.tier===1?(d.event==='build_short'?BUILD_LINES[10]:'What is this?'):d.tier===2?"What's this?":d.event==='build_short'?(d.key==='stick'?BUILD_LINES[20]:buildNeedLine(d.key))+' Say it!':(d.key==='house'?BUILD_LINES[33]:d.key==='fence'?BUILD_LINES[34]:'I made a '+d.key+'.')+' Say it!';
     if(d.event==='build_plan'){var prefix=buildName();d.named=!!prefix;text=prefix+text;}
     if(d.upgrade)text=d.tier===3?'Look! '+WORD[d.key][0]+'. Say it!':'What is this?';
     var a=buildBubble(text,d), picture=document.getElementById('buddy-picture');
-    if(d.event!=='build_plan'){picture.hidden=false;paintIcon(picture,d.key);picture.setAttribute('aria-label',WORD[d.key][0]);}
-    if(d.tier===1 || d.event==='build_plan')buildChoices(d);
-    else a.hintTimer=setTimeout(function(){if(ambient===a)buildChoices(d);},8000);
+    if(d.event!=='build_plan'){picture.hidden=false;paintIcon(picture,d.key);picture.setAttribute('aria-label','Listen: '+WORD[d.key][0]);}
+    // Pictures and choice words can be heard. None of them pass the question.
+    if(d.tier<2)buildChoices(d);
   }
   function answerBuild(d,key,clicked) {
     if(!ambient || ambient.build!==d || d.answered)return;
+    if(clicked){ if(WORD[key]) buildSpeak(WORD[key][0], false); return; }
     if(d.event!=='build_plan' && key!==d.key){
       playSfx('wrong');
       d.misses++;buildSpeak(WORD[key][0],false);buildChoices(d);
@@ -2382,7 +2602,11 @@ function validConversation(value, p) {
     finishBuildAnswer(d,key,clicked);
   }
   function finishBuildAnswer(d,key,clicked) {
-    if(!ambient||ambient.build!==d||d.answered)return; d.answered=true;playSfx('correct');
+    if(!ambient||ambient.build!==d||d.answered)return;
+    // "I said it" is only the two-failure fallback, and it is not a speaking score.
+    if(d.selfClaim && (d.voiceFailures||0)<2)return;
+    d.answered=true;
+    if(!d.selfClaim)playSfx('correct');
     if(d.event==='build_plan'){buildSession.plan=key;buildSession.planAnswered=true;}
     else if(d.tier===1 && clicked){var l=trail.levels[key]||{t1:0,t2:0,t3:0};l.t1++;trail.levels[key]=l;}
     if(d.building){if(d.event==='house_part')delete d.building.partQuestion;d.building.shown=true;d.stage='done';celebrateBuild(d.building);learn(key);if(!d.selfClaim){quizStars[key]=1;playSfx('star');}}
@@ -2391,32 +2615,37 @@ function validConversation(value, p) {
     if(d.upgrade)text={stone:'Strong stone walls! Well done!',roof:'A lovely roof! Well done!',flower:'Flowers in our yard! Well done!',window:'A bright window! Well done!'}[key];
     if(d.building&&d.building.kind==='car')text='You built a car! Look at the wheels! Good job!';
     if(d.event==='build_short')pointBuildMaterial(key);
-    closeAmbient();buildBubble(d.selfClaim?'Thanks for trying!':text,{event:d.event,praise:true,deferSpeech:true,reward:!d.selfClaim,key:key});
+    closeAmbient();
+    // Success except I said it: praise then auto-close — no OK!/Continue.
+    buildBubble(d.selfClaim?'Thanks for trying!':text,{event:d.event,praise:true,deferSpeech:true,reward:!d.selfClaim,key:key,autoAdvance:!d.selfClaim});
     saveSoon();
   }
   function buildVoiceFailure(a) {
-    if(ambient!==a)return;var d=a.build;d.voiceFailures=(d.voiceFailures||0)+1;
+    if(ambient!==a||!a.build||a.build.answered||a.build.praise)return;
+    var d=a.build;d.voiceFailures=(d.voiceFailures||0)+1;
     document.getElementById('buddy-confirm').hidden=d.voiceFailures<2;
     document.getElementById('buddy-line').textContent=d.voiceFailures>=2?'Try Speak again, or tap I said it.':'Try Speak again.';
-    clearTimeout(a.timer); // Allow an unhurried second attempt.
+    clearTimeout(a.timer); // Allow an unhurried second attempt. Do not auto-pass.
   }
   function listenBuild() {
-    var a=ambient,d=a&&a.build;if(!d||d.praise||socialRecognizer)return;
+    var a=ambient,d=a&&a.build;if(!d||d.praise||d.answered||socialRecognizer)return;
     if(d.stage==='invite'){showBuildQuestion(d);return;}
     var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
     if(!SR){buildVoiceFailure(a);return;}
     cancelEnAudio();if(window.speechSynthesis)speechSynthesis.cancel();clearTimeout(a.timer);
-    try {var r=new SR();socialRecognizer=r;r.lang='en-US';r.interimResults=false;r.continuous=false;
+    try {var r=new SR(),handled=false;socialRecognizer=r;r.lang='en-US';r.interimResults=false;r.continuous=false;
       r.onstart=function(){if(socialRecognizer===r)micRecording('buddy-mic',true);};
-      r.onresult=function(e){var text=normalAnswer(e.results[0][0].transcript);stopSocialListening();if(ambient!==a)return;var key=d.options.find(function(k){return text.split(' ').includes(k);});if(key===d.key||key&&d.event==='build_plan')answerBuild(d,key,false);else buildVoiceFailure(a);};
-      r.onerror=r.onend=function(){stopSocialListening();buildVoiceFailure(a);};r.start();
-      socialWatchdog=setTimeout(function(){stopSocialListening();buildVoiceFailure(a);},8000);
+      r.onresult=function(e){handled=true;var text=normalAnswer(e.results[0][0].transcript);stopSocialListening();if(ambient!==a)return;var key=d.options.find(function(k){return text.split(' ').includes(k);});if(key===d.key||key&&d.event==='build_plan')answerBuild(d,key,false);else buildVoiceFailure(a);};
+      // onend follows onresult/onerror, and abort() can re-enter onend. Count once.
+      r.onerror=function(){if(handled)return;handled=true;stopSocialListening();buildVoiceFailure(a);};
+      r.onend=function(){if(handled)return;handled=true;stopSocialListening();buildVoiceFailure(a);};
+      r.start();
+      socialWatchdog=setTimeout(function(){if(handled||socialRecognizer!==r)return;handled=true;stopSocialListening();buildVoiceFailure(a);},8000);
     }catch(e){stopSocialListening();buildVoiceFailure(a);}
   }
   function pointBuildMaterial(key) {
-    var wanted=key==='stone'?STONE:WOOD,best=null,dist=Infinity;
-    for(var x=Math.max(0,Math.floor(player.x/TILE)-30);x<Math.min(W,Math.floor(player.x/TILE)+30);x++)for(var y=0;y<H;y++)if(get(x,y)===wanted){var dd=Math.hypot(x*TILE-player.x,y*TILE-player.y);if(dd<dist){dist=dd;best={x:x,y:y,until:chatClock+10};}}
-    buildArrow=best;
+    // UX12: no on-world ↓ guide arrow (山锦绣); keep call sites for short-material feedback only.
+    buildArrow = null;
   }
   function buildShort(material) {
     var key=material==='house'?'stone':material==='fence'?'stick':material==='door'||material==='window'?'planks':material;
@@ -2565,7 +2794,8 @@ function validConversation(value, p) {
     buildLastPosition={x:player.x,y:player.y};
     resetBuildDay();updateShowButton();
     if(buildSession.active && chatClock-buildSession.lastActionAt>=30 && !buildMode) {buildSession.active=false;buildQueue=[];}
-    if((buildSessionBusy() || autoShowCandidate()) && (axis() || joyId!==null || jumpBuf>0)) {buildAction('move');buildSession.moved=true;}
+    // Do not refresh lastActionAt during the post-build afterglow — that starved exploration chat/TTS.
+    if((buildMode || buildSession.active) && (axis() || joyId!==null || jumpBuf>0)) {buildAction('move');buildSession.moved=true;}
     if(buildDirty && chatClock-buildSession.lastActionAt>=2.5)detectBuilds();
     if(buildClusterDirty)scanFreeBuilds();
     var quiet=buildQuiet();
@@ -2668,7 +2898,6 @@ function validConversation(value, p) {
   function drawBuildGuide(g) {
     if(buildMode){g.save();g.strokeStyle='#ffffff44';g.lineWidth=0.7;var px=Math.floor(player.x/TILE),py=Math.floor(player.y/TILE);for(var x=px-8;x<=px+8;x++)for(var y=py-6;y<=py;y++)if(get(x,y)===AIR)g.strokeRect(x*TILE,y*TILE,TILE,TILE);g.restore();}
     if(buildGhost&&chatClock<buildGhost.until){g.save();g.fillStyle='#fff8cc44';g.strokeStyle='#fff8cc';g.setLineDash([5,4]);g.fillRect(buildGhost.x*TILE,buildGhost.y*TILE,4*TILE,3*TILE);g.strokeRect(buildGhost.x*TILE,buildGhost.y*TILE,4*TILE,3*TILE);g.restore();}
-    if(buildArrow&&chatClock<buildArrow.until){g.save();g.fillStyle='#fff089';g.font='bold 28px sans-serif';g.fillText('↓',buildArrow.x*TILE,buildArrow.y*TILE-5);g.restore();}
   }
 
   function blankProgress() {
@@ -2706,6 +2935,8 @@ function validConversation(value, p) {
     buildClusterDirty=true;
     if (x < 0 || y < 0 || x >= W || y >= H) return;
     cells[idx(x, y)] = id;
+    // A dug-out floor must drop a car on the same turn, before the next paint.
+    if (buildObjects && buildObjects.length) settleLooseCars();
   }
   function mix(a, b, t) { return a + (b - a) * t; }
   function mixc(a, b, t) { return [mix(a[0], b[0], t), mix(a[1], b[1], t), mix(a[2], b[2], t)]; }
@@ -2755,12 +2986,15 @@ function validConversation(value, p) {
     sprites[GRASS] = [0, 1, 2].map(function (v) {
       return makeSprite(function (g) {
         g.fillStyle = '#c98448'; g.fillRect(0, 0, 32, 32);
+        g.fillStyle = '#e2b06a'; g.fillRect(4 + v * 3, 18, 4, 2); g.fillRect(20, 24, 3, 2);
         g.fillStyle = '#67c84a'; g.fillRect(0, 0, 32, 13);
+        g.fillStyle = '#8ed86a'; g.fillRect(0, 0, 32, 4);
         g.fillStyle = '#3f9e34'; g.fillRect(0, 11, 32, 3);
         g.fillStyle = '#2f8a2c';
         var i;
-        for (i = 0; i < 4; i++) g.fillRect(3 + i * 7 + v, 2, 2, 6);
-        if (v !== 1) { g.fillStyle = '#e2b06a'; g.fillRect(18 + v, 22, 3, 2); }
+        for (i = 0; i < 5; i++) g.fillRect(2 + i * 6 + v, 1 + (i % 2), 2, 7);
+        g.fillStyle = '#d7f5a4'; g.fillRect(8 + v, 3, 2, 4);
+        if (v === 0) { g.fillStyle = '#ff8aa8'; g.fillRect(22, 4, 3, 3); g.fillStyle = '#ffe08a'; g.fillRect(23, 5, 1, 1); }
         shade(g);
       });
     });
@@ -2768,57 +3002,72 @@ function validConversation(value, p) {
       return makeSprite(function (g) {
         g.fillStyle = '#d09252'; g.fillRect(0, 0, 32, 32);
         g.fillStyle = '#b67a3e';
-        g.fillRect(6 + v, 8, 4, 3); g.fillRect(18, 14 + v, 5, 3); g.fillRect(10, 22, 3, 2);
+        g.fillRect(5 + v, 7, 5, 3); g.fillRect(18, 12 + v, 6, 3); g.fillRect(9, 21, 4, 3);
+        g.fillStyle = '#8d5a32'; g.fillRect(14, 8, 3, 2); g.fillRect(7, 16, 2, 3);
+        g.fillStyle = '#e7c096'; g.fillRect(21, 22, 3, 2); g.fillRect(4, 24, 2, 2);
         shade(g);
       });
     });
     sprites[STONE] = [0, 1, 2].map(function (v) {
       return makeSprite(function (g) {
         g.fillStyle = '#c5ced6'; g.fillRect(0, 0, 32, 32);
-        g.fillStyle = '#93a0ab';
-        g.fillRect(4 + v, 6, 8, 6); g.fillRect(18, 16, 7, 5);
-        g.fillStyle = '#e7eef3'; g.fillRect(8, 18, 4, 3);
+        g.fillStyle = '#9aa7b2';
+        g.fillRect(3 + v, 5, 10, 7); g.fillRect(17, 14, 9, 7); g.fillRect(8, 20, 7, 5);
+        g.fillStyle = '#7e8c98'; g.fillRect(6, 8, 6, 2); g.fillRect(19, 17, 5, 2);
+        g.fillStyle = '#eef4f8'; g.fillRect(5, 6, 3, 2); g.fillRect(20, 15, 2, 2);
         shade(g);
       });
     });
     sprites[WOOD] = [0, 1].map(function () {
       return makeSprite(function (g) {
-        g.fillStyle = '#b8743a'; g.fillRect(0, 0, 32, 32);
-        g.fillStyle = '#e0b06a'; g.fillRect(5, 0, 22, 32);
-        g.fillStyle = '#f0d2a0'; g.beginPath(); g.arc(16, 16, 5, 0, 6.3); g.fill();
-        g.fillStyle = '#b8743a'; g.beginPath(); g.arc(16, 16, 2, 0, 6.3); g.fill();
+        g.fillStyle = '#8d5428'; g.fillRect(0, 0, 32, 32);
+        g.fillStyle = '#c4843e'; g.fillRect(3, 0, 26, 32);
+        g.fillStyle = '#e8c48a'; g.fillRect(7, 0, 18, 32);
+        g.fillStyle = '#f3ddb4'; g.beginPath(); g.arc(16, 16, 6, 0, 6.3); g.fill();
+        g.fillStyle = '#e2b56a'; g.beginPath(); g.arc(16, 16, 3.5, 0, 6.3); g.fill();
+        g.fillStyle = '#a86430'; g.beginPath(); g.arc(16, 16, 1.6, 0, 6.3); g.fill();
+        g.fillStyle = '#6e3e1c'; g.fillRect(2, 6, 2, 4); g.fillRect(28, 18, 2, 5);
         shade(g);
       });
     });
     sprites[LEAVES] = [0, 1, 2].map(function (v) {
       return makeSprite(function (g) {
-        g.fillStyle = v === 2 ? '#34944a' : '#3eae52'; g.fillRect(0, 0, 32, 32);
+        g.fillStyle = v === 2 ? '#2f8a40' : '#3eae52'; g.fillRect(0, 0, 32, 32);
         g.fillStyle = '#6ed25f';
-        g.beginPath(); g.arc(10, 11, 7, 0, 6.3); g.fill();
-        g.beginPath(); g.arc(21, 14, 6, 0, 6.3); g.fill();
+        g.beginPath(); g.arc(9, 10, 8, 0, 6.3); g.fill();
+        g.beginPath(); g.arc(22, 12, 7, 0, 6.3); g.fill();
+        g.beginPath(); g.arc(16, 18, 8, 0, 6.3); g.fill();
         g.fillStyle = '#2c8a40';
-        g.beginPath(); g.arc(16, 22, 6, 0, 6.3); g.fill();
-        g.fillStyle = '#e7ffb0'; g.fillRect(8 + v, 7, 3, 3);
+        g.beginPath(); g.arc(15, 24, 6, 0, 6.3); g.fill();
+        g.fillStyle = '#d7f5a4'; g.fillRect(8 + v, 8, 2, 5); g.fillRect(18, 14, 4, 2);
         shade(g);
       });
     });
     sprites[SAND] = [0, 1].map(function (v) {
       return makeSprite(function (g) {
         g.fillStyle = '#f3d48a'; g.fillRect(0, 0, 32, 32);
+        g.fillStyle = '#f8e4ad'; g.fillRect(0, 0, 32, 6);
         g.fillStyle = '#e0bc68';
-        var i; for (i = 0; i < 6; i++) g.fillRect((i * 9 + v * 4) % 28, (i * 7 + 3) % 26, 2, 2);
+        var i; for (i = 0; i < 7; i++) g.fillRect((i * 8 + v * 5) % 28 + 1, (i * 6 + 4) % 24 + 4, 2, 2);
+        g.fillStyle = '#f7f1e4'; g.beginPath(); g.ellipse(22, 20, 4, 2.2, 0.4, 0, 6.3); g.fill();
+        g.fillStyle = '#e7d3b0'; g.beginPath(); g.ellipse(22, 20, 2, 1, 0.4, 0, 6.3); g.fill();
         shade(g);
       });
     });
     sprites[PLANKS] = [makeSprite(function (g) {
       g.fillStyle = '#e7b56a'; g.fillRect(0, 0, 32, 32);
-      g.fillStyle = '#c48a3e'; g.fillRect(0, 10, 32, 2); g.fillRect(0, 21, 32, 2);
-      g.fillStyle = '#f6e0b0'; g.fillRect(0, 0, 32, 3);
+      g.fillStyle = '#f6e0b0'; g.fillRect(0, 0, 32, 9);
+      g.fillStyle = '#d7a45a'; g.fillRect(0, 10, 32, 10);
+      g.fillStyle = '#c48a3e'; g.fillRect(0, 9, 32, 2); g.fillRect(0, 20, 32, 2);
+      g.fillStyle = '#8d5a28'; g.fillRect(6, 4, 2, 2); g.fillRect(22, 14, 2, 2); g.fillRect(12, 25, 2, 2);
+      shade(g);
     })];
     sprites[WATER] = [makeSprite(function (g) {
       g.fillStyle = '#3ec6e0'; g.fillRect(0, 0, 32, 32);
-      g.fillStyle = 'rgba(255,255,255,0.5)'; g.fillRect(0, 8, 32, 5);
-      g.fillStyle = 'rgba(16,110,150,0.25)'; g.fillRect(0, 24, 32, 8);
+      g.fillStyle = '#7fe3ef'; g.fillRect(0, 0, 32, 8);
+      g.fillStyle = 'rgba(255,255,255,0.65)'; g.fillRect(2, 6, 12, 3); g.fillRect(18, 16, 10, 3);
+      g.fillStyle = 'rgba(16,110,150,0.28)'; g.fillRect(0, 22, 32, 10);
+      shade(g);
     })];
     sprites[WHEAT1] = [makeSprite(function (g) {
       g.strokeStyle = '#4fae4a'; g.lineWidth = 2; g.lineCap = 'round';
@@ -3015,6 +3264,7 @@ function validConversation(value, p) {
     return false;
   }
   function inWater() {
+    if (indoors) return false;
     var pts = [[player.x, player.y - 8], [player.x, player.y - PH * 0.55]];
     var i;
     for (i = 0; i < pts.length; i++) {
@@ -3055,6 +3305,275 @@ function validConversation(value, p) {
       left -= step;
     }
   }
+  // Original ground in this column (grass, sand, or pond), ignoring trees and dug cells.
+  function columnCap(tx) {
+    if (!base || tx < 0 || tx >= W) return null;
+    var y, fallback = null;
+    for (y = 1; y < H - 1; y++) {
+      var id = base[idx(tx, y)];
+      if (id === GRASS || id === SAND || id === WATER) return y;
+      if (fallback == null && (id === DIRT || id === STONE)) fallback = y;
+    }
+    return fallback;
+  }
+  function pitDepthTiles() {
+    var tx = Math.floor(player.x / TILE);
+    var cap = columnCap(tx);
+    if (cap == null) return 0;
+    var feet = Math.floor((player.y - 1) / TILE);
+    return feet - (cap - 1);
+  }
+  // A dug staircase is a path of one-block steps back to the surface. A sheer shaft is not.
+  function canWalkOut() {
+    var startX = Math.floor(player.x / TILE);
+    var startFeet = Math.floor((player.y - 1) / TILE);
+    var seen = {};
+    var q = [[startX, startFeet]];
+    var guard = 0;
+    while (q.length && guard++ < 90) {
+      var cur = q.shift();
+      var tx = cur[0], feet = cur[1];
+      var key = tx + ',' + feet;
+      if (seen[key]) continue;
+      seen[key] = 1;
+      var cap = columnCap(tx);
+      if (cap != null && feet - (cap - 1) < 3) return true;
+      var dir;
+      for (dir = -1; dir <= 1; dir += 2) {
+        var nx = tx + dir;
+        if (nx < 1 || nx >= W - 1) continue;
+        var df;
+        for (df = -1; df <= 6; df++) {
+          var nf = feet + df;
+          if (nf < 1 || nf >= H - 2) continue;
+          var px = (nx + 0.5) * TILE;
+          var py = (nf + 1) * TILE - 0.01;
+          if (collides(px, py)) continue;
+          if (!collides(px, py + 1.5)) continue;
+          var nkey = nx + ',' + nf;
+          if (!seen[nkey]) q.push([nx, nf]);
+          break;
+        }
+      }
+    }
+    return false;
+  }
+  function syncRopeAnchor() {
+    if (!ropeShown) { ropeAnchor = null; return; }
+    var tx = Math.floor(player.x / TILE);
+    var cap = columnCap(tx);
+    if (cap == null) cap = Math.max(1, Math.floor(player.y / TILE) - 8);
+    var topY = cap * TILE;
+    var botY = Math.max(topY + 20, player.y - 16);
+    ropeAnchor = { x: (tx + 0.5) * TILE + 10, topY: topY, botY: botY };
+  }
+  function ropeLanding() {
+    var tx = Math.floor(player.x / TILE);
+    var cap = columnCap(tx);
+    if (cap == null) cap = GROUND;
+    var best = null, bestD = 1e9, dx;
+    for (dx = 0; dx <= 12; dx++) {
+      var sides = dx === 0 ? [0] : [-dx, dx], s;
+      for (s = 0; s < sides.length; s++) {
+        var x = tx + sides[s];
+        if (x < 1 || x >= W - 1) continue;
+        var y;
+        for (y = Math.max(1, cap - 1); y <= cap + 1; y++) {
+          if (!solid(get(x, y))) continue;
+          var px = (x + 0.5) * TILE, py = y * TILE - 0.01;
+          if (collides(px, py) || !collides(px, py + 1.5)) continue;
+          var d = Math.abs(sides[s]) + Math.abs(y - cap) * 3;
+          if (d < bestD) { bestD = d; best = { x: px, y: py }; }
+          break;
+        }
+      }
+      if (best && dx > 0) break;
+    }
+    return best || { x: player.x, y: cap * TILE - 0.01 };
+  }
+  function petInPit(a, shaftX) {
+    // Any puppy or cat in this hole, hearts or not. Other animals stay put.
+    if (!a || (a.type !== 'dog' && a.type !== 'cat')) return false;
+    if (Math.abs(a.x - shaftX) > 8 * TILE) return false;
+    var cap = columnCap(Math.floor(shaftX / TILE));
+    if (cap == null) cap = columnCap(Math.floor(a.x / TILE));
+    if (cap == null) return false;
+    return Math.floor((a.y - 1) / TILE) - (cap - 1) >= 3;
+  }
+  function ropePets(shaftX) {
+    var list = [];
+    var i;
+    for (i = 0; i < animals.length; i++) if (petInPit(animals[i], shaftX)) list.push(animals[i]);
+    return list;
+  }
+  function petLandingSpot(c) {
+    var shaftTx = Math.floor(c.sx / TILE);
+    var landTx = Math.floor(c.tx / TILE);
+    var side = landTx === shaftTx ? (player.dir || 1) : (landTx > shaftTx ? 1 : -1);
+    var row = Math.floor((c.ty + 1) / TILE);
+    var order = [landTx + side, landTx, landTx + side * 2, landTx - side];
+    var shifts = [0, 1, -1, 2, -2];
+    var i, k, tx, ty;
+    for (i = 0; i < order.length; i++) {
+      tx = order[i];
+      if (tx < 1 || tx >= W - 1 || tx === shaftTx) continue;
+      for (k = 0; k < shifts.length; k++) {
+        ty = row + shifts[k];
+        if (ty < 2 || ty >= H - 1) continue;
+        if (solid(get(tx, ty)) && !solid(get(tx, ty - 1))) return { x: (tx + 0.5) * TILE, y: ty * TILE - 0.01 };
+      }
+    }
+    return { x: c.tx, y: c.ty };
+  }
+  function moveRopePet(c, pet, vu, hu) {
+    var land = c.petLand;
+    var joinX = c.sx + (pet.sx >= c.sx ? 14 : -14);
+    var x = vu < 1 ? pet.sx + (joinX - pet.sx) * vu : joinX + (land.x - joinX) * hu;
+    var y = pet.sy + (land.y - pet.sy) * vu;
+    pet.a.x = x;
+    pet.a.y = y;
+    pet.a.vx = 0;
+    pet.a.ropeRide = 1;
+    pet.a.dir = land.x >= c.sx ? 1 : -1;
+  }
+  function settleRopePet(a, spot) {
+    a.ropeRide = 0;
+    a.ropeHold = 2.4;
+    a.x = spot.x;
+    a.y = spot.y;
+    a.vx = 0;
+    a.wait = Math.max(a.wait || 0, 2.4);
+    var n = 0;
+    while (n++ < 6 && solid(get(Math.floor(a.x / TILE), Math.floor((a.y - 4) / TILE)))) a.y -= 4;
+    var under = get(Math.floor(a.x / TILE), Math.floor((a.y + 2) / TILE));
+    if (!solid(under)) {
+      var tx = Math.floor(a.x / TILE), ty;
+      for (ty = Math.floor((a.y + 2) / TILE); ty < H - 1; ty++) {
+        if (solid(get(tx, ty)) && !solid(get(tx, ty - 1))) { a.y = ty * TILE - 0.01; break; }
+      }
+    }
+  }
+  function climbRope() {
+    if (!ropeShown || ropeClimb || drivingCar || riding) return;
+    var land = ropeLanding();
+    if (land.y > player.y - TILE) return;
+    seek = null; fishing = null; joyX = 0;
+    var dist = Math.hypot(land.x - player.x, land.y - player.y);
+    var pals = ropePets(player.x);
+    ropeClimb = {
+      sx: player.x, sy: player.y, tx: land.x, ty: land.y, t: 0,
+      dur: Math.max(0.85, dist / (TILE * 3.5)),
+      petLand: null,
+      pets: pals.map(function (a) { a.ropeRide = 1; return { a: a, sx: a.x, sy: a.y }; })
+    };
+    ropeClimb.petLand = petLandingSpot(ropeClimb);
+    if (land.x !== player.x) player.dir = land.x > player.x ? 1 : -1;
+    if (pals.length === 1) showToast('The ' + pals[0].type + ' climbs too!', 2.2);
+    else if (pals.length > 1) showToast('Come with me!', 2.2);
+  }
+  function stepRopeClimb(dt) {
+    var c = ropeClimb;
+    if (!c) return;
+    if (!c.petLand) c.petLand = petLandingSpot(c);
+    c.t += dt;
+    var u = Math.min(1, c.t / c.dur);
+    var vu = Math.min(1, u / 0.75);
+    var hu = u <= 0.75 ? 0 : (u - 0.75) / 0.25;
+    player.vy = 0;
+    player.x = c.sx + (c.tx - c.sx) * hu;
+    player.y = c.sy + (c.ty - c.sy) * vu;
+    onGround = false;
+    var i;
+    for (i = 0; i < c.pets.length; i++) moveRopePet(c, c.pets[i], vu, hu);
+    if (u >= 1) {
+      player.x = c.tx; player.y = c.ty;
+      var n = 0;
+      while (n++ < 8 && collides(player.x, player.y)) player.y -= 2;
+      player.vy = 0; onGround = true; coyote = 0.14;
+      for (i = 0; i < c.pets.length; i++) settleRopePet(c.pets[i].a, c.petLand);
+      var extra = ropePets(c.sx);
+      for (i = 0; i < extra.length; i++) settleRopePet(extra[i], c.petLand);
+      ropeClimb = null; pitTime = 0; ropeShown = false; ropeAnnounced = false; ropeAnchor = null;
+      if (lastPromptSpoken === 'A rope! Climb up!') lastPromptSpoken = '';
+      saveSoon();
+    }
+  }
+  function ropeHit(wx, wy) {
+    var a = ropeAnchor;
+    if (!ropeShown || ropeClimb || drivingCar || !a) return false;
+    if (wy < a.topY - 6 || wy > a.botY + 24) return false;
+    if (Math.hypot(wx - a.x, wy - a.botY) <= 26) return true;
+    return Math.abs(wx - a.x) <= 16 && wy >= a.topY && wy <= a.botY + 8;
+  }
+  function liftChatForRope() {
+    if (!dialogue || dialogue.answered || !dialogue.key) return;
+    chatQueue.push({ anchor: dialogue.anchor || 'scene', key: dialogue.key, at: chatClock });
+    if (chatQueue.length > 2) chatQueue.shift();
+    closeChat(true);
+    chatCooldown = 2;
+  }
+  function clearRopeRescue() {
+    pitTime = 0; ropeShown = false; ropeAnnounced = false; ropeAnchor = null; ropeClimb = null;
+  }
+  function updateRopeRescue(dt) {
+    var physicsRuns = started && !rotateBlock() && !panelOpen() && !chatBlocked();
+    if (ropeClimb && !physicsRuns) stepRopeClimb(dt);
+    if (ropeClimb) { ropeShown = true; syncRopeAnchor(); return; }
+    var allow = started && !drivingCar && !riding;
+    var depth = allow ? pitDepthTiles() : 0;
+    var stairs = depth >= 8 && canWalkOut();
+    if (allow && onGround && depth >= 8 && !stairs) pitTime += dt;
+    else if (!(allow && !onGround && depth >= 8 && pitTime > 0 && !stairs)) pitTime = 0;
+    var show = allow && depth >= 8 && !stairs && pitTime >= 2.5;
+    if (!show) {
+      if (ropeShown && lastPromptSpoken === 'A rope! Climb up!') lastPromptSpoken = '';
+      ropeShown = false; ropeAnnounced = false; ropeAnchor = null;
+      return;
+    }
+    if (!ropeShown) {
+      ropeShown = true;
+      if (!(inv.rope > 0)) {
+        addItem('rope', 1, true);
+        var ri = hotbar.indexOf('rope');
+        if (ri >= 0) sel = ri;
+        invSig = '';
+        renderHotbar();
+        saveSoon();
+      }
+      if (!ropeAnnounced) { ropeAnnounced = true; liftChatForRope(); showToast('A rope! Climb up!', 2.6); }
+    }
+    syncRopeAnchor();
+  }
+  function drawRescueRope(g) {
+    var a = ropeAnchor;
+    if (!ropeShown || drivingCar || !a) return;
+    g.save();
+    inkStyle(g);
+    g.lineCap = 'round';
+    var y, sway;
+    g.strokeStyle = '#c98448'; g.lineWidth = 4;
+    g.beginPath();
+    for (y = a.topY; y <= a.botY; y += 8) {
+      sway = Math.sin(y * 0.16) * 2.4;
+      if (y === a.topY) g.moveTo(a.x + sway, y); else g.lineTo(a.x + sway, y);
+    }
+    g.stroke();
+    g.strokeStyle = '#f3ddb4'; g.lineWidth = 1.6;
+    g.beginPath();
+    for (y = a.topY; y <= a.botY; y += 8) {
+      sway = Math.sin(y * 0.16 + 1.1) * 2.2;
+      if (y === a.topY) g.moveTo(a.x + sway, y); else g.lineTo(a.x + sway, y);
+    }
+    g.stroke();
+    g.fillStyle = '#a86430'; g.strokeStyle = '#51493c'; g.lineWidth = 1.35;
+    var k;
+    for (k = a.topY + 22; k < a.botY - 10; k += 32) {
+      g.beginPath(); g.arc(a.x + Math.sin(k * 0.16) * 2, k, 3.3, 0, 6.3); g.fill(); g.stroke();
+    }
+    g.beginPath(); g.ellipse(a.x, a.botY + 6, 8, 5.5, 0, 0, 6.3);
+    g.fillStyle = '#e2b06a'; g.fill(); g.stroke();
+    g.restore();
+  }
   function moveY(dy) {
     if (!dy) return;
     var sign = dy > 0 ? 1 : -1;
@@ -3071,7 +3590,210 @@ function validConversation(value, p) {
       left -= step;
     }
   }
+  // The crafted house keeps its 3×3 front. The door opens a room drawn over the world.
+  function houseDoorBox(b) {
+    return { x: b.x * TILE + 44, y: b.y * TILE + 54, w: 32, h: 42 };
+  }
+  function pointInDoor(b, wx, wy) {
+    var d = houseDoorBox(b);
+    return wx >= d.x - 8 && wx <= d.x + d.w + 8 && wy >= d.y - 8 && wy <= d.y + d.h + 10;
+  }
+  function playerHitsDoor(b) {
+    var d = houseDoorBox(b);
+    return player.x + PW > d.x && player.x - PW < d.x + d.w && player.y > d.y && player.y - PH < d.y + d.h;
+  }
+  function houseFurn(b) {
+    if (!b.furn) b.furn = { bed: 0, table: 0, torch: 0 };
+    return b.furn;
+  }
+  function sayHouse(line) {
+    if (lastPromptSpoken === line) lastPromptSpoken = '';
+    showToast(line, 2.2);
+  }
+  function standBesideDoor(b) {
+    var d = houseDoorBox(b);
+    var ground = (b.y + b.h) * TILE - 0.01;
+    var x = d.x + d.w + 22;
+    if (x > (b.x + b.w) * TILE - 8) x = d.x - 22;
+    player.x = x;
+    player.y = ground;
+    var n = 0;
+    while (n++ < 8 && collides(player.x, player.y)) player.y -= 4;
+    player.vy = 0;
+    onGround = true;
+  }
+  function enterHouse(b) {
+    if (!b || b.kind !== 'house' || indoors || drivingCar || riding || ropeClimb || houseGrace > 0) return;
+    if (quiz || dialogue || nameFlow) return;
+    closeUpgrade();
+    seek = null;
+    fishing = null;
+    jumpBuf = 0;
+    standBesideDoor(b);
+    indoors = b;
+    indoorX = 0.62;
+    houseFurn(b);
+    sayHouse('Go inside!');
+    saveSoon();
+  }
+  function exitHouse(silent) {
+    if (!indoors) return;
+    var b = indoors;
+    indoors = null;
+    indoorX = 0.42;
+    houseGrace = 0.65;
+    if (buildObjects.indexOf(b) >= 0) standBesideDoor(b);
+    if (!silent) sayHouse('Go outside!');
+    saveSoon();
+  }
+  function roomBoxes() {
+    var left = Math.max(36, viewW * 0.08);
+    var right = viewW - left;
+    var top = Math.max(54, viewH * 0.12);
+    var floor = Math.min(viewH * 0.72, viewH - 108);
+    if (floor < top + 150) floor = top + 150;
+    var doorH = Math.min(108, Math.max(72, floor - top - 28));
+    return {
+      left: left, right: right, top: top, floor: floor,
+      door: { x: left + 12, y: floor - doorH, w: 50, h: doorH },
+      bed: { x: right - 130, y: floor - 54, w: 96, h: 50 },
+      table: { x: left + (right - left) * 0.24, y: floor - 52, w: 76, h: 48 },
+      torch: { x: right - 54, y: top + 24, w: 36, h: 42 }
+    };
+  }
+  function indoorFeet() {
+    var R = roomBoxes();
+    var minX = R.door.x + R.door.w + 28;
+    var maxX = R.bed.x - 20;
+    if (maxX < minX + 24) maxX = minX + 24;
+    return { x: minX + indoorX * (maxX - minX), y: R.floor };
+  }
+  function hitRoom(box, x, y, pad) {
+    return x >= box.x - pad && x <= box.x + box.w + pad && y >= box.y - pad && y <= box.y + box.h + pad;
+  }
+  function placeIndoor(key) {
+    if (!indoors || (key !== 'bed' && key !== 'table' && key !== 'torch')) return;
+    var furn = houseFurn(indoors);
+    if (furn[key]) { showWord(key); return; }
+    if (selectedKey() !== key || !(inv[key] > 0)) {
+      showToast(key === 'torch' ? 'The torch goes on the wall!' : ('The ' + key + ' goes here!'), 2);
+      return;
+    }
+    consume(key);
+    furn[key] = 1;
+    if (!quiz) { progress.placed[key] = 1; rememberEvent('built', key); }
+    playSfx('place');
+    showWord(key);
+    updateQuest();
+    saveSoon();
+  }
+  function indoorTap(sx, sy) {
+    if (!indoors) return;
+    var R = roomBoxes();
+    if (hitRoom(R.door, sx, sy, 12)) { exitHouse(); return; }
+    var key = selectedKey();
+    if (hitRoom(R.bed, sx, sy, 18) || (key === 'bed' && sy > R.floor - 80 && sx > R.bed.x - 24)) { placeIndoor('bed'); return; }
+    if (hitRoom(R.table, sx, sy, 18) || (key === 'table' && sy > R.floor - 80 && sx > R.table.x - 20 && sx < R.table.x + R.table.w + 24)) { placeIndoor('table'); return; }
+    if (hitRoom(R.torch, sx, sy, 16) || (key === 'torch' && sy < R.floor - 90 && sx > R.torch.x - 20)) { placeIndoor('torch'); return; }
+    if (key === 'bed') showToast('The bed goes here!', 2);
+    else if (key === 'table') showToast('The table goes here!', 2);
+    else if (key === 'torch') showToast('The torch goes on the wall!', 2);
+    else if (key === 'flower') showToast('The flower goes outside!', 2.2);
+    else if (key === 'fence') showToast('The fence goes outside!', 2.2);
+    else if (key === 'door') showToast('The door goes outside!', 2.2);
+    else if (key === 'window') showToast('The window goes outside!', 2.2);
+  }
+  function indoorPhysics(dt) {
+    var ax = axis();
+    jumpBuf = 0;
+    onGround = true;
+    player.vy = 0;
+    if (ax) {
+      player.dir = ax > 0 ? 1 : -1;
+      indoorX = Math.max(0, Math.min(1, indoorX + ax * dt * 0.62));
+      player.anim += dt * 11;
+      if (ax < 0 && indoorX <= 0.001) exitHouse();
+    } else player.anim += dt * 2;
+  }
+  function updateHouse(dt) {
+    if (houseGrace > 0) houseGrace = Math.max(0, houseGrace - dt);
+    if (indoors) {
+      if (buildObjects.indexOf(indoors) < 0) indoors = null;
+      return;
+    }
+    if (houseGrace > 0 || drivingCar || riding || ropeClimb || !onGround || !started) return;
+    var i;
+    for (i = 0; i < buildObjects.length; i++) {
+      var b = buildObjects[i];
+      if (b.kind === 'house' && playerHitsDoor(b)) { enterHouse(b); return; }
+    }
+  }
+  function drawRoomItem(g, key, box, filled) {
+    g.save();
+    g.globalAlpha = filled ? 1 : 0.4;
+    g.translate(box.x + (box.w - Math.min(box.w, box.h)) / 2, box.y);
+    specialIcon(g, key, Math.min(box.w, box.h));
+    g.restore();
+    if (!filled) {
+      g.save();
+      g.strokeStyle = '#51493c';
+      g.globalAlpha = 0.4;
+      g.setLineDash([4, 3]);
+      g.lineWidth = 1.5;
+      roundRect(g, box.x - 4, box.y - 4, box.w + 8, box.h + 8, 8);
+      g.stroke();
+      g.restore();
+    }
+  }
+  function drawInterior(g) {
+    var R = roomBoxes();
+    var b = indoors;
+    var furn = houseFurn(b);
+    var stone = b.parts && b.parts.wall && b.parts.wall.material === 'stone';
+    var glass = b.parts && b.parts.window && b.parts.window.tier >= 2;
+    g.save();
+    g.setTransform(dpr, 0, 0, dpr, 0, 0);
+    g.fillStyle = '#f6e7cf';
+    g.fillRect(0, 0, viewW, viewH);
+    inkStyle(g);
+    g.lineWidth = 2.2;
+    inkBox(g, R.left, R.top, R.right - R.left, R.floor - R.top + 28, stone ? '#d7e2ea' : '#fff6e4', 10);
+    inkBox(g, R.left + 8, R.floor - 6, R.right - R.left - 16, 30, '#e7b56a', 4);
+    g.strokeStyle = '#c48a3e';
+    g.lineWidth = 1.2;
+    var plank;
+    for (plank = R.left + 18; plank < R.right - 10; plank += 22) {
+      g.beginPath(); g.moveTo(plank, R.floor - 2); g.lineTo(plank, R.floor + 20); g.stroke();
+    }
+    var ww = 78, wh = 52, winX = (R.left + R.right) / 2 - ww / 2, winY = R.top + 26;
+    inkBox(g, winX, winY, ww, wh, glass ? '#9fd8ea' : '#d7b98a', 4);
+    g.strokeStyle = '#51493c';
+    g.lineWidth = 1.6;
+    g.beginPath();
+    g.moveTo(winX + ww / 2, winY + 2); g.lineTo(winX + ww / 2, winY + wh - 2);
+    g.moveTo(winX + 2, winY + wh / 2); g.lineTo(winX + ww - 2, winY + wh / 2);
+    g.stroke();
+    inkBox(g, R.door.x, R.door.y, R.door.w, R.door.h, '#e2b06a', 5);
+    g.fillStyle = '#ffe08a';
+    g.beginPath(); g.arc(R.door.x + R.door.w - 12, R.door.y + R.door.h * 0.55, 4, 0, 6.3); g.fill();
+    inkBox(g, R.table.x - 10, R.floor - 8, R.table.w + 20, 16, '#f4b4c4', 7);
+    drawRoomItem(g, 'bed', R.bed, furn.bed);
+    drawRoomItem(g, 'table', R.table, furn.table);
+    drawRoomItem(g, 'torch', R.torch, furn.torch);
+    if (furn.torch) {
+      g.fillStyle = 'rgba(255, 196, 90, 0.2)';
+      g.beginPath(); g.arc(R.torch.x + 16, R.torch.y + 12, 56, 0, 6.3); g.fill();
+    }
+    var feet = indoorFeet();
+    g.translate(feet.x, feet.y);
+    g.scale(1.35, 1.35);
+    g.translate(-player.x, -player.y);
+    drawPlayer(g);
+    g.restore();
+  }
   function physics(dt) {
+    if (indoors) { indoorPhysics(dt); return; }
+    if (ropeClimb) { stepRopeClimb(dt); return; }
     if(drivingCar){driveCar(dt);return;}
     if (riding) { player.anim += dt * 2; return; }
     var water = inWater();
@@ -3113,6 +3835,26 @@ function validConversation(value, p) {
     if (player.y > H * TILE) player.y = homeY;
   }
   function animalStep(a, dt) {
+    if (a.ropeRide || (ropeClimb && ropeClimb.pets)) {
+      var ridingRope = !!a.ropeRide;
+      if (!ridingRope && ropeClimb && ropeClimb.pets) {
+        var pi;
+        for (pi = 0; pi < ropeClimb.pets.length; pi++) if (ropeClimb.pets[pi].a === a) ridingRope = true;
+      }
+      if (ridingRope) { a.phase += dt * 8; a.vx = 0; return; }
+    }
+    if (a.ropeHold > 0) {
+      a.ropeHold -= dt;
+      a.phase += dt * 6;
+      a.vx = 0;
+      var holdUnder = get(Math.floor(a.x / TILE), Math.floor((a.y + 2) / TILE));
+      if (!solid(holdUnder)) {
+        a.y += 90 * dt;
+        var holdGy = Math.floor(a.y / TILE);
+        if (solid(get(Math.floor(a.x / TILE), holdGy))) a.y = holdGy * TILE - 0.01;
+      }
+      return;
+    }
     if(drivingCar&&a.tamed){a.vx=0;return;}
     if (Math.abs(a.x - player.x) > 1100 && !a.tamed) return;
     var previousX = a.x, previousY = a.y;
@@ -3144,24 +3886,28 @@ function validConversation(value, p) {
     var ahead = Math.floor((nx + a.dir * 12) / TILE);
     var body = Math.floor((a.y - 10) / TILE);
     var belowId = get(tx, under);
-    var canSwim = a.tamed || a.type === 'duck';
+    var canSwim = a.tamed || a.type === 'duck' || a.type === 'dog' || a.type === 'cat';
     var floorOk = solid(belowId) || (belowId === WATER && canSwim);
     var blocked = solid(get(ahead, body));
     if (floorOk && !blocked && nx > TILE && nx < (W - 1) * TILE) a.x = nx;
-    else if (a.tamed && !blocked && nx > TILE && nx < (W - 1) * TILE) a.x = nx;
+    else if ((a.tamed || canSwim) && !blocked && nx > TILE && nx < (W - 1) * TILE) a.x = nx;
     else if (a.tamed && blocked) {
       if (!solid(get(ahead, body - 1)) && !solid(get(tx, body - 1))) { a.y = body * TILE - 0.01; a.x = nx; }
     }
-    else if (!a.tamed) { a.vx = -a.vx; a.timer = 0.7; }
+    else if (!a.tamed && !(canSwim && (belowId === WATER || get(ahead, under) === WATER))) { a.vx = -a.vx; a.timer = 0.7; }
     var underId2 = get(Math.floor(a.x / TILE), Math.floor((a.y + 2) / TILE));
-    if (underId2 === WATER && canSwim) {
-      a.y = Math.floor((a.y + 2) / TILE) * TILE - 0.01;
+    var inWaterBody = underId2 === WATER || get(Math.floor(a.x / TILE), Math.floor((a.y - 8) / TILE)) === WATER;
+    if (inWaterBody && canSwim) {
+      var waterRow = underId2 === WATER ? Math.floor((a.y + 2) / TILE) : Math.floor((a.y - 8) / TILE);
+      a.y = waterRow * TILE - 0.01 + Math.sin(a.phase * 2.2) * 2.5;
+      a.swim = true;
     } else if (!solid(underId2)) {
+      a.swim = false;
       a.y += 90 * dt;
       var gy = Math.floor(a.y / TILE);
       if (solid(get(Math.floor(a.x / TILE), gy))) a.y = gy * TILE - 0.01;
       else if (get(Math.floor(a.x / TILE), gy) === WATER && canSwim) a.y = gy * TILE - 0.01;
-    }
+    } else a.swim = false;
     if (a.tamed && (a.x !== previousX || a.y !== previousY)) saveSoon();
   }
 
@@ -3313,9 +4059,10 @@ function validConversation(value, p) {
     updateQuest();
     saveSoon();
   }
-  function mine(tx, ty) {
+  function mine(tx, ty, fromBreak) {
     var id = get(tx, ty);
-    if (id === WATER) {
+    // Rod/boat on water: tap-to-use only. Break always digs so water leaves a mark.
+    if (id === WATER && !fromBreak) {
       var sk = selectedKey();
       if (sk === 'rod') { if (inReach(tx, ty)) startFishing(tx, ty); return; }
       if (sk === 'boat') { if (inReach(tx, ty)) placeBoat(tx, ty); return; }
@@ -3331,16 +4078,54 @@ function validConversation(value, p) {
       buildAction('remove'); placedThisRun.delete(idx(tx,ty)); buildSession.removed++; buildDirty=true;
     }
     playSfx(buildOwned(tx,ty)?'remove':'harvest');setCell(tx, ty, AIR);
+    // Lasting dig marks: water must not look like an untouched sandy shore;
+    // sand under water opens the surface so the pond shows a crater.
+    if (id === WATER) {
+      if (get(tx, ty + 1) === SAND) setCell(tx, ty + 1, DIRT);
+    } else if (id === SAND) {
+      if (get(tx, ty - 1) === WATER) setCell(tx, ty - 1, AIR);
+    }
     burst((tx + 0.5) * TILE, (ty + 0.5) * TILE, PCOL[id] || '#fff', false);
     tone(180, 0.07, 'triangle', 0, 0.04, 80);
     giveMined(id);
     rememberEvent(id===WINDOW?'built':'found', KEY_OF[id]);
+  }
+  function groundSupport(id) {
+    return id === GRASS || id === DIRT || id === SAND || id === STONE || id === PLANKS;
+  }
+  function wallSupport(id) {
+    return id === GRASS || id === DIRT || id === SAND || id === STONE || id === PLANKS || id === WOOD || id === HOUSE || id === BEDROCK;
+  }
+  // Where a crafted item is allowed to sit. Empty string means the spot is fine.
+  function specialPlaceLine(key, tx, ty) {
+    if (indoors && (key === 'flower' || key === 'fence' || key === 'door' || key === 'window')) return 'The ' + key + ' goes outside!';
+    if (key === 'flower') {
+      var soil = get(tx, ty + 1);
+      if (soil !== GRASS && soil !== DIRT) return 'The flower goes on the grass!';
+    } else if (key === 'fence') {
+      if (!groundSupport(get(tx, ty + 1))) return 'The fence goes on the ground!';
+    } else if (key === 'door') {
+      if (!groundSupport(get(tx, ty + 1))) return 'The door goes on the ground!';
+      if (get(tx, ty - 1) !== AIR) return 'The door needs space above!';
+    } else if (key === 'window') {
+      if (!wallSupport(get(tx - 1, ty)) && !wallSupport(get(tx + 1, ty))) return 'The window goes on a wall!';
+    } else if (key === 'torch' && !indoors) {
+      var held = groundSupport(get(tx, ty + 1)) || wallSupport(get(tx - 1, ty)) || wallSupport(get(tx + 1, ty));
+      if (!held) return 'The torch goes on the ground!';
+    }
+    return '';
   }
   function tryPlace(tx, ty) {
     var key = selectedKey();
     if (!key) return;
     if(CRAFTABLES[key]){var prior=buildTool;buildTool=key;buildTap(tx,ty,0);if(!buildMode)buildTool=prior;return;}
     if (key !== 'seed' && key !== 'boat' && !BLOCK_OF[key]) { showWord(key); return; }
+    if (key === 'bed' || key === 'table') {
+      if (indoors) { placeIndoor(key); return; }
+      showToast(key === 'bed' ? 'The bed goes in the house!' : 'The table goes in the house!', 2.2);
+      return;
+    }
+    if (key === 'torch' && indoors) { placeIndoor('torch'); return; }
     if (!placementReach(tx,ty)) { placementFailure(tx,ty,'reach'); return; }
     if (!placementSight(tx,ty)) { placementFailure(tx,ty,'sight',sightBlock); return; }
     if (key === 'boat') {
@@ -3350,6 +4135,8 @@ function validConversation(value, p) {
     }
     if (craftableAt(tx,ty) || get(tx,ty)!==AIR || overlapsPlayer(tx,ty)) { placementFailure(tx,ty,'occupied'); return; }
     if(cellHasAnimal(tx,ty)){placementFailure(tx,ty,'animal');return;}
+    var spotLine = specialPlaceLine(key, tx, ty);
+    if (spotLine) { showToast(spotLine, 2.2); return; }
     if (key === 'seed') {
       var below = get(tx, ty + 1);
       if (below !== GRASS && below !== DIRT) { showWord('seed'); return; }
@@ -3385,7 +4172,7 @@ function validConversation(value, p) {
     if (!c) return;
     lock = { tx: c.tx, ty: c.ty };
     lockAge = 0;
-    mine(c.tx, c.ty);
+    mine(c.tx, c.ty, true);
   }
   function doPlace() {
     if (riding || drivingCar) return;
@@ -3484,7 +4271,7 @@ function validConversation(value, p) {
   }
   function requestJump() {
     if(drivingCar)return;
-    if (buildSessionBusy()) buildAction('jump');
+    if (buildMode || buildSession.active) buildAction('jump');
     if (riding) { disembark(); return; }
     jumpBuf = 0.16;
     if (!intros.jump) {
@@ -3501,7 +4288,9 @@ function validConversation(value, p) {
     if (!quiz) progress.tapped[a.type] = 1;
     if (quiz && a.type !== quiz.key) quizWrong();
     learn(a.type); rememberEvent('met', a.type);
-    if(!trail.discoveries[a.type]){trail.discoveries[a.type]=true;queueChat('pet',a.type);}
+    if(!trail.discoveries[a.type]) trail.discoveries[a.type]=true;
+    // First meet and later pats can enqueue an exploration prompt (queueChat cooldown applies).
+    queueChat('pet', a.type);
     if(!quiz&&!dialogue&&!buildShowActive())buildFeedback('Look! A '+a.type+'!','animal_meet');
     if (a.type === 'sheep') { addItem('wool', 1, true); learn('wool'); }
     if (a.tamed) {
@@ -3581,6 +4370,7 @@ function validConversation(value, p) {
     return x > player.x ? 1 : -1;
   }
   function tapWorld(wx, wy, sx, sy, fy) {
+    if (ropeHit(wx, wy)) { climbRope(); return; }
     if(interactObject(wx,wy))return;
     if(CRAFTABLES[selectedKey()]){var prior=buildTool;buildTool=selectedKey();buildTap(Math.floor(wx/TILE),Math.floor(wy/TILE),fy);if(!buildMode)buildTool=prior;return;}
     if (boat) {
@@ -3616,7 +4406,35 @@ function validConversation(value, p) {
     }
     var tx = Math.floor(wx / TILE), ty = Math.floor(wy / TILE);
     var id = get(tx, ty);
+    var heldKey = selectedKey();
+    if (heldKey === 'flower' || heldKey === 'fence' || heldKey === 'door' || heldKey === 'window' || heldKey === 'torch') {
+      // A special item never digs. Offer the surface it belongs on, or explain and keep it.
+      if (id !== AIR && (heldKey === 'flower' || heldKey === 'fence' || heldKey === 'door' || heldKey === 'torch') && get(tx, ty - 1) === AIR) {
+        tryPlace(tx, ty - 1);
+        return;
+      }
+      if (heldKey === 'window' && id !== AIR) {
+        var sides = [[tx - 1, ty], [tx + 1, ty]];
+        var si;
+        for (si = 0; si < sides.length; si++) {
+          if (get(sides[si][0], sides[si][1]) === AIR && !specialPlaceLine('window', sides[si][0], sides[si][1])) {
+            tryPlace(sides[si][0], sides[si][1]);
+            return;
+          }
+        }
+        showToast('The window goes on a wall!', 2.2);
+        return;
+      }
+      if (id !== AIR) {
+        showToast(specialPlaceLine(heldKey, tx, ty - 1) || ('The ' + heldKey + ' goes on the ground!'), 2.2);
+        return;
+      }
+    }
     if (id !== AIR) {
+      if (heldKey === 'bed' || heldKey === 'table') {
+        showToast(heldKey === 'bed' ? 'The bed goes in the house!' : 'The table goes in the house!', 2.2);
+        return;
+      }
       lock = { tx: tx, ty: ty };
       lockAge = 0;
       if (mineable(id)) seekMine(tx, ty);
@@ -3634,6 +4452,10 @@ function validConversation(value, p) {
           if (Math.hypot(sx - starPos[i].x, sy - starPos[i].y) < 22) { showWord('star'); return; }
         }
       }
+    }
+    if (selectedKey() === 'bed' || selectedKey() === 'table') {
+      showToast(selectedKey() === 'bed' ? 'The bed goes in the house!' : 'The table goes in the house!', 2.2);
+      return;
     }
     if (placementReach(tx, ty)) {
       lock = { tx: tx, ty: ty };
@@ -3668,52 +4490,97 @@ function validConversation(value, p) {
     var wag = Math.sin(frame * Math.PI / 4) * 3;
     var blink = !reducedMotion && phase % 25 > 24;
     var bird = type === 'chicken' || type === 'duck';
-    var color = { cow: '#fff9e8', pig: '#efb6bd', sheep: '#fff9e8', chicken: '#f6d487',
-      cat: '#eab776', dog: '#dfc198', duck: '#fff9e8', horse: '#c99d7b', rabbit: '#e6e3dc' }[type] || '#dfc198';
-    // Tail moves independently, so a standing animal still has a little life.
-    if (type === 'pig') { g.beginPath(); g.arc(-16, -21, 3, -1, 4.6); g.stroke(); }
-    else if (type === 'rabbit') inkEllipse(g, -12, -15, 3.5, 3.5, '#fff9ef');
+    var color = { cow: '#fff9e8', pig: '#f3b7c0', sheep: '#fffdf6', chicken: '#f6d487',
+      cat: '#eab776', dog: '#e2c4a2', duck: '#fffdf8', horse: '#c99d7b', rabbit: '#f4f1ea' }[type] || '#dfc198';
+    var hoof = type === 'sheep' ? '#3c342e' : (type === 'cow' || type === 'horse' ? '#6d5848' : color);
+    function eye(x, y) {
+      if (blink) { inkPath(g, [[x - 1.7, y], [x + 1.7, y]]); return; }
+      g.fillStyle = '#fffdf8'; g.beginPath(); g.arc(x, y, 1.65, 0, 6.3); g.fill();
+      g.strokeStyle = '#51493c'; g.lineWidth = 1; g.stroke();
+      g.fillStyle = '#51493c'; g.beginPath(); g.arc(x + 0.35, y + 0.1, 0.82, 0, 6.3); g.fill();
+      g.fillStyle = '#fff'; g.beginPath(); g.arc(x - 0.35, y - 0.45, 0.32, 0, 6.3); g.fill();
+      inkStyle(g);
+    }
+    function blot(x, y, rx, ry, c) {
+      g.beginPath(); g.ellipse(x, y, rx, ry, 0, 0, 6.3); g.fillStyle = c; g.fill();
+    }
+    // Tail sits behind the body and still wags while the animal stands.
+    if (type === 'pig') {
+      g.beginPath(); g.arc(-15, -22, 3.2, 0.4, 5.4); g.stroke();
+      g.beginPath(); g.arc(-16.5, -24, 1.5, 0.2, 4.2); g.stroke();
+    } else if (type === 'rabbit') inkEllipse(g, -13, -16, 3.4, 3.2, '#fff');
+    else if (type === 'cat') {
+      g.beginPath(); g.moveTo(-12, -18); g.quadraticCurveTo(-22, -16 - wag * 0.3, -18, -28 - wag); g.quadraticCurveTo(-10, -26, -12, -20);
+      g.fillStyle = color; g.fill(); g.stroke();
+    } else if (type === 'dog') inkEllipse(g, -11, -30 - wag * 0.15, 3.2, 5.2, '#c49e77', 0.9);
+    else if (type === 'horse') inkPath(g, [[-12, -22], [-20, -18 - wag], [-16, -30 - wag], [-10, -24]], '#6d5344');
     else if (!bird) {
-      g.beginPath(); g.moveTo(-12, -20); g.quadraticCurveTo(-23, -23 - wag, -18, -30 - wag); g.stroke();
+      g.beginPath(); g.moveTo(-12, -20); g.quadraticCurveTo(-22, -22 - wag, -16, -30 - wag); g.stroke();
     }
     if (bird) {
-      inkPath(g, [[-4, -11], [-4, -2], [-7, -2]]); inkPath(g, [[4, -11], [4, -2], [7, -2]]);
+      inkPath(g, [[-5, -12], [-5, -2], [-8, -1]]); inkPath(g, [[3, -12], [3, -2], [6, -1]]);
+      blot(-7, -1.2, 1.6, 0.7, '#edbf71'); blot(5, -1.2, 1.6, 0.7, '#edbf71');
     } else {
-      inkBox(g, -10, -14, 5, 12, color); inkBox(g, 4, -14, 5, 12, color);
+      var legTop = type === 'dog' ? -11 : -14, legH = type === 'dog' ? 9 : 12;
+      inkBox(g, -10, legTop, 5, legH, hoof === color ? color : hoof); inkBox(g, 4, legTop, 5, legH, hoof === color ? color : hoof);
+      if (type === 'sheep') { inkBox(g, -10, -14, 5, 8, '#51493c', 1.2); inkBox(g, 4, -14, 5, 8, '#51493c', 1.2); }
+      blot(-7.5, -3.2, 2.1, 1.1, '#3a322c'); blot(6.5, -3.2, 2.1, 1.1, '#3a322c');
     }
-    inkEllipse(g, -1, -21, bird ? 12 : 15, 9, color);
+    inkEllipse(g, type === 'dog' ? 0 : -1, type === 'dog' ? -18 : -21, type === 'dog' ? 12 : (bird ? 11 : 14), type === 'dog' ? 8 : (bird ? 8 : 9), type === 'sheep' ? '#fffdf8' : color);
     if (type === 'sheep') {
-      [-10, -3, 5].forEach(function (x) { inkEllipse(g, x, -27, 5, 5, '#fff9e8'); });
+      [[-10, -24], [-2, -28], [6, -24], [-6, -18], [3, -16]].forEach(function (p) { inkEllipse(g, p[0], p[1], 5.2, 4.6, '#fffdf8'); });
+    } else if (type === 'cow') {
+      blot(-8, -24, 3.2, 2.2, '#51493c'); blot(2, -18, 2.4, 1.8, '#51493c'); blot(-4, -22, 1.5, 1.2, '#51493c');
     }
-    if (bird) inkEllipse(g, -3, -21 + (frame < 4 ? 0 : 1), 6, 4, type === 'duck' ? '#e3eacb' : '#edbf71', -0.2);
-    if (type === 'horse') inkBox(g, 7, -33, 8, 17, color, 3);
+    if (bird) inkEllipse(g, -2, -20 + (frame < 4 ? 0 : 0.8), 5.5, 3.6, type === 'duck' ? '#d5e4c4' : '#edbf71', -0.25);
+    if (type === 'horse') {
+      inkBox(g, 6, -34, 7, 16, color, 3);
+      inkPath(g, [[7, -33], [5, -28], [8, -22], [10, -30]], '#6d5344');
+    }
     var hx = bird ? 10 : 12, hy = type === 'horse' ? -33 : -28;
-    inkEllipse(g, hx, hy, type === 'horse' ? 9 : 7.5, 7, color);
+    inkEllipse(g, hx, hy, type === 'horse' ? 8.2 : 7.2, type === 'horse' ? 6.4 : 6.6, type === 'sheep' ? '#51493c' : color);
     if (type === 'rabbit') {
-      inkEllipse(g, 8, -40, 2.5, 9, color, -0.12); inkEllipse(g, 15, -40, 2.5, 9, color, 0.12);
-      g.strokeStyle = '#ce9f9e'; inkPath(g, [[8, -44], [8, -38]]); inkPath(g, [[15, -44], [15, -38]]); inkStyle(g);
-    } else if (type === 'cat' || type === 'pig') {
-      inkPath(g, [[5, -32], [5, -40], [11, -34]], color); inkPath(g, [[13, -34], [18, -40], [19, -30]], color);
-    } else if (type === 'dog') inkEllipse(g, 7, -30, 3.5, 7, '#c49e77', -0.3);
-    else if (type === 'cow') {
-      inkPath(g, [[7, -33], [5, -39], [11, -34]], '#dfc198'); inkPath(g, [[14, -34], [17, -39], [18, -32]], '#dfc198');
-      inkEllipse(g, -7, -23, 4, 3, '#807365');
-    } else if (type === 'horse') {
-      inkPath(g, [[8, -37], [9, -43], [13, -37]], color);
-      inkPath(g, [[5, -34], [4, -27], [6, -22]], '#807365');
-    } else if (type === 'chicken') {
-      inkEllipse(g, 9, -36, 2.5, 3, '#d99080'); inkEllipse(g, 13, -35, 2.2, 2.7, '#d99080');
-    }
-    if (bird) inkPath(g, [[16, -29], [23, -26], [16, -24]], '#edbf71');
-    else if (type === 'pig' || type === 'cow') {
-      inkEllipse(g, 18, hy + 3, 5, 3.5, '#efb6bd'); inkEye(g, 17, hy + 3, false); inkEye(g, 20, hy + 3, false);
-    } else if (type === 'dog' || type === 'horse') {
-      inkEllipse(g, 18, hy + 3, 5, 3, '#fff1d8'); inkEye(g, 21, hy + 2, false);
+      inkEllipse(g, 8, -40, 2.3, 8.5, color, -0.14); inkEllipse(g, 14.5, -40, 2.3, 8.5, color, 0.14);
+      inkEllipse(g, 8.2, -40, 1.1, 6, '#f0b8b4', -0.14); inkEllipse(g, 14.3, -40, 1.1, 6, '#f0b8b4', 0.14);
     } else if (type === 'cat') {
-      inkPath(g, [[16, -25], [23, -26]]); inkPath(g, [[16, -23], [22, -21]]);
+      inkPath(g, [[6, -32], [5, -40], [12, -33]], color); inkPath(g, [[12, -33], [16, -40], [18, -31]], color);
+      blot(7.2, -36, 1.3, 1.6, '#f0b8b4'); blot(15.2, -36, 1.3, 1.6, '#f0b8b4');
+    } else if (type === 'pig') {
+      inkEllipse(g, 7, -33, 3.2, 3.6, '#f7c4cb', -0.4); inkEllipse(g, 16, -33, 3.2, 3.6, '#f7c4cb', 0.5);
+    } else if (type === 'dog') inkEllipse(g, 8.5, -23, 2.7, 6.6, '#b58862', 0.2);
+    else if (type === 'cow') {
+      inkPath(g, [[7, -33], [6, -39], [11, -33]], '#fff9e8'); inkPath(g, [[13, -33], [16, -39], [17, -32]], '#fff9e8');
+      blot(8.2, -36.5, 0.7, 1.3, '#dfc198'); blot(15.2, -36.2, 0.7, 1.3, '#dfc198');
+    } else if (type === 'horse') {
+      inkPath(g, [[8, -36], [9, -43], [13, -36]], color);
+      inkPath(g, [[9.2, -40], [10.2, -36]], '#6d5344');
+    } else if (type === 'chicken') {
+      inkEllipse(g, 8, -36, 2.2, 2.6, '#e07070'); inkEllipse(g, 12, -37, 2.4, 3.1, '#e07070');
+      blot(10, -32.5, 1.3, 1.6, '#e07070');
     }
-    inkEye(g, hx + 1, hy - 1, blink);
-    if (type === 'dog') inkPath(g, [[6, -18], [12, -18]]); // collar
+    if (type === 'duck') inkPath(g, [[15, -28], [23, -27], [15, -25]], '#f0a05a');
+    else if (type === 'chicken') inkPath(g, [[16, -28], [21, -27], [16, -26]], '#edbf71');
+    else if (type === 'pig') {
+      inkEllipse(g, 18, hy + 2, 4.6, 3.3, '#f7c9cf');
+      blot(16.6, hy + 2.2, 0.55, 0.7, '#c47d8a'); blot(19.2, hy + 2.2, 0.55, 0.7, '#c47d8a');
+    } else if (type === 'cow') {
+      inkEllipse(g, 18, hy + 3, 5.2, 3.4, '#f3b7c0');
+      blot(16.6, hy + 3.2, 0.55, 0.75, '#c47d8a'); blot(19.4, hy + 3.2, 0.55, 0.75, '#c47d8a');
+    } else if (type === 'dog') {
+      inkEllipse(g, 16.6, hy + 1.5, 3.3, 2.5, '#fff6ea');
+      blot(17.6, hy + 1.4, 1.35, 1.05, '#51493c');
+      if (!blink) blot(17.2, hy + 3.6, 1.5, 0.85, '#e07070');
+    } else if (type === 'horse') {
+      inkEllipse(g, 19.2, hy + 2.4, 5.4, 2.3, '#ddc2a4');
+      blot(21.6, hy + 2.3, 0.85, 0.6, '#51493c');
+    } else if (type === 'cat') {
+      blot(16.5, hy + 2.2, 0.7, 0.55, '#e07070');
+      g.strokeStyle = '#51493c'; g.lineWidth = 0.9;
+      [[15, -25], [22, -26], [15, -23], [22, -22]].forEach(function (p, i) { inkPath(g, [[14, p[1]], p]); });
+    } else if (type === 'rabbit') blot(16, hy + 2, 0.7, 0.5, '#e07070');
+    eye(hx + (bird ? 0.4 : 1.2), hy - 1.3);
+    if (!bird && type !== 'horse') eye(hx - 2.2, hy - 1.1);
+    if (type === 'dog') { inkPath(g, [[6, -18], [13, -18]]); blot(9.5, -17.2, 1.1, 1.1, '#ffd36a'); }
     g.restore();
   }
   function drawAnimalIcon(g, type, S, phase) {
@@ -3722,102 +4589,168 @@ function validConversation(value, p) {
   }
   function specialIcon(g, key, S, phase) {
     g.save(); g.scale(S / 32, S / 32); inkStyle(g);
-    var green = '#aed09b', wood = '#dfbc8a', blue = '#acd9e5', cream = '#fff5da', gold = '#f4d382';
+    var green = '#7ec86a', wood = '#dfbc8a', blue = '#8fd4ea', cream = '#fff5da', gold = '#f4d382';
+    var bark = '#a86430', soil = '#c98448';
+    function speck(x, y, r, c) { g.beginPath(); g.arc(x, y, r, 0, 6.3); g.fillStyle = c; g.fill(); }
     if (key === 'window') {
-      inkBox(g, 3, 3, 26, 26, wood); inkBox(g, 6, 6, 20, 20, blue);
-      inkPath(g, [[16, 6], [16, 26]]); inkPath(g, [[6, 16], [26, 16]]);
+      inkBox(g, 2, 3, 28, 26, bark); inkBox(g, 5, 6, 22, 20, blue);
+      g.fillStyle = '#e7f8ff'; g.fillRect(6, 7, 8, 6);
+      inkPath(g, [[16, 6], [16, 26]]); inkPath(g, [[5, 16], [27, 16]]);
+      inkBox(g, 4, 26, 24, 3, wood);
     } else if (key === 'wall') {
-      for (var row = 0; row < 3; row++) for (var col = 0; col < 3; col++) inkBox(g, 2 + col * 9, 5 + row * 8, 9, 8, '#dba38b');
-    } else if (key === 'roof') {
-      inkPath(g, [[2, 24], [16, 5], [30, 24]], '#d88260'); inkPath(g, [[8, 19], [24, 19]]);
-    } else if (key === 'room') {
-      inkBox(g, 2, 3, 28, 27, cream); inkBox(g, 5, 6, 9, 8, blue); inkBox(g, 7, 20, 20, 6, '#f4b4c4'); inkBox(g, 7, 16, 6, 5, wood);
-    } else if (key === 'gate') {
-      inkBox(g, 3, 8, 4, 22, wood); inkBox(g, 25, 8, 4, 22, wood); inkBox(g, 8, 12, 16, 15, cream); inkPath(g, [[9, 25], [23, 14]]);
-    } else if (key === 'tree') {
-      inkBox(g, 13, 17, 6, 13, wood);
-      inkEllipse(g, 16, 12, 11, 10, green); inkPath(g, [[16, 19], [16, 11], [12, 8]]);
-    } else if (['grass', 'dirt', 'stone', 'sand', 'wood', 'planks', 'leaves'].indexOf(key) >= 0) {
-      var colors = { grass: green, dirt: '#d4af8b', stone: '#c3ccd0', sand: '#f1dfa9', wood: wood, planks: wood, leaves: green };
-      if (key === 'leaves') {
-        inkEllipse(g, 16, 16, 10, 7, green, -0.55); inkPath(g, [[7, 22], [23, 11]]);
-      } else if (key === 'stone') {
-        inkPath(g, [[4, 22], [7, 10], [16, 5], [26, 10], [29, 24], [16, 28]], colors[key]);
-        inkPath(g, [[7, 10], [16, 15], [26, 10]]);
-      } else {
-        inkBox(g, 4, 5, 24, 23, colors[key], 3);
-        if (key === 'grass') { inkPath(g, [[5, 14], [27, 14]]); inkPath(g, [[10, 11], [9, 8], [12, 10]]); }
-        else if (key === 'wood') { inkPath(g, [[11, 7], [11, 25]]); inkEllipse(g, 20, 15, 3, 5, '#f1d4a8'); }
-        else if (key === 'planks') { inkPath(g, [[5, 13], [27, 13]]); inkPath(g, [[5, 21], [27, 21]]); }
-        else { inkPath(g, [[9, 12], [12, 12]]); inkPath(g, [[20, 22], [22, 22]]); inkEye(g, 19, 10, false); }
+      var row, col;
+      for (row = 0; row < 4; row++) for (col = 0; col < 3; col++) {
+        var ox = (row % 2) * 5;
+        inkBox(g, 1 + ox + col * 10, 2 + row * 7, 9, 6, row % 2 ? '#e2b09a' : '#d08a78');
       }
+    } else if (key === 'roof') {
+      inkPath(g, [[2, 26], [16, 4], [30, 26]], '#d07058');
+      g.strokeStyle = '#f0b090'; g.lineWidth = 1.2;
+      [10, 15, 20].forEach(function (y) { g.beginPath(); g.moveTo(8, y); g.lineTo(24, y - 2); g.stroke(); });
+      inkBox(g, 14, 8, 4, 6, '#8d5a48');
+    } else if (key === 'room') {
+      inkBox(g, 2, 3, 28, 27, cream); inkBox(g, 5, 6, 9, 8, blue); g.fillStyle = '#e7f8ff'; g.fillRect(6, 7, 3, 3);
+      inkBox(g, 6, 20, 20, 7, '#f4b4c4'); inkBox(g, 7, 18, 6, 4, cream); inkBox(g, 18, 16, 6, 3, wood);
+      inkBox(g, 4, 25, 24, 3, '#e7c9a0');
+    } else if (key === 'gate') {
+      inkBox(g, 2, 6, 5, 23, bark); inkBox(g, 25, 6, 5, 23, bark);
+      inkBox(g, 7, 10, 18, 16, wood); inkPath(g, [[9, 24], [23, 12]]);
+      speck(22, 17, 1.3, '#ffe08a');
+    } else if (key === 'tree') {
+      inkBox(g, 13, 16, 6, 14, bark); g.fillStyle = '#e8c48a'; g.fillRect(14, 18, 2, 10);
+      inkEllipse(g, 16, 14, 11, 9, '#3eae52'); inkEllipse(g, 10, 15, 6, 5, '#6ed25f'); inkEllipse(g, 22, 13, 5, 4, '#2f8a40');
+      speck(12, 10, 1.4, '#e25b6a'); speck(20, 12, 1.2, '#e25b6a');
+    } else if (key === 'grass') {
+      inkBox(g, 3, 16, 26, 13, soil, 2); inkBox(g, 3, 10, 26, 9, green, 2);
+      g.strokeStyle = '#2f8a2c'; g.lineWidth = 1.4; g.lineCap = 'round';
+      [[8, 12, 7, 4], [14, 11, 14, 3], [20, 12, 22, 5], [25, 13, 27, 6]].forEach(function (p) { g.beginPath(); g.moveTo(p[0], p[1]); g.lineTo(p[2], p[3]); g.stroke(); });
+      speck(23, 8, 1.6, '#ff8aa8'); speck(23, 8, 0.6, '#ffe08a');
+    } else if (key === 'dirt') {
+      inkBox(g, 4, 6, 24, 21, '#d09252', 6);
+      speck(10, 13, 2.2, '#b67a3e'); speck(20, 16, 2.6, '#8d5a32'); speck(14, 21, 1.6, '#e7c096');
+      g.strokeStyle = '#8d5a32'; g.lineWidth = 1.2; g.beginPath(); g.moveTo(16, 9); g.quadraticCurveTo(18, 14, 15, 18); g.stroke();
+    } else if (key === 'stone') {
+      inkPath(g, [[5, 22], [8, 10], [16, 4], [25, 9], [28, 22], [16, 28]], '#c5ced6');
+      inkPath(g, [[8, 12], [16, 16], [24, 11]]);
+      speck(11, 10, 1.5, '#eef4f8'); speck(20, 18, 2, '#93a0ab');
+    } else if (key === 'sand') {
+      inkPath(g, [[4, 22], [8, 12], [16, 8], [26, 14], [28, 24], [6, 26]], '#f3d48a');
+      speck(10, 16, 1.1, '#e0bc68'); speck(18, 18, 1.1, '#e0bc68'); speck(14, 14, 0.8, '#fff6d4');
+      g.beginPath(); g.ellipse(22, 16, 3.2, 1.8, 0.5, 0, 6.3); g.fillStyle = '#fff8ea'; g.fill(); g.stroke();
+    } else if (key === 'wood') {
+      inkEllipse(g, 16, 16, 12, 12, bark);
+      inkEllipse(g, 16, 16, 8, 8, '#e8c48a');
+      inkEllipse(g, 16, 16, 4, 4, '#f3ddb4');
+      speck(16, 16, 1.5, bark);
+    } else if (key === 'planks') {
+      inkBox(g, 3, 3, 26, 7, '#f0d09a', 1); inkBox(g, 3, 12, 26, 7, wood, 1); inkBox(g, 3, 21, 26, 7, '#c48a3e', 1);
+      speck(8, 6, 1, '#8d5a28'); speck(22, 15, 1, '#8d5a28'); speck(12, 24, 1, '#8d5a28');
+    } else if (key === 'leaves') {
+      inkEllipse(g, 12, 18, 8, 5, '#3eae52', -0.6); inkEllipse(g, 20, 16, 7, 4.5, '#2f8a40', 0.5); inkEllipse(g, 16, 12, 8, 5, '#6ed25f', -0.2);
+      g.strokeStyle = '#2f8a2c'; g.lineWidth = 1.1; g.beginPath(); g.moveTo(10, 20); g.lineTo(22, 11); g.stroke();
     } else if (key === 'water') {
-      inkPath(g, [[4, 11], [28, 11], [28, 27], [4, 27]], blue);
-      [15, 21].forEach(function (y) { g.beginPath(); g.moveTo(7, y); g.quadraticCurveTo(11, y - 3, 15, y); g.quadraticCurveTo(19, y + 3, 25, y); g.stroke(); });
+      inkPath(g, [[3, 12], [29, 12], [27, 26], [5, 26]], blue);
+      g.strokeStyle = '#fff'; g.lineWidth = 1.4;
+      [[8, 16], [8, 21]].forEach(function (p) { g.beginPath(); g.moveTo(p[0], p[1]); g.quadraticCurveTo(p[0] + 5, p[1] - 3, p[0] + 10, p[1]); g.stroke(); });
+      speck(10, 15, 1.2, '#e7fbff');
     } else if (key === 'flower') {
-      inkPath(g, [[16, 29], [16, 12]]); inkEllipse(g, 11, 23, 5, 2.5, green, 0.4);
-      for (var i = 0; i < 5; i++) { var a = i * Math.PI * 2 / 5; inkEllipse(g, 16 + Math.sin(a) * 5, 11 + Math.cos(a) * 5, 3.6, 3.6, '#eab7bd'); }
-      inkEllipse(g, 16, 11, 3, 3, gold);
+      inkPath(g, [[16, 29], [16, 13]]); inkEllipse(g, 11, 22, 5, 2.4, green, 0.5); inkEllipse(g, 21, 20, 4, 2, green, -0.4);
+      for (var i = 0; i < 5; i++) { var a = i * Math.PI * 2 / 5; inkEllipse(g, 16 + Math.sin(a) * 5.2, 11 + Math.cos(a) * 5.2, 3.8, 3.8, '#f09aab'); }
+      inkEllipse(g, 16, 11, 3.2, 3.2, gold); speck(15, 10, 0.8, '#fff6d0');
     } else if (key === 'stick' || key === 'rod') {
-      inkPath(g, [[7, 28], [5, 26], [23, 5], [25, 7]], wood);
-      if (key === 'rod') { g.beginPath(); g.moveTo(24, 6); g.quadraticCurveTo(31, 15, 26, 23); g.stroke(); inkEllipse(g, 26, 25, 2.5, 2.5, '#eab7bd'); }
+      inkBox(g, 6, 14, 18, 4, wood, 2); inkBox(g, 14, 6, 4, 18, '#e8c48a', 2);
+      inkBox(g, 12, 14, 8, 3, bark, 1);
+      if (key === 'rod') {
+        g.strokeStyle = '#51493c'; g.lineWidth = 1.1; g.beginPath(); g.moveTo(16, 8); g.quadraticCurveTo(28, 12, 24, 22); g.stroke();
+        inkEllipse(g, 24, 24, 2.4, 2.4, '#e25b6a'); speck(24, 24, 0.8, '#fff');
+      }
+    } else if (key === 'rope') {
+      inkEllipse(g, 16, 13, 8, 6, '#e2b06a');
+      g.strokeStyle = '#f6e2b8'; g.lineWidth = 2.2; g.lineCap = 'round';
+      g.beginPath(); g.arc(16, 13, 4.2, 0.6, 5.6); g.stroke();
+      g.strokeStyle = '#a86430'; g.lineWidth = 2.4;
+      g.beginPath(); g.moveTo(21, 16); g.quadraticCurveTo(26, 21, 22, 27); g.stroke();
+      speck(22, 28, 1.8, '#c98448');
     } else if (key === 'table') {
-      inkBox(g, 7, 14, 4, 14, wood); inkBox(g, 21, 14, 4, 14, wood); inkBox(g, 3, 9, 26, 6, wood);
+      inkBox(g, 6, 16, 4, 12, bark); inkBox(g, 22, 16, 4, 12, bark); inkBox(g, 2, 10, 28, 7, wood, 2);
+      inkEllipse(g, 22, 12, 3, 2.2, cream);
     } else if (key === 'door') {
-      inkBox(g, 7, 3, 18, 27, wood); inkBox(g, 11, 7, 10, 8, blue); inkEye(g, 21, 21, false);
+      inkBox(g, 7, 2, 18, 28, bark); inkBox(g, 10, 5, 12, 11, wood); inkBox(g, 10, 17, 12, 10, '#c98448');
+      inkBox(g, 12, 7, 8, 6, blue); speck(20, 20, 1.5, '#ffe08a');
     } else if (key === 'torch') {
-      inkBox(g, 13, 14, 6, 16, wood);
-      inkPath(g, [[11, 17], [10, 11], [17, 2], [23, 12], [20, 17]], gold); inkEllipse(g, 16, 13, 2.5, 4, cream);
+      inkBox(g, 14, 14, 5, 15, bark);
+      inkPath(g, [[10, 16], [9, 10], [16, 2], [23, 10], [22, 16]], gold);
+      inkEllipse(g, 16, 11, 3, 4.5, cream); speck(16, 8, 1.2, '#fff');
     } else if (key === 'bed') {
-      inkBox(g, 3, 14, 3, 15, wood); inkBox(g, 26, 17, 3, 12, wood);
-      inkBox(g, 4, 13, 24, 11, '#eab7bd'); inkBox(g, 5, 12, 8, 7, cream);
+      inkBox(g, 3, 10, 5, 16, bark); inkBox(g, 25, 16, 4, 10, bark);
+      inkBox(g, 6, 14, 20, 10, '#f0a8b8'); inkBox(g, 7, 12, 8, 6, cream);
+      g.strokeStyle = '#e090a4'; g.lineWidth = 1; g.beginPath(); g.moveTo(14, 16); g.lineTo(24, 22); g.stroke();
     } else if (key === 'house' || key === 'home') {
-      inkBox(g, 6, 14, 20, 15, cream); inkPath(g, [[3, 15], [16, 3], [29, 15]], '#d6a08d');
-      inkBox(g, 10, 20, 6, 9, wood); inkBox(g, 19, 19, 4, 5, blue);
+      inkBox(g, 6, 14, 20, 14, cream); inkPath(g, [[3, 16], [16, 3], [29, 16]], '#d07058');
+      inkBox(g, 20, 6, 4, 6, '#8d5a48'); inkBox(g, 9, 20, 6, 8, bark); inkBox(g, 18, 18, 5, 5, blue);
+      speck(20, 20, 0.8, '#fff');
     } else if (key === 'fence') {
-      inkBox(g, 3, 10, 26, 4, wood); inkBox(g, 3, 21, 26, 4, wood);
-      inkBox(g, 6, 5, 4, 24, wood); inkBox(g, 22, 5, 4, 24, wood);
+      inkBox(g, 4, 12, 24, 4, wood); inkBox(g, 4, 20, 24, 4, wood);
+      [6, 14, 22].forEach(function (x) { inkBox(g, x, 6, 4, 22, bark); inkPath(g, [[x, 6], [x + 2, 3], [x + 4, 6]], wood); });
     } else if (key === 'wool' || key === 'cloud' || key === 'rain') {
-      inkPath(g, [[6, 21], [3, 18], [3, 13], [8, 10], [11, 5], [19, 4], [24, 10], [28, 12], [29, 18], [26, 21]], key === 'rain' ? '#c3ccd0' : cream);
-      if (key === 'rain') [9, 17, 25].forEach(function (x) { inkPath(g, [[x, 25], [x - 2, 29]]); });
-      if (key === 'wool') { g.beginPath(); g.arc(16, 14, 4, 0, 5); g.stroke(); }
+      var puff = key === 'rain' ? '#d5dee8' : cream;
+      inkEllipse(g, 12, 16, 7, 6, puff); inkEllipse(g, 20, 15, 8, 6.5, puff); inkEllipse(g, 16, 11, 6, 5, '#fff');
+      if (key === 'rain') [8, 16, 24].forEach(function (x) { inkPath(g, [[x, 22], [x - 2, 29]], blue); });
+      if (key === 'wool') { g.strokeStyle = '#e7d3a4'; g.lineWidth = 1.3; g.beginPath(); g.arc(16, 15, 4, 0.4, 5); g.stroke(); inkPath(g, [[20, 18], [26, 24]]); }
     } else if (key === 'sun') {
-      for (var j = 0; j < 8; j++) { var ang = j * Math.PI / 4; inkPath(g, [[16 + Math.cos(ang) * 11, 16 + Math.sin(ang) * 11], [16 + Math.cos(ang) * 14, 16 + Math.sin(ang) * 14]]); }
-      inkEllipse(g, 16, 16, 7.5, 7.5, gold);
+      for (var j = 0; j < 8; j++) { var ang = j * Math.PI / 4; inkPath(g, [[16 + Math.cos(ang) * 10, 16 + Math.sin(ang) * 10], [16 + Math.cos(ang) * 14, 16 + Math.sin(ang) * 14]]); }
+      inkEllipse(g, 16, 16, 8, 8, gold);
+      speck(13, 15, 1, '#e09020'); speck(19, 15, 1, '#e09020');
+      g.strokeStyle = '#e09020'; g.lineWidth = 1.1; g.beginPath(); g.arc(16, 17, 3, 0.2, Math.PI - 0.2); g.stroke();
     } else if (key === 'moon') {
-      g.beginPath(); g.moveTo(23, 5); g.bezierCurveTo(2, 0, 1, 30, 23, 27); g.bezierCurveTo(11, 24, 11, 9, 23, 5); g.fillStyle = cream; g.fill(); g.stroke();
+      g.beginPath(); g.moveTo(22, 4); g.bezierCurveTo(2, 2, 2, 30, 22, 28); g.bezierCurveTo(12, 24, 12, 8, 22, 4); g.fillStyle = cream; g.fill(); g.stroke();
+      speck(16, 13, 0.9, '#c4b48a'); speck(18, 19, 0.9, '#c4b48a');
     } else if (key === 'star') {
-      var points = []; for (var k = 0; k < 10; k++) { var r = k % 2 ? 5.5 : 13, angle = k * Math.PI / 5 - Math.PI / 2; points.push([16 + Math.cos(angle) * r, 16 + Math.sin(angle) * r]); } inkPath(g, points, gold);
+      var points = []; for (var k = 0; k < 10; k++) { var r = k % 2 ? 5 : 13, angle = k * Math.PI / 5 - Math.PI / 2; points.push([16 + Math.cos(angle) * r, 16 + Math.sin(angle) * r]); } inkPath(g, points, gold);
+      speck(16, 15, 1.4, '#fff6d0');
     } else if (key === 'hello') {
-      inkEllipse(g, 16, 16, 12, 12, '#efd2b4'); inkEye(g, 12, 14, false); inkEye(g, 20, 14, false);
-      g.beginPath(); g.arc(16, 18, 5, 0.2, Math.PI - 0.2); g.stroke();
+      inkEllipse(g, 16, 16, 12, 12, '#ffd2b8');
+      speck(12, 14, 1.3, '#51493c'); speck(20, 14, 1.3, '#51493c');
+      speck(10, 17, 1.5, 'rgba(255,140,140,0.7)'); speck(22, 17, 1.5, 'rgba(255,140,140,0.7)');
+      g.beginPath(); g.arc(16, 18, 4.5, 0.25, Math.PI - 0.25); g.stroke();
     } else if (key === 'jump') {
-      inkPath(g, [[12, 28], [20, 28], [20, 15], [27, 15], [16, 3], [5, 15], [12, 15]], green);
+      inkBox(g, 6, 26, 20, 3, soil, 1);
+      inkPath(g, [[16, 24], [16, 8], [10, 14], [16, 6], [22, 14], [16, 8]], green);
     } else if (key === 'seed') {
-      inkEllipse(g, 10, 22, 3.5, 5, wood, 0.4); inkEllipse(g, 23, 23, 3.5, 5, wood, -0.4);
-      inkEllipse(g, 17, 13, 3.5, 5, wood); inkEllipse(g, 19, 6, 4, 2, green, -0.6);
+      inkEllipse(g, 16, 20, 6, 8, wood, 0.2); g.fillStyle = '#f3ddb4'; g.beginPath(); g.ellipse(14, 18, 2, 3, 0.2, 0, 6.3); g.fill();
+      inkPath(g, [[16, 13], [16, 6]]); inkEllipse(g, 13, 7, 3.5, 2, green, -0.6); inkEllipse(g, 19, 6, 3.2, 1.8, '#3eae52', 0.5);
     } else if (key === 'fish') {
       var swish = reducedMotion ? 0 : Math.sin(Math.floor((phase || 0) * 2) * Math.PI / 4) * 2;
-      inkPath(g, [[21, 16], [29, 9 + swish], [29, 23 - swish]], '#e8b784');
-      inkPath(g, [[12, 12], [16, 6], [20, 12]], gold);
-      inkEllipse(g, 14, 17, 10, 6.5, '#e8b784'); inkEye(g, 8, 15, false);
-      g.beginPath(); g.moveTo(17, 12); g.quadraticCurveTo(13, 17, 17, 22); g.stroke();
+      inkPath(g, [[20, 16], [29, 8 + swish], [29, 24 - swish]], '#f0a05a');
+      inkPath(g, [[14, 11], [18, 6], [20, 12]], gold);
+      inkEllipse(g, 14, 17, 10, 6.5, '#f2b56a');
+      g.fillStyle = '#fff3d4'; g.beginPath(); g.ellipse(14, 16, 4, 2, 0.2, 0, 6.3); g.fill();
+      inkEye(g, 8, 15, false); speck(8, 15, 0.7, '#fff');
     } else if (key === 'boat') {
-      inkPath(g, [[3, 19], [29, 19], [25, 28], [8, 28]], wood); inkPath(g, [[16, 19], [16, 3]]);
-      inkPath(g, [[17, 4], [26, 15], [17, 15]], cream);
+      inkPath(g, [[3, 20], [29, 20], [24, 28], [8, 28]], bark);
+      inkPath(g, [[6, 20], [26, 20], [23, 24], [9, 24]], wood);
+      inkPath(g, [[16, 20], [16, 4]]); inkPath(g, [[17, 5], [26, 16], [17, 16]], cream);
+      g.strokeStyle = blue; g.lineWidth = 1.3; g.beginPath(); g.moveTo(4, 30); g.quadraticCurveTo(16, 27, 28, 30); g.stroke();
     } else if (key === 'wheat') {
-      [9, 16, 23].forEach(function (x, i) {
-        var y = i === 1 ? 6 : 10; inkPath(g, [[x, 29], [x, y]]);
-        inkEllipse(g, x - 2, y + 5, 2, 4, gold, -0.5); inkEllipse(g, x + 2, y + 5, 2, 4, gold, 0.5); inkEllipse(g, x, y, 2, 3, gold);
+      [9, 16, 23].forEach(function (x, n) {
+        var y = n === 1 ? 5 : 9; inkPath(g, [[x, 30], [x, y]]);
+        inkEllipse(g, x, y + 2, 2.2, 3.4, gold); inkEllipse(g, x - 2.4, y + 5, 1.8, 3, '#e7b84a', -0.5); inkEllipse(g, x + 2.4, y + 5, 1.8, 3, '#e7b84a', 0.5);
       });
     } else if (key === 'pet') {
-      inkEllipse(g, 16, 22, 7, 5.5, wood);
-      [[6, 13], [12, 8], [20, 8], [26, 13]].forEach(function (p) { inkEllipse(g, p[0], p[1], 2.5, 3, wood); });
+      inkPath(g, [[6, 18], [8, 26], [24, 26], [26, 18]], wood);
+      inkEllipse(g, 16, 18, 10, 4, '#f0d2a4');
+      inkEllipse(g, 16, 14, 6, 2.2, cream);
+      speck(11, 12, 1.6, '#e2b48a'); speck(16, 11, 1.6, '#e2b48a'); speck(21, 12, 1.6, '#e2b48a');
     } else if (key === 'follow') {
-      [[10, 10], [22, 23]].forEach(function (p) { inkEllipse(g, p[0], p[1], 3, 5, wood, 0.3); inkEllipse(g, p[0] + 1, p[1] - 7, 2, 2, wood); });
+      [[11, 12], [21, 22]].forEach(function (p) {
+        inkEllipse(g, p[0], p[1], 4, 5.5, '#8d5a32', 0.4);
+        inkEllipse(g, p[0] - 1, p[1] - 5, 1.5, 1.8, '#8d5a32');
+        inkEllipse(g, p[0] + 1.5, p[1] - 4, 1.3, 1.6, '#8d5a32');
+      });
     } else if (key === 'gift') {
-      inkBox(g, 5, 12, 22, 17, green); inkBox(g, 3, 9, 26, 6, gold); inkBox(g, 14, 10, 4, 19, cream);
-      inkEllipse(g, 11, 6, 5, 3, '#eab7bd', 0.4); inkEllipse(g, 21, 6, 5, 3, '#eab7bd', -0.4);
+      inkBox(g, 5, 12, 22, 16, green); inkBox(g, 4, 9, 24, 5, gold); inkBox(g, 14, 9, 4, 19, cream);
+      inkEllipse(g, 12, 7, 4, 3, '#f09aab', 0.4); inkEllipse(g, 20, 7, 4, 3, '#f09aab', -0.4);
+      speck(16, 6, 1.3, gold);
     }
     g.restore();
   }
@@ -3894,15 +4827,22 @@ function validConversation(value, p) {
     g.fillRect(-3, S + bob, 5, 4);
     g.fillStyle = '#241911';
     g.beginPath(); g.arc(12.4, S - 5.4 + bob, 6.8, 0, 6.3); g.fill();
+    g.strokeStyle = '#51493c'; g.lineWidth = 1.2; g.stroke();
     g.fillStyle = '#ffd2b8';
-    g.beginPath(); g.arc(13.4, S - 3.8 + bob, 6, 0, 6.3); g.fill();
+    g.beginPath(); g.arc(13.4, S - 3.8 + bob, 6, 0, 6.3); g.fill(); g.stroke();
     g.fillStyle = '#241911';
     g.fillRect(6.8, S - 12 + bob, 13.4, 3);
     g.fillRect(6.4, S - 9.4 + bob, 3, 5.4);
-    g.beginPath(); g.arc(14.8, S - 4.6 + bob, 1.1, 0, 6.3); g.fill();
-    g.beginPath(); g.arc(17.8, S - 4.6 + bob, 1.1, 0, 6.3); g.fill();
+    g.fillStyle = '#51493c';
+    g.beginPath(); g.arc(14.8, S - 4.6 + bob, 1.15, 0, 6.3); g.fill();
+    g.beginPath(); g.arc(17.8, S - 4.6 + bob, 1.15, 0, 6.3); g.fill();
+    g.fillStyle = '#fff';
+    g.beginPath(); g.arc(14.4, S - 5 + bob, 0.35, 0, 6.3); g.fill();
+    g.beginPath(); g.arc(17.4, S - 5 + bob, 0.35, 0, 6.3); g.fill();
     g.strokeStyle = '#d06a5c'; g.lineWidth = 1;
     g.beginPath(); g.arc(16.3, S - 2.6 + bob, 2, 0.15, Math.PI - 0.15); g.stroke();
+    g.fillStyle = 'rgba(255,140,130,0.45)';
+    g.beginPath(); g.arc(13.2, S - 2.2 + bob, 1.1, 0, 6.3); g.fill();
     if (hasHat()) {
       g.fillStyle = '#ffc53d';
       g.beginPath(); g.ellipse(13, S - 11.6 + bob, 9.4, 2.4, 0, 0, 6.3); g.fill();
@@ -3978,15 +4918,22 @@ function validConversation(value, p) {
     roundRect(g, 5, -17, 4, 9, 1.6); g.fill();
     g.fillStyle = '#241911';
     g.beginPath(); g.arc(2, -36.4, 8.1, 0, 6.3); g.fill();
+    g.strokeStyle = '#51493c'; g.lineWidth = 1.2; g.stroke();
     g.fillStyle = '#ffd2b8';
-    g.beginPath(); g.arc(2.6, -32.4, 6.3, 0, 6.3); g.fill();
+    g.beginPath(); g.arc(2.6, -32.4, 6.3, 0, 6.3); g.fill(); g.stroke();
     g.fillStyle = '#241911';
     g.fillRect(-5.2, -38.6, 14.2, 3.2);
     g.fillRect(-5.6, -35.4, 3.2, 6);
+    g.fillStyle = '#51493c';
     g.beginPath(); g.arc(3.8, -33.4, 1.2, 0, 6.3); g.fill();
     g.beginPath(); g.arc(7, -33.4, 1.2, 0, 6.3); g.fill();
+    g.fillStyle = '#fff';
+    g.beginPath(); g.arc(3.4, -33.8, 0.35, 0, 6.3); g.fill();
+    g.beginPath(); g.arc(6.6, -33.8, 0.35, 0, 6.3); g.fill();
     g.strokeStyle = '#d06a5c'; g.lineWidth = 1;
     g.beginPath(); g.arc(5.4, -31.2, 2.2, 0.15, Math.PI - 0.15); g.stroke();
+    g.fillStyle = 'rgba(255,140,130,0.45)';
+    g.beginPath(); g.arc(2.4, -30.6, 1.2, 0, 6.3); g.fill();
     if (hasHat()) {
       g.fillStyle = '#ffc53d';
       g.beginPath(); g.ellipse(2.4, -39.4, 10, 2.6, 0, 0, 6.3); g.fill();
@@ -4007,43 +4954,55 @@ function validConversation(value, p) {
     g.save();
     g.translate(player.x, player.y);
     g.scale(player.dir, 1);
+    inkStyle(g);
+    var step = onGround ? walk * 1.4 : 0;
     g.fillStyle = 'rgba(40,30,20,0.18)';
     g.beginPath(); g.ellipse(0, -1, 9, 3, 0, 0, 6.3); g.fill();
     if (hasPack()) {
-      g.fillStyle = '#2ea8a0';
-      roundRect(g, -14.5, -25 - bob, 7.5, 15, 3); g.fill();
+      inkBox(g, -14.5, -25 - bob, 7.5, 15, '#2ea8a0', 3);
       g.fillStyle = '#1f7a74';
       g.fillRect(-14.5, -19 - bob, 7.5, 3);
       g.fillStyle = '#ffc53d';
       g.beginPath(); g.arc(-10.8, -17.4 - bob, 1.4, 0, 6.3); g.fill();
     }
-    g.fillStyle = '#3d78e0';
-    roundRect(g, -6, -13 - bob, 4.5, 11, 1.6); g.fill();
-    roundRect(g, 2, -13 - bob * 0.2, 4.5, 11, 1.6); g.fill();
-    g.fillStyle = '#3a2a1c';
-    g.fillRect(-7, -4, 6, 3); g.fillRect(1, -4, 6, 3);
-    g.fillStyle = '#e6b15a';
-    roundRect(g, -12, -20 - bob, 5, 9, 2); g.fill();
-    g.fillStyle = '#ff6d6d';
-    roundRect(g, -7.5, -24 - bob, 15, 13, 4); g.fill();
+    inkBox(g, -12, -20 - bob + step * 0.35, 5, 9, '#e6b15a', 2);
+    inkBox(g, -6, -13 - bob, 4.5, 11, '#3d78e0', 1.6);
+    inkBox(g, 2, -13 - bob * 0.2, 4.5, 11, '#2f66c4', 1.6);
+    inkBox(g, -7, -4.2, 6, 3.2, '#3a2a1c', 1.2);
+    inkBox(g, 1, -4.2, 6, 3.2, '#3a2a1c', 1.2);
+    g.fillStyle = '#6d5848';
+    g.fillRect(-6.2, -2.1, 4.4, 1); g.fillRect(1.8, -2.1, 4.4, 1);
+    inkBox(g, -7.5, -24 - bob, 15, 13, '#ff6d6d', 4);
+    g.strokeStyle = '#e4554e'; g.lineWidth = 1.1;
+    g.strokeRect(-1, -19.2 - bob, 4.4, 3.4);
     g.fillStyle = '#ffd36a';
-    g.fillRect(-2, -18 - bob, 5, 4);
-    g.fillStyle = '#ffd2b8';
-    roundRect(g, 6, -22 - bob, 4, 9, 1.5); g.fill();
+    g.fillRect(-2, -23.2 - bob, 5.2, 3.2);
+    inkBox(g, 6, -22 - bob - step * 0.25, 4, 9, '#ffd2b8', 1.5);
     g.fillStyle = '#241911';
     g.beginPath(); g.arc(2, -33.4 - bob, 8.1, 0, 6.3); g.fill();
+    g.strokeStyle = '#51493c'; g.lineWidth = 1.25; g.stroke();
     g.fillStyle = '#ffd2b8';
-    g.beginPath(); g.arc(2.6, -29.4 - bob, 6.3, 0, 6.3); g.fill();
+    g.beginPath(); g.arc(2.6, -29.4 - bob, 6.3, 0, 6.3); g.fill(); g.stroke();
     g.fillStyle = '#241911';
     g.fillRect(-5.2, -35.6 - bob, 14.2, 3.2);
-    g.fillRect(-5.6, -32.4 - bob, 3.2, 6);
-    g.fillStyle = '#241911';
-    g.beginPath(); g.arc(3.8, -30.4 - bob, 1.2, 0, 6.3); g.fill();
-    g.beginPath(); g.arc(7, -30.4 - bob, 1.2, 0, 6.3); g.fill();
-    g.strokeStyle = '#d06a5c'; g.lineWidth = 1;
-    g.beginPath(); g.arc(5.4, -28.2 - bob, 2.2, 0.15, Math.PI - 0.15); g.stroke();
-    g.fillStyle = 'rgba(255,120,120,0.45)';
-    g.beginPath(); g.arc(2.6, -27.8 - bob, 1.4, 0, 6.3); g.fill();
+    g.fillRect(-5.6, -32.4 - bob, 3.2, 5.2);
+    g.strokeStyle = '#51493c'; g.lineWidth = 1;
+    g.beginPath(); g.moveTo(2.2, -32.2 - bob); g.lineTo(5, -32.7 - bob); g.stroke();
+    g.beginPath(); g.moveTo(5.6, -32.7 - bob); g.lineTo(8.4, -32.2 - bob); g.stroke();
+    g.fillStyle = '#fffdf8';
+    g.strokeStyle = '#51493c'; g.lineWidth = 0.9;
+    g.beginPath(); g.arc(3.8, -30.4 - bob, 1.7, 0, 6.3); g.fill(); g.stroke();
+    g.beginPath(); g.arc(7, -30.4 - bob, 1.7, 0, 6.3); g.fill(); g.stroke();
+    g.fillStyle = '#51493c';
+    g.beginPath(); g.arc(4.15, -30.2 - bob, 0.85, 0, 6.3); g.fill();
+    g.beginPath(); g.arc(7.35, -30.2 - bob, 0.85, 0, 6.3); g.fill();
+    g.fillStyle = '#fff';
+    g.beginPath(); g.arc(3.7, -30.6 - bob, 0.32, 0, 6.3); g.fill();
+    g.beginPath(); g.arc(6.9, -30.6 - bob, 0.32, 0, 6.3); g.fill();
+    g.strokeStyle = '#d06a5c'; g.lineWidth = 1.1;
+    g.beginPath(); g.arc(5.4, -28.2 - bob, 2.2, 0.2, Math.PI - 0.2); g.stroke();
+    g.fillStyle = 'rgba(255,120,120,0.5)';
+    g.beginPath(); g.arc(2.2, -28 - bob, 1.35, 0, 6.3); g.fill();
     if (hasHat()) {
       g.fillStyle = '#ffc53d';
       g.beginPath(); g.ellipse(2.4, -36.4 - bob, 10, 2.6, 0, 0, 6.3); g.fill();
@@ -4289,6 +5248,7 @@ function validConversation(value, p) {
     hillBand(hill2, 0.25, 16, viewH * 0.58);
     hillBand(hill, 0.45, 12, viewH * 0.66);
 
+    if (indoors) { drawInterior(ctx); return; }
     ctx.setTransform(dpr * z, 0, 0, dpr * z, -drawCamX * dpr * z, -drawCamY * dpr * z);
     drawWorld(ctx, sec);
     buildObjects.forEach(function(b){if(!bboxOnScreen(b))return;ctx.save();ctx.translate((b.x+(b.dir===-1?b.w:0))*TILE,b.y*TILE);if(b.dir===-1)ctx.scale(-1,1);ctx.drawImage(craftableSprite(b),0,0);ctx.restore();});
@@ -4323,7 +5283,8 @@ function validConversation(value, p) {
       drawBoatShape(ctx);
       ctx.restore();
     }
-    if(drivingCar){ctx.save();ctx.beginPath();ctx.rect(drivingCar.x*TILE+26,drivingCar.y*TILE+8,39,27);ctx.clip();drawPlayer(ctx);ctx.restore();}else drawPlayer(ctx);
+    drawRescueRope(ctx);
+    if(drivingCar){ctx.save();ctx.beginPath();var cx=drivingCar.dir===-1?(drivingCar.x*TILE+drivingCar.w*TILE-65):(drivingCar.x*TILE+26);ctx.rect(cx,drivingCar.y*TILE+8,39,27);ctx.clip();drawPlayer(ctx);ctx.restore();}else drawPlayer(ctx);
     if (fishing) {
       var fbob = Math.sin(sec * 5) * 1.6;
       ctx.strokeStyle = 'rgba(255,255,255,0.65)';
@@ -4451,20 +5412,68 @@ function validConversation(value, p) {
     var w = WORD[key];
     if (!w) return;
     learn(key);
-    if (buildSessionBusy() && !buildShowingWord) return;
+    if (buildSessionBusy() && !buildShowingWord) {
+      // Build-busy hides the card, but animal taps / word reads must still say English when unmuted.
+      speak(w[0]);
+      return;
+    }
+    if (cardFlyTimer) { clearTimeout(cardFlyTimer); cardFlyTimer = null; }
     cardKey = key;
+    cardFlyChest = reward === 'chest';
     var card = document.getElementById('wordcard');
+    card.classList.remove('fly-chest');
+    card.style.transform = '';
+    card.style.opacity = '';
     card.hidden = false;
     document.getElementById('card-en').textContent = w[0];
     paintIcon(document.getElementById('card-icon'), key);
-    cardLeft = reward ? 3600 : 2.15;
-    document.getElementById('card-continue').hidden=!reward;
+    // Sticky Continue only for legacy reward===true; quiz rewards fly to Chest.
+    cardLeft = reward === true ? 3600 : (cardFlyChest ? 1.35 : 2.15);
+    document.getElementById('card-continue').hidden = reward !== true;
+    if (cardFlyChest) {
+      // Soft ding on reward-card pop (respects sfxOn / mute).
+      chime();
+      playSfx('star');
+    }
     speak(w[0]);
     renderHotbar();
   }
   function hideCard() {
-    document.getElementById('wordcard').hidden = true;
+    if (cardFlyTimer) { clearTimeout(cardFlyTimer); cardFlyTimer = null; }
+    var card = document.getElementById('wordcard');
+    card.hidden = true;
+    card.classList.remove('fly-chest');
+    card.style.transform = '';
+    card.style.opacity = '';
     cardLeft = 0;
+    cardFlyChest = false;
+  }
+  function flyWordcardToChest() {
+    var card = document.getElementById('wordcard');
+    var chest = document.getElementById('btn-chest');
+    if (!card || card.hidden || !chest) { hideCard(); return; }
+    cardFlyChest = false;
+    cardLeft = 0;
+    var cr = card.getBoundingClientRect();
+    var tr = chest.getBoundingClientRect();
+    var dx = (tr.left + tr.width / 2) - (cr.left + cr.width / 2);
+    var dy = (tr.top + tr.height / 2) - (cr.top + cr.height / 2);
+    card.classList.add('fly-chest');
+    // Force layout, then animate toward the Chest button.
+    void card.offsetWidth;
+    card.style.transform = 'translate(calc(-50% + ' + dx + 'px), ' + dy + 'px) scale(0.16)';
+    card.style.opacity = '0.2';
+    if (cardFlyTimer) clearTimeout(cardFlyTimer);
+    cardFlyTimer = setTimeout(function () {
+      cardFlyTimer = null;
+      hideCard();
+      chest.classList.remove('chest-catch');
+      void chest.offsetWidth;
+      chest.classList.add('chest-catch');
+      setTimeout(function () { chest.classList.remove('chest-catch'); }, 480);
+      tone(880, 0.08, 'sine', 0, 0.035);
+      tone(1175, 0.1, 'sine', 0.06, 0.03);
+    }, 560);
   }
   function speak(text) { return speakEn(text); }
   function pickVoice() {
@@ -4576,6 +5585,33 @@ function validConversation(value, p) {
       return u;
     } catch (err) { /* speech is optional */ }
   }
+  function cleanPrompt(text) { return String(text || '').replace(/★/g, ' ').replace(/\s+/g, ' ').trim(); }
+  function promptBusy() {
+    if (welcome || nameFlow || dialogue) return true;
+    if (enAudio && !enAudio.ended && !enAudio.paused) return true;
+    try { if (window.speechSynthesis && (speechSynthesis.speaking || speechSynthesis.pending)) return true; } catch (err) { /* optional */ }
+    return false;
+  }
+  function speakPrompt(text, kind) {
+    if (!speechOn) return;
+    var line = cleanPrompt(text);
+    if (!line || line === lastPromptSpoken) return;
+    if (kind === 'quest') queuedQuest = line;
+    else if (line !== queuedQuest) queuedHint = line;
+    flushPrompt();
+  }
+  function flushPrompt() {
+    if (!speechOn) return;
+    if (promptLock) { if (!promptBusy()) promptLock = false; else return; }
+    if (promptBusy()) return;
+    var line = queuedQuest || queuedHint;
+    if (!line) return;
+    if (queuedQuest) queuedQuest = ''; else queuedHint = '';
+    if (line === lastPromptSpoken) return;
+    lastPromptSpoken = line;
+    promptLock = true;
+    speakEn(line, { onend: function () { promptLock = false; flushPrompt(); } });
+  }
   function speakTask() {
     if (dialogue) { if (!dialogue.pending && dialogue.question) speakEn(dialogue.question, { audio_url: !dialogue.reveal ? dialogue.audio_url : undefined }); return; }
     if (quiz) { speakEn('Find the ' + WORD[quiz.key][0] + '!'); return; }
@@ -4586,13 +5622,14 @@ function validConversation(value, p) {
     document.getElementById('toast-en').textContent = en;
     document.getElementById('toast').hidden = false;
     toastLeft = secs || 2.2;
+    speakPrompt(en, 'hint');
   }
   // Optional local sound pack: lazy HTMLAudio loads never block starting play.
   // Speech has its own existing switch/path; these settings control music/SFX.
   var musicOn=true,sfxOn=true,packUnlocked=false,packSuspended=false,carMoving=false;
   var packPlayers={},packWanted={},packRequests={},packPlayed={},hornAt=-100;
   function packAudio(key,loop) {
-    if(!packPlayers[key]){var a=new Audio('audio/build-v1.1/'+key+'.ogg');a.preload='none';a.loop=!!loop;a.volume=key==='garden-loop'?.30:key==='engine'?.14:.42;packPlayers[key]=a;}
+    if(!packPlayers[key]){var a=new Audio('audio/build-v1.1/'+key+'.ogg');a.preload='none';a.loop=!!loop;a.volume=key==='garden-loop'?.30:key==='engine'?.36:.42;packPlayers[key]=a;}
     return packPlayers[key];
   }
   function packPlay(key,loop) {
@@ -4604,7 +5641,12 @@ function validConversation(value, p) {
   function playSfx(key){packPlay(key,false);}
   function packLoop(key,wanted) {
     wanted=!!(wanted&&packUnlocked&&!packSuspended&&!document.hidden);
-    if(packWanted[key]===wanted)return;packWanted[key]=wanted;
+    if(packWanted[key]===wanted){
+      // A failed play() must not stick the engine silent for the rest of the drive.
+      if(wanted&&packPlayers[key]&&packPlayers[key].paused)packPlay(key,true);
+      return;
+    }
+    packWanted[key]=wanted;
     if(wanted)packPlay(key,true);else if(packPlayers[key])packPlayers[key].pause();
   }
   function syncSoundPack() {
@@ -4726,10 +5768,11 @@ function validConversation(value, p) {
   function quizWin() {
     var key = quiz.key;
     quiz = null;
-    quizStars[key] = 1;playSfx('correct');playSfx('star');
+    quizStars[key] = 1;playSfx('correct');
     updateQuest();
     celebrate(player.x, player.y - 40, false);
-    showWord(key,true);
+    // Reward card: ding + speak, then fly into the Chest button.
+    showWord(key, 'chest');
     showToast('Great job!', 2.4);
     saveSoon();
   }
@@ -4750,7 +5793,6 @@ function validConversation(value, p) {
     lastQuizKey = key;
     quiz = { key: key };
     updateQuest();
-    speakEn('Find the ' + WORD[key][0] + '!');
     return true;
   }
   function endQuiz() {
@@ -4777,6 +5819,7 @@ function validConversation(value, p) {
       en.textContent = 'Find the ' + WORD[quiz.key][0].toUpperCase() + '!';
       paintIcon(document.getElementById('quest-icon'), 'star');
       questBtn.classList.add('quiz');
+      speakPrompt('Find the ' + WORD[quiz.key][0] + '!', 'quest');
       return;
     }
     questBtn.classList.remove('quiz');
@@ -4795,6 +5838,7 @@ function validConversation(value, p) {
       en.textContent = q.en;
       paintIcon(document.getElementById('quest-icon'), q.icon);
     }
+    speakPrompt(q ? q.en : 'Level 3 Complete! Explore and play!', 'quest');
     if (hasPack() && !packSeen) {
       packSeen = true;
       showToast('You got a backpack!', 3);
@@ -4803,46 +5847,32 @@ function validConversation(value, p) {
     }
   }
   function renderHotbar() {
-    var sig = invSignature();
+    var sig = invSignature() + '|chest:' + chestKeys().length + '|onchest';
     var bar = document.getElementById('hotbar');
-    if (sig === invSig && bar.childElementCount) {
-      var nodes = bar.querySelectorAll('.slot');
-      var i;
-      for (i = 0; i < nodes.length; i++) nodes[i].classList.toggle('on', i === sel);
-    } else {
-      var keep = bar.scrollLeft;
-      bar.innerHTML = '';
-      if (!hotbar.length) {
-        var empty = document.createElement('div');
-        empty.className = 'emptybar';
-        empty.textContent = 'Tap a block';
-        bar.appendChild(empty);
-      }
-      hotbar.forEach(function (key, i) {
-        var b = document.createElement('button');
-        b.type = 'button';
-        b.className = 'slot' + (i === sel ? ' on' : '');
-        b.setAttribute('aria-label', key==='house'?'Roof blocks':WORD[key][0]);
-        var cv = document.createElement('canvas');
-        cv.width = 128; cv.height = 128;
-        paintIcon(cv, key);
-        var em = document.createElement('em');
-        em.textContent = String(inv[key] || 0);
-        b.appendChild(cv); b.appendChild(em);
-        tapButton(b, function () {
-          sel = i;
-          if (buildSessionBusy()) buildAction('select');
-          if (buildMode && (BLOCK_OF[key]||CRAFTABLES[key])) { buildTool = key; renderBuildTools(); }
-          invSig = '';
-          showWord(key);
-        });
-        bar.appendChild(b);
-      });
-      bar.scrollLeft = keep;
-      invSig = sig;
+    if (bar) bar.replaceChildren();
+    invSig = sig;
+    var key = selectedKey();
+    var heldName = key && WORD[key] ? (key === 'house' ? 'Roof blocks' : WORD[key][0]) : '';
+    var heldEn = document.getElementById('held-en');
+    if (heldEn) heldEn.textContent = heldName || 'Tap a block';
+    var btn = document.getElementById('btn-chest');
+    var n = chestKindCount();
+    var cc = document.getElementById('chest-count');
+    var held = document.getElementById('chest-held');
+    if (cc) {
+      cc.textContent = String(n);
+      cc.title = n === 1 ? '1 kind' : (n + ' kinds');
     }
-    var key = hotbar[sel];
-    document.getElementById('held-en').textContent = key && WORD[key] ? (key==='house'?'Roof blocks':WORD[key][0]) : 'Tap a block';
+    if (btn) {
+      var canvas = btn.querySelector('canvas');
+      if (canvas) paintIcon(canvas, key || 'table');
+      if (held) {
+        held.hidden = !key;
+        held.textContent = key ? String(inv[key] || 0) : '';
+      }
+      var kinds = n ? (', ' + n + (n === 1 ? ' kind' : ' kinds')) : '';
+      btn.setAttribute('aria-label', key ? ('Chest, ' + heldName + ', ' + (inv[key] || 0) + kinds) : (n ? ('Open chest' + kinds) : 'Open chest'));
+    }
   }
   function canCraft(r) {
     var k;
@@ -4973,7 +6003,7 @@ function validConversation(value, p) {
       tapButton(spk, function () { showWord(key); });
       tapButton(row, function () { showWord(key); });
       var practice=document.createElement('button');practice.type='button';practice.textContent='Speak';practice.setAttribute('aria-label','Practice '+WORD[key][0]);
-      tapButton(practice,function(){document.getElementById('book').hidden=true;hideCard();var d={event:'word_practice',key:key,options:[key],tier:3,stage:'question',deferSpeech:true};buildBubble('Say '+WORD[key][0].toLowerCase()+'!',d);paintIcon(document.getElementById('buddy-picture'),key);document.getElementById('buddy-picture').hidden=false;});
+      tapButton(practice,function(){document.getElementById('book').hidden=true;hideCard();var d={event:'word_practice',key:key,options:[key],tier:3,stage:'question',deferSpeech:false};buildBubble('Say '+WORD[key][0].toLowerCase()+'!',d);paintIcon(document.getElementById('buddy-picture'),key);document.getElementById('buddy-picture').hidden=false;});
       row.appendChild(cv); row.appendChild(txt); row.appendChild(spk);row.appendChild(practice);
       grid.appendChild(row);
     });
@@ -5019,8 +6049,58 @@ function validConversation(value, p) {
     document.getElementById('brain-status').textContent = '本次伙伴回应：AI ' + brainStats.brain + '，模板 ' + brainStats.template + '，预生成音频 ' + brainStats.audio + '，合成回落 ' + brainStats.tts + '，来源未标注 ' + brainStats.unknown + '。最多每分钟 8 次、每个标签页会话 60 次请求（刷新不重置）；重试使用本地提示。';
     if (log) renderSpeakingLog();
   }
+  var CHEST_STASH = { grass:1, dirt:1, leaves:1, sand:1, flower:1, wool:1, seed:1, wheat:1, stone:1 };
+  // Badge + panel share the same kind list (every hotbar key with stock).
+  // CHEST_STASH still marks bulk blocks that skip the one-slot quick bar.
+  function chestKeys() { return hotbar.filter(function (k) { return inv[k]; }); }
+  function chestKindCount() { return chestKeys().length; }
+  function quickHotbarKeys() {
+    // Chest is the full inventory picker; bottom bar keeps only the held slot.
+    var selKey = sel >= 0 ? hotbar[sel] : null;
+    if (selKey && inv[selKey]) return [selKey];
+    return [];
+  }
+  function setChestOpenUi(open) {
+    document.body.classList.toggle('chest-open', !!open);
+    // UX20: Break/Place/Jump and the floating held name stay hidden.
+    // UX29: the held item lives on the Chest button, not a separate slot.
+    ['btn-break', 'btn-place', 'btn-jump', 'held'].forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el) el.hidden = true;
+    });
+  }
+  function openChest() {
+    if (!started || dialogue || quiz || nameFlow) return;
+    closePanels(); renderChest(); document.getElementById('chest-panel').hidden = false;
+    setChestOpenUi(true);
+  }
+  function closeChest() {
+    document.getElementById('chest-panel').hidden = true;
+    setChestOpenUi(false);
+  }
+  function renderChest() {
+    var root = document.getElementById('chest-grid'); root.replaceChildren();
+    var keys = chestKeys();
+    var lab = document.getElementById('chest-kinds-label');
+    if (lab) lab.textContent = keys.length ? ('· ' + keys.length + (keys.length === 1 ? ' kind' : ' kinds')) : '';
+    if (!keys.length) { var empty = document.createElement('p'); empty.textContent = 'Empty for now.'; root.appendChild(empty); return; }
+    keys.forEach(function (key) {
+      var b = document.createElement('button'); b.type = 'button'; b.className = 'chest-item';
+      b.setAttribute('aria-label', WORD[key][0]);
+      var cv = document.createElement('canvas'); cv.width = 96; cv.height = 96; cv.style.cssText = 'width:40px;height:40px;image-rendering:pixelated';
+      paintIcon(cv, key); b.appendChild(cv);
+      b.appendChild(document.createTextNode(WORD[key][0]));
+      var em = document.createElement('em'); em.textContent = 'x' + inv[key]; b.appendChild(em);
+      tapButton(b, function () {
+        var i = hotbar.indexOf(key); if (i >= 0) sel = i; invSig = '';
+        if (buildMode && (BLOCK_OF[key] || CRAFTABLES[key])) { buildTool = key; renderBuildTools(); }
+        closeChest(); showWord(key); renderHotbar();
+      });
+      root.appendChild(b);
+    });
+  }
   function panelOpen() {
-    return !document.getElementById('house-upgrade').hidden || !document.getElementById('craft').hidden || !document.getElementById('book').hidden || !document.getElementById('parent-help').hidden;
+    return !document.getElementById('house-upgrade').hidden || !document.getElementById('craft').hidden || !document.getElementById('book').hidden || !document.getElementById('parent-help').hidden || !document.getElementById('chest-panel').hidden;
   }
   function openCraft() {
     if (chatBlocked()) return;
@@ -5039,7 +6119,7 @@ function validConversation(value, p) {
     speak('Word book');
   }
   function closeBook() { document.getElementById('book').hidden = true; }
-  function closePanels() { closeUpgrade(); closeCraft(); closeBook(); document.getElementById('parent-help').hidden = true; document.getElementById('btn-zh').setAttribute('aria-expanded', 'false'); }
+  function closePanels() { closeUpgrade(); closeCraft(); closeBook(); closeChest(); document.getElementById('parent-help').hidden = true; document.getElementById('btn-zh').setAttribute('aria-expanded', 'false'); }
   function setZh() {
     // Legacy save setting cannot turn on translations in child-facing UI.
     zhOn = false;
@@ -5199,6 +6279,7 @@ function validConversation(value, p) {
     packSeen = hasPack();
     camReady = false;
     invSig = '';
+    settleLooseCars();
   }
   function freshGame(newSeed) {
     restoreBuild({});
@@ -5207,6 +6288,8 @@ function validConversation(value, p) {
     progress = blankProgress(); intros = {};
     packSeen = false;
     timeOfDay = 0.30;
+    clearRopeRescue();
+    indoors = null; indoorX = 0.42; houseGrace = 0;
     generate(newSeed);
     taskSnapshot = QUESTS.map(function () { return false; });
     invSig = '';
@@ -5216,8 +6299,9 @@ function validConversation(value, p) {
     if (chatBlocked()) return;
     closeChat(); chatQueue = []; boatLanding = false; boatStartX = null;
     riding = false; fishing = null;
+    if (indoors) exitHouse(true);
     player.x = homeX; player.y = homeY; player.vy = 0; player.dir = 1;
-    onGround = true; deepTime = 0; camReady = false;
+    onGround = true; clearRopeRescue(); camReady = false;
     document.getElementById('btn-home').hidden = true;
     showWord('home');
     chime();
@@ -5234,6 +6318,7 @@ function validConversation(value, p) {
     document.getElementById('start').hidden = true;
     learn('hello');
     if (determineMode('gameLoad') === 'name_ask') openNameAsk(); else openGreeting();
+    speakPrompt(quiz ? ('Find the ' + WORD[quiz.key][0] + '!') : (currentQuest() ? currentQuest().en : 'Level 3 Complete! Explore and play!'), 'quest');
   }
   function hardReset() {
     cancelSocial(nameFlow); nameFlow = null; closeAmbient(); memory = blankMemory(); childName = ''; weatherPending = false; socialLastInput = Date.now();
@@ -5296,7 +6381,13 @@ function validConversation(value, p) {
       hardReset();
     });
     tapButton(document.getElementById('btn-craft'), openCraft);
+    document.getElementById('btn-craft').addEventListener('click', function (e) { if (e.detail === 0) openCraft(); });
     tapButton(document.getElementById('btn-words'), openBook);
+    document.getElementById('btn-words').addEventListener('click', function (e) { if (e.detail === 0) openBook(); });
+    tapButton(document.getElementById('chest-back'), closeChest);
+    (function () { var c = document.getElementById('btn-chest'); if (c) { paintIcon(c.querySelector('canvas'), 'table'); tapButton(c, openChest); c.addEventListener('click', function (e) { if (e.detail === 0) openChest(); }); } })();
+    (function () { var h = document.getElementById('btn-home'); if (h) paintIcon(h.querySelector('canvas'), 'home'); })();
+    setChestOpenUi(false);
     bindDialogue();
     function toggleParent() {
       stopChatListening(); releaseChatInput(); closeCraft(); closeBook();
@@ -5324,7 +6415,8 @@ function validConversation(value, p) {
       memory.prefs = blankMemory().prefs; memory.prefsLearnedAt = {};
       save(); showParentPage(document.getElementById('parent-info').hidden);
     });
-    document.getElementById('btn-build').addEventListener('click', toggleBuild);
+    tapButton(document.getElementById('btn-build'), toggleBuild);
+    document.getElementById('btn-build').addEventListener('click', function (e) { if (e.detail === 0) toggleBuild(); });
     document.getElementById('car-exit').onclick=exitCar;
     document.getElementById('parent-music').onclick=function(){setPackSetting('music');};document.getElementById('parent-sfx').onclick=function(){setPackSetting('sfx');};
     document.getElementById('upgrade-back').onclick=closeUpgrade;
@@ -5348,7 +6440,7 @@ function validConversation(value, p) {
     tapButton(document.getElementById('quest'), function () {
       if (quiz) { speakEn('Find the ' + WORD[quiz.key][0] + '!'); return; }
       var q = currentQuest();
-      speak(q ? q.en : 'Explore and play');
+      speak(q ? q.en : 'All done!');
     });
     tapButton(document.getElementById('btn-speak'), speakTask);
     tapButton(document.getElementById('btn-quiz'), function () {
@@ -5402,8 +6494,10 @@ function validConversation(value, p) {
       // Canvas input and drawing share CSS-pixel coordinates, including browser zoom.
       var sx = (e.clientX - rect.left) * viewW / rect.width;
       var sy = (e.clientY - rect.top) * viewH / rect.height;
+      if (indoors) { indoorTap(sx, sy); return; }
       var w = screenToWorld(sx, sy);
       buildClick={x:Math.round(e.clientX),y:Math.round(e.clientY)};
+      if (ropeHit(w.x, w.y)) { climbRope(); return; }
       if(interactObject(w.x,w.y))return;
       if (buildMode) {
         buildTap(Math.floor(w.x / TILE), Math.floor(w.y / TILE), w.y/TILE-Math.floor(w.y/TILE));
@@ -5489,7 +6583,7 @@ function validConversation(value, p) {
     window.addEventListener('blur', function () { keys={};joyEnd({pointerId:joyId}); });
     document.addEventListener('touchmove', function (e) {
       var t = e.target;
-      if (t && t.closest && t.closest('.body, .hotbar, #parent-help, #dialogue, #welcome, #buddy-chat')) return;
+      if (t && t.closest && t.closest('.panel-body, .topbar, .acts, .hotbar, #build-tools, #chest-panel, #parent-help, #dialogue, #welcome, #buddy-chat, #btn-build, #btn-craft, #btn-words, #btn-zh, #btn-chest')) return;
       e.preventDefault();
     }, { passive: false });
     ['gesturestart', 'gesturechange', 'gestureend'].forEach(function (ev) {
@@ -5525,7 +6619,10 @@ function validConversation(value, p) {
     lockAge += dt;
     if (cardLeft > 0) {
       cardLeft -= dt;
-      if (cardLeft <= 0) hideCard();
+      if (cardLeft <= 0) {
+        if (cardFlyChest) flyWordcardToChest();
+        else hideCard();
+      }
     }
     if (toastLeft > 0) {
       toastLeft -= dt;
@@ -5538,6 +6635,7 @@ function validConversation(value, p) {
     var playing = started && !rotateBlock() && !panelOpen() && !chatBlocked();
     if (playing) {
       var previousPlayerX = player.x, previousPlayerY = player.y;
+      settleLooseCars();
       buildStep(dt);
       rainbowLeft = Math.max(0, rainbowLeft - dt);
       rainTimer -= dt;
@@ -5612,10 +6710,10 @@ function validConversation(value, p) {
       }
       wasSwim = swimNow;
       if (quiz && quizNear()) quizWin();
-      var depth = Math.floor((player.y - 2) / TILE);
-      if (depth >= GROUND + 4) deepTime += dt;
-      else deepTime = 0;
-      document.getElementById('btn-home').hidden = !(deepTime > 1.15);
+      // Home is a long horizontal walk. A deep pit gets the rope instead, so both never show together.
+      var farHome = Math.abs(player.x - homeX) > 18 * TILE;
+      var deepPit = pitDepthTiles() >= 8 || ropeShown || !!ropeClimb;
+      document.getElementById('btn-home').hidden = !(started && farHome && !deepPit && !drivingCar && !chatBlocked());
       adventureStep(dt);
       // Walking and pet following must persist even without a new world action.
       // saveSoon uses the same 2.5-second throttle as inventory/build changes.
@@ -5626,8 +6724,11 @@ function validConversation(value, p) {
       }
     }
     // Dialogue also pauses physics; opening a parent panel keeps it intact.
+    if (started && !document.hidden) updateRopeRescue(dt);
     syncSoundPack();
-    updateCamera(playing ? dt : 1);
+    flushPrompt();
+      if (playing) updateHouse(dt);
+      updateCamera(playing ? dt : 1);
     if (invSignature() !== invSig) { renderHotbar(); renderBuildTools(); }
     drawFrame(sec);
   }
@@ -5744,7 +6845,20 @@ function validConversation(value, p) {
       layout: function () {
         return { viewW: viewW, viewH: viewH, tileScreen: tileScreen, dpr: dpr, portrait: portrait, started: started };
       },
-      seed: function () { return seed; }
+      seed: function () { return seed; },
+      rope: function () {
+        return { shown: !!ropeShown, depth: pitDepthTiles(), walk: pitDepthTiles() >= 8 ? canWalkOut() : false, climbing: !!ropeClimb, wait: Math.round(pitTime * 10) / 10, anchor: ropeAnchor };
+      },
+      house: function () {
+        return {
+          inside: !!(indoors && indoors.kind === 'house'),
+          furn: indoors && indoors.furn ? { bed: indoors.furn.bed || 0, table: indoors.furn.table || 0, torch: indoors.furn.torch || 0 } : null,
+          houses: buildObjects.filter(function (b) { return b.kind === 'house'; }).map(function (b) {
+            var d = houseDoorBox(b);
+            return { x: b.x, y: b.y, door: { x: d.x, y: d.y, w: d.w, h: d.h }, furn: b.furn || null };
+          })
+        };
+      }
     };
   }
   boot();
