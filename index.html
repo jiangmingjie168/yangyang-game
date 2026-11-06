@@ -213,9 +213,11 @@
     display: flex; flex-direction: column; align-items: center; justify-content: center;
     font-weight: 800; line-height: 1; position: relative; touch-action: manipulation;
   }
-  #btn-chest canvas { width: 36px; height: 36px; display: block; }
-  #btn-chest strong { display:block; font-size:11px; margin-top:1px; }
-  #btn-chest em { position:absolute; right:2px; bottom:1px; font-style:normal; font-size:12px; font-weight:800; background:#fff9; border-radius:8px; padding:0 3px; }
+  #btn-chest canvas { width: 36px; height: 36px; display: block; pointer-events: none; }
+  #btn-chest strong { display:block; font-size:11px; margin-top:1px; pointer-events: none; }
+  #btn-chest em { position:absolute; font-style:normal; font-size:11px; font-weight:800; background:#fff; border-radius:8px; padding:0 3px; pointer-events: none; line-height: 1.2; }
+  #btn-chest #chest-held { top: 1px; right: 2px; }
+  #btn-chest #chest-count { right: 2px; bottom: 1px; }
   .acts { gap: 6px; }
   #chest-panel .panel-body { display:grid; grid-template-columns:repeat(auto-fill,minmax(72px,1fr)); gap:8px; align-content:start; }
   #chest-panel .chest-item { min-height:72px; border-radius:14px; background:#fff8ee; border:2px solid #c6d9ad; padding:6px; font-weight:800; }
@@ -234,12 +236,12 @@
   .act.place { background: var(--sky); }
   .act.jump { width: 48px; height: 48px; border-radius: 14px; background: var(--sun); color: var(--ink); }
   .act.jump strong { font-size: 18px; line-height: 1; }
-  /* UX23: right column is Home, then the one held slot, then the chest.
+  /* Home sits just above the Chest. The held item is drawn on the Chest button.
      Home is for a long walk from spawn. A deep pit uses the rope, not Home.
      Home stays hidden while driving. */
   #btn-home {
     position: absolute; right: calc(7px + var(--sar)); left: auto;
-    bottom: calc(136px + var(--sab));
+    bottom: calc(74px + var(--sab));
     transform: none;
     z-index: 26; pointer-events: auto;
     width: 56px; height: 56px; min-width: 56px; min-height: 56px; padding: 6px;
@@ -545,40 +547,16 @@
   body.driving .acts, body.driving #held {visibility:hidden;}
   /* UX20: Break, Place, and Jump stay gone. The joystick still jumps.
      The floating held name (#held, e.g. "Leaves") stays gone.
-     UX23: the single held slot is back, under Home and above the chest. */
+     UX29: no separate held slot. The Chest button shows what is in hand. */
   #btn-break,
   #btn-place,
   #btn-jump,
-  #held {
+  #held,
+  #hotbar {
     display: none !important;
     visibility: hidden !important;
     pointer-events: none !important;
   }
-  #hud > #hotbar {
-    position: absolute !important;
-    left: auto !important;
-    right: calc(6px + var(--sar)) !important;
-    bottom: calc(70px + var(--sab)) !important;
-    z-index: 26;
-    width: 58px;
-    max-width: 58px;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-    display: flex !important;
-    justify-content: center;
-    pointer-events: auto;
-  }
-  /* One held slot only, under Home. A copy inside the joystick row stays hidden. */
-  .bottom #hotbar, .mid #hotbar, .mid > * { display: none !important; }
-  #hotbar .slot.empty {
-    border: 2px dashed rgba(58,42,28,0.28);
-    background: rgba(255,248,238,0.72);
-    box-shadow: none;
-  }
-  /* Never paint more than the one held slot, and never beside the joystick. */
-  #hotbar .slot:nth-child(n+2),
-  #hotbar .emptybar { display: none !important; }
   #car-exit { position:absolute;right:18px;top:106px;z-index:25;background:#ffe4a0; }
   #house-upgrade .panel-body { max-width:760px;margin:auto; }
   .upgrade-preview {display:flex;align-items:center;gap:18px;flex-wrap:wrap;}
@@ -596,7 +574,7 @@
 <div id="app">
   <canvas id="view" width="800" height="400"></canvas>
   <div id="hud">
-    <span id="build-version" aria-label="Build version">build cd91b62+ux28</span>
+    <span id="build-version" aria-label="Build version">build cd91b62+ux29</span>
     <div class="topbar">
       <button id="quest" type="button">
         <canvas id="quest-icon" width="128" height="128"></canvas>
@@ -622,7 +600,7 @@
         <div id="held"><strong id="held-en">Tap a block</strong></div>
       </div>
       <div class="acts">
-        <button id="btn-chest" type="button" aria-label="Open chest"><canvas width="128" height="128" aria-hidden="true"></canvas><strong>Chest</strong><em id="chest-count">0</em></button>
+        <button id="btn-chest" type="button" aria-label="Open chest"><canvas width="128" height="128" aria-hidden="true"></canvas><strong>Chest</strong><em id="chest-held" hidden></em><em id="chest-count">0</em></button>
         <button id="btn-break" class="act break" type="button" aria-label="Break"><strong>Break</strong></button>
         <button id="btn-place" class="act place" type="button" aria-label="Place"><strong>Place</strong></button>
         <button id="btn-jump" class="act jump" type="button" aria-label="Jump"><strong>↑</strong></button>
@@ -5710,51 +5688,31 @@ function validConversation(value, p) {
     }
   }
   function renderHotbar() {
-    var sig = invSignature() + '|chest:' + chestKeys().length + '|quick1';
+    var sig = invSignature() + '|chest:' + chestKeys().length + '|onchest';
     var bar = document.getElementById('hotbar');
-    var visible = quickHotbarKeys().slice(0, 1);
-    var keep = bar.scrollLeft;
-    bar.innerHTML = '';
-    if (!visible.length) {
-      var empty = document.createElement('div');
-      empty.className = 'slot empty';
-      empty.setAttribute('aria-label', hotbar.length ? 'Open Chest' : 'Tap a block');
-      bar.appendChild(empty);
-    } else {
-      visible.forEach(function (key) {
-        var i = hotbar.indexOf(key);
-        var b = document.createElement('button');
-        b.type = 'button';
-        b.className = 'slot' + (i === sel ? ' on' : '');
-        b.setAttribute('aria-label', key==='house'?'Roof blocks':WORD[key][0]);
-        var cv = document.createElement('canvas');
-        cv.width = 128; cv.height = 128;
-        paintIcon(cv, key);
-        var em = document.createElement('em');
-        em.textContent = String(inv[key] || 0);
-        b.appendChild(cv); b.appendChild(em);
-        tapButton(b, function () {
-          if (key === 'rope' && ropeShown && !ropeClimb) { climbRope(); return; }
-          sel = i;
-          if (buildSessionBusy()) buildAction('select');
-          if (buildMode && (BLOCK_OF[key]||CRAFTABLES[key])) { buildTool = key; renderBuildTools(); }
-          invSig = '';
-          showWord(key);
-        });
-        bar.appendChild(b);
-      });
-    }
-    bar.scrollLeft = keep;
+    if (bar) bar.replaceChildren();
     invSig = sig;
-    var key = hotbar[sel];
-    document.getElementById('held-en').textContent = key && WORD[key] ? (key==='house'?'Roof blocks':WORD[key][0]) : 'Tap a block';
+    var key = selectedKey();
+    var heldName = key && WORD[key] ? (key === 'house' ? 'Roof blocks' : WORD[key][0]) : '';
+    var heldEn = document.getElementById('held-en');
+    if (heldEn) heldEn.textContent = heldName || 'Tap a block';
+    var btn = document.getElementById('btn-chest');
+    var n = chestKindCount();
     var cc = document.getElementById('chest-count');
+    var held = document.getElementById('chest-held');
     if (cc) {
-      var n = chestKindCount();
       cc.textContent = String(n);
       cc.title = n === 1 ? '1 kind' : (n + ' kinds');
-      var btn = document.getElementById('btn-chest');
-      if (btn) btn.setAttribute('aria-label', n ? ('Open chest, ' + n + (n === 1 ? ' kind' : ' kinds')) : 'Open chest');
+    }
+    if (btn) {
+      var canvas = btn.querySelector('canvas');
+      if (canvas) paintIcon(canvas, key || 'table');
+      if (held) {
+        held.hidden = !key;
+        held.textContent = key ? String(inv[key] || 0) : '';
+      }
+      var kinds = n ? (', ' + n + (n === 1 ? ' kind' : ' kinds')) : '';
+      btn.setAttribute('aria-label', key ? ('Chest, ' + heldName + ', ' + (inv[key] || 0) + kinds) : (n ? ('Open chest' + kinds) : 'Open chest'));
     }
   }
   function canCraft(r) {
@@ -5946,7 +5904,7 @@ function validConversation(value, p) {
   function setChestOpenUi(open) {
     document.body.classList.toggle('chest-open', !!open);
     // UX20: Break/Place/Jump and the floating held name stay hidden.
-    // UX23: the held slot under Home stays visible.
+    // UX29: the held item lives on the Chest button, not a separate slot.
     ['btn-break', 'btn-place', 'btn-jump', 'held'].forEach(function (id) {
       var el = document.getElementById(id);
       if (el) el.hidden = true;
