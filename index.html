@@ -574,7 +574,7 @@
 <div id="app">
   <canvas id="view" width="800" height="400"></canvas>
   <div id="hud">
-    <span id="build-version" aria-label="Build version">build cd91b62+ux29</span>
+    <span id="build-version" aria-label="Build version">build cd91b62+ux30</span>
     <div class="topbar">
       <button id="quest" type="button">
         <canvas id="quest-icon" width="128" height="128"></canvas>
@@ -2357,7 +2357,14 @@ function validConversation(value, p) {
       playSfx('remove');var key=KEY_OF[get(x,y)];setCell(x,y,AIR);addItem(key,1,true);placedThisRun.delete(idx(x,y));buildSession.removed++;buildDirty=true;
       logBuildResult(x,y,'removed '+key);save();renderBuildTools();return;
     }
-    playSfx('place');var material=buildMaterial(),width=r.w,id=BLOCK_OF[material];
+    var material=buildMaterial(),width=r.w,id=BLOCK_OF[material];
+    if (material === 'fence' || material === 'door' || material === 'window') {
+      for (var s = 0; s < width; s++) {
+        var spotLine = specialPlaceLine(material, x + s, y);
+        if (spotLine) { showToast(spotLine, 2.2); logBuildResult(x, y, 'fail:spot'); return; }
+      }
+    }
+    playSfx('place');
     // Atomic validation above: inventory is only consumed after writing tiles.
     for(var j=0;j<width;j++) {
       setCell(x+j,y,id);consume(material);progress.placed[material]=1;buildPlaced(x+j,y,material,true);
@@ -3614,6 +3621,10 @@ function validConversation(value, p) {
     if (key === 'bed') showToast('The bed goes here!', 2);
     else if (key === 'table') showToast('The table goes here!', 2);
     else if (key === 'torch') showToast('The torch goes on the wall!', 2);
+    else if (key === 'flower') showToast('The flower goes outside!', 2.2);
+    else if (key === 'fence') showToast('The fence goes outside!', 2.2);
+    else if (key === 'door') showToast('The door goes outside!', 2.2);
+    else if (key === 'window') showToast('The window goes outside!', 2.2);
   }
   function indoorPhysics(dt) {
     var ax = axis();
@@ -3982,6 +3993,31 @@ function validConversation(value, p) {
     giveMined(id);
     rememberEvent(id===WINDOW?'built':'found', KEY_OF[id]);
   }
+  function groundSupport(id) {
+    return id === GRASS || id === DIRT || id === SAND || id === STONE || id === PLANKS;
+  }
+  function wallSupport(id) {
+    return id === GRASS || id === DIRT || id === SAND || id === STONE || id === PLANKS || id === WOOD || id === HOUSE || id === BEDROCK;
+  }
+  // Where a crafted item is allowed to sit. Empty string means the spot is fine.
+  function specialPlaceLine(key, tx, ty) {
+    if (indoors && (key === 'flower' || key === 'fence' || key === 'door' || key === 'window')) return 'The ' + key + ' goes outside!';
+    if (key === 'flower') {
+      var soil = get(tx, ty + 1);
+      if (soil !== GRASS && soil !== DIRT) return 'The flower goes on the grass!';
+    } else if (key === 'fence') {
+      if (!groundSupport(get(tx, ty + 1))) return 'The fence goes on the ground!';
+    } else if (key === 'door') {
+      if (!groundSupport(get(tx, ty + 1))) return 'The door goes on the ground!';
+      if (get(tx, ty - 1) !== AIR) return 'The door needs space above!';
+    } else if (key === 'window') {
+      if (!wallSupport(get(tx - 1, ty)) && !wallSupport(get(tx + 1, ty))) return 'The window goes on a wall!';
+    } else if (key === 'torch' && !indoors) {
+      var held = groundSupport(get(tx, ty + 1)) || wallSupport(get(tx - 1, ty)) || wallSupport(get(tx + 1, ty));
+      if (!held) return 'The torch goes on the ground!';
+    }
+    return '';
+  }
   function tryPlace(tx, ty) {
     var key = selectedKey();
     if (!key) return;
@@ -4002,6 +4038,8 @@ function validConversation(value, p) {
     }
     if (craftableAt(tx,ty) || get(tx,ty)!==AIR || overlapsPlayer(tx,ty)) { placementFailure(tx,ty,'occupied'); return; }
     if(cellHasAnimal(tx,ty)){placementFailure(tx,ty,'animal');return;}
+    var spotLine = specialPlaceLine(key, tx, ty);
+    if (spotLine) { showToast(spotLine, 2.2); return; }
     if (key === 'seed') {
       var below = get(tx, ty + 1);
       if (below !== GRASS && below !== DIRT) { showWord('seed'); return; }
@@ -4271,9 +4309,33 @@ function validConversation(value, p) {
     }
     var tx = Math.floor(wx / TILE), ty = Math.floor(wy / TILE);
     var id = get(tx, ty);
+    var heldKey = selectedKey();
+    if (heldKey === 'flower' || heldKey === 'fence' || heldKey === 'door' || heldKey === 'window' || heldKey === 'torch') {
+      // A special item never digs. Offer the surface it belongs on, or explain and keep it.
+      if (id !== AIR && (heldKey === 'flower' || heldKey === 'fence' || heldKey === 'door' || heldKey === 'torch') && get(tx, ty - 1) === AIR) {
+        tryPlace(tx, ty - 1);
+        return;
+      }
+      if (heldKey === 'window' && id !== AIR) {
+        var sides = [[tx - 1, ty], [tx + 1, ty]];
+        var si;
+        for (si = 0; si < sides.length; si++) {
+          if (get(sides[si][0], sides[si][1]) === AIR && !specialPlaceLine('window', sides[si][0], sides[si][1])) {
+            tryPlace(sides[si][0], sides[si][1]);
+            return;
+          }
+        }
+        showToast('The window goes on a wall!', 2.2);
+        return;
+      }
+      if (id !== AIR) {
+        showToast(specialPlaceLine(heldKey, tx, ty - 1) || ('The ' + heldKey + ' goes on the ground!'), 2.2);
+        return;
+      }
+    }
     if (id !== AIR) {
-      if (selectedKey() === 'bed' || selectedKey() === 'table') {
-        showToast(selectedKey() === 'bed' ? 'The bed goes in the house!' : 'The table goes in the house!', 2.2);
+      if (heldKey === 'bed' || heldKey === 'table') {
+        showToast(heldKey === 'bed' ? 'The bed goes in the house!' : 'The table goes in the house!', 2.2);
         return;
       }
       lock = { tx: tx, ty: ty };
