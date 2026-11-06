@@ -234,11 +234,11 @@
   .act.place { background: var(--sky); }
   .act.jump { width: 48px; height: 48px; border-radius: 14px; background: var(--sun); color: var(--ink); }
   .act.jump strong { font-size: 18px; line-height: 1; }
-  /* UX20: compact house icon on the right edge, just above the chest.
-     Visibility is unchanged (far from spawn, or stuck deep; hidden while driving). */
+  /* UX23: right column is Home, then the one held slot, then the chest.
+     Home stays a house icon (far from spawn, or stuck deep; hidden while driving). */
   #btn-home {
-    position: absolute; right: calc(10px + var(--sar)); left: auto;
-    bottom: calc(76px + var(--sab));
+    position: absolute; right: calc(7px + var(--sar)); left: auto;
+    bottom: calc(136px + var(--sab));
     transform: none;
     z-index: 26; pointer-events: auto;
     width: 56px; height: 56px; min-width: 56px; min-height: 56px; padding: 6px;
@@ -542,21 +542,39 @@
   #parent-help #btn-speak { width:auto; min-width:120px; height:48px; padding:0 14px; border-radius:12px; display:inline-flex; align-items:center; gap:8px; }
 
   body.driving .acts, body.driving #held {visibility:hidden;}
-  /* UX20: Break, Place, and Jump are gone for good (UX15/UX17 only hid them
-     while the chest was open). The joystick still covers direction and jump.
-     The quick slot and its floating name (#held, e.g. "Leaves") are gone too.
-     Keep #btn-chest. Inventory picking stays in the chest. */
+  /* UX20: Break, Place, and Jump stay gone. The joystick still jumps.
+     The floating held name (#held, e.g. "Leaves") stays gone.
+     UX23: the single held slot is back, under Home and above the chest. */
   #btn-break,
   #btn-place,
   #btn-jump,
-  #held,
-  #hotbar {
+  #held {
     display: none !important;
     visibility: hidden !important;
     pointer-events: none !important;
   }
-  /* Belt-and-suspenders: never paint more than one quick slot, even if JS regresses. */
-  #hotbar .slot:nth-child(n+2) { display: none !important; }
+  #hotbar {
+    position: absolute;
+    right: calc(6px + var(--sar));
+    bottom: calc(70px + var(--sab));
+    z-index: 26;
+    width: 58px;
+    max-width: 58px;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    pointer-events: auto;
+  }
+  #hotbar .slot.empty {
+    border: 2px dashed rgba(58,42,28,0.28);
+    background: rgba(255,248,238,0.72);
+    box-shadow: none;
+  }
+  /* Never paint more than the one held slot, and never beside the joystick. */
+  #hotbar .slot:nth-child(n+2),
+  #hotbar .emptybar { display: none !important; }
   #car-exit { position:absolute;right:18px;top:106px;z-index:25;background:#ffe4a0; }
   #house-upgrade .panel-body { max-width:760px;margin:auto; }
   .upgrade-preview {display:flex;align-items:center;gap:18px;flex-wrap:wrap;}
@@ -574,7 +592,7 @@
 <div id="app">
   <canvas id="view" width="800" height="400"></canvas>
   <div id="hud">
-    <span id="build-version" aria-label="Build version">build cd91b62+ux22</span>
+    <span id="build-version" aria-label="Build version">build cd91b62+ux23</span>
     <div class="topbar">
       <button id="quest" type="button">
         <canvas id="quest-icon" width="128" height="128"></canvas>
@@ -590,6 +608,7 @@
     <button id="btn-home" type="button" hidden aria-label="Go home">
       <canvas width="128" height="128" aria-hidden="true"></canvas>
     </button>
+    <div id="hotbar" class="hotbar"></div>
     <div class="bottom">
       <div id="joy" aria-label="Move">
         <div id="joy-base"></div>
@@ -597,7 +616,6 @@
       </div>
       <div class="mid">
         <div id="held"><strong id="held-en">Tap a block</strong></div>
-        <div id="hotbar" class="hotbar"></div>
       </div>
       <div class="acts">
         <button id="btn-chest" type="button" aria-label="Open chest"><canvas width="128" height="128" aria-hidden="true"></canvas><strong>Chest</strong><em id="chest-count">0</em></button>
@@ -5082,8 +5100,8 @@ function validConversation(value, p) {
     bar.innerHTML = '';
     if (!visible.length) {
       var empty = document.createElement('div');
-      empty.className = 'emptybar';
-      empty.textContent = hotbar.length ? 'Open Chest' : 'Tap a block';
+      empty.className = 'slot empty';
+      empty.setAttribute('aria-label', hotbar.length ? 'Open Chest' : 'Tap a block');
       bar.appendChild(empty);
     } else {
       visible.forEach(function (key) {
@@ -5309,8 +5327,9 @@ function validConversation(value, p) {
   }
   function setChestOpenUi(open) {
     document.body.classList.toggle('chest-open', !!open);
-    // UX20: never reveal Break/Place/Jump, the quick slot, or the held-name caption.
-    ['btn-break', 'btn-place', 'btn-jump', 'held', 'hotbar'].forEach(function (id) {
+    // UX20: Break/Place/Jump and the floating held name stay hidden.
+    // UX23: the held slot under Home stays visible.
+    ['btn-break', 'btn-place', 'btn-jump', 'held'].forEach(function (id) {
       var el = document.getElementById(id);
       if (el) el.hidden = true;
     });
