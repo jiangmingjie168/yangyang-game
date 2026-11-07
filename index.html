@@ -579,7 +579,7 @@
   <canvas id="view" width="800" height="400"></canvas>
   <div id="hud">
     <span id="hunger-hint" hidden></span>
-    <span id="build-version" aria-label="Build version">build cd91b62+ux47</span>
+    <span id="build-version" aria-label="Build version">build cd91b62+ux48</span>
     <div class="topbar">
       <button id="quest" type="button">
         <canvas id="quest-icon" width="128" height="128"></canvas>
@@ -918,7 +918,7 @@ const BRAIN_TIMEOUT_MS = 6500;
   var seek = null, joyId = null;
   var trailSpots = [], dialogue = null, chatQueue = [], chatIdle = 0, chatCooldown = 0;
   var chatClock = 0, chatRecognizer = null, chatTimer = null, recognitionTimer = null, chatLastInput = 0;
-  var taskSnapshot = null, followTravel = 0, followLastX = 0, followReady = false, lastPetChatAt = -999;
+  var taskSnapshot = null, followTravel = 0, followLastX = 0, followReady = false, lastPetChatAt = -999, lastFollowChatAt = -999;
   var boatStartX = null, boatLanding = false, sceneNow = '';
   var childName = '', recentEvents = [], recentLines = [], lastAnswer = '';
   var welcome = null, lastGreeting = { id: -1, text: '' }, returningVisit = false;
@@ -1374,13 +1374,33 @@ function validConversation(value, p) {
     if (advance) trail.promptCursor = (trail.promptCursor || 0) + 1;
     return pick;
   }
-  function recentPromptWord() {
+  function recentPromptWord(skip) {
     var i, e;
     for (i = recentEvents.length - 1; i >= 0; i--) {
       e = recentEvents[i];
-      if (e && allowedChatWord(e.word) && (e.action === 'met' || e.action === 'found' || e.action === 'caught' || e.action === 'built' || e.action === 'made')) return e.word;
+      if (!e || !allowedChatWord(e.word)) continue;
+      // A pet that is just walking along is not a new meeting.
+      if (skip && e.word === skip && e.action === 'met') continue;
+      if (e.action === 'met' || e.action === 'found' || e.action === 'caught' || e.action === 'built' || e.action === 'made') return e.word;
     }
     return '';
+  }
+  function followingType() {
+    var buddy = animals.filter(function (a) { return a.tamed; })[0];
+    return buddy ? buddy.type : '';
+  }
+  function scenePromptWord() {
+    return sceneNow === 'water' ? 'water' : sceneNow === 'trees' ? 'tree' : sceneNow === 'home' ? 'house' : sceneNow === 'meadow' ? 'flower' : '';
+  }
+  // While a pet follows, idle prompts rotate through other learned words and the place.
+  function rotatedExploreWord(skip) {
+    var sceneKey = scenePromptWord();
+    var pool = chatWords().filter(function (k) { return k && k !== skip; });
+    var cursor = trail.promptCursor || 0;
+    trail.promptCursor = cursor + 1;
+    if (sceneKey && allowedChatWord(sceneKey) && sceneKey !== skip && cursor % 3 === 0) return sceneKey;
+    if (pool.length) return oldWord(pool, '', false);
+    return sceneKey && allowedChatWord(sceneKey) && sceneKey !== skip ? sceneKey : '';
   }
   function sceneAt(x) {
     var dx = x / TILE - origin;
@@ -1392,7 +1412,7 @@ function validConversation(value, p) {
     trail = { found: {}, reviews: {}, turns: 0, scenes: {}, levels: {}, speaking: [], rounds: 0, lastRound: {}, discoveries:{}, quizDay:new Date().toISOString().slice(0,10), quizzes:0 };
     chatQueue = []; chatIdle = 0; chatCooldown = 0; taskSnapshot = null;
     boatStartX = null; boatLanding = false;
-    followTravel = 0; followLastX = player.x; followReady = false;
+    followTravel = 0; followLastX = player.x; followReady = false; lastFollowChatAt = -999;
     sceneNow = sceneAt(player.x); trail.scenes[sceneNow] = 1;
     trailPickupDelay = 0;
     buildTrailSpots();
@@ -1569,8 +1589,10 @@ function validConversation(value, p) {
     dismissGreeting();
     var pool = chatWords();
     if (pool.length < 2) return;
-    // Pet, fish, task, and place events keep their own word. Otherwise use what just happened, then rotate.
-    var target = allowedChatWord(event.key) ? event.key : (recentPromptWord() || oldWord(pool, '', true));
+    // A tap on the dog still asks about the dog. Walking with it does not.
+    var skip = event.anchor === 'pet' ? '' : followingType();
+    var keyed = allowedChatWord(event.key) && event.key !== skip;
+    var target = keyed ? event.key : (recentPromptWord(skip) || oldWord(pool, skip, true));
     // The first question stays with the event's anchor word.
     var other = oldWord(pool, target);
     var options = trail.turns % 2 ? [other, target] : [target, other];
@@ -1966,8 +1988,11 @@ function validConversation(value, p) {
       if (!riding && Math.abs(player.x - followLastX) < TILE * 2) followTravel += Math.abs(player.x - followLastX);
       followLastX = player.x;
       if (followTravel > TILE * 28) followReady = true;
-      if (followReady && safe && Math.abs(buddy.x - player.x) < TILE * 3 && chatClock - lastPetChatAt >= 60) {
-        queueChat('pet', buddy.type); followReady = false; followTravel = 0; lastPetChatAt = chatClock;
+      if (followReady && safe && Math.abs(buddy.x - player.x) < TILE * 3 && chatClock - lastFollowChatAt >= 60) {
+        // Following is not another meeting. Ask about the place or another learned word.
+        var explore = rotatedExploreWord(buddy.type);
+        if (explore) queueChat('scene', explore);
+        followReady = false; followTravel = 0; lastFollowChatAt = chatClock;
       }
     }
     var scene = sceneAt(player.x);
