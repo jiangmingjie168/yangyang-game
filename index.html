@@ -295,6 +295,8 @@
   }
   #wordcard canvas { width: 68px; height: 68px; display: block; margin: 0 auto; }
   #card-en { font-size: clamp(42px, 6.4vw, 64px); font-weight: 900; line-height: 1; letter-spacing: -0.5px; }
+  #card-hint { font-size: 18px; font-weight: 800; line-height: 1.25; margin-top: 6px; }
+  #card-hint:empty { display: none; }
   @keyframes pop { from { transform: translateX(-50%) scale(0.86); } to { transform: translateX(-50%) scale(1); } }
 
   .panel {
@@ -378,6 +380,7 @@
     #wordcard { display: flex; align-items: center; gap: 8px; min-width: 0; padding: 6px 14px; border-width: 3px; border-radius: 18px; }
     #wordcard canvas { width: 38px; height: 38px; margin: 0; }
     #card-en { font-size: 32px; }
+    #card-hint { font-size: 15px; margin-top: 2px; }
     #toast { top: calc(140px + var(--sat)); bottom: auto; padding: 6px 14px; }
     #toast-en { font-size: 18px; }
   }
@@ -520,6 +523,7 @@
   #buddy-chat.build-done #buddy-line { font-size:20px; line-height:20px; }
   #buddy-chat.build-done #buddy-line::before { content:''; display:inline-block; width:20px; height:20px; vertical-align:bottom; margin-right:5px; background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='m12 2 3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1z' fill='%23ffc23d' stroke='%23986c25'/%3E%3C/svg%3E") center/contain no-repeat; }
   #build-version { position:absolute; z-index:16; left:8px; bottom:calc(3px + var(--sab)); padding:2px 5px; border-radius:4px; background:#fff8eee6; color:#4c493f; font:10px/1.2 monospace; pointer-events:none; }
+  #hunger-hint { position:absolute; z-index:16; left:8px; bottom:calc(20px + var(--sab)); padding:3px 8px; border-radius:10px; background:#fff3d6; color:#8a4b12; font:700 13px/1.2 "Avenir Next", sans-serif; pointer-events:none; }
   #build-debug { position:absolute; z-index:45; left:8px; bottom:115px; max-width:calc(100% - 16px); background:#152030e8; color:#fff; padding:6px; font:11px/1.3 monospace; white-space:pre-wrap; pointer-events:none; }
   #build-tools small { display:block; font-size:12px; }
   #build-status { position:absolute; left:10px; top:112px; width:max-content; max-width:min(72vw,320px); font-size:12px; line-height:1.25; pointer-events:none; background:#fff8eedd; border-radius:6px; padding:2px 6px; box-shadow:0 1px 0 #0001; }
@@ -574,7 +578,8 @@
 <div id="app">
   <canvas id="view" width="800" height="400"></canvas>
   <div id="hud">
-    <span id="build-version" aria-label="Build version">build cd91b62+ux32</span>
+    <span id="hunger-hint" hidden></span>
+    <span id="build-version" aria-label="Build version">build cd91b62+ux46</span>
     <div class="topbar">
       <button id="quest" type="button">
         <canvas id="quest-icon" width="128" height="128"></canvas>
@@ -673,6 +678,7 @@
   <div id="wordcard" hidden role="status" aria-live="polite">
     <canvas id="card-icon" width="256" height="256"></canvas>
     <div id="card-en">Hello</div>
+    <div id="card-hint"></div>
     <button id="card-continue" type="button" hidden>Continue</button>
   </div>
 
@@ -768,7 +774,7 @@ const BRAIN_TIMEOUT_MS = 6500;
     fence: ['Fence'], rain: ['Rain'], cloud: ['Cloud'],
     sun: ['Sun'], moon: ['Moon'], star: ['Star'],
     hello: ['Hello'], jump: ['Jump'], home: ['Home'],
-    wheat: ['Wheat'], seed: ['Seed'], fish: ['Fish'],
+    wheat: ['Wheat'], bread: ['Bread'], seed: ['Seed'], fish: ['Fish'],
     rod: ['Fishing Rod'], boat: ['Boat'], pet: ['Pet'],
     car: ['Car'], wheel: ['Wheel'], follow: ['Follow'], wall: ['Wall'], roof: ['Roof'], window: ['Window'], room: ['Room'], gate: ['Gate']
   };
@@ -804,6 +810,7 @@ const BRAIN_TIMEOUT_MS = 6500;
     { out: 'fence', n: 2, need: { planks: 2, stick: 1 } },
     { out: 'rod', n: 1, need: { stick: 2, wool: 1 } },
     { out: 'boat', n: 1, need: { planks: 5 } },
+    { out: 'bread', n: 1, need: { wheat: 1 } },
     { out: 'window', n: 2, need: { planks: 2, sand: 1 } }
   ];
   var QUESTS = [
@@ -834,6 +841,28 @@ const BRAIN_TIMEOUT_MS = 6500;
   ];
   var CHAPTER1 = 8;
   var CHAPTER2 = 16;
+  // One short sentence after the name, spoken with the word card.
+  var ITEM_HINT = {
+    grass: 'Green ground.', dirt: 'Soft ground.', stone: 'Hard rock.',
+    wood: 'From a tree.', leaves: 'On a tree.', sand: 'Soft ground.',
+    water: 'Cool water.', flower: 'It grows outside.', planks: 'From wood.',
+    stick: 'A thin piece of wood.', rope: 'Climb up!', table: 'Put it in the house.',
+    door: 'Open it to go inside.', torch: 'It gives light.', bed: 'Sleep in the house.',
+    house: 'Go inside the door.', houseKit: 'Go inside the door.', wool: 'From a sheep.',
+    tree: 'It grows tall.', fence: 'Put it outside.', pen: 'A yard for animals.',
+    seed: 'Plant it outside.', wheat: 'A yellow plant.', bread: 'You can eat it.', fish: 'From the water.',
+    rod: 'Use it on water.', boat: 'Ride on the water.', pet: 'A friend who follows.',
+    car: 'You can drive.', wheel: 'It goes on a car.', window: 'It goes on a wall.',
+    wall: 'Part of a house.', roof: 'The top of a house.', room: 'Inside a house.',
+    gate: 'A door in a fence.', cow: 'A big animal.', pig: 'A pink animal.',
+    sheep: 'It has wool.', chicken: 'A small bird.', cat: 'A small pet.',
+    dog: 'A pet friend.', duck: 'A bird that swims.', horse: 'A big animal.',
+    rabbit: 'A small animal.', sun: 'It shines.', moon: 'It shines at night.',
+    star: 'It shines at night.', cloud: 'It floats in the sky.', rain: 'Water from the sky.',
+    home: 'Your starting place.', follow: 'Come with me.', hello: '', jump: ''
+  };
+  // Stackable ground and fill. One-at-a-time specials stay off this list.
+  var MULTI_PLACE = { grass: 1, dirt: 1, sand: 1, stone: 1, wood: 1, leaves: 1, planks: 1, house: 1, water: 1 };
   var ANIMALS = { cow: 1, pig: 1, sheep: 1, chicken: 1, cat: 1, dog: 1, duck: 1, horse: 1, rabbit: 1 };
   var SKY_KEYS = [
     { t: 0.00, top: [255, 186, 150], hor: [255, 228, 190] },
@@ -869,10 +898,13 @@ const BRAIN_TIMEOUT_MS = 6500;
   var parts = [];
   var audioCtx = null, speechOn = false, cardKey = '', cardLeft = 0, cardFlyChest = false, cardFlyTimer = null;
   var queuedQuest = '', queuedHint = '', lastPromptSpoken = '', promptLock = false, lastBuildHint = '';
+  var ttsToken = 0, speechArm = 0, ttsLive = false, ttsLiveSince = 0, promptPlaying = '', lastQuestSpoken = '', liveUtterance = null;
+  var placeHold = null, deepWarned = false;
   var quiz = null, quizStars = {}, lastQuizKey = '', toastLeft = 0, wrongAt = 0;
   var saveIn = 0, dirtySave = false;
   var pitTime = 0, ropeShown = false, ropeAnnounced = false, ropeAnchor = null, ropeClimb = null;
-  var indoors = null, indoorX = 0.42, houseGrace = 0;
+  var indoors = null, indoorX = 0.42, houseGrace = 0, bedRest = 0, sleepPhase = 0;
+  var BED_NAP = 6;
   var swimPhase = 0, wasSwim = false, splashT = 0;
   var crops = [], boat = null, riding = false, fishing = null, boatPhase = 0, packSeen = false;
   var sunPos = { x: 0, y: 0 }, moonPos = { x: 0, y: 0 }, sunOn = false, moonOn = false, starPos = [], cloudPos = [];
@@ -907,14 +939,14 @@ const NOUNS = new Set('grass dirt stone wood leaves sand water flower planks sti
 const PREF_VALUES = { color: [], animal: ['cat','dog','cow','pig','sheep','chicken','duck','horse','rabbit'], food: ['fish','wheat','seed'], build: ['house','table','door','bed','fence','torch','boat'] };
 function conversationLines(p) {
   if (p.event === 'name_ask') return ['Hi! What is your name?', 'Hello! What is your name?'];
-  if (p.event === 'weather_chat') return ['Look! I see the ' + p.weather + '!', 'We can see the ' + p.weather + '!'];
+  if (p.event === 'weather_chat') return ['Look! I see the ' + p.weather + '!', 'We can see the ' + p.weather + '!', 'Look at the ' + p.weather + '!', 'Nice! I see the ' + p.weather + '!'];
   if (p.event === 'recast') {
     if (p.target_tier === 3) return ['Good job! Well done!', 'Great! Good job!'];
     const word = p.child_said.toLowerCase().split(/[^a-z]+/).find(w => NOUNS.has(w));
     if (!word) return ['Good try! Say it again!'];
     const mass = ['grass','dirt','stone','wood','leaves','sand','water','planks','wool','rain','wheat'];
     const noun = (mass.includes(word) ? 'the ' : 'a ') + LABEL(word);
-    return p.target_tier === 1 ? ['Try: I see ' + noun + '!', 'Say: I see ' + noun + '!'] : ['I can see ' + noun + '!', 'We can see ' + noun + '!'];
+    return p.target_tier === 1 ? ['Try: I see ' + noun + '!', 'Say: I see ' + noun + '!', 'Look! I see ' + noun + '!'] : ['I can see ' + noun + '!', 'We can see ' + noun + '!', 'Look! I see ' + noun + '!'];
   }
   if (p.topic) {
     const values = PREF_VALUES[p.topic.slice(11)];
@@ -923,9 +955,13 @@ function conversationLines(p) {
   const favorite = p.prefs.build || p.prefs.animal || p.prefs.food;
   if (favorite) return ['You like the ' + favorite + '!', 'You like ' + favorite + '!'];
   const event = p.recent_events.at(-1), word = (event && event.word) || 'tree';
-  return ['Look! I see the ' + word + '!', 'We can see the ' + word + '!'];
+  return ['Look! I see the ' + word + '!', 'We can see the ' + word + '!', 'Nice! I see the ' + word + '!', 'Look at the ' + word + '!', 'Come and see!', 'You can do it!'];
 }
-function conversationTemplate(p) { return { say: conversationLines(p)[0], options: [], answer: null, done: true }; }
+function conversationTemplate(p) {
+  const lines = conversationLines(p);
+  const n = Number.isInteger(p.variety) ? p.variety : 0;
+  return { say: lines[Math.abs(n) % lines.length], options: [], answer: null, done: true };
+}
 function validConversation(value, p) {
   return !!value && Object.keys(value).filter(function (key) { return key !== 'audio_url'; }).sort().join(',') === 'answer,done,options,say' &&
     Array.isArray(value.options) && value.options.length === 0 && value.answer === null && value.done === true &&
@@ -964,7 +1000,11 @@ function validConversation(value, p) {
     if (trigger === 'speech') return 'recast';
     return 'idle';
   }
-  function socialPayload(event) { return { event: event, child_name: childName || undefined, scene: sceneNow || 'grass', prefs: Object.assign({}, memory.prefs), recent_events: recentEvents.slice(-6) }; }
+  function socialVariety() {
+    var scenes = { home: 1, trees: 2, water: 3, meadow: 4, far: 5 };
+    return (trail.turns || 0) + (memory.small_talk_count || 0) + (scenes[sceneNow] || 0) * 3;
+  }
+  function socialPayload(event) { return { event: event, child_name: childName || undefined, scene: sceneNow || 'grass', prefs: Object.assign({}, memory.prefs), recent_events: recentEvents.slice(-6), variety: socialVariety() }; }
   function micRecording(id, active) { document.getElementById(id).classList.toggle('mic-recording', active); }
   function stopSocialListening() {
     clearTimeout(socialWatchdog); socialWatchdog = null;
@@ -973,12 +1013,15 @@ function validConversation(value, p) {
     document.getElementById('buddy-mic').disabled = false; document.getElementById('name-mic').disabled = false;
   }
   function cancelSocial(w) { if (!w) return; clearTimeout(w.timer); clearTimeout(w.hintTimer); clearTimeout(w.deadline); if (w.controller) w.controller.abort(); }
-  function closeAmbient() {
-    if (ambient) cancelEnAudio();
+  function closeAmbient(keepSpeech) {
+    if (ambient && !keepSpeech) cancelEnAudio();
     var active = ambient; cancelSocial(ambient); ambient = null; stopSocialListening();
     // invited is transient; closing/expiring an invitation never means shown.
     if(active && active.build && active.build.building){active.build.building.invited=false;saveSoon();}
-    if (active && window.speechSynthesis) { try { speechSynthesis.cancel(); } catch (err) { /* optional */ } }
+    if (active && !keepSpeech && window.speechSynthesis) {
+      ttsToken++; ttsLive = false; speechArm = 0; promptPlaying = '';
+      try { speechSynthesis.cancel(); } catch (err) { /* optional */ }
+    }
     document.getElementById('buddy-chat').hidden = true;
     document.getElementById('buddy-chat').classList.remove('build-bubble', 'build-feedback', 'build-done', 'build-question');
     document.getElementById('buddy-mic').hidden = false;
@@ -1315,14 +1358,29 @@ function validConversation(value, p) {
     var qi = questIndex();
     if (qi < CHAPTER2 && CH3_WORDS.indexOf(key) >= 0) return false;
     if (qi < CHAPTER1 && CH2_WORDS.indexOf(key) >= 0) return false;
-    return key !== 'hello' && key !== 'jump' && key !== 'follow';
+    return key !== 'hello' && key !== 'jump' && key !== 'follow' && key !== 'bread';
   }
   function chatWords() { return learned.filter(allowedChatWord); }
-  function oldWord(pool, except) {
-    return pool.filter(function (k) { return k !== except; }).sort(function (a, b) {
+  function oldWord(pool, except, advance) {
+    var list = pool.filter(function (k) { return k !== except; });
+    if (!list.length) return pool[0];
+    list.sort(function (a, b) {
       var ar = trail.reviews[a], br = trail.reviews[b];
-      return (ar ? ar.last + 1 : 0) - (br ? br.last + 1 : 0) || learned.indexOf(a) - learned.indexOf(b);
-    })[0];
+      return (ar ? ar.last : 0) - (br ? br.last : 0) || learned.indexOf(a) - learned.indexOf(b);
+    });
+    var least = trail.reviews[list[0]] ? trail.reviews[list[0]].last : 0;
+    var tied = list.filter(function (k) { return (trail.reviews[k] ? trail.reviews[k].last : 0) === least; });
+    var pick = tied[(trail.promptCursor || 0) % tied.length];
+    if (advance) trail.promptCursor = (trail.promptCursor || 0) + 1;
+    return pick;
+  }
+  function recentPromptWord() {
+    var i, e;
+    for (i = recentEvents.length - 1; i >= 0; i--) {
+      e = recentEvents[i];
+      if (e && allowedChatWord(e.word) && (e.action === 'met' || e.action === 'found' || e.action === 'caught' || e.action === 'built' || e.action === 'made')) return e.word;
+    }
+    return '';
   }
   function sceneAt(x) {
     var dx = x / TILE - origin;
@@ -1432,7 +1490,7 @@ function validConversation(value, p) {
         if (WORD[key]) {
           var cv = document.createElement('canvas'); cv.width = 128; cv.height = 128;
           paintIcon(cv, key); b.appendChild(cv); b.setAttribute('aria-label', WORD[key][0]);
-          tapButton(b, function () { showWord(key); });
+          tapButton(b, function () { showWord(key, false, true); });
         } else { b.textContent = key ? '★' : '☆'; b.setAttribute('aria-label', key ? 'Found' : 'Hidden'); }
         root.appendChild(b);
       });
@@ -1511,7 +1569,8 @@ function validConversation(value, p) {
     dismissGreeting();
     var pool = chatWords();
     if (pool.length < 2) return;
-    var target = allowedChatWord(event.key) ? event.key : oldWord(pool);
+    // Pet, fish, task, and place events keep their own word. Otherwise use what just happened, then rotate.
+    var target = allowedChatWord(event.key) ? event.key : (recentPromptWord() || oldWord(pool, '', true));
     // The first question stays with the event's anchor word.
     var other = oldWord(pool, target);
     var options = trail.turns % 2 ? [other, target] : [target, other];
@@ -1519,22 +1578,76 @@ function validConversation(value, p) {
     var tier = level.t1 >= 2 ? (level.t2 >= 2 ? 3 : 2) : 1;
     var day=new Date().toISOString().slice(0,10);if(trail.quizDay!==day){trail.quizDay=day;trail.quizzes=0;}trail.quizzes++;saveSoon();
     releaseChatInput();
+    var promptSalt = exerciseSalt(trail.promptCursor || 0, sceneNow, event.anchor);
+    trail.promptCursor = (trail.promptCursor || 0) + 1;
     dialogue = { context: { child_name: childName || undefined, recent_events: recentEvents.filter(function (e) { return allowedChatWord(e.word); }).slice(-6), last_answer: allowedChatWord(lastAnswer) ? lastAnswer : undefined }, misses: 0, anchor: event.anchor, scene: sceneNow, key: target, options: options, tier: tier,
-      turn: 0, at: chatClock, answered: false, pending: false, choices: tier === 1, sequence: 0 };
+      turn: 0, at: chatClock, answered: false, pending: false, choices: tier === 1, sequence: 0, promptSalt: promptSalt };
     paintIcon(document.getElementById('chat-face'), 'dog');
     document.getElementById('chat-picture').hidden = false;
     paintIcon(document.getElementById('chat-picture'), target);document.getElementById('chat-picture').setAttribute('aria-label','Listen: '+WORD[target][0]);
     requestChat(dialogue, 'prompt');
   }
+  function nounFor(key) {
+    var mass = ['grass', 'dirt', 'stone', 'wood', 'leaves', 'sand', 'water', 'planks', 'wool', 'rain', 'wheat'];
+    var word = WORD[key][0].toLowerCase();
+    return (mass.indexOf(key) >= 0 ? 'the ' : /^[aeiou]/.test(word) ? 'an ' : 'a ') + word;
+  }
+  function exerciseForms(key, tier, scene, anchor) {
+    var word = WORD[key][0].toLowerCase();
+    var noun = nounFor(key);
+    var shown = noun.charAt(0).toUpperCase() + noun.slice(1);
+    var animal = !!ANIMALS[key];
+    var forms;
+    if (tier <= 1) {
+      forms = ['What is this?', "What's this?", 'Your turn!', 'Look!'];
+      if (animal) forms.push('Who is this?');
+    } else if (tier === 2) {
+      forms = ["What's this?", 'What is this?', 'Can you say it?', 'Your turn!', 'Look!'];
+      if (animal) forms.push('Who is this?');
+    } else {
+      forms = [
+        'I see ' + noun + '. Say it!',
+        'Say ' + word + '!',
+        'Look! ' + shown + '.',
+        'Your turn! Say ' + word + '!',
+        'Can you say ' + word + '?'
+      ];
+      if (animal) forms.push('Who is this? Say ' + word + '!');
+      if (scene === 'water' && key === 'water') forms.push('Look! The water. Say it!');
+      if (scene === 'trees' && key === 'tree') forms.push('Look! A tree. Say it!');
+      if (scene === 'meadow' && key === 'flower') forms.push('Look! A flower. Say it!');
+      if (scene === 'home' && key === 'house') forms.push('Look! A house. Say it!');
+      if (anchor === 'pet' && animal) forms.push('Look! ' + shown + '.');
+    }
+    var seen = {}, out = [];
+    forms.forEach(function (line) { var id = line.toLowerCase(); if (!seen[id]) { seen[id] = 1; out.push(line); } });
+    return out;
+  }
+  function exerciseSalt(turn, scene, anchor) {
+    if (!turn) return 0;
+    var scenes = { home: 1, trees: 2, water: 3, meadow: 4, far: 5 };
+    var anchors = { task: 1, fish: 2, pet: 3, boat: 4, scene: 5, bed: 6, build: 7 };
+    return turn * 5 + (scenes[scene] || 0) + (anchors[anchor] || 0) * 2;
+  }
+  function exerciseOk(body, key, tier, scene, anchor) {
+    var forms = exerciseForms(key, tier, scene, anchor);
+    var i, line;
+    for (i = 0; i < forms.length; i++) {
+      line = forms[i].toLowerCase();
+      if (body === line) return true;
+      if (line.slice(-7) === 'say it!' && body === line.slice(0, -7) + 'your turn!') return true;
+    }
+    return false;
+  }
   function chatTemplate(d, feedback) {
     var done = d.turn >= 3 || feedback === 'success', say;
+    var tier = d.choices ? 1 : d.tier;
     if (done) say = 'Great!';
-    else if (d.tier === 2 && !d.choices) say = "What's this?";
-    else if (d.tier === 3 && !d.choices) {
-      var mass = ['grass', 'dirt', 'stone', 'wood', 'leaves', 'sand', 'water', 'planks', 'wool', 'rain', 'wheat'];
-      var word = WORD[d.key][0].toLowerCase();
-      say = 'I see ' + (mass.indexOf(d.key) >= 0 ? 'the ' : /^[aeiou]/.test(word) ? 'an ' : 'a ') + word + '. Say it!';
-    } else say = 'What is this?';
+    else {
+      var forms = exerciseForms(d.key, tier, d.scene, d.anchor);
+      var salt = Number.isInteger(d.promptSalt) ? d.promptSalt : exerciseSalt(trail.turns, d.scene, d.anchor);
+      say = forms[Math.abs(salt) % forms.length];
+    }
     if (!done && feedback === 'retry') say = 'Great! ' + say;
     return { say: say, options: d.options.slice(), answer: d.key, done: done };
   }
@@ -1543,7 +1656,7 @@ function validConversation(value, p) {
         reply.done !== expected.done || reply.answer !== d.key || !Array.isArray(reply.options) ||
         JSON.stringify(reply.options) !== JSON.stringify(d.options) || !reply.options.every(allowedChatWord)) return false;
     var tokens = reply.say.toLowerCase().match(/[a-z]+(?:'[a-z]+)?/g) || [];
-    var scaffold = "a an the i you we it this is see got can say what what's or great nice thanks thank good job well done let's keep exploring try look at again your turn found made built met caught rode said together ready remember friend more".split(' ');
+    var scaffold = "a an the i you we it this is see got can say what what's who where or great nice thanks thank good job well done let's keep exploring try look at again your turn found made built met caught rode said together ready remember friend more".split(' ');
     var vocabulary = scaffold.concat(chatContextLeads(d).join(' ').toLowerCase().match(/[a-z]+(?:'[a-z]+)?/g) || []).concat((d.choices || d.tier === 1 ? [] : d.options).reduce(function (all, key) { return all.concat(WORD[key][0].toLowerCase().split(' ')); }, []));
     if (!/^[A-Za-z ,.!?'’-]+$/.test(reply.say) || /[^\x20-\x7e]/.test(reply.say) || reply.say.length > 160 ||
         tokens.length < 1 || tokens.length > 12 || !tokens.every(function (w) { return vocabulary.indexOf(w) >= 0; })) return false;
@@ -1554,12 +1667,8 @@ function validConversation(value, p) {
     var lead = chatContextLeads(d).find(function (line) { return body.indexOf(line.toLowerCase() + ' ') === 0; });
     if (lead) body = body.slice(lead.length + 1);
     if (expected.done) return body === '' || /^(let's )?keep exploring!$/.test(body);
-    if (d.choices || d.tier === 1) {
-      return body === 'what is this?';
-    }
-    if (d.tier === 2) return body === "what's this?" || body === 'what is this?';
-    var sentence = expected.say.replace(praise, '').toLowerCase().split('. ')[0];
-    return body === sentence + '. say it!' || body === sentence + '. your turn!';
+    var tier = d.choices ? 1 : d.tier;
+    return exerciseOk(body, d.key, tier, d.scene, d.anchor);
   }
   function renderChat(d, reply, quiet) {
     if (dialogue !== d) return;
@@ -1639,6 +1748,7 @@ function validConversation(value, p) {
     Array.prototype.forEach.call(document.querySelectorAll('#chat-options button'), function (b) { b.disabled = true; });
     var timer, payload = { event: d.anchor, scene: d.scene, chapter: questIndex() < CHAPTER1 ? 1 : questIndex() < CHAPTER2 ? 2 : 3,
       target_word: d.key, options: d.options.slice(), learned_words: chatWords(), turn: d.turn,
+      prompt_salt: Number.isInteger(d.promptSalt) ? d.promptSalt : exerciseSalt(trail.turns, d.scene, d.anchor),
       tier: d.choices ? 1 : d.tier, feedback: feedback, child_name: d.context.child_name,
       recent_events: d.context.recent_events, last_answer: d.context.last_answer, recent_lines: recentLines.slice(-4) };
     if (childSaid) payload.child_said = String(childSaid).slice(0, 160);
@@ -1799,10 +1909,50 @@ function validConversation(value, p) {
       else if (b.id === 'chat-confirm') confirmChat();
     });
   }
+  function claimTrailGift(spot) {
+    if (!spot || trailPickupDelay > 0 || trail.found[spot.id]) return false;
+    var pool = chatWords(), collected = Object.keys(trail.found).map(function (id) { return trail.found[id]; });
+    var fresh = pool.filter(function (key) { return collected.indexOf(key) < 0; });
+    var sticker = oldWord(fresh.length ? fresh : pool, '', true);
+    trail.found[spot.id] = sticker || true;
+    var rewards = ['wood', 'stone', 'planks', 'wool', 'seed'].filter(allowedChatWord);
+    if (rewards.length) {
+      var reward = rewards[Number(spot.id) % rewards.length], count = 1 + Number(spot.id) % 3;
+      addItem(reward, count, true); showToast('★ +' + count + ' ' + WORD[reward][0], 2);
+    }
+    var completed = completeTrailRound();
+    celebrate(spot.x, spot.y, completed);
+    if (completed) showToast('Seven gifts! New hiding places await!', 3);
+    updateTrailCount();
+    queueChat('scene', sticker); rememberEvent('found', sticker); saveSoon();
+    return true;
+  }
+  function giftOverlapsPlayer(spot) {
+    if (!spot || trail.found[spot.id]) return false;
+    if (Math.abs(player.x - spot.x) > 42) return false;
+    var top = player.y - 46, bot = player.y + 10;
+    return bot >= spot.y - 26 && top <= spot.y + 22;
+  }
+  function giftAtPoint(wx, wy) {
+    var i, spot, dx, dy, best = null, bd = 1e9, d;
+    for (i = 0; i < trailSpots.length; i++) {
+      spot = trailSpots[i];
+      if (!spot || trail.found[spot.id]) continue;
+      dx = wx - spot.x; dy = wy - spot.y; d = dx * dx + dy * dy;
+      if (d <= 30 * 30 && d < bd) { bd = d; best = spot; }
+    }
+    return best;
+  }
+  function giftTapReach(spot) {
+    return Math.abs(spot.x - player.x) <= 8 * TILE && Math.abs(spot.y - (player.y - 20)) <= 14 * TILE;
+  }
   function adventureStep(dt) {
-    if(drivingCar)return;
     chatCooldown = Math.max(0, chatCooldown - dt);
     trailPickupDelay = Math.max(0, trailPickupDelay - dt);
+    // Jumping or walking through a gift collects it, even when the gift is off the ground.
+    var gi;
+    for (gi = 0; gi < trailSpots.length; gi++) if (giftOverlapsPlayer(trailSpots[gi])) claimTrailGift(trailSpots[gi]);
+    if(drivingCar)return;
     var moving = !!seek || !!enAudio || axis() !== 0 || !onGround || riding || inWater() || fishing || jumpBuf > 0;
     var safe = !moving && !quiz && !(window.speechSynthesis && speechSynthesis.speaking) && chatClock - chatLastInput > 0.9;
     chatIdle = safe ? chatIdle + dt : 0;
@@ -1828,30 +1978,13 @@ function validConversation(value, p) {
         queueChat('scene', scene === 'water' ? 'water' : scene === 'trees' ? 'tree' : 'flower'); saveSoon();
       }
     }
-    trailSpots.forEach(function (spot) {
-      if (trailPickupDelay > 0 || trail.found[spot.id] || !onGround || riding || Math.abs(player.x - spot.x) > 29 || Math.abs(player.y - spot.y - 15) > 45) return;
-      var pool = chatWords(), collected = Object.keys(trail.found).map(function (id) { return trail.found[id]; });
-      var fresh = pool.filter(function (key) { return collected.indexOf(key) < 0; });
-      var sticker = oldWord(fresh.length ? fresh : pool);
-      trail.found[spot.id] = sticker || true;
-      var rewards = ['wood', 'stone', 'planks', 'wool', 'seed'].filter(allowedChatWord);
-      if (rewards.length) {
-        var reward = rewards[Number(spot.id) % rewards.length], count = 1 + Number(spot.id) % 3;
-        addItem(reward, count, true); showToast('★ +' + count + ' ' + WORD[reward][0], 2);
-      }
-      var completed = completeTrailRound();
-      celebrate(spot.x, spot.y, completed);
-      if (completed) showToast('Seven gifts! New hiding places await!', 3);
-      updateTrailCount();
-      // Discoveries are scene-entry stops, with the same safety/cooldown as every other chat.
-      queueChat('scene', sticker); rememberEvent('found', sticker); saveSoon();
-    });
+    // Gift pickup runs at the start of this step, including while the child is in the air.
     // Keep exploration events long enough to survive a short stand-still after walking.
     chatQueue = chatQueue.filter(function (e) { return chatClock - e.at < 40; });
     // A deep pit is a rescue, not a question. Hold the Speak prompt until they are out.
     var pitLocked = ropeShown || ropeClimb || (pitDepthTiles() >= 8 && !canWalkOut());
-    if (!(buildMode || buildSession.active) && !dialogue && chatIdle > 0.8 && chatCooldown <= 0 && cardLeft <= 0 && chatQueue.length && !pitLocked) {
-      var priority = { fish: 4, boat: 4, pet: 2, task: 2, scene: 1 };
+    if (!(buildMode || buildSession.active) && !dialogue && chatIdle > 0.8 && chatCooldown <= 0 && cardLeft <= 0 && chatQueue.length && !pitLocked && Date.now() - animalVoiceAt > 2200) {
+      var priority = { fish: 4, boat: 4, pet: 3, task: 2, bed: 2, scene: 1 };
       chatQueue.sort(function (a, b) { return priority[b.anchor] - priority[a.anchor] || b.at - a.at; });
       var event = chatQueue.shift();
       if (chatWords().length >= 2) {
@@ -2149,7 +2282,7 @@ function validConversation(value, p) {
   }
   function objectQuestion(b) {
     var key=b.showWord||(b.kind==='house'?'house':b.kind==='car'?'car':'fence');
-    return {key:key,options:b.showWord?[key,key==='stone'?'wood':key==='flower'?'stone':key==='roof'?'window':'roof']:b.kind==='car'?['car','wheel']:['house','fence'],upgrade:!!b.showWord,deferSpeech:!!b.showWord||b.kind==='car'};
+    return {key:key,options:b.showWord?[key,key==='stone'?'wood':key==='flower'?'stone':key==='roof'?'window':'roof']:b.kind==='car'?['car','wheel']:['house','fence'],upgrade:!!b.showWord};
   }
   function requestObjectShow(b) {
     if(drivingCar)return;
@@ -2225,13 +2358,19 @@ function validConversation(value, p) {
     resetBuildDay();
   }
   function buildAction(kind) {
-    beginBuildSession(); buildSession.lastActionAt = chatClock;
-    toastLeft = 0; document.getElementById('toast').hidden = true;
+    beginBuildSession();
+    var soft = kind === 'move' || kind === 'jump' || kind === 'paint';
+    if (kind !== 'move') buildSession.lastActionAt = chatClock;
+    if (!soft) { toastLeft = 0; document.getElementById('toast').hidden = true; }
     if (kind === 'select') { buildSession.selectedAt = chatClock; document.getElementById('build-status').style.visibility=''; document.getElementById('toast').style.visibility=''; }
-    if(kind!=='move' && kind!=='jump')manualShowPending=null;
-    if (ambient && ambient.build && !buildInviteActive() && !((kind==='move'||kind==='jump') && ambient.build.feedback)) { closeAmbient(); document.getElementById('btn-buddy').classList.add('buddy-wave'); }
-    cancelEnAudio(); if (window.speechSynthesis) speechSynthesis.cancel(); hideCard();
-    buildQueue = buildQueue.filter(function (e) { return !['build_plan','build_offer','build_show'].includes(e.event); });
+    if (kind !== 'move' && kind !== 'jump' && kind !== 'paint') manualShowPending = null;
+    if (ambient && ambient.build && !buildInviteActive() && !(soft && ambient.build.feedback)) { closeAmbient(soft); document.getElementById('btn-buddy').classList.add('buddy-wave'); }
+    if (!soft) {
+      ttsToken++; ttsLive = false; speechArm = 0; promptPlaying = ''; promptLock = false;
+      cancelEnAudio(); if (window.speechSynthesis) { try { speechSynthesis.cancel(); } catch (err) { /* optional */ } }
+      hideCard();
+      buildQueue = buildQueue.filter(function (e) { return !['build_plan','build_offer','build_show'].includes(e.event); });
+    }
   }
   function toggleBuild() {
     if(drivingCar)return;
@@ -2346,39 +2485,41 @@ function validConversation(value, p) {
   function placementPulse(x,y,w) {
     buildSession.pulse={x:x,y:y,w:w,until:chatClock+1.2}; revealBuildPlacement(x,y,w);
   }
-  function buildTap(x,y,fy) {
-    if(drivingCar)return;
-    buildAction('tap');
+  function buildTap(x,y,fy,quiet) {
+    if(drivingCar)return false;
+    buildAction(quiet ? 'paint' : 'tap');
     var r=resolveBuildTarget(x,y,fy);x=r.x;y=r.y;
-    if(!r.ok){if(r.reason==='stock'){buildShort(buildMaterial());logBuildResult(x,y,'fail:stock');}else placementFailure(x,y,r.reason,r.block);return;}
-    if(r.object){removeCraftable(r.object);return;}
-    if(CRAFTABLES[buildTool]){placeCraftable(buildTool,r);return;}
+    if(!r.ok){if(!quiet){if(r.reason==='stock'){buildShort(buildMaterial());logBuildResult(x,y,'fail:stock');}else placementFailure(x,y,r.reason,r.block);}return false;}
+    if(r.object){removeCraftable(r.object);return true;}
+    if(CRAFTABLES[buildTool]){placeCraftable(buildTool,r);return true;}
     if(buildTool==='remove') {
       playSfx('remove');var key=KEY_OF[get(x,y)];setCell(x,y,AIR);addItem(key,1,true);placedThisRun.delete(idx(x,y));buildSession.removed++;buildDirty=true;
-      logBuildResult(x,y,'removed '+key);save();renderBuildTools();return;
+      logBuildResult(x,y,'removed '+key);save();renderBuildTools();return true;
     }
     var material=buildMaterial(),width=r.w,id=BLOCK_OF[material];
     if (material === 'fence' || material === 'door' || material === 'window') {
       for (var s = 0; s < width; s++) {
         var spotLine = specialPlaceLine(material, x + s, y);
-        if (spotLine) { showToast(spotLine, 2.2); logBuildResult(x, y, 'fail:spot'); return; }
+        if (spotLine) { if(!quiet){showToast(spotLine, 2.2);logBuildResult(x, y, 'fail:spot');} return false; }
       }
     }
     playSfx('place');
     // Atomic validation above: inventory is only consumed after writing tiles.
     for(var j=0;j<width;j++) {
-      setCell(x+j,y,id);consume(material);progress.placed[material]=1;buildPlaced(x+j,y,material,true);
+      setCell(x+j,y,id);consume(material);progress.placed[material]=1;buildPlaced(x+j,y,material,true,quiet);
       burst((x+j+.5)*TILE,(y+.5)*TILE,PCOL[id]||'#fff',false);
     }
-    tone(520,.06,'sine',0,.035,760);flushBuildFirst();placementPulse(x,y,width);
+    tone(520,.06,'sine',0,.035,760);if(!quiet)flushBuildFirst();placementPulse(x,y,width);
     logBuildResult(x,y,'placed '+material+(r.from?' | stacked from ('+r.from.x+','+r.from.y+')':''));
     updateQuest();save();renderHotbar();renderBuildTools();
+    return true;
   }
-  function buildPlaced(x,y,key,deferFeedback) {
-    buildAction('place'); placedThisRun.add(idx(x,y)); buildSession.placed++; buildSession.lastPoint = {x:x,y:y}; (buildSession.dirtyPoints || (buildSession.dirtyPoints=[])).push({x:x,y:y}); buildSession.dirtyPoints=buildSession.dirtyPoints.slice(-512); buildDirty = true;
+  function buildPlaced(x,y,key,deferFeedback,quiet) {
+    buildAction(quiet ? 'paint' : 'place'); placedThisRun.add(idx(x,y)); buildSession.placed++; buildSession.lastPoint = {x:x,y:y}; (buildSession.dirtyPoints || (buildSession.dirtyPoints=[])).push({x:x,y:y}); buildSession.dirtyPoints=buildSession.dirtyPoints.slice(-512); buildDirty = true;
     if (buildGhost && chatClock < buildGhost.until && x >= buildGhost.x && x < buildGhost.x+4 && y >= buildGhost.y && y < buildGhost.y+3) { buildChat.offerIgnored = 0; buildSession.offerAnswered = true; buildGhost = null; }
     if(buildSession.offerAt && chatClock-buildSession.offerAt<=8){buildSession.offerAnswered=true;buildChat.offerIgnored=0;}
     rememberEvent('built',key);
+    addFatigue(6);
     if (!buildSession.firstDone) { buildSession.firstDone = true; buildSession.firstPending = true; }
     scanBuildWord(x,y);
     if (!deferFeedback) flushBuildFirst();
@@ -2510,7 +2651,7 @@ function validConversation(value, p) {
     // An action result is not an optional conversation: no idle gate, queue,
     // praise/question budget, other-material test, or 25/45-second cooldown.
     // Ordinary build feedback stays text-only; animal meet speaks English (respects speechOn).
-    var a=buildBubble(text,{event:event,praise:true,deferSpeech:event!=='animal_meet',feedback:true});
+    var a=buildBubble(text,{event:event,praise:true,feedback:true,deferSpeech:event==='animal_meet'});
     if(!a)return;
     document.getElementById('buddy-chat').classList.add('build-feedback');
     clearTimeout(a.timer);
@@ -2537,8 +2678,8 @@ function validConversation(value, p) {
     }, data.stage==='invite'?35000:14000);
     if(!data.feedback)buildSession.lastBubbleAt=chatClock;
     if(data.event==='house_part')clearTimeout(a.timer);
-    if(data.reward){clearTimeout(a.timer);buildSpeak(WORD[data.key][0],false);}
-    else if(!data.deferSpeech)buildSpeak(text,data.named);
+    if(data.reward)clearTimeout(a.timer);
+    if(data.reward || !data.deferSpeech)buildSpeak(text,!!data.named);
     if(data.autoAdvance){
       clearTimeout(a.timer);
       a.timer=setTimeout(function(){if(ambient===a)closeAmbient();}, data.reward ? 1500 : 900);
@@ -2758,7 +2899,7 @@ function validConversation(value, p) {
       if(event==='build_show'){d.building.autoOffered=true;}
       else {buildChat.revisits++;buildSession.revisit=true;}
       var prefix=buildName();d.named=!!prefix;
-      if(d.building.kind==='car'||d.upgrade){d.deferSpeech=true;if(event==='build_revisit')prefix+='Look! '+(d.upgrade?'Our house!':'Our car!')+' ';}
+      if((d.building.kind==='car'||d.upgrade) && event==='build_revisit')prefix+='Look! '+(d.upgrade?'Our house!':'Our car!')+' ';
       if((event==='build_revisit' && d.building.shown)) {d.praise=true;buildBubble(d.building.kind==='free'?BUILD_LINES[0]+' '+BUILD_LINES[38]+' '+BUILD_LINES[1]:(d.building.kind==='car'||d.upgrade)?prefix+BUILD_LINES[36]:prefix+BUILD_LINES[39]+' '+BUILD_LINES[d.key==='house'?40:41]+' '+BUILD_LINES[1],d);}
       else {d.stage='invite';buildBubble(prefix+(event==='build_revisit'&&d.building.kind!=='car'&&!d.upgrade?lineVariant([BUILD_LINES[39]+' '+BUILD_LINES[d.key==='house'?40:41],BUILD_LINES[d.key==='house'?42:43],BUILD_LINES[d.key==='house'?44:45]]):lineVariant([(BUILD_LINES[0] + ' ' + BUILD_LINES[30]),BUILD_LINES[31],(BUILD_LINES[32] + ' ' + BUILD_LINES[30])])),d);var b=document.createElement('button');b.textContent='☝ Show';b.setAttribute('aria-label','Show my building');b.onclick=function(){showBuildQuestion(d);};document.getElementById('buddy-options').appendChild(b);d.building.invited=true;}
     } else if(event==='build_word') {
@@ -3391,42 +3532,75 @@ function validConversation(value, p) {
     }
     return best || { x: player.x, y: cap * TILE - 0.01 };
   }
-  function petInPit(a, shaftX) {
-    // Any puppy or cat in this hole, hearts or not. Other animals stay put.
-    if (!a || (a.type !== 'dog' && a.type !== 'cat')) return false;
-    if (Math.abs(a.x - shaftX) > 8 * TILE) return false;
-    var cap = columnCap(Math.floor(shaftX / TILE));
-    if (cap == null) cap = columnCap(Math.floor(a.x / TILE));
-    if (cap == null) return false;
-    return Math.floor((a.y - 1) / TILE) - (cap - 1) >= 3;
+  function animalDepth(a) {
+    var cap = columnCap(Math.floor(a.x / TILE));
+    if (cap == null) return 0;
+    return Math.floor((a.y - 1) / TILE) - (cap - 1);
   }
-  function ropePets(shaftX) {
+  function pitConnected(ax, ay, sx, sy) {
+    var seen = {};
+    var q = [[ax, ay]];
+    var guard = 0;
+    while (q.length && guard++ < 280) {
+      var cur = q.pop();
+      var x = cur[0], y = cur[1];
+      if (x < 1 || x >= W - 1 || y < 1 || y >= H - 2) continue;
+      var key = x + ',' + y;
+      if (seen[key]) continue;
+      seen[key] = 1;
+      if (Math.abs(x - sx) <= 1 && Math.abs(y - sy) <= 2) return true;
+      if (Math.abs(x - sx) > 16 || Math.abs(y - sy) > 24) continue;
+      var cap = columnCap(x);
+      if (cap == null || y < cap - 1) continue;
+      if (solid(get(x, y))) continue;
+      q.push([x - 1, y], [x + 1, y], [x, y - 1], [x, y + 1]);
+    }
+    return false;
+  }
+  function petInPit(a, shaftX, shaftY) {
+    // Any animal in this hole, hearts or not. A deep pit is not only for the child.
+    if (!a || !a.type) return false;
+    if (animalDepth(a) < 3) return false;
+    var sx = Math.floor(shaftX / TILE);
+    var sy = Math.floor(((shaftY == null ? player.y : shaftY) - 1) / TILE);
+    var ax = Math.floor(a.x / TILE);
+    var ay = Math.floor((a.y - 1) / TILE);
+    if (Math.abs(ax - sx) <= 2 && Math.abs(ay - sy) <= 20) return true;
+    return pitConnected(ax, ay, sx, sy);
+  }
+  function ropePets(shaftX, shaftY) {
     var list = [];
     var i;
-    for (i = 0; i < animals.length; i++) if (petInPit(animals[i], shaftX)) list.push(animals[i]);
+    for (i = 0; i < animals.length; i++) if (petInPit(animals[i], shaftX, shaftY)) list.push(animals[i]);
     return list;
   }
-  function petLandingSpot(c) {
+  function petLandingSpot(c, n) {
     var shaftTx = Math.floor(c.sx / TILE);
     var landTx = Math.floor(c.tx / TILE);
     var side = landTx === shaftTx ? (player.dir || 1) : (landTx > shaftTx ? 1 : -1);
-    var row = Math.floor((c.ty + 1) / TILE);
-    var order = [landTx + side, landTx, landTx + side * 2, landTx - side];
-    var shifts = [0, 1, -1, 2, -2];
-    var i, k, tx, ty;
-    for (i = 0; i < order.length; i++) {
-      tx = order[i];
+    var cap = columnCap(landTx);
+    if (cap == null) cap = columnCap(shaftTx);
+    if (cap == null) cap = GROUND;
+    var used = c.petUsed || (c.petUsed = {});
+    var offsets = [1, 2, 3, 4, 5, -1, 6, -2, 7, 8];
+    var i, k, tx, ty, start = n || 0;
+    for (i = 0; i < offsets.length; i++) {
+      tx = landTx + side * offsets[(i + start) % offsets.length];
       if (tx < 1 || tx >= W - 1 || tx === shaftTx) continue;
-      for (k = 0; k < shifts.length; k++) {
-        ty = row + shifts[k];
+      if (used[tx]) continue;
+      for (k = 0; k <= 2; k++) {
+        ty = cap + (k === 2 ? -1 : k);
         if (ty < 2 || ty >= H - 1) continue;
-        if (solid(get(tx, ty)) && !solid(get(tx, ty - 1))) return { x: (tx + 0.5) * TILE, y: ty * TILE - 0.01 };
+        if (!solid(get(tx, ty)) || solid(get(tx, ty - 1))) continue;
+        if (ty - cap >= 3) continue;
+        used[tx] = 1;
+        return { x: (tx + 0.5) * TILE, y: ty * TILE - 0.01 };
       }
     }
-    return { x: c.tx, y: c.ty };
+    return { x: c.tx + side * (18 + start * 14), y: c.ty };
   }
   function moveRopePet(c, pet, vu, hu) {
-    var land = c.petLand;
+    var land = pet.land || c.petLand;
     var joinX = c.sx + (pet.sx >= c.sx ? 14 : -14);
     var x = vu < 1 ? pet.sx + (joinX - pet.sx) * vu : joinX + (land.x - joinX) * hu;
     var y = pet.sy + (land.y - pet.sy) * vu;
@@ -3438,11 +3612,11 @@ function validConversation(value, p) {
   }
   function settleRopePet(a, spot) {
     a.ropeRide = 0;
-    a.ropeHold = 2.4;
+    a.ropeHold = 3.2;
     a.x = spot.x;
     a.y = spot.y;
     a.vx = 0;
-    a.wait = Math.max(a.wait || 0, 2.4);
+    a.wait = Math.max(a.wait || 0, 3.2);
     var n = 0;
     while (n++ < 6 && solid(get(Math.floor(a.x / TILE), Math.floor((a.y - 4) / TILE)))) a.y -= 4;
     var under = get(Math.floor(a.x / TILE), Math.floor((a.y + 2) / TILE));
@@ -3459,17 +3633,20 @@ function validConversation(value, p) {
     if (land.y > player.y - TILE) return;
     seek = null; fishing = null; joyX = 0;
     var dist = Math.hypot(land.x - player.x, land.y - player.y);
-    var pals = ropePets(player.x);
+    var pals = ropePets(player.x, player.y);
     ropeClimb = {
       sx: player.x, sy: player.y, tx: land.x, ty: land.y, t: 0,
       dur: Math.max(0.85, dist / (TILE * 3.5)),
       petLand: null,
-      pets: pals.map(function (a) { a.ropeRide = 1; return { a: a, sx: a.x, sy: a.y }; })
+      petUsed: {},
+      pets: pals.map(function (a, i) { a.ropeRide = 1; return { a: a, sx: a.x, sy: a.y, i: i, land: null }; })
     };
-    ropeClimb.petLand = petLandingSpot(ropeClimb);
+    var pi;
+    for (pi = 0; pi < ropeClimb.pets.length; pi++) ropeClimb.pets[pi].land = petLandingSpot(ropeClimb, pi);
+    ropeClimb.petLand = ropeClimb.pets.length ? ropeClimb.pets[0].land : petLandingSpot(ropeClimb, 0);
     if (land.x !== player.x) player.dir = land.x > player.x ? 1 : -1;
-    if (pals.length === 1) showToast('The ' + pals[0].type + ' climbs too!', 2.2);
-    else if (pals.length > 1) showToast('Come with me!', 2.2);
+    if (pals.length === 1) showToast('The ' + pals[0].type + ' climbs too!', 2.2, true);
+    else if (pals.length > 1) showToast('Come with me!', 2.2, true);
   }
   function stepRopeClimb(dt) {
     var c = ropeClimb;
@@ -3490,9 +3667,9 @@ function validConversation(value, p) {
       var n = 0;
       while (n++ < 8 && collides(player.x, player.y)) player.y -= 2;
       player.vy = 0; onGround = true; coyote = 0.14;
-      for (i = 0; i < c.pets.length; i++) settleRopePet(c.pets[i].a, c.petLand);
-      var extra = ropePets(c.sx);
-      for (i = 0; i < extra.length; i++) settleRopePet(extra[i], c.petLand);
+      for (i = 0; i < c.pets.length; i++) settleRopePet(c.pets[i].a, c.pets[i].land || c.petLand);
+      var extra = ropePets(c.sx, c.sy);
+      for (i = 0; i < extra.length; i++) settleRopePet(extra[i], petLandingSpot(c, c.pets.length + i));
       ropeClimb = null; pitTime = 0; ropeShown = false; ropeAnnounced = false; ropeAnchor = null;
       if (lastPromptSpoken === 'A rope! Climb up!') lastPromptSpoken = '';
       saveSoon();
@@ -3501,9 +3678,11 @@ function validConversation(value, p) {
   function ropeHit(wx, wy) {
     var a = ropeAnchor;
     if (!ropeShown || ropeClimb || drivingCar || !a) return false;
-    if (wy < a.topY - 6 || wy > a.botY + 24) return false;
-    if (Math.hypot(wx - a.x, wy - a.botY) <= 26) return true;
-    return Math.abs(wx - a.x) <= 16 && wy >= a.topY && wy <= a.botY + 8;
+    // The drawn rope is a few pixels wide. Ground beside it must stay a dig.
+    var sway = Math.sin(wy * 0.16) * 2.4;
+    var onLine = Math.abs(wx - (a.x + sway)) <= 8 && wy >= a.topY - 4 && wy <= a.botY + 4;
+    var onHandle = Math.hypot(wx - a.x, wy - (a.botY + 6)) <= 14;
+    return onLine || onHandle;
   }
   function liftChatForRope() {
     if (!dialogue || dialogue.answered || !dialogue.key) return;
@@ -3514,6 +3693,16 @@ function validConversation(value, p) {
   }
   function clearRopeRescue() {
     pitTime = 0; ropeShown = false; ropeAnnounced = false; ropeAnchor = null; ropeClimb = null;
+  }
+  function updateDeepWarn() {
+    if (!started || indoors || drivingCar || riding || ropeClimb) return;
+    var depth = pitDepthTiles();
+    if (depth < 4) { deepWarned = false; return; }
+    if (deepWarned || ropeAnnounced || ropeShown) return;
+    if (depth >= 6 && !canWalkOut()) {
+      deepWarned = true;
+      showToast('Too deep! Be careful!', 2.4);
+    }
   }
   function updateRopeRescue(dt) {
     var physicsRuns = started && !rotateBlock() && !panelOpen() && !chatBlocked();
@@ -3638,6 +3827,7 @@ function validConversation(value, p) {
   }
   function exitHouse(silent) {
     if (!indoors) return;
+    bedRest = 0;
     var b = indoors;
     indoors = null;
     indoorX = 0.42;
@@ -3687,14 +3877,44 @@ function validConversation(value, p) {
     updateQuest();
     saveSoon();
   }
+  function startBedRest() {
+    if (!indoors || bedRest > 0 || !houseFurn(indoors).bed) return;
+    bedRest = BED_NAP;
+    sleepPhase = 0;
+    speakChild(CHILD_REST_LINE);
+    fatigue = 0;
+    fatigueRemind = 0;
+    fatigueStage = 'fresh';
+    paintNeeds();
+    if (allowedChatWord('bed')) { rememberEvent('scene', 'bed'); queueChat('scene', 'bed'); }
+  }
+  function bedTap(sx, sy) {
+    if (!indoors || !houseFurn(indoors).bed) return false;
+    var R = roomBoxes();
+    if (hitRoom(R.bed, sx, sy, 28)) return true;
+    // The lying child sits on the mattress, a little above the bed box.
+    var cx = R.bed.x + R.bed.w * 0.52;
+    var cy = R.bed.y + 24;
+    return Math.abs(sx - cx) < 58 && sy >= R.bed.y - 36 && sy <= R.bed.y + R.bed.h + 20;
+  }
+  function wakeBed() {
+    if (!(bedRest > 0)) return false;
+    bedRest = 0;
+    return true;
+  }
   function indoorTap(sx, sy) {
     if (!indoors) return;
+    if (bedRest > 0) {
+      if (bedTap(sx, sy)) wakeBed();
+      return;
+    }
     var R = roomBoxes();
     if (hitRoom(R.door, sx, sy, 12)) { exitHouse(); return; }
     var key = selectedKey();
-    if (hitRoom(R.bed, sx, sy, 18) || (key === 'bed' && sy > R.floor - 80 && sx > R.bed.x - 24)) { placeIndoor('bed'); return; }
-    if (hitRoom(R.table, sx, sy, 18) || (key === 'table' && sy > R.floor - 80 && sx > R.table.x - 20 && sx < R.table.x + R.table.w + 24)) { placeIndoor('table'); return; }
-    if (hitRoom(R.torch, sx, sy, 16) || (key === 'torch' && sy < R.floor - 90 && sx > R.torch.x - 20)) { placeIndoor('torch'); return; }
+    if (houseFurn(indoors).bed && hitRoom(R.bed, sx, sy, 18)) { startBedRest(); return; }
+    if (hitRoom(R.bed, sx, sy, 18) || (key === 'bed' && sy > R.floor - 80 && sx > R.bed.x - 24)) { showToast(key === 'bed' ? 'Hold to build!' : 'The bed goes here!', 1.8); return; }
+    if (hitRoom(R.table, sx, sy, 18) || (key === 'table' && sy > R.floor - 80 && sx > R.table.x - 20 && sx < R.table.x + R.table.w + 24)) { showToast(key === 'table' ? 'Hold to build!' : 'The table goes here!', 1.8); return; }
+    if (hitRoom(R.torch, sx, sy, 16) || (key === 'torch' && sy < R.floor - 90 && sx > R.torch.x - 20)) { showToast(key === 'torch' ? 'Hold to build!' : 'The torch goes on the wall!', 1.8); return; }
     if (key === 'bed') showToast('The bed goes here!', 2);
     else if (key === 'table') showToast('The table goes here!', 2);
     else if (key === 'torch') showToast('The torch goes on the wall!', 2);
@@ -3708,25 +3928,26 @@ function validConversation(value, p) {
     jumpBuf = 0;
     onGround = true;
     player.vy = 0;
+    if (bedRest > 0) {
+      if (ax) bedRest = 0;
+      else {
+        bedRest = Math.max(0, bedRest - dt);
+        sleepPhase += dt;
+        return;
+      }
+    }
     if (ax) {
       player.dir = ax > 0 ? 1 : -1;
       indoorX = Math.max(0, Math.min(1, indoorX + ax * dt * 0.62));
       player.anim += dt * 11;
+      addFatigue(dt * 0.55);
       if (ax < 0 && indoorX <= 0.001) exitHouse();
     } else player.anim += dt * 2;
   }
   function updateHouse(dt) {
     if (houseGrace > 0) houseGrace = Math.max(0, houseGrace - dt);
-    if (indoors) {
-      if (buildObjects.indexOf(indoors) < 0) indoors = null;
-      return;
-    }
-    if (houseGrace > 0 || drivingCar || riding || ropeClimb || !onGround || !started) return;
-    var i;
-    for (i = 0; i < buildObjects.length; i++) {
-      var b = buildObjects[i];
-      if (b.kind === 'house' && playerHitsDoor(b)) { enterHouse(b); return; }
-    }
+    // Walking onto the door does not enter. A tap on the door does.
+    if (indoors && buildObjects.indexOf(indoors) < 0) { indoors = null; bedRest = 0; }
   }
   function drawRoomItem(g, key, box, filled) {
     g.save();
@@ -3784,11 +4005,106 @@ function validConversation(value, p) {
       g.fillStyle = 'rgba(255, 196, 90, 0.2)';
       g.beginPath(); g.arc(R.torch.x + 16, R.torch.y + 12, 56, 0, 6.3); g.fill();
     }
+    if (placeHold && placeHold.armed && placeHold.indoor) {
+      var holdSpots = placeHold.spots || [], hi, hb, holdHot;
+      for (hi = 0; hi < holdSpots.length; hi++) {
+        hb = holdSpots[hi].box;
+        holdHot = placeHold.aim && placeHold.aim.key === holdSpots[hi].key;
+        g.save();
+        g.fillStyle = holdHot ? 'rgba(70,180,100,0.45)' : 'rgba(125,222,160,0.28)';
+        g.fillRect(hb.x, hb.y, hb.w, hb.h);
+        g.strokeStyle = holdHot ? '#178a42' : '#ffffff';
+        g.lineWidth = holdHot ? 3 : 2;
+        g.strokeRect(hb.x, hb.y, hb.w, hb.h);
+        g.restore();
+      }
+    }
     var feet = indoorFeet();
-    g.translate(feet.x, feet.y);
-    g.scale(1.35, 1.35);
-    g.translate(-player.x, -player.y);
-    drawPlayer(g);
+    if (bedRest > 0) {
+      if (childReady()) {
+        g.save();
+        drawChildFrame(g, 3, R.bed.x + R.bed.w * 0.52, R.bed.y + 46, 46);
+        g.restore();
+      } else {
+        g.save();
+        g.translate(R.bed.x + R.bed.w - 14, R.bed.y + 30);
+        g.rotate(-Math.PI / 2);
+        g.scale(1.2, 1.2);
+        g.translate(-player.x, -player.y);
+        drawPlayer(g);
+        g.restore();
+      }
+      drawSleepZzz(g, R.bed.x + R.bed.w * 0.62, R.bed.y - 8);
+      drawChildLine(g, R.bed.x - 8, R.bed.y - 46);
+    } else {
+      g.translate(feet.x, feet.y);
+      g.scale(1.35, 1.35);
+      g.translate(-player.x, -player.y);
+      drawPlayer(g);
+    }
+    g.restore();
+  }
+  function drawSleepZzz(g, x, y) {
+    var t = sleepPhase, i, phase, rise, alpha, size, lx, ly;
+    g.save();
+    g.setTransform(dpr, 0, 0, dpr, 0, 0);
+    inkStyle(g);
+    var bw = 58, bh = 34;
+    var bx = Math.max(8, Math.min(viewW - bw - 8, x - 10));
+    var by = Math.max(48, y - 30);
+    inkBox(g, bx, by, bw, bh, '#fffaf2', 16);
+    g.beginPath();
+    g.moveTo(bx + 18, by + bh);
+    g.lineTo(bx + 26, by + bh + 10);
+    g.lineTo(bx + 34, by + bh);
+    g.closePath();
+    g.fillStyle = '#fffaf2';
+    g.fill();
+    g.stroke();
+    g.fillStyle = '#5b4a86';
+    g.font = 'bold 20px "Avenir Next", sans-serif';
+    g.textAlign = 'center';
+    g.textBaseline = 'middle';
+    g.fillText('Zzz', bx + bw / 2, by + bh / 2 + 1);
+    for (i = 0; i < 3; i++) {
+      phase = (t * 0.55 + i * 0.33) % 1;
+      rise = phase * 30;
+      alpha = phase < 0.12 ? phase / 0.12 : (phase > 0.72 ? (1 - phase) / 0.28 : 1);
+      size = 14 + phase * 10;
+      lx = bx + bw - 4 + Math.sin(t * 2.2 + i) * 3;
+      ly = by - 2 - rise;
+      g.globalAlpha = Math.max(0, alpha);
+      g.lineWidth = 3;
+      g.strokeStyle = '#fffaf2';
+      g.font = 'bold ' + Math.round(size) + 'px "Avenir Next", sans-serif';
+      g.strokeText('z', lx, ly);
+      g.fillStyle = '#5b4a86';
+      g.fillText('z', lx, ly);
+    }
+    g.restore();
+  }
+  function drawChildLine(g, x, y) {
+    var text = CHILD_REST_LINE;
+    g.save();
+    g.setTransform(dpr, 0, 0, dpr, 0, 0);
+    inkStyle(g);
+    g.font = 'bold 18px "Avenir Next", sans-serif';
+    var w = Math.ceil(g.measureText(text).width) + 24;
+    var bx = Math.max(10, Math.min(viewW - w - 10, x));
+    var by = Math.max(50, y);
+    inkBox(g, bx, by, w, 34, '#fffaf2', 14);
+    g.beginPath();
+    g.moveTo(bx + 28, by + 34);
+    g.lineTo(bx + 40, by + 46);
+    g.lineTo(bx + 46, by + 34);
+    g.closePath();
+    g.fillStyle = '#fffaf2';
+    g.fill();
+    g.stroke();
+    g.fillStyle = '#3a2a1c';
+    g.textAlign = 'center';
+    g.textBaseline = 'middle';
+    g.fillText(text, bx + w / 2, by + 17);
     g.restore();
   }
   function physics(dt) {
@@ -3830,7 +4146,7 @@ function validConversation(value, p) {
     } else {
       coyote -= dt;
     }
-    if (ax && onGround) player.anim += dt * 11;
+    if (ax && onGround) { player.anim += dt * 11; addFatigue(dt * 0.55); }
     else player.anim += dt * 2;
     if (player.y > H * TILE) player.y = homeY;
   }
@@ -3889,12 +4205,12 @@ function validConversation(value, p) {
     var canSwim = a.tamed || a.type === 'duck' || a.type === 'dog' || a.type === 'cat';
     var floorOk = solid(belowId) || (belowId === WATER && canSwim);
     var blocked = solid(get(ahead, body));
+    // Open air is not a path. Dogs and cats used to walk off the lip and fall back in.
     if (floorOk && !blocked && nx > TILE && nx < (W - 1) * TILE) a.x = nx;
-    else if ((a.tamed || canSwim) && !blocked && nx > TILE && nx < (W - 1) * TILE) a.x = nx;
     else if (a.tamed && blocked) {
       if (!solid(get(ahead, body - 1)) && !solid(get(tx, body - 1))) { a.y = body * TILE - 0.01; a.x = nx; }
     }
-    else if (!a.tamed && !(canSwim && (belowId === WATER || get(ahead, under) === WATER))) { a.vx = -a.vx; a.timer = 0.7; }
+    else if (!a.tamed) { a.vx = -a.vx; a.timer = 0.7; }
     var underId2 = get(Math.floor(a.x / TILE), Math.floor((a.y + 2) / TILE));
     var inWaterBody = underId2 === WATER || get(Math.floor(a.x / TILE), Math.floor((a.y - 8) / TILE)) === WATER;
     if (inWaterBody && canSwim) {
@@ -3920,6 +4236,12 @@ function validConversation(value, p) {
   function placementReach(tx,ty) {
     var dx=(tx+.5)*TILE-player.x, dy=(ty+.5)*TILE-(player.y-PH*.4);
     return dx*dx+dy*dy<=16*TILE*TILE;
+  }
+  // Fill strokes reach a dug shaft. A deep hole is taller than the normal 4-tile place radius.
+  function fillReach(tx, ty) {
+    var dx = Math.abs((tx + 0.5) * TILE - player.x);
+    var dy = Math.abs((ty + 0.5) * TILE - (player.y - PH * 0.4));
+    return dx <= 8 * TILE && dy <= 14 * TILE;
   }
   function overlapsPlayer(tx, ty) {
     var l = tx * TILE, t = ty * TILE, r = l + TILE, b = t + TILE;
@@ -4042,6 +4364,7 @@ function validConversation(value, p) {
   function harvestWheat(tx, ty, id) {
     playSfx('harvest');
     setCell(tx, ty, AIR);
+    addFatigue(8);
     var i;
     for (i = crops.length - 1; i >= 0; i--) if (crops[i].tx === tx && crops[i].ty === ty) crops.splice(i, 1);
     burst((tx + 0.5) * TILE, (ty + 0.5) * TILE, id === WHEAT3 ? '#f2c14e' : '#67c84a', false);
@@ -4059,7 +4382,7 @@ function validConversation(value, p) {
     updateQuest();
     saveSoon();
   }
-  function mine(tx, ty, fromBreak) {
+  function mine(tx, ty, fromBreak, loose) {
     var id = get(tx, ty);
     // Rod/boat on water: tap-to-use only. Break always digs so water leaves a mark.
     if (id === WATER && !fromBreak) {
@@ -4067,7 +4390,7 @@ function validConversation(value, p) {
       if (sk === 'rod') { if (inReach(tx, ty)) startFishing(tx, ty); return; }
       if (sk === 'boat') { if (inReach(tx, ty)) placeBoat(tx, ty); return; }
     }
-    if (!mineable(id) || !inReach(tx, ty)) {
+    if (!mineable(id) || (!loose && !inReach(tx, ty))) {
       var key = KEY_OF[id];
       if (key) showWord(key);
       return;
@@ -4089,12 +4412,36 @@ function validConversation(value, p) {
     tone(180, 0.07, 'triangle', 0, 0.04, 80);
     giveMined(id);
     rememberEvent(id===WINDOW?'built':'found', KEY_OF[id]);
+    addFatigue(10);
   }
   function groundSupport(id) {
     return id === GRASS || id === DIRT || id === SAND || id === STONE || id === PLANKS;
   }
   function wallSupport(id) {
     return id === GRASS || id === DIRT || id === SAND || id === STONE || id === PLANKS || id === WOOD || id === HOUSE || id === BEDROCK;
+  }
+  // Misplaced fill blocks and windows with nothing under them. Leaves stay, so a tree canopy is not a pile of floating blocks.
+  var RECLAIM_FLOAT = {};
+  [GRASS, DIRT, SAND, STONE, WOOD, PLANKS, HOUSE, WINDOW].forEach(function (id) { RECLAIM_FLOAT[id] = 1; });
+  function blockIsFloating(tx, ty) {
+    var id = get(tx, ty);
+    if (!RECLAIM_FLOAT[id]) return false;
+    if (solid(get(tx, ty + 1))) return false;
+    if (id === WINDOW && (wallSupport(get(tx - 1, ty)) || wallSupport(get(tx + 1, ty)))) return false;
+    return true;
+  }
+  function craftableFloating(b) {
+    if (!b) return false;
+    var y = Math.floor(b.y + b.h), x, n = 0, seen = 0;
+    for (x = Math.floor(b.x); x < Math.ceil(b.x + b.w); x++) {
+      if (x < 0 || x >= W) continue;
+      seen++;
+      if (y >= 0 && y < H && solid(get(x, y))) n++;
+    }
+    return seen > 0 && n === 0;
+  }
+  function reclaimReach(tx, ty) {
+    return inReach(tx, ty) || fillReach(tx, ty);
   }
   // Where a crafted item is allowed to sit. Empty string means the spot is fine.
   function specialPlaceLine(key, tx, ty) {
@@ -4115,45 +4462,56 @@ function validConversation(value, p) {
     }
     return '';
   }
-  function tryPlace(tx, ty) {
+  function tryPlace(tx, ty, quiet, fill) {
     var key = selectedKey();
-    if (!key) return;
-    if(CRAFTABLES[key]){var prior=buildTool;buildTool=key;buildTap(tx,ty,0);if(!buildMode)buildTool=prior;return;}
-    if (key !== 'seed' && key !== 'boat' && !BLOCK_OF[key]) { showWord(key); return; }
+    if (!key) return false;
+    if (CRAFTABLES[key]) {
+      var prior = buildTool;
+      buildTool = key;
+      var placedKit = !!buildTap(tx, ty, 0, quiet);
+      if (!buildMode) buildTool = prior;
+      return placedKit;
+    }
+    if (key !== 'seed' && key !== 'boat' && !BLOCK_OF[key]) { if (!quiet) showWord(key); return false; }
     if (key === 'bed' || key === 'table') {
-      if (indoors) { placeIndoor(key); return; }
-      showToast(key === 'bed' ? 'The bed goes in the house!' : 'The table goes in the house!', 2.2);
-      return;
+      if (indoors) { placeIndoor(key); return true; }
+      if (!quiet) showToast(key === 'bed' ? 'The bed goes in the house!' : 'The table goes in the house!', 2.2);
+      return false;
     }
-    if (key === 'torch' && indoors) { placeIndoor('torch'); return; }
-    if (!placementReach(tx,ty)) { placementFailure(tx,ty,'reach'); return; }
-    if (!placementSight(tx,ty)) { placementFailure(tx,ty,'sight',sightBlock); return; }
+    if (key === 'torch' && indoors) { placeIndoor('torch'); return true; }
+    if (fill) {
+      if (!fillReach(tx, ty)) { if (!quiet) showToast('Move a little closer!', 1.6); return false; }
+    } else {
+      if (!placementReach(tx,ty)) { if (!quiet) placementFailure(tx,ty,'reach'); return false; }
+      if (!placementSight(tx,ty)) { if (!quiet) placementFailure(tx,ty,'sight',sightBlock); return false; }
+    }
     if (key === 'boat') {
-      if (get(tx, ty) !== WATER) return;
+      if (get(tx, ty) !== WATER) return false;
       placeBoat(tx, ty);
-      return;
+      return true;
     }
-    if (craftableAt(tx,ty) || get(tx,ty)!==AIR || overlapsPlayer(tx,ty)) { placementFailure(tx,ty,'occupied'); return; }
-    if(cellHasAnimal(tx,ty)){placementFailure(tx,ty,'animal');return;}
+    if (craftableAt(tx,ty) || get(tx,ty)!==AIR || overlapsPlayer(tx,ty)) { if (!quiet) placementFailure(tx,ty,'occupied'); return false; }
+    if(cellHasAnimal(tx,ty)){ if (!quiet) placementFailure(tx,ty,'animal'); return false; }
     var spotLine = specialPlaceLine(key, tx, ty);
-    if (spotLine) { showToast(spotLine, 2.2); return; }
+    if (spotLine) { if (!quiet) showToast(spotLine, 2.2); return false; }
+    if (fill && !solid(get(tx, ty + 1))) { if (!quiet) showToast('Choose empty squares!', 1.6); return false; }
     if (key === 'seed') {
       var below = get(tx, ty + 1);
-      if (below !== GRASS && below !== DIRT) { showWord('seed'); return; }
+      if (below !== GRASS && below !== DIRT) { if (!quiet) showWord('seed'); return false; }
       setCell(tx, ty, WHEAT1);
       crops.push({ tx: tx, ty: ty, age: 0 });
       consume(key);
       if (!quiz) progress.placed.seed = 1;
       burst((tx + 0.5) * TILE, (ty + 0.6) * TILE, '#67c84a', false);
       tone(520, 0.06, 'sine', 0, 0.035, 760);
-      showWord('seed');
+      if (!quiet) showWord('seed');
       updateQuest();
       saveSoon();
-      return;
+      return true;
     }
     setCell(tx, ty, BLOCK_OF[key]);
     playSfx('place');consume(key);
-    buildPlaced(tx,ty,key);
+    buildPlaced(tx,ty,key,!!quiet,!!quiet);
     placementPulse(tx,ty,1);logBuildResult(tx,ty,'placed '+key);
     if (!quiz) {
       progress.placed[key] = 1; rememberEvent('built', key);
@@ -4161,10 +4519,11 @@ function validConversation(value, p) {
     }
     burst((tx + 0.5) * TILE, (ty + 0.4) * TILE, PCOL[BLOCK_OF[key]] || '#fff', false);
     tone(520, 0.06, 'sine', 0, 0.035, 760);
-    showWord(key);
-    if (collides(player.x, player.y)) player.y -= TILE;
+    if (!quiet) showWord(key);
+    if (!fill && collides(player.x, player.y) && !collides(player.x, player.y - TILE)) player.y -= TILE;
     updateQuest();
     saveSoon();
+    return true;
   }
   function doBreak() {
     if (riding || drivingCar) return;
@@ -4281,8 +4640,15 @@ function validConversation(value, p) {
     }
   }
   function pet(a) {
-    function animalCard(){if(quiz&&quiz.key===a.type)quizWin();else showWord(a.type);}
-    playSfx('pet');
+    var primed = a.audioPrimed && Date.now() - a.audioPrimed < 12000;
+    a.audioPrimed = 0;
+    function animalCard(){if(quiz&&quiz.key===a.type)quizWin();else showWord(a.type, false, true, primed);}
+    if (!primed) {
+      unlockAudio();
+      if (!document.hidden) packSuspended = false;
+      animalCry(a.type);
+      animalVoiceAt = Date.now();
+    }
     a.pet = 1.2;
     a.wait = 4; a.vx = 0; a.timer = 2;
     if (!quiz) progress.tapped[a.type] = 1;
@@ -4295,7 +4661,6 @@ function validConversation(value, p) {
     if (a.type === 'sheep') { addItem('wool', 1, true); learn('wool'); }
     if (a.tamed) {
       animalCard();
-      cry(a.type);
       burst(a.x, a.y - 24, '#ff6b8a', true);
       updateQuest();
       saveSoon();
@@ -4303,7 +4668,7 @@ function validConversation(value, p) {
     }
     if ((a.type === 'dog' || a.type === 'cat') && !animals.some(function (o) { return o.tamed; })) {
       a.love = (a.love || 0) + 1;
-      showToast(WORD[a.type][0] + ': ' + a.love + '/3 hearts', 2.2);
+      showToast(WORD[a.type][0] + ': ' + a.love + '/3 hearts', 2.2, true);
       if (a.love >= 3) {
         a.tamed = 1;
         if (!quiz) progress.pet = 1;
@@ -4311,18 +4676,16 @@ function validConversation(value, p) {
         learn('follow');
         followLastX = player.x; followTravel = 0; followReady = false;
         animalCard();
-        cry(a.type);
         burst(a.x, a.y - 24, '#ff6b8a', true);
         burst(a.x, a.y - 42, '#ffc53d', false);
         chime();
-        showToast('Your pet follows you!', 2.6);
+        showToast('Your pet follows you!', 2.6, true);
         updateQuest();
         saveSoon();
         return;
       }
     }
     animalCard();
-    cry(a.type);
     burst(a.x, a.y - 24, '#ff6b8a', true);
     updateQuest();
     saveSoon();
@@ -4335,11 +4698,12 @@ function validConversation(value, p) {
     seekStep(0);
     if (seek) {
       var key = target.kind === 'pet' ? target.animal.type : KEY_OF[get(target.tx, target.ty)];
-      showToast('Walking to ' + (WORD[key] ? WORD[key][0].toLowerCase() : 'the block') + '!', 1.8);
+      // A pet walk-toast used to call speakEn and cancel the name that the tap just started.
+      showToast('Walking to ' + (WORD[key] ? WORD[key][0].toLowerCase() : 'the block') + '!', 1.8, target.kind === 'pet');
     }
   }
-  function seekMine(tx, ty) {
-    beginSeek({ kind: 'mine', tx: tx, ty: ty });
+  function seekMine(tx, ty, dig) {
+    beginSeek({ kind: 'mine', tx: tx, ty: ty, dig: dig !== false });
   }
   // A bounded horizontal seek uses the same collision and step-up path as keys.
   // Unreachable heights/obstacles time out; no teleporting or identify-only success.
@@ -4350,7 +4714,7 @@ function validConversation(value, p) {
     var reached = s.kind === 'pet' ? petReach(s.animal) : inReach(s.tx, s.ty);
     if (reached) {
       seek = null;
-      if (s.kind === 'pet') pet(s.animal); else mine(s.tx, s.ty);
+      if (s.kind === 'pet') pet(s.animal); else mine(s.tx, s.ty, s.dig !== false);
       return 0;
     }
     var x = s.kind === 'pet' ? s.animal.x : (s.tx + 0.5) * TILE;
@@ -4369,10 +4733,441 @@ function validConversation(value, p) {
     }
     return x > player.x ? 1 : -1;
   }
+  function activePlaceKey() {
+    if (drivingCar || riding || ropeClimb) return null;
+    if (buildMode) return buildTool === 'remove' ? null : buildTool;
+    var key = selectedKey();
+    if (!key) return null;
+    if (CRAFTABLES[key] || BLOCK_OF[key] || key === 'seed' || key === 'boat') return key;
+    return null;
+  }
+  function isMultiPlace(key) {
+    if (!key || CRAFTABLES[key] || key === 'bed' || key === 'table' || key === 'door' || key === 'window' || key === 'fence' || key === 'flower' || key === 'torch' || key === 'seed' || key === 'boat') return false;
+    if (buildMode && buildTool === 'roof') return false;
+    var mat = buildMode ? buildMaterial() : key;
+    return !!MULTI_PLACE[mat];
+  }
+  function footprintSupported(x, y, w) {
+    var i, n = 0;
+    for (i = 0; i < w; i++) if (solid(get(x + i, y + 1))) n++;
+    return n >= Math.ceil((w || 1) / 2);
+  }
+  function explainPlace(key, tx, ty) {
+    if (!key) return '';
+    if (key === 'bed' || (buildMode && buildMaterial() === 'bed')) return 'The bed goes in the house!';
+    if (key === 'table' || (buildMode && buildMaterial() === 'table')) return 'The table goes in the house!';
+    var mat = buildMode ? buildMaterial() : key;
+    if (indoors && (mat === 'flower' || mat === 'fence' || mat === 'door' || mat === 'window')) return 'The ' + mat + ' goes outside!';
+    var line = specialPlaceLine(mat, tx, ty);
+    if (line) return line;
+    if (mat === 'seed') return 'The seed goes on dirt!';
+    if (buildMode ? !buildReach(tx, ty) : !placementReach(tx, ty)) return 'Move a little closer!';
+    return 'Choose empty squares!';
+  }
+  function evalSpot(key, tx, ty, fy) {
+    if (!key || indoors || key === 'bed' || key === 'table') return null;
+    if (CRAFTABLES[key]) {
+      var kit = craftableTarget(key, tx, ty);
+      return kit.ok ? { x: kit.x, y: kit.y, w: kit.w, h: kit.h } : null;
+    }
+    if (buildMode) {
+      var saved = sightBlock;
+      var r = resolveBuildTarget(tx, ty, fy == null ? 0.5 : fy);
+      sightBlock = saved;
+      if (!r.ok || r.object) return null;
+      var mat = buildMaterial();
+      var s;
+      if (mat === 'fence' || mat === 'door' || mat === 'window' || mat === 'flower' || mat === 'torch') {
+        for (s = 0; s < (r.w || 1); s++) if (specialPlaceLine(mat, r.x + s, r.y)) return null;
+      } else if (!footprintSupported(r.x, r.y, r.w || 1)) return null;
+      return { x: r.x, y: r.y, w: r.w || 1, h: r.h || 1 };
+    }
+    if (key !== 'seed' && key !== 'boat' && !BLOCK_OF[key]) return null;
+    if (key === 'boat') return get(tx, ty) === WATER && placementReach(tx, ty) ? { x: tx, y: ty, w: 1, h: 1 } : null;
+    if (!placementReach(tx, ty) || !placementSight(tx, ty)) return null;
+    if (craftableAt(tx, ty) || get(tx, ty) !== AIR || overlapsPlayer(tx, ty) || cellHasAnimal(tx, ty)) return null;
+    if (specialPlaceLine(key, tx, ty)) return null;
+    if (key === 'seed') {
+      var soil = get(tx, ty + 1);
+      return (soil === GRASS || soil === DIRT) ? { x: tx, y: ty, w: 1, h: 1 } : null;
+    }
+    if (key !== 'flower' && key !== 'fence' && key !== 'door' && key !== 'window' && key !== 'torch' && !footprintSupported(tx, ty, 1)) return null;
+    return { x: tx, y: ty, w: 1, h: 1 };
+  }
+  function collectPlaceSpots(ax, ay) {
+    var key = activePlaceKey();
+    var saved = sightBlock;
+    var spots = [], seen = {}, cx = Math.floor(player.x / TILE), cy = Math.floor((player.y - 10) / TILE);
+    var rad = buildMode ? 6 : 4, x, y, s, id;
+    if (!key) { sightBlock = saved; return spots; }
+    for (y = cy - rad; y <= cy + rad; y++) {
+      for (x = cx - rad; x <= cx + rad; x++) {
+        s = evalSpot(key, x, y, 0.5);
+        if (!s) continue;
+        id = s.x + ':' + s.y + ':' + s.w + ':' + s.h;
+        if (seen[id]) continue;
+        seen[id] = 1;
+        s.d = Math.abs(s.x + s.w / 2 - ax) + Math.abs(s.y + s.h / 2 - ay);
+        spots.push(s);
+      }
+    }
+    spots.sort(function (a, b) { return a.d - b.d; });
+    sightBlock = saved;
+    return spots.slice(0, 24);
+  }
+  function indoorPlaceSpots() {
+    if (!indoors) return [];
+    var key = selectedKey(), furn = houseFurn(indoors), R = roomBoxes(), spots = [];
+    if (key === 'bed' && !furn.bed) spots.push({ key: 'bed', box: R.bed });
+    if (key === 'table' && !furn.table) spots.push({ key: 'table', box: R.table });
+    if (key === 'torch' && !furn.torch) spots.push({ key: 'torch', box: R.torch });
+    return spots;
+  }
+  function indoorAim(sx, sy) {
+    var spots = indoorPlaceSpots(), i;
+    for (i = 0; i < spots.length; i++) if (hitRoom(spots[i].box, sx, sy, 16)) return spots[i];
+    return null;
+  }
+  function placeStock(key) {
+    if (!key) return 0;
+    if (buildMode && !CRAFTABLES[key]) return buildStock();
+    return inv[key] || 0;
+  }
+  function placeOne(tx, ty, fy, quiet) {
+    if (buildMode) return !!buildTap(tx, ty, fy, quiet);
+    return !!tryPlace(tx, ty, quiet);
+  }
+  function surfaceCell(tx, ty) {
+    if (ty > 1 && get(tx, ty) !== AIR && get(tx, ty - 1) === AIR) return { tx: tx, ty: ty - 1 };
+    return { tx: tx, ty: ty };
+  }
+  function fillCellOpen(key, tx, ty) {
+    if (tx < 1 || ty < 1 || tx >= W - 1 || ty >= H - 1) return false;
+    if (!fillReach(tx, ty) || get(tx, ty) !== AIR) return false;
+    if (craftableAt(tx, ty)) return false;
+    // An animal in this cell is lifted onto the new block, not treated as a wall.
+    if (specialPlaceLine(key, tx, ty)) return false;
+    return true;
+  }
+  function canFillCell(key, tx, ty) {
+    return fillCellOpen(key, tx, ty) && !overlapsPlayer(tx, ty);
+  }
+  function collectFillSpots(key) {
+    var spots = [], seen = {}, cx = Math.floor(player.x / TILE), cy = Math.floor((player.y - 10) / TILE);
+    var x, y, bottom, floor, cap;
+    function push(tx, ty) {
+      var id = tx + ':' + ty;
+      if (seen[id] || spots.length >= 72) return;
+      seen[id] = 1;
+      spots.push({ x: tx, y: ty, w: 1, h: 1 });
+    }
+    for (x = cx - 8; x <= cx + 8; x++) {
+      for (y = cy - 4; y <= cy + 4; y++) if (canFillCell(key, x, y) && solid(get(x, y + 1))) push(x, y);
+      cap = columnCap(x);
+      if (cap == null) continue;
+      bottom = Math.min(H - 2, cap + 16);
+      floor = null;
+      for (y = cap; y <= bottom; y++) {
+        if (solid(get(x, y))) { floor = y; break; }
+        if (get(x, y) !== AIR) break;
+      }
+      if (floor == null) continue;
+      for (y = floor - 1; y >= cap; y--) {
+        if (!canFillCell(key, x, y)) continue;
+        push(x, y);
+      }
+    }
+    return spots;
+  }
+  function strokeCells(x0, y0, x1, y1) {
+    var list = [], seen = {}, x = x0, y = y0;
+    var dx = Math.abs(x1 - x0), dy = Math.abs(y1 - y0), sx = x0 < x1 ? 1 : -1, sy = y0 < y1 ? 1 : -1, err = dx - dy;
+    while (true) {
+      var surf = surfaceCell(x, y), id = surf.tx + ':' + surf.ty;
+      if (!seen[id]) { seen[id] = 1; list.push(surf); }
+      if (x === x1 && y === y1) break;
+      var e2 = 2 * err;
+      if (e2 > -dy) { err -= dy; x += sx; }
+      if (e2 < dx) { err += dx; y += sy; }
+    }
+    list.sort(function (a, b) { return b.ty - a.ty || a.tx - b.tx; });
+    return list;
+  }
+  function paintFillCell(h, tx, ty) {
+    var key = activePlaceKey(), id = tx + ',' + ty;
+    if (h.blocked || !key || !h.filled || h.filled[id]) return;
+    if (placeStock(key) <= 0) {
+      if (!h.spokeBad) { h.spokeBad = true; showToast('Use some materials first!', 1.6); }
+      return;
+    }
+    if (!fillCellOpen(key, tx, ty) || !solid(get(tx, ty + 1))) return;
+    var snap = bodySnap();
+    if (!liftForFill(tx, ty)) {
+      bodyRestore(snap);
+      if (!h.spokeBad) { h.spokeBad = true; showToast('No room!', 1.6); }
+      h.blocked = true;
+      return;
+    }
+    if (h.blocked) return;
+    if (tryPlace(tx, ty, true, true)) {
+      h.filled[id] = 1;
+      h.placedN++;
+      if (!h.saidItem) { h.saidItem = true; showWord(buildMode ? buildMaterial() : key); }
+    } else bodyRestore(snap);
+  }
+  function bodySnap() {
+    return {
+      x: player.x, y: player.y, vy: player.vy, g: onGround,
+      list: animals.map(function (a) { return [a, a.x, a.y, a.vx]; })
+    };
+  }
+  function bodyRestore(s) {
+    player.x = s.x; player.y = s.y; player.vy = s.vy; onGround = s.g;
+    var i;
+    for (i = 0; i < s.list.length; i++) {
+      s.list[i][0].x = s.list[i][1];
+      s.list[i][0].y = s.list[i][2];
+      s.list[i][0].vx = s.list[i][3];
+    }
+  }
+  function standSpots(tx, ty) {
+    var foot = ty * TILE - 0.01;
+    var spots = [{ x: (tx + 0.5) * TILE, y: foot }];
+    var step, dir, nx;
+    for (step = 1; step <= 3; step++) {
+      for (dir = -1; dir <= 1; dir += 2) {
+        nx = tx + dir * step;
+        if (nx < 1 || nx >= W - 1) continue;
+        if (!solid(get(nx, ty))) continue;
+        spots.push({ x: (nx + 0.5) * TILE, y: foot });
+      }
+    }
+    return spots;
+  }
+  function animalsInCell(tx, ty) {
+    var list = [], i, a;
+    for (i = 0; i < animals.length; i++) {
+      a = animals[i];
+      if (a.x + 12 > tx * TILE && a.x - 12 < (tx + 1) * TILE && a.y > ty * TILE && a.y - 24 < (ty + 1) * TILE) list.push(a);
+    }
+    return list;
+  }
+  function animalClearance(type) {
+    if (type === 'horse' || type === 'cow') return 40;
+    if (type === 'sheep' || type === 'pig') return 30;
+    return 22;
+  }
+  function animalStandOk(a, x, y, tx, ty) {
+    var col = Math.floor(x / TILE);
+    if (col < 1 || col >= W - 1) return false;
+    var top = y - animalClearance(a.type);
+    var y0 = Math.floor(top / TILE);
+    var y1 = Math.floor((y - 1) / TILE);
+    var row;
+    for (row = y0; row <= y1; row++) if (solid(get(col, row))) return false;
+    var under = Math.floor((y + 2) / TILE);
+    if (solid(get(col, under))) return true;
+    return col === tx && under === ty;
+  }
+  function liftPlayerForFill(tx, ty) {
+    if (!overlapsPlayer(tx, ty)) return !collides(player.x, player.y);
+    var spots = standSpots(tx, ty), i, s;
+    var sx = player.x, sy = player.y, sv = player.vy, sg = onGround;
+    for (i = 0; i < spots.length; i++) {
+      s = spots[i];
+      player.x = s.x;
+      player.y = s.y;
+      player.vy = 0;
+      onGround = true;
+      if (!overlapsPlayer(tx, ty) && !collides(player.x, player.y)) return true;
+    }
+    player.x = sx; player.y = sy; player.vy = sv; onGround = sg;
+    return false;
+  }
+  function liftAnimalsForFill(tx, ty) {
+    var group = animalsInCell(tx, ty);
+    if (!group.length) return true;
+    var spots = standSpots(tx, ty);
+    var saved = group.map(function (a) { return { a: a, x: a.x, y: a.y, vx: a.vx }; });
+    var g, i, s, ax, ok;
+    for (g = 0; g < group.length; g++) {
+      ok = false;
+      for (i = 0; i < spots.length; i++) {
+        s = spots[i];
+        ax = s.x + (g === 0 ? 0 : (g % 2 ? 6 : -6));
+        if (!animalStandOk(group[g], ax, s.y, tx, ty)) continue;
+        group[g].x = ax;
+        group[g].y = s.y;
+        group[g].vx = 0;
+        group[g].wait = Math.max(group[g].wait || 0, 0.35);
+        ok = true;
+        break;
+      }
+      if (!ok) {
+        for (i = 0; i < saved.length; i++) {
+          saved[i].a.x = saved[i].x; saved[i].a.y = saved[i].y; saved[i].a.vx = saved[i].vx;
+        }
+        return false;
+      }
+    }
+    if (animalsInCell(tx, ty).length) {
+      for (i = 0; i < saved.length; i++) {
+        saved[i].a.x = saved[i].x; saved[i].a.y = saved[i].y; saved[i].a.vx = saved[i].vx;
+      }
+      return false;
+    }
+    return true;
+  }
+  function liftForFill(tx, ty) {
+    var needPal = animalsInCell(tx, ty).length > 0;
+    var needPlayer = overlapsPlayer(tx, ty);
+    if (!needPlayer && !needPal) return !collides(player.x, player.y);
+    if (!solid(get(tx, ty + 1))) return false;
+    var sx = player.x, sy = player.y, sv = player.vy, sg = onGround;
+    if (!liftPlayerForFill(tx, ty)) return false;
+    if (!liftAnimalsForFill(tx, ty)) {
+      player.x = sx; player.y = sy; player.vy = sv; onGround = sg;
+      return false;
+    }
+    if (collides(player.x, player.y) || overlapsPlayer(tx, ty)) {
+      player.x = sx; player.y = sy; player.vy = sv; onGround = sg;
+      return false;
+    }
+    return true;
+  }
+  function dragPaint(h) {
+    if (!isMultiPlace(activePlaceKey())) return;
+    if (!h.filled) h.filled = {};
+    var cells = strokeCells(h.anchorTx, h.anchorTy, h.tx, h.ty);
+    var vertical = h.anchorTy !== h.ty;
+    if (vertical) {
+      var lowest = {}, seen = {}, i, c, id;
+      for (i = 0; i < cells.length; i++) {
+        c = cells[i];
+        id = c.tx + ':' + c.ty;
+        seen[id] = 1;
+        if (lowest[c.tx] == null || c.ty > lowest[c.tx]) lowest[c.tx] = c.ty;
+      }
+      Object.keys(lowest).forEach(function (xs) {
+        var tx = +xs, y = lowest[xs], cap = columnCap(tx), guard = 0;
+        if (cap != null && y < cap - 1) return;
+        y += 1;
+        while (guard++ < 18 && y < H - 1 && get(tx, y) === AIR) {
+          id = tx + ':' + y;
+          if (!seen[id]) { seen[id] = 1; cells.push({ tx: tx, ty: y }); }
+          y++;
+        }
+      });
+      cells.sort(function (a, b) { return b.ty - a.ty || a.tx - b.tx; });
+    }
+    for (i = 0; i < cells.length; i++) paintFillCell(h, cells[i].tx, cells[i].ty);
+  }
+  function confirmSingle(h) {
+    if (h.indoor) {
+      if (bedRest > 0) {
+        if (bedTap(h.sx, h.sy)) wakeBed();
+        return;
+      }
+      if (indoors && houseFurn(indoors).bed && hitRoom(roomBoxes().bed, h.sx, h.sy, 18)) return;
+      var spot = indoorAim(h.sx, h.sy);
+      if (spot) placeIndoor(spot.key);
+      else { var why = selectedKey() === 'flower' || selectedKey() === 'fence' || selectedKey() === 'door' || selectedKey() === 'window' ? ('The ' + selectedKey() + ' goes outside!') : (selectedKey() === 'torch' ? 'The torch goes on the wall!' : (selectedKey() === 'bed' ? 'The bed goes here!' : (selectedKey() === 'table' ? 'The table goes here!' : ''))); if (why) showToast(why, 1.8); }
+      return;
+    }
+    var key = activePlaceKey();
+    if (!key) return;
+    var surf = surfaceCell(h.tx, h.ty);
+    if (!evalSpot(key, surf.tx, surf.ty, h.fy)) { if (!h.spokeBad) showToast(explainPlace(key, surf.tx, surf.ty), 1.8); return; }
+    if (placeOne(surf.tx, surf.ty, h.fy, false) && buildMode) showWord(buildMaterial());
+  }
+  function armPlaceHold() {
+    var h = placeHold;
+    if (!h || h.armed || chatBlocked() || panelOpen() || !started || bedRest > 0) return;
+    h.armed = true;
+    h.seen = {};
+    h.placedN = 0;
+    h.spokeBad = false;
+    h.saidItem = false;
+    h.lastTx = null;
+    h.filled = {};
+    var placeKey = activePlaceKey();
+    h.spots = h.indoor ? indoorPlaceSpots() : (isMultiPlace(placeKey) ? collectFillSpots(placeKey) : collectPlaceSpots(h.tx, h.ty));
+    var armSurf = surfaceCell(h.tx, h.ty);
+    h.aim = h.indoor ? indoorAim(h.sx, h.sy) : (isMultiPlace(placeKey) ? { x: armSurf.tx, y: armSurf.ty, w: 1, h: 1 } : evalSpot(placeKey, h.tx, h.ty, h.fy));
+    if (!h.spots.length && activePlaceKey() && !isMultiPlace(placeKey)) {
+      h.spokeBad = true;
+      showToast(h.indoor ? (selectedKey() === 'bed' ? 'The bed goes here!' : 'Hold to build!') : explainPlace(placeKey, h.tx, h.ty), 1.8);
+    }
+  }
+  function pointerWorld(e) {
+    var rect = canvas.getBoundingClientRect();
+    var sx = (e.clientX - rect.left) * viewW / rect.width;
+    var sy = (e.clientY - rect.top) * viewH / rect.height;
+    var w = screenToWorld(sx, sy);
+    var ty = Math.floor(w.y / TILE);
+    return { sx: sx, sy: sy, wx: w.x, wy: w.y, tx: Math.floor(w.x / TILE), ty: ty, fy: w.y / TILE - ty };
+  }
+  function animalAtPoint(wx, wy) {
+    var cropX = Math.floor(wx / TILE), cropY = Math.floor(wy / TILE);
+    var best = null, bd = Infinity, i, a, dx, dy, d, hit, footCell;
+    for (i = 0; i < animals.length; i++) {
+      a = animals[i];
+      dx = a.x - wx; dy = (a.y - 16) - wy; d = dx * dx + dy * dy;
+      hit = Math.abs(dx) <= 32 && wy >= a.y - 54 && wy <= a.y + 8;
+      footCell = Math.floor(a.x / TILE) === cropX && Math.floor((a.y - 1) / TILE) === cropY;
+      if ((hit || footCell) && d < bd) { bd = d; best = a; }
+    }
+    return best;
+  }
+  function primeAnimalAudio(a) {
+    unlockAudio();
+    if (!document.hidden) packSuspended = false;
+    animalCry(a.type);
+    speakEn(WORD[a.type][0], { force: true, noDeviceTts: true });
+    a.audioPrimed = Date.now();
+    animalVoiceAt = Date.now();
+  }
   function tapWorld(wx, wy, sx, sy, fy) {
-    if (ropeHit(wx, wy)) { climbRope(); return; }
+    var tapTx = Math.floor(wx / TILE), tapTy = Math.floor(wy / TILE), tapId = get(tapTx, tapTy);
+    // Wheat stays tappable when a pet stands on it. The animal body is checked next, before gifts.
+    if (!riding && !drivingCar && (tapId === WHEAT1 || tapId === WHEAT2 || tapId === WHEAT3)) {
+      lock = { tx: tapTx, ty: tapTy }; lockAge = 0;
+      seek = null;
+      seekMine(tapTx, tapTy);
+      return;
+    }
+    if (!riding && !drivingCar) {
+      var petHit = animalAtPoint(wx, wy);
+      if (petHit) {
+        // Play during this tap. A later arrival is no longer a user gesture, so play() would be rejected.
+        if (!petReach(petHit)) primeAnimalAudio(petHit);
+        seek = null;
+        beginSeek({ kind: 'pet', animal: petHit });
+        return;
+      }
+    }
+    var present = giftAtPoint(wx, wy);
+    if (present) {
+      if (giftTapReach(present)) claimTrailGift(present);
+      else showToast('Move a little closer!', 1.6);
+      return;
+    }
+    var ropeTx = Math.floor(wx / TILE), ropeTy = Math.floor(wy / TILE), ropeId = get(ropeTx, ropeTy);
+    if (!(ropeId !== AIR && mineable(ropeId)) && ropeHit(wx, wy)) { climbRope(); return; }
+    var floated = craftableAt(ropeTx, ropeTy);
+    if (floated && craftableFloating(floated) && reclaimReach(ropeTx, ropeTy)) {
+      if ((inv[floated.item] || 0) >= 99) { showToast('Use some materials first!', 1.6); return; }
+      removeCraftable(floated);
+      showWord(floated.item);
+      return;
+    }
+    if (blockIsFloating(ropeTx, ropeTy) && reclaimReach(ropeTx, ropeTy)) {
+      var back = KEY_OF[get(ropeTx, ropeTy)];
+      if (back && (inv[back] || 0) >= 99) { showToast('Use some materials first!', 1.6); return; }
+      mine(ropeTx, ropeTy, true, true);
+      return;
+    }
     if(interactObject(wx,wy))return;
-    if(CRAFTABLES[selectedKey()]){var prior=buildTool;buildTool=selectedKey();buildTap(Math.floor(wx/TILE),Math.floor(wy/TILE),fy);if(!buildMode)buildTool=prior;return;}
     if (boat) {
       var bdx = wx - boat.x, bdy = wy - (boat.y - 8);
       if (bdx * bdx + bdy * bdy < 46 * 46) {
@@ -4383,61 +5178,18 @@ function validConversation(value, p) {
     }
     if (riding || drivingCar) return;
     seek = null;
-    var cropX = Math.floor(wx / TILE), cropY = Math.floor(wy / TILE), cropId = get(cropX, cropY);
-    if(BLOCK_OF[selectedKey()] && buildOwned(cropX,cropY) && fy<.4 && get(cropX,cropY-1)===AIR && placementReach(cropX,cropY-1)) {tryPlace(cropX,cropY-1);return;}
-    // A direct tap on a crop should reach it even when a pet stands in front.
-    if (cropId === WHEAT1 || cropId === WHEAT2 || cropId === WHEAT3) {
-      lock = { tx: cropX, ty: cropY }; lockAge = 0;
-      seekMine(cropX, cropY); return;
-    }
-    var best = null, bd = Infinity, i;
-    for (i = 0; i < animals.length; i++) {
-      var a = animals[i];
-      var dx = a.x - wx, dy = (a.y - 16) - wy, d = dx * dx + dy * dy;
-      // Cover the drawn head/ears, body and the foot cell a child selects.
-      var hit = Math.abs(dx) <= 32 && wy >= a.y - 54 && wy <= a.y + 8;
-      var footCell = Math.floor(a.x / TILE) === cropX && Math.floor((a.y - 1) / TILE) === cropY;
-      if ((hit || footCell) && d < bd) { bd = d; best = a; }
-    }
-    if (best) {
-      lock = null; lockAge = 0;
-      beginSeek({ kind: 'pet', animal: best });
-      return;
-    }
     var tx = Math.floor(wx / TILE), ty = Math.floor(wy / TILE);
     var id = get(tx, ty);
     var heldKey = selectedKey();
-    if (heldKey === 'flower' || heldKey === 'fence' || heldKey === 'door' || heldKey === 'window' || heldKey === 'torch') {
-      // A special item never digs. Offer the surface it belongs on, or explain and keep it.
-      if (id !== AIR && (heldKey === 'flower' || heldKey === 'fence' || heldKey === 'door' || heldKey === 'torch') && get(tx, ty - 1) === AIR) {
-        tryPlace(tx, ty - 1);
-        return;
-      }
-      if (heldKey === 'window' && id !== AIR) {
-        var sides = [[tx - 1, ty], [tx + 1, ty]];
-        var si;
-        for (si = 0; si < sides.length; si++) {
-          if (get(sides[si][0], sides[si][1]) === AIR && !specialPlaceLine('window', sides[si][0], sides[si][1])) {
-            tryPlace(sides[si][0], sides[si][1]);
-            return;
-          }
-        }
-        showToast('The window goes on a wall!', 2.2);
-        return;
-      }
-      if (id !== AIR) {
-        showToast(specialPlaceLine(heldKey, tx, ty - 1) || ('The ' + heldKey + ' goes on the ground!'), 2.2);
-        return;
-      }
+    if (id === WATER && heldKey === 'rod') {
+      lock = { tx: tx, ty: ty }; lockAge = 0;
+      if (inReach(tx, ty)) startFishing(tx, ty); else seekMine(tx, ty, false);
+      return;
     }
     if (id !== AIR) {
-      if (heldKey === 'bed' || heldKey === 'table') {
-        showToast(heldKey === 'bed' ? 'The bed goes in the house!' : 'The table goes in the house!', 2.2);
-        return;
-      }
       lock = { tx: tx, ty: ty };
       lockAge = 0;
-      if (mineable(id)) seekMine(tx, ty);
+      if (mineable(id)) seekMine(tx, ty, true);
       return;
     }
     if (sy < viewH * 0.48) {
@@ -4453,15 +5205,8 @@ function validConversation(value, p) {
         }
       }
     }
-    if (selectedKey() === 'bed' || selectedKey() === 'table') {
-      showToast(selectedKey() === 'bed' ? 'The bed goes in the house!' : 'The table goes in the house!', 2.2);
-      return;
-    }
-    if (placementReach(tx, ty)) {
-      lock = { tx: tx, ty: ty };
-      lockAge = 0;
-      if (selectedKey()) { tryPlace(tx, ty); return; }
-    }
+    if (heldKey === 'bed' || heldKey === 'table') { showToast(heldKey === 'bed' ? 'The bed goes in the house!' : 'The table goes in the house!', 2.2); return; }
+    if (activePlaceKey()) { showToast('Hold to build!', 1.6); return; }
     showToast('Tap an animal or a block!', 1.6);
   }
 
@@ -4731,6 +5476,12 @@ function validConversation(value, p) {
       inkPath(g, [[6, 20], [26, 20], [23, 24], [9, 24]], wood);
       inkPath(g, [[16, 20], [16, 4]]); inkPath(g, [[17, 5], [26, 16], [17, 16]], cream);
       g.strokeStyle = blue; g.lineWidth = 1.3; g.beginPath(); g.moveTo(4, 30); g.quadraticCurveTo(16, 27, 28, 30); g.stroke();
+    } else if (key === 'bread') {
+      inkBox(g, 6, 14, 20, 12, '#e7b56a', 6);
+      inkBox(g, 8, 16, 16, 8, '#f3d48a', 4);
+      g.strokeStyle = '#c4843a'; g.lineWidth = 1.4;
+      g.beginPath(); g.moveTo(16, 15); g.lineTo(16, 25); g.stroke();
+      inkEllipse(g, 16, 13, 8, 3.2, '#f6e2a8');
     } else if (key === 'wheat') {
       [9, 16, 23].forEach(function (x, n) {
         var y = n === 1 ? 5 : 9; inkPath(g, [[x, 30], [x, y]]);
@@ -4801,8 +5552,60 @@ function validConversation(value, p) {
       });
     }
   }
+  var CHILD_FW = 96, CHILD_FH = 112, CHILD_FEET_X = 48, CHILD_FEET_Y = 104;
+  var childSheet = new Image();
+  childSheet.src = 'assets/child/child-sheet.png';
+  function childReady() { return !!(childSheet.complete && childSheet.naturalWidth); }
+  function drawChildFrame(g, frame, feetX, feetY, height) {
+    if (!childReady()) return false;
+    var scale = height / CHILD_FH;
+    var prev = g.imageSmoothingEnabled;
+    g.imageSmoothingEnabled = true;
+    g.drawImage(childSheet, frame * CHILD_FW, 0, CHILD_FW, CHILD_FH, feetX - CHILD_FEET_X * scale, feetY - CHILD_FEET_Y * scale, CHILD_FW * scale, CHILD_FH * scale);
+    g.imageSmoothingEnabled = prev;
+    return true;
+  }
+  function drawKidPack(g, x, y) {
+    inkBox(g, x, y, 7.5, 15, '#2ea8a0', 3);
+    g.fillStyle = '#1f7a74';
+    g.fillRect(x, y + 6, 7.5, 3);
+    g.fillStyle = '#ffc53d';
+    g.beginPath(); g.arc(x + 3.7, y + 7.6, 1.4, 0, 6.3); g.fill();
+  }
+  function drawKidHat(g, x, y) {
+    g.fillStyle = '#ffc53d';
+    g.beginPath(); g.ellipse(x, y, 10, 2.6, 0, 0, 6.3); g.fill();
+    g.beginPath(); g.ellipse(x, y - 1.6, 6.4, 4.2, 0, 0, 6.3); g.fill();
+    g.fillStyle = '#ff6b57'; g.fillRect(x - 6.2, y - 1.2, 12.4, 2.2);
+    g.fillStyle = '#fff3a0';
+    g.beginPath(); g.arc(x, y - 4, 1.6, 0, 6.3); g.fill();
+  }
+  function drawChildWorld(g) {
+    if (!childReady()) return false;
+    var frame = 0;
+    if (onGround && axis()) frame = (Math.floor(player.anim) % 2) ? 2 : 1;
+    var bob = onGround ? Math.abs(Math.sin(player.anim)) * 1.1 : 0;
+    g.save();
+    g.translate(player.x, player.y - bob);
+    g.scale(player.dir, 1);
+    drawChildFrame(g, frame, 0, 0, 48);
+    if (hasPack()) drawKidPack(g, -22, -28);
+    if (hasHat()) drawKidHat(g, 0, -44);
+    if (rainOn && !indoors) drawUmbrella(g, 14, -50, -20);
+    g.restore();
+    return true;
+  }
   function drawSwimmer(g) {
     var S = waterSurfaceY() - player.y;
+    if (childReady()) {
+      g.save();
+      g.translate(player.x, player.y);
+      g.scale(player.dir, 1);
+      drawChildFrame(g, 4, 2, S + 10, 38);
+      if (hasHat()) drawKidHat(g, 8, S - 8);
+      g.restore();
+      return;
+    }
     var ph = swimPhase;
     var bob = Math.sin(ph * 0.55) * 1.1;
     var kick = Math.sin(ph);
@@ -4897,6 +5700,18 @@ function validConversation(value, p) {
   }
   function drawBoatRide(g) {
     var bob = Math.sin(boatPhase) * 1.1;
+    if (childReady()) {
+      g.save();
+      g.translate(boat.x, boat.y + bob);
+      g.scale(player.dir, 1);
+      drawChildFrame(g, 5, 0, -4, 42);
+      if (hasPack()) drawKidPack(g, -24, -26);
+      if (hasHat()) drawKidHat(g, -2, -40);
+      if (rainOn) drawUmbrella(g, 10, -48, -14);
+      drawBoatShape(g);
+      g.restore();
+      return;
+    }
     g.save();
     g.translate(boat.x, boat.y + bob);
     g.scale(player.dir, 1);
@@ -4949,6 +5764,7 @@ function validConversation(value, p) {
   function drawPlayer(g) {
     if (riding && boat) { drawBoatRide(g); return; }
     if (inWater()) { drawSwimmer(g); return; }
+    if (drawChildWorld(g)) return;
     var walk = Math.sin(player.anim);
     var bob = onGround ? Math.abs(walk) * 1.3 : 0;
     g.save();
@@ -4991,16 +5807,22 @@ function validConversation(value, p) {
     g.beginPath(); g.moveTo(5.6, -32.7 - bob); g.lineTo(8.4, -32.2 - bob); g.stroke();
     g.fillStyle = '#fffdf8';
     g.strokeStyle = '#51493c'; g.lineWidth = 0.9;
-    g.beginPath(); g.arc(3.8, -30.4 - bob, 1.7, 0, 6.3); g.fill(); g.stroke();
-    g.beginPath(); g.arc(7, -30.4 - bob, 1.7, 0, 6.3); g.fill(); g.stroke();
-    g.fillStyle = '#51493c';
-    g.beginPath(); g.arc(4.15, -30.2 - bob, 0.85, 0, 6.3); g.fill();
-    g.beginPath(); g.arc(7.35, -30.2 - bob, 0.85, 0, 6.3); g.fill();
-    g.fillStyle = '#fff';
-    g.beginPath(); g.arc(3.7, -30.6 - bob, 0.32, 0, 6.3); g.fill();
-    g.beginPath(); g.arc(6.9, -30.6 - bob, 0.32, 0, 6.3); g.fill();
-    g.strokeStyle = '#d06a5c'; g.lineWidth = 1.1;
-    g.beginPath(); g.arc(5.4, -28.2 - bob, 2.2, 0.2, Math.PI - 0.2); g.stroke();
+    if (bedRest > 0) {
+      g.beginPath(); g.moveTo(2.4, -30.4 - bob); g.lineTo(5.4, -30.4 - bob); g.stroke();
+      g.beginPath(); g.moveTo(5.8, -30.4 - bob); g.lineTo(8.6, -30.4 - bob); g.stroke();
+      g.beginPath(); g.arc(5.4, -28.6 - bob, 1.6, 0.15, Math.PI - 0.15); g.stroke();
+    } else {
+      g.beginPath(); g.arc(3.8, -30.4 - bob, 1.7, 0, 6.3); g.fill(); g.stroke();
+      g.beginPath(); g.arc(7, -30.4 - bob, 1.7, 0, 6.3); g.fill(); g.stroke();
+      g.fillStyle = '#51493c';
+      g.beginPath(); g.arc(4.15, -30.2 - bob, 0.85, 0, 6.3); g.fill();
+      g.beginPath(); g.arc(7.35, -30.2 - bob, 0.85, 0, 6.3); g.fill();
+      g.fillStyle = '#fff';
+      g.beginPath(); g.arc(3.7, -30.6 - bob, 0.32, 0, 6.3); g.fill();
+      g.beginPath(); g.arc(6.9, -30.6 - bob, 0.32, 0, 6.3); g.fill();
+      g.strokeStyle = '#d06a5c'; g.lineWidth = 1.1;
+      g.beginPath(); g.arc(5.4, -28.2 - bob, 2.2, 0.2, Math.PI - 0.2); g.stroke();
+    }
     g.fillStyle = 'rgba(255,120,120,0.5)';
     g.beginPath(); g.arc(2.2, -28 - bob, 1.35, 0, 6.3); g.fill();
     if (hasHat()) {
@@ -5011,7 +5833,7 @@ function validConversation(value, p) {
       g.fillStyle = '#fff3a0';
       g.beginPath(); g.arc(2.4, -40.4 - bob, 1.6, 0, 6.3); g.fill();
     }
-    if (rainOn) drawUmbrella(g, 9, -45 - bob, -18 - bob);
+    if (rainOn && !indoors) drawUmbrella(g, 9, -45 - bob, -18 - bob);
     g.restore();
   }
   function drawWorld(g, sec) {
@@ -5083,29 +5905,28 @@ function validConversation(value, p) {
     }
   }
   function drawHighlight(g) {
-    if(buildMode){drawBuildHover(g);return;}
+    if (placeHold && placeHold.armed && !placeHold.indoor) {
+      var spots = placeHold.spots || [], i, s, aim = placeHold.aim, hot;
+      for (i = 0; i < spots.length; i++) {
+        s = spots[i];
+        hot = aim && aim.x < s.x + s.w && aim.x + (aim.w || 1) > s.x && aim.y < s.y + s.h && aim.y + (aim.h || 1) > s.y;
+        g.save();
+        g.fillStyle = hot ? 'rgba(70,180,100,0.45)' : 'rgba(125,222,160,0.28)';
+        g.fillRect(s.x * TILE, s.y * TILE, s.w * TILE, s.h * TILE);
+        g.strokeStyle = hot ? '#178a42' : 'rgba(255,255,255,0.95)';
+        g.lineWidth = hot ? 3 : 2;
+        g.setLineDash(hot ? [] : [4, 3]);
+        g.strokeRect(s.x * TILE + 2, s.y * TILE + 2, s.w * TILE - 4, s.h * TILE - 4);
+        g.restore();
+      }
+      return;
+    }
+    if (buildMode && buildTool === 'remove') { drawBuildHover(g); return; }
     var br = chooseBreak();
-    var pl = choosePlace();
     if (br) {
       g.strokeStyle = '#ff6b57';
       g.lineWidth = 2.5;
       g.strokeRect(br.tx * TILE + 1.5, br.ty * TILE + 1.5, TILE - 3, TILE - 3);
-    }
-    if (pl) {
-      var key = selectedKey();
-      if (key && BLOCK_OF[key]) {
-        var sp = key === 'flower' ? spr(FLOWER, 0) : spr(BLOCK_OF[key], 0);
-        if (sp) {
-          g.globalAlpha = 0.45;
-          g.drawImage(sp, pl.tx * TILE, pl.ty * TILE, TILE, TILE);
-          g.globalAlpha = 1;
-        }
-      }
-      g.strokeStyle = 'rgba(255,255,255,0.95)';
-      g.lineWidth = 2;
-      g.setLineDash([4, 3]);
-      g.strokeRect(pl.tx * TILE + 2, pl.ty * TILE + 2, TILE - 4, TILE - 4);
-      g.setLineDash([]);
     }
   }
   function glow(g, x, y, r, a) {
@@ -5407,14 +6228,28 @@ function validConversation(value, p) {
     drawCamY = Math.round(camY * z) / z;
   }
 
-  function showWord(key, reward) {
+  function itemSpeakLine(key) {
+    var hint = ITEM_HINT[key] || '';
+    var shown = key === 'houseKit' ? 'house' : key === 'pen' ? 'fence' : key;
+    var w = WORD[shown] || WORD[key];
+    if (!w) return '';
+    if (!hint) hint = ITEM_HINT[shown] || '';
+    return hint ? (w[0] + '. ' + hint) : w[0];
+  }
+  function showWord(key, reward, replay, quiet) {
+    var hintKey = key;
     key=key==='houseKit'?'house':key==='pen'?'fence':key;
     var w = WORD[key];
     if (!w) return;
+    var hint = ITEM_HINT[hintKey] || ITEM_HINT[key] || '';
+    var line = itemSpeakLine(hintKey);
+    var animalLine = !!ANIMALS[key];
+    // Animals: one Jenny clip of the name. The hint stays on the card, not a second voice.
+    var spoken = animalLine ? w[0] : line;
     learn(key);
     if (buildSessionBusy() && !buildShowingWord) {
       // Build-busy hides the card, but animal taps / word reads must still say English when unmuted.
-      speak(w[0]);
+      if (!quiet) speakEn(spoken, { force: !!replay || animalLine, noDeviceTts: animalLine });
       return;
     }
     if (cardFlyTimer) { clearTimeout(cardFlyTimer); cardFlyTimer = null; }
@@ -5426,6 +6261,8 @@ function validConversation(value, p) {
     card.style.opacity = '';
     card.hidden = false;
     document.getElementById('card-en').textContent = w[0];
+    var cardHint = document.getElementById('card-hint');
+    if (cardHint) cardHint.textContent = hint;
     paintIcon(document.getElementById('card-icon'), key);
     // Sticky Continue only for legacy reward===true; quiz rewards fly to Chest.
     cardLeft = reward === true ? 3600 : (cardFlyChest ? 1.35 : 2.15);
@@ -5435,7 +6272,7 @@ function validConversation(value, p) {
       chime();
       playSfx('star');
     }
-    speak(w[0]);
+    if (!quiet) speakEn(spoken, { force: !!replay || animalLine, noDeviceTts: animalLine });
     renderHotbar();
   }
   function hideCard() {
@@ -5514,13 +6351,104 @@ function validConversation(value, p) {
       if (map && typeof map === 'object' && !Array.isArray(map)) { voiceIndex = map; nameVoiceStatus(); }
     }).catch(function () { /* Offline speech stays available. */ });
   }
+  // Child rest line. Not Jenny and not the Jenny voiceIndex.
+  // Exact sentence: "I am resting."
+  // Clip: audio/child/i-am-resting.mp3
+  // Generated with edge-tts, voice en-US-AnaNeural, rate -10%.
+  // If the file fails to load, the browser speaks the same sentence with a
+  // non-Jenny voice and a higher pitch.
+  var CHILD_REST_LINE = 'I am resting.';
+  var CHILD_REST_SRC = 'audio/child/i-am-resting.mp3';
+  var childAudio = null, childUtterance = null;
+  function pickVoiceChild() {
+    try {
+      var voices = speechSynthesis.getVoices() || [];
+      var gb = pickVoiceGB();
+      var i, v;
+      for (i = 0; i < voices.length; i++) {
+        v = voices[i];
+        if (/jenny/i.test(v.name || '')) continue;
+        if (/child|kid|junior|\bana\b/i.test(v.name || '')) return v;
+      }
+      for (i = 0; i < voices.length; i++) {
+        v = voices[i];
+        if (gb && v === gb) continue;
+        if (/jenny/i.test(v.name || '')) continue;
+        if (/^en-US/i.test(v.lang || '')) return v;
+      }
+    } catch (err) { /* optional */ }
+    return null;
+  }
+  function speakChildTTS(text) {
+    if (!speechOn || !window.speechSynthesis) return;
+    try {
+      var u = new SpeechSynthesisUtterance(text);
+      childUtterance = u;
+      u.lang = 'en-US';
+      u.rate = 0.9;
+      u.pitch = 1.55;
+      u.volume = 1;
+      var v = pickVoiceChild();
+      if (v) { u.voice = v; u.lang = v.lang; }
+      u.onend = u.onerror = function () { if (childUtterance === u) childUtterance = null; };
+      speechSynthesis.speak(u);
+    } catch (err) { /* speech is optional */ }
+  }
+  function speakChild(text) {
+    if (!speechOn || !text) return;
+    if (childAudio && !childAudio.ended && !childAudio.paused) return;
+    if (childUtterance) return;
+    var a = new Audio(CHILD_REST_SRC);
+    childAudio = a;
+    a.preload = 'auto';
+    var fell = false;
+    function fallback() {
+      if (fell) return;
+      fell = true;
+      if (childAudio === a) {
+        a.onended = a.onerror = null;
+        try { a.pause(); } catch (err) { /* missing clip */ }
+        childAudio = null;
+      }
+      speakChildTTS(text);
+    }
+    a.onerror = fallback;
+    a.onended = function () { if (childAudio === a) childAudio = null; };
+    var played = a.play();
+    if (played && played.then) played.catch(fallback);
+  }
+  function speechLive() {
+    if (enAudio && !enAudio.ended && !enAudio.paused) return true;
+    if (ttsLive) {
+      var age = Date.now() - ttsLiveSince;
+      var active = false;
+      try { active = !!(window.speechSynthesis && (speechSynthesis.speaking || speechSynthesis.pending)); } catch (err) { /* optional */ }
+      if (age > 12000 || (!active && age > 450)) { ttsLive = false; speechArm = 0; return false; }
+      return true;
+    }
+    if (speechArm && Date.now() < speechArm) return true;
+    return false;
+  }
   function speakEn(text, params) {
-    if (!speechOn) return;
+    if (!speechOn || text == null || text === '') return;
     params = Object.assign({}, params || {});
+    var key = String(text).trim().toLowerCase();
+    if (!params.force && promptPlaying === key && speechLive()) return;
     // Defense in depth: every name-bearing call is Jenny-only, including replay.
-    if (childName && text.toLowerCase().includes(childName.toLowerCase())) params.named = true;
+    if (childName && key.includes(childName.toLowerCase())) params.named = true;
+    var token = ++ttsToken;
+    promptPlaying = key;
+    speechArm = Date.now() + 700;
+    var userEnd = params.onend;
+    params.onend = function () {
+      if (token !== ttsToken) return;
+      speechArm = 0;
+      ttsLive = false;
+      if (promptPlaying === key) promptPlaying = '';
+      if (userEnd) userEnd();
+    };
     cancelEnAudio();
-    if (window.speechSynthesis) speechSynthesis.cancel();
+    try { if (window.speechSynthesis) speechSynthesis.cancel(); } catch (err) { /* optional */ }
     var serial = speechSerial;
     var normalized = text.trim().toLowerCase(), urls = [], remainder = normalized;
     if (params.named) {
@@ -5557,11 +6485,21 @@ function validConversation(value, p) {
         if (!urls.length) { enAudio = null; if (params.onend) params.onend(); return; }
         try {
           var a = new Audio(urls.shift()); enAudio = a; a.volume = params.soft ? 0.75 : 1;
+          var started = false;
+          function markStarted() {
+            if (failed || serial !== speechSerial) { try { a.pause(); } catch (err) { /* late start after fallback */ } return; }
+            if (started) return;
+            started = true;
+            clearTimeout(a.voiceTimer);
+            brainStats.audio++;
+          }
           a.onended = function () { clearTimeout(a.voiceTimer); playNext(); };
           a.onerror = fallback;
-          a.voiceTimer = setTimeout(fallback, 4000); // stalled network/autoplay
+          a.addEventListener('playing', markStarted);
+          // A hung Jenny file must not leave the name silent, and must not overlap a later fallback.
+          a.voiceTimer = setTimeout(function () { if (!started) fallback(); }, params.noDeviceTts ? 900 : 4000);
           var played = a.play();
-          if (played && played.then) played.then(function () { clearTimeout(a.voiceTimer); if (!failed && serial === speechSerial) { brainStats.audio++; a.voiceTimer = setTimeout(fallback, 12000); } }).catch(fallback);
+          if (played && played.then) played.then(function () { markStarted(); if (!params.noDeviceTts && !failed && serial === speechSerial) a.voiceTimer = setTimeout(fallback, 12000); }).catch(fallback);
           return a;
         } catch (err) { fallback(); }
       }
@@ -5570,34 +6508,79 @@ function validConversation(value, p) {
     return params.named ? (params.onend && params.onend()) : speakEnTTS(text, params);
   }
   function speakEnTTS(text, params) {
-    if (!speechOn || !window.speechSynthesis || (params && params.named)) return;
+    if (!speechOn || !window.speechSynthesis || (params && params.named)) {
+      if (params && params.onend) params.onend();
+      return;
+    }
     try {
+      var token = ttsToken;
       var u = new SpeechSynthesisUtterance(text);
+      liveUtterance = u;
       u.lang = 'en-GB';
       u.rate = 0.82;
       u.volume = params && params.soft ? 0.75 : 1;
       u.pitch = params && params.soft ? 1.03 : 1;
-      if (params && params.onend) { u.onend = params.onend; u.onerror = params.onend; }
+      var finished = false;
+      function finish() {
+        if (finished || token !== ttsToken) return;
+        finished = true;
+        ttsLive = false;
+        if (liveUtterance === u) liveUtterance = null;
+        if (params && params.onend) params.onend();
+      }
+      u.onend = finish;
+      u.onerror = finish;
       var v = pickVoiceGB() || pickVoice();
       if (v) { u.voice = v; u.lang = v.lang; }
-      speechSynthesis.cancel();
-      brainStats.tts++; speechSynthesis.speak(u);
+      if (speechSynthesis.paused) speechSynthesis.resume();
+      ttsLive = true;
+      ttsLiveSince = Date.now();
+      brainStats.tts++;
+      speechSynthesis.speak(u);
+      setTimeout(function () {
+        if (finished || token !== ttsToken) return;
+        try {
+          if (!speechSynthesis.speaking && !speechSynthesis.pending) {
+            if (speechSynthesis.paused) speechSynthesis.resume();
+            speechSynthesis.speak(u);
+          }
+        } catch (err) { /* optional */ }
+      }, 70);
+      setTimeout(finish, 14000);
       return u;
-    } catch (err) { /* speech is optional */ }
+    } catch (err) {
+      ttsLive = false;
+      if (params && params.onend) params.onend();
+    }
   }
   function cleanPrompt(text) { return String(text || '').replace(/★/g, ' ').replace(/\s+/g, ' ').trim(); }
   function promptBusy() {
     if (welcome || nameFlow || dialogue) return true;
-    if (enAudio && !enAudio.ended && !enAudio.paused) return true;
-    try { if (window.speechSynthesis && (speechSynthesis.speaking || speechSynthesis.pending)) return true; } catch (err) { /* optional */ }
-    return false;
+    return speechLive();
   }
-  function speakPrompt(text, kind) {
+  function questSpeechLine() {
+    if (quiz) return 'Find the ' + WORD[quiz.key][0] + '!';
+    var q = currentQuest();
+    return q ? q.en : 'Level 3 Complete! Explore and play!';
+  }
+  function speakPrompt(text, kind, force) {
     if (!speechOn) return;
     var line = cleanPrompt(text);
-    if (!line || line === lastPromptSpoken) return;
-    if (kind === 'quest') queuedQuest = line;
-    else if (line !== queuedQuest) queuedHint = line;
+    if (!line) return;
+    var key = line.toLowerCase();
+    if (force) {
+      queuedQuest = '';
+      queuedHint = '';
+      promptLock = false;
+      if (kind === 'quest') lastQuestSpoken = key;
+      speakEn(line, { force: true, onend: function () { promptLock = false; flushPrompt(); } });
+      return;
+    }
+    if (promptPlaying === key && speechLive()) return;
+    if (kind === 'quest') {
+      if (key === lastQuestSpoken || queuedQuest.toLowerCase() === key) return;
+      queuedQuest = line;
+    } else if (line !== queuedQuest) queuedHint = line;
     flushPrompt();
   }
   function flushPrompt() {
@@ -5605,31 +6588,32 @@ function validConversation(value, p) {
     if (promptLock) { if (!promptBusy()) promptLock = false; else return; }
     if (promptBusy()) return;
     var line = queuedQuest || queuedHint;
+    var kind = queuedQuest ? 'quest' : 'hint';
     if (!line) return;
     if (queuedQuest) queuedQuest = ''; else queuedHint = '';
-    if (line === lastPromptSpoken) return;
+    var key = line.toLowerCase();
+    if (promptPlaying === key && speechLive()) return;
+    if (kind === 'quest') lastQuestSpoken = key;
     lastPromptSpoken = line;
     promptLock = true;
     speakEn(line, { onend: function () { promptLock = false; flushPrompt(); } });
   }
   function speakTask() {
-    if (dialogue) { if (!dialogue.pending && dialogue.question) speakEn(dialogue.question, { audio_url: !dialogue.reveal ? dialogue.audio_url : undefined }); return; }
-    if (quiz) { speakEn('Find the ' + WORD[quiz.key][0] + '!'); return; }
-    var q = currentQuest();
-    speakEn(q ? q.en : 'Level 3 Complete! Explore and play!');
+    if (dialogue) { if (!dialogue.pending && dialogue.question) speakEn(dialogue.question, { force: true, audio_url: !dialogue.reveal ? dialogue.audio_url : undefined }); return; }
+    speakPrompt(questSpeechLine(), 'quest', true);
   }
-  function showToast(en, secs) {
+  function showToast(en, secs, quiet) {
     document.getElementById('toast-en').textContent = en;
     document.getElementById('toast').hidden = false;
     toastLeft = secs || 2.2;
-    speakPrompt(en, 'hint');
+    if (!quiet) speakPrompt(en, 'hint');
   }
   // Optional local sound pack: lazy HTMLAudio loads never block starting play.
   // Speech has its own existing switch/path; these settings control music/SFX.
   var musicOn=true,sfxOn=true,packUnlocked=false,packSuspended=false,carMoving=false;
   var packPlayers={},packWanted={},packRequests={},packPlayed={},hornAt=-100;
   function packAudio(key,loop) {
-    if(!packPlayers[key]){var a=new Audio('audio/build-v1.1/'+key+'.ogg');a.preload='none';a.loop=!!loop;a.volume=key==='garden-loop'?.30:key==='engine'?.36:.42;packPlayers[key]=a;}
+    if(!packPlayers[key]){var a=new Audio('audio/build-v1.1/'+key+'.ogg');a.preload='none';a.loop=!!loop;a.volume=key==='garden-loop'?.30:key==='engine'?.36:key.indexOf('cry-')===0?.8:.42;packPlayers[key]=a;}
     return packPlayers[key];
   }
   function packPlay(key,loop) {
@@ -5639,6 +6623,41 @@ function validConversation(value, p) {
     }catch(err){/* Missing browser audio support never blocks game actions. */}
   }
   function playSfx(key){packPlay(key,false);}
+  var animalSfxAt = {}, animalVoiceAt = 0;
+  function dropCry(key) {
+    var old = packPlayers[key];
+    if (!old) return;
+    try { old.pause(); old.onended = old.onerror = null; } catch (err) { /* ignore */ }
+    delete packPlayers[key];
+  }
+  function animalCry(type) {
+    if (!type || !sfxOn || document.hidden) return;
+    // A tap is a user gesture. A stale suspend or a locked pack must not mute the cry.
+    if (!packUnlocked) unlockAudio();
+    else if (audioCtx && audioCtx.state === 'suspended') { try { audioCtx.resume(); } catch (err) { /* optional */ } }
+    if (packSuspended) resumeSoundPack();
+    var key = 'cry-' + type;
+    var now = Date.now();
+    if (animalSfxAt[type] && now - animalSfxAt[type] < 280) return;
+    animalSfxAt[type] = now;
+    var clip = packPlayers[key];
+    // A stalled element used to look "still playing" and then ignore every later tap of that animal.
+    if (!clip || clip.error || (clip._cryArm && now - clip._cryArm > 2500 && (clip.paused || clip.readyState < 2))) dropCry(key);
+    try {
+      clip = packAudio(key, false);
+      var gen = (clip._cryGen || 0) + 1;
+      clip._cryGen = gen;
+      clip.pause();
+      try { if (clip.readyState >= 1) clip.currentTime = 0; } catch (err) { dropCry(key); clip = packAudio(key, false); clip._cryGen = gen; }
+      clip._cryArm = now;
+      var played = clip.play();
+      if (played && played.then) played.then(function () {
+        if (packPlayers[key] === clip && clip._cryGen === gen) clip._cryArm = 0;
+      }).catch(function () {
+        if (packPlayers[key] === clip && clip._cryGen === gen) dropCry(key);
+      });
+    } catch (err) { dropCry(key); }
+  }
   function packLoop(key,wanted) {
     wanted=!!(wanted&&packUnlocked&&!packSuspended&&!document.hidden);
     if(packWanted[key]===wanted){
@@ -5899,7 +6918,7 @@ function validConversation(value, p) {
         ct.dataset.need = k;
         ct.dataset.n = String(r.need[k]);
         ing.appendChild(cv); ing.appendChild(name); ing.appendChild(ct);
-        tapButton(ing, function () { showWord(k); });
+        tapButton(ing, function () { showWord(k, false, true); });
         needs.appendChild(ing);
       });
       var arrow = document.createElement('div');
@@ -5913,7 +6932,7 @@ function validConversation(value, p) {
       var nm = document.createElement('b');
       nm.textContent = (r.label || WORD[r.out][0]) + (r.n > 1 ? ' ×' + r.n : '');
       out.appendChild(ocv); out.appendChild(nm);
-      tapButton(out, function () { showWord(r.out); });
+      tapButton(out, function () { showWord(r.out, false, true); });
       var btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'craftbtn';
@@ -6000,8 +7019,8 @@ function validConversation(value, p) {
       spk.className = 'spk';
       spk.setAttribute('aria-label', 'Listen to ' + WORD[key][0]);
       spk.innerHTML = '<svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true"><path fill="#3a2a1c" d="M4 9h4l5-4v14l-5-4H4z"/><path fill="none" stroke="#3a2a1c" stroke-width="2" stroke-linecap="round" d="M16 9.2a4 4 0 0 1 0 5.6M18.2 7a7 7 0 0 1 0 10"/></svg>';
-      tapButton(spk, function () { showWord(key); });
-      tapButton(row, function () { showWord(key); });
+      tapButton(spk, function () { showWord(key, false, true); });
+      tapButton(row, function () { showWord(key, false, true); });
       var practice=document.createElement('button');practice.type='button';practice.textContent='Speak';practice.setAttribute('aria-label','Practice '+WORD[key][0]);
       tapButton(practice,function(){document.getElementById('book').hidden=true;hideCard();var d={event:'word_practice',key:key,options:[key],tier:3,stage:'question',deferSpeech:false};buildBubble('Say '+WORD[key][0].toLowerCase()+'!',d);paintIcon(document.getElementById('buddy-picture'),key);document.getElementById('buddy-picture').hidden=false;});
       row.appendChild(cv); row.appendChild(txt); row.appendChild(spk);row.appendChild(practice);
@@ -6049,7 +7068,106 @@ function validConversation(value, p) {
     document.getElementById('brain-status').textContent = '本次伙伴回应：AI ' + brainStats.brain + '，模板 ' + brainStats.template + '，预生成音频 ' + brainStats.audio + '，合成回落 ' + brainStats.tts + '，来源未标注 ' + brainStats.unknown + '。最多每分钟 8 次、每个标签页会话 60 次请求（刷新不重置）；重试使用本地提示。';
     if (log) renderSpeakingLog();
   }
-  var CHEST_STASH = { grass:1, dirt:1, leaves:1, sand:1, flower:1, wool:1, seed:1, wheat:1, stone:1 };
+  var CHEST_STASH = { grass:1, dirt:1, leaves:1, sand:1, flower:1, wool:1, seed:1, wheat:1, stone:1, bread:1 };
+  // Play seconds since the last meal. Peckish at 100s, hungry at 200s.
+  var hungerTime = 0, hungerStage = 'full', hungerRemind = 0;
+  function hungerLabel(stage) {
+    return stage === 'hungry' ? "I'm hungry!" : stage === 'peckish' ? 'I want bread!' : '';
+  }
+  function hungerStageNow() {
+    return hungerTime >= 200 ? 'hungry' : hungerTime >= 100 ? 'peckish' : 'full';
+  }
+  var fatigue = 0, fatigueStage = 'fresh', fatigueRemind = 0, needSpokeAt = -999;
+  function fatigueStageNow() {
+    return fatigue >= 72 ? 'tired' : fatigue >= 36 ? 'weary' : 'fresh';
+  }
+  function fatigueLabel(stage) {
+    return stage === 'tired' ? 'I need a rest.' : stage === 'weary' ? "I'm tired." : '';
+  }
+  function paintNeeds() {
+    var el = document.getElementById('hunger-hint');
+    if (!el) return;
+    var parts = [];
+    var hungry = hungerLabel(hungerStageNow());
+    var tired = fatigueLabel(fatigueStageNow());
+    if (hungry) parts.push(hungry);
+    if (tired) parts.push(tired);
+    el.hidden = !parts.length;
+    el.textContent = parts.join(' ');
+  }
+  function sayNeed(line) {
+    if (chatClock - needSpokeAt < 12) return;
+    // Don't cut off the animal name that just started.
+    if (Date.now() - animalVoiceAt < 1600) return;
+    needSpokeAt = chatClock;
+    showToast(line, 2.6);
+  }
+  function noteHunger(speak) {
+    var next = hungerStageNow();
+    paintNeeds();
+    if (!speak || next === 'full' || next === hungerStage) {
+      hungerStage = next;
+      if (next !== 'hungry') hungerRemind = 0;
+      return;
+    }
+    hungerStage = next;
+    hungerRemind = 0;
+    sayNeed(hungerLabel(next));
+  }
+  function addFatigue(n) {
+    var prev = fatigueStageNow();
+    fatigue = Math.min(400, fatigue + n);
+    if (fatigueStageNow() !== prev) noteFatigue(true);
+  }
+  function noteFatigue(speak) {
+    var next = fatigueStageNow();
+    paintNeeds();
+    if (!speak || next === 'fresh' || next === fatigueStage) {
+      fatigueStage = next;
+      if (next !== 'tired') fatigueRemind = 0;
+      return;
+    }
+    fatigueStage = next;
+    fatigueRemind = 0;
+    sayNeed(fatigueLabel(next));
+  }
+  function updateFatigue(dt) {
+    var next = fatigueStageNow();
+    if (next !== fatigueStage) { noteFatigue(true); return; }
+    if (next !== 'tired') return;
+    fatigueRemind += dt;
+    if (fatigueRemind < 150) return;
+    fatigueRemind = 0;
+    sayNeed('I need a rest.');
+  }
+  function updateHunger(dt) {
+    hungerTime += dt;
+    var next = hungerStageNow();
+    if (next !== hungerStage) { noteHunger(true); return; }
+    if (next !== 'hungry') return;
+    hungerRemind += dt;
+    if (hungerRemind < 150) return;
+    hungerRemind = 0;
+    sayNeed("I'm hungry!");
+  }
+  function eatBread() {
+    if (!(inv.bread > 0)) return false;
+    var wasHungry = hungerTime >= 100;
+    consume('bread');
+    hungerTime = 0;
+    hungerRemind = 0;
+    hungerStage = 'full';
+    paintNeeds();
+    burst(player.x, player.y - 28, '#f2c14e', true);
+    chime();
+    showToast(wasHungry ? "I'm full!" : 'Yum! Bread.', 2.2);
+    invSig = '';
+    renderHotbar();
+    if (!document.getElementById('chest-panel').hidden) renderChest();
+    updateQuest();
+    saveSoon();
+    return true;
+  }
   // Badge + panel share the same kind list (every hotbar key with stock).
   // CHEST_STASH still marks bulk blocks that skip the one-slot quick bar.
   function chestKeys() { return hotbar.filter(function (k) { return inv[k]; }); }
@@ -6086,15 +7204,16 @@ function validConversation(value, p) {
     if (!keys.length) { var empty = document.createElement('p'); empty.textContent = 'Empty for now.'; root.appendChild(empty); return; }
     keys.forEach(function (key) {
       var b = document.createElement('button'); b.type = 'button'; b.className = 'chest-item';
-      b.setAttribute('aria-label', WORD[key][0]);
+      b.setAttribute('aria-label', key === 'bread' ? 'Eat bread' : WORD[key][0]);
       var cv = document.createElement('canvas'); cv.width = 96; cv.height = 96; cv.style.cssText = 'width:40px;height:40px;image-rendering:pixelated';
       paintIcon(cv, key); b.appendChild(cv);
       b.appendChild(document.createTextNode(WORD[key][0]));
-      var em = document.createElement('em'); em.textContent = 'x' + inv[key]; b.appendChild(em);
+      var em = document.createElement('em'); em.textContent = key === 'bread' ? ('x' + inv[key] + ' · Eat') : ('x' + inv[key]); b.appendChild(em);
       tapButton(b, function () {
+        if (key === 'bread') { eatBread(); return; }
         var i = hotbar.indexOf(key); if (i >= 0) sel = i; invSig = '';
         if (buildMode && (BLOCK_OF[key] || CRAFTABLES[key])) { buildTool = key; renderBuildTools(); }
-        closeChest(); showWord(key); renderHotbar();
+        closeChest(); showWord(key, false, true); renderHotbar();
       });
       root.appendChild(b);
     });
@@ -6170,6 +7289,8 @@ function validConversation(value, p) {
       prefs: memory.prefs, prefsLearnedAt: memory.prefsLearnedAt, name_asked: memory.name_asked,
       chat_day: memory.chat_day, small_talk_count: memory.small_talk_count, weather_chat_done: memory.weather_chat_done,
       boat: boat ? [Math.round(boat.x), Math.round(boat.y)] : null,
+      hunger: Math.round(hungerTime * 10) / 10,
+      fatigue: Math.round(fatigue * 10) / 10,
       animals: animals.map(function (a) { return [a.type, Math.round(a.x * 10) / 10, Math.round(a.y * 10) / 10, a.dir, a.tamed ? 1 : 0, a.love || 0]; })
     };
     try { localStorage.setItem(SAVE_KEY, JSON.stringify(data)); } catch (err) { /* private mode */ }
@@ -6228,6 +7349,13 @@ function validConversation(value, p) {
       }
     }
     boat = null; riding = false; fishing = null;
+    hungerTime = isFinite(data.hunger) ? Math.max(0, Math.min(600, +data.hunger)) : 0;
+    hungerRemind = 0;
+    hungerStage = hungerStageNow();
+    fatigue = isFinite(data.fatigue) ? Math.max(0, Math.min(400, +data.fatigue)) : 0;
+    fatigueRemind = 0;
+    fatigueStage = fatigueStageNow();
+    paintNeeds();
     if (Array.isArray(data.boat) && isFinite(data.boat[0]) && isFinite(data.boat[1])) {
       boat = { x: +data.boat[0], y: +data.boat[1] };
     }
@@ -6288,6 +7416,9 @@ function validConversation(value, p) {
     progress = blankProgress(); intros = {};
     packSeen = false;
     timeOfDay = 0.30;
+    hungerTime = 0; hungerRemind = 0; hungerStage = 'full';
+    fatigue = 0; fatigueRemind = 0; fatigueStage = 'fresh';
+    paintNeeds();
     clearRopeRescue();
     indoors = null; indoorX = 0.42; houseGrace = 0;
     generate(newSeed);
@@ -6438,9 +7569,7 @@ function validConversation(value, p) {
       }, true);
     });
     tapButton(document.getElementById('quest'), function () {
-      if (quiz) { speakEn('Find the ' + WORD[quiz.key][0] + '!'); return; }
-      var q = currentQuest();
-      speak(q ? q.en : 'All done!');
+      speakPrompt(questSpeechLine(), 'quest', true);
     });
     tapButton(document.getElementById('btn-speak'), speakTask);
     tapButton(document.getElementById('btn-quiz'), function () {
@@ -6480,7 +7609,38 @@ function validConversation(value, p) {
       e.stopPropagation();
       hideCard();
     });
+    function followHold(e) {
+      if (!placeHold || e.pointerId !== placeHold.id) return;
+      if (Math.hypot(e.clientX - placeHold.x, e.clientY - placeHold.y) > 22) placeHold.moved = true;
+      var p = pointerWorld(e);
+      placeHold.sx = p.sx; placeHold.sy = p.sy; placeHold.wx = p.wx; placeHold.wy = p.wy;
+      placeHold.tx = p.tx; placeHold.ty = p.ty; placeHold.fy = p.fy;
+      if (!placeHold.armed) return;
+      var surf = surfaceCell(p.tx, p.ty);
+      placeHold.aim = placeHold.indoor ? indoorAim(p.sx, p.sy) : (isMultiPlace(activePlaceKey()) ? { x: surf.tx, y: surf.ty, w: 1, h: 1 } : evalSpot(activePlaceKey(), surf.tx, surf.ty, p.fy));
+      if (isMultiPlace(activePlaceKey())) dragPaint(placeHold);
+    }
+    function endHold(e) {
+      if (!placeHold || e.pointerId !== placeHold.id) return;
+      if (!placeHold.armed && performance.now() - placeHold.t >= 480) armPlaceHold();
+      var h = placeHold;
+      placeHold = null;
+      if (h.indoor && bedRest > 0) {
+        var up = pointerWorld(e);
+        if (bedTap(h.sx, h.sy) || bedTap(up.sx, up.sy)) wakeBed();
+        return;
+      }
+      if (!h.armed) {
+        if (!h.moved) { if (h.indoor) indoorTap(h.sx, h.sy); else tapWorld(h.wx, h.wy, h.sx, h.sy, h.fy); }
+        return;
+      }
+      if (h.indoor || !isMultiPlace(activePlaceKey())) confirmSingle(h);
+      else {
+        dragPaint(h);
+      }
+    }
     canvas.addEventListener('pointermove',function(e){
+      if (placeHold && e.pointerId === placeHold.id) { followHold(e); return; }
       if(e.pointerType==='touch'){buildHover=null;return;}var r=canvas.getBoundingClientRect(),w=screenToWorld((e.clientX-r.left)*viewW/r.width,(e.clientY-r.top)*viewH/r.height);
       buildHover={x:Math.floor(w.x/TILE),y:Math.floor(w.y/TILE),fy:w.y/TILE-Math.floor(w.y/TILE)};
     });
@@ -6490,27 +7650,13 @@ function validConversation(value, p) {
       if (!started || rotateBlock() || panelOpen() || chatBlocked()) return;
       if (e.button && e.button !== 0 && e.button !== 2) return;
       e.preventDefault();
-      var rect = canvas.getBoundingClientRect();
-      // Canvas input and drawing share CSS-pixel coordinates, including browser zoom.
-      var sx = (e.clientX - rect.left) * viewW / rect.width;
-      var sy = (e.clientY - rect.top) * viewH / rect.height;
-      if (indoors) { indoorTap(sx, sy); return; }
-      var w = screenToWorld(sx, sy);
+      var p = pointerWorld(e);
+      placeHold = { id: e.pointerId, x: e.clientX, y: e.clientY, t: performance.now(), moved: false, armed: false, indoor: !!indoors, sx: p.sx, sy: p.sy, wx: p.wx, wy: p.wy, tx: p.tx, ty: p.ty, fy: p.fy, seen: {}, placedN: 0, spokeBad: false, saidItem: false, lastTx: null, anchorTx: p.tx, anchorTy: p.ty, spots: [] };
       buildClick={x:Math.round(e.clientX),y:Math.round(e.clientY)};
-      if (ropeHit(w.x, w.y)) { climbRope(); return; }
-      if(interactObject(w.x,w.y))return;
-      if (buildMode) {
-        buildTap(Math.floor(w.x / TILE), Math.floor(w.y / TILE), w.y/TILE-Math.floor(w.y/TILE));
-        return;
-      }
-      if (e.button === 2) {
-        var tx = Math.floor(w.x / TILE), ty = Math.floor(w.y / TILE);
-        lock = { tx: tx, ty: ty }; lockAge = 0;
-        if (get(tx, ty) === AIR) tryPlace(tx, ty);
-        return;
-      }
-      tapWorld(w.x, w.y, sx, sy, w.y/TILE-Math.floor(w.y/TILE));
+      try { canvas.setPointerCapture(e.pointerId); } catch (err) { /* optional */ }
     });
+    canvas.addEventListener('pointerup', endHold);
+    canvas.addEventListener('pointercancel', function (e) { if (placeHold && e.pointerId === placeHold.id) placeHold = null; });
     var joy = document.getElementById('joy');
     var knob = document.getElementById('joy-knob');
     function joyPoint(e) {
@@ -6645,6 +7791,8 @@ function validConversation(value, p) {
       }
       if (nightFactor(timeOfDay) >= 0.6 && rainOn) { changeRain(false); rainTimer = 24; }
       timeOfDay = (timeOfDay + dt / DAY_LEN) % 1;
+      updateHunger(dt);
+      updateFatigue(dt);
       var left = Math.min(dt, 0.05);
       while (left > 0) {
         var h = Math.min(0.008, left);
@@ -6725,6 +7873,9 @@ function validConversation(value, p) {
     }
     // Dialogue also pauses physics; opening a parent panel keeps it intact.
     if (started && !document.hidden) updateRopeRescue(dt);
+    if (placeHold && (chatBlocked() || panelOpen() || !started)) placeHold = null;
+    else if (placeHold && !placeHold.armed && performance.now() - placeHold.t >= 480) armPlaceHold();
+    updateDeepWarn();
     syncSoundPack();
     flushPrompt();
       if (playing) updateHouse(dt);
@@ -6785,6 +7936,22 @@ function validConversation(value, p) {
       endQuiz: function () { endQuiz(); },
       speakTask: function () { speakTask(); },
       inv: function () { return JSON.parse(JSON.stringify(inv)); },
+      hunger: function () { return { time: Math.round(hungerTime * 10) / 10, stage: hungerStageNow() }; },
+      setHunger: function (stage) {
+        hungerTime = stage === 'hungry' ? 200 : stage === 'peckish' ? 100 : 0;
+        hungerRemind = 0;
+        hungerStage = 'full';
+        noteHunger(true);
+        return { time: hungerTime, stage: hungerStageNow() };
+      },
+      fatigue: function () { return { points: Math.round(fatigue * 10) / 10, stage: fatigueStageNow() }; },
+      setTired: function (stage) {
+        fatigue = stage === 'tired' ? 72 : stage === 'weary' ? 36 : 0;
+        fatigueRemind = 0;
+        fatigueStage = 'fresh';
+        noteFatigue(true);
+        return { points: fatigue, stage: fatigueStageNow() };
+      },
       quest: function () { return document.getElementById('quest-en').textContent; },
       card: function () {
         return document.getElementById('wordcard').hidden ? '' : document.getElementById('card-en').textContent;

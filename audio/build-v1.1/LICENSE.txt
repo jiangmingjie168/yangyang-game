@@ -1,5 +1,6 @@
-Original self-synthesized instrumental composition and sound effects.
-No third-party samples, recordings, lyrics, or voices.
+Original self-synthesized instrumental composition and sound effects, except the animal cries.
 Dedicated to the public domain under CC0 1.0 Universal.
 License: https://creativecommons.org/publicdomain/zero/1.0/
 Source: tools/make-build-v1.1-audio.py
+
+cry-*.ogg are real recordings, not synthesized sounds. Authors and licenses are in CRIES.txt.

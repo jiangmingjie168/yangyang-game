@@ -46,7 +46,7 @@ test('invalid model outputs get exactly one corrective retry, then template', as
     'answer outside options': { ...good, answer: 'cat' }, 'changed answer': { ...good, answer: 'wood' },
     'changed done': { ...good, done: true }, 'non-boolean done': { ...good, done: 'false' },
     'too long': { ...good, say: 'Fish or wood? '.repeat(5) }, 'new topic': { ...good, say: 'Fish or wood? Buy a rocket!' },
-    'wrong word': { ...good, say: 'Wrong! Fish or wood?' }, 'tier switch': { ...good, say: "What's this?" },
+    'wrong word': { ...good, say: 'Wrong! Fish or wood?' }, 'tier switch': { ...good, say: 'Say fish!' },
     'extra fields': { ...good, reward: 99 }, 'no English': { ...good, say: '!!!' }, 'numeric say': {...good,say:42}
   };
   for (const [name, bad] of Object.entries(bads)) await t.test(name, async () => {

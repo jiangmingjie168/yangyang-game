@@ -61,8 +61,14 @@ entries.append(save('engine',(.10*np.sin(2*np.pi*64*t)+.035*np.sin(2*np.pi*128*t
 t=np.arange(round(.28*SR))/SR;env=np.minimum(1,t*50)*np.minimum(1,(.28-t)*25)
 entries.append(save('horn',.19*(np.sin(2*np.pi*392*t)+.6*np.sin(2*np.pi*493.88*t))*env))
 entries.append(save('pet',seq([880,1046.5],.07,.22)*.6))
-manifest={'license':'CC0-1.0','external_samples':False,'voice':False,'total_bytes':sum(x['bytes'] for x in entries),'assets':entries}
+cries=[]
+if (OUT/'manifest.json').exists():
+ old=json.loads((OUT/'manifest.json').read_text())
+ cries=[a for a in old.get('assets',[]) if str(a.get('file','')).split('/')[-1].startswith('cry-')]
+entries.extend(cries)
+manifest={'license':'CC0-1.0','external_samples':bool(cries),'voice':False,'total_bytes':sum(x['bytes'] for x in entries),'assets':entries}
+if cries: manifest['cry_note']='cry-*.ogg are real recordings listed in CRIES.txt. They are not synthesized.'
 assert manifest['total_bytes']<3_000_000
 (OUT/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
-(OUT/'LICENSE.txt').write_text('Original self-synthesized instrumental composition and sound effects.\nNo third-party samples, recordings, lyrics, or voices.\nDedicated to the public domain under CC0 1.0 Universal.\nLicense: https://creativecommons.org/publicdomain/zero/1.0/\nSource: tools/make-build-v1.1-audio.py\n')
+(OUT/'LICENSE.txt').write_text('Original self-synthesized instrumental composition and sound effects, except the animal cries.\nDedicated to the public domain under CC0 1.0 Universal.\nLicense: https://creativecommons.org/publicdomain/zero/1.0/\nSource: tools/make-build-v1.1-audio.py\n\ncry-*.ogg are real recordings, not synthesized sounds. Authors and licenses are in CRIES.txt.\n')
 print(json.dumps({'assets':len(entries),'total_bytes':manifest['total_bytes']}))

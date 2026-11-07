@@ -72,7 +72,7 @@ function report(text) { console.log('PASS', text); }
   const unlocked2 = structuredClone(data);
   for (const said of ['trees','I see a three']) {
     p = await page(next(data)); const d = await chat(p); assert.equal(d.tier,2);
-    assert.equal(await p.locator('#chat-question').innerText(),"What's this?"); assert(!(await p.locator('#chat-options').isVisible()));
+    assert.match(await p.locator('#chat-question').innerText(), /^(What's this\?|What is this\?|Can you say it\?|Your turn!|Look!|Who is this\?)$/); assert(!(await p.locator('#chat-options').isVisible()));
     await voice(p,said); data = await snapshot(p); assert(data.adventure.levels.tree.t2>=1);
     assert((await p.locator('#chat-status').innerText()).includes('★ ★ ★')); assert(data.adventure.speaking.at(-1).spoke);
     assert.equal(data.adventure.speaking.at(-1).spoken_word,'tree'); await checkClose(p);
@@ -80,7 +80,9 @@ function report(text) { console.log('PASS', text); }
   assert.equal(data.adventure.levels.tree.t2,2); report('picture naming accepts plural/near-sound and unlocks tier three after two spoken successes');
   for (const said of ['tree','I see a tree','tre']) {
     p = await page(next(data)); assert.equal((await chat(p)).tier,3);
-    assert.equal(await p.locator('#chat-question').innerText(),'I see a tree. Say it!');
+    assert.match(await p.locator('#chat-question').innerText(), /tree/i);
+    assert.match(await p.locator('#chat-question').innerText(), /say|look|your turn|can you say|i see|who is this/i);
+    assert.doesNotMatch(await p.locator('#chat-question').innerText(), /\bwood\b/i);
     await voice(p,said); const saved = await snapshot(p); assert.equal(saved.adventure.levels.tree.t3,1); await checkClose(p);
   }
   report('tier three accepts the missing word, whole sentence, or small spelling difference');
