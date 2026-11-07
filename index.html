@@ -523,6 +523,7 @@
   #buddy-chat.build-done #buddy-line { font-size:20px; line-height:20px; }
   #buddy-chat.build-done #buddy-line::before { content:''; display:inline-block; width:20px; height:20px; vertical-align:bottom; margin-right:5px; background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='m12 2 3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1z' fill='%23ffc23d' stroke='%23986c25'/%3E%3C/svg%3E") center/contain no-repeat; }
   #build-version { position:absolute; z-index:16; left:8px; bottom:calc(3px + var(--sab)); padding:2px 5px; border-radius:4px; background:#fff8eee6; color:#4c493f; font:10px/1.2 monospace; pointer-events:none; }
+  #hunger-hint { position:absolute; z-index:16; left:8px; bottom:calc(20px + var(--sab)); padding:3px 8px; border-radius:10px; background:#fff3d6; color:#8a4b12; font:700 13px/1.2 "Avenir Next", sans-serif; pointer-events:none; }
   #build-debug { position:absolute; z-index:45; left:8px; bottom:115px; max-width:calc(100% - 16px); background:#152030e8; color:#fff; padding:6px; font:11px/1.3 monospace; white-space:pre-wrap; pointer-events:none; }
   #build-tools small { display:block; font-size:12px; }
   #build-status { position:absolute; left:10px; top:112px; width:max-content; max-width:min(72vw,320px); font-size:12px; line-height:1.25; pointer-events:none; background:#fff8eedd; border-radius:6px; padding:2px 6px; box-shadow:0 1px 0 #0001; }
@@ -577,7 +578,8 @@
 <div id="app">
   <canvas id="view" width="800" height="400"></canvas>
   <div id="hud">
-    <span id="build-version" aria-label="Build version">build cd91b62+ux43</span>
+    <span id="hunger-hint" hidden></span>
+    <span id="build-version" aria-label="Build version">build cd91b62+ux44</span>
     <div class="topbar">
       <button id="quest" type="button">
         <canvas id="quest-icon" width="128" height="128"></canvas>
@@ -2516,6 +2518,7 @@ function validConversation(value, p) {
     if (buildGhost && chatClock < buildGhost.until && x >= buildGhost.x && x < buildGhost.x+4 && y >= buildGhost.y && y < buildGhost.y+3) { buildChat.offerIgnored = 0; buildSession.offerAnswered = true; buildGhost = null; }
     if(buildSession.offerAt && chatClock-buildSession.offerAt<=8){buildSession.offerAnswered=true;buildChat.offerIgnored=0;}
     rememberEvent('built',key);
+    addFatigue(6);
     if (!buildSession.firstDone) { buildSession.firstDone = true; buildSession.firstPending = true; }
     scanBuildWord(x,y);
     if (!deferFeedback) flushBuildFirst();
@@ -3877,6 +3880,10 @@ function validConversation(value, p) {
     if (!indoors || bedRest > 0 || !houseFurn(indoors).bed) return;
     bedRest = 1.6;
     speakChild(CHILD_REST_LINE);
+    fatigue = 0;
+    fatigueRemind = 0;
+    fatigueStage = 'fresh';
+    paintNeeds();
     if (allowedChatWord('bed')) { rememberEvent('scene', 'bed'); queueChat('scene', 'bed'); }
   }
   function bedTap(sx, sy) {
@@ -3930,6 +3937,7 @@ function validConversation(value, p) {
       player.dir = ax > 0 ? 1 : -1;
       indoorX = Math.max(0, Math.min(1, indoorX + ax * dt * 0.62));
       player.anim += dt * 11;
+      addFatigue(dt * 0.55);
       if (ax < 0 && indoorX <= 0.001) exitHouse();
     } else player.anim += dt * 2;
   }
@@ -4095,7 +4103,7 @@ function validConversation(value, p) {
     } else {
       coyote -= dt;
     }
-    if (ax && onGround) player.anim += dt * 11;
+    if (ax && onGround) { player.anim += dt * 11; addFatigue(dt * 0.55); }
     else player.anim += dt * 2;
     if (player.y > H * TILE) player.y = homeY;
   }
@@ -4313,6 +4321,7 @@ function validConversation(value, p) {
   function harvestWheat(tx, ty, id) {
     playSfx('harvest');
     setCell(tx, ty, AIR);
+    addFatigue(8);
     var i;
     for (i = crops.length - 1; i >= 0; i--) if (crops[i].tx === tx && crops[i].ty === ty) crops.splice(i, 1);
     burst((tx + 0.5) * TILE, (ty + 0.5) * TILE, id === WHEAT3 ? '#f2c14e' : '#67c84a', false);
@@ -4360,6 +4369,7 @@ function validConversation(value, p) {
     tone(180, 0.07, 'triangle', 0, 0.04, 80);
     giveMined(id);
     rememberEvent(id===WINDOW?'built':'found', KEY_OF[id]);
+    addFatigue(10);
   }
   function groundSupport(id) {
     return id === GRASS || id === DIRT || id === SAND || id === STONE || id === PLANKS;
@@ -6956,12 +6966,96 @@ function validConversation(value, p) {
     if (log) renderSpeakingLog();
   }
   var CHEST_STASH = { grass:1, dirt:1, leaves:1, sand:1, flower:1, wool:1, seed:1, wheat:1, stone:1, bread:1 };
+  // Play seconds since the last meal. Peckish at 100s, hungry at 200s.
+  var hungerTime = 0, hungerStage = 'full', hungerRemind = 0;
+  function hungerLabel(stage) {
+    return stage === 'hungry' ? "I'm hungry!" : stage === 'peckish' ? 'I want bread!' : '';
+  }
+  function hungerStageNow() {
+    return hungerTime >= 200 ? 'hungry' : hungerTime >= 100 ? 'peckish' : 'full';
+  }
+  var fatigue = 0, fatigueStage = 'fresh', fatigueRemind = 0, needSpokeAt = -999;
+  function fatigueStageNow() {
+    return fatigue >= 72 ? 'tired' : fatigue >= 36 ? 'weary' : 'fresh';
+  }
+  function fatigueLabel(stage) {
+    return stage === 'tired' ? 'I need a rest.' : stage === 'weary' ? "I'm tired." : '';
+  }
+  function paintNeeds() {
+    var el = document.getElementById('hunger-hint');
+    if (!el) return;
+    var parts = [];
+    var hungry = hungerLabel(hungerStageNow());
+    var tired = fatigueLabel(fatigueStageNow());
+    if (hungry) parts.push(hungry);
+    if (tired) parts.push(tired);
+    el.hidden = !parts.length;
+    el.textContent = parts.join(' ');
+  }
+  function sayNeed(line) {
+    if (chatClock - needSpokeAt < 12) return;
+    needSpokeAt = chatClock;
+    showToast(line, 2.6);
+  }
+  function noteHunger(speak) {
+    var next = hungerStageNow();
+    paintNeeds();
+    if (!speak || next === 'full' || next === hungerStage) {
+      hungerStage = next;
+      if (next !== 'hungry') hungerRemind = 0;
+      return;
+    }
+    hungerStage = next;
+    hungerRemind = 0;
+    sayNeed(hungerLabel(next));
+  }
+  function addFatigue(n) {
+    var prev = fatigueStageNow();
+    fatigue = Math.min(400, fatigue + n);
+    if (fatigueStageNow() !== prev) noteFatigue(true);
+  }
+  function noteFatigue(speak) {
+    var next = fatigueStageNow();
+    paintNeeds();
+    if (!speak || next === 'fresh' || next === fatigueStage) {
+      fatigueStage = next;
+      if (next !== 'tired') fatigueRemind = 0;
+      return;
+    }
+    fatigueStage = next;
+    fatigueRemind = 0;
+    sayNeed(fatigueLabel(next));
+  }
+  function updateFatigue(dt) {
+    var next = fatigueStageNow();
+    if (next !== fatigueStage) { noteFatigue(true); return; }
+    if (next !== 'tired') return;
+    fatigueRemind += dt;
+    if (fatigueRemind < 150) return;
+    fatigueRemind = 0;
+    sayNeed('I need a rest.');
+  }
+  function updateHunger(dt) {
+    hungerTime += dt;
+    var next = hungerStageNow();
+    if (next !== hungerStage) { noteHunger(true); return; }
+    if (next !== 'hungry') return;
+    hungerRemind += dt;
+    if (hungerRemind < 150) return;
+    hungerRemind = 0;
+    sayNeed("I'm hungry!");
+  }
   function eatBread() {
     if (!(inv.bread > 0)) return false;
+    var wasHungry = hungerTime >= 100;
     consume('bread');
+    hungerTime = 0;
+    hungerRemind = 0;
+    hungerStage = 'full';
+    paintNeeds();
     burst(player.x, player.y - 28, '#f2c14e', true);
     chime();
-    showToast('Yum! Bread.', 2.2);
+    showToast(wasHungry ? "I'm full!" : 'Yum! Bread.', 2.2);
     invSig = '';
     renderHotbar();
     if (!document.getElementById('chest-panel').hidden) renderChest();
@@ -7090,6 +7184,8 @@ function validConversation(value, p) {
       prefs: memory.prefs, prefsLearnedAt: memory.prefsLearnedAt, name_asked: memory.name_asked,
       chat_day: memory.chat_day, small_talk_count: memory.small_talk_count, weather_chat_done: memory.weather_chat_done,
       boat: boat ? [Math.round(boat.x), Math.round(boat.y)] : null,
+      hunger: Math.round(hungerTime * 10) / 10,
+      fatigue: Math.round(fatigue * 10) / 10,
       animals: animals.map(function (a) { return [a.type, Math.round(a.x * 10) / 10, Math.round(a.y * 10) / 10, a.dir, a.tamed ? 1 : 0, a.love || 0]; })
     };
     try { localStorage.setItem(SAVE_KEY, JSON.stringify(data)); } catch (err) { /* private mode */ }
@@ -7148,6 +7244,13 @@ function validConversation(value, p) {
       }
     }
     boat = null; riding = false; fishing = null;
+    hungerTime = isFinite(data.hunger) ? Math.max(0, Math.min(600, +data.hunger)) : 0;
+    hungerRemind = 0;
+    hungerStage = hungerStageNow();
+    fatigue = isFinite(data.fatigue) ? Math.max(0, Math.min(400, +data.fatigue)) : 0;
+    fatigueRemind = 0;
+    fatigueStage = fatigueStageNow();
+    paintNeeds();
     if (Array.isArray(data.boat) && isFinite(data.boat[0]) && isFinite(data.boat[1])) {
       boat = { x: +data.boat[0], y: +data.boat[1] };
     }
@@ -7208,6 +7311,9 @@ function validConversation(value, p) {
     progress = blankProgress(); intros = {};
     packSeen = false;
     timeOfDay = 0.30;
+    hungerTime = 0; hungerRemind = 0; hungerStage = 'full';
+    fatigue = 0; fatigueRemind = 0; fatigueStage = 'fresh';
+    paintNeeds();
     clearRopeRescue();
     indoors = null; indoorX = 0.42; houseGrace = 0;
     generate(newSeed);
@@ -7580,6 +7686,8 @@ function validConversation(value, p) {
       }
       if (nightFactor(timeOfDay) >= 0.6 && rainOn) { changeRain(false); rainTimer = 24; }
       timeOfDay = (timeOfDay + dt / DAY_LEN) % 1;
+      updateHunger(dt);
+      updateFatigue(dt);
       var left = Math.min(dt, 0.05);
       while (left > 0) {
         var h = Math.min(0.008, left);
@@ -7723,6 +7831,22 @@ function validConversation(value, p) {
       endQuiz: function () { endQuiz(); },
       speakTask: function () { speakTask(); },
       inv: function () { return JSON.parse(JSON.stringify(inv)); },
+      hunger: function () { return { time: Math.round(hungerTime * 10) / 10, stage: hungerStageNow() }; },
+      setHunger: function (stage) {
+        hungerTime = stage === 'hungry' ? 200 : stage === 'peckish' ? 100 : 0;
+        hungerRemind = 0;
+        hungerStage = 'full';
+        noteHunger(true);
+        return { time: hungerTime, stage: hungerStageNow() };
+      },
+      fatigue: function () { return { points: Math.round(fatigue * 10) / 10, stage: fatigueStageNow() }; },
+      setTired: function (stage) {
+        fatigue = stage === 'tired' ? 72 : stage === 'weary' ? 36 : 0;
+        fatigueRemind = 0;
+        fatigueStage = 'fresh';
+        noteFatigue(true);
+        return { points: fatigue, stage: fatigueStageNow() };
+      },
       quest: function () { return document.getElementById('quest-en').textContent; },
       card: function () {
         return document.getElementById('wordcard').hidden ? '' : document.getElementById('card-en').textContent;
