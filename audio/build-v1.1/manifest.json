@@ -2,7 +2,7 @@
   "license": "CC0-1.0",
   "external_samples": true,
   "voice": false,
-  "total_bytes": 377715,
+  "total_bytes": 347230,
   "assets": [
     {
       "file": "audio/build-v1.1/garden-loop.ogg",
@@ -85,12 +85,12 @@
       "loop": false
     },
     {
-      "file": "audio/build-v1.1/engine-idle.ogg",
-      "source": "Recording: Mixkit royalty-free car engine idle, cleaned to a 5 second mono loop.",
-      "license": "Mixkit Sound Effects Free License",
-      "seconds": 5.0,
-      "bytes": 50919,
-      "loop": true,
+      "file": "audio/build-v1.1/engine-throttle.ogg",
+      "source": "Recording: Freesound \"Car Go Fast!\" by Beetlemuse, CC0, short rev. https://freesound.org/people/Beetlemuse/sounds/678961/",
+      "license": "CC0-1.0",
+      "seconds": 2.6,
+      "bytes": 20434,
+      "loop": false,
       "recorded": true
     },
     {
@@ -210,5 +210,5 @@
     }
   ],
   "cry_note": "cry-*.ogg are real recordings listed in CRIES.txt. They are not synthesized.",
-  "engine_note": "Sitting still plays engine-idle.ogg (Mixkit). Driving crossfades to engine-drive.ogg, a CC0 interior cruise by jc144940 (Freesound). See ENGINE.txt. The old engine.ogg clip is not played."
+  "engine_note": "Sitting still is silent. Starting to drive plays engine-throttle.ogg once (Beetlemuse, CC0). Steady driving loops engine-drive.ogg (jc144940, CC0). See ENGINE.txt. engine-idle.ogg is not played."
 }

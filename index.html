@@ -579,7 +579,7 @@
   <canvas id="view" width="800" height="400"></canvas>
   <div id="hud">
     <span id="hunger-hint" hidden></span>
-    <span id="build-version" aria-label="Build version">build cd91b62+ux53</span>
+    <span id="build-version" aria-label="Build version">build cd91b62+ux54</span>
     <div class="topbar">
       <button id="quest" type="button">
         <canvas id="quest-icon" width="128" height="128"></canvas>
@@ -2140,7 +2140,7 @@ function validConversation(value, p) {
       box(41,34,2,16,'#206470');box(46,36,7,2,'#e3e9d0');box(84,37,6,7,'#fff0ad');box(85,38,4,4,'#fffbe0');
       box(6,38,4,7,'#e89872');box(5,49,87,5,'#778a91');box(7,49,82,2,'#d9e4d4');
       box(12,45,25,11,'#193f4d');box(61,45,25,11,'#193f4d');
-      [[13,42],[62,42]].forEach(function(p){g.save();g.translate(p[0],p[1]);g.scale(.75,.75);drawWheelArt(g);g.restore();});
+      if(!b.skipWheels)[[13,42],[62,42]].forEach(function(p){g.save();g.translate(p[0],p[1]);g.scale(.75,.75);drawWheelArt(g);g.restore();});
       box(40,51,15,3,'#354f5c');return;
     }
     var timber=b.parts[b.kind==='house'?'wall':'fence'].material!=='stone';
@@ -2185,9 +2185,38 @@ function validConversation(value, p) {
     }
   }
   function craftableSprite(b) {
-    var key=b.kind+':'+JSON.stringify(b.parts);
+    var key=b.kind+':'+JSON.stringify(b.parts)+(b.skipWheels?':nowheels':'');
     if(!craftableArt[key]){var c=document.createElement('canvas');c.width=b.w*TILE;c.height=b.h*TILE;drawCraftableArt(c.getContext('2d'),b);craftableArt[key]=c;}
     return craftableArt[key];
+  }
+  function carBodySprite(b) {
+    return craftableSprite({kind:b.kind,parts:b.parts,w:b.w,h:b.h,skipWheels:true});
+  }
+  function wheelSprite() {
+    if (wheelSprite.canvas) return wheelSprite.canvas;
+    var c = document.createElement('canvas');
+    c.width = 24; c.height = 24;
+    var wg = c.getContext('2d');
+    wg.imageSmoothingEnabled = false;
+    wg.scale(0.75, 0.75);
+    drawWheelArt(wg);
+    wheelSprite.canvas = c;
+    return c;
+  }
+  // Same wheel art as the parked sprite. Angle 0 matches that drawing; driving adds roll.
+  function drawCarWheel(g, ox, oy, angle) {
+    g.save();
+    g.imageSmoothingEnabled = false;
+    g.translate(ox + 12, oy + 12);
+    g.rotate(angle);
+    g.drawImage(wheelSprite(), -12, -12);
+    g.restore();
+  }
+  function drawCarWheels(g, b) {
+    var spin = b.wheelSpin || 0;
+    if (b.dir === -1) spin = -spin;
+    drawCarWheel(g, 13, 42, spin);
+    drawCarWheel(g, 62, 42, spin);
   }
   // Car movement is continuous in this side-on world. Full footprint collision,
   // one-pixel substeps, and dry support prevent tunnelling or water rides.
@@ -2294,6 +2323,9 @@ function validConversation(value, p) {
       }
     }
     carMoving = moving;
+    if (b._wheelX == null) b._wheelX = b.x;
+    if (moving) b.wheelSpin = (b.wheelSpin || 0) + (b.x - b._wheelX) * (Math.PI * 2) / (22 / 32);
+    b._wheelX = b.x;
     seatDriver(b); player.anim += dt * 2;
   }
   function exitCar() {
@@ -6245,7 +6277,7 @@ function validConversation(value, p) {
     if (indoors) { drawInterior(ctx, sec); return; }
     ctx.setTransform(dpr * z, 0, 0, dpr * z, -drawCamX * dpr * z, -drawCamY * dpr * z);
     drawWorld(ctx, sec);
-    buildObjects.forEach(function(b){if(!bboxOnScreen(b))return;ctx.save();ctx.translate((b.x+(b.dir===-1?b.w:0))*TILE,b.y*TILE);if(b.dir===-1)ctx.scale(-1,1);ctx.drawImage(craftableSprite(b),0,0);ctx.restore();drawHouseLife(ctx,b,sec);drawCarExhaust(ctx,b,sec);});
+    buildObjects.forEach(function(b){if(!bboxOnScreen(b))return;ctx.save();ctx.translate((b.x+(b.dir===-1?b.w:0))*TILE,b.y*TILE);if(b.dir===-1)ctx.scale(-1,1);if(b.kind==='car'){ctx.drawImage(carBodySprite(b),0,0);drawCarWheels(ctx,b);}else ctx.drawImage(craftableSprite(b),0,0);ctx.restore();drawHouseLife(ctx,b,sec);drawCarExhaust(ctx,b,sec);});
     var ai;
     for (ai = 0; ai < animals.length; ai++) {
       var an = animals[ai];
@@ -6786,7 +6818,7 @@ function validConversation(value, p) {
   var musicOn=true,sfxOn=true,packUnlocked=false,packSuspended=false,carMoving=false;
   var packPlayers={},packWanted={},packRequests={},packPlayed={},hornAt=-100;
   function packAudio(key,loop) {
-    if(!packPlayers[key]){var a=new Audio('audio/build-v1.1/'+key+'.ogg');a.preload='none';a.loop=!!loop;a.volume=key==='garden-loop'?.30:(key==='engine-idle'||key==='engine-drive')?0:key.indexOf('cry-')===0?.8:.42;packPlayers[key]=a;}
+    if(!packPlayers[key]){var a=new Audio('audio/build-v1.1/'+key+'.ogg');a.preload='none';a.loop=!!loop;a.volume=key==='garden-loop'?.30:key==='engine-drive'?0:key==='engine-throttle'?.46:key.indexOf('cry-')===0?.8:.42;packPlayers[key]=a;}
     return packPlayers[key];
   }
   function dropLoop(key) {
@@ -6909,27 +6941,40 @@ function validConversation(value, p) {
     if (target <= 0 && (a.paused || v <= 0.001)) { haltEngine(key); return; }
     packWanted[key] = true;
   }
-  var engineMixAt = 0;
+  var engineMixAt = 0, engineWasMoving = false;
+  function stopThrottle() {
+    var a = packPlayers['engine-throttle'];
+    if (!a) return;
+    try { a.pause(); } catch (err) { /* optional */ }
+    try { a.currentTime = 0; } catch (err) { /* optional */ }
+  }
   function syncEngine() {
-    var allow = packUnlocked && !packSuspended && !document.hidden;
-    var seated = allow && started && sfxOn && !!drivingCar && !panelOpen() && !chatBlocked();
-    if (!seated) {
+    var audible = packUnlocked && !packSuspended && !document.hidden;
+    var driving = audible && started && sfxOn && !!drivingCar && !!carMoving && !panelOpen() && !chatBlocked();
+    if (!driving) {
       haltEngine('engine-idle');
       haltEngine('engine-drive');
+      if (!(started && sfxOn && drivingCar && carMoving && !panelOpen() && !chatBlocked())) {
+        stopThrottle();
+        engineWasMoving = false;
+      } else {
+        var held = packPlayers['engine-throttle'];
+        if (held) try { held.pause(); } catch (err) { /* optional */ }
+      }
       engineMixAt = 0;
       return;
     }
     var now = performance.now();
     var dt = engineMixAt ? Math.min(0.05, (now - engineMixAt) / 1000) : 0.016;
     engineMixAt = now;
-    var driving = !!carMoving;
-    fadeEngine('engine-idle', driving ? 0 : 0.46, dt);
-    // Clear cruise, not a loud mix. The recording itself carries the road and engine.
-    fadeEngine('engine-drive', driving ? 0.36 : 0, dt);
+    // One rev as the wheels start. Sitting still stays quiet. Cruise covers the steady drive.
+    if (!engineWasMoving) playSfx('engine-throttle');
+    engineWasMoving = true;
+    fadeEngine('engine-drive', 0.36, dt);
   }
   function syncSoundPack() {
     packLoop('garden-loop',started&&musicOn);
-    // Sitting still loops the cabin idle. Moving crossfades to the on-road recording.
+    // No idle hum. A throttle blip marks the start; the cruise loop plays only while moving.
     syncEngine();
   }
   function suspendSoundPack(){packSuspended=true;Object.keys(packPlayers).forEach(function(k){if(packPlayers[k]){packPlayers[k]._loopArm=0;try{packPlayers[k].pause();}catch(err){/* optional */}}});packWanted={};}

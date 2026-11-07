@@ -1,20 +1,26 @@
-Car engine uses two real recordings. The game crossfades between them while the child is in the car. They are not synthesized tones, and the playback rate stays at 1.
+Car engine uses real recordings. They are not synthesized tones, and the playback rate stays at 1.
 
-engine-idle.ogg — child sitting in the car, not moving.
-  Source: Mixkit royalty-free car engine idle.
-  License: Mixkit Sound Effects Free License (royalty-free, attribution not required).
-  https://mixkit.co/license/#sfxFree
-  Cleaned 5 second loopable mono Ogg. Plays under the existing SFX switch.
+Sitting in the car without moving is silent. There is no idle loop.
 
-engine-drive.ogg — while the car is actually moving.
+engine-throttle.ogg — one rev when the car starts moving (加油门).
+  Source: Freesound "Car Go Fast!" by Beetlemuse.
+  Page: https://freesound.org/people/Beetlemuse/sounds/678961/
+  License: CC0 1.0.
+  Attribution: Car Go Fast! by Beetlemuse (Freesound), CC0.
+  https://creativecommons.org/publicdomain/zero/1.0/
+  The shipped file is the short ~2.6 second take, played once. It is not looped.
+  A longer take of the same recording and an alternate rev by kyles
+  (https://freesound.org/people/kyles/sounds/450774/, CC0) were considered and not shipped.
+
+engine-drive.ogg — while the car is actually moving, after the rev.
   Source: Freesound "Car Interior Driving Down Road" by jc144940.
   Page: https://freesound.org/people/jc144940/sounds/179121/
   License: CC0 1.0. Attribution is not required; credit is included anyway.
   Attribution: Car Interior Driving Down Road by jc144940 (Freesound), CC0.
   https://creativecommons.org/publicdomain/zero/1.0/
-  A steady cruise from inside the car (about 6s–14s of the take), high-passed at 75 Hz so the engine and road stay audible instead of a sub-bass rumble. 7.91 second loopable mono Ogg. Not a race-car rev.
+  A steady cruise from inside the car (about 6s–14s of the take), high-passed at 75 Hz so the engine and road stay audible instead of a sub-bass rumble. 7.91 second loopable mono Ogg. Not a race-car rev. Volume 0.36.
 
-Getting out, opening a panel, blocking chat, leaving the page, or turning SFX off stops both loops immediately. Idle and drive crossfade only with each other.
+Getting out, opening a panel, blocking chat, leaving the page, or turning SFX off stops the rev and the cruise immediately. Stopping the car does too, so a parked car stays quiet.
 
-engine.ogg is the previous UX51 slice of Mixkit "Cars starting" (#1561). The game no longer plays it.
-engine-replace.ogg was a single-loop fallback and is not shipped. Idle and drive are separate loops.
+engine-idle.ogg is the previous Mixkit idle. The game no longer plays it.
+engine.ogg is the older UX51 Mixkit "Cars starting" slice. The game no longer plays it.
