@@ -577,7 +577,7 @@
 <div id="app">
   <canvas id="view" width="800" height="400"></canvas>
   <div id="hud">
-    <span id="build-version" aria-label="Build version">build cd91b62+ux33</span>
+    <span id="build-version" aria-label="Build version">build cd91b62+ux34</span>
     <div class="topbar">
       <button id="quest" type="button">
         <canvas id="quest-icon" width="128" height="128"></canvas>
@@ -900,7 +900,7 @@ const BRAIN_TIMEOUT_MS = 6500;
   var quiz = null, quizStars = {}, lastQuizKey = '', toastLeft = 0, wrongAt = 0;
   var saveIn = 0, dirtySave = false;
   var pitTime = 0, ropeShown = false, ropeAnnounced = false, ropeAnchor = null, ropeClimb = null;
-  var indoors = null, indoorX = 0.42, houseGrace = 0;
+  var indoors = null, indoorX = 0.42, houseGrace = 0, bedRest = 0;
   var swimPhase = 0, wasSwim = false, splashT = 0;
   var crops = [], boat = null, riding = false, fishing = null, boatPhase = 0, packSeen = false;
   var sunPos = { x: 0, y: 0 }, moonPos = { x: 0, y: 0 }, sunOn = false, moonOn = false, starPos = [], cloudPos = [];
@@ -3686,6 +3686,7 @@ function validConversation(value, p) {
   }
   function exitHouse(silent) {
     if (!indoors) return;
+    bedRest = 0;
     var b = indoors;
     indoors = null;
     indoorX = 0.42;
@@ -3735,11 +3736,18 @@ function validConversation(value, p) {
     updateQuest();
     saveSoon();
   }
+  function startBedRest() {
+    if (!indoors || bedRest > 0 || !houseFurn(indoors).bed) return;
+    bedRest = 1.6;
+    speakChild(CHILD_REST_LINE);
+  }
   function indoorTap(sx, sy) {
     if (!indoors) return;
+    if (bedRest > 0) { bedRest = 0; return; }
     var R = roomBoxes();
     if (hitRoom(R.door, sx, sy, 12)) { exitHouse(); return; }
     var key = selectedKey();
+    if (houseFurn(indoors).bed && hitRoom(R.bed, sx, sy, 18)) { startBedRest(); return; }
     if (hitRoom(R.bed, sx, sy, 18) || (key === 'bed' && sy > R.floor - 80 && sx > R.bed.x - 24)) { showToast(key === 'bed' ? 'Hold to build!' : 'The bed goes here!', 1.8); return; }
     if (hitRoom(R.table, sx, sy, 18) || (key === 'table' && sy > R.floor - 80 && sx > R.table.x - 20 && sx < R.table.x + R.table.w + 24)) { showToast(key === 'table' ? 'Hold to build!' : 'The table goes here!', 1.8); return; }
     if (hitRoom(R.torch, sx, sy, 16) || (key === 'torch' && sy < R.floor - 90 && sx > R.torch.x - 20)) { showToast(key === 'torch' ? 'Hold to build!' : 'The torch goes on the wall!', 1.8); return; }
@@ -3756,6 +3764,13 @@ function validConversation(value, p) {
     jumpBuf = 0;
     onGround = true;
     player.vy = 0;
+    if (bedRest > 0) {
+      if (ax) bedRest = 0;
+      else {
+        bedRest = Math.max(0, bedRest - dt);
+        return;
+      }
+    }
     if (ax) {
       player.dir = ax > 0 ? 1 : -1;
       indoorX = Math.max(0, Math.min(1, indoorX + ax * dt * 0.62));
@@ -3766,7 +3781,7 @@ function validConversation(value, p) {
   function updateHouse(dt) {
     if (houseGrace > 0) houseGrace = Math.max(0, houseGrace - dt);
     // Walking onto the door does not enter. A tap on the door does.
-    if (indoors && buildObjects.indexOf(indoors) < 0) indoors = null;
+    if (indoors && buildObjects.indexOf(indoors) < 0) { indoors = null; bedRest = 0; }
   }
   function drawRoomItem(g, key, box, filled) {
     g.save();
@@ -3839,10 +3854,45 @@ function validConversation(value, p) {
       }
     }
     var feet = indoorFeet();
-    g.translate(feet.x, feet.y);
-    g.scale(1.35, 1.35);
-    g.translate(-player.x, -player.y);
-    drawPlayer(g);
+    if (bedRest > 0) {
+      g.save();
+      g.translate(R.bed.x + R.bed.w - 14, R.bed.y + 30);
+      g.rotate(-Math.PI / 2);
+      g.scale(1.2, 1.2);
+      g.translate(-player.x, -player.y);
+      drawPlayer(g);
+      g.restore();
+      drawChildLine(g, R.bed.x - 8, R.bed.y - 46);
+    } else {
+      g.translate(feet.x, feet.y);
+      g.scale(1.35, 1.35);
+      g.translate(-player.x, -player.y);
+      drawPlayer(g);
+    }
+    g.restore();
+  }
+  function drawChildLine(g, x, y) {
+    var text = CHILD_REST_LINE;
+    g.save();
+    g.setTransform(dpr, 0, 0, dpr, 0, 0);
+    inkStyle(g);
+    g.font = 'bold 18px "Avenir Next", sans-serif';
+    var w = Math.ceil(g.measureText(text).width) + 24;
+    var bx = Math.max(10, Math.min(viewW - w - 10, x));
+    var by = Math.max(50, y);
+    inkBox(g, bx, by, w, 34, '#fffaf2', 14);
+    g.beginPath();
+    g.moveTo(bx + 28, by + 34);
+    g.lineTo(bx + 40, by + 46);
+    g.lineTo(bx + 46, by + 34);
+    g.closePath();
+    g.fillStyle = '#fffaf2';
+    g.fill();
+    g.stroke();
+    g.fillStyle = '#3a2a1c';
+    g.textAlign = 'center';
+    g.textBaseline = 'middle';
+    g.fillText(text, bx + w / 2, by + 17);
     g.restore();
   }
   function physics(dt) {
@@ -4570,6 +4620,7 @@ function validConversation(value, p) {
   }
   function confirmSingle(h) {
     if (h.indoor) {
+      if (indoors && houseFurn(indoors).bed && hitRoom(roomBoxes().bed, h.sx, h.sy, 18)) return;
       var spot = indoorAim(h.sx, h.sy);
       if (spot) placeIndoor(spot.key);
       else { var why = selectedKey() === 'flower' || selectedKey() === 'fence' || selectedKey() === 'door' || selectedKey() === 'window' ? ('The ' + selectedKey() + ' goes outside!') : (selectedKey() === 'torch' ? 'The torch goes on the wall!' : (selectedKey() === 'bed' ? 'The bed goes here!' : (selectedKey() === 'table' ? 'The table goes here!' : ''))); if (why) showToast(why, 1.8); }
@@ -5196,16 +5247,22 @@ function validConversation(value, p) {
     g.beginPath(); g.moveTo(5.6, -32.7 - bob); g.lineTo(8.4, -32.2 - bob); g.stroke();
     g.fillStyle = '#fffdf8';
     g.strokeStyle = '#51493c'; g.lineWidth = 0.9;
-    g.beginPath(); g.arc(3.8, -30.4 - bob, 1.7, 0, 6.3); g.fill(); g.stroke();
-    g.beginPath(); g.arc(7, -30.4 - bob, 1.7, 0, 6.3); g.fill(); g.stroke();
-    g.fillStyle = '#51493c';
-    g.beginPath(); g.arc(4.15, -30.2 - bob, 0.85, 0, 6.3); g.fill();
-    g.beginPath(); g.arc(7.35, -30.2 - bob, 0.85, 0, 6.3); g.fill();
-    g.fillStyle = '#fff';
-    g.beginPath(); g.arc(3.7, -30.6 - bob, 0.32, 0, 6.3); g.fill();
-    g.beginPath(); g.arc(6.9, -30.6 - bob, 0.32, 0, 6.3); g.fill();
-    g.strokeStyle = '#d06a5c'; g.lineWidth = 1.1;
-    g.beginPath(); g.arc(5.4, -28.2 - bob, 2.2, 0.2, Math.PI - 0.2); g.stroke();
+    if (bedRest > 0) {
+      g.beginPath(); g.moveTo(2.4, -30.4 - bob); g.lineTo(5.4, -30.4 - bob); g.stroke();
+      g.beginPath(); g.moveTo(5.8, -30.4 - bob); g.lineTo(8.6, -30.4 - bob); g.stroke();
+      g.beginPath(); g.arc(5.4, -28.6 - bob, 1.6, 0.15, Math.PI - 0.15); g.stroke();
+    } else {
+      g.beginPath(); g.arc(3.8, -30.4 - bob, 1.7, 0, 6.3); g.fill(); g.stroke();
+      g.beginPath(); g.arc(7, -30.4 - bob, 1.7, 0, 6.3); g.fill(); g.stroke();
+      g.fillStyle = '#51493c';
+      g.beginPath(); g.arc(4.15, -30.2 - bob, 0.85, 0, 6.3); g.fill();
+      g.beginPath(); g.arc(7.35, -30.2 - bob, 0.85, 0, 6.3); g.fill();
+      g.fillStyle = '#fff';
+      g.beginPath(); g.arc(3.7, -30.6 - bob, 0.32, 0, 6.3); g.fill();
+      g.beginPath(); g.arc(6.9, -30.6 - bob, 0.32, 0, 6.3); g.fill();
+      g.strokeStyle = '#d06a5c'; g.lineWidth = 1.1;
+      g.beginPath(); g.arc(5.4, -28.2 - bob, 2.2, 0.2, Math.PI - 0.2); g.stroke();
+    }
     g.fillStyle = 'rgba(255,120,120,0.5)';
     g.beginPath(); g.arc(2.2, -28 - bob, 1.35, 0, 6.3); g.fill();
     if (hasHat()) {
@@ -5730,6 +5787,73 @@ function validConversation(value, p) {
     fetch(new URL('/audio/index.json', BRAIN_URL).href, { credentials: 'omit' }).then(function (r) { return r.ok ? r.json() : {}; }).then(function (map) {
       if (map && typeof map === 'object' && !Array.isArray(map)) { voiceIndex = map; nameVoiceStatus(); }
     }).catch(function () { /* Offline speech stays available. */ });
+  }
+  // Child rest line. Not Jenny and not the Jenny voiceIndex.
+  // Exact sentence: "I am resting."
+  // Optional clip (add later, do not generate with en-US-JennyNeural):
+  //   audio/child/i-am-resting.mp3
+  //   Voice: a child neural voice, for example Microsoft en-US-AnaNeural.
+  // Until that file exists, the browser speaks the same sentence with a
+  // non-Jenny voice and a higher pitch.
+  var CHILD_REST_LINE = 'I am resting.';
+  var CHILD_REST_SRC = 'audio/child/i-am-resting.mp3';
+  var childAudio = null, childUtterance = null;
+  function pickVoiceChild() {
+    try {
+      var voices = speechSynthesis.getVoices() || [];
+      var gb = pickVoiceGB();
+      var i, v;
+      for (i = 0; i < voices.length; i++) {
+        v = voices[i];
+        if (/jenny/i.test(v.name || '')) continue;
+        if (/child|kid|junior|\bana\b/i.test(v.name || '')) return v;
+      }
+      for (i = 0; i < voices.length; i++) {
+        v = voices[i];
+        if (gb && v === gb) continue;
+        if (/jenny/i.test(v.name || '')) continue;
+        if (/^en-US/i.test(v.lang || '')) return v;
+      }
+    } catch (err) { /* optional */ }
+    return null;
+  }
+  function speakChildTTS(text) {
+    if (!speechOn || !window.speechSynthesis) return;
+    try {
+      var u = new SpeechSynthesisUtterance(text);
+      childUtterance = u;
+      u.lang = 'en-US';
+      u.rate = 0.9;
+      u.pitch = 1.55;
+      u.volume = 1;
+      var v = pickVoiceChild();
+      if (v) { u.voice = v; u.lang = v.lang; }
+      u.onend = u.onerror = function () { if (childUtterance === u) childUtterance = null; };
+      speechSynthesis.speak(u);
+    } catch (err) { /* speech is optional */ }
+  }
+  function speakChild(text) {
+    if (!speechOn || !text) return;
+    if (childAudio && !childAudio.ended && !childAudio.paused) return;
+    if (childUtterance) return;
+    var a = new Audio(CHILD_REST_SRC);
+    childAudio = a;
+    a.preload = 'auto';
+    var fell = false;
+    function fallback() {
+      if (fell) return;
+      fell = true;
+      if (childAudio === a) {
+        a.onended = a.onerror = null;
+        try { a.pause(); } catch (err) { /* missing clip */ }
+        childAudio = null;
+      }
+      speakChildTTS(text);
+    }
+    a.onerror = fallback;
+    a.onended = function () { if (childAudio === a) childAudio = null; };
+    var played = a.play();
+    if (played && played.then) played.catch(fallback);
   }
   function speechLive() {
     if (enAudio && !enAudio.ended && !enAudio.paused) return true;
