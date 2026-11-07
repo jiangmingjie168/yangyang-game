@@ -4,4 +4,7 @@ License: https://creativecommons.org/publicdomain/zero/1.0/
 Source: tools/make-build-v1.1-audio.py
 
 cry-*.ogg are real recordings, not synthesized sounds. Authors and licenses are in CRIES.txt.
-engine.ogg is a trimmed Mixkit recording. See ENGINE.txt. It is not covered by CC0.
+engine-idle.ogg is a Mixkit car-idle recording. See ENGINE.txt. It is not covered by CC0.
+engine-drive.ogg is "Engine Sound" by kurt (OpenGameArt), CC-BY 3.0. https://opengameart.org/content/engine-sound
+Attribution: Engine Sound by kurt, CC-BY 3.0. https://creativecommons.org/licenses/by/3.0/
+The retired engine.ogg Mixkit slice is not played. See ENGINE.txt.
