@@ -1,136 +1,153 @@
 #!/usr/bin/env python3
-"""Paint the child sprite sheet. Flat illustrated frames, not a runtime sketch."""
+"""Cuter child sprite sheet. Walk frames still move the arms and feet."""
 from PIL import Image, ImageDraw
 
-OUT = (90, 62, 48, 255)
-SKIN = (255, 214, 186, 255)
-SKIN2 = (244, 184, 156, 255)
-HAIR = (62, 40, 32, 255)
-HAIR2 = (92, 62, 48, 255)
-SHIRT = (255, 92, 96, 255)
-SHIRT2 = (226, 70, 78, 255)
-POCKET = (255, 208, 96, 255)
-PANTS = (62, 122, 224, 255)
-PANTS2 = (46, 96, 190, 255)
-SHOE = (84, 58, 44, 255)
-SHOE2 = (120, 86, 64, 255)
-EYE = (54, 40, 34, 255)
-WHITE = (255, 253, 248, 255)
-MOUTH = (214, 96, 96, 255)
-BLUSH = (244, 150, 140, 150)
-LINE = 5
+# Warm storybook colors. Outlines stay thin so the face stays soft.
+SKIN = (255, 220, 196, 255)
+SKIN2 = (244, 196, 168, 255)
+HAIR = (110, 72, 48, 255)
+HAIR2 = (146, 98, 64, 255)
+SHIRT = (255, 112, 118, 255)
+SHIRT2 = (232, 86, 98, 255)
+BUTTON = (255, 214, 120, 255)
+SHORTS = (78, 148, 236, 255)
+SHORTS2 = (58, 118, 210, 255)
+SHOE = (150, 104, 70, 255)
+SHOE2 = (196, 150, 108, 255)
+EYE = (74, 52, 40, 255)
+WHITE = (255, 253, 250, 255)
+MOUTH = (214, 112, 108, 255)
+BLUSH = (255, 160, 150, 120)
+LINE = (120, 78, 58, 255)
 
 FW, FH = 96, 112
-# Feet sit on this point in every upright frame. Lying/swim frames use the same box.
-FEET = (48, 104)
+SCALE = 3
+W, H = FW * SCALE, FH * SCALE
 
 
-def canvas():
-    im = Image.new('RGBA', (FW * 2, FH * 2), (0, 0, 0, 0))
+def new():
+    im = Image.new('RGBA', (W, H), (0, 0, 0, 0))
     return im, ImageDraw.Draw(im)
 
 
-def blob(d, box, fill, width=LINE):
-    d.ellipse(box, fill=fill, outline=OUT, width=width)
+def ell(d, box, fill, width=4):
+    d.ellipse(box, fill=fill, outline=LINE, width=width)
 
 
-def round_box(d, box, fill, radius, width=LINE):
-    d.rounded_rectangle(box, radius=radius, fill=fill, outline=OUT, width=width)
+def pill(d, box, fill, radius, width=4):
+    d.rounded_rectangle(box, radius=radius, fill=fill, outline=LINE, width=width)
 
 
 def eye(d, x, y, closed=False):
     if closed:
-        d.arc([x - 10, y - 6, x + 10, y + 8], 200, 340, fill=EYE, width=4)
+        d.arc([x - 16, y - 8, x + 16, y + 14], 200, 340, fill=EYE, width=5)
         return
-    blob(d, [x - 9, y - 9, x + 9, y + 9], WHITE, 3)
-    blob(d, [x - 4, y - 4, x + 5, y + 5], EYE, 2)
-    d.ellipse([x - 4, y - 5, x - 1, y - 2], fill=WHITE)
+    ell(d, [x - 16, y - 16, x + 16, y + 16], WHITE, 4)
+    ell(d, [x - 8, y - 8, x + 9, y + 9], EYE, 3)
+    d.ellipse([x - 7, y - 8, x - 1, y - 2], fill=WHITE)
+    d.ellipse([x + 2, y + 2, x + 6, y + 6], fill=(255, 255, 255, 180))
 
 
-def face(d, cx, cy, closed=False, smile=True):
-    blob(d, [cx - 46, cy - 40, cx + 46, cy + 46], SKIN, LINE)
-    # Hair sits on top of the head, with short side locks. The face stays open.
-    d.pieslice([cx - 50, cy - 52, cx + 50, cy + 10], 200, 340, fill=HAIR, outline=OUT, width=LINE)
-    d.ellipse([cx - 52, cy - 18, cx - 30, cy + 16], fill=HAIR)
-    d.ellipse([cx + 30, cy - 18, cx + 52, cy + 16], fill=HAIR)
-    d.ellipse([cx - 22, cy - 30, cx + 6, cy - 6], fill=HAIR)
-    d.ellipse([cx - 16, cy - 48, cx - 2, cy - 32], fill=HAIR2)
-    eye(d, cx - 16, cy + 8, closed)
-    eye(d, cx + 18, cy + 8, closed)
-    d.ellipse([cx - 36, cy + 18, cx - 20, cy + 30], fill=BLUSH)
-    d.ellipse([cx + 20, cy + 18, cx + 36, cy + 30], fill=BLUSH)
-    if smile:
-        d.arc([cx - 12, cy + 18, cx + 16, cy + 40], 15, 165, fill=MOUTH, width=4)
+def face(d, cx, cy, closed=False):
+    # Ears peek out before the hair cap.
+    ell(d, [cx - 78, cy - 8, cx - 52, cy + 28], SKIN, 4)
+    ell(d, [cx + 52, cy - 8, cx + 78, cy + 28], SKIN, 4)
+    ell(d, [cx - 70, cy - 64, cx + 70, cy + 72], SKIN, 5)
+    # Soft bowl of hair, bangs stop above the eyes.
+    d.pieslice([cx - 76, cy - 78, cx + 76, cy + 36], 188, 352, fill=HAIR, outline=LINE, width=5)
+    d.ellipse([cx - 28, cy - 86, cx + 6, cy - 52], fill=HAIR2)
+    d.ellipse([cx - 58, cy - 20, cx - 28, cy + 18], fill=HAIR)
+    d.ellipse([cx + 30, cy - 18, cx + 60, cy + 16], fill=HAIR)
+    d.ellipse([cx - 34, cy - 28, cx + 8, cy + 2], fill=HAIR)
+    eye(d, cx - 26, cy + 10, closed)
+    eye(d, cx + 28, cy + 10, closed)
+    d.ellipse([cx - 58, cy + 24, cx - 34, cy + 42], fill=BLUSH)
+    d.ellipse([cx + 34, cy + 24, cx + 58, cy + 42], fill=BLUSH)
+    d.arc([cx - 16, cy + 28, cx + 20, cy + 52], 18, 162, fill=MOUTH, width=5)
 
 
-def shoe(d, x, y, w=28, h=16):
-    round_box(d, [x, y, x + w, y + h], SHOE, 6, 4)
-    d.rectangle([x + 4, y + 3, x + w - 6, y + 7], fill=SHOE2)
+def shoe(d, x, y, w=40, h=22):
+    pill(d, [x, y, x + w, y + h], SHOE, 10, 4)
+    d.rounded_rectangle([x + 4, y + 4, x + w - 8, y + 10], radius=4, fill=SHOE2)
 
 
-def new2():
-    im = Image.new('RGBA', (FW * 2, FH * 2), (0, 0, 0, 0))
-    return im, ImageDraw.Draw(im)
+def arm(d, x, y, reach):
+    pill(d, [x, y, x + 28, y + 58 + reach], SKIN, 14, 4)
+    ell(d, [x - 2, y + 46 + reach, x + 30, y + 74 + reach], SKIN2, 4)
+
+
+def leg(d, x, top, bot, color):
+    pill(d, [x, top, x + 30, bot], color, 12, 4)
+    shoe(d, x - 6, bot - 8, 42, 24)
+
+
+def shadow(d, cx, feet):
+    d.ellipse([cx - 46, feet - 10, cx + 46, feet + 12], fill=(70, 50, 36, 40))
 
 
 def frame_stand(step):
-    im, d = new2()
-    cx, feet = 96, 208
-    d.ellipse([cx - 34, feet - 10, cx + 34, feet + 6], fill=(40, 30, 20, 46))
-    swing = 18 * (step or 0)
-    # back arm
-    round_box(d, [cx - 62, 108 - swing, cx - 34, 160 - swing], SKIN, 16, 6)
+    im, d = new()
+    cx, feet = W // 2, 312
+    shadow(d, cx, feet)
+    # Opposite arm and leg so the walk reads at a small size.
     if step > 0:
-        legs = [(-36, 142, 184, PANTS), (16, 158, 204, PANTS2)]
+        arm(d, cx - 78, 150, -18)
+        leg(d, cx - 40, 214, 292, SHORTS)
+        leg(d, cx + 8, 188, 250, SHORTS2)
+        arm(d, cx + 46, 168, 16)
     elif step < 0:
-        legs = [(14, 142, 184, PANTS), (-34, 158, 204, PANTS2)]
+        arm(d, cx - 78, 168, 16)
+        leg(d, cx - 36, 188, 250, SHORTS)
+        leg(d, cx + 6, 214, 292, SHORTS2)
+        arm(d, cx + 46, 150, -18)
     else:
-        legs = [(-24, 150, 198, PANTS), (2, 150, 198, PANTS2)]
-    for ox, top, bot, color in legs:
-        round_box(d, [cx + ox, top, cx + ox + 28, bot - 8], color, 12, 6)
-        round_box(d, [cx + ox - 4, bot - 16, cx + ox + 32, bot + 8], SHOE, 8, 5)
-    round_box(d, [cx - 40, 96, cx + 40, 162], SHIRT, 22, 7)
-    d.rounded_rectangle([cx - 14, 112, cx + 16, 132], radius=4, fill=POCKET)
-    d.rectangle([cx - 28, 140, cx + 28, 154], fill=SHIRT2)
-    round_box(d, [cx + 24, 104 + swing, cx + 54, 158 + swing], SKIN, 16, 6)
-    d.ellipse([cx + 28, 146 + swing, cx + 50, 168 + swing], fill=SKIN2)
-    face(d, cx, 62, closed=False)
-    return im
-
-
-def frame_sit():
-    im, d = new2()
-    cx, feet = 96, 208
-    d.ellipse([cx - 36, feet - 8, cx + 40, feet + 6], fill=(40, 30, 20, 46))
-    round_box(d, [cx - 8, 150, cx + 70, 188], PANTS, 16, 6)
-    round_box(d, [cx + 36, 168, cx + 86, 204], PANTS2, 14, 6)
-    shoe(d, cx + 52, 190, 40, 22)
-    round_box(d, [cx - 40, 108, cx + 36, 168], SHIRT, 20, 7)
-    d.rounded_rectangle([cx - 16, 122, cx + 12, 140], radius=4, fill=POCKET)
-    round_box(d, [cx + 16, 124, cx + 46, 170], SKIN, 14, 6)
-    face(d, cx - 4, 70, closed=False)
+        arm(d, cx - 74, 156, 0)
+        leg(d, cx - 34, 208, 300, SHORTS)
+        leg(d, cx + 6, 208, 300, SHORTS2)
+        arm(d, cx + 46, 156, 0)
+    pill(d, [cx - 48, 148, cx + 48, 236], SHIRT, 28, 5)
+    d.ellipse([cx - 10, 176, cx + 12, 198], fill=BUTTON)
+    d.rectangle([cx - 36, 214, cx + 36, 230], fill=SHIRT2)
+    face(d, cx, 108, closed=False)
     return im
 
 
 def frame_rest():
-    im, d = new2()
-    # Lying on the back, head at the right, feet to the left. Eyes closed.
-    d.ellipse([36, 150, 150, 176], fill=(40, 30, 20, 36))
-    round_box(d, [28, 118, 78, 156], PANTS, 14, 6)
-    shoe(d, 18, 128, 36, 22)
-    round_box(d, [62, 96, 132, 150], SHIRT, 18, 6)
-    d.rounded_rectangle([86, 108, 112, 124], radius=4, fill=POCKET)
-    face(d, 150, 108, closed=True)
+    im, d = new()
+    d.ellipse([40, 214, 250, 250], fill=(70, 50, 36, 36))
+    shoe(d, 18, 186, 40, 22)
+    pill(d, [36, 156, 78, 204], SHORTS, 16, 4)
+    pill(d, [64, 140, 168, 214], SHIRT, 28, 5)
+    d.ellipse([96, 162, 118, 184], fill=BUTTON)
+    pill(d, [118, 168, 150, 214], SKIN, 12, 4)
+    face(d, 196, 156, closed=True)
     return im
 
 
 def frame_swim():
-    im, d = new2()
-    d.ellipse([40, 150, 160, 176], fill=(40, 30, 20, 30))
-    round_box(d, [24, 118, 108, 156], SHIRT, 16, 6)
-    d.rounded_rectangle([48, 126, 74, 142], radius=4, fill=POCKET)
-    round_box(d, [96, 86, 128, 128], SKIN, 14, 6)
-    face(d, 148, 108, closed=False)
+    im, d = new()
+    d.ellipse([36, 220, 240, 254], fill=(70, 50, 36, 28))
+    shoe(d, 8, 176, 36, 20)
+    pill(d, [28, 150, 70, 198], SHORTS2, 16, 4)
+    pill(d, [58, 138, 156, 206], SHIRT, 26, 5)
+    d.ellipse([90, 156, 110, 176], fill=BUTTON)
+    pill(d, [130, 96, 162, 156], SKIN, 14, 4)
+    ell(d, [124, 84, 168, 120], SKIN2, 4)
+    face(d, 198, 150, closed=False)
+    return im
+
+
+def frame_sit():
+    im, d = new()
+    cx, feet = W // 2, 312
+    shadow(d, cx + 10, feet)
+    pill(d, [cx - 10, 210, cx + 86, 268], SHORTS, 18, 4)
+    pill(d, [cx + 40, 236, cx + 108, 286], SHORTS2, 16, 4)
+    shoe(d, cx + 70, 276, 44, 24)
+    arm(d, cx + 28, 168, 6)
+    pill(d, [cx - 52, 156, cx + 40, 236], SHIRT, 26, 5)
+    d.ellipse([cx - 16, 184, cx + 6, 206], fill=BUTTON)
+    face(d, cx - 8, 112, closed=False)
     return im
 
 

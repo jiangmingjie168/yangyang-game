@@ -577,7 +577,7 @@
 <div id="app">
   <canvas id="view" width="800" height="400"></canvas>
   <div id="hud">
-    <span id="build-version" aria-label="Build version">build cd91b62+ux39</span>
+    <span id="build-version" aria-label="Build version">build cd91b62+ux40</span>
     <div class="topbar">
       <button id="quest" type="button">
         <canvas id="quest-icon" width="128" height="128"></canvas>
@@ -4230,7 +4230,7 @@ function validConversation(value, p) {
     updateQuest();
     saveSoon();
   }
-  function mine(tx, ty, fromBreak) {
+  function mine(tx, ty, fromBreak, loose) {
     var id = get(tx, ty);
     // Rod/boat on water: tap-to-use only. Break always digs so water leaves a mark.
     if (id === WATER && !fromBreak) {
@@ -4238,7 +4238,7 @@ function validConversation(value, p) {
       if (sk === 'rod') { if (inReach(tx, ty)) startFishing(tx, ty); return; }
       if (sk === 'boat') { if (inReach(tx, ty)) placeBoat(tx, ty); return; }
     }
-    if (!mineable(id) || !inReach(tx, ty)) {
+    if (!mineable(id) || (!loose && !inReach(tx, ty))) {
       var key = KEY_OF[id];
       if (key) showWord(key);
       return;
@@ -4266,6 +4266,29 @@ function validConversation(value, p) {
   }
   function wallSupport(id) {
     return id === GRASS || id === DIRT || id === SAND || id === STONE || id === PLANKS || id === WOOD || id === HOUSE || id === BEDROCK;
+  }
+  // Misplaced fill blocks and windows with nothing under them. Leaves stay, so a tree canopy is not a pile of floating blocks.
+  var RECLAIM_FLOAT = {};
+  [GRASS, DIRT, SAND, STONE, WOOD, PLANKS, HOUSE, WINDOW].forEach(function (id) { RECLAIM_FLOAT[id] = 1; });
+  function blockIsFloating(tx, ty) {
+    var id = get(tx, ty);
+    if (!RECLAIM_FLOAT[id]) return false;
+    if (solid(get(tx, ty + 1))) return false;
+    if (id === WINDOW && (wallSupport(get(tx - 1, ty)) || wallSupport(get(tx + 1, ty)))) return false;
+    return true;
+  }
+  function craftableFloating(b) {
+    if (!b) return false;
+    var y = Math.floor(b.y + b.h), x, n = 0, seen = 0;
+    for (x = Math.floor(b.x); x < Math.ceil(b.x + b.w); x++) {
+      if (x < 0 || x >= W) continue;
+      seen++;
+      if (y >= 0 && y < H && solid(get(x, y))) n++;
+    }
+    return seen > 0 && n === 0;
+  }
+  function reclaimReach(tx, ty) {
+    return inReach(tx, ty) || fillReach(tx, ty);
   }
   // Where a crafted item is allowed to sit. Empty string means the spot is fine.
   function specialPlaceLine(key, tx, ty) {
@@ -4660,7 +4683,8 @@ function validConversation(value, p) {
   function fillCellOpen(key, tx, ty) {
     if (tx < 1 || ty < 1 || tx >= W - 1 || ty >= H - 1) return false;
     if (!fillReach(tx, ty) || get(tx, ty) !== AIR) return false;
-    if (cellHasAnimal(tx, ty) || craftableAt(tx, ty)) return false;
+    if (craftableAt(tx, ty)) return false;
+    // An animal in this cell is lifted onto the new block, not treated as a wall.
     if (specialPlaceLine(key, tx, ty)) return false;
     return true;
   }
@@ -4716,7 +4740,9 @@ function validConversation(value, p) {
       return;
     }
     if (!fillCellOpen(key, tx, ty) || !solid(get(tx, ty + 1))) return;
+    var snap = bodySnap();
     if (!liftForFill(tx, ty)) {
+      bodyRestore(snap);
       if (!h.spokeBad) { h.spokeBad = true; showToast('No room!', 1.6); }
       h.blocked = true;
       return;
@@ -4726,12 +4752,25 @@ function validConversation(value, p) {
       h.filled[id] = 1;
       h.placedN++;
       if (!h.saidItem) { h.saidItem = true; showWord(buildMode ? buildMaterial() : key); }
+    } else bodyRestore(snap);
+  }
+  function bodySnap() {
+    return {
+      x: player.x, y: player.y, vy: player.vy, g: onGround,
+      list: animals.map(function (a) { return [a, a.x, a.y, a.vx]; })
+    };
+  }
+  function bodyRestore(s) {
+    player.x = s.x; player.y = s.y; player.vy = s.vy; onGround = s.g;
+    var i;
+    for (i = 0; i < s.list.length; i++) {
+      s.list[i][0].x = s.list[i][1];
+      s.list[i][0].y = s.list[i][2];
+      s.list[i][0].vx = s.list[i][3];
     }
   }
-  function liftForFill(tx, ty) {
-    if (!overlapsPlayer(tx, ty)) return !collides(player.x, player.y);
-    if (!solid(get(tx, ty + 1))) return false;
-    var savedX = player.x, savedY = player.y, foot = ty * TILE - 0.01;
+  function standSpots(tx, ty) {
+    var foot = ty * TILE - 0.01;
     var spots = [{ x: (tx + 0.5) * TILE, y: foot }];
     var step, dir, nx;
     for (step = 1; step <= 3; step++) {
@@ -4742,20 +4781,98 @@ function validConversation(value, p) {
         spots.push({ x: (nx + 0.5) * TILE, y: foot });
       }
     }
-    var i, s;
+    return spots;
+  }
+  function animalsInCell(tx, ty) {
+    var list = [], i, a;
+    for (i = 0; i < animals.length; i++) {
+      a = animals[i];
+      if (a.x + 12 > tx * TILE && a.x - 12 < (tx + 1) * TILE && a.y > ty * TILE && a.y - 24 < (ty + 1) * TILE) list.push(a);
+    }
+    return list;
+  }
+  function animalClearance(type) {
+    if (type === 'horse' || type === 'cow') return 40;
+    if (type === 'sheep' || type === 'pig') return 30;
+    return 22;
+  }
+  function animalStandOk(a, x, y, tx, ty) {
+    var col = Math.floor(x / TILE);
+    if (col < 1 || col >= W - 1) return false;
+    var top = y - animalClearance(a.type);
+    var y0 = Math.floor(top / TILE);
+    var y1 = Math.floor((y - 1) / TILE);
+    var row;
+    for (row = y0; row <= y1; row++) if (solid(get(col, row))) return false;
+    var under = Math.floor((y + 2) / TILE);
+    if (solid(get(col, under))) return true;
+    return col === tx && under === ty;
+  }
+  function liftPlayerForFill(tx, ty) {
+    if (!overlapsPlayer(tx, ty)) return !collides(player.x, player.y);
+    var spots = standSpots(tx, ty), i, s;
+    var sx = player.x, sy = player.y, sv = player.vy, sg = onGround;
     for (i = 0; i < spots.length; i++) {
       s = spots[i];
-      if (collides(s.x, s.y)) continue;
       player.x = s.x;
       player.y = s.y;
       player.vy = 0;
       onGround = true;
       if (!overlapsPlayer(tx, ty) && !collides(player.x, player.y)) return true;
     }
-    player.x = savedX;
-    player.y = savedY;
-    player.vy = 0;
+    player.x = sx; player.y = sy; player.vy = sv; onGround = sg;
     return false;
+  }
+  function liftAnimalsForFill(tx, ty) {
+    var group = animalsInCell(tx, ty);
+    if (!group.length) return true;
+    var spots = standSpots(tx, ty);
+    var saved = group.map(function (a) { return { a: a, x: a.x, y: a.y, vx: a.vx }; });
+    var g, i, s, ax, ok;
+    for (g = 0; g < group.length; g++) {
+      ok = false;
+      for (i = 0; i < spots.length; i++) {
+        s = spots[i];
+        ax = s.x + (g === 0 ? 0 : (g % 2 ? 6 : -6));
+        if (!animalStandOk(group[g], ax, s.y, tx, ty)) continue;
+        group[g].x = ax;
+        group[g].y = s.y;
+        group[g].vx = 0;
+        group[g].wait = Math.max(group[g].wait || 0, 0.35);
+        ok = true;
+        break;
+      }
+      if (!ok) {
+        for (i = 0; i < saved.length; i++) {
+          saved[i].a.x = saved[i].x; saved[i].a.y = saved[i].y; saved[i].a.vx = saved[i].vx;
+        }
+        return false;
+      }
+    }
+    if (animalsInCell(tx, ty).length) {
+      for (i = 0; i < saved.length; i++) {
+        saved[i].a.x = saved[i].x; saved[i].a.y = saved[i].y; saved[i].a.vx = saved[i].vx;
+      }
+      return false;
+    }
+    return true;
+  }
+  function liftForFill(tx, ty) {
+    var needPal = animalsInCell(tx, ty).length > 0;
+    var needPlayer = overlapsPlayer(tx, ty);
+    if (!needPlayer && !needPal) return !collides(player.x, player.y);
+    if (!solid(get(tx, ty + 1))) return false;
+    var sx = player.x, sy = player.y, sv = player.vy, sg = onGround;
+    if (!liftPlayerForFill(tx, ty)) return false;
+    if (!liftAnimalsForFill(tx, ty)) {
+      player.x = sx; player.y = sy; player.vy = sv; onGround = sg;
+      return false;
+    }
+    if (collides(player.x, player.y) || overlapsPlayer(tx, ty)) {
+      player.x = sx; player.y = sy; player.vy = sv; onGround = sg;
+      return false;
+    }
+    return true;
   }
   function dragPaint(h) {
     if (!isMultiPlace(activePlaceKey())) return;
@@ -4832,6 +4949,19 @@ function validConversation(value, p) {
   function tapWorld(wx, wy, sx, sy, fy) {
     var ropeTx = Math.floor(wx / TILE), ropeTy = Math.floor(wy / TILE), ropeId = get(ropeTx, ropeTy);
     if (!(ropeId !== AIR && mineable(ropeId)) && ropeHit(wx, wy)) { climbRope(); return; }
+    var floated = craftableAt(ropeTx, ropeTy);
+    if (floated && craftableFloating(floated) && reclaimReach(ropeTx, ropeTy)) {
+      if ((inv[floated.item] || 0) >= 99) { showToast('Use some materials first!', 1.6); return; }
+      removeCraftable(floated);
+      showWord(floated.item);
+      return;
+    }
+    if (blockIsFloating(ropeTx, ropeTy) && reclaimReach(ropeTx, ropeTy)) {
+      var back = KEY_OF[get(ropeTx, ropeTy)];
+      if (back && (inv[back] || 0) >= 99) { showToast('Use some materials first!', 1.6); return; }
+      mine(ropeTx, ropeTy, true, true);
+      return;
+    }
     if(interactObject(wx,wy))return;
     if (boat) {
       var bdx = wx - boat.x, bdy = wy - (boat.y - 8);
