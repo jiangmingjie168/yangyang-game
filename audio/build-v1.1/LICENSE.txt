@@ -1,6 +1,7 @@
-Original self-synthesized instrumental composition and sound effects, except the animal cries.
+Original self-synthesized instrumental composition and sound effects, except the animal cries and the car engine.
 Dedicated to the public domain under CC0 1.0 Universal.
 License: https://creativecommons.org/publicdomain/zero/1.0/
 Source: tools/make-build-v1.1-audio.py
 
 cry-*.ogg are real recordings, not synthesized sounds. Authors and licenses are in CRIES.txt.
+engine.ogg is a trimmed Mixkit recording. See ENGINE.txt. It is not covered by CC0.
