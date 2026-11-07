@@ -577,7 +577,7 @@
 <div id="app">
   <canvas id="view" width="800" height="400"></canvas>
   <div id="hud">
-    <span id="build-version" aria-label="Build version">build cd91b62+ux41</span>
+    <span id="build-version" aria-label="Build version">build cd91b62+ux42</span>
     <div class="topbar">
       <button id="quest" type="button">
         <canvas id="quest-icon" width="128" height="128"></canvas>
@@ -935,14 +935,14 @@ const NOUNS = new Set('grass dirt stone wood leaves sand water flower planks sti
 const PREF_VALUES = { color: [], animal: ['cat','dog','cow','pig','sheep','chicken','duck','horse','rabbit'], food: ['fish','wheat','seed'], build: ['house','table','door','bed','fence','torch','boat'] };
 function conversationLines(p) {
   if (p.event === 'name_ask') return ['Hi! What is your name?', 'Hello! What is your name?'];
-  if (p.event === 'weather_chat') return ['Look! I see the ' + p.weather + '!', 'We can see the ' + p.weather + '!'];
+  if (p.event === 'weather_chat') return ['Look! I see the ' + p.weather + '!', 'We can see the ' + p.weather + '!', 'Look at the ' + p.weather + '!', 'Nice! I see the ' + p.weather + '!'];
   if (p.event === 'recast') {
     if (p.target_tier === 3) return ['Good job! Well done!', 'Great! Good job!'];
     const word = p.child_said.toLowerCase().split(/[^a-z]+/).find(w => NOUNS.has(w));
     if (!word) return ['Good try! Say it again!'];
     const mass = ['grass','dirt','stone','wood','leaves','sand','water','planks','wool','rain','wheat'];
     const noun = (mass.includes(word) ? 'the ' : 'a ') + LABEL(word);
-    return p.target_tier === 1 ? ['Try: I see ' + noun + '!', 'Say: I see ' + noun + '!'] : ['I can see ' + noun + '!', 'We can see ' + noun + '!'];
+    return p.target_tier === 1 ? ['Try: I see ' + noun + '!', 'Say: I see ' + noun + '!', 'Look! I see ' + noun + '!'] : ['I can see ' + noun + '!', 'We can see ' + noun + '!', 'Look! I see ' + noun + '!'];
   }
   if (p.topic) {
     const values = PREF_VALUES[p.topic.slice(11)];
@@ -951,9 +951,13 @@ function conversationLines(p) {
   const favorite = p.prefs.build || p.prefs.animal || p.prefs.food;
   if (favorite) return ['You like the ' + favorite + '!', 'You like ' + favorite + '!'];
   const event = p.recent_events.at(-1), word = (event && event.word) || 'tree';
-  return ['Look! I see the ' + word + '!', 'We can see the ' + word + '!'];
+  return ['Look! I see the ' + word + '!', 'We can see the ' + word + '!', 'Nice! I see the ' + word + '!', 'Look at the ' + word + '!', 'Come and see!', 'You can do it!'];
 }
-function conversationTemplate(p) { return { say: conversationLines(p)[0], options: [], answer: null, done: true }; }
+function conversationTemplate(p) {
+  const lines = conversationLines(p);
+  const n = Number.isInteger(p.variety) ? p.variety : 0;
+  return { say: lines[Math.abs(n) % lines.length], options: [], answer: null, done: true };
+}
 function validConversation(value, p) {
   return !!value && Object.keys(value).filter(function (key) { return key !== 'audio_url'; }).sort().join(',') === 'answer,done,options,say' &&
     Array.isArray(value.options) && value.options.length === 0 && value.answer === null && value.done === true &&
@@ -992,7 +996,11 @@ function validConversation(value, p) {
     if (trigger === 'speech') return 'recast';
     return 'idle';
   }
-  function socialPayload(event) { return { event: event, child_name: childName || undefined, scene: sceneNow || 'grass', prefs: Object.assign({}, memory.prefs), recent_events: recentEvents.slice(-6) }; }
+  function socialVariety() {
+    var scenes = { home: 1, trees: 2, water: 3, meadow: 4, far: 5 };
+    return (trail.turns || 0) + (memory.small_talk_count || 0) + (scenes[sceneNow] || 0) * 3;
+  }
+  function socialPayload(event) { return { event: event, child_name: childName || undefined, scene: sceneNow || 'grass', prefs: Object.assign({}, memory.prefs), recent_events: recentEvents.slice(-6), variety: socialVariety() }; }
   function micRecording(id, active) { document.getElementById(id).classList.toggle('mic-recording', active); }
   function stopSocialListening() {
     clearTimeout(socialWatchdog); socialWatchdog = null;
@@ -1349,11 +1357,26 @@ function validConversation(value, p) {
     return key !== 'hello' && key !== 'jump' && key !== 'follow';
   }
   function chatWords() { return learned.filter(allowedChatWord); }
-  function oldWord(pool, except) {
-    return pool.filter(function (k) { return k !== except; }).sort(function (a, b) {
+  function oldWord(pool, except, advance) {
+    var list = pool.filter(function (k) { return k !== except; });
+    if (!list.length) return pool[0];
+    list.sort(function (a, b) {
       var ar = trail.reviews[a], br = trail.reviews[b];
-      return (ar ? ar.last + 1 : 0) - (br ? br.last + 1 : 0) || learned.indexOf(a) - learned.indexOf(b);
-    })[0];
+      return (ar ? ar.last : 0) - (br ? br.last : 0) || learned.indexOf(a) - learned.indexOf(b);
+    });
+    var least = trail.reviews[list[0]] ? trail.reviews[list[0]].last : 0;
+    var tied = list.filter(function (k) { return (trail.reviews[k] ? trail.reviews[k].last : 0) === least; });
+    var pick = tied[(trail.promptCursor || 0) % tied.length];
+    if (advance) trail.promptCursor = (trail.promptCursor || 0) + 1;
+    return pick;
+  }
+  function recentPromptWord() {
+    var i, e;
+    for (i = recentEvents.length - 1; i >= 0; i--) {
+      e = recentEvents[i];
+      if (e && allowedChatWord(e.word) && (e.action === 'met' || e.action === 'found' || e.action === 'caught' || e.action === 'built' || e.action === 'made')) return e.word;
+    }
+    return '';
   }
   function sceneAt(x) {
     var dx = x / TILE - origin;
@@ -1542,7 +1565,8 @@ function validConversation(value, p) {
     dismissGreeting();
     var pool = chatWords();
     if (pool.length < 2) return;
-    var target = allowedChatWord(event.key) ? event.key : oldWord(pool);
+    // Pet, fish, task, and place events keep their own word. Otherwise use what just happened, then rotate.
+    var target = allowedChatWord(event.key) ? event.key : (recentPromptWord() || oldWord(pool, '', true));
     // The first question stays with the event's anchor word.
     var other = oldWord(pool, target);
     var options = trail.turns % 2 ? [other, target] : [target, other];
@@ -1550,22 +1574,76 @@ function validConversation(value, p) {
     var tier = level.t1 >= 2 ? (level.t2 >= 2 ? 3 : 2) : 1;
     var day=new Date().toISOString().slice(0,10);if(trail.quizDay!==day){trail.quizDay=day;trail.quizzes=0;}trail.quizzes++;saveSoon();
     releaseChatInput();
+    var promptSalt = exerciseSalt(trail.promptCursor || 0, sceneNow, event.anchor);
+    trail.promptCursor = (trail.promptCursor || 0) + 1;
     dialogue = { context: { child_name: childName || undefined, recent_events: recentEvents.filter(function (e) { return allowedChatWord(e.word); }).slice(-6), last_answer: allowedChatWord(lastAnswer) ? lastAnswer : undefined }, misses: 0, anchor: event.anchor, scene: sceneNow, key: target, options: options, tier: tier,
-      turn: 0, at: chatClock, answered: false, pending: false, choices: tier === 1, sequence: 0 };
+      turn: 0, at: chatClock, answered: false, pending: false, choices: tier === 1, sequence: 0, promptSalt: promptSalt };
     paintIcon(document.getElementById('chat-face'), 'dog');
     document.getElementById('chat-picture').hidden = false;
     paintIcon(document.getElementById('chat-picture'), target);document.getElementById('chat-picture').setAttribute('aria-label','Listen: '+WORD[target][0]);
     requestChat(dialogue, 'prompt');
   }
+  function nounFor(key) {
+    var mass = ['grass', 'dirt', 'stone', 'wood', 'leaves', 'sand', 'water', 'planks', 'wool', 'rain', 'wheat'];
+    var word = WORD[key][0].toLowerCase();
+    return (mass.indexOf(key) >= 0 ? 'the ' : /^[aeiou]/.test(word) ? 'an ' : 'a ') + word;
+  }
+  function exerciseForms(key, tier, scene, anchor) {
+    var word = WORD[key][0].toLowerCase();
+    var noun = nounFor(key);
+    var shown = noun.charAt(0).toUpperCase() + noun.slice(1);
+    var animal = !!ANIMALS[key];
+    var forms;
+    if (tier <= 1) {
+      forms = ['What is this?', "What's this?", 'Your turn!', 'Look!'];
+      if (animal) forms.push('Who is this?');
+    } else if (tier === 2) {
+      forms = ["What's this?", 'What is this?', 'Can you say it?', 'Your turn!', 'Look!'];
+      if (animal) forms.push('Who is this?');
+    } else {
+      forms = [
+        'I see ' + noun + '. Say it!',
+        'Say ' + word + '!',
+        'Look! ' + shown + '.',
+        'Your turn! Say ' + word + '!',
+        'Can you say ' + word + '?'
+      ];
+      if (animal) forms.push('Who is this? Say ' + word + '!');
+      if (scene === 'water' && key === 'water') forms.push('Look! The water. Say it!');
+      if (scene === 'trees' && key === 'tree') forms.push('Look! A tree. Say it!');
+      if (scene === 'meadow' && key === 'flower') forms.push('Look! A flower. Say it!');
+      if (scene === 'home' && key === 'house') forms.push('Look! A house. Say it!');
+      if (anchor === 'pet' && animal) forms.push('Look! ' + shown + '.');
+    }
+    var seen = {}, out = [];
+    forms.forEach(function (line) { var id = line.toLowerCase(); if (!seen[id]) { seen[id] = 1; out.push(line); } });
+    return out;
+  }
+  function exerciseSalt(turn, scene, anchor) {
+    if (!turn) return 0;
+    var scenes = { home: 1, trees: 2, water: 3, meadow: 4, far: 5 };
+    var anchors = { task: 1, fish: 2, pet: 3, boat: 4, scene: 5, bed: 6, build: 7 };
+    return turn * 5 + (scenes[scene] || 0) + (anchors[anchor] || 0) * 2;
+  }
+  function exerciseOk(body, key, tier, scene, anchor) {
+    var forms = exerciseForms(key, tier, scene, anchor);
+    var i, line;
+    for (i = 0; i < forms.length; i++) {
+      line = forms[i].toLowerCase();
+      if (body === line) return true;
+      if (line.slice(-7) === 'say it!' && body === line.slice(0, -7) + 'your turn!') return true;
+    }
+    return false;
+  }
   function chatTemplate(d, feedback) {
     var done = d.turn >= 3 || feedback === 'success', say;
+    var tier = d.choices ? 1 : d.tier;
     if (done) say = 'Great!';
-    else if (d.tier === 2 && !d.choices) say = "What's this?";
-    else if (d.tier === 3 && !d.choices) {
-      var mass = ['grass', 'dirt', 'stone', 'wood', 'leaves', 'sand', 'water', 'planks', 'wool', 'rain', 'wheat'];
-      var word = WORD[d.key][0].toLowerCase();
-      say = 'I see ' + (mass.indexOf(d.key) >= 0 ? 'the ' : /^[aeiou]/.test(word) ? 'an ' : 'a ') + word + '. Say it!';
-    } else say = 'What is this?';
+    else {
+      var forms = exerciseForms(d.key, tier, d.scene, d.anchor);
+      var salt = Number.isInteger(d.promptSalt) ? d.promptSalt : exerciseSalt(trail.turns, d.scene, d.anchor);
+      say = forms[Math.abs(salt) % forms.length];
+    }
     if (!done && feedback === 'retry') say = 'Great! ' + say;
     return { say: say, options: d.options.slice(), answer: d.key, done: done };
   }
@@ -1574,7 +1652,7 @@ function validConversation(value, p) {
         reply.done !== expected.done || reply.answer !== d.key || !Array.isArray(reply.options) ||
         JSON.stringify(reply.options) !== JSON.stringify(d.options) || !reply.options.every(allowedChatWord)) return false;
     var tokens = reply.say.toLowerCase().match(/[a-z]+(?:'[a-z]+)?/g) || [];
-    var scaffold = "a an the i you we it this is see got can say what what's or great nice thanks thank good job well done let's keep exploring try look at again your turn found made built met caught rode said together ready remember friend more".split(' ');
+    var scaffold = "a an the i you we it this is see got can say what what's who where or great nice thanks thank good job well done let's keep exploring try look at again your turn found made built met caught rode said together ready remember friend more".split(' ');
     var vocabulary = scaffold.concat(chatContextLeads(d).join(' ').toLowerCase().match(/[a-z]+(?:'[a-z]+)?/g) || []).concat((d.choices || d.tier === 1 ? [] : d.options).reduce(function (all, key) { return all.concat(WORD[key][0].toLowerCase().split(' ')); }, []));
     if (!/^[A-Za-z ,.!?'’-]+$/.test(reply.say) || /[^\x20-\x7e]/.test(reply.say) || reply.say.length > 160 ||
         tokens.length < 1 || tokens.length > 12 || !tokens.every(function (w) { return vocabulary.indexOf(w) >= 0; })) return false;
@@ -1585,12 +1663,8 @@ function validConversation(value, p) {
     var lead = chatContextLeads(d).find(function (line) { return body.indexOf(line.toLowerCase() + ' ') === 0; });
     if (lead) body = body.slice(lead.length + 1);
     if (expected.done) return body === '' || /^(let's )?keep exploring!$/.test(body);
-    if (d.choices || d.tier === 1) {
-      return body === 'what is this?';
-    }
-    if (d.tier === 2) return body === "what's this?" || body === 'what is this?';
-    var sentence = expected.say.replace(praise, '').toLowerCase().split('. ')[0];
-    return body === sentence + '. say it!' || body === sentence + '. your turn!';
+    var tier = d.choices ? 1 : d.tier;
+    return exerciseOk(body, d.key, tier, d.scene, d.anchor);
   }
   function renderChat(d, reply, quiet) {
     if (dialogue !== d) return;
@@ -1670,6 +1744,7 @@ function validConversation(value, p) {
     Array.prototype.forEach.call(document.querySelectorAll('#chat-options button'), function (b) { b.disabled = true; });
     var timer, payload = { event: d.anchor, scene: d.scene, chapter: questIndex() < CHAPTER1 ? 1 : questIndex() < CHAPTER2 ? 2 : 3,
       target_word: d.key, options: d.options.slice(), learned_words: chatWords(), turn: d.turn,
+      prompt_salt: Number.isInteger(d.promptSalt) ? d.promptSalt : exerciseSalt(trail.turns, d.scene, d.anchor),
       tier: d.choices ? 1 : d.tier, feedback: feedback, child_name: d.context.child_name,
       recent_events: d.context.recent_events, last_answer: d.context.last_answer, recent_lines: recentLines.slice(-4) };
     if (childSaid) payload.child_said = String(childSaid).slice(0, 160);
@@ -1834,7 +1909,7 @@ function validConversation(value, p) {
     if (!spot || trailPickupDelay > 0 || trail.found[spot.id]) return false;
     var pool = chatWords(), collected = Object.keys(trail.found).map(function (id) { return trail.found[id]; });
     var fresh = pool.filter(function (key) { return collected.indexOf(key) < 0; });
-    var sticker = oldWord(fresh.length ? fresh : pool);
+    var sticker = oldWord(fresh.length ? fresh : pool, '', true);
     trail.found[spot.id] = sticker || true;
     var rewards = ['wood', 'stone', 'planks', 'wool', 'seed'].filter(allowedChatWord);
     if (rewards.length) {
@@ -1905,7 +1980,7 @@ function validConversation(value, p) {
     // A deep pit is a rescue, not a question. Hold the Speak prompt until they are out.
     var pitLocked = ropeShown || ropeClimb || (pitDepthTiles() >= 8 && !canWalkOut());
     if (!(buildMode || buildSession.active) && !dialogue && chatIdle > 0.8 && chatCooldown <= 0 && cardLeft <= 0 && chatQueue.length && !pitLocked) {
-      var priority = { fish: 4, boat: 4, pet: 2, task: 2, scene: 1 };
+      var priority = { fish: 4, boat: 4, pet: 3, task: 2, bed: 2, scene: 1 };
       chatQueue.sort(function (a, b) { return priority[b.anchor] - priority[a.anchor] || b.at - a.at; });
       var event = chatQueue.shift();
       if (chatWords().length >= 2) {
@@ -3801,6 +3876,7 @@ function validConversation(value, p) {
     if (!indoors || bedRest > 0 || !houseFurn(indoors).bed) return;
     bedRest = 1.6;
     speakChild(CHILD_REST_LINE);
+    if (allowedChatWord('bed')) { rememberEvent('scene', 'bed'); queueChat('scene', 'bed'); }
   }
   function bedTap(sx, sy) {
     if (!indoors || !houseFurn(indoors).bed) return false;
