@@ -579,7 +579,7 @@
   <canvas id="view" width="800" height="400"></canvas>
   <div id="hud">
     <span id="hunger-hint" hidden></span>
-    <span id="build-version" aria-label="Build version">build cd91b62+ux46</span>
+    <span id="build-version" aria-label="Build version">build cd91b62+ux51</span>
     <div class="topbar">
       <button id="quest" type="button">
         <canvas id="quest-icon" width="128" height="128"></canvas>
@@ -918,7 +918,7 @@ const BRAIN_TIMEOUT_MS = 6500;
   var seek = null, joyId = null;
   var trailSpots = [], dialogue = null, chatQueue = [], chatIdle = 0, chatCooldown = 0;
   var chatClock = 0, chatRecognizer = null, chatTimer = null, recognitionTimer = null, chatLastInput = 0;
-  var taskSnapshot = null, followTravel = 0, followLastX = 0, followReady = false, lastPetChatAt = -999;
+  var taskSnapshot = null, followTravel = 0, followLastX = 0, followReady = false, lastPetChatAt = -999, lastFollowChatAt = -999;
   var boatStartX = null, boatLanding = false, sceneNow = '';
   var childName = '', recentEvents = [], recentLines = [], lastAnswer = '';
   var welcome = null, lastGreeting = { id: -1, text: '' }, returningVisit = false;
@@ -937,6 +937,8 @@ const LABEL = key => key === 'rod' ? 'fishing rod' : key;
 const CHAT_EVENTS = ['name_ask', 'small_talk', 'weather_chat', 'recast'];
 const NOUNS = new Set('grass dirt stone wood leaves sand water flower planks stick table door torch bed house wool tree cow pig sheep chicken cat dog duck horse rabbit fence rain cloud sun moon star wheat seed fish rod boat wall roof window room gate'.split(' '));
 const PREF_VALUES = { color: [], animal: ['cat','dog','cow','pig','sheep','chicken','duck','horse','rabbit'], food: ['fish','wheat','seed'], build: ['house','table','door','bed','fence','torch','boat'] };
+const DAILY = ['Hello!', 'Thank you.', "I'm happy.", "Let's go!", 'Good morning.', 'Good night.', 'Please.', 'I love you.', 'See you!', 'Wow!'];
+function dailyForms(phrase) { return [phrase, 'Say ' + phrase, 'Can you say ' + phrase]; }
 function conversationLines(p) {
   if (p.event === 'name_ask') return ['Hi! What is your name?', 'Hello! What is your name?'];
   if (p.event === 'weather_chat') return ['Look! I see the ' + p.weather + '!', 'We can see the ' + p.weather + '!', 'Look at the ' + p.weather + '!', 'Nice! I see the ' + p.weather + '!'];
@@ -955,7 +957,7 @@ function conversationLines(p) {
   const favorite = p.prefs.build || p.prefs.animal || p.prefs.food;
   if (favorite) return ['You like the ' + favorite + '!', 'You like ' + favorite + '!'];
   const event = p.recent_events.at(-1), word = (event && event.word) || 'tree';
-  return ['Look! I see the ' + word + '!', 'We can see the ' + word + '!', 'Nice! I see the ' + word + '!', 'Look at the ' + word + '!', 'Come and see!', 'You can do it!'];
+  return ['Look! I see the ' + word + '!', 'We can see the ' + word + '!', 'Nice! I see the ' + word + '!', 'Look at the ' + word + '!', 'Come and see!', 'You can do it!'].concat(DAILY);
 }
 function conversationTemplate(p) {
   const lines = conversationLines(p);
@@ -966,7 +968,7 @@ function validConversation(value, p) {
   return !!value && Object.keys(value).filter(function (key) { return key !== 'audio_url'; }).sort().join(',') === 'answer,done,options,say' &&
     Array.isArray(value.options) && value.options.length === 0 && value.answer === null && value.done === true &&
     typeof value.say === 'string' && value.say.length <= 160 && !/[^\x20-\x7e]/.test(value.say) &&
-    (value.say.match(/[A-Za-z]+/g) || []).length >= 3 &&
+    (value.say.match(/[A-Za-z]+/g) || []).length >= 1 &&
     (value.say.match(/[A-Za-z]+/g) || []).length <= 6 && conversationLines(p).includes(value.say);
 }
 
@@ -1374,13 +1376,33 @@ function validConversation(value, p) {
     if (advance) trail.promptCursor = (trail.promptCursor || 0) + 1;
     return pick;
   }
-  function recentPromptWord() {
+  function recentPromptWord(skip) {
     var i, e;
     for (i = recentEvents.length - 1; i >= 0; i--) {
       e = recentEvents[i];
-      if (e && allowedChatWord(e.word) && (e.action === 'met' || e.action === 'found' || e.action === 'caught' || e.action === 'built' || e.action === 'made')) return e.word;
+      if (!e || !allowedChatWord(e.word)) continue;
+      // A pet that is just walking along is not a new meeting.
+      if (skip && e.word === skip && e.action === 'met') continue;
+      if (e.action === 'met' || e.action === 'found' || e.action === 'caught' || e.action === 'built' || e.action === 'made') return e.word;
     }
     return '';
+  }
+  function followingType() {
+    var buddy = animals.filter(function (a) { return a.tamed; })[0];
+    return buddy ? buddy.type : '';
+  }
+  function scenePromptWord() {
+    return sceneNow === 'water' ? 'water' : sceneNow === 'trees' ? 'tree' : sceneNow === 'home' ? 'house' : sceneNow === 'meadow' ? 'flower' : '';
+  }
+  // While a pet follows, idle prompts rotate through other learned words and the place.
+  function rotatedExploreWord(skip) {
+    var sceneKey = scenePromptWord();
+    var pool = chatWords().filter(function (k) { return k && k !== skip; });
+    var cursor = trail.promptCursor || 0;
+    trail.promptCursor = cursor + 1;
+    if (sceneKey && allowedChatWord(sceneKey) && sceneKey !== skip && cursor % 3 === 0) return sceneKey;
+    if (pool.length) return oldWord(pool, '', false);
+    return sceneKey && allowedChatWord(sceneKey) && sceneKey !== skip ? sceneKey : '';
   }
   function sceneAt(x) {
     var dx = x / TILE - origin;
@@ -1392,7 +1414,7 @@ function validConversation(value, p) {
     trail = { found: {}, reviews: {}, turns: 0, scenes: {}, levels: {}, speaking: [], rounds: 0, lastRound: {}, discoveries:{}, quizDay:new Date().toISOString().slice(0,10), quizzes:0 };
     chatQueue = []; chatIdle = 0; chatCooldown = 0; taskSnapshot = null;
     boatStartX = null; boatLanding = false;
-    followTravel = 0; followLastX = player.x; followReady = false;
+    followTravel = 0; followLastX = player.x; followReady = false; lastFollowChatAt = -999;
     sceneNow = sceneAt(player.x); trail.scenes[sceneNow] = 1;
     trailPickupDelay = 0;
     buildTrailSpots();
@@ -1569,8 +1591,11 @@ function validConversation(value, p) {
     dismissGreeting();
     var pool = chatWords();
     if (pool.length < 2) return;
-    // Pet, fish, task, and place events keep their own word. Otherwise use what just happened, then rotate.
-    var target = allowedChatWord(event.key) ? event.key : (recentPromptWord() || oldWord(pool, '', true));
+    // A tap on the dog still asks about the dog. Walking with it does not.
+    var skip = event.anchor === 'pet' ? '' : followingType();
+    var keyed = allowedChatWord(event.key) && event.key !== skip;
+    var target = keyed ? event.key : (recentPromptWord(skip) || oldWord(pool, skip, true));
+    var phrase = event.anchor === 'pet' ? '' : (event.phrase || '');
     // The first question stays with the event's anchor word.
     var other = oldWord(pool, target);
     var options = trail.turns % 2 ? [other, target] : [target, other];
@@ -1580,9 +1605,9 @@ function validConversation(value, p) {
     releaseChatInput();
     var promptSalt = exerciseSalt(trail.promptCursor || 0, sceneNow, event.anchor);
     trail.promptCursor = (trail.promptCursor || 0) + 1;
-    dialogue = { context: { child_name: childName || undefined, recent_events: recentEvents.filter(function (e) { return allowedChatWord(e.word); }).slice(-6), last_answer: allowedChatWord(lastAnswer) ? lastAnswer : undefined }, misses: 0, anchor: event.anchor, scene: sceneNow, key: target, options: options, tier: tier,
-      turn: 0, at: chatClock, answered: false, pending: false, choices: tier === 1, sequence: 0, promptSalt: promptSalt };
-    paintIcon(document.getElementById('chat-face'), 'dog');
+    dialogue = { context: { child_name: childName || undefined, recent_events: recentEvents.filter(function (e) { return allowedChatWord(e.word); }).slice(-6), last_answer: allowedChatWord(lastAnswer) ? lastAnswer : undefined }, misses: 0, anchor: event.anchor, scene: sceneNow, key: target, options: options, tier: phrase ? 3 : tier, phrase: phrase,
+      turn: 0, at: chatClock, answered: false, pending: false, choices: phrase ? false : tier === 1, sequence: 0, promptSalt: promptSalt };
+    paintIcon(document.getElementById('chat-face'), target);
     document.getElementById('chat-picture').hidden = false;
     paintIcon(document.getElementById('chat-picture'), target);document.getElementById('chat-picture').setAttribute('aria-label','Listen: '+WORD[target][0]);
     requestChat(dialogue, 'prompt');
@@ -1592,7 +1617,8 @@ function validConversation(value, p) {
     var word = WORD[key][0].toLowerCase();
     return (mass.indexOf(key) >= 0 ? 'the ' : /^[aeiou]/.test(word) ? 'an ' : 'a ') + word;
   }
-  function exerciseForms(key, tier, scene, anchor) {
+  function exerciseForms(key, tier, scene, anchor, phrase) {
+    if (phrase) return dailyForms(phrase);
     var word = WORD[key][0].toLowerCase();
     var noun = nounFor(key);
     var shown = noun.charAt(0).toUpperCase() + noun.slice(1);
@@ -1629,8 +1655,8 @@ function validConversation(value, p) {
     var anchors = { task: 1, fish: 2, pet: 3, boat: 4, scene: 5, bed: 6, build: 7 };
     return turn * 5 + (scenes[scene] || 0) + (anchors[anchor] || 0) * 2;
   }
-  function exerciseOk(body, key, tier, scene, anchor) {
-    var forms = exerciseForms(key, tier, scene, anchor);
+  function exerciseOk(body, key, tier, scene, anchor, phrase) {
+    var forms = exerciseForms(key, tier, scene, anchor, phrase);
     var i, line;
     for (i = 0; i < forms.length; i++) {
       line = forms[i].toLowerCase();
@@ -1644,7 +1670,7 @@ function validConversation(value, p) {
     var tier = d.choices ? 1 : d.tier;
     if (done) say = 'Great!';
     else {
-      var forms = exerciseForms(d.key, tier, d.scene, d.anchor);
+      var forms = exerciseForms(d.key, tier, d.scene, d.anchor, d.phrase);
       var salt = Number.isInteger(d.promptSalt) ? d.promptSalt : exerciseSalt(trail.turns, d.scene, d.anchor);
       say = forms[Math.abs(salt) % forms.length];
     }
@@ -1658,6 +1684,7 @@ function validConversation(value, p) {
     var tokens = reply.say.toLowerCase().match(/[a-z]+(?:'[a-z]+)?/g) || [];
     var scaffold = "a an the i you we it this is see got can say what what's who where or great nice thanks thank good job well done let's keep exploring try look at again your turn found made built met caught rode said together ready remember friend more".split(' ');
     var vocabulary = scaffold.concat(chatContextLeads(d).join(' ').toLowerCase().match(/[a-z]+(?:'[a-z]+)?/g) || []).concat((d.choices || d.tier === 1 ? [] : d.options).reduce(function (all, key) { return all.concat(WORD[key][0].toLowerCase().split(' ')); }, []));
+    if (d.phrase) dailyForms(d.phrase).forEach(function (line) { (line.toLowerCase().match(/[a-z]+(?:'[a-z]+)?/g) || []).forEach(function (w) { vocabulary.push(w); }); });
     if (!/^[A-Za-z ,.!?'’-]+$/.test(reply.say) || /[^\x20-\x7e]/.test(reply.say) || reply.say.length > 160 ||
         tokens.length < 1 || tokens.length > 12 || !tokens.every(function (w) { return vocabulary.indexOf(w) >= 0; })) return false;
     var praise = /^(great!|nice!|good job!|well done!)\s*/i;
@@ -1668,17 +1695,17 @@ function validConversation(value, p) {
     if (lead) body = body.slice(lead.length + 1);
     if (expected.done) return body === '' || /^(let's )?keep exploring!$/.test(body);
     var tier = d.choices ? 1 : d.tier;
-    return exerciseOk(body, d.key, tier, d.scene, d.anchor);
+    return exerciseOk(body, d.key, tier, d.scene, d.anchor, d.phrase);
   }
   function renderChat(d, reply, quiet) {
     if (dialogue !== d) return;
-    document.getElementById('chat-picture').hidden = false;
-    document.getElementById('chat-face').hidden = d.choices || d.tier === 1;
+    document.getElementById('chat-picture').hidden = !!d.phrase;
+    document.getElementById('chat-face').hidden = !!d.phrase || d.choices || d.tier === 1;
     d.audio_url = reply.audio_url;
-    d.pending = false; d.controller = null; d.question = d.reveal && !reply.done ? "Let's say " + WORD[d.key][0].toLowerCase() + ' together!' : (reply.done ? (d.selfClaim ? 'Thanks for trying!' : WORD[d.key][0] + '!') : reply.say); d.at = chatClock;
+    d.pending = false; d.controller = null; d.question = d.reveal && !reply.done ? "Let's say " + (d.phrase || WORD[d.key][0].toLowerCase()) + ' together!' : (reply.done ? (d.selfClaim ? 'Thanks for trying!' : (d.phrase || (WORD[d.key][0] + '!'))) : reply.say); d.at = chatClock;
     var listening = false;
     document.getElementById('chat-question').textContent = listening ? 'Listen and choose!' : d.question;
-    document.getElementById('chat-status').textContent = listening ? '' : d.answered ? (d.selfClaim?'Thanks for trying!':WORD[d.key][0]+' ★') : (d.reveal ? 'Say ' + WORD[d.key][0] + '!' : d.hint ? 'Good try! Say it again.' : '');
+    document.getElementById('chat-status').textContent = listening ? '' : d.answered ? (d.selfClaim?'Thanks for trying!':(d.phrase || WORD[d.key][0])+' ★') : (d.reveal ? 'Say ' + (d.phrase || WORD[d.key][0]) + '!' : d.hint ? 'Good try! Say it again.' : '');
     var root = document.getElementById('chat-options'); root.innerHTML = ''; root.hidden = !d.choices || reply.done;
     d.options.forEach(function (key) {
       var b = document.createElement('button'); b.type = 'button'; b.dataset.word = key;
@@ -1711,7 +1738,7 @@ function validConversation(value, p) {
       d.answered = true;
       if (!d.rewardRead && !d.selfClaim) {
         d.rewardRead = true;
-        speakEn(WORD[d.key][0], { onend: function () { if (dialogue === d) closeChat(); } });
+        speakEn(d.phrase || WORD[d.key][0], { onend: function () { if (dialogue === d) closeChat(); } });
         clearTimeout(d.autoAdvanceTimer);
         d.autoAdvanceTimer = setTimeout(function () { if (dialogue === d) closeChat(); }, 1600);
       } else if (!d.selfClaim) {
@@ -1749,6 +1776,7 @@ function validConversation(value, p) {
     var timer, payload = { event: d.anchor, scene: d.scene, chapter: questIndex() < CHAPTER1 ? 1 : questIndex() < CHAPTER2 ? 2 : 3,
       target_word: d.key, options: d.options.slice(), learned_words: chatWords(), turn: d.turn,
       prompt_salt: Number.isInteger(d.promptSalt) ? d.promptSalt : exerciseSalt(trail.turns, d.scene, d.anchor),
+      daily_phrase: d.anchor === 'pet' ? undefined : (d.phrase || undefined),
       tier: d.choices ? 1 : d.tier, feedback: feedback, child_name: d.context.child_name,
       recent_events: d.context.recent_events, last_answer: d.context.last_answer, recent_lines: recentLines.slice(-4) };
     if (childSaid) payload.child_said = String(childSaid).slice(0, 160);
@@ -1829,6 +1857,12 @@ function validConversation(value, p) {
   function voiceChoice(text) {
     if (!dialogue) return '';
     var said = normalAnswer(text), tokens = said.split(' ');
+    if (dialogue.phrase) {
+      var want = normalAnswer(dialogue.phrase), bits = want.split(' ').filter(function (w) { return w.length > 2; });
+      if (want && (said === want || said.indexOf(want) >= 0)) return dialogue.key;
+      if (bits.length && bits.every(function (w) { return tokens.indexOf(w) >= 0 || tokens.some(function (t) { return nearWord(t, w); }); })) return dialogue.key;
+      return '';
+    }
     var aliases = { fish: ['fishes', 'fesh'], sheep: ['ship', 'shep'], wood: ['would'], flower: ['flour'], water: ['wata', 'woter'], cow: ['kow'], boat: ['bote'], cat: ['kat'], tree: ['three'], leaves: ['leaf'], planks: ['plank'], rod: ['fishing rod', 'rod'] };
     function exact(k) { return [normalAnswer(WORD[k][0])].concat(aliases[k] || []).some(function (a) { return said === a || (a.indexOf(' ') < 0 && tokens.indexOf(a) >= 0); }); }
     var matches = dialogue.options.filter(exact);
@@ -1966,8 +2000,16 @@ function validConversation(value, p) {
       if (!riding && Math.abs(player.x - followLastX) < TILE * 2) followTravel += Math.abs(player.x - followLastX);
       followLastX = player.x;
       if (followTravel > TILE * 28) followReady = true;
-      if (followReady && safe && Math.abs(buddy.x - player.x) < TILE * 3 && chatClock - lastPetChatAt >= 60) {
-        queueChat('pet', buddy.type); followReady = false; followTravel = 0; lastPetChatAt = chatClock;
+      if (followReady && safe && Math.abs(buddy.x - player.x) < TILE * 3 && chatClock - lastFollowChatAt >= 60) {
+        // Following is not another meeting. Ask about the place or another learned word.
+        var cursor = trail.promptCursor || 0;
+        var explore = rotatedExploreWord(buddy.type);
+        if (explore) {
+          queueChat('scene', explore);
+          // Odd turns are a daily sentence. Even turns stay on the place or another word.
+          if (cursor % 2 === 1 && chatQueue.length) chatQueue[chatQueue.length - 1].phrase = DAILY[Math.floor(cursor / 2) % DAILY.length];
+        }
+        followReady = false; followTravel = 0; lastFollowChatAt = chatClock;
       }
     }
     var scene = sceneAt(player.x);
@@ -2236,7 +2278,7 @@ function validConversation(value, p) {
     drivingCar=b;b.dir=b.dir||1;document.body.classList.add('driving');
     buildMode=false;document.getElementById('btn-build').setAttribute('aria-pressed','false');document.getElementById('build-tools').hidden=true;document.getElementById('build-status').hidden=true;
     document.getElementById('car-exit').hidden=false;settleCar(b);seatDriver(b);
-    buildFeedback('Hop in! Let\'s drive!','car_ride');playSfx('enter-car');save();
+    buildFeedback('Hop in! Let\'s drive!','car_ride');playSfx('enter-car');syncSoundPack();save();
   }
   function driveCar(dt) {
     var b = drivingCar, ax = axis(); jumpBuf = 0;
@@ -3966,7 +4008,25 @@ function validConversation(value, p) {
       g.restore();
     }
   }
-  function drawInterior(g) {
+  function drawHearth(g, R, sec) {
+    var x = R.left + 78, y = R.floor - 44;
+    inkStyle(g);
+    inkBox(g, x, y, 34, 26, '#8d5a3c', 4);
+    inkBox(g, x + 4, y + 8, 26, 14, '#3a2418', 3);
+    g.fillStyle = '#ffb15a';
+    g.beginPath(); g.ellipse(x + 17, y + 16, 5, 3.2, 0, 0, 6.3); g.fill();
+    var glow = g.createRadialGradient(x + 17, y + 14, 2, x + 17, y + 14, 40);
+    glow.addColorStop(0, 'rgba(255, 186, 90, 0.32)');
+    glow.addColorStop(1, 'rgba(255, 186, 90, 0)');
+    g.fillStyle = glow;
+    g.beginPath(); g.arc(x + 17, y + 14, 40, 0, 6.3); g.fill();
+    var i, phase;
+    for (i = 0; i < 2; i++) {
+      phase = (sec * 0.4 + i * 0.5) % 1;
+      drawSmokePuff(g, x + 17 + Math.sin(sec + i) * 2, y + 6, phase, 5, 22, 0.28);
+    }
+  }
+  function drawInterior(g, sec) {
     var R = roomBoxes();
     var b = indoors;
     var furn = houseFurn(b);
@@ -4001,6 +4061,7 @@ function validConversation(value, p) {
     drawRoomItem(g, 'bed', R.bed, furn.bed);
     drawRoomItem(g, 'table', R.table, furn.table);
     drawRoomItem(g, 'torch', R.torch, furn.torch);
+    drawHearth(g, R, sec || 0);
     if (furn.torch) {
       g.fillStyle = 'rgba(255, 196, 90, 0.2)';
       g.beginPath(); g.arc(R.torch.x + 16, R.torch.y + 12, 56, 0, 6.3); g.fill();
@@ -5228,8 +5289,77 @@ function validConversation(value, p) {
     if (blink) inkPath(g, [[x - 1.2, y], [x + 1.2, y]]);
     else { g.fillStyle = '#51493c'; g.beginPath(); g.arc(x, y, 1.1, 0, Math.PI * 2); g.fill(); }
   }
-  var ANIMAL_SCALE={dog:[.68,.68],cat:[.43,.43],cow:[1.12,.95],pig:[.75,.7],sheep:[.8,.8],chicken:[.45,.45],duck:[.45,.45],horse:[1.08,1.03],rabbit:[.38,.38]};
+  var ANIMAL_SCALE={dog:[.68,.68],cat:[.43,.43],cow:[1.12,.95],pig:[.75,.7],sheep:[.8,.8],chicken:[.45,.45],duck:[.72,.72],horse:[1.08,1.03],rabbit:[.38,.38]};
+  function drawDuck(g, phase) {
+    // Side-view marker duck: round yellow head, open orange beak, black eyes, small wing, orange webs.
+    g.save();
+    var frame = reducedMotion ? 0 : Math.floor(phase * 1.6) % 2;
+    var bob = reducedMotion ? 0 : Math.sin(phase * 2.4) * 0.7;
+    g.translate(0, bob);
+    g.lineJoin = 'round';
+    g.lineCap = 'round';
+    g.strokeStyle = '#1a120c';
+    g.lineWidth = 3.2;
+    // Stroke first, then fill, so the thick outline stays outside the yellow.
+    function blob(x, y, rx, ry, color, rot) {
+      g.beginPath();
+      g.ellipse(x, y, rx, ry, rot || 0, 0, Math.PI * 2);
+      g.stroke();
+      g.fillStyle = color;
+      g.fill();
+    }
+    function web(x, y, step) {
+      g.beginPath();
+      g.moveTo(x, -9);
+      g.lineTo(x + step, y);
+      g.stroke();
+      g.beginPath();
+      g.moveTo(x + step - 3.4, y - 0.2);
+      g.quadraticCurveTo(x + step, y + 2.6, x + step + 3.6, y - 0.2);
+      g.quadraticCurveTo(x + step, y + 0.5, x + step - 3.4, y - 0.2);
+      g.closePath();
+      g.stroke();
+      g.fillStyle = '#f08a1a';
+      g.fill();
+    }
+    web(-5, -1, frame ? -1.6 : 1.4);
+    web(4, -1, frame ? 1.6 : -1.2);
+    blob(-1, -16, 11.5, 8.4, '#ffe14a');
+    blob(-1.5, -15, 6.2, 4.4, '#fff3a0');
+    g.save();
+    g.translate(-2, -15);
+    g.rotate(frame ? -0.55 : -0.15);
+    blob(0, 0, 4.6, 3.1, '#ffd23a');
+    g.restore();
+    blob(-12, -14, 2.4, 1.8, '#ffe14a', 0.4);
+    blob(9, -26, 7.6, 7.1, '#ffe14a');
+    g.beginPath();
+    g.moveTo(14.2, -27.4);
+    g.quadraticCurveTo(22.4, -29.6, 20.6, -25.6);
+    g.quadraticCurveTo(17.2, -24.6, 14.2, -25.6);
+    g.closePath();
+    g.stroke();
+    g.fillStyle = '#ff9a1f';
+    g.fill();
+    g.beginPath();
+    g.moveTo(14.2, -25.2);
+    g.quadraticCurveTo(21.2, -24.0, 19.2, -21.8);
+    g.quadraticCurveTo(16.2, -23.0, 14.2, -24.4);
+    g.closePath();
+    g.stroke();
+    g.fillStyle = '#e36d00';
+    g.fill();
+    g.fillStyle = '#1a120c';
+    g.beginPath();
+    g.arc(10.4, -27.2, 1.55, 0, Math.PI * 2);
+    g.fill();
+    g.beginPath();
+    g.arc(7.2, -26.4, 1.15, 0, Math.PI * 2);
+    g.fill();
+    g.restore();
+  }
   function drawAnimal(g, type, phase) {
+    if (type === 'duck') { drawDuck(g, phase); return; }
     g.save(); inkStyle(g);
     var frame = reducedMotion ? 1 : Math.floor(phase * 1.5) % 8;
     var wag = Math.sin(frame * Math.PI / 4) * 3;
@@ -5518,8 +5648,8 @@ function validConversation(value, p) {
     if (reducedMotion || sec - artFrameAt < 0.125) return;
     artFrameAt = sec;
     if (dialogue && !document.getElementById('dialogue').hidden) {
-      paintIcon(document.getElementById('chat-face'), 'dog', sec * 6);
-      if (ANIMALS[dialogue.key] || dialogue.key === 'fish') paintIcon(document.getElementById('chat-picture'), dialogue.key, sec * 6);
+      paintIcon(document.getElementById('chat-face'), dialogue.key, sec * 6);
+      if (!dialogue.phrase && (ANIMALS[dialogue.key] || dialogue.key === 'fish')) paintIcon(document.getElementById('chat-picture'), dialogue.key, sec * 6);
     }
     if (cardLeft > 0 && (ANIMALS[cardKey] || cardKey === 'fish')) paintIcon(document.getElementById('card-icon'), cardKey, sec * 6);
   }
@@ -5954,6 +6084,48 @@ function validConversation(value, p) {
     });
     g.restore();
   }
+  function drawSmokePuff(g, x, y, phase, spread, lift, alpha) {
+    g.save();
+    g.globalAlpha = Math.max(0, (1 - phase) * alpha);
+    g.fillStyle = phase < 0.4 ? 'rgba(120,116,110,0.9)' : 'rgba(236,232,226,0.95)';
+    g.beginPath();
+    g.ellipse(x, y - phase * lift, 2.2 + phase * spread, 1.6 + phase * spread * 0.7, 0, 0, 6.3);
+    g.fill();
+    g.restore();
+  }
+  function drawCarExhaust(g, b, sec) {
+    if (drivingCar !== b) return;
+    var rear = b.dir === -1 ? (b.x + b.w) * TILE - 8 : b.x * TILE + 8;
+    var y = (b.y + b.h) * TILE - 16;
+    var drift = b.dir === -1 ? 1 : -1;
+    var moving = !!carMoving;
+    var n = moving ? 4 : 3;
+    var i, phase;
+    for (i = 0; i < n; i++) {
+      phase = (sec * (moving ? 1.7 : 0.8) + i / n) % 1;
+      drawSmokePuff(g, rear + drift * phase * (moving ? 34 : 16), y - phase * (moving ? 8 : 18), phase, moving ? 11 : 9, moving ? 6 : 10, moving ? 0.55 : 0.5);
+    }
+  }
+  function drawHouseLife(g, b, sec) {
+    if (b.kind !== 'house') return;
+    var chimney = b.parts && b.parts.roof && b.parts.roof.tier >= 2;
+    var baseX = b.dir === -1 ? (b.x + b.w) * TILE - (chimney ? 70 : 48) : b.x * TILE + (chimney ? 70 : 48);
+    var baseY = b.y * TILE + (chimney ? 6 : 16);
+    var i, phase, n = chimney ? 3 : 2;
+    for (i = 0; i < n; i++) {
+      phase = (sec * 0.28 + i / n) % 1;
+      drawSmokePuff(g, baseX + Math.sin(sec * 0.8 + i) * 2, baseY, phase, chimney ? 6 : 4, chimney ? 30 : 16, chimney ? 0.34 : 0.2);
+    }
+    var wx = b.dir === -1 ? (b.x + b.w) * TILE - 26 : b.x * TILE + 26;
+    var wy = b.y * TILE + 64;
+    var glow = g.createRadialGradient(wx, wy, 1, wx, wy, 22);
+    glow.addColorStop(0, 'rgba(255, 186, 90, 0.55)');
+    glow.addColorStop(1, 'rgba(255, 186, 90, 0)');
+    g.save();
+    g.fillStyle = glow;
+    g.beginPath(); g.arc(wx, wy, 22, 0, 6.3); g.fill();
+    g.restore();
+  }
   function drawFrame(sec) {
     var z = tileScreen / TILE;
     var sky = skyColors(timeOfDay);
@@ -6069,10 +6241,10 @@ function validConversation(value, p) {
     hillBand(hill2, 0.25, 16, viewH * 0.58);
     hillBand(hill, 0.45, 12, viewH * 0.66);
 
-    if (indoors) { drawInterior(ctx); return; }
+    if (indoors) { drawInterior(ctx, sec); return; }
     ctx.setTransform(dpr * z, 0, 0, dpr * z, -drawCamX * dpr * z, -drawCamY * dpr * z);
     drawWorld(ctx, sec);
-    buildObjects.forEach(function(b){if(!bboxOnScreen(b))return;ctx.save();ctx.translate((b.x+(b.dir===-1?b.w:0))*TILE,b.y*TILE);if(b.dir===-1)ctx.scale(-1,1);ctx.drawImage(craftableSprite(b),0,0);ctx.restore();});
+    buildObjects.forEach(function(b){if(!bboxOnScreen(b))return;ctx.save();ctx.translate((b.x+(b.dir===-1?b.w:0))*TILE,b.y*TILE);if(b.dir===-1)ctx.scale(-1,1);ctx.drawImage(craftableSprite(b),0,0);ctx.restore();drawHouseLife(ctx,b,sec);drawCarExhaust(ctx,b,sec);});
     var ai;
     for (ai = 0; ai < animals.length; ai++) {
       var an = animals[ai];
@@ -6668,9 +6840,18 @@ function validConversation(value, p) {
     packWanted[key]=wanted;
     if(wanted)packPlay(key,true);else if(packPlayers[key])packPlayers[key].pause();
   }
+  function tuneEngine() {
+    var eng = packPlayers.engine;
+    if (!eng) return;
+    var drive = !!(drivingCar && carMoving);
+    eng.volume = drive ? 0.48 : 0.3;
+    try { eng.playbackRate = drive ? 1.12 : 0.94; } catch (err) { /* optional */ }
+  }
   function syncSoundPack() {
     packLoop('garden-loop',started&&musicOn);
-    packLoop('engine',started&&sfxOn&&drivingCar&&carMoving&&!panelOpen()&&!chatBlocked());
+    // Idle while seated, a little louder and higher while the wheels are turning.
+    packLoop('engine',started&&sfxOn&&!!drivingCar&&!panelOpen()&&!chatBlocked());
+    tuneEngine();
   }
   function suspendSoundPack(){packSuspended=true;Object.keys(packPlayers).forEach(function(k){packPlayers[k].pause();});packWanted={};}
   function resumeSoundPack(){packSuspended=false;syncSoundPack();}
@@ -7917,7 +8098,7 @@ function validConversation(value, p) {
     });
     window.BW = {
       ready: true,
-      audioState:function(){var players={};Object.keys(packPlayers).forEach(function(k){var a=packPlayers[k];players[k]={paused:a.paused,volume:a.volume,loop:a.loop,time:a.currentTime,ready:a.readyState};});return JSON.parse(JSON.stringify({music:musicOn,sfx:sfxOn,unlocked:packUnlocked,suspended:packSuspended,requests:packRequests,played:packPlayed,players:players}));},
+      audioState:function(){var players={};Object.keys(packPlayers).forEach(function(k){var a=packPlayers[k];players[k]={paused:a.paused,volume:a.volume,rate:a.playbackRate,loop:a.loop,time:a.currentTime,ready:a.readyState};});return JSON.parse(JSON.stringify({music:musicOn,sfx:sfxOn,unlocked:packUnlocked,suspended:packSuspended,requests:packRequests,played:packPlayed,players:players}));},
       buildState: function(){return JSON.parse(JSON.stringify({objects:buildObjects,driving:drivingCar&&drivingCar.id,crafted:craftedObjects,shows:showsToday(),exploreQuizzes:trail.quizzes}));},
       adventure: function () {
         return JSON.parse(JSON.stringify({ trail: trail, spots: trailSpots, active: dialogue, queue: chatQueue,

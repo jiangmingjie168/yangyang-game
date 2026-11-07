@@ -56,8 +56,11 @@ entries.append(save('correct',seq([659.25,880],.10,.28)))
 entries.append(save('wrong',seq([329.63,293.66],.10,.25)*.6))
 t=np.arange(round(.42*SR))/SR
 entries.append(save('enter-car',mix(noise(.13)*1.7,note(110,.16)*.35,.13*np.sin(2*np.pi*(62*t+34*t*t))*np.minimum(1,t*30)*np.minimum(1,(.42-t)*20))))
-t=np.arange(2*SR)/SR
-entries.append(save('engine',(.10*np.sin(2*np.pi*64*t)+.035*np.sin(2*np.pi*128*t))*(.72+.28*np.cos(2*np.pi*8*t)),True))
+# engine.ogg is a trimmed Mixkit recording. Do not synthesize over it.
+engine_file=OUT/'engine.ogg'
+if not engine_file.exists():
+ raise SystemExit('Missing audio/build-v1.1/engine.ogg. It is a Mixkit idle recording; see ENGINE.txt.')
+entries.append({'file':'audio/build-v1.1/engine.ogg','source':'Recording: Mixkit "Cars starting" (sfx 1561), trimmed to a steady idle loop. https://assets.mixkit.co/active_storage/sfx/1561/1561.wav','license':'Mixkit Sound Effects Free License','seconds':3.44,'bytes':engine_file.stat().st_size,'loop':True,'recorded':True})
 t=np.arange(round(.28*SR))/SR;env=np.minimum(1,t*50)*np.minimum(1,(.28-t)*25)
 entries.append(save('horn',.19*(np.sin(2*np.pi*392*t)+.6*np.sin(2*np.pi*493.88*t))*env))
 entries.append(save('pet',seq([880,1046.5],.07,.22)*.6))
@@ -66,9 +69,9 @@ if (OUT/'manifest.json').exists():
  old=json.loads((OUT/'manifest.json').read_text())
  cries=[a for a in old.get('assets',[]) if str(a.get('file','')).split('/')[-1].startswith('cry-')]
 entries.extend(cries)
-manifest={'license':'CC0-1.0','external_samples':bool(cries),'voice':False,'total_bytes':sum(x['bytes'] for x in entries),'assets':entries}
+manifest={'license':'CC0-1.0','external_samples':True,'voice':False,'total_bytes':sum(x['bytes'] for x in entries),'assets':entries,'engine_note':'engine.ogg is a trimmed Mixkit car recording, not synthesized. See ENGINE.txt.'}
 if cries: manifest['cry_note']='cry-*.ogg are real recordings listed in CRIES.txt. They are not synthesized.'
 assert manifest['total_bytes']<3_000_000
 (OUT/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
-(OUT/'LICENSE.txt').write_text('Original self-synthesized instrumental composition and sound effects, except the animal cries.\nDedicated to the public domain under CC0 1.0 Universal.\nLicense: https://creativecommons.org/publicdomain/zero/1.0/\nSource: tools/make-build-v1.1-audio.py\n\ncry-*.ogg are real recordings, not synthesized sounds. Authors and licenses are in CRIES.txt.\n')
+(OUT/'LICENSE.txt').write_text('Original self-synthesized instrumental composition and sound effects, except the animal cries and the car engine.\nDedicated to the public domain under CC0 1.0 Universal.\nLicense: https://creativecommons.org/publicdomain/zero/1.0/\nSource: tools/make-build-v1.1-audio.py\n\ncry-*.ogg are real recordings, not synthesized sounds. Authors and licenses are in CRIES.txt.\nengine.ogg is a trimmed Mixkit recording. See ENGINE.txt. It is not covered by CC0.\n')
 print(json.dumps({'assets':len(entries),'total_bytes':manifest['total_bytes']}))

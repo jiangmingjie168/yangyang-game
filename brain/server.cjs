@@ -18,6 +18,8 @@ const SCAFFOLD = new Set("a an the i you we it this is see got can say what what
 const CHAT_EVENTS = ['name_ask', 'small_talk', 'weather_chat', 'recast'];
 const NOUNS = new Set('grass dirt stone wood leaves sand water flower planks stick table door torch bed house wool tree cow pig sheep chicken cat dog duck horse rabbit fence rain cloud sun moon star wheat seed fish rod boat wall roof window room gate'.split(' '));
 const PREF_VALUES = { color: [], animal: ['cat','dog','cow','pig','sheep','chicken','duck','horse','rabbit'], food: ['fish','wheat','seed'], build: ['house','table','door','bed','fence','torch','boat'] };
+const DAILY = ['Hello!', 'Thank you.', "I'm happy.", "Let's go!", 'Good morning.', 'Good night.', 'Please.', 'I love you.', 'See you!', 'Wow!'];
+function dailyForms(phrase) { return [phrase, 'Say ' + phrase, 'Can you say ' + phrase]; }
 function conversationLines(p) {
   if (p.event === 'name_ask') return ['Hi! What is your name?', 'Hello! What is your name?'];
   if (p.event === 'weather_chat') return ['Look! I see the ' + p.weather + '!', 'We can see the ' + p.weather + '!', 'Look at the ' + p.weather + '!', 'Nice! I see the ' + p.weather + '!'];
@@ -36,7 +38,7 @@ function conversationLines(p) {
   const favorite = p.prefs.build || p.prefs.animal || p.prefs.food;
   if (favorite) return ['You like the ' + favorite + '!', 'You like ' + favorite + '!'];
   const event = p.recent_events.at(-1), word = (event && event.word) || 'tree';
-  return ['Look! I see the ' + word + '!', 'We can see the ' + word + '!', 'Nice! I see the ' + word + '!', 'Look at the ' + word + '!', 'Come and see!', 'You can do it!'];
+  return ['Look! I see the ' + word + '!', 'We can see the ' + word + '!', 'Nice! I see the ' + word + '!', 'Look at the ' + word + '!', 'Come and see!', 'You can do it!'].concat(DAILY);
 }
 function conversationTemplate(p) {
   const lines = conversationLines(p);
@@ -47,7 +49,7 @@ function validConversation(value, p) {
   return !!value && Object.keys(value).sort().join(',') === 'answer,done,options,say' &&
     Array.isArray(value.options) && value.options.length === 0 && value.answer === null && value.done === true &&
     typeof value.say === 'string' && value.say.length <= 160 && !/[^\x20-\x7e]/.test(value.say) &&
-    (value.say.match(/[A-Za-z]+/g) || []).length >= 3 &&
+    (value.say.match(/[A-Za-z]+/g) || []).length >= 1 &&
     (value.say.match(/[A-Za-z]+/g) || []).length <= 6 && conversationLines(p).includes(value.say);
 }
 const SYSTEM = `You are a warm, playful dog buddy in a child's block-world game. Rules choose words, options, tier, success and rewards; you only phrase the exercise. Return ONLY JSON with say, options, answer, done, copied exactly from expected except say.
@@ -131,9 +133,11 @@ function normalize(input) {
       (input.last_answer !== undefined && !learned.includes(input.last_answer)) ||
       (input.spoken_word !== undefined && !options.includes(input.spoken_word))) throw Error('invalid recent context');
   if (input.prompt_salt !== undefined && (!Number.isInteger(input.prompt_salt) || input.prompt_salt < 0 || input.prompt_salt > 1000000)) throw Error('invalid salt');
+  if (input.daily_phrase !== undefined && (typeof input.daily_phrase !== 'string' || !DAILY.includes(input.daily_phrase))) throw Error('invalid daily phrase');
   return { child_name: input.child_name, recent_events: input.recent_events || [], recent_lines: input.recent_lines || [],
     last_answer: input.last_answer, spoken_word: input.spoken_word, event: input.event, scene: input.scene, chapter: input.chapter, target_word: target,
     options: options.slice(), learned_words: [...new Set(learned)], turn: Math.min(MAX_TURN, input.turn), prompt_salt: input.prompt_salt,
+    daily_phrase: input.event === 'pet' ? undefined : input.daily_phrase,
     tier: input.tier || 1, feedback: input.feedback || (input.child_said ? 'retry' : 'prompt'), child_said: input.child_said };
 }
 // Rule-owned slots: the AI can combine warm phrases, never add a quiz, command,
@@ -163,7 +167,8 @@ function nounFor(key) {
   return (mass.includes(key) ? 'the ' : /^[aeiou]/.test(word) ? 'an ' : 'a ') + word;
 }
 const ANIMALS = new Set('cat dog cow pig sheep chicken duck horse rabbit'.split(' '));
-function exerciseForms(key, tier, scene, anchor) {
+function exerciseForms(key, tier, scene, anchor, phrase) {
+  if (phrase) return dailyForms(phrase);
   const word = LABEL(key);
   const noun = nounFor(key);
   const shown = noun.charAt(0).toUpperCase() + noun.slice(1);
@@ -198,8 +203,8 @@ function exerciseSalt(turn, scene, anchor) {
   const anchors = { task: 1, fish: 2, pet: 3, boat: 4, scene: 5, bed: 6, build: 7 };
   return turn * 5 + (scenes[scene] || 0) + (anchors[anchor] || 0) * 2;
 }
-function exerciseOk(body, key, tier, scene, anchor) {
-  return exerciseForms(key, tier, scene, anchor).some(line => {
+function exerciseOk(body, key, tier, scene, anchor, phrase) {
+  return exerciseForms(key, tier, scene, anchor, phrase).some(line => {
     const text = line.toLowerCase();
     return body === text || (text.endsWith('say it!') && body === text.slice(0, -'say it!'.length) + 'your turn!');
   });
@@ -211,7 +216,7 @@ function template(p) {
   let say;
   if (done) say = 'Great! Keep exploring!';
   else {
-    const forms = exerciseForms(p.target_word, p.tier || 1, p.scene, p.event);
+    const forms = exerciseForms(p.target_word, p.tier || 1, p.scene, p.event, p.daily_phrase);
     const salt = Number.isInteger(p.prompt_salt) ? p.prompt_salt : exerciseSalt(p.turn, p.scene, p.event);
     say = forms[Math.abs(salt) % forms.length];
   }
@@ -233,7 +238,7 @@ function validOutput(value, p) {
       !value.options.every(w => p.learned_words.includes(w)) || value.answer !== p.target_word ||
       !value.options.includes(value.answer) || value.done !== expected.done || typeof value.say !== 'string') return false;
   const say = value.say.trim(), tokens = say.toLowerCase().match(/[a-z]+(?:'[a-z]+)?/g) || [];
-  const vocab = new Set([...SCAFFOLD, ...(p.tier === 1 ? [] : p.options).flatMap(w => LABEL(w).split(' ')), ...contextLeads(p).flatMap(line => line.toLowerCase().match(/[a-z]+(?:'[a-z]+)?/g) || [])]);
+  const vocab = new Set([...SCAFFOLD, ...(p.tier === 1 ? [] : p.options).flatMap(w => LABEL(w).split(' ')), ...contextLeads(p).flatMap(line => line.toLowerCase().match(/[a-z]+(?:'[a-z]+)?/g) || []), ...(p.daily_phrase ? dailyForms(p.daily_phrase).flatMap(line => line.toLowerCase().match(/[a-z]+(?:'[a-z]+)?/g) || []) : [])]);
   if (!say || say.length > 160 || !/^[A-Za-z ,.!?'’-]+$/.test(say) || /[^\x20-\x7e]/.test(say) ||
       tokens.length < 1 || tokens.length > 12 || !tokens.every(w => vocab.has(w))) return false;
   const praise = /^(great!|nice!|good job!|well done!)\s*/i;
@@ -244,7 +249,7 @@ function validOutput(value, p) {
   const lead = contextLeads(p).find(line => body.startsWith(line.toLowerCase() + ' '));
   if (lead) body = body.slice(lead.length + 1);
   if (expected.done) return /^(let's )?keep exploring!$/.test(body);
-  return exerciseOk(body, p.target_word, p.tier || 1, p.scene, p.event);
+  return exerciseOk(body, p.target_word, p.tier || 1, p.scene, p.event, p.daily_phrase);
 }
 function config(env = process.env) {
   const timeout = Number(env.BRAIN_TIMEOUT_MS || 6000);
