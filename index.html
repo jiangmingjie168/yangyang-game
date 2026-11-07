@@ -577,7 +577,7 @@
 <div id="app">
   <canvas id="view" width="800" height="400"></canvas>
   <div id="hud">
-    <span id="build-version" aria-label="Build version">build cd91b62+ux35</span>
+    <span id="build-version" aria-label="Build version">build cd91b62+ux36</span>
     <div class="topbar">
       <button id="quest" type="button">
         <canvas id="quest-icon" width="128" height="128"></canvas>
@@ -4596,12 +4596,15 @@ function validConversation(value, p) {
     if (ty > 1 && get(tx, ty) !== AIR && get(tx, ty - 1) === AIR) return { tx: tx, ty: ty - 1 };
     return { tx: tx, ty: ty };
   }
-  function canFillCell(key, tx, ty) {
+  function fillCellOpen(key, tx, ty) {
     if (tx < 1 || ty < 1 || tx >= W - 1 || ty >= H - 1) return false;
     if (!fillReach(tx, ty) || get(tx, ty) !== AIR) return false;
-    if (overlapsPlayer(tx, ty) || cellHasAnimal(tx, ty) || craftableAt(tx, ty)) return false;
+    if (cellHasAnimal(tx, ty) || craftableAt(tx, ty)) return false;
     if (specialPlaceLine(key, tx, ty)) return false;
     return true;
+  }
+  function canFillCell(key, tx, ty) {
+    return fillCellOpen(key, tx, ty) && !overlapsPlayer(tx, ty);
   }
   function collectFillSpots(key) {
     var spots = [], seen = {}, cx = Math.floor(player.x / TILE), cy = Math.floor((player.y - 10) / TILE);
@@ -4651,17 +4654,47 @@ function validConversation(value, p) {
       if (!h.spokeBad) { h.spokeBad = true; showToast('Use some materials first!', 1.6); }
       return;
     }
-    if (!canFillCell(key, tx, ty) || !solid(get(tx, ty + 1))) return;
+    if (!fillCellOpen(key, tx, ty) || !solid(get(tx, ty + 1))) return;
+    if (!liftForFill(tx, ty)) return;
     if (tryPlace(tx, ty, true, true)) {
       h.filled[id] = 1;
       h.placedN++;
       if (!h.saidItem) { h.saidItem = true; showWord(buildMode ? buildMaterial() : key); }
     }
   }
+  function liftForFill(tx, ty) {
+    if (!overlapsPlayer(tx, ty)) return true;
+    if (!solid(get(tx, ty + 1))) return false;
+    player.y = ty * TILE - 0.01;
+    player.vy = 0;
+    onGround = true;
+    return !overlapsPlayer(tx, ty);
+  }
   function dragPaint(h) {
     if (!isMultiPlace(activePlaceKey())) return;
     if (!h.filled) h.filled = {};
-    var cells = strokeCells(h.anchorTx, h.anchorTy, h.tx, h.ty), i;
+    var cells = strokeCells(h.anchorTx, h.anchorTy, h.tx, h.ty);
+    var vertical = h.anchorTy !== h.ty;
+    if (vertical) {
+      var lowest = {}, seen = {}, i, c, id;
+      for (i = 0; i < cells.length; i++) {
+        c = cells[i];
+        id = c.tx + ':' + c.ty;
+        seen[id] = 1;
+        if (lowest[c.tx] == null || c.ty > lowest[c.tx]) lowest[c.tx] = c.ty;
+      }
+      Object.keys(lowest).forEach(function (xs) {
+        var tx = +xs, y = lowest[xs], cap = columnCap(tx), guard = 0;
+        if (cap != null && y < cap - 1) return;
+        y += 1;
+        while (guard++ < 18 && y < H - 1 && get(tx, y) === AIR) {
+          id = tx + ':' + y;
+          if (!seen[id]) { seen[id] = 1; cells.push({ tx: tx, ty: y }); }
+          y++;
+        }
+      });
+      cells.sort(function (a, b) { return b.ty - a.ty || a.tx - b.tx; });
+    }
     for (i = 0; i < cells.length; i++) paintFillCell(h, cells[i].tx, cells[i].ty);
   }
   function confirmSingle(h) {
@@ -4692,9 +4725,9 @@ function validConversation(value, p) {
     h.spots = h.indoor ? indoorPlaceSpots() : (isMultiPlace(placeKey) ? collectFillSpots(placeKey) : collectPlaceSpots(h.tx, h.ty));
     var armSurf = surfaceCell(h.tx, h.ty);
     h.aim = h.indoor ? indoorAim(h.sx, h.sy) : (isMultiPlace(placeKey) ? { x: armSurf.tx, y: armSurf.ty, w: 1, h: 1 } : evalSpot(placeKey, h.tx, h.ty, h.fy));
-    if (!h.spots.length && activePlaceKey()) {
+    if (!h.spots.length && activePlaceKey() && !isMultiPlace(placeKey)) {
       h.spokeBad = true;
-      showToast(h.indoor ? (selectedKey() === 'bed' ? 'The bed goes here!' : 'Hold to build!') : explainPlace(activePlaceKey(), h.tx, h.ty), 1.8);
+      showToast(h.indoor ? (selectedKey() === 'bed' ? 'The bed goes here!' : 'Hold to build!') : explainPlace(placeKey, h.tx, h.ty), 1.8);
     }
   }
   function pointerWorld(e) {
@@ -6972,7 +7005,6 @@ function validConversation(value, p) {
       if (h.indoor || !isMultiPlace(activePlaceKey())) confirmSingle(h);
       else {
         dragPaint(h);
-        if (!h.placedN && !h.spokeBad) showToast(explainPlace(activePlaceKey(), h.tx, h.ty) || 'Choose empty squares!', 1.8);
       }
     }
     canvas.addEventListener('pointermove',function(e){
