@@ -4496,8 +4496,8 @@ function validConversation(value, p) {
     // Rod/boat on water: tap-to-use only. Break always digs so water leaves a mark.
     if (id === WATER && !fromBreak) {
       var sk = selectedKey();
-      if (sk === 'rod') { if (inReach(tx, ty)) startFishing(tx, ty); return; }
-      if (sk === 'boat') { if (inReach(tx, ty)) placeBoat(tx, ty); return; }
+      if (sk === 'rod') { if (inReach(tx, ty)) startFishing(tx, ty); else showToast('Move a little closer!', 1.6); return; }
+      if (sk === 'boat') { if (inReach(tx, ty)) placeBoat(tx, ty); else showToast('Move a little closer!', 1.6); return; }
     }
     if (!mineable(id) || (!loose && !inReach(tx, ty))) {
       var key = KEY_OF[id];
@@ -4647,7 +4647,7 @@ function validConversation(value, p) {
     if (selectedKey() === 'boat') {
       var bfx = Math.floor(player.x / TILE) + player.dir;
       var bfy = Math.floor((player.y - 12) / TILE);
-      var bopts = [[bfx, bfy], [bfx, bfy + 1], [bfx, bfy - 1], [bfx + player.dir, bfy], [bfx + player.dir, bfy + 1]];
+      var bopts = [[bfx, bfy], [bfx, bfy + 1], [bfx, bfy + 2], [bfx, bfy - 1], [bfx + player.dir, bfy], [bfx + player.dir, bfy + 1], [bfx + player.dir, bfy + 2]];
       var bi;
       for (bi = 0; bi < bopts.length; bi++) {
         if (get(bopts[bi][0], bopts[bi][1]) === WATER && inReach(bopts[bi][0], bopts[bi][1])) {
@@ -5300,6 +5300,11 @@ function validConversation(value, p) {
     if (id === WATER && heldKey === 'rod') {
       lock = { tx: tx, ty: ty }; lockAge = 0;
       if (inReach(tx, ty)) startFishing(tx, ty); else seekMine(tx, ty, false);
+      return;
+    }
+    if (id === WATER && heldKey === 'boat') {
+      lock = { tx: tx, ty: ty }; lockAge = 0;
+      if (inReach(tx, ty)) placeBoat(tx, ty); else seekMine(tx, ty, false);
       return;
     }
     if (id !== AIR) {
