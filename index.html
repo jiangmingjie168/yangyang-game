@@ -579,7 +579,7 @@
   <canvas id="view" width="800" height="400"></canvas>
   <div id="hud">
     <span id="hunger-hint" hidden></span>
-    <span id="build-version" aria-label="Build version">build cd91b62+ux45</span>
+    <span id="build-version" aria-label="Build version">build cd91b62+ux46</span>
     <div class="topbar">
       <button id="quest" type="button">
         <canvas id="quest-icon" width="128" height="128"></canvas>
@@ -903,7 +903,8 @@ const BRAIN_TIMEOUT_MS = 6500;
   var quiz = null, quizStars = {}, lastQuizKey = '', toastLeft = 0, wrongAt = 0;
   var saveIn = 0, dirtySave = false;
   var pitTime = 0, ropeShown = false, ropeAnnounced = false, ropeAnchor = null, ropeClimb = null;
-  var indoors = null, indoorX = 0.42, houseGrace = 0, bedRest = 0;
+  var indoors = null, indoorX = 0.42, houseGrace = 0, bedRest = 0, sleepPhase = 0;
+  var BED_NAP = 6;
   var swimPhase = 0, wasSwim = false, splashT = 0;
   var crops = [], boat = null, riding = false, fishing = null, boatPhase = 0, packSeen = false;
   var sunPos = { x: 0, y: 0 }, moonPos = { x: 0, y: 0 }, sunOn = false, moonOn = false, starPos = [], cloudPos = [];
@@ -3878,7 +3879,8 @@ function validConversation(value, p) {
   }
   function startBedRest() {
     if (!indoors || bedRest > 0 || !houseFurn(indoors).bed) return;
-    bedRest = 1.6;
+    bedRest = BED_NAP;
+    sleepPhase = 0;
     speakChild(CHILD_REST_LINE);
     fatigue = 0;
     fatigueRemind = 0;
@@ -3930,6 +3932,7 @@ function validConversation(value, p) {
       if (ax) bedRest = 0;
       else {
         bedRest = Math.max(0, bedRest - dt);
+        sleepPhase += dt;
         return;
       }
     }
@@ -4031,12 +4034,52 @@ function validConversation(value, p) {
         drawPlayer(g);
         g.restore();
       }
+      drawSleepZzz(g, R.bed.x + R.bed.w * 0.62, R.bed.y - 8);
       drawChildLine(g, R.bed.x - 8, R.bed.y - 46);
     } else {
       g.translate(feet.x, feet.y);
       g.scale(1.35, 1.35);
       g.translate(-player.x, -player.y);
       drawPlayer(g);
+    }
+    g.restore();
+  }
+  function drawSleepZzz(g, x, y) {
+    var t = sleepPhase, i, phase, rise, alpha, size, lx, ly;
+    g.save();
+    g.setTransform(dpr, 0, 0, dpr, 0, 0);
+    inkStyle(g);
+    var bw = 58, bh = 34;
+    var bx = Math.max(8, Math.min(viewW - bw - 8, x - 10));
+    var by = Math.max(48, y - 30);
+    inkBox(g, bx, by, bw, bh, '#fffaf2', 16);
+    g.beginPath();
+    g.moveTo(bx + 18, by + bh);
+    g.lineTo(bx + 26, by + bh + 10);
+    g.lineTo(bx + 34, by + bh);
+    g.closePath();
+    g.fillStyle = '#fffaf2';
+    g.fill();
+    g.stroke();
+    g.fillStyle = '#5b4a86';
+    g.font = 'bold 20px "Avenir Next", sans-serif';
+    g.textAlign = 'center';
+    g.textBaseline = 'middle';
+    g.fillText('Zzz', bx + bw / 2, by + bh / 2 + 1);
+    for (i = 0; i < 3; i++) {
+      phase = (t * 0.55 + i * 0.33) % 1;
+      rise = phase * 30;
+      alpha = phase < 0.12 ? phase / 0.12 : (phase > 0.72 ? (1 - phase) / 0.28 : 1);
+      size = 14 + phase * 10;
+      lx = bx + bw - 4 + Math.sin(t * 2.2 + i) * 3;
+      ly = by - 2 - rise;
+      g.globalAlpha = Math.max(0, alpha);
+      g.lineWidth = 3;
+      g.strokeStyle = '#fffaf2';
+      g.font = 'bold ' + Math.round(size) + 'px "Avenir Next", sans-serif';
+      g.strokeText('z', lx, ly);
+      g.fillStyle = '#5b4a86';
+      g.fillText('z', lx, ly);
     }
     g.restore();
   }
@@ -5548,7 +5591,7 @@ function validConversation(value, p) {
     drawChildFrame(g, frame, 0, 0, 48);
     if (hasPack()) drawKidPack(g, -22, -28);
     if (hasHat()) drawKidHat(g, 0, -44);
-    if (rainOn) drawUmbrella(g, 14, -50, -20);
+    if (rainOn && !indoors) drawUmbrella(g, 14, -50, -20);
     g.restore();
     return true;
   }
@@ -5790,7 +5833,7 @@ function validConversation(value, p) {
       g.fillStyle = '#fff3a0';
       g.beginPath(); g.arc(2.4, -40.4 - bob, 1.6, 0, 6.3); g.fill();
     }
-    if (rainOn) drawUmbrella(g, 9, -45 - bob, -18 - bob);
+    if (rainOn && !indoors) drawUmbrella(g, 9, -45 - bob, -18 - bob);
     g.restore();
   }
   function drawWorld(g, sec) {
