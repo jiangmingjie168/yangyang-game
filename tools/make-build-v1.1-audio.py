@@ -57,7 +57,11 @@ entries.append(save('wrong',seq([329.63,293.66],.10,.25)*.6))
 t=np.arange(round(.42*SR))/SR
 entries.append(save('enter-car',mix(noise(.13)*1.7,note(110,.16)*.35,.13*np.sin(2*np.pi*(62*t+34*t*t))*np.minimum(1,t*30)*np.minimum(1,(.42-t)*20))))
 t=np.arange(2*SR)/SR
-entries.append(save('engine',(.10*np.sin(2*np.pi*64*t)+.035*np.sin(2*np.pi*128*t))*(.72+.28*np.cos(2*np.pi*8*t)),True))
+# Even pulse count so the idle loop has no click. Low rumble plus a soft exhaust tick.
+pulse=np.sin(np.pi*((t*14)%1))**8
+rumble=.55*np.sin(2*np.pi*42*t)+.18*np.sin(2*np.pi*84*t)+.22*np.sin(2*np.pi*21*t)
+hiss=np.convolve(np.random.default_rng(1105).normal(0,1,len(t)),np.ones(48)/48,mode='same')
+entries.append(save('engine',(rumble*(.35+.65*pulse)+hiss*.07*pulse)*.22,True))
 t=np.arange(round(.28*SR))/SR;env=np.minimum(1,t*50)*np.minimum(1,(.28-t)*25)
 entries.append(save('horn',.19*(np.sin(2*np.pi*392*t)+.6*np.sin(2*np.pi*493.88*t))*env))
 entries.append(save('pet',seq([880,1046.5],.07,.22)*.6))

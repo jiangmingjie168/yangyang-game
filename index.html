@@ -579,7 +579,7 @@
   <canvas id="view" width="800" height="400"></canvas>
   <div id="hud">
     <span id="hunger-hint" hidden></span>
-    <span id="build-version" aria-label="Build version">build cd91b62+ux46</span>
+    <span id="build-version" aria-label="Build version">build cd91b62+ux47</span>
     <div class="topbar">
       <button id="quest" type="button">
         <canvas id="quest-icon" width="128" height="128"></canvas>
@@ -2236,7 +2236,7 @@ function validConversation(value, p) {
     drivingCar=b;b.dir=b.dir||1;document.body.classList.add('driving');
     buildMode=false;document.getElementById('btn-build').setAttribute('aria-pressed','false');document.getElementById('build-tools').hidden=true;document.getElementById('build-status').hidden=true;
     document.getElementById('car-exit').hidden=false;settleCar(b);seatDriver(b);
-    buildFeedback('Hop in! Let\'s drive!','car_ride');playSfx('enter-car');save();
+    buildFeedback('Hop in! Let\'s drive!','car_ride');playSfx('enter-car');syncSoundPack();save();
   }
   function driveCar(dt) {
     var b = drivingCar, ax = axis(); jumpBuf = 0;
@@ -3966,7 +3966,25 @@ function validConversation(value, p) {
       g.restore();
     }
   }
-  function drawInterior(g) {
+  function drawHearth(g, R, sec) {
+    var x = R.left + 78, y = R.floor - 44;
+    inkStyle(g);
+    inkBox(g, x, y, 34, 26, '#8d5a3c', 4);
+    inkBox(g, x + 4, y + 8, 26, 14, '#3a2418', 3);
+    g.fillStyle = '#ffb15a';
+    g.beginPath(); g.ellipse(x + 17, y + 16, 5, 3.2, 0, 0, 6.3); g.fill();
+    var glow = g.createRadialGradient(x + 17, y + 14, 2, x + 17, y + 14, 40);
+    glow.addColorStop(0, 'rgba(255, 186, 90, 0.32)');
+    glow.addColorStop(1, 'rgba(255, 186, 90, 0)');
+    g.fillStyle = glow;
+    g.beginPath(); g.arc(x + 17, y + 14, 40, 0, 6.3); g.fill();
+    var i, phase;
+    for (i = 0; i < 2; i++) {
+      phase = (sec * 0.4 + i * 0.5) % 1;
+      drawSmokePuff(g, x + 17 + Math.sin(sec + i) * 2, y + 6, phase, 5, 22, 0.28);
+    }
+  }
+  function drawInterior(g, sec) {
     var R = roomBoxes();
     var b = indoors;
     var furn = houseFurn(b);
@@ -4001,6 +4019,7 @@ function validConversation(value, p) {
     drawRoomItem(g, 'bed', R.bed, furn.bed);
     drawRoomItem(g, 'table', R.table, furn.table);
     drawRoomItem(g, 'torch', R.torch, furn.torch);
+    drawHearth(g, R, sec || 0);
     if (furn.torch) {
       g.fillStyle = 'rgba(255, 196, 90, 0.2)';
       g.beginPath(); g.arc(R.torch.x + 16, R.torch.y + 12, 56, 0, 6.3); g.fill();
@@ -5954,6 +5973,48 @@ function validConversation(value, p) {
     });
     g.restore();
   }
+  function drawSmokePuff(g, x, y, phase, spread, lift, alpha) {
+    g.save();
+    g.globalAlpha = Math.max(0, (1 - phase) * alpha);
+    g.fillStyle = phase < 0.4 ? 'rgba(120,116,110,0.9)' : 'rgba(236,232,226,0.95)';
+    g.beginPath();
+    g.ellipse(x, y - phase * lift, 2.2 + phase * spread, 1.6 + phase * spread * 0.7, 0, 0, 6.3);
+    g.fill();
+    g.restore();
+  }
+  function drawCarExhaust(g, b, sec) {
+    if (drivingCar !== b) return;
+    var rear = b.dir === -1 ? (b.x + b.w) * TILE - 8 : b.x * TILE + 8;
+    var y = (b.y + b.h) * TILE - 16;
+    var drift = b.dir === -1 ? 1 : -1;
+    var moving = !!carMoving;
+    var n = moving ? 4 : 3;
+    var i, phase;
+    for (i = 0; i < n; i++) {
+      phase = (sec * (moving ? 1.7 : 0.8) + i / n) % 1;
+      drawSmokePuff(g, rear + drift * phase * (moving ? 34 : 16), y - phase * (moving ? 8 : 18), phase, moving ? 11 : 9, moving ? 6 : 10, moving ? 0.55 : 0.5);
+    }
+  }
+  function drawHouseLife(g, b, sec) {
+    if (b.kind !== 'house') return;
+    var chimney = b.parts && b.parts.roof && b.parts.roof.tier >= 2;
+    var baseX = b.dir === -1 ? (b.x + b.w) * TILE - (chimney ? 70 : 48) : b.x * TILE + (chimney ? 70 : 48);
+    var baseY = b.y * TILE + (chimney ? 6 : 16);
+    var i, phase, n = chimney ? 3 : 2;
+    for (i = 0; i < n; i++) {
+      phase = (sec * 0.28 + i / n) % 1;
+      drawSmokePuff(g, baseX + Math.sin(sec * 0.8 + i) * 2, baseY, phase, chimney ? 6 : 4, chimney ? 30 : 16, chimney ? 0.34 : 0.2);
+    }
+    var wx = b.dir === -1 ? (b.x + b.w) * TILE - 26 : b.x * TILE + 26;
+    var wy = b.y * TILE + 64;
+    var glow = g.createRadialGradient(wx, wy, 1, wx, wy, 22);
+    glow.addColorStop(0, 'rgba(255, 186, 90, 0.55)');
+    glow.addColorStop(1, 'rgba(255, 186, 90, 0)');
+    g.save();
+    g.fillStyle = glow;
+    g.beginPath(); g.arc(wx, wy, 22, 0, 6.3); g.fill();
+    g.restore();
+  }
   function drawFrame(sec) {
     var z = tileScreen / TILE;
     var sky = skyColors(timeOfDay);
@@ -6069,10 +6130,10 @@ function validConversation(value, p) {
     hillBand(hill2, 0.25, 16, viewH * 0.58);
     hillBand(hill, 0.45, 12, viewH * 0.66);
 
-    if (indoors) { drawInterior(ctx); return; }
+    if (indoors) { drawInterior(ctx, sec); return; }
     ctx.setTransform(dpr * z, 0, 0, dpr * z, -drawCamX * dpr * z, -drawCamY * dpr * z);
     drawWorld(ctx, sec);
-    buildObjects.forEach(function(b){if(!bboxOnScreen(b))return;ctx.save();ctx.translate((b.x+(b.dir===-1?b.w:0))*TILE,b.y*TILE);if(b.dir===-1)ctx.scale(-1,1);ctx.drawImage(craftableSprite(b),0,0);ctx.restore();});
+    buildObjects.forEach(function(b){if(!bboxOnScreen(b))return;ctx.save();ctx.translate((b.x+(b.dir===-1?b.w:0))*TILE,b.y*TILE);if(b.dir===-1)ctx.scale(-1,1);ctx.drawImage(craftableSprite(b),0,0);ctx.restore();drawHouseLife(ctx,b,sec);drawCarExhaust(ctx,b,sec);});
     var ai;
     for (ai = 0; ai < animals.length; ai++) {
       var an = animals[ai];
@@ -6668,9 +6729,18 @@ function validConversation(value, p) {
     packWanted[key]=wanted;
     if(wanted)packPlay(key,true);else if(packPlayers[key])packPlayers[key].pause();
   }
+  function tuneEngine() {
+    var eng = packPlayers.engine;
+    if (!eng) return;
+    var drive = !!(drivingCar && carMoving);
+    eng.volume = drive ? 0.48 : 0.3;
+    try { eng.playbackRate = drive ? 1.12 : 0.94; } catch (err) { /* optional */ }
+  }
   function syncSoundPack() {
     packLoop('garden-loop',started&&musicOn);
-    packLoop('engine',started&&sfxOn&&drivingCar&&carMoving&&!panelOpen()&&!chatBlocked());
+    // Idle while seated, a little louder and higher while the wheels are turning.
+    packLoop('engine',started&&sfxOn&&!!drivingCar&&!panelOpen()&&!chatBlocked());
+    tuneEngine();
   }
   function suspendSoundPack(){packSuspended=true;Object.keys(packPlayers).forEach(function(k){packPlayers[k].pause();});packWanted={};}
   function resumeSoundPack(){packSuspended=false;syncSoundPack();}
@@ -7917,7 +7987,7 @@ function validConversation(value, p) {
     });
     window.BW = {
       ready: true,
-      audioState:function(){var players={};Object.keys(packPlayers).forEach(function(k){var a=packPlayers[k];players[k]={paused:a.paused,volume:a.volume,loop:a.loop,time:a.currentTime,ready:a.readyState};});return JSON.parse(JSON.stringify({music:musicOn,sfx:sfxOn,unlocked:packUnlocked,suspended:packSuspended,requests:packRequests,played:packPlayed,players:players}));},
+      audioState:function(){var players={};Object.keys(packPlayers).forEach(function(k){var a=packPlayers[k];players[k]={paused:a.paused,volume:a.volume,rate:a.playbackRate,loop:a.loop,time:a.currentTime,ready:a.readyState};});return JSON.parse(JSON.stringify({music:musicOn,sfx:sfxOn,unlocked:packUnlocked,suspended:packSuspended,requests:packRequests,played:packPlayed,players:players}));},
       buildState: function(){return JSON.parse(JSON.stringify({objects:buildObjects,driving:drivingCar&&drivingCar.id,crafted:craftedObjects,shows:showsToday(),exploreQuizzes:trail.quizzes}));},
       adventure: function () {
         return JSON.parse(JSON.stringify({ trail: trail, spots: trailSpots, active: dialogue, queue: chatQueue,

@@ -2,7 +2,7 @@
   "license": "CC0-1.0",
   "external_samples": true,
   "voice": false,
-  "total_bytes": 267280,
+  "total_bytes": 277300,
   "assets": [
     {
       "file": "audio/build-v1.1/garden-loop.ogg",
@@ -86,10 +86,10 @@
     },
     {
       "file": "audio/build-v1.1/engine.ogg",
-      "source": "Original self-synthesis: tools/make-build-v1.1-audio.py",
+      "source": "Original self-synthesis: tools/make-build-v1.1-audio.py (idle rumble; Mixkit idle file was not on this machine)",
       "license": "CC0-1.0",
       "seconds": 2.0,
-      "bytes": 6792,
+      "bytes": 16812,
       "loop": true
     },
     {
