@@ -5247,8 +5247,77 @@ function validConversation(value, p) {
     if (blink) inkPath(g, [[x - 1.2, y], [x + 1.2, y]]);
     else { g.fillStyle = '#51493c'; g.beginPath(); g.arc(x, y, 1.1, 0, Math.PI * 2); g.fill(); }
   }
-  var ANIMAL_SCALE={dog:[.68,.68],cat:[.43,.43],cow:[1.12,.95],pig:[.75,.7],sheep:[.8,.8],chicken:[.45,.45],duck:[.45,.45],horse:[1.08,1.03],rabbit:[.38,.38]};
+  var ANIMAL_SCALE={dog:[.68,.68],cat:[.43,.43],cow:[1.12,.95],pig:[.75,.7],sheep:[.8,.8],chicken:[.45,.45],duck:[.72,.72],horse:[1.08,1.03],rabbit:[.38,.38]};
+  function drawDuck(g, phase) {
+    // Side-view marker duck: round yellow head, open orange beak, black eyes, small wing, orange webs.
+    g.save();
+    var frame = reducedMotion ? 0 : Math.floor(phase * 1.6) % 2;
+    var bob = reducedMotion ? 0 : Math.sin(phase * 2.4) * 0.7;
+    g.translate(0, bob);
+    g.lineJoin = 'round';
+    g.lineCap = 'round';
+    g.strokeStyle = '#1a120c';
+    g.lineWidth = 3.2;
+    // Stroke first, then fill, so the thick outline stays outside the yellow.
+    function blob(x, y, rx, ry, color, rot) {
+      g.beginPath();
+      g.ellipse(x, y, rx, ry, rot || 0, 0, Math.PI * 2);
+      g.stroke();
+      g.fillStyle = color;
+      g.fill();
+    }
+    function web(x, y, step) {
+      g.beginPath();
+      g.moveTo(x, -9);
+      g.lineTo(x + step, y);
+      g.stroke();
+      g.beginPath();
+      g.moveTo(x + step - 3.4, y - 0.2);
+      g.quadraticCurveTo(x + step, y + 2.6, x + step + 3.6, y - 0.2);
+      g.quadraticCurveTo(x + step, y + 0.5, x + step - 3.4, y - 0.2);
+      g.closePath();
+      g.stroke();
+      g.fillStyle = '#f08a1a';
+      g.fill();
+    }
+    web(-5, -1, frame ? -1.6 : 1.4);
+    web(4, -1, frame ? 1.6 : -1.2);
+    blob(-1, -16, 11.5, 8.4, '#ffe14a');
+    blob(-1.5, -15, 6.2, 4.4, '#fff3a0');
+    g.save();
+    g.translate(-2, -15);
+    g.rotate(frame ? -0.55 : -0.15);
+    blob(0, 0, 4.6, 3.1, '#ffd23a');
+    g.restore();
+    blob(-12, -14, 2.4, 1.8, '#ffe14a', 0.4);
+    blob(9, -26, 7.6, 7.1, '#ffe14a');
+    g.beginPath();
+    g.moveTo(14.2, -27.4);
+    g.quadraticCurveTo(22.4, -29.6, 20.6, -25.6);
+    g.quadraticCurveTo(17.2, -24.6, 14.2, -25.6);
+    g.closePath();
+    g.stroke();
+    g.fillStyle = '#ff9a1f';
+    g.fill();
+    g.beginPath();
+    g.moveTo(14.2, -25.2);
+    g.quadraticCurveTo(21.2, -24.0, 19.2, -21.8);
+    g.quadraticCurveTo(16.2, -23.0, 14.2, -24.4);
+    g.closePath();
+    g.stroke();
+    g.fillStyle = '#e36d00';
+    g.fill();
+    g.fillStyle = '#1a120c';
+    g.beginPath();
+    g.arc(10.4, -27.2, 1.55, 0, Math.PI * 2);
+    g.fill();
+    g.beginPath();
+    g.arc(7.2, -26.4, 1.15, 0, Math.PI * 2);
+    g.fill();
+    g.restore();
+  }
   function drawAnimal(g, type, phase) {
+    if (type === 'duck') { drawDuck(g, phase); return; }
     g.save(); inkStyle(g);
     var frame = reducedMotion ? 1 : Math.floor(phase * 1.5) % 8;
     var wag = Math.sin(frame * Math.PI / 4) * 3;
