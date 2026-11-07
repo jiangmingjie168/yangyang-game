@@ -1,10 +1,14 @@
 English line (exact): I am resting.
 
-File to add: audio/child/i-am-resting.mp3
+File: audio/child/i-am-resting.mp3
 
-Voice: a child neural voice, for example Microsoft en-US-AnaNeural (female child).
+Generated with edge-tts:
+  voice: en-US-AnaNeural
+  rate: -10%
+  text: I am resting.
+
 Do not use en-US-JennyNeural. This file is not part of the Jenny voiceIndex.
 
-The game plays this mp3 on its own child-voice path. Until the file is present,
+The game plays this mp3 on its own child-voice path. If the file fails to load,
 the same sentence is spoken with the browser speech synthesizer, using a
 non-Jenny voice and a higher pitch.

@@ -5790,10 +5790,9 @@ function validConversation(value, p) {
   }
   // Child rest line. Not Jenny and not the Jenny voiceIndex.
   // Exact sentence: "I am resting."
-  // Optional clip (add later, do not generate with en-US-JennyNeural):
-  //   audio/child/i-am-resting.mp3
-  //   Voice: a child neural voice, for example Microsoft en-US-AnaNeural.
-  // Until that file exists, the browser speaks the same sentence with a
+  // Clip: audio/child/i-am-resting.mp3
+  // Generated with edge-tts, voice en-US-AnaNeural, rate -10%.
+  // If the file fails to load, the browser speaks the same sentence with a
   // non-Jenny voice and a higher pitch.
   var CHILD_REST_LINE = 'I am resting.';
   var CHILD_REST_SRC = 'audio/child/i-am-resting.mp3';
