@@ -1,8 +1,8 @@
 {
   "license": "CC0-1.0",
-  "external_samples": false,
+  "external_samples": true,
   "voice": false,
-  "total_bytes": 214755,
+  "total_bytes": 267280,
   "assets": [
     {
       "file": "audio/build-v1.1/garden-loop.ogg",
@@ -110,84 +110,94 @@
     },
     {
       "file": "audio/build-v1.1/cry-dog.ogg",
-      "source": "Original self-synthesis: tools/make-animal-sfx.py",
-      "license": "CC0-1.0",
-      "seconds": 0.24,
-      "bytes": 4784,
+      "source": "Recording: Barking of a dog 2 by Amada44. Trimmed to one bark. https://commons.wikimedia.org/wiki/File:Barking_of_a_dog_2.ogg",
+      "license": "CC-BY-SA-3.0",
+      "seconds": 0.5,
+      "bytes": 8219,
       "loop": false,
-      "animal": "dog"
+      "animal": "dog",
+      "recorded": true
     },
     {
       "file": "audio/build-v1.1/cry-cat.ogg",
-      "source": "Original self-synthesis: tools/make-animal-sfx.py",
-      "license": "CC0-1.0",
-      "seconds": 0.42,
-      "bytes": 4291,
+      "source": "Recording: Meow by Dcrosby. Trimmed. https://commons.wikimedia.org/wiki/File:Meow.ogg",
+      "license": "CC-BY-SA-3.0",
+      "seconds": 0.72,
+      "bytes": 10265,
       "loop": false,
-      "animal": "cat"
+      "animal": "cat",
+      "recorded": true
     },
     {
       "file": "audio/build-v1.1/cry-pig.ogg",
-      "source": "Original self-synthesis: tools/make-animal-sfx.py",
-      "license": "CC0-1.0",
-      "seconds": 0.3,
-      "bytes": 5039,
+      "source": "Recording: Pig grunt by erdie (Freesound 44274). Trimmed. https://commons.wikimedia.org/wiki/File:Pig_grunt_-_Erdie.ogg",
+      "license": "CC-BY-3.0",
+      "seconds": 0.6,
+      "bytes": 9393,
       "loop": false,
-      "animal": "pig"
+      "animal": "pig",
+      "recorded": true
     },
     {
       "file": "audio/build-v1.1/cry-cow.ogg",
-      "source": "Original self-synthesis: tools/make-animal-sfx.py",
-      "license": "CC0-1.0",
-      "seconds": 0.55,
-      "bytes": 4173,
+      "source": "Recording: Mudchute cow 1 by Secretlondon. Trimmed to one moo. https://commons.wikimedia.org/wiki/File:Mudchute_cow_1.ogg",
+      "license": "CC-BY-SA-3.0",
+      "seconds": 1.33,
+      "bytes": 14718,
       "loop": false,
-      "animal": "cow"
+      "animal": "cow",
+      "recorded": true
     },
     {
       "file": "audio/build-v1.1/cry-sheep.ogg",
-      "source": "Original self-synthesis: tools/make-animal-sfx.py",
+      "source": "Recording: Sheep bleat by Eviatar Bach. https://commons.wikimedia.org/wiki/File:Sheep_bleat.ogg",
       "license": "CC0-1.0",
-      "seconds": 0.4,
-      "bytes": 5236,
+      "seconds": 0.44,
+      "bytes": 7616,
       "loop": false,
-      "animal": "sheep"
-    },
-    {
-      "file": "audio/build-v1.1/cry-chicken.ogg",
-      "source": "Original self-synthesis: tools/make-animal-sfx.py",
-      "license": "CC0-1.0",
-      "seconds": 0.23,
-      "bytes": 4252,
-      "loop": false,
-      "animal": "chicken"
-    },
-    {
-      "file": "audio/build-v1.1/cry-duck.ogg",
-      "source": "Original self-synthesis: tools/make-animal-sfx.py",
-      "license": "CC0-1.0",
-      "seconds": 0.22,
-      "bytes": 4684,
-      "loop": false,
-      "animal": "duck"
+      "animal": "sheep",
+      "recorded": true
     },
     {
       "file": "audio/build-v1.1/cry-horse.ogg",
-      "source": "Original self-synthesis: tools/make-animal-sfx.py",
-      "license": "CC0-1.0",
-      "seconds": 0.5,
-      "bytes": 4488,
+      "source": "Recording: Wiehern by H\u00fc. Public domain. Trimmed to one neigh. https://commons.wikimedia.org/wiki/File:Wiehern.ogg",
+      "license": "Public domain",
+      "seconds": 1.33,
+      "bytes": 10973,
       "loop": false,
-      "animal": "horse"
+      "animal": "horse",
+      "recorded": true
+    },
+    {
+      "file": "audio/build-v1.1/cry-duck.ogg",
+      "source": "Recording: Mallard XC62258 by Jonathon Jongsma. Trimmed to a quack. https://commons.wikimedia.org/wiki/File:Anas_platyrhynchos_-_Mallard_-_XC62258.ogg",
+      "license": "CC-BY-SA-3.0",
+      "seconds": 0.8,
+      "bytes": 10886,
+      "loop": false,
+      "animal": "duck",
+      "recorded": true
+    },
+    {
+      "file": "audio/build-v1.1/cry-chicken.ogg",
+      "source": "Recording: Hen announcing an egg by alys / PDSounds. Trimmed to clucks. https://commons.wikimedia.org/wiki/File:Hen_announcing_shes_lain_an_egg.ogg",
+      "license": "Public domain",
+      "seconds": 0.85,
+      "bytes": 10637,
+      "loop": false,
+      "animal": "chicken",
+      "recorded": true
     },
     {
       "file": "audio/build-v1.1/cry-rabbit.ogg",
-      "source": "Original self-synthesis: tools/make-animal-sfx.py",
+      "source": "Recording: Rabbit oinks and squeaks by kessir, CC0, via Wikimedia. Trimmed to one squeak. https://commons.wikimedia.org/wiki/File:Rabbit_oinks_and_squeaks.wav",
       "license": "CC0-1.0",
-      "seconds": 0.16,
-      "bytes": 4011,
+      "seconds": 0.8,
+      "bytes": 10776,
       "loop": false,
-      "animal": "rabbit"
+      "animal": "rabbit",
+      "recorded": true
     }
-  ]
+  ],
+  "cry_note": "cry-*.ogg are real recordings listed in CRIES.txt. They are not synthesized. Other files in this pack stay CC0 self-synthesis."
 }

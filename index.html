@@ -577,7 +577,7 @@
 <div id="app">
   <canvas id="view" width="800" height="400"></canvas>
   <div id="hud">
-    <span id="build-version" aria-label="Build version">build cd91b62+ux38</span>
+    <span id="build-version" aria-label="Build version">build cd91b62+ux39</span>
     <div class="topbar">
       <button id="quest" type="button">
         <canvas id="quest-icon" width="128" height="128"></canvas>
@@ -3429,42 +3429,75 @@ function validConversation(value, p) {
     }
     return best || { x: player.x, y: cap * TILE - 0.01 };
   }
-  function petInPit(a, shaftX) {
-    // Any puppy or cat in this hole, hearts or not. Other animals stay put.
-    if (!a || (a.type !== 'dog' && a.type !== 'cat')) return false;
-    if (Math.abs(a.x - shaftX) > 8 * TILE) return false;
-    var cap = columnCap(Math.floor(shaftX / TILE));
-    if (cap == null) cap = columnCap(Math.floor(a.x / TILE));
-    if (cap == null) return false;
-    return Math.floor((a.y - 1) / TILE) - (cap - 1) >= 3;
+  function animalDepth(a) {
+    var cap = columnCap(Math.floor(a.x / TILE));
+    if (cap == null) return 0;
+    return Math.floor((a.y - 1) / TILE) - (cap - 1);
   }
-  function ropePets(shaftX) {
+  function pitConnected(ax, ay, sx, sy) {
+    var seen = {};
+    var q = [[ax, ay]];
+    var guard = 0;
+    while (q.length && guard++ < 280) {
+      var cur = q.pop();
+      var x = cur[0], y = cur[1];
+      if (x < 1 || x >= W - 1 || y < 1 || y >= H - 2) continue;
+      var key = x + ',' + y;
+      if (seen[key]) continue;
+      seen[key] = 1;
+      if (Math.abs(x - sx) <= 1 && Math.abs(y - sy) <= 2) return true;
+      if (Math.abs(x - sx) > 16 || Math.abs(y - sy) > 24) continue;
+      var cap = columnCap(x);
+      if (cap == null || y < cap - 1) continue;
+      if (solid(get(x, y))) continue;
+      q.push([x - 1, y], [x + 1, y], [x, y - 1], [x, y + 1]);
+    }
+    return false;
+  }
+  function petInPit(a, shaftX, shaftY) {
+    // Any animal in this hole, hearts or not. A deep pit is not only for the child.
+    if (!a || !a.type) return false;
+    if (animalDepth(a) < 3) return false;
+    var sx = Math.floor(shaftX / TILE);
+    var sy = Math.floor(((shaftY == null ? player.y : shaftY) - 1) / TILE);
+    var ax = Math.floor(a.x / TILE);
+    var ay = Math.floor((a.y - 1) / TILE);
+    if (Math.abs(ax - sx) <= 2 && Math.abs(ay - sy) <= 20) return true;
+    return pitConnected(ax, ay, sx, sy);
+  }
+  function ropePets(shaftX, shaftY) {
     var list = [];
     var i;
-    for (i = 0; i < animals.length; i++) if (petInPit(animals[i], shaftX)) list.push(animals[i]);
+    for (i = 0; i < animals.length; i++) if (petInPit(animals[i], shaftX, shaftY)) list.push(animals[i]);
     return list;
   }
-  function petLandingSpot(c) {
+  function petLandingSpot(c, n) {
     var shaftTx = Math.floor(c.sx / TILE);
     var landTx = Math.floor(c.tx / TILE);
     var side = landTx === shaftTx ? (player.dir || 1) : (landTx > shaftTx ? 1 : -1);
-    var row = Math.floor((c.ty + 1) / TILE);
-    var order = [landTx + side, landTx, landTx + side * 2, landTx - side];
-    var shifts = [0, 1, -1, 2, -2];
-    var i, k, tx, ty;
-    for (i = 0; i < order.length; i++) {
-      tx = order[i];
+    var cap = columnCap(landTx);
+    if (cap == null) cap = columnCap(shaftTx);
+    if (cap == null) cap = GROUND;
+    var used = c.petUsed || (c.petUsed = {});
+    var offsets = [1, 2, 3, 4, 5, -1, 6, -2, 7, 8];
+    var i, k, tx, ty, start = n || 0;
+    for (i = 0; i < offsets.length; i++) {
+      tx = landTx + side * offsets[(i + start) % offsets.length];
       if (tx < 1 || tx >= W - 1 || tx === shaftTx) continue;
-      for (k = 0; k < shifts.length; k++) {
-        ty = row + shifts[k];
+      if (used[tx]) continue;
+      for (k = 0; k <= 2; k++) {
+        ty = cap + (k === 2 ? -1 : k);
         if (ty < 2 || ty >= H - 1) continue;
-        if (solid(get(tx, ty)) && !solid(get(tx, ty - 1))) return { x: (tx + 0.5) * TILE, y: ty * TILE - 0.01 };
+        if (!solid(get(tx, ty)) || solid(get(tx, ty - 1))) continue;
+        if (ty - cap >= 3) continue;
+        used[tx] = 1;
+        return { x: (tx + 0.5) * TILE, y: ty * TILE - 0.01 };
       }
     }
-    return { x: c.tx, y: c.ty };
+    return { x: c.tx + side * (18 + start * 14), y: c.ty };
   }
   function moveRopePet(c, pet, vu, hu) {
-    var land = c.petLand;
+    var land = pet.land || c.petLand;
     var joinX = c.sx + (pet.sx >= c.sx ? 14 : -14);
     var x = vu < 1 ? pet.sx + (joinX - pet.sx) * vu : joinX + (land.x - joinX) * hu;
     var y = pet.sy + (land.y - pet.sy) * vu;
@@ -3476,11 +3509,11 @@ function validConversation(value, p) {
   }
   function settleRopePet(a, spot) {
     a.ropeRide = 0;
-    a.ropeHold = 2.4;
+    a.ropeHold = 3.2;
     a.x = spot.x;
     a.y = spot.y;
     a.vx = 0;
-    a.wait = Math.max(a.wait || 0, 2.4);
+    a.wait = Math.max(a.wait || 0, 3.2);
     var n = 0;
     while (n++ < 6 && solid(get(Math.floor(a.x / TILE), Math.floor((a.y - 4) / TILE)))) a.y -= 4;
     var under = get(Math.floor(a.x / TILE), Math.floor((a.y + 2) / TILE));
@@ -3497,17 +3530,20 @@ function validConversation(value, p) {
     if (land.y > player.y - TILE) return;
     seek = null; fishing = null; joyX = 0;
     var dist = Math.hypot(land.x - player.x, land.y - player.y);
-    var pals = ropePets(player.x);
+    var pals = ropePets(player.x, player.y);
     ropeClimb = {
       sx: player.x, sy: player.y, tx: land.x, ty: land.y, t: 0,
       dur: Math.max(0.85, dist / (TILE * 3.5)),
       petLand: null,
-      pets: pals.map(function (a) { a.ropeRide = 1; return { a: a, sx: a.x, sy: a.y }; })
+      petUsed: {},
+      pets: pals.map(function (a, i) { a.ropeRide = 1; return { a: a, sx: a.x, sy: a.y, i: i, land: null }; })
     };
-    ropeClimb.petLand = petLandingSpot(ropeClimb);
+    var pi;
+    for (pi = 0; pi < ropeClimb.pets.length; pi++) ropeClimb.pets[pi].land = petLandingSpot(ropeClimb, pi);
+    ropeClimb.petLand = ropeClimb.pets.length ? ropeClimb.pets[0].land : petLandingSpot(ropeClimb, 0);
     if (land.x !== player.x) player.dir = land.x > player.x ? 1 : -1;
-    if (pals.length === 1) showToast('The ' + pals[0].type + ' climbs too!', 2.2);
-    else if (pals.length > 1) showToast('Come with me!', 2.2);
+    if (pals.length === 1) showToast('The ' + pals[0].type + ' climbs too!', 2.2, true);
+    else if (pals.length > 1) showToast('Come with me!', 2.2, true);
   }
   function stepRopeClimb(dt) {
     var c = ropeClimb;
@@ -3528,9 +3564,9 @@ function validConversation(value, p) {
       var n = 0;
       while (n++ < 8 && collides(player.x, player.y)) player.y -= 2;
       player.vy = 0; onGround = true; coyote = 0.14;
-      for (i = 0; i < c.pets.length; i++) settleRopePet(c.pets[i].a, c.petLand);
-      var extra = ropePets(c.sx);
-      for (i = 0; i < extra.length; i++) settleRopePet(extra[i], c.petLand);
+      for (i = 0; i < c.pets.length; i++) settleRopePet(c.pets[i].a, c.pets[i].land || c.petLand);
+      var extra = ropePets(c.sx, c.sy);
+      for (i = 0; i < extra.length; i++) settleRopePet(extra[i], petLandingSpot(c, c.pets.length + i));
       ropeClimb = null; pitTime = 0; ropeShown = false; ropeAnnounced = false; ropeAnchor = null;
       if (lastPromptSpoken === 'A rope! Climb up!') lastPromptSpoken = '';
       saveSoon();
@@ -3743,9 +3779,26 @@ function validConversation(value, p) {
     bedRest = 1.6;
     speakChild(CHILD_REST_LINE);
   }
+  function bedTap(sx, sy) {
+    if (!indoors || !houseFurn(indoors).bed) return false;
+    var R = roomBoxes();
+    if (hitRoom(R.bed, sx, sy, 28)) return true;
+    // The lying child sits on the mattress, a little above the bed box.
+    var cx = R.bed.x + R.bed.w * 0.52;
+    var cy = R.bed.y + 24;
+    return Math.abs(sx - cx) < 58 && sy >= R.bed.y - 36 && sy <= R.bed.y + R.bed.h + 20;
+  }
+  function wakeBed() {
+    if (!(bedRest > 0)) return false;
+    bedRest = 0;
+    return true;
+  }
   function indoorTap(sx, sy) {
     if (!indoors) return;
-    if (bedRest > 0) { bedRest = 0; return; }
+    if (bedRest > 0) {
+      if (bedTap(sx, sy)) wakeBed();
+      return;
+    }
     var R = roomBoxes();
     if (hitRoom(R.door, sx, sy, 12)) { exitHouse(); return; }
     var key = selectedKey();
@@ -3857,13 +3910,19 @@ function validConversation(value, p) {
     }
     var feet = indoorFeet();
     if (bedRest > 0) {
-      g.save();
-      g.translate(R.bed.x + R.bed.w - 14, R.bed.y + 30);
-      g.rotate(-Math.PI / 2);
-      g.scale(1.2, 1.2);
-      g.translate(-player.x, -player.y);
-      drawPlayer(g);
-      g.restore();
+      if (childReady()) {
+        g.save();
+        drawChildFrame(g, 3, R.bed.x + R.bed.w * 0.52, R.bed.y + 46, 46);
+        g.restore();
+      } else {
+        g.save();
+        g.translate(R.bed.x + R.bed.w - 14, R.bed.y + 30);
+        g.rotate(-Math.PI / 2);
+        g.scale(1.2, 1.2);
+        g.translate(-player.x, -player.y);
+        drawPlayer(g);
+        g.restore();
+      }
       drawChildLine(g, R.bed.x - 8, R.bed.y - 46);
     } else {
       g.translate(feet.x, feet.y);
@@ -3995,12 +4054,12 @@ function validConversation(value, p) {
     var canSwim = a.tamed || a.type === 'duck' || a.type === 'dog' || a.type === 'cat';
     var floorOk = solid(belowId) || (belowId === WATER && canSwim);
     var blocked = solid(get(ahead, body));
+    // Open air is not a path. Dogs and cats used to walk off the lip and fall back in.
     if (floorOk && !blocked && nx > TILE && nx < (W - 1) * TILE) a.x = nx;
-    else if ((a.tamed || canSwim) && !blocked && nx > TILE && nx < (W - 1) * TILE) a.x = nx;
     else if (a.tamed && blocked) {
       if (!solid(get(ahead, body - 1)) && !solid(get(tx, body - 1))) { a.y = body * TILE - 0.01; a.x = nx; }
     }
-    else if (!a.tamed && !(canSwim && (belowId === WATER || get(ahead, under) === WATER))) { a.vx = -a.vx; a.timer = 0.7; }
+    else if (!a.tamed) { a.vx = -a.vx; a.timer = 0.7; }
     var underId2 = get(Math.floor(a.x / TILE), Math.floor((a.y + 2) / TILE));
     var inWaterBody = underId2 === WATER || get(Math.floor(a.x / TILE), Math.floor((a.y - 8) / TILE)) === WATER;
     if (inWaterBody && canSwim) {
@@ -4727,6 +4786,10 @@ function validConversation(value, p) {
   }
   function confirmSingle(h) {
     if (h.indoor) {
+      if (bedRest > 0) {
+        if (bedTap(h.sx, h.sy)) wakeBed();
+        return;
+      }
       if (indoors && houseFurn(indoors).bed && hitRoom(roomBoxes().bed, h.sx, h.sy, 18)) return;
       var spot = indoorAim(h.sx, h.sy);
       if (spot) placeIndoor(spot.key);
@@ -4741,7 +4804,7 @@ function validConversation(value, p) {
   }
   function armPlaceHold() {
     var h = placeHold;
-    if (!h || h.armed || chatBlocked() || panelOpen() || !started) return;
+    if (!h || h.armed || chatBlocked() || panelOpen() || !started || bedRest > 0) return;
     h.armed = true;
     h.seen = {};
     h.placedN = 0;
@@ -5168,8 +5231,60 @@ function validConversation(value, p) {
       });
     }
   }
+  var CHILD_FW = 96, CHILD_FH = 112, CHILD_FEET_X = 48, CHILD_FEET_Y = 104;
+  var childSheet = new Image();
+  childSheet.src = 'assets/child/child-sheet.png';
+  function childReady() { return !!(childSheet.complete && childSheet.naturalWidth); }
+  function drawChildFrame(g, frame, feetX, feetY, height) {
+    if (!childReady()) return false;
+    var scale = height / CHILD_FH;
+    var prev = g.imageSmoothingEnabled;
+    g.imageSmoothingEnabled = true;
+    g.drawImage(childSheet, frame * CHILD_FW, 0, CHILD_FW, CHILD_FH, feetX - CHILD_FEET_X * scale, feetY - CHILD_FEET_Y * scale, CHILD_FW * scale, CHILD_FH * scale);
+    g.imageSmoothingEnabled = prev;
+    return true;
+  }
+  function drawKidPack(g, x, y) {
+    inkBox(g, x, y, 7.5, 15, '#2ea8a0', 3);
+    g.fillStyle = '#1f7a74';
+    g.fillRect(x, y + 6, 7.5, 3);
+    g.fillStyle = '#ffc53d';
+    g.beginPath(); g.arc(x + 3.7, y + 7.6, 1.4, 0, 6.3); g.fill();
+  }
+  function drawKidHat(g, x, y) {
+    g.fillStyle = '#ffc53d';
+    g.beginPath(); g.ellipse(x, y, 10, 2.6, 0, 0, 6.3); g.fill();
+    g.beginPath(); g.ellipse(x, y - 1.6, 6.4, 4.2, 0, 0, 6.3); g.fill();
+    g.fillStyle = '#ff6b57'; g.fillRect(x - 6.2, y - 1.2, 12.4, 2.2);
+    g.fillStyle = '#fff3a0';
+    g.beginPath(); g.arc(x, y - 4, 1.6, 0, 6.3); g.fill();
+  }
+  function drawChildWorld(g) {
+    if (!childReady()) return false;
+    var frame = 0;
+    if (onGround && axis()) frame = (Math.floor(player.anim) % 2) ? 2 : 1;
+    var bob = onGround ? Math.abs(Math.sin(player.anim)) * 1.1 : 0;
+    g.save();
+    g.translate(player.x, player.y - bob);
+    g.scale(player.dir, 1);
+    drawChildFrame(g, frame, 0, 0, 48);
+    if (hasPack()) drawKidPack(g, -22, -28);
+    if (hasHat()) drawKidHat(g, 0, -44);
+    if (rainOn) drawUmbrella(g, 14, -50, -20);
+    g.restore();
+    return true;
+  }
   function drawSwimmer(g) {
     var S = waterSurfaceY() - player.y;
+    if (childReady()) {
+      g.save();
+      g.translate(player.x, player.y);
+      g.scale(player.dir, 1);
+      drawChildFrame(g, 4, 2, S + 10, 38);
+      if (hasHat()) drawKidHat(g, 8, S - 8);
+      g.restore();
+      return;
+    }
     var ph = swimPhase;
     var bob = Math.sin(ph * 0.55) * 1.1;
     var kick = Math.sin(ph);
@@ -5264,6 +5379,18 @@ function validConversation(value, p) {
   }
   function drawBoatRide(g) {
     var bob = Math.sin(boatPhase) * 1.1;
+    if (childReady()) {
+      g.save();
+      g.translate(boat.x, boat.y + bob);
+      g.scale(player.dir, 1);
+      drawChildFrame(g, 5, 0, -4, 42);
+      if (hasPack()) drawKidPack(g, -24, -26);
+      if (hasHat()) drawKidHat(g, -2, -40);
+      if (rainOn) drawUmbrella(g, 10, -48, -14);
+      drawBoatShape(g);
+      g.restore();
+      return;
+    }
     g.save();
     g.translate(boat.x, boat.y + bob);
     g.scale(player.dir, 1);
@@ -5316,6 +5443,7 @@ function validConversation(value, p) {
   function drawPlayer(g) {
     if (riding && boat) { drawBoatRide(g); return; }
     if (inWater()) { drawSwimmer(g); return; }
+    if (drawChildWorld(g)) return;
     var walk = Math.sin(player.anim);
     var bob = onGround ? Math.abs(walk) * 1.3 : 0;
     g.save();
@@ -6154,7 +6282,7 @@ function validConversation(value, p) {
   var musicOn=true,sfxOn=true,packUnlocked=false,packSuspended=false,carMoving=false;
   var packPlayers={},packWanted={},packRequests={},packPlayed={},hornAt=-100;
   function packAudio(key,loop) {
-    if(!packPlayers[key]){var a=new Audio('audio/build-v1.1/'+key+'.ogg');a.preload='none';a.loop=!!loop;a.volume=key==='garden-loop'?.30:key==='engine'?.36:key.indexOf('cry-')===0?.34:.42;packPlayers[key]=a;}
+    if(!packPlayers[key]){var a=new Audio('audio/build-v1.1/'+key+'.ogg');a.preload='none';a.loop=!!loop;a.volume=key==='garden-loop'?.30:key==='engine'?.36:key.indexOf('cry-')===0?.8:.42;packPlayers[key]=a;}
     return packPlayers[key];
   }
   function packPlay(key,loop) {
@@ -7030,6 +7158,11 @@ function validConversation(value, p) {
       if (!placeHold.armed && performance.now() - placeHold.t >= 480) armPlaceHold();
       var h = placeHold;
       placeHold = null;
+      if (h.indoor && bedRest > 0) {
+        var up = pointerWorld(e);
+        if (bedTap(h.sx, h.sy) || bedTap(up.sx, up.sy)) wakeBed();
+        return;
+      }
       if (!h.armed) {
         if (!h.moved) { if (h.indoor) indoorTap(h.sx, h.sy); else tapWorld(h.wx, h.wy, h.sx, h.sy, h.fy); }
         return;

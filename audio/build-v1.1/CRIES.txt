@@ -1,0 +1,61 @@
+Animal cries are short clips of real recordings. They are not synthesized, generated, or procedural tones.
+Each clip was trimmed and peak-normalized so a tap stays short. The recording itself is unchanged.
+
+cry-dog.ogg
+  Barking of a dog 2
+  Author: Amada44
+  License: CC BY-SA 3.0
+  https://commons.wikimedia.org/wiki/File:Barking_of_a_dog_2.ogg
+
+cry-cat.ogg
+  Meow
+  Author: Dcrosby (original upload, English Wikipedia)
+  License: CC BY-SA 3.0
+  https://commons.wikimedia.org/wiki/File:Meow.ogg
+
+cry-pig.ogg
+  Pig grunt
+  Author: erdie
+  License: CC BY 3.0
+  https://commons.wikimedia.org/wiki/File:Pig_grunt_-_Erdie.ogg
+  Original: https://freesound.org/people/Erdie/sounds/44274/
+
+cry-cow.ogg
+  Mudchute cow 1
+  Author: Secretlondon
+  License: CC BY-SA 3.0
+  https://commons.wikimedia.org/wiki/File:Mudchute_cow_1.ogg
+
+cry-sheep.ogg
+  Sheep bleat
+  Author: Eviatar Bach
+  License: CC0 1.0
+  https://commons.wikimedia.org/wiki/File:Sheep_bleat.ogg
+
+cry-horse.ogg
+  Wiehern (a neigh)
+  Author: Hü.
+  License: Public domain
+  https://commons.wikimedia.org/wiki/File:Wiehern.ogg
+
+cry-duck.ogg
+  Mallard quack, XC62258
+  Author: Jonathon Jongsma
+  License: CC BY-SA 3.0
+  https://commons.wikimedia.org/wiki/File:Anas_platyrhynchos_-_Mallard_-_XC62258.ogg
+  https://xeno-canto.org/62258
+
+cry-chicken.ogg
+  Hen announcing she has laid an egg
+  Author: alys, via PDSounds
+  License: Public domain
+  https://commons.wikimedia.org/wiki/File:Hen_announcing_shes_lain_an_egg.ogg
+
+cry-rabbit.ogg
+  Rabbit oinks and squeaks (one squeak)
+  Author: kessir
+  License: CC0 1.0
+  https://commons.wikimedia.org/wiki/File:Rabbit_oinks_and_squeaks.wav
+
+CC BY-SA clips stay under that license. Attribution belongs with these files.
+The other ogg files in this folder are still the original CC0 sound effects.
