@@ -579,7 +579,7 @@
   <canvas id="view" width="800" height="400"></canvas>
   <div id="hud">
     <span id="hunger-hint" hidden></span>
-    <span id="build-version" aria-label="Build version">build cd91b62+ux49</span>
+    <span id="build-version" aria-label="Build version">build cd91b62+ux50</span>
     <div class="topbar">
       <button id="quest" type="button">
         <canvas id="quest-icon" width="128" height="128"></canvas>
@@ -937,6 +937,8 @@ const LABEL = key => key === 'rod' ? 'fishing rod' : key;
 const CHAT_EVENTS = ['name_ask', 'small_talk', 'weather_chat', 'recast'];
 const NOUNS = new Set('grass dirt stone wood leaves sand water flower planks stick table door torch bed house wool tree cow pig sheep chicken cat dog duck horse rabbit fence rain cloud sun moon star wheat seed fish rod boat wall roof window room gate'.split(' '));
 const PREF_VALUES = { color: [], animal: ['cat','dog','cow','pig','sheep','chicken','duck','horse','rabbit'], food: ['fish','wheat','seed'], build: ['house','table','door','bed','fence','torch','boat'] };
+const DAILY = ['Hello!', 'Thank you.', "I'm happy.", "Let's go!", 'Good morning.', 'Good night.', 'Please.', 'I love you.', 'See you!', 'Wow!'];
+function dailyForms(phrase) { return [phrase, 'Say ' + phrase, 'Can you say ' + phrase]; }
 function conversationLines(p) {
   if (p.event === 'name_ask') return ['Hi! What is your name?', 'Hello! What is your name?'];
   if (p.event === 'weather_chat') return ['Look! I see the ' + p.weather + '!', 'We can see the ' + p.weather + '!', 'Look at the ' + p.weather + '!', 'Nice! I see the ' + p.weather + '!'];
@@ -955,7 +957,7 @@ function conversationLines(p) {
   const favorite = p.prefs.build || p.prefs.animal || p.prefs.food;
   if (favorite) return ['You like the ' + favorite + '!', 'You like ' + favorite + '!'];
   const event = p.recent_events.at(-1), word = (event && event.word) || 'tree';
-  return ['Look! I see the ' + word + '!', 'We can see the ' + word + '!', 'Nice! I see the ' + word + '!', 'Look at the ' + word + '!', 'Come and see!', 'You can do it!'];
+  return ['Look! I see the ' + word + '!', 'We can see the ' + word + '!', 'Nice! I see the ' + word + '!', 'Look at the ' + word + '!', 'Come and see!', 'You can do it!'].concat(DAILY);
 }
 function conversationTemplate(p) {
   const lines = conversationLines(p);
@@ -966,7 +968,7 @@ function validConversation(value, p) {
   return !!value && Object.keys(value).filter(function (key) { return key !== 'audio_url'; }).sort().join(',') === 'answer,done,options,say' &&
     Array.isArray(value.options) && value.options.length === 0 && value.answer === null && value.done === true &&
     typeof value.say === 'string' && value.say.length <= 160 && !/[^\x20-\x7e]/.test(value.say) &&
-    (value.say.match(/[A-Za-z]+/g) || []).length >= 3 &&
+    (value.say.match(/[A-Za-z]+/g) || []).length >= 1 &&
     (value.say.match(/[A-Za-z]+/g) || []).length <= 6 && conversationLines(p).includes(value.say);
 }
 
@@ -1593,6 +1595,7 @@ function validConversation(value, p) {
     var skip = event.anchor === 'pet' ? '' : followingType();
     var keyed = allowedChatWord(event.key) && event.key !== skip;
     var target = keyed ? event.key : (recentPromptWord(skip) || oldWord(pool, skip, true));
+    var phrase = event.anchor === 'pet' ? '' : (event.phrase || '');
     // The first question stays with the event's anchor word.
     var other = oldWord(pool, target);
     var options = trail.turns % 2 ? [other, target] : [target, other];
@@ -1602,8 +1605,8 @@ function validConversation(value, p) {
     releaseChatInput();
     var promptSalt = exerciseSalt(trail.promptCursor || 0, sceneNow, event.anchor);
     trail.promptCursor = (trail.promptCursor || 0) + 1;
-    dialogue = { context: { child_name: childName || undefined, recent_events: recentEvents.filter(function (e) { return allowedChatWord(e.word); }).slice(-6), last_answer: allowedChatWord(lastAnswer) ? lastAnswer : undefined }, misses: 0, anchor: event.anchor, scene: sceneNow, key: target, options: options, tier: tier,
-      turn: 0, at: chatClock, answered: false, pending: false, choices: tier === 1, sequence: 0, promptSalt: promptSalt };
+    dialogue = { context: { child_name: childName || undefined, recent_events: recentEvents.filter(function (e) { return allowedChatWord(e.word); }).slice(-6), last_answer: allowedChatWord(lastAnswer) ? lastAnswer : undefined }, misses: 0, anchor: event.anchor, scene: sceneNow, key: target, options: options, tier: phrase ? 3 : tier, phrase: phrase,
+      turn: 0, at: chatClock, answered: false, pending: false, choices: phrase ? false : tier === 1, sequence: 0, promptSalt: promptSalt };
     paintIcon(document.getElementById('chat-face'), 'dog');
     document.getElementById('chat-picture').hidden = false;
     paintIcon(document.getElementById('chat-picture'), target);document.getElementById('chat-picture').setAttribute('aria-label','Listen: '+WORD[target][0]);
@@ -1614,7 +1617,8 @@ function validConversation(value, p) {
     var word = WORD[key][0].toLowerCase();
     return (mass.indexOf(key) >= 0 ? 'the ' : /^[aeiou]/.test(word) ? 'an ' : 'a ') + word;
   }
-  function exerciseForms(key, tier, scene, anchor) {
+  function exerciseForms(key, tier, scene, anchor, phrase) {
+    if (phrase) return dailyForms(phrase);
     var word = WORD[key][0].toLowerCase();
     var noun = nounFor(key);
     var shown = noun.charAt(0).toUpperCase() + noun.slice(1);
@@ -1651,8 +1655,8 @@ function validConversation(value, p) {
     var anchors = { task: 1, fish: 2, pet: 3, boat: 4, scene: 5, bed: 6, build: 7 };
     return turn * 5 + (scenes[scene] || 0) + (anchors[anchor] || 0) * 2;
   }
-  function exerciseOk(body, key, tier, scene, anchor) {
-    var forms = exerciseForms(key, tier, scene, anchor);
+  function exerciseOk(body, key, tier, scene, anchor, phrase) {
+    var forms = exerciseForms(key, tier, scene, anchor, phrase);
     var i, line;
     for (i = 0; i < forms.length; i++) {
       line = forms[i].toLowerCase();
@@ -1666,7 +1670,7 @@ function validConversation(value, p) {
     var tier = d.choices ? 1 : d.tier;
     if (done) say = 'Great!';
     else {
-      var forms = exerciseForms(d.key, tier, d.scene, d.anchor);
+      var forms = exerciseForms(d.key, tier, d.scene, d.anchor, d.phrase);
       var salt = Number.isInteger(d.promptSalt) ? d.promptSalt : exerciseSalt(trail.turns, d.scene, d.anchor);
       say = forms[Math.abs(salt) % forms.length];
     }
@@ -1680,6 +1684,7 @@ function validConversation(value, p) {
     var tokens = reply.say.toLowerCase().match(/[a-z]+(?:'[a-z]+)?/g) || [];
     var scaffold = "a an the i you we it this is see got can say what what's who where or great nice thanks thank good job well done let's keep exploring try look at again your turn found made built met caught rode said together ready remember friend more".split(' ');
     var vocabulary = scaffold.concat(chatContextLeads(d).join(' ').toLowerCase().match(/[a-z]+(?:'[a-z]+)?/g) || []).concat((d.choices || d.tier === 1 ? [] : d.options).reduce(function (all, key) { return all.concat(WORD[key][0].toLowerCase().split(' ')); }, []));
+    if (d.phrase) dailyForms(d.phrase).forEach(function (line) { (line.toLowerCase().match(/[a-z]+(?:'[a-z]+)?/g) || []).forEach(function (w) { vocabulary.push(w); }); });
     if (!/^[A-Za-z ,.!?'’-]+$/.test(reply.say) || /[^\x20-\x7e]/.test(reply.say) || reply.say.length > 160 ||
         tokens.length < 1 || tokens.length > 12 || !tokens.every(function (w) { return vocabulary.indexOf(w) >= 0; })) return false;
     var praise = /^(great!|nice!|good job!|well done!)\s*/i;
@@ -1690,17 +1695,17 @@ function validConversation(value, p) {
     if (lead) body = body.slice(lead.length + 1);
     if (expected.done) return body === '' || /^(let's )?keep exploring!$/.test(body);
     var tier = d.choices ? 1 : d.tier;
-    return exerciseOk(body, d.key, tier, d.scene, d.anchor);
+    return exerciseOk(body, d.key, tier, d.scene, d.anchor, d.phrase);
   }
   function renderChat(d, reply, quiet) {
     if (dialogue !== d) return;
-    document.getElementById('chat-picture').hidden = false;
+    document.getElementById('chat-picture').hidden = !!d.phrase;
     document.getElementById('chat-face').hidden = d.choices || d.tier === 1;
     d.audio_url = reply.audio_url;
-    d.pending = false; d.controller = null; d.question = d.reveal && !reply.done ? "Let's say " + WORD[d.key][0].toLowerCase() + ' together!' : (reply.done ? (d.selfClaim ? 'Thanks for trying!' : WORD[d.key][0] + '!') : reply.say); d.at = chatClock;
+    d.pending = false; d.controller = null; d.question = d.reveal && !reply.done ? "Let's say " + (d.phrase || WORD[d.key][0].toLowerCase()) + ' together!' : (reply.done ? (d.selfClaim ? 'Thanks for trying!' : (d.phrase || (WORD[d.key][0] + '!'))) : reply.say); d.at = chatClock;
     var listening = false;
     document.getElementById('chat-question').textContent = listening ? 'Listen and choose!' : d.question;
-    document.getElementById('chat-status').textContent = listening ? '' : d.answered ? (d.selfClaim?'Thanks for trying!':WORD[d.key][0]+' ★') : (d.reveal ? 'Say ' + WORD[d.key][0] + '!' : d.hint ? 'Good try! Say it again.' : '');
+    document.getElementById('chat-status').textContent = listening ? '' : d.answered ? (d.selfClaim?'Thanks for trying!':(d.phrase || WORD[d.key][0])+' ★') : (d.reveal ? 'Say ' + (d.phrase || WORD[d.key][0]) + '!' : d.hint ? 'Good try! Say it again.' : '');
     var root = document.getElementById('chat-options'); root.innerHTML = ''; root.hidden = !d.choices || reply.done;
     d.options.forEach(function (key) {
       var b = document.createElement('button'); b.type = 'button'; b.dataset.word = key;
@@ -1733,7 +1738,7 @@ function validConversation(value, p) {
       d.answered = true;
       if (!d.rewardRead && !d.selfClaim) {
         d.rewardRead = true;
-        speakEn(WORD[d.key][0], { onend: function () { if (dialogue === d) closeChat(); } });
+        speakEn(d.phrase || WORD[d.key][0], { onend: function () { if (dialogue === d) closeChat(); } });
         clearTimeout(d.autoAdvanceTimer);
         d.autoAdvanceTimer = setTimeout(function () { if (dialogue === d) closeChat(); }, 1600);
       } else if (!d.selfClaim) {
@@ -1771,6 +1776,7 @@ function validConversation(value, p) {
     var timer, payload = { event: d.anchor, scene: d.scene, chapter: questIndex() < CHAPTER1 ? 1 : questIndex() < CHAPTER2 ? 2 : 3,
       target_word: d.key, options: d.options.slice(), learned_words: chatWords(), turn: d.turn,
       prompt_salt: Number.isInteger(d.promptSalt) ? d.promptSalt : exerciseSalt(trail.turns, d.scene, d.anchor),
+      daily_phrase: d.anchor === 'pet' ? undefined : (d.phrase || undefined),
       tier: d.choices ? 1 : d.tier, feedback: feedback, child_name: d.context.child_name,
       recent_events: d.context.recent_events, last_answer: d.context.last_answer, recent_lines: recentLines.slice(-4) };
     if (childSaid) payload.child_said = String(childSaid).slice(0, 160);
@@ -1851,6 +1857,12 @@ function validConversation(value, p) {
   function voiceChoice(text) {
     if (!dialogue) return '';
     var said = normalAnswer(text), tokens = said.split(' ');
+    if (dialogue.phrase) {
+      var want = normalAnswer(dialogue.phrase), bits = want.split(' ').filter(function (w) { return w.length > 2; });
+      if (want && (said === want || said.indexOf(want) >= 0)) return dialogue.key;
+      if (bits.length && bits.every(function (w) { return tokens.indexOf(w) >= 0 || tokens.some(function (t) { return nearWord(t, w); }); })) return dialogue.key;
+      return '';
+    }
     var aliases = { fish: ['fishes', 'fesh'], sheep: ['ship', 'shep'], wood: ['would'], flower: ['flour'], water: ['wata', 'woter'], cow: ['kow'], boat: ['bote'], cat: ['kat'], tree: ['three'], leaves: ['leaf'], planks: ['plank'], rod: ['fishing rod', 'rod'] };
     function exact(k) { return [normalAnswer(WORD[k][0])].concat(aliases[k] || []).some(function (a) { return said === a || (a.indexOf(' ') < 0 && tokens.indexOf(a) >= 0); }); }
     var matches = dialogue.options.filter(exact);
@@ -1990,8 +2002,13 @@ function validConversation(value, p) {
       if (followTravel > TILE * 28) followReady = true;
       if (followReady && safe && Math.abs(buddy.x - player.x) < TILE * 3 && chatClock - lastFollowChatAt >= 60) {
         // Following is not another meeting. Ask about the place or another learned word.
+        var cursor = trail.promptCursor || 0;
         var explore = rotatedExploreWord(buddy.type);
-        if (explore) queueChat('scene', explore);
+        if (explore) {
+          queueChat('scene', explore);
+          // Odd turns are a daily sentence. Even turns stay on the place or another word.
+          if (cursor % 2 === 1 && chatQueue.length) chatQueue[chatQueue.length - 1].phrase = DAILY[Math.floor(cursor / 2) % DAILY.length];
+        }
         followReady = false; followTravel = 0; lastFollowChatAt = chatClock;
       }
     }
@@ -5632,7 +5649,7 @@ function validConversation(value, p) {
     artFrameAt = sec;
     if (dialogue && !document.getElementById('dialogue').hidden) {
       paintIcon(document.getElementById('chat-face'), 'dog', sec * 6);
-      if (ANIMALS[dialogue.key] || dialogue.key === 'fish') paintIcon(document.getElementById('chat-picture'), dialogue.key, sec * 6);
+      if (!dialogue.phrase && (ANIMALS[dialogue.key] || dialogue.key === 'fish')) paintIcon(document.getElementById('chat-picture'), dialogue.key, sec * 6);
     }
     if (cardLeft > 0 && (ANIMALS[cardKey] || cardKey === 'fish')) paintIcon(document.getElementById('card-icon'), cardKey, sec * 6);
   }
