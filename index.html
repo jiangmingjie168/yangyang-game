@@ -577,7 +577,7 @@
 <div id="app">
   <canvas id="view" width="800" height="400"></canvas>
   <div id="hud">
-    <span id="build-version" aria-label="Build version">build cd91b62+ux42</span>
+    <span id="build-version" aria-label="Build version">build cd91b62+ux43</span>
     <div class="topbar">
       <button id="quest" type="button">
         <canvas id="quest-icon" width="128" height="128"></canvas>
@@ -772,7 +772,7 @@ const BRAIN_TIMEOUT_MS = 6500;
     fence: ['Fence'], rain: ['Rain'], cloud: ['Cloud'],
     sun: ['Sun'], moon: ['Moon'], star: ['Star'],
     hello: ['Hello'], jump: ['Jump'], home: ['Home'],
-    wheat: ['Wheat'], seed: ['Seed'], fish: ['Fish'],
+    wheat: ['Wheat'], bread: ['Bread'], seed: ['Seed'], fish: ['Fish'],
     rod: ['Fishing Rod'], boat: ['Boat'], pet: ['Pet'],
     car: ['Car'], wheel: ['Wheel'], follow: ['Follow'], wall: ['Wall'], roof: ['Roof'], window: ['Window'], room: ['Room'], gate: ['Gate']
   };
@@ -808,6 +808,7 @@ const BRAIN_TIMEOUT_MS = 6500;
     { out: 'fence', n: 2, need: { planks: 2, stick: 1 } },
     { out: 'rod', n: 1, need: { stick: 2, wool: 1 } },
     { out: 'boat', n: 1, need: { planks: 5 } },
+    { out: 'bread', n: 1, need: { wheat: 1 } },
     { out: 'window', n: 2, need: { planks: 2, sand: 1 } }
   ];
   var QUESTS = [
@@ -847,7 +848,7 @@ const BRAIN_TIMEOUT_MS = 6500;
     door: 'Open it to go inside.', torch: 'It gives light.', bed: 'Sleep in the house.',
     house: 'Go inside the door.', houseKit: 'Go inside the door.', wool: 'From a sheep.',
     tree: 'It grows tall.', fence: 'Put it outside.', pen: 'A yard for animals.',
-    seed: 'Plant it outside.', wheat: 'A yellow plant.', fish: 'From the water.',
+    seed: 'Plant it outside.', wheat: 'A yellow plant.', bread: 'You can eat it.', fish: 'From the water.',
     rod: 'Use it on water.', boat: 'Ride on the water.', pet: 'A friend who follows.',
     car: 'You can drive.', wheel: 'It goes on a car.', window: 'It goes on a wall.',
     wall: 'Part of a house.', roof: 'The top of a house.', room: 'Inside a house.',
@@ -1354,7 +1355,7 @@ function validConversation(value, p) {
     var qi = questIndex();
     if (qi < CHAPTER2 && CH3_WORDS.indexOf(key) >= 0) return false;
     if (qi < CHAPTER1 && CH2_WORDS.indexOf(key) >= 0) return false;
-    return key !== 'hello' && key !== 'jump' && key !== 'follow';
+    return key !== 'hello' && key !== 'jump' && key !== 'follow' && key !== 'bread';
   }
   function chatWords() { return learned.filter(allowedChatWord); }
   function oldWord(pool, except, advance) {
@@ -5396,6 +5397,12 @@ function validConversation(value, p) {
       inkPath(g, [[6, 20], [26, 20], [23, 24], [9, 24]], wood);
       inkPath(g, [[16, 20], [16, 4]]); inkPath(g, [[17, 5], [26, 16], [17, 16]], cream);
       g.strokeStyle = blue; g.lineWidth = 1.3; g.beginPath(); g.moveTo(4, 30); g.quadraticCurveTo(16, 27, 28, 30); g.stroke();
+    } else if (key === 'bread') {
+      inkBox(g, 6, 14, 20, 12, '#e7b56a', 6);
+      inkBox(g, 8, 16, 16, 8, '#f3d48a', 4);
+      g.strokeStyle = '#c4843a'; g.lineWidth = 1.4;
+      g.beginPath(); g.moveTo(16, 15); g.lineTo(16, 25); g.stroke();
+      inkEllipse(g, 16, 13, 8, 3.2, '#f6e2a8');
     } else if (key === 'wheat') {
       [9, 16, 23].forEach(function (x, n) {
         var y = n === 1 ? 5 : 9; inkPath(g, [[x, 30], [x, y]]);
@@ -6948,7 +6955,20 @@ function validConversation(value, p) {
     document.getElementById('brain-status').textContent = '本次伙伴回应：AI ' + brainStats.brain + '，模板 ' + brainStats.template + '，预生成音频 ' + brainStats.audio + '，合成回落 ' + brainStats.tts + '，来源未标注 ' + brainStats.unknown + '。最多每分钟 8 次、每个标签页会话 60 次请求（刷新不重置）；重试使用本地提示。';
     if (log) renderSpeakingLog();
   }
-  var CHEST_STASH = { grass:1, dirt:1, leaves:1, sand:1, flower:1, wool:1, seed:1, wheat:1, stone:1 };
+  var CHEST_STASH = { grass:1, dirt:1, leaves:1, sand:1, flower:1, wool:1, seed:1, wheat:1, stone:1, bread:1 };
+  function eatBread() {
+    if (!(inv.bread > 0)) return false;
+    consume('bread');
+    burst(player.x, player.y - 28, '#f2c14e', true);
+    chime();
+    showToast('Yum! Bread.', 2.2);
+    invSig = '';
+    renderHotbar();
+    if (!document.getElementById('chest-panel').hidden) renderChest();
+    updateQuest();
+    saveSoon();
+    return true;
+  }
   // Badge + panel share the same kind list (every hotbar key with stock).
   // CHEST_STASH still marks bulk blocks that skip the one-slot quick bar.
   function chestKeys() { return hotbar.filter(function (k) { return inv[k]; }); }
@@ -6985,12 +7005,13 @@ function validConversation(value, p) {
     if (!keys.length) { var empty = document.createElement('p'); empty.textContent = 'Empty for now.'; root.appendChild(empty); return; }
     keys.forEach(function (key) {
       var b = document.createElement('button'); b.type = 'button'; b.className = 'chest-item';
-      b.setAttribute('aria-label', WORD[key][0]);
+      b.setAttribute('aria-label', key === 'bread' ? 'Eat bread' : WORD[key][0]);
       var cv = document.createElement('canvas'); cv.width = 96; cv.height = 96; cv.style.cssText = 'width:40px;height:40px;image-rendering:pixelated';
       paintIcon(cv, key); b.appendChild(cv);
       b.appendChild(document.createTextNode(WORD[key][0]));
-      var em = document.createElement('em'); em.textContent = 'x' + inv[key]; b.appendChild(em);
+      var em = document.createElement('em'); em.textContent = key === 'bread' ? ('x' + inv[key] + ' · Eat') : ('x' + inv[key]); b.appendChild(em);
       tapButton(b, function () {
+        if (key === 'bread') { eatBread(); return; }
         var i = hotbar.indexOf(key); if (i >= 0) sel = i; invSig = '';
         if (buildMode && (BLOCK_OF[key] || CRAFTABLES[key])) { buildTool = key; renderBuildTools(); }
         closeChest(); showWord(key, false, true); renderHotbar();
