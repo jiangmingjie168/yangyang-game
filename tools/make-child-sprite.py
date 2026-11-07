@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Cuter child sprite sheet. Walk frames still move the arms and feet."""
+"""Little carpenter. Walk frames still move the arms and feet."""
 from PIL import Image, ImageDraw
 
 # Warm storybook colors. Outlines stay thin so the face stays soft.
@@ -7,11 +7,15 @@ SKIN = (255, 220, 196, 255)
 SKIN2 = (244, 196, 168, 255)
 HAIR = (110, 72, 48, 255)
 HAIR2 = (146, 98, 64, 255)
-SHIRT = (255, 112, 118, 255)
-SHIRT2 = (232, 86, 98, 255)
-BUTTON = (255, 214, 120, 255)
-SHORTS = (78, 148, 236, 255)
-SHORTS2 = (58, 118, 210, 255)
+SHIRT = (214, 46, 52, 255)
+SHIRT2 = (176, 32, 40, 255)
+BUTTON = (232, 184, 64, 255)
+SHORTS = (46, 112, 214, 255)
+SHORTS2 = (32, 84, 186, 255)
+HAT = (196, 36, 44, 255)
+HAT2 = (236, 92, 88, 255)
+NOSE = (255, 168, 138, 255)
+STACHE = (64, 42, 32, 255)
 SHOE = (150, 104, 70, 255)
 SHOE2 = (196, 150, 108, 255)
 EYE = (74, 52, 40, 255)
@@ -48,22 +52,36 @@ def eye(d, x, y, closed=False):
     d.ellipse([x + 2, y + 2, x + 6, y + 6], fill=(255, 255, 255, 180))
 
 
+def hat(d, cx, cy):
+    # Brim first, then the red crown, so the hat sits above the eyes.
+    ell(d, [cx - 92, cy - 28, cx + 92, cy + 8], HAT, 4)
+    ell(d, [cx - 64, cy - 86, cx + 64, cy - 4], HAT, 5)
+    d.ellipse([cx - 30, cy - 74, cx + 8, cy - 42], fill=HAT2)
+
+
 def face(d, cx, cy, closed=False):
-    # Ears peek out before the hair cap.
     ell(d, [cx - 78, cy - 8, cx - 52, cy + 28], SKIN, 4)
     ell(d, [cx + 52, cy - 8, cx + 78, cy + 28], SKIN, 4)
     ell(d, [cx - 70, cy - 64, cx + 70, cy + 72], SKIN, 5)
-    # Soft bowl of hair, bangs stop above the eyes.
-    d.pieslice([cx - 76, cy - 78, cx + 76, cy + 36], 188, 352, fill=HAIR, outline=LINE, width=5)
-    d.ellipse([cx - 28, cy - 86, cx + 6, cy - 52], fill=HAIR2)
-    d.ellipse([cx - 58, cy - 20, cx - 28, cy + 18], fill=HAIR)
-    d.ellipse([cx + 30, cy - 18, cx + 60, cy + 16], fill=HAIR)
-    d.ellipse([cx - 34, cy - 28, cx + 8, cy + 2], fill=HAIR)
-    eye(d, cx - 26, cy + 10, closed)
-    eye(d, cx + 28, cy + 10, closed)
-    d.ellipse([cx - 58, cy + 24, cx - 34, cy + 42], fill=BLUSH)
-    d.ellipse([cx + 34, cy + 24, cx + 58, cy + 42], fill=BLUSH)
-    d.arc([cx - 16, cy + 28, cx + 20, cy + 52], 18, 162, fill=MOUTH, width=5)
+    d.ellipse([cx - 22, cy - 78, cx + 18, cy - 48], fill=HAIR2)
+    eye(d, cx - 26, cy + 6, closed)
+    eye(d, cx + 28, cy + 6, closed)
+    # Big nose, then a small tuft of mustache just under it.
+    ell(d, [cx - 16, cy + 18, cx + 18, cy + 46], NOSE, 4)
+    d.ellipse([cx - 4, cy + 24, cx + 2, cy + 30], fill=WHITE)
+    d.ellipse([cx - 18, cy + 44, cx - 2, cy + 54], fill=STACHE)
+    d.ellipse([cx + 2, cy + 44, cx + 18, cy + 54], fill=STACHE)
+    d.ellipse([cx - 58, cy + 28, cx - 34, cy + 46], fill=BLUSH)
+    d.ellipse([cx + 34, cy + 28, cx + 58, cy + 46], fill=BLUSH)
+    d.arc([cx - 14, cy + 50, cx + 18, cy + 70], 18, 162, fill=MOUTH, width=5)
+    hat(d, cx, cy)
+
+
+def straps(d, x1, y1, x2, y2):
+    w = max(14, int((x2 - x1) * 0.18))
+    pill(d, [x1 + 10, y1, x1 + 10 + w, y2], SHORTS, 8, 3)
+    pill(d, [x2 - 10 - w, y1, x2 - 10, y2], SHORTS, 8, 3)
+    d.ellipse([(x1 + x2) // 2 - 10, y2 - 16, (x1 + x2) // 2 + 12, y2 + 6], fill=BUTTON)
 
 
 def shoe(d, x, y, w=40, h=22):
@@ -74,6 +92,7 @@ def shoe(d, x, y, w=40, h=22):
 def arm(d, x, y, reach):
     pill(d, [x, y, x + 28, y + 58 + reach], SKIN, 14, 4)
     ell(d, [x - 2, y + 46 + reach, x + 30, y + 74 + reach], SKIN2, 4)
+    pill(d, [x - 4, y - 2, x + 32, y + 24], SHIRT, 12, 3)
 
 
 def leg(d, x, top, bot, color):
@@ -106,8 +125,8 @@ def frame_stand(step):
         leg(d, cx + 6, 208, 300, SHORTS2)
         arm(d, cx + 46, 156, 0)
     pill(d, [cx - 48, 148, cx + 48, 236], SHIRT, 28, 5)
-    d.ellipse([cx - 10, 176, cx + 12, 198], fill=BUTTON)
-    d.rectangle([cx - 36, 214, cx + 36, 230], fill=SHIRT2)
+    pill(d, [cx - 40, 196, cx + 40, 250], SHORTS, 16, 4)
+    straps(d, cx - 44, 150, cx + 44, 214)
     face(d, cx, 108, closed=False)
     return im
 
@@ -118,7 +137,8 @@ def frame_rest():
     shoe(d, 18, 186, 40, 22)
     pill(d, [36, 156, 78, 204], SHORTS, 16, 4)
     pill(d, [64, 140, 168, 214], SHIRT, 28, 5)
-    d.ellipse([96, 162, 118, 184], fill=BUTTON)
+    pill(d, [78, 176, 156, 220], SHORTS, 14, 4)
+    straps(d, 72, 146, 160, 198)
     pill(d, [118, 168, 150, 214], SKIN, 12, 4)
     face(d, 196, 156, closed=True)
     return im
@@ -130,7 +150,8 @@ def frame_swim():
     shoe(d, 8, 176, 36, 20)
     pill(d, [28, 150, 70, 198], SHORTS2, 16, 4)
     pill(d, [58, 138, 156, 206], SHIRT, 26, 5)
-    d.ellipse([90, 156, 110, 176], fill=BUTTON)
+    pill(d, [72, 168, 146, 210], SHORTS, 14, 4)
+    straps(d, 66, 142, 148, 186)
     pill(d, [130, 96, 162, 156], SKIN, 14, 4)
     ell(d, [124, 84, 168, 120], SKIN2, 4)
     face(d, 198, 150, closed=False)
@@ -146,7 +167,8 @@ def frame_sit():
     shoe(d, cx + 70, 276, 44, 24)
     arm(d, cx + 28, 168, 6)
     pill(d, [cx - 52, 156, cx + 40, 236], SHIRT, 26, 5)
-    d.ellipse([cx - 16, 184, cx + 6, 206], fill=BUTTON)
+    pill(d, [cx - 40, 198, cx + 28, 242], SHORTS, 14, 4)
+    straps(d, cx - 46, 160, cx + 34, 210)
     face(d, cx - 8, 112, closed=False)
     return im
 
