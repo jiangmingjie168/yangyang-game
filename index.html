@@ -579,7 +579,7 @@
   <canvas id="view" width="800" height="400"></canvas>
   <div id="hud">
     <span id="hunger-hint" hidden></span>
-    <span id="build-version" aria-label="Build version">build cd91b62+ux50</span>
+    <span id="build-version" aria-label="Build version">build cd91b62+ux51</span>
     <div class="topbar">
       <button id="quest" type="button">
         <canvas id="quest-icon" width="128" height="128"></canvas>
@@ -1607,7 +1607,7 @@ function validConversation(value, p) {
     trail.promptCursor = (trail.promptCursor || 0) + 1;
     dialogue = { context: { child_name: childName || undefined, recent_events: recentEvents.filter(function (e) { return allowedChatWord(e.word); }).slice(-6), last_answer: allowedChatWord(lastAnswer) ? lastAnswer : undefined }, misses: 0, anchor: event.anchor, scene: sceneNow, key: target, options: options, tier: phrase ? 3 : tier, phrase: phrase,
       turn: 0, at: chatClock, answered: false, pending: false, choices: phrase ? false : tier === 1, sequence: 0, promptSalt: promptSalt };
-    paintIcon(document.getElementById('chat-face'), 'dog');
+    paintIcon(document.getElementById('chat-face'), target);
     document.getElementById('chat-picture').hidden = false;
     paintIcon(document.getElementById('chat-picture'), target);document.getElementById('chat-picture').setAttribute('aria-label','Listen: '+WORD[target][0]);
     requestChat(dialogue, 'prompt');
@@ -1700,7 +1700,7 @@ function validConversation(value, p) {
   function renderChat(d, reply, quiet) {
     if (dialogue !== d) return;
     document.getElementById('chat-picture').hidden = !!d.phrase;
-    document.getElementById('chat-face').hidden = d.choices || d.tier === 1;
+    document.getElementById('chat-face').hidden = !!d.phrase || d.choices || d.tier === 1;
     d.audio_url = reply.audio_url;
     d.pending = false; d.controller = null; d.question = d.reveal && !reply.done ? "Let's say " + (d.phrase || WORD[d.key][0].toLowerCase()) + ' together!' : (reply.done ? (d.selfClaim ? 'Thanks for trying!' : (d.phrase || (WORD[d.key][0] + '!'))) : reply.say); d.at = chatClock;
     var listening = false;
@@ -5648,7 +5648,7 @@ function validConversation(value, p) {
     if (reducedMotion || sec - artFrameAt < 0.125) return;
     artFrameAt = sec;
     if (dialogue && !document.getElementById('dialogue').hidden) {
-      paintIcon(document.getElementById('chat-face'), 'dog', sec * 6);
+      paintIcon(document.getElementById('chat-face'), dialogue.key, sec * 6);
       if (!dialogue.phrase && (ANIMALS[dialogue.key] || dialogue.key === 'fish')) paintIcon(document.getElementById('chat-picture'), dialogue.key, sec * 6);
     }
     if (cardLeft > 0 && (ANIMALS[cardKey] || cardKey === 'fish')) paintIcon(document.getElementById('card-icon'), cardKey, sec * 6);
