@@ -579,7 +579,7 @@
   <canvas id="view" width="800" height="400"></canvas>
   <div id="hud">
     <span id="hunger-hint" hidden></span>
-    <span id="build-version" aria-label="Build version">build cd91b62+ux44</span>
+    <span id="build-version" aria-label="Build version">build cd91b62+ux45</span>
     <div class="topbar">
       <button id="quest" type="button">
         <canvas id="quest-icon" width="128" height="128"></canvas>
@@ -1982,7 +1982,7 @@ function validConversation(value, p) {
     chatQueue = chatQueue.filter(function (e) { return chatClock - e.at < 40; });
     // A deep pit is a rescue, not a question. Hold the Speak prompt until they are out.
     var pitLocked = ropeShown || ropeClimb || (pitDepthTiles() >= 8 && !canWalkOut());
-    if (!(buildMode || buildSession.active) && !dialogue && chatIdle > 0.8 && chatCooldown <= 0 && cardLeft <= 0 && chatQueue.length && !pitLocked) {
+    if (!(buildMode || buildSession.active) && !dialogue && chatIdle > 0.8 && chatCooldown <= 0 && cardLeft <= 0 && chatQueue.length && !pitLocked && Date.now() - animalVoiceAt > 2200) {
       var priority = { fish: 4, boat: 4, pet: 3, task: 2, bed: 2, scene: 1 };
       chatQueue.sort(function (a, b) { return priority[b.anchor] - priority[a.anchor] || b.at - a.at; });
       var event = chatQueue.shift();
@@ -4597,8 +4597,15 @@ function validConversation(value, p) {
     }
   }
   function pet(a) {
-    function animalCard(){if(quiz&&quiz.key===a.type)quizWin();else showWord(a.type, false, true);}
-    animalCry(a.type);
+    var primed = a.audioPrimed && Date.now() - a.audioPrimed < 12000;
+    a.audioPrimed = 0;
+    function animalCard(){if(quiz&&quiz.key===a.type)quizWin();else showWord(a.type, false, true, primed);}
+    if (!primed) {
+      unlockAudio();
+      if (!document.hidden) packSuspended = false;
+      animalCry(a.type);
+      animalVoiceAt = Date.now();
+    }
     a.pet = 1.2;
     a.wait = 4; a.vx = 0; a.timer = 2;
     if (!quiz) progress.tapped[a.type] = 1;
@@ -4648,7 +4655,8 @@ function validConversation(value, p) {
     seekStep(0);
     if (seek) {
       var key = target.kind === 'pet' ? target.animal.type : KEY_OF[get(target.tx, target.ty)];
-      showToast('Walking to ' + (WORD[key] ? WORD[key][0].toLowerCase() : 'the block') + '!', 1.8);
+      // A pet walk-toast used to call speakEn and cancel the name that the tap just started.
+      showToast('Walking to ' + (WORD[key] ? WORD[key][0].toLowerCase() : 'the block') + '!', 1.8, target.kind === 'pet');
     }
   }
   function seekMine(tx, ty, dig) {
@@ -5056,7 +5064,45 @@ function validConversation(value, p) {
     var ty = Math.floor(w.y / TILE);
     return { sx: sx, sy: sy, wx: w.x, wy: w.y, tx: Math.floor(w.x / TILE), ty: ty, fy: w.y / TILE - ty };
   }
+  function animalAtPoint(wx, wy) {
+    var cropX = Math.floor(wx / TILE), cropY = Math.floor(wy / TILE);
+    var best = null, bd = Infinity, i, a, dx, dy, d, hit, footCell;
+    for (i = 0; i < animals.length; i++) {
+      a = animals[i];
+      dx = a.x - wx; dy = (a.y - 16) - wy; d = dx * dx + dy * dy;
+      hit = Math.abs(dx) <= 32 && wy >= a.y - 54 && wy <= a.y + 8;
+      footCell = Math.floor(a.x / TILE) === cropX && Math.floor((a.y - 1) / TILE) === cropY;
+      if ((hit || footCell) && d < bd) { bd = d; best = a; }
+    }
+    return best;
+  }
+  function primeAnimalAudio(a) {
+    unlockAudio();
+    if (!document.hidden) packSuspended = false;
+    animalCry(a.type);
+    speakEn(WORD[a.type][0], { force: true, noDeviceTts: true });
+    a.audioPrimed = Date.now();
+    animalVoiceAt = Date.now();
+  }
   function tapWorld(wx, wy, sx, sy, fy) {
+    var tapTx = Math.floor(wx / TILE), tapTy = Math.floor(wy / TILE), tapId = get(tapTx, tapTy);
+    // Wheat stays tappable when a pet stands on it. The animal body is checked next, before gifts.
+    if (!riding && !drivingCar && (tapId === WHEAT1 || tapId === WHEAT2 || tapId === WHEAT3)) {
+      lock = { tx: tapTx, ty: tapTy }; lockAge = 0;
+      seek = null;
+      seekMine(tapTx, tapTy);
+      return;
+    }
+    if (!riding && !drivingCar) {
+      var petHit = animalAtPoint(wx, wy);
+      if (petHit) {
+        // Play during this tap. A later arrival is no longer a user gesture, so play() would be rejected.
+        if (!petReach(petHit)) primeAnimalAudio(petHit);
+        seek = null;
+        beginSeek({ kind: 'pet', animal: petHit });
+        return;
+      }
+    }
     var present = giftAtPoint(wx, wy);
     if (present) {
       if (giftTapReach(present)) claimTrailGift(present);
@@ -5089,26 +5135,6 @@ function validConversation(value, p) {
     }
     if (riding || drivingCar) return;
     seek = null;
-    var cropX = Math.floor(wx / TILE), cropY = Math.floor(wy / TILE), cropId = get(cropX, cropY);
-    // A direct tap on a crop should reach it even when a pet stands in front.
-    if (cropId === WHEAT1 || cropId === WHEAT2 || cropId === WHEAT3) {
-      lock = { tx: cropX, ty: cropY }; lockAge = 0;
-      seekMine(cropX, cropY); return;
-    }
-    var best = null, bd = Infinity, i;
-    for (i = 0; i < animals.length; i++) {
-      var a = animals[i];
-      var dx = a.x - wx, dy = (a.y - 16) - wy, d = dx * dx + dy * dy;
-      // Cover the drawn head/ears, body and the foot cell a child selects.
-      var hit = Math.abs(dx) <= 32 && wy >= a.y - 54 && wy <= a.y + 8;
-      var footCell = Math.floor(a.x / TILE) === cropX && Math.floor((a.y - 1) / TILE) === cropY;
-      if ((hit || footCell) && d < bd) { bd = d; best = a; }
-    }
-    if (best) {
-      lock = null; lockAge = 0;
-      beginSeek({ kind: 'pet', animal: best });
-      return;
-    }
     var tx = Math.floor(wx / TILE), ty = Math.floor(wy / TILE);
     var id = get(tx, ty);
     var heldKey = selectedKey();
@@ -6167,7 +6193,7 @@ function validConversation(value, p) {
     if (!hint) hint = ITEM_HINT[shown] || '';
     return hint ? (w[0] + '. ' + hint) : w[0];
   }
-  function showWord(key, reward, replay) {
+  function showWord(key, reward, replay, quiet) {
     var hintKey = key;
     key=key==='houseKit'?'house':key==='pen'?'fence':key;
     var w = WORD[key];
@@ -6180,7 +6206,7 @@ function validConversation(value, p) {
     learn(key);
     if (buildSessionBusy() && !buildShowingWord) {
       // Build-busy hides the card, but animal taps / word reads must still say English when unmuted.
-      speakEn(spoken, { force: !!replay || animalLine, noDeviceTts: animalLine });
+      if (!quiet) speakEn(spoken, { force: !!replay || animalLine, noDeviceTts: animalLine });
       return;
     }
     if (cardFlyTimer) { clearTimeout(cardFlyTimer); cardFlyTimer = null; }
@@ -6203,7 +6229,7 @@ function validConversation(value, p) {
       chime();
       playSfx('star');
     }
-    speakEn(spoken, { force: !!replay || animalLine, noDeviceTts: animalLine });
+    if (!quiet) speakEn(spoken, { force: !!replay || animalLine, noDeviceTts: animalLine });
     renderHotbar();
   }
   function hideCard() {
@@ -6416,11 +6442,21 @@ function validConversation(value, p) {
         if (!urls.length) { enAudio = null; if (params.onend) params.onend(); return; }
         try {
           var a = new Audio(urls.shift()); enAudio = a; a.volume = params.soft ? 0.75 : 1;
+          var started = false;
+          function markStarted() {
+            if (failed || serial !== speechSerial) { try { a.pause(); } catch (err) { /* late start after fallback */ } return; }
+            if (started) return;
+            started = true;
+            clearTimeout(a.voiceTimer);
+            brainStats.audio++;
+          }
           a.onended = function () { clearTimeout(a.voiceTimer); playNext(); };
           a.onerror = fallback;
-          if (!params.noDeviceTts) a.voiceTimer = setTimeout(fallback, 4000); // stalled network/autoplay
+          a.addEventListener('playing', markStarted);
+          // A hung Jenny file must not leave the name silent, and must not overlap a later fallback.
+          a.voiceTimer = setTimeout(function () { if (!started) fallback(); }, params.noDeviceTts ? 900 : 4000);
           var played = a.play();
-          if (played && played.then) played.then(function () { clearTimeout(a.voiceTimer); if (!failed && serial === speechSerial) { brainStats.audio++; if (!params.noDeviceTts) a.voiceTimer = setTimeout(fallback, 12000); } }).catch(fallback);
+          if (played && played.then) played.then(function () { markStarted(); if (!params.noDeviceTts && !failed && serial === speechSerial) a.voiceTimer = setTimeout(fallback, 12000); }).catch(fallback);
           return a;
         } catch (err) { fallback(); }
       }
@@ -6544,16 +6580,40 @@ function validConversation(value, p) {
     }catch(err){/* Missing browser audio support never blocks game actions. */}
   }
   function playSfx(key){packPlay(key,false);}
-  var animalSfxAt = {};
+  var animalSfxAt = {}, animalVoiceAt = 0;
+  function dropCry(key) {
+    var old = packPlayers[key];
+    if (!old) return;
+    try { old.pause(); old.onended = old.onerror = null; } catch (err) { /* ignore */ }
+    delete packPlayers[key];
+  }
   function animalCry(type) {
-    if (!type || !sfxOn || packSuspended || document.hidden) return;
+    if (!type || !sfxOn || document.hidden) return;
+    // A tap is a user gesture. A stale suspend or a locked pack must not mute the cry.
+    if (!packUnlocked) unlockAudio();
+    else if (audioCtx && audioCtx.state === 'suspended') { try { audioCtx.resume(); } catch (err) { /* optional */ } }
+    if (packSuspended) resumeSoundPack();
     var key = 'cry-' + type;
-    var clip = packPlayers[key];
-    if (clip && !clip.paused && !clip.ended && clip.currentTime > 0.02) return;
     var now = Date.now();
-    if (animalSfxAt[type] && now - animalSfxAt[type] < 420) return;
+    if (animalSfxAt[type] && now - animalSfxAt[type] < 280) return;
     animalSfxAt[type] = now;
-    playSfx(key);
+    var clip = packPlayers[key];
+    // A stalled element used to look "still playing" and then ignore every later tap of that animal.
+    if (!clip || clip.error || (clip._cryArm && now - clip._cryArm > 2500 && (clip.paused || clip.readyState < 2))) dropCry(key);
+    try {
+      clip = packAudio(key, false);
+      var gen = (clip._cryGen || 0) + 1;
+      clip._cryGen = gen;
+      clip.pause();
+      try { if (clip.readyState >= 1) clip.currentTime = 0; } catch (err) { dropCry(key); clip = packAudio(key, false); clip._cryGen = gen; }
+      clip._cryArm = now;
+      var played = clip.play();
+      if (played && played.then) played.then(function () {
+        if (packPlayers[key] === clip && clip._cryGen === gen) clip._cryArm = 0;
+      }).catch(function () {
+        if (packPlayers[key] === clip && clip._cryGen === gen) dropCry(key);
+      });
+    } catch (err) { dropCry(key); }
   }
   function packLoop(key,wanted) {
     wanted=!!(wanted&&packUnlocked&&!packSuspended&&!document.hidden);
@@ -6994,6 +7054,8 @@ function validConversation(value, p) {
   }
   function sayNeed(line) {
     if (chatClock - needSpokeAt < 12) return;
+    // Don't cut off the animal name that just started.
+    if (Date.now() - animalVoiceAt < 1600) return;
     needSpokeAt = chatClock;
     showToast(line, 2.6);
   }
