@@ -2,7 +2,7 @@
   "license": "CC0-1.0",
   "external_samples": false,
   "voice": false,
-  "total_bytes": 173797,
+  "total_bytes": 214755,
   "assets": [
     {
       "file": "audio/build-v1.1/garden-loop.ogg",
@@ -107,6 +107,87 @@
       "seconds": 0.36,
       "bytes": 4513,
       "loop": false
+    },
+    {
+      "file": "audio/build-v1.1/cry-dog.ogg",
+      "source": "Original self-synthesis: tools/make-animal-sfx.py",
+      "license": "CC0-1.0",
+      "seconds": 0.24,
+      "bytes": 4784,
+      "loop": false,
+      "animal": "dog"
+    },
+    {
+      "file": "audio/build-v1.1/cry-cat.ogg",
+      "source": "Original self-synthesis: tools/make-animal-sfx.py",
+      "license": "CC0-1.0",
+      "seconds": 0.42,
+      "bytes": 4291,
+      "loop": false,
+      "animal": "cat"
+    },
+    {
+      "file": "audio/build-v1.1/cry-pig.ogg",
+      "source": "Original self-synthesis: tools/make-animal-sfx.py",
+      "license": "CC0-1.0",
+      "seconds": 0.3,
+      "bytes": 5039,
+      "loop": false,
+      "animal": "pig"
+    },
+    {
+      "file": "audio/build-v1.1/cry-cow.ogg",
+      "source": "Original self-synthesis: tools/make-animal-sfx.py",
+      "license": "CC0-1.0",
+      "seconds": 0.55,
+      "bytes": 4173,
+      "loop": false,
+      "animal": "cow"
+    },
+    {
+      "file": "audio/build-v1.1/cry-sheep.ogg",
+      "source": "Original self-synthesis: tools/make-animal-sfx.py",
+      "license": "CC0-1.0",
+      "seconds": 0.4,
+      "bytes": 5236,
+      "loop": false,
+      "animal": "sheep"
+    },
+    {
+      "file": "audio/build-v1.1/cry-chicken.ogg",
+      "source": "Original self-synthesis: tools/make-animal-sfx.py",
+      "license": "CC0-1.0",
+      "seconds": 0.23,
+      "bytes": 4252,
+      "loop": false,
+      "animal": "chicken"
+    },
+    {
+      "file": "audio/build-v1.1/cry-duck.ogg",
+      "source": "Original self-synthesis: tools/make-animal-sfx.py",
+      "license": "CC0-1.0",
+      "seconds": 0.22,
+      "bytes": 4684,
+      "loop": false,
+      "animal": "duck"
+    },
+    {
+      "file": "audio/build-v1.1/cry-horse.ogg",
+      "source": "Original self-synthesis: tools/make-animal-sfx.py",
+      "license": "CC0-1.0",
+      "seconds": 0.5,
+      "bytes": 4488,
+      "loop": false,
+      "animal": "horse"
+    },
+    {
+      "file": "audio/build-v1.1/cry-rabbit.ogg",
+      "source": "Original self-synthesis: tools/make-animal-sfx.py",
+      "license": "CC0-1.0",
+      "seconds": 0.16,
+      "bytes": 4011,
+      "loop": false,
+      "animal": "rabbit"
     }
   ]
 }
