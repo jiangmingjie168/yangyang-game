@@ -56,11 +56,17 @@ entries.append(save('correct',seq([659.25,880],.10,.28)))
 entries.append(save('wrong',seq([329.63,293.66],.10,.25)*.6))
 t=np.arange(round(.42*SR))/SR
 entries.append(save('enter-car',mix(noise(.13)*1.7,note(110,.16)*.35,.13*np.sin(2*np.pi*(62*t+34*t*t))*np.minimum(1,t*30)*np.minimum(1,(.42-t)*20))))
-# engine.ogg is a trimmed Mixkit recording. Do not synthesize over it.
-engine_file=OUT/'engine.ogg'
-if not engine_file.exists():
- raise SystemExit('Missing audio/build-v1.1/engine.ogg. It is a Mixkit idle recording; see ENGINE.txt.')
-entries.append({'file':'audio/build-v1.1/engine.ogg','source':'Recording: Mixkit "Cars starting" (sfx 1561), trimmed to a steady idle loop. https://assets.mixkit.co/active_storage/sfx/1561/1561.wav','license':'Mixkit Sound Effects Free License','seconds':3.44,'bytes':engine_file.stat().st_size,'loop':True,'recorded':True})
+# Throttle and drive are real recordings. Do not synthesize over them. Idle is not used.
+engine_clips=(
+ ('engine-throttle.ogg','Recording: Freesound "Car Go Fast!" by Beetlemuse, CC0, short rev. https://freesound.org/people/Beetlemuse/sounds/678961/','CC0-1.0',2.6),
+ ('engine-drive.ogg','Recording: Freesound "Car Interior Driving Down Road" by jc144940, CC0, steady cruise slice. https://freesound.org/people/jc144940/sounds/179121/','CC0-1.0',7.91),
+ ('engine-horn.ogg','Recording: Freesound "Nissan Altima car horn honk (raw)" by ChrisReierson, CC0. https://freesound.org/people/ChrisReierson/sounds/433578/','CC0-1.0',1.99),
+)
+for name,source,license,seconds in engine_clips:
+ engine_file=OUT/name
+ if not engine_file.exists():
+  raise SystemExit('Missing audio/build-v1.1/%s. See ENGINE.txt.'%name)
+ entries.append({'file':'audio/build-v1.1/'+name,'source':source,'license':license,'seconds':seconds,'bytes':engine_file.stat().st_size,'loop':name=='engine-drive.ogg','recorded':True})
 t=np.arange(round(.28*SR))/SR;env=np.minimum(1,t*50)*np.minimum(1,(.28-t)*25)
 entries.append(save('horn',.19*(np.sin(2*np.pi*392*t)+.6*np.sin(2*np.pi*493.88*t))*env))
 entries.append(save('pet',seq([880,1046.5],.07,.22)*.6))
@@ -69,9 +75,9 @@ if (OUT/'manifest.json').exists():
  old=json.loads((OUT/'manifest.json').read_text())
  cries=[a for a in old.get('assets',[]) if str(a.get('file','')).split('/')[-1].startswith('cry-')]
 entries.extend(cries)
-manifest={'license':'CC0-1.0','external_samples':True,'voice':False,'total_bytes':sum(x['bytes'] for x in entries),'assets':entries,'engine_note':'engine.ogg is a trimmed Mixkit car recording, not synthesized. See ENGINE.txt.'}
+manifest={'license':'CC0-1.0','external_samples':True,'voice':False,'total_bytes':sum(x['bytes'] for x in entries),'assets':entries,'engine_note':'Sitting still is silent. Starting to drive plays engine-throttle.ogg once (Beetlemuse, CC0). Steady driving loops engine-drive.ogg (jc144940, CC0). A double-tap on the car while seated plays engine-horn.ogg once (ChrisReierson, CC0). See ENGINE.txt.'}
 if cries: manifest['cry_note']='cry-*.ogg are real recordings listed in CRIES.txt. They are not synthesized.'
 assert manifest['total_bytes']<3_000_000
 (OUT/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
-(OUT/'LICENSE.txt').write_text('Original self-synthesized instrumental composition and sound effects, except the animal cries and the car engine.\nDedicated to the public domain under CC0 1.0 Universal.\nLicense: https://creativecommons.org/publicdomain/zero/1.0/\nSource: tools/make-build-v1.1-audio.py\n\ncry-*.ogg are real recordings, not synthesized sounds. Authors and licenses are in CRIES.txt.\nengine.ogg is a trimmed Mixkit recording. See ENGINE.txt. It is not covered by CC0.\n')
+(OUT/'LICENSE.txt').write_text('Original self-synthesized instrumental composition and sound effects, except the animal cries and the car engine.\nDedicated to the public domain under CC0 1.0 Universal.\nLicense: https://creativecommons.org/publicdomain/zero/1.0/\nSource: tools/make-build-v1.1-audio.py\n\ncry-*.ogg are real recordings, not synthesized sounds. Authors and licenses are in CRIES.txt.\nengine-throttle.ogg is "Car Go Fast!" by Beetlemuse (Freesound), CC0 1.0. https://freesound.org/people/Beetlemuse/sounds/678961/\nAttribution: Car Go Fast! by Beetlemuse, CC0. https://creativecommons.org/publicdomain/zero/1.0/\nengine-drive.ogg is "Car Interior Driving Down Road" by jc144940 (Freesound), CC0 1.0. https://freesound.org/people/jc144940/sounds/179121/\nAttribution: Car Interior Driving Down Road by jc144940, CC0. https://creativecommons.org/publicdomain/zero/1.0/\nengine-horn.ogg is "Nissan Altima car horn honk (raw)" by ChrisReierson (Freesound), CC0 1.0. https://freesound.org/people/ChrisReierson/sounds/433578/\nAttribution: Nissan Altima car horn honk by ChrisReierson, CC0. https://creativecommons.org/publicdomain/zero/1.0/\nengine-idle.ogg (Mixkit) and the older engine.ogg slice are not played. See ENGINE.txt.\n')
 print(json.dumps({'assets':len(entries),'total_bytes':manifest['total_bytes']}))

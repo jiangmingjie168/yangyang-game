@@ -579,7 +579,7 @@
   <canvas id="view" width="800" height="400"></canvas>
   <div id="hud">
     <span id="hunger-hint" hidden></span>
-    <span id="build-version" aria-label="Build version">build cd91b62+ux51</span>
+    <span id="build-version" aria-label="Build version">build cd91b62+ux55</span>
     <div class="topbar">
       <button id="quest" type="button">
         <canvas id="quest-icon" width="128" height="128"></canvas>
@@ -2140,7 +2140,7 @@ function validConversation(value, p) {
       box(41,34,2,16,'#206470');box(46,36,7,2,'#e3e9d0');box(84,37,6,7,'#fff0ad');box(85,38,4,4,'#fffbe0');
       box(6,38,4,7,'#e89872');box(5,49,87,5,'#778a91');box(7,49,82,2,'#d9e4d4');
       box(12,45,25,11,'#193f4d');box(61,45,25,11,'#193f4d');
-      [[13,42],[62,42]].forEach(function(p){g.save();g.translate(p[0],p[1]);g.scale(.75,.75);drawWheelArt(g);g.restore();});
+      if(!b.skipWheels)[[13,42],[62,42]].forEach(function(p){g.save();g.translate(p[0],p[1]);g.scale(.75,.75);drawWheelArt(g);g.restore();});
       box(40,51,15,3,'#354f5c');return;
     }
     var timber=b.parts[b.kind==='house'?'wall':'fence'].material!=='stone';
@@ -2185,9 +2185,38 @@ function validConversation(value, p) {
     }
   }
   function craftableSprite(b) {
-    var key=b.kind+':'+JSON.stringify(b.parts);
+    var key=b.kind+':'+JSON.stringify(b.parts)+(b.skipWheels?':nowheels':'');
     if(!craftableArt[key]){var c=document.createElement('canvas');c.width=b.w*TILE;c.height=b.h*TILE;drawCraftableArt(c.getContext('2d'),b);craftableArt[key]=c;}
     return craftableArt[key];
+  }
+  function carBodySprite(b) {
+    return craftableSprite({kind:b.kind,parts:b.parts,w:b.w,h:b.h,skipWheels:true});
+  }
+  function wheelSprite() {
+    if (wheelSprite.canvas) return wheelSprite.canvas;
+    var c = document.createElement('canvas');
+    c.width = 24; c.height = 24;
+    var wg = c.getContext('2d');
+    wg.imageSmoothingEnabled = false;
+    wg.scale(0.75, 0.75);
+    drawWheelArt(wg);
+    wheelSprite.canvas = c;
+    return c;
+  }
+  // Same wheel art as the parked sprite. Angle 0 matches that drawing; driving adds roll.
+  function drawCarWheel(g, ox, oy, angle) {
+    g.save();
+    g.imageSmoothingEnabled = false;
+    g.translate(ox + 12, oy + 12);
+    g.rotate(angle);
+    g.drawImage(wheelSprite(), -12, -12);
+    g.restore();
+  }
+  function drawCarWheels(g, b) {
+    var spin = b.wheelSpin || 0;
+    if (b.dir === -1) spin = -spin;
+    drawCarWheel(g, 13, 42, spin);
+    drawCarWheel(g, 62, 42, spin);
   }
   // Car movement is continuous in this side-on world. Full footprint collision,
   // one-pixel substeps, and dry support prevent tunnelling or water rides.
@@ -2294,6 +2323,9 @@ function validConversation(value, p) {
       }
     }
     carMoving = moving;
+    if (b._wheelX == null) b._wheelX = b.x;
+    if (moving) b.wheelSpin = (b.wheelSpin || 0) + (b.x - b._wheelX) * (Math.PI * 2) / (22 / 32);
+    b._wheelX = b.x;
     seatDriver(b); player.anim += dt * 2;
   }
   function exitCar() {
@@ -2309,7 +2341,16 @@ function validConversation(value, p) {
   }
   function interactObject(wx,wy) {
     var b=craftableAt(wx/TILE,wy/TILE);
-    if(drivingCar){if(b===drivingCar&&chatClock-hornAt>.6){hornAt=chatClock;playSfx('horn');}return true;}
+    // Single tap while seated does not get out (that is the Get out button) and does not honk.
+    // A second tap on the car within a short beat is the horn.
+    if(drivingCar){
+      if(b===drivingCar&&!panelOpen()&&!chatBlocked()){
+        var now=performance.now();
+        if(carHornTap&&now-carHornTap<420){carHornTap=0;honkCar();}
+        else carHornTap=now;
+      }
+      return true;
+    }
     // A just-placed, now-empty whole tool opens its object immediately. Explicit
     // removal and stocked placement still take priority over object interaction.
     if(buildMode&&(!b||buildTool!==b.item||(inv[buildTool]||0)>0))return false;
@@ -3765,8 +3806,6 @@ function validConversation(value, p) {
       ropeShown = true;
       if (!(inv.rope > 0)) {
         addItem('rope', 1, true);
-        var ri = hotbar.indexOf('rope');
-        if (ri >= 0) sel = ri;
         invSig = '';
         renderHotbar();
         saveSoon();
@@ -3913,6 +3952,7 @@ function validConversation(value, p) {
     }
     consume(key);
     furn[key] = 1;
+    if (key === 'torch' && nightFactor(timeOfDay) > 0.5) progress.nightTorch = 1;
     if (!quiz) { progress.placed[key] = 1; rememberEvent('built', key); }
     playSfx('place');
     showWord(key);
@@ -4095,8 +4135,8 @@ function validConversation(value, p) {
         drawPlayer(g);
         g.restore();
       }
-      drawSleepZzz(g, R.bed.x + R.bed.w * 0.62, R.bed.y - 8);
-      drawChildLine(g, R.bed.x - 8, R.bed.y - 46);
+      var zzzBox = drawSleepZzz(g, R.bed.x + R.bed.w * 0.62, R.bed.y - 8);
+      drawChildLine(g, R.bed.x - 8, R.bed.y - 46, zzzBox);
     } else {
       g.translate(feet.x, feet.y);
       g.scale(1.35, 1.35);
@@ -4143,8 +4183,9 @@ function validConversation(value, p) {
       g.fillText('z', lx, ly);
     }
     g.restore();
+    return { x: bx, y: by, w: bw, h: bh };
   }
-  function drawChildLine(g, x, y) {
+  function drawChildLine(g, x, y, avoid) {
     var text = CHILD_REST_LINE;
     g.save();
     g.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -4153,6 +4194,13 @@ function validConversation(value, p) {
     var w = Math.ceil(g.measureText(text).width) + 24;
     var bx = Math.max(10, Math.min(viewW - w - 10, x));
     var by = Math.max(50, y);
+    if (avoid) {
+      // Keep the spoken line clear of the Zzz bubble: sit left of it, else above it.
+      if (bx < avoid.x + avoid.w && bx + w > avoid.x && by < avoid.y + avoid.h && by + 34 > avoid.y) {
+        bx = avoid.x - 10 - w;
+        if (bx < 10) { bx = Math.max(10, Math.min(viewW - w - 10, avoid.x + avoid.w - w)); by = Math.max(50, avoid.y - 42); }
+      }
+    }
     inkBox(g, bx, by, w, 34, '#fffaf2', 14);
     g.beginPath();
     g.moveTo(bx + 28, by + 34);
@@ -4970,7 +5018,7 @@ function validConversation(value, p) {
       return;
     }
     if (h.blocked) return;
-    if (tryPlace(tx, ty, true, true)) {
+    if (buildMode ? buildTap(tx, ty, 0.5, true) : tryPlace(tx, ty, true, true)) {
       h.filled[id] = 1;
       h.placedN++;
       if (!h.saidItem) { h.saidItem = true; showWord(buildMode ? buildMaterial() : key); }
@@ -5144,6 +5192,13 @@ function validConversation(value, p) {
   function armPlaceHold() {
     var h = placeHold;
     if (!h || h.armed || chatBlocked() || panelOpen() || !started || bedRest > 0) return;
+    var placeKey = activePlaceKey();
+    // A hold only means "place" when something can actually be placed.
+    // With nothing placeable in hand (or no indoor spot for it), leave the
+    // press unarmed so endHold falls through to the tap path (pet, mine,
+    // door, rope, bed) instead of silently swallowing the tap.
+    if (!h.indoor && !placeKey) return;
+    if (h.indoor && !indoorPlaceSpots().length) return;
     h.armed = true;
     h.seen = {};
     h.placedN = 0;
@@ -5151,7 +5206,6 @@ function validConversation(value, p) {
     h.saidItem = false;
     h.lastTx = null;
     h.filled = {};
-    var placeKey = activePlaceKey();
     h.spots = h.indoor ? indoorPlaceSpots() : (isMultiPlace(placeKey) ? collectFillSpots(placeKey) : collectPlaceSpots(h.tx, h.ty));
     var armSurf = surfaceCell(h.tx, h.ty);
     h.aim = h.indoor ? indoorAim(h.sx, h.sy) : (isMultiPlace(placeKey) ? { x: armSurf.tx, y: armSurf.ty, w: 1, h: 1 } : evalSpot(placeKey, h.tx, h.ty, h.fy));
@@ -5189,6 +5243,7 @@ function validConversation(value, p) {
     animalVoiceAt = Date.now();
   }
   function tapWorld(wx, wy, sx, sy, fy) {
+    var i;
     var tapTx = Math.floor(wx / TILE), tapTy = Math.floor(wy / TILE), tapId = get(tapTx, tapTy);
     // Wheat stays tappable when a pet stands on it. The animal body is checked next, before gifts.
     if (!riding && !drivingCar && (tapId === WHEAT1 || tapId === WHEAT2 || tapId === WHEAT3)) {
@@ -6085,13 +6140,28 @@ function validConversation(value, p) {
     g.restore();
   }
   function drawSmokePuff(g, x, y, phase, spread, lift, alpha) {
-    g.save();
     g.globalAlpha = Math.max(0, (1 - phase) * alpha);
     g.fillStyle = phase < 0.4 ? 'rgba(120,116,110,0.9)' : 'rgba(236,232,226,0.95)';
     g.beginPath();
     g.ellipse(x, y - phase * lift, 2.2 + phase * spread, 1.6 + phase * spread * 0.7, 0, 0, 6.3);
     g.fill();
-    g.restore();
+    g.globalAlpha = 1;
+  }
+  // Sun, moon, and window glows are the same sprite every frame. Building a gradient each frame was a steady allocation.
+  function glowSprite(key, radius, innerR, inner, outer) {
+    if (!glowSprite.cache) glowSprite.cache = {};
+    if (glowSprite.cache[key]) return glowSprite.cache[key];
+    var c = document.createElement('canvas');
+    var size = Math.ceil(radius * 2);
+    c.width = c.height = size;
+    var gg = c.getContext('2d');
+    var grd = gg.createRadialGradient(radius, radius, innerR, radius, radius, radius);
+    grd.addColorStop(0, inner);
+    grd.addColorStop(1, outer);
+    gg.fillStyle = grd;
+    gg.beginPath(); gg.arc(radius, radius, radius, 0, 6.3); gg.fill();
+    glowSprite.cache[key] = c;
+    return c;
   }
   function drawCarExhaust(g, b, sec) {
     if (drivingCar !== b) return;
@@ -6118,13 +6188,7 @@ function validConversation(value, p) {
     }
     var wx = b.dir === -1 ? (b.x + b.w) * TILE - 26 : b.x * TILE + 26;
     var wy = b.y * TILE + 64;
-    var glow = g.createRadialGradient(wx, wy, 1, wx, wy, 22);
-    glow.addColorStop(0, 'rgba(255, 186, 90, 0.55)');
-    glow.addColorStop(1, 'rgba(255, 186, 90, 0)');
-    g.save();
-    g.fillStyle = glow;
-    g.beginPath(); g.arc(wx, wy, 22, 0, 6.3); g.fill();
-    g.restore();
+    g.drawImage(glowSprite('hearth', 22, 1, 'rgba(255, 186, 90, 0.55)', 'rgba(255, 186, 90, 0)'), wx - 22, wy - 22);
   }
   function drawFrame(sec) {
     var z = tileScreen / TILE;
@@ -6173,11 +6237,7 @@ function validConversation(value, p) {
         ctx.lineTo(sunPos.x + Math.cos(ang) * 30, sunPos.y + Math.sin(ang) * 30);
         ctx.stroke();
       }
-      var sg = ctx.createRadialGradient(sunPos.x, sunPos.y, 4, sunPos.x, sunPos.y, 48);
-      sg.addColorStop(0, 'rgba(255,228,120,0.85)');
-      sg.addColorStop(1, 'rgba(255,228,120,0)');
-      ctx.fillStyle = sg;
-      ctx.beginPath(); ctx.arc(sunPos.x, sunPos.y, 48, 0, 6.3); ctx.fill();
+      ctx.drawImage(glowSprite('sun', 48, 4, 'rgba(255,228,120,0.85)', 'rgba(255,228,120,0)'), sunPos.x - 48, sunPos.y - 48);
       ctx.fillStyle = '#ffe56a';
       ctx.beginPath(); ctx.arc(sunPos.x, sunPos.y, 16, 0, 6.3); ctx.fill();
       ctx.fillStyle = '#e09020';
@@ -6189,11 +6249,7 @@ function validConversation(value, p) {
     }
     if (moonOn) {
       ctx.globalAlpha = Math.min(1, night + 0.15);
-      var halo = ctx.createRadialGradient(moonPos.x, moonPos.y, 8, moonPos.x, moonPos.y, 46);
-      halo.addColorStop(0, 'rgba(255, 244, 200, 0.55)');
-      halo.addColorStop(1, 'rgba(255, 244, 200, 0)');
-      ctx.fillStyle = halo;
-      ctx.beginPath(); ctx.arc(moonPos.x, moonPos.y, 46, 0, 6.3); ctx.fill();
+      ctx.drawImage(glowSprite('moon', 46, 8, 'rgba(255, 244, 200, 0.55)', 'rgba(255, 244, 200, 0)'), moonPos.x - 46, moonPos.y - 46);
       ctx.fillStyle = '#fff6d4';
       ctx.beginPath(); ctx.arc(moonPos.x, moonPos.y, 18, 0, 6.3); ctx.fill();
       ctx.fillStyle = '#ffe7a8';
@@ -6244,7 +6300,7 @@ function validConversation(value, p) {
     if (indoors) { drawInterior(ctx, sec); return; }
     ctx.setTransform(dpr * z, 0, 0, dpr * z, -drawCamX * dpr * z, -drawCamY * dpr * z);
     drawWorld(ctx, sec);
-    buildObjects.forEach(function(b){if(!bboxOnScreen(b))return;ctx.save();ctx.translate((b.x+(b.dir===-1?b.w:0))*TILE,b.y*TILE);if(b.dir===-1)ctx.scale(-1,1);ctx.drawImage(craftableSprite(b),0,0);ctx.restore();drawHouseLife(ctx,b,sec);drawCarExhaust(ctx,b,sec);});
+    buildObjects.forEach(function(b){if(!bboxOnScreen(b))return;ctx.save();ctx.translate((b.x+(b.dir===-1?b.w:0))*TILE,b.y*TILE);if(b.dir===-1)ctx.scale(-1,1);if(b.kind==='car'){ctx.drawImage(carBodySprite(b),0,0);drawCarWheels(ctx,b);}else ctx.drawImage(craftableSprite(b),0,0);ctx.restore();drawHouseLife(ctx,b,sec);drawCarExhaust(ctx,b,sec);});
     var ai;
     for (ai = 0; ai < animals.length; ai++) {
       var an = animals[ai];
@@ -6650,7 +6706,8 @@ function validConversation(value, p) {
         if (failed || serial !== speechSerial) return;
         failed = true;
         if (enAudio) { clearTimeout(enAudio.voiceTimer); enAudio.onended = enAudio.onerror = null; enAudio.pause(); enAudio = null; }
-        params.named ? (params.onend && params.onend()) : speakEnTTS(text, params);
+        if (params.named || params.noDeviceTts) { if (params.onend) params.onend(); }
+        else speakEnTTS(text, params);
       }
       function playNext() {
         if (serial !== speechSerial) return;
@@ -6677,7 +6734,7 @@ function validConversation(value, p) {
       }
       return playNext();
     }
-    return params.named ? (params.onend && params.onend()) : speakEnTTS(text, params);
+    return (params.named || params.noDeviceTts) ? (params.onend && params.onend()) : speakEnTTS(text, params);
   }
   function speakEnTTS(text, params) {
     if (!speechOn || !window.speechSynthesis || (params && params.named)) {
@@ -6783,20 +6840,78 @@ function validConversation(value, p) {
   // Optional local sound pack: lazy HTMLAudio loads never block starting play.
   // Speech has its own existing switch/path; these settings control music/SFX.
   var musicOn=true,sfxOn=true,packUnlocked=false,packSuspended=false,carMoving=false;
-  var packPlayers={},packWanted={},packRequests={},packPlayed={},hornAt=-100;
+  var packPlayers={},packWanted={},packRequests={},packPlayed={},hornAt=-100,carHornTap=0;
   function packAudio(key,loop) {
-    if(!packPlayers[key]){var a=new Audio('audio/build-v1.1/'+key+'.ogg');a.preload='none';a.loop=!!loop;a.volume=key==='garden-loop'?.30:key==='engine'?.36:key.indexOf('cry-')===0?.8:.42;packPlayers[key]=a;}
+    if(!packPlayers[key]){var a=new Audio('audio/build-v1.1/'+key+'.ogg');a.preload='none';a.loop=!!loop;a.volume=key==='garden-loop'?.30:key==='engine-drive'?0:key==='engine-throttle'?.46:key==='engine-horn'?.55:key.indexOf('cry-')===0?.8:.42;packPlayers[key]=a;}
     return packPlayers[key];
+  }
+  function dropLoop(key) {
+    var old = packPlayers[key];
+    if (!old) return;
+    try { old.pause(); old.onended = old.onerror = null; } catch (err) { /* ignore */ }
+    delete packPlayers[key];
+  }
+  var loopRetryAt = {};
+  function noteLoopProgress(a, now) {
+    if (!a || a.paused || a.ended) return;
+    var t = a.currentTime;
+    // NaN !== NaN, so a bad clock used to refresh the stall timer forever.
+    if (!(t >= 0)) { if (!a._loopBadAt) a._loopBadAt = now; return; }
+    a._loopBadAt = 0;
+    if (a.readyState < 2) { if (!a._loopLowAt) a._loopLowAt = now; }
+    else a._loopLowAt = 0;
+    if (a._loopTickAt == null || Math.abs(t - a._loopTick) > 0.02) {
+      a._loopTick = t;
+      a._loopTickAt = now;
+    }
+  }
+  // Same failure class as the animal cries: the element looks alive, so the loop never retries.
+  function loopStalled(a, now) {
+    if (!a) return false;
+    if (a.error || a.ended) return true;
+    if (a._loopBadAt && now - a._loopBadAt > 800) return true;
+    if (a._loopArm && now - a._loopArm > 2500 && (a.paused || a.readyState < 2)) return true;
+    if (!a.paused && a._loopLowAt && now - a._loopLowAt > 1200) return true;
+    if (!a.paused && a._loopTickAt && now - a._loopTickAt > 1000 && Math.abs(a.currentTime - a._loopTick) <= 0.02) return true;
+    return false;
   }
   function packPlay(key,loop) {
     if(!packUnlocked||packSuspended||document.hidden||!(key==='garden-loop'?musicOn:sfxOn))return;
-    try{var a=packAudio(key,loop);if(!loop){a.pause();a.currentTime=0;}packRequests[key]=(packRequests[key]||0)+1;
-      var p=a.play();if(p&&p.then)p.then(function(){packPlayed[key]=(packPlayed[key]||0)+1;}).catch(function(){/* optional asset/offline/autoplay: stay silent */});
-    }catch(err){/* Missing browser audio support never blocks game actions. */}
+    var now=Date.now();
+    if(loop&&loopRetryAt[key]&&now<loopRetryAt[key])return;
+    try{var a=packAudio(key,loop);if(!loop){a.pause();try{a.currentTime=0;}catch(err){/* optional */}}
+      else if(a.ended){try{a.currentTime=0;}catch(err){/* optional */}}
+      packRequests[key]=(packRequests[key]||0)+1;
+      var gen=0;
+      if(loop){gen=(a._loopGen||0)+1;a._loopGen=gen;a._loopArm=now;a.loop=true;if(audioCtx&&audioCtx.state==='suspended'){try{audioCtx.resume();}catch(err){/* optional */}}
+        if(!a._loopBound){a._loopBound=true;a.addEventListener('ended',function(){if(packPlayers[key]!==a||!packWanted[key]||document.hidden||packSuspended)return;try{a.currentTime=0;}catch(err){/* optional */}var again=a.play();if(again&&again.catch)again.catch(function(){if(packPlayers[key]===a)loopRetryAt[key]=Date.now()+900;});});}}
+      var p=a.play();if(p&&p.then)p.then(function(){if(packPlayers[key]!==a||(loop&&a._loopGen!==gen))return;packPlayed[key]=(packPlayed[key]||0)+1;if(loop){a._loopArm=0;loopRetryAt[key]=0;if(!packWanted[key]){try{a.pause();}catch(err){/* optional */}}}}).catch(function(){if(loop&&packPlayers[key]===a&&a._loopGen===gen){dropLoop(key);loopRetryAt[key]=Date.now()+900;}else if(!loop&&packPlayers[key]===a){dropOneShot(key);}});
+    }catch(err){if(loop){dropLoop(key);loopRetryAt[key]=Date.now()+900;}else{dropOneShot(key);}}
   }
   function playSfx(key){packPlay(key,false);}
+  function stopOneShot(key) {
+    var a = packPlayers[key];
+    if (!a) return;
+    try { a.pause(); } catch (err) { /* optional */ }
+    try { a.currentTime = 0; } catch (err) { /* optional */ }
+  }
+  function hornAllowed() {
+    return packUnlocked && !packSuspended && !document.hidden && started && sfxOn && !!drivingCar && !panelOpen() && !chatBlocked();
+  }
+  function honkCar() {
+    if (!hornAllowed() || chatClock - hornAt < 0.45) return;
+    hornAt = chatClock;
+    stopOneShot('engine-horn');
+    playSfx('engine-horn');
+  }
   var animalSfxAt = {}, animalVoiceAt = 0;
   function dropCry(key) {
+    var old = packPlayers[key];
+    if (!old) return;
+    try { old.pause(); old.onended = old.onerror = null; } catch (err) { /* ignore */ }
+    delete packPlayers[key];
+  }
+  function dropOneShot(key) {
     var old = packPlayers[key];
     if (!old) return;
     try { old.pause(); old.onended = old.onerror = null; } catch (err) { /* ignore */ }
@@ -6832,29 +6947,113 @@ function validConversation(value, p) {
   }
   function packLoop(key,wanted) {
     wanted=!!(wanted&&packUnlocked&&!packSuspended&&!document.hidden);
-    if(packWanted[key]===wanted){
-      // A failed play() must not stick the engine silent for the rest of the drive.
-      if(wanted&&packPlayers[key]&&packPlayers[key].paused)packPlay(key,true);
+    var now=Date.now();
+    if(wanted&&loopStalled(packPlayers[key],now)){dropLoop(key);loopRetryAt[key]=0;}
+    var a=packPlayers[key];
+    // A rejected play() must wait. Creating a new Audio every frame hitches and still stays silent.
+    if(!a&&wanted&&loopRetryAt[key]&&now<loopRetryAt[key]){packWanted[key]=true;return;}
+    if(packWanted[key]===wanted&&a){
+      // Retry a paused loop, but don't stack play() calls while one attempt is in flight.
+      if(wanted&&a.paused&&!(a._loopArm&&now-a._loopArm<2500))packPlay(key,true);
+      else if(wanted)noteLoopProgress(a,now);
       return;
     }
     packWanted[key]=wanted;
-    if(wanted)packPlay(key,true);else if(packPlayers[key])packPlayers[key].pause();
+    if(wanted)packPlay(key,true);else if(a){a._loopArm=0;try{a.pause();}catch(err){/* optional */}}
   }
-  function tuneEngine() {
-    var eng = packPlayers.engine;
-    if (!eng) return;
-    var drive = !!(drivingCar && carMoving);
-    eng.volume = drive ? 0.48 : 0.3;
-    try { eng.playbackRate = drive ? 1.12 : 0.94; } catch (err) { /* optional */ }
+  function haltEngine(key) {
+    var a = packPlayers[key];
+    packWanted[key] = false;
+    if (!a) return;
+    a._loopArm = 0;
+    try { a.pause(); } catch (err) { /* optional */ }
+    a.volume = 0;
+  }
+  // Linear crossfade, about a fifth of a second. Playback rate stays 1 so the recordings stay natural.
+  function fadeEngine(key, target, dt) {
+    var now = Date.now();
+    if (target > 0 && loopStalled(packPlayers[key], now)) { dropLoop(key); loopRetryAt[key] = 0; }
+    var a = packAudio(key, true);
+    try { a.playbackRate = 1; } catch (err) { /* optional */ }
+    if (target > 0 && a.paused && !(a._loopArm && now - a._loopArm < 2500)) {
+      packWanted[key] = true;
+      packPlay(key, true);
+    }
+    var v = a.paused ? 0 : a.volume;
+    var step = 2.2 * dt;
+    v = v < target ? Math.min(target, v + step) : Math.max(target, v - step);
+    if (!a.paused) { a.volume = v; noteLoopProgress(a, now); }
+    if (target <= 0 && (a.paused || v <= 0.001)) { haltEngine(key); return; }
+    packWanted[key] = true;
+  }
+  var engineMixAt = 0, engineWasMoving = false;
+  function stopThrottle() {
+    var a = packPlayers['engine-throttle'];
+    if (!a) return;
+    try { a.pause(); } catch (err) { /* optional */ }
+    try { a.currentTime = 0; } catch (err) { /* optional */ }
+  }
+  function syncEngine() {
+    if (!hornAllowed()) stopOneShot('engine-horn');
+    var audible = packUnlocked && !packSuspended && !document.hidden;
+    var driving = audible && started && sfxOn && !!drivingCar && !!carMoving && !panelOpen() && !chatBlocked();
+    if (!driving) {
+      haltEngine('engine-idle');
+      haltEngine('engine-drive');
+      if (!(started && sfxOn && drivingCar && carMoving && !panelOpen() && !chatBlocked())) {
+        stopThrottle();
+        engineWasMoving = false;
+      } else {
+        var held = packPlayers['engine-throttle'];
+        if (held) try { held.pause(); } catch (err) { /* optional */ }
+      }
+      engineMixAt = 0;
+      return;
+    }
+    var now = performance.now();
+    var dt = engineMixAt ? Math.min(0.05, (now - engineMixAt) / 1000) : 0.016;
+    engineMixAt = now;
+    // One rev as the wheels start. Sitting still stays quiet. Cruise covers the steady drive.
+    if (!engineWasMoving) playSfx('engine-throttle');
+    engineWasMoving = true;
+    fadeEngine('engine-drive', 0.36, dt);
   }
   function syncSoundPack() {
     packLoop('garden-loop',started&&musicOn);
-    // Idle while seated, a little louder and higher while the wheels are turning.
-    packLoop('engine',started&&sfxOn&&!!drivingCar&&!panelOpen()&&!chatBlocked());
-    tuneEngine();
+    // No idle hum. A throttle blip marks the start; the cruise loop plays only while moving.
+    syncEngine();
   }
-  function suspendSoundPack(){packSuspended=true;Object.keys(packPlayers).forEach(function(k){packPlayers[k].pause();});packWanted={};}
-  function resumeSoundPack(){packSuspended=false;syncSoundPack();}
+  function suspendSoundPack(){packSuspended=true;Object.keys(packPlayers).forEach(function(k){if(packPlayers[k]){packPlayers[k]._loopArm=0;try{packPlayers[k].pause();}catch(err){/* optional */}}});packWanted={};}
+  var soundResumeAt=0;
+  function resumeSoundPack(){
+    packSuspended=false;
+    var now=Date.now();
+    // visibilitychange and pageshow both fire. Only the first one throws away the zombie element.
+    if(now-soundResumeAt>400){
+      soundResumeAt=now;
+      dropLoop('garden-loop');
+      packWanted['garden-loop']=false;
+      loopRetryAt['garden-loop']=0;
+    }
+    if(audioCtx&&audioCtx.state==='suspended'){try{audioCtx.resume();}catch(err){/* optional */}}
+    syncSoundPack();
+  }
+  // A tap or key is a user gesture. That is what actually restarts music after a tab return.
+  function reviveLoops(){
+    if(!packUnlocked||document.hidden)return;
+    if(packSuspended){resumeSoundPack();return;}
+    if(audioCtx&&audioCtx.state==='suspended'){try{audioCtx.resume();}catch(err){/* optional */}}
+    var now=Date.now();
+    if(started&&musicOn){
+      var g=packPlayers['garden-loop'];
+      if(!g||g.paused||g.ended||g.error||loopStalled(g,now)){
+        loopRetryAt['garden-loop']=0;
+        if(g)dropLoop('garden-loop');
+        packWanted['garden-loop']=false;
+      }
+    }
+    syncSoundPack();
+  }
   function renderSoundSettings(){['music','sfx'].forEach(function(k){var b=document.getElementById('parent-'+k),on=k==='music'?musicOn:sfxOn;b.textContent=(k==='music'?'Music':'SFX')+': '+(on?'On':'Off');b.setAttribute('aria-pressed',String(on));});}
   function setPackSetting(key){if(key==='music')musicOn=!musicOn;else{sfxOn=!sfxOn;if(!sfxOn)Object.keys(packPlayers).forEach(function(k){if(k!=='garden-loop')packPlayers[k].pause();});}renderSoundSettings();syncSoundPack();save();}
   function unlockAudio() {
@@ -7676,6 +7875,7 @@ function validConversation(value, p) {
   function bind() {
     bindSocial();
     document.addEventListener('pointerdown', function (e) {
+      reviveLoops();
       if(buildLogEnabled)buildClick={x:Math.round(e.clientX),y:Math.round(e.clientY)};
       chatLastInput = chatClock; socialLastInput = Date.now();
       if (welcome && !nameFlow && !e.target.closest('#welcome')) dismissGreeting();
@@ -7875,6 +8075,7 @@ function validConversation(value, p) {
     joy.addEventListener('pointercancel', joyEnd);
     joy.addEventListener('lostpointercapture', joyEnd);
     window.addEventListener('keydown', function (e) {
+      reviveLoops();
       if (welcome && !nameFlow && /^(ArrowLeft|ArrowRight|ArrowUp|Space|KeyW|KeyA|KeyD|KeyE|KeyB|Escape)$/.test(e.code)) dismissGreeting();
       chatLastInput = chatClock; socialLastInput = Date.now();
       if (e.target.closest('input, textarea') && !(chatBlocked() && /^(Tab|Escape)$/.test(e.code))) return;
@@ -8042,7 +8243,9 @@ function validConversation(value, p) {
       // Home is a long horizontal walk. A deep pit gets the rope instead, so both never show together.
       var farHome = Math.abs(player.x - homeX) > 18 * TILE;
       var deepPit = pitDepthTiles() >= 8 || ropeShown || !!ropeClimb;
-      document.getElementById('btn-home').hidden = !(started && farHome && !deepPit && !drivingCar && !chatBlocked());
+      var homeHidden = !(started && farHome && !deepPit && !drivingCar && !chatBlocked());
+      var homeBtn = document.getElementById('btn-home');
+      if (homeBtn.hidden !== homeHidden) homeBtn.hidden = homeHidden;
       adventureStep(dt);
       // Walking and pet following must persist even without a new world action.
       // saveSoon uses the same 2.5-second throttle as inventory/build changes.

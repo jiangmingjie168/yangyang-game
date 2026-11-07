@@ -4,4 +4,10 @@ License: https://creativecommons.org/publicdomain/zero/1.0/
 Source: tools/make-build-v1.1-audio.py
 
 cry-*.ogg are real recordings, not synthesized sounds. Authors and licenses are in CRIES.txt.
-engine.ogg is a trimmed Mixkit recording. See ENGINE.txt. It is not covered by CC0.
+engine-throttle.ogg is "Car Go Fast!" by Beetlemuse (Freesound), CC0 1.0. https://freesound.org/people/Beetlemuse/sounds/678961/
+Attribution: Car Go Fast! by Beetlemuse, CC0. https://creativecommons.org/publicdomain/zero/1.0/
+engine-drive.ogg is "Car Interior Driving Down Road" by jc144940 (Freesound), CC0 1.0. https://freesound.org/people/jc144940/sounds/179121/
+Attribution: Car Interior Driving Down Road by jc144940, CC0. https://creativecommons.org/publicdomain/zero/1.0/
+engine-horn.ogg is "Nissan Altima car horn honk (raw)" by ChrisReierson (Freesound), CC0 1.0. https://freesound.org/people/ChrisReierson/sounds/433578/
+Attribution: Nissan Altima car horn honk by ChrisReierson, CC0. https://creativecommons.org/publicdomain/zero/1.0/
+engine-idle.ogg (Mixkit) and the older engine.ogg slice are not played. See ENGINE.txt.

@@ -1,9 +1,35 @@
-engine.ogg is a real recording, not a synthesized tone.
+Car engine uses real recordings. They are not synthesized tones, and the playback rate stays at 1.
 
-Source: Mixkit, "Cars starting" (sound effect 1561).
-File: https://assets.mixkit.co/active_storage/sfx/1561/1561.wav
-Page: https://mixkit.co/free-sound-effects/car/
-License: Mixkit Sound Effects Free License (royalty-free, attribution not required).
-https://mixkit.co/license/#sfxFree
+Sitting in the car without moving is silent. There is no idle loop.
 
-The handoff clip idle-realish.ogg was not on this machine. This file is a 3.44 second slice of that Mixkit car recording where the engine is already running at a steady idle (low rumble, about 40 Hz), with a short crossfade so it can loop. It plays when the child sits in the car and while the car is moving.
+engine-throttle.ogg — one rev when the car starts moving (加油门).
+  Source: Freesound "Car Go Fast!" by Beetlemuse.
+  Page: https://freesound.org/people/Beetlemuse/sounds/678961/
+  License: CC0 1.0.
+  Attribution: Car Go Fast! by Beetlemuse (Freesound), CC0.
+  https://creativecommons.org/publicdomain/zero/1.0/
+  The shipped file is the short ~2.6 second take, played once. It is not looped.
+  A longer take of the same recording and an alternate rev by kyles
+  (https://freesound.org/people/kyles/sounds/450774/, CC0) were considered and not shipped.
+
+engine-drive.ogg — while the car is actually moving, after the rev.
+  Source: Freesound "Car Interior Driving Down Road" by jc144940.
+  Page: https://freesound.org/people/jc144940/sounds/179121/
+  License: CC0 1.0. Attribution is not required; credit is included anyway.
+  Attribution: Car Interior Driving Down Road by jc144940 (Freesound), CC0.
+  https://creativecommons.org/publicdomain/zero/1.0/
+  A steady cruise from inside the car (about 6s–14s of the take), high-passed at 75 Hz so the engine and road stay audible instead of a sub-bass rumble. 7.91 second loopable mono Ogg. Not a race-car rev. Volume 0.36.
+
+engine-horn.ogg — one honk when the child double-taps the car while seated.
+  Source: Freesound "Nissan Altima car horn honk (raw)" by ChrisReierson.
+  Page: https://freesound.org/people/ChrisReierson/sounds/433578/
+  License: CC0 1.0.
+  Attribution: Nissan Altima car horn honk by ChrisReierson (Freesound), CC0.
+  https://creativecommons.org/publicdomain/zero/1.0/
+  About 2 seconds, played once. Not a loop. A single tap does not honk.
+  Getting out is the Get out button, not a second tap.
+
+Getting out, opening a panel, blocking chat, leaving the page, or turning SFX off stops the rev, the cruise, and a honk in progress. Stopping the car stops the rev and the cruise, so a parked car stays quiet. A honk that already started can finish while the car is parked and the child is still seated.
+
+engine-idle.ogg is the previous Mixkit idle. The game no longer plays it.
+engine.ogg is the older UX51 Mixkit "Cars starting" slice. The game no longer plays it.
