@@ -3806,8 +3806,6 @@ function validConversation(value, p) {
       ropeShown = true;
       if (!(inv.rope > 0)) {
         addItem('rope', 1, true);
-        var ri = hotbar.indexOf('rope');
-        if (ri >= 0) sel = ri;
         invSig = '';
         renderHotbar();
         saveSoon();
@@ -3954,6 +3952,7 @@ function validConversation(value, p) {
     }
     consume(key);
     furn[key] = 1;
+    if (key === 'torch' && nightFactor(timeOfDay) > 0.5) progress.nightTorch = 1;
     if (!quiz) { progress.placed[key] = 1; rememberEvent('built', key); }
     playSfx('place');
     showWord(key);
@@ -6707,7 +6706,8 @@ function validConversation(value, p) {
         if (failed || serial !== speechSerial) return;
         failed = true;
         if (enAudio) { clearTimeout(enAudio.voiceTimer); enAudio.onended = enAudio.onerror = null; enAudio.pause(); enAudio = null; }
-        params.named ? (params.onend && params.onend()) : speakEnTTS(text, params);
+        if (params.named || params.noDeviceTts) { if (params.onend) params.onend(); }
+        else speakEnTTS(text, params);
       }
       function playNext() {
         if (serial !== speechSerial) return;
@@ -6734,7 +6734,7 @@ function validConversation(value, p) {
       }
       return playNext();
     }
-    return params.named ? (params.onend && params.onend()) : speakEnTTS(text, params);
+    return (params.named || params.noDeviceTts) ? (params.onend && params.onend()) : speakEnTTS(text, params);
   }
   function speakEnTTS(text, params) {
     if (!speechOn || !window.speechSynthesis || (params && params.named)) {
@@ -6885,8 +6885,8 @@ function validConversation(value, p) {
       var gen=0;
       if(loop){gen=(a._loopGen||0)+1;a._loopGen=gen;a._loopArm=now;a.loop=true;if(audioCtx&&audioCtx.state==='suspended'){try{audioCtx.resume();}catch(err){/* optional */}}
         if(!a._loopBound){a._loopBound=true;a.addEventListener('ended',function(){if(packPlayers[key]!==a||!packWanted[key]||document.hidden||packSuspended)return;try{a.currentTime=0;}catch(err){/* optional */}var again=a.play();if(again&&again.catch)again.catch(function(){if(packPlayers[key]===a)loopRetryAt[key]=Date.now()+900;});});}}
-      var p=a.play();if(p&&p.then)p.then(function(){if(packPlayers[key]!==a||(loop&&a._loopGen!==gen))return;packPlayed[key]=(packPlayed[key]||0)+1;if(loop){a._loopArm=0;loopRetryAt[key]=0;if(!packWanted[key]){try{a.pause();}catch(err){/* optional */}}}}).catch(function(){if(loop&&packPlayers[key]===a&&a._loopGen===gen){dropLoop(key);loopRetryAt[key]=Date.now()+900;}});
-    }catch(err){if(loop){dropLoop(key);loopRetryAt[key]=Date.now()+900;}}
+      var p=a.play();if(p&&p.then)p.then(function(){if(packPlayers[key]!==a||(loop&&a._loopGen!==gen))return;packPlayed[key]=(packPlayed[key]||0)+1;if(loop){a._loopArm=0;loopRetryAt[key]=0;if(!packWanted[key]){try{a.pause();}catch(err){/* optional */}}}}).catch(function(){if(loop&&packPlayers[key]===a&&a._loopGen===gen){dropLoop(key);loopRetryAt[key]=Date.now()+900;}else if(!loop&&packPlayers[key]===a){dropOneShot(key);}});
+    }catch(err){if(loop){dropLoop(key);loopRetryAt[key]=Date.now()+900;}else{dropOneShot(key);}}
   }
   function playSfx(key){packPlay(key,false);}
   function stopOneShot(key) {
@@ -6906,6 +6906,12 @@ function validConversation(value, p) {
   }
   var animalSfxAt = {}, animalVoiceAt = 0;
   function dropCry(key) {
+    var old = packPlayers[key];
+    if (!old) return;
+    try { old.pause(); old.onended = old.onerror = null; } catch (err) { /* ignore */ }
+    delete packPlayers[key];
+  }
+  function dropOneShot(key) {
     var old = packPlayers[key];
     if (!old) return;
     try { old.pause(); old.onended = old.onerror = null; } catch (err) { /* ignore */ }
