@@ -579,7 +579,7 @@
   <canvas id="view" width="800" height="400"></canvas>
   <div id="hud">
     <span id="hunger-hint" hidden></span>
-    <span id="build-version" aria-label="Build version">build cd91b62+ux52</span>
+    <span id="build-version" aria-label="Build version">build cd91b62+ux53</span>
     <div class="topbar">
       <button id="quest" type="button">
         <canvas id="quest-icon" width="128" height="128"></canvas>
@@ -6085,13 +6085,28 @@ function validConversation(value, p) {
     g.restore();
   }
   function drawSmokePuff(g, x, y, phase, spread, lift, alpha) {
-    g.save();
     g.globalAlpha = Math.max(0, (1 - phase) * alpha);
     g.fillStyle = phase < 0.4 ? 'rgba(120,116,110,0.9)' : 'rgba(236,232,226,0.95)';
     g.beginPath();
     g.ellipse(x, y - phase * lift, 2.2 + phase * spread, 1.6 + phase * spread * 0.7, 0, 0, 6.3);
     g.fill();
-    g.restore();
+    g.globalAlpha = 1;
+  }
+  // Sun, moon, and window glows are the same sprite every frame. Building a gradient each frame was a steady allocation.
+  function glowSprite(key, radius, innerR, inner, outer) {
+    if (!glowSprite.cache) glowSprite.cache = {};
+    if (glowSprite.cache[key]) return glowSprite.cache[key];
+    var c = document.createElement('canvas');
+    var size = Math.ceil(radius * 2);
+    c.width = c.height = size;
+    var gg = c.getContext('2d');
+    var grd = gg.createRadialGradient(radius, radius, innerR, radius, radius, radius);
+    grd.addColorStop(0, inner);
+    grd.addColorStop(1, outer);
+    gg.fillStyle = grd;
+    gg.beginPath(); gg.arc(radius, radius, radius, 0, 6.3); gg.fill();
+    glowSprite.cache[key] = c;
+    return c;
   }
   function drawCarExhaust(g, b, sec) {
     if (drivingCar !== b) return;
@@ -6118,13 +6133,7 @@ function validConversation(value, p) {
     }
     var wx = b.dir === -1 ? (b.x + b.w) * TILE - 26 : b.x * TILE + 26;
     var wy = b.y * TILE + 64;
-    var glow = g.createRadialGradient(wx, wy, 1, wx, wy, 22);
-    glow.addColorStop(0, 'rgba(255, 186, 90, 0.55)');
-    glow.addColorStop(1, 'rgba(255, 186, 90, 0)');
-    g.save();
-    g.fillStyle = glow;
-    g.beginPath(); g.arc(wx, wy, 22, 0, 6.3); g.fill();
-    g.restore();
+    g.drawImage(glowSprite('hearth', 22, 1, 'rgba(255, 186, 90, 0.55)', 'rgba(255, 186, 90, 0)'), wx - 22, wy - 22);
   }
   function drawFrame(sec) {
     var z = tileScreen / TILE;
@@ -6173,11 +6182,7 @@ function validConversation(value, p) {
         ctx.lineTo(sunPos.x + Math.cos(ang) * 30, sunPos.y + Math.sin(ang) * 30);
         ctx.stroke();
       }
-      var sg = ctx.createRadialGradient(sunPos.x, sunPos.y, 4, sunPos.x, sunPos.y, 48);
-      sg.addColorStop(0, 'rgba(255,228,120,0.85)');
-      sg.addColorStop(1, 'rgba(255,228,120,0)');
-      ctx.fillStyle = sg;
-      ctx.beginPath(); ctx.arc(sunPos.x, sunPos.y, 48, 0, 6.3); ctx.fill();
+      ctx.drawImage(glowSprite('sun', 48, 4, 'rgba(255,228,120,0.85)', 'rgba(255,228,120,0)'), sunPos.x - 48, sunPos.y - 48);
       ctx.fillStyle = '#ffe56a';
       ctx.beginPath(); ctx.arc(sunPos.x, sunPos.y, 16, 0, 6.3); ctx.fill();
       ctx.fillStyle = '#e09020';
@@ -6189,11 +6194,7 @@ function validConversation(value, p) {
     }
     if (moonOn) {
       ctx.globalAlpha = Math.min(1, night + 0.15);
-      var halo = ctx.createRadialGradient(moonPos.x, moonPos.y, 8, moonPos.x, moonPos.y, 46);
-      halo.addColorStop(0, 'rgba(255, 244, 200, 0.55)');
-      halo.addColorStop(1, 'rgba(255, 244, 200, 0)');
-      ctx.fillStyle = halo;
-      ctx.beginPath(); ctx.arc(moonPos.x, moonPos.y, 46, 0, 6.3); ctx.fill();
+      ctx.drawImage(glowSprite('moon', 46, 8, 'rgba(255, 244, 200, 0.55)', 'rgba(255, 244, 200, 0)'), moonPos.x - 46, moonPos.y - 46);
       ctx.fillStyle = '#fff6d4';
       ctx.beginPath(); ctx.arc(moonPos.x, moonPos.y, 18, 0, 6.3); ctx.fill();
       ctx.fillStyle = '#ffe7a8';
@@ -6794,31 +6795,42 @@ function validConversation(value, p) {
     try { old.pause(); old.onended = old.onerror = null; } catch (err) { /* ignore */ }
     delete packPlayers[key];
   }
+  var loopRetryAt = {};
   function noteLoopProgress(a, now) {
-    if (!a || a.paused) return;
+    if (!a || a.paused || a.ended) return;
+    var t = a.currentTime;
+    // NaN !== NaN, so a bad clock used to refresh the stall timer forever.
+    if (!(t >= 0)) { if (!a._loopBadAt) a._loopBadAt = now; return; }
+    a._loopBadAt = 0;
     if (a.readyState < 2) { if (!a._loopLowAt) a._loopLowAt = now; }
     else a._loopLowAt = 0;
-    if (a._loopTickAt == null || a.currentTime !== a._loopTick) {
-      a._loopTick = a.currentTime;
+    if (a._loopTickAt == null || Math.abs(t - a._loopTick) > 0.02) {
+      a._loopTick = t;
       a._loopTickAt = now;
     }
   }
   // Same failure class as the animal cries: the element looks alive, so the loop never retries.
   function loopStalled(a, now) {
     if (!a) return false;
-    if (a.error) return true;
+    if (a.error || a.ended) return true;
+    if (a._loopBadAt && now - a._loopBadAt > 800) return true;
     if (a._loopArm && now - a._loopArm > 2500 && (a.paused || a.readyState < 2)) return true;
-    if (!a.paused && a._loopLowAt && now - a._loopLowAt > 2500) return true;
-    if (!a.paused && a._loopTickAt && now - a._loopTickAt > 2500 && a.currentTime === a._loopTick) return true;
+    if (!a.paused && a._loopLowAt && now - a._loopLowAt > 1200) return true;
+    if (!a.paused && a._loopTickAt && now - a._loopTickAt > 1000 && Math.abs(a.currentTime - a._loopTick) <= 0.02) return true;
     return false;
   }
   function packPlay(key,loop) {
     if(!packUnlocked||packSuspended||document.hidden||!(key==='garden-loop'?musicOn:sfxOn))return;
-    try{var a=packAudio(key,loop);if(!loop){a.pause();a.currentTime=0;}packRequests[key]=(packRequests[key]||0)+1;
+    var now=Date.now();
+    if(loop&&loopRetryAt[key]&&now<loopRetryAt[key])return;
+    try{var a=packAudio(key,loop);if(!loop){a.pause();try{a.currentTime=0;}catch(err){/* optional */}}
+      else if(a.ended){try{a.currentTime=0;}catch(err){/* optional */}}
+      packRequests[key]=(packRequests[key]||0)+1;
       var gen=0;
-      if(loop){gen=(a._loopGen||0)+1;a._loopGen=gen;a._loopArm=Date.now();if(audioCtx&&audioCtx.state==='suspended'){try{audioCtx.resume();}catch(err){/* optional */}}}
-      var p=a.play();if(p&&p.then)p.then(function(){if(packPlayers[key]!==a||(loop&&a._loopGen!==gen))return;packPlayed[key]=(packPlayed[key]||0)+1;if(loop){a._loopArm=0;if(!packWanted[key]){try{a.pause();}catch(err){/* optional */}}}}).catch(function(){if(loop&&packPlayers[key]===a&&a._loopGen===gen)dropLoop(key);});
-    }catch(err){if(loop)dropLoop(key);}
+      if(loop){gen=(a._loopGen||0)+1;a._loopGen=gen;a._loopArm=now;a.loop=true;if(audioCtx&&audioCtx.state==='suspended'){try{audioCtx.resume();}catch(err){/* optional */}}
+        if(!a._loopBound){a._loopBound=true;a.addEventListener('ended',function(){if(packPlayers[key]!==a||!packWanted[key]||document.hidden||packSuspended)return;try{a.currentTime=0;}catch(err){/* optional */}var again=a.play();if(again&&again.catch)again.catch(function(){if(packPlayers[key]===a)loopRetryAt[key]=Date.now()+900;});});}}
+      var p=a.play();if(p&&p.then)p.then(function(){if(packPlayers[key]!==a||(loop&&a._loopGen!==gen))return;packPlayed[key]=(packPlayed[key]||0)+1;if(loop){a._loopArm=0;loopRetryAt[key]=0;if(!packWanted[key]){try{a.pause();}catch(err){/* optional */}}}}).catch(function(){if(loop&&packPlayers[key]===a&&a._loopGen===gen){dropLoop(key);loopRetryAt[key]=Date.now()+900;}});
+    }catch(err){if(loop){dropLoop(key);loopRetryAt[key]=Date.now()+900;}}
   }
   function playSfx(key){packPlay(key,false);}
   var animalSfxAt = {}, animalVoiceAt = 0;
@@ -6859,8 +6871,10 @@ function validConversation(value, p) {
   function packLoop(key,wanted) {
     wanted=!!(wanted&&packUnlocked&&!packSuspended&&!document.hidden);
     var now=Date.now();
-    if(wanted&&loopStalled(packPlayers[key],now))dropLoop(key);
+    if(wanted&&loopStalled(packPlayers[key],now)){dropLoop(key);loopRetryAt[key]=0;}
     var a=packPlayers[key];
+    // A rejected play() must wait. Creating a new Audio every frame hitches and still stays silent.
+    if(!a&&wanted&&loopRetryAt[key]&&now<loopRetryAt[key]){packWanted[key]=true;return;}
     if(packWanted[key]===wanted&&a){
       // Retry a paused loop, but don't stack play() calls while one attempt is in flight.
       if(wanted&&a.paused&&!(a._loopArm&&now-a._loopArm<2500))packPlay(key,true);
@@ -6881,7 +6895,7 @@ function validConversation(value, p) {
   // Linear crossfade, about a fifth of a second. Playback rate stays 1 so the recordings stay natural.
   function fadeEngine(key, target, dt) {
     var now = Date.now();
-    if (target > 0 && loopStalled(packPlayers[key], now)) dropLoop(key);
+    if (target > 0 && loopStalled(packPlayers[key], now)) { dropLoop(key); loopRetryAt[key] = 0; }
     var a = packAudio(key, true);
     try { a.playbackRate = 1; } catch (err) { /* optional */ }
     if (target > 0 && a.paused && !(a._loopArm && now - a._loopArm < 2500)) {
@@ -6910,15 +6924,45 @@ function validConversation(value, p) {
     engineMixAt = now;
     var driving = !!carMoving;
     fadeEngine('engine-idle', driving ? 0 : 0.46, dt);
-    fadeEngine('engine-drive', driving ? 0.42 : 0, dt);
+    // Clear cruise, not a loud mix. The recording itself carries the road and engine.
+    fadeEngine('engine-drive', driving ? 0.36 : 0, dt);
   }
   function syncSoundPack() {
     packLoop('garden-loop',started&&musicOn);
     // Sitting still loops the cabin idle. Moving crossfades to the on-road recording.
     syncEngine();
   }
-  function suspendSoundPack(){packSuspended=true;Object.keys(packPlayers).forEach(function(k){packPlayers[k].pause();});packWanted={};}
-  function resumeSoundPack(){packSuspended=false;syncSoundPack();}
+  function suspendSoundPack(){packSuspended=true;Object.keys(packPlayers).forEach(function(k){if(packPlayers[k]){packPlayers[k]._loopArm=0;try{packPlayers[k].pause();}catch(err){/* optional */}}});packWanted={};}
+  var soundResumeAt=0;
+  function resumeSoundPack(){
+    packSuspended=false;
+    var now=Date.now();
+    // visibilitychange and pageshow both fire. Only the first one throws away the zombie element.
+    if(now-soundResumeAt>400){
+      soundResumeAt=now;
+      dropLoop('garden-loop');
+      packWanted['garden-loop']=false;
+      loopRetryAt['garden-loop']=0;
+    }
+    if(audioCtx&&audioCtx.state==='suspended'){try{audioCtx.resume();}catch(err){/* optional */}}
+    syncSoundPack();
+  }
+  // A tap or key is a user gesture. That is what actually restarts music after a tab return.
+  function reviveLoops(){
+    if(!packUnlocked||document.hidden)return;
+    if(packSuspended){resumeSoundPack();return;}
+    if(audioCtx&&audioCtx.state==='suspended'){try{audioCtx.resume();}catch(err){/* optional */}}
+    var now=Date.now();
+    if(started&&musicOn){
+      var g=packPlayers['garden-loop'];
+      if(!g||g.paused||g.ended||g.error||loopStalled(g,now)){
+        loopRetryAt['garden-loop']=0;
+        if(g)dropLoop('garden-loop');
+        packWanted['garden-loop']=false;
+      }
+    }
+    syncSoundPack();
+  }
   function renderSoundSettings(){['music','sfx'].forEach(function(k){var b=document.getElementById('parent-'+k),on=k==='music'?musicOn:sfxOn;b.textContent=(k==='music'?'Music':'SFX')+': '+(on?'On':'Off');b.setAttribute('aria-pressed',String(on));});}
   function setPackSetting(key){if(key==='music')musicOn=!musicOn;else{sfxOn=!sfxOn;if(!sfxOn)Object.keys(packPlayers).forEach(function(k){if(k!=='garden-loop')packPlayers[k].pause();});}renderSoundSettings();syncSoundPack();save();}
   function unlockAudio() {
@@ -7740,6 +7784,7 @@ function validConversation(value, p) {
   function bind() {
     bindSocial();
     document.addEventListener('pointerdown', function (e) {
+      reviveLoops();
       if(buildLogEnabled)buildClick={x:Math.round(e.clientX),y:Math.round(e.clientY)};
       chatLastInput = chatClock; socialLastInput = Date.now();
       if (welcome && !nameFlow && !e.target.closest('#welcome')) dismissGreeting();
@@ -7939,6 +7984,7 @@ function validConversation(value, p) {
     joy.addEventListener('pointercancel', joyEnd);
     joy.addEventListener('lostpointercapture', joyEnd);
     window.addEventListener('keydown', function (e) {
+      reviveLoops();
       if (welcome && !nameFlow && /^(ArrowLeft|ArrowRight|ArrowUp|Space|KeyW|KeyA|KeyD|KeyE|KeyB|Escape)$/.test(e.code)) dismissGreeting();
       chatLastInput = chatClock; socialLastInput = Date.now();
       if (e.target.closest('input, textarea') && !(chatBlocked() && /^(Tab|Escape)$/.test(e.code))) return;
@@ -8106,7 +8152,9 @@ function validConversation(value, p) {
       // Home is a long horizontal walk. A deep pit gets the rope instead, so both never show together.
       var farHome = Math.abs(player.x - homeX) > 18 * TILE;
       var deepPit = pitDepthTiles() >= 8 || ropeShown || !!ropeClimb;
-      document.getElementById('btn-home').hidden = !(started && farHome && !deepPit && !drivingCar && !chatBlocked());
+      var homeHidden = !(started && farHome && !deepPit && !drivingCar && !chatBlocked());
+      var homeBtn = document.getElementById('btn-home');
+      if (homeBtn.hidden !== homeHidden) homeBtn.hidden = homeHidden;
       adventureStep(dt);
       // Walking and pet following must persist even without a new world action.
       // saveSoon uses the same 2.5-second throttle as inventory/build changes.

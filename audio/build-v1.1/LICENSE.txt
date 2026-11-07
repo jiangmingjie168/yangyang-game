@@ -5,6 +5,6 @@ Source: tools/make-build-v1.1-audio.py
 
 cry-*.ogg are real recordings, not synthesized sounds. Authors and licenses are in CRIES.txt.
 engine-idle.ogg is a Mixkit car-idle recording. See ENGINE.txt. It is not covered by CC0.
-engine-drive.ogg is "Engine Sound" by kurt (OpenGameArt), CC-BY 3.0. https://opengameart.org/content/engine-sound
-Attribution: Engine Sound by kurt, CC-BY 3.0. https://creativecommons.org/licenses/by/3.0/
+engine-drive.ogg is "Car Interior Driving Down Road" by jc144940 (Freesound), CC0 1.0. https://freesound.org/people/jc144940/sounds/179121/
+Attribution: Car Interior Driving Down Road by jc144940, CC0. https://creativecommons.org/publicdomain/zero/1.0/
 The retired engine.ogg Mixkit slice is not played. See ENGINE.txt.

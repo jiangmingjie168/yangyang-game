@@ -59,7 +59,7 @@ entries.append(save('enter-car',mix(noise(.13)*1.7,note(110,.16)*.35,.13*np.sin(
 # Idle and drive are real recordings. Do not synthesize over them.
 engine_clips=(
  ('engine-idle.ogg','Recording: Mixkit royalty-free car engine idle, cleaned to a 5 second mono loop.','Mixkit Sound Effects Free License',5.0),
- ('engine-drive.ogg','Recording: OpenGameArt "Engine Sound" by kurt, file enginehum3.ogg (on-road). https://opengameart.org/content/engine-sound','CC-BY-3.0',8.0),
+ ('engine-drive.ogg','Recording: Freesound "Car Interior Driving Down Road" by jc144940, CC0, steady cruise slice. https://freesound.org/people/jc144940/sounds/179121/','CC0-1.0',7.91),
 )
 for name,source,license,seconds in engine_clips:
  engine_file=OUT/name
@@ -74,9 +74,9 @@ if (OUT/'manifest.json').exists():
  old=json.loads((OUT/'manifest.json').read_text())
  cries=[a for a in old.get('assets',[]) if str(a.get('file','')).split('/')[-1].startswith('cry-')]
 entries.extend(cries)
-manifest={'license':'CC0-1.0','external_samples':True,'voice':False,'total_bytes':sum(x['bytes'] for x in entries),'assets':entries,'engine_note':'Sitting still plays engine-idle.ogg (Mixkit). Driving crossfades to engine-drive.ogg, Engine Sound by kurt, CC-BY 3.0. See ENGINE.txt. The old engine.ogg clip is not played.'}
+manifest={'license':'CC0-1.0','external_samples':True,'voice':False,'total_bytes':sum(x['bytes'] for x in entries),'assets':entries,'engine_note':'Sitting still plays engine-idle.ogg (Mixkit). Driving crossfades to engine-drive.ogg, a CC0 interior cruise by jc144940 (Freesound). See ENGINE.txt. The old engine.ogg clip is not played.'}
 if cries: manifest['cry_note']='cry-*.ogg are real recordings listed in CRIES.txt. They are not synthesized.'
 assert manifest['total_bytes']<3_000_000
 (OUT/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
-(OUT/'LICENSE.txt').write_text('Original self-synthesized instrumental composition and sound effects, except the animal cries and the car engine.\nDedicated to the public domain under CC0 1.0 Universal.\nLicense: https://creativecommons.org/publicdomain/zero/1.0/\nSource: tools/make-build-v1.1-audio.py\n\ncry-*.ogg are real recordings, not synthesized sounds. Authors and licenses are in CRIES.txt.\nengine-idle.ogg is a Mixkit car-idle recording. See ENGINE.txt. It is not covered by CC0.\nengine-drive.ogg is "Engine Sound" by kurt (OpenGameArt), CC-BY 3.0. https://opengameart.org/content/engine-sound\nAttribution: Engine Sound by kurt, CC-BY 3.0. https://creativecommons.org/licenses/by/3.0/\nThe retired engine.ogg Mixkit slice is not played. See ENGINE.txt.\n')
+(OUT/'LICENSE.txt').write_text('Original self-synthesized instrumental composition and sound effects, except the animal cries and the car engine.\nDedicated to the public domain under CC0 1.0 Universal.\nLicense: https://creativecommons.org/publicdomain/zero/1.0/\nSource: tools/make-build-v1.1-audio.py\n\ncry-*.ogg are real recordings, not synthesized sounds. Authors and licenses are in CRIES.txt.\nengine-idle.ogg is a Mixkit car-idle recording. See ENGINE.txt. It is not covered by CC0.\nengine-drive.ogg is "Car Interior Driving Down Road" by jc144940 (Freesound), CC0 1.0. https://freesound.org/people/jc144940/sounds/179121/\nAttribution: Car Interior Driving Down Road by jc144940, CC0. https://creativecommons.org/publicdomain/zero/1.0/\nThe retired engine.ogg Mixkit slice is not played. See ENGINE.txt.\n')
 print(json.dumps({'assets':len(entries),'total_bytes':manifest['total_bytes']}))

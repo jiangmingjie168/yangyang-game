@@ -7,13 +7,12 @@ engine-idle.ogg — child sitting in the car, not moving.
   Cleaned 5 second loopable mono Ogg. Plays under the existing SFX switch.
 
 engine-drive.ogg — while the car is actually moving.
-  Source: OpenGameArt "Engine Sound" by kurt.
-  Page: https://opengameart.org/content/engine-sound
-  Original file: enginehum3.ogg, a real recorder-on-while-driving take.
-  License: CC-BY 3.0.
-  Attribution: Engine Sound by kurt (OpenGameArt), CC-BY 3.0.
-  https://creativecommons.org/licenses/by/3.0/
-  Cleaned 8 second loopable mono Ogg. A little more present than the idle, still a road car rather than a race car.
+  Source: Freesound "Car Interior Driving Down Road" by jc144940.
+  Page: https://freesound.org/people/jc144940/sounds/179121/
+  License: CC0 1.0. Attribution is not required; credit is included anyway.
+  Attribution: Car Interior Driving Down Road by jc144940 (Freesound), CC0.
+  https://creativecommons.org/publicdomain/zero/1.0/
+  A steady cruise from inside the car (about 6s–14s of the take), high-passed at 75 Hz so the engine and road stay audible instead of a sub-bass rumble. 7.91 second loopable mono Ogg. Not a race-car rev.
 
 Getting out, opening a panel, blocking chat, leaving the page, or turning SFX off stops both loops immediately. Idle and drive crossfade only with each other.
 

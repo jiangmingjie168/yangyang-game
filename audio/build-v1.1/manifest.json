@@ -2,7 +2,7 @@
   "license": "CC0-1.0",
   "external_samples": true,
   "voice": false,
-  "total_bytes": 365497,
+  "total_bytes": 377715,
   "assets": [
     {
       "file": "audio/build-v1.1/garden-loop.ogg",
@@ -95,10 +95,10 @@
     },
     {
       "file": "audio/build-v1.1/engine-drive.ogg",
-      "source": "Recording: OpenGameArt \"Engine Sound\" by kurt, file enginehum3.ogg (on-road). https://opengameart.org/content/engine-sound",
-      "license": "CC-BY-3.0",
-      "seconds": 8.0,
-      "bytes": 54090,
+      "source": "Recording: Freesound \"Car Interior Driving Down Road\" by jc144940, CC0, steady cruise slice. https://freesound.org/people/jc144940/sounds/179121/",
+      "license": "CC0-1.0",
+      "seconds": 7.91,
+      "bytes": 66308,
       "loop": true,
       "recorded": true
     },
@@ -210,5 +210,5 @@
     }
   ],
   "cry_note": "cry-*.ogg are real recordings listed in CRIES.txt. They are not synthesized.",
-  "engine_note": "Sitting still plays engine-idle.ogg (Mixkit). Driving crossfades to engine-drive.ogg, Engine Sound by kurt, CC-BY 3.0. See ENGINE.txt. The old engine.ogg clip is not played."
+  "engine_note": "Sitting still plays engine-idle.ogg (Mixkit). Driving crossfades to engine-drive.ogg, a CC0 interior cruise by jc144940 (Freesound). See ENGINE.txt. The old engine.ogg clip is not played."
 }
