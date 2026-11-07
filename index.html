@@ -577,7 +577,7 @@
 <div id="app">
   <canvas id="view" width="800" height="400"></canvas>
   <div id="hud">
-    <span id="build-version" aria-label="Build version">build cd91b62+ux37</span>
+    <span id="build-version" aria-label="Build version">build cd91b62+ux38</span>
     <div class="topbar">
       <button id="quest" type="button">
         <canvas id="quest-icon" width="128" height="128"></canvas>
@@ -2548,7 +2548,7 @@ function validConversation(value, p) {
     // An action result is not an optional conversation: no idle gate, queue,
     // praise/question budget, other-material test, or 25/45-second cooldown.
     // Ordinary build feedback stays text-only; animal meet speaks English (respects speechOn).
-    var a=buildBubble(text,{event:event,praise:true,feedback:true});
+    var a=buildBubble(text,{event:event,praise:true,feedback:true,deferSpeech:event==='animal_meet'});
     if(!a)return;
     document.getElementById('buddy-chat').classList.add('build-feedback');
     clearTimeout(a.timer);
@@ -4426,7 +4426,7 @@ function validConversation(value, p) {
     }
     if ((a.type === 'dog' || a.type === 'cat') && !animals.some(function (o) { return o.tamed; })) {
       a.love = (a.love || 0) + 1;
-      showToast(WORD[a.type][0] + ': ' + a.love + '/3 hearts', 2.2);
+      showToast(WORD[a.type][0] + ': ' + a.love + '/3 hearts', 2.2, true);
       if (a.love >= 3) {
         a.tamed = 1;
         if (!quiz) progress.pet = 1;
@@ -4437,7 +4437,7 @@ function validConversation(value, p) {
         burst(a.x, a.y - 24, '#ff6b8a', true);
         burst(a.x, a.y - 42, '#ffc53d', false);
         chime();
-        showToast('Your pet follows you!', 2.6);
+        showToast('Your pet follows you!', 2.6, true);
         updateQuest();
         saveSoon();
         return;
@@ -5794,10 +5794,13 @@ function validConversation(value, p) {
     if (!w) return;
     var hint = ITEM_HINT[hintKey] || ITEM_HINT[key] || '';
     var line = itemSpeakLine(hintKey);
+    var animalLine = !!ANIMALS[key];
+    // Animals: one Jenny clip of the name. The hint stays on the card, not a second voice.
+    var spoken = animalLine ? w[0] : line;
     learn(key);
     if (buildSessionBusy() && !buildShowingWord) {
       // Build-busy hides the card, but animal taps / word reads must still say English when unmuted.
-      speakEn(line, { force: !!replay });
+      speakEn(spoken, { force: !!replay || animalLine, noDeviceTts: animalLine });
       return;
     }
     if (cardFlyTimer) { clearTimeout(cardFlyTimer); cardFlyTimer = null; }
@@ -5820,7 +5823,7 @@ function validConversation(value, p) {
       chime();
       playSfx('star');
     }
-    speakEn(line, { force: !!replay });
+    speakEn(spoken, { force: !!replay || animalLine, noDeviceTts: animalLine });
     renderHotbar();
   }
   function hideCard() {
@@ -6035,9 +6038,9 @@ function validConversation(value, p) {
           var a = new Audio(urls.shift()); enAudio = a; a.volume = params.soft ? 0.75 : 1;
           a.onended = function () { clearTimeout(a.voiceTimer); playNext(); };
           a.onerror = fallback;
-          a.voiceTimer = setTimeout(fallback, 4000); // stalled network/autoplay
+          if (!params.noDeviceTts) a.voiceTimer = setTimeout(fallback, 4000); // stalled network/autoplay
           var played = a.play();
-          if (played && played.then) played.then(function () { clearTimeout(a.voiceTimer); if (!failed && serial === speechSerial) { brainStats.audio++; a.voiceTimer = setTimeout(fallback, 12000); } }).catch(fallback);
+          if (played && played.then) played.then(function () { clearTimeout(a.voiceTimer); if (!failed && serial === speechSerial) { brainStats.audio++; if (!params.noDeviceTts) a.voiceTimer = setTimeout(fallback, 12000); } }).catch(fallback);
           return a;
         } catch (err) { fallback(); }
       }
@@ -6140,11 +6143,11 @@ function validConversation(value, p) {
     if (dialogue) { if (!dialogue.pending && dialogue.question) speakEn(dialogue.question, { force: true, audio_url: !dialogue.reveal ? dialogue.audio_url : undefined }); return; }
     speakPrompt(questSpeechLine(), 'quest', true);
   }
-  function showToast(en, secs) {
+  function showToast(en, secs, quiet) {
     document.getElementById('toast-en').textContent = en;
     document.getElementById('toast').hidden = false;
     toastLeft = secs || 2.2;
-    speakPrompt(en, 'hint');
+    if (!quiet) speakPrompt(en, 'hint');
   }
   // Optional local sound pack: lazy HTMLAudio loads never block starting play.
   // Speech has its own existing switch/path; these settings control music/SFX.
