@@ -577,7 +577,7 @@
 <div id="app">
   <canvas id="view" width="800" height="400"></canvas>
   <div id="hud">
-    <span id="build-version" aria-label="Build version">build cd91b62+ux40</span>
+    <span id="build-version" aria-label="Build version">build cd91b62+ux41</span>
     <div class="topbar">
       <button id="quest" type="button">
         <canvas id="quest-icon" width="128" height="128"></canvas>
@@ -1830,10 +1830,50 @@ function validConversation(value, p) {
       else if (b.id === 'chat-confirm') confirmChat();
     });
   }
+  function claimTrailGift(spot) {
+    if (!spot || trailPickupDelay > 0 || trail.found[spot.id]) return false;
+    var pool = chatWords(), collected = Object.keys(trail.found).map(function (id) { return trail.found[id]; });
+    var fresh = pool.filter(function (key) { return collected.indexOf(key) < 0; });
+    var sticker = oldWord(fresh.length ? fresh : pool);
+    trail.found[spot.id] = sticker || true;
+    var rewards = ['wood', 'stone', 'planks', 'wool', 'seed'].filter(allowedChatWord);
+    if (rewards.length) {
+      var reward = rewards[Number(spot.id) % rewards.length], count = 1 + Number(spot.id) % 3;
+      addItem(reward, count, true); showToast('★ +' + count + ' ' + WORD[reward][0], 2);
+    }
+    var completed = completeTrailRound();
+    celebrate(spot.x, spot.y, completed);
+    if (completed) showToast('Seven gifts! New hiding places await!', 3);
+    updateTrailCount();
+    queueChat('scene', sticker); rememberEvent('found', sticker); saveSoon();
+    return true;
+  }
+  function giftOverlapsPlayer(spot) {
+    if (!spot || trail.found[spot.id]) return false;
+    if (Math.abs(player.x - spot.x) > 42) return false;
+    var top = player.y - 46, bot = player.y + 10;
+    return bot >= spot.y - 26 && top <= spot.y + 22;
+  }
+  function giftAtPoint(wx, wy) {
+    var i, spot, dx, dy, best = null, bd = 1e9, d;
+    for (i = 0; i < trailSpots.length; i++) {
+      spot = trailSpots[i];
+      if (!spot || trail.found[spot.id]) continue;
+      dx = wx - spot.x; dy = wy - spot.y; d = dx * dx + dy * dy;
+      if (d <= 30 * 30 && d < bd) { bd = d; best = spot; }
+    }
+    return best;
+  }
+  function giftTapReach(spot) {
+    return Math.abs(spot.x - player.x) <= 8 * TILE && Math.abs(spot.y - (player.y - 20)) <= 14 * TILE;
+  }
   function adventureStep(dt) {
-    if(drivingCar)return;
     chatCooldown = Math.max(0, chatCooldown - dt);
     trailPickupDelay = Math.max(0, trailPickupDelay - dt);
+    // Jumping or walking through a gift collects it, even when the gift is off the ground.
+    var gi;
+    for (gi = 0; gi < trailSpots.length; gi++) if (giftOverlapsPlayer(trailSpots[gi])) claimTrailGift(trailSpots[gi]);
+    if(drivingCar)return;
     var moving = !!seek || !!enAudio || axis() !== 0 || !onGround || riding || inWater() || fishing || jumpBuf > 0;
     var safe = !moving && !quiz && !(window.speechSynthesis && speechSynthesis.speaking) && chatClock - chatLastInput > 0.9;
     chatIdle = safe ? chatIdle + dt : 0;
@@ -1859,24 +1899,7 @@ function validConversation(value, p) {
         queueChat('scene', scene === 'water' ? 'water' : scene === 'trees' ? 'tree' : 'flower'); saveSoon();
       }
     }
-    trailSpots.forEach(function (spot) {
-      if (trailPickupDelay > 0 || trail.found[spot.id] || !onGround || riding || Math.abs(player.x - spot.x) > 29 || Math.abs(player.y - spot.y - 15) > 45) return;
-      var pool = chatWords(), collected = Object.keys(trail.found).map(function (id) { return trail.found[id]; });
-      var fresh = pool.filter(function (key) { return collected.indexOf(key) < 0; });
-      var sticker = oldWord(fresh.length ? fresh : pool);
-      trail.found[spot.id] = sticker || true;
-      var rewards = ['wood', 'stone', 'planks', 'wool', 'seed'].filter(allowedChatWord);
-      if (rewards.length) {
-        var reward = rewards[Number(spot.id) % rewards.length], count = 1 + Number(spot.id) % 3;
-        addItem(reward, count, true); showToast('★ +' + count + ' ' + WORD[reward][0], 2);
-      }
-      var completed = completeTrailRound();
-      celebrate(spot.x, spot.y, completed);
-      if (completed) showToast('Seven gifts! New hiding places await!', 3);
-      updateTrailCount();
-      // Discoveries are scene-entry stops, with the same safety/cooldown as every other chat.
-      queueChat('scene', sticker); rememberEvent('found', sticker); saveSoon();
-    });
+    // Gift pickup runs at the start of this step, including while the child is in the air.
     // Keep exploration events long enough to survive a short stand-still after walking.
     chatQueue = chatQueue.filter(function (e) { return chatClock - e.at < 40; });
     // A deep pit is a rescue, not a question. Hold the Speak prompt until they are out.
@@ -4947,6 +4970,12 @@ function validConversation(value, p) {
     return { sx: sx, sy: sy, wx: w.x, wy: w.y, tx: Math.floor(w.x / TILE), ty: ty, fy: w.y / TILE - ty };
   }
   function tapWorld(wx, wy, sx, sy, fy) {
+    var present = giftAtPoint(wx, wy);
+    if (present) {
+      if (giftTapReach(present)) claimTrailGift(present);
+      else showToast('Move a little closer!', 1.6);
+      return;
+    }
     var ropeTx = Math.floor(wx / TILE), ropeTy = Math.floor(wy / TILE), ropeId = get(ropeTx, ropeTy);
     if (!(ropeId !== AIR && mineable(ropeId)) && ropeHit(wx, wy)) { climbRope(); return; }
     var floated = craftableAt(ropeTx, ropeTy);
