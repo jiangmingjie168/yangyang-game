@@ -577,7 +577,7 @@
 <div id="app">
   <canvas id="view" width="800" height="400"></canvas>
   <div id="hud">
-    <span id="build-version" aria-label="Build version">build cd91b62+ux36</span>
+    <span id="build-version" aria-label="Build version">build cd91b62+ux37</span>
     <div class="topbar">
       <button id="quest" type="button">
         <canvas id="quest-icon" width="128" height="128"></canvas>
@@ -3539,9 +3539,11 @@ function validConversation(value, p) {
   function ropeHit(wx, wy) {
     var a = ropeAnchor;
     if (!ropeShown || ropeClimb || drivingCar || !a) return false;
-    if (wy < a.topY - 6 || wy > a.botY + 24) return false;
-    if (Math.hypot(wx - a.x, wy - a.botY) <= 26) return true;
-    return Math.abs(wx - a.x) <= 16 && wy >= a.topY && wy <= a.botY + 8;
+    // The drawn rope is a few pixels wide. Ground beside it must stay a dig.
+    var sway = Math.sin(wy * 0.16) * 2.4;
+    var onLine = Math.abs(wx - (a.x + sway)) <= 8 && wy >= a.topY - 4 && wy <= a.botY + 4;
+    var onHandle = Math.hypot(wx - a.x, wy - (a.botY + 6)) <= 14;
+    return onLine || onHandle;
   }
   function liftChatForRope() {
     if (!dialogue || dialogue.answered || !dialogue.key) return;
@@ -4283,7 +4285,7 @@ function validConversation(value, p) {
     burst((tx + 0.5) * TILE, (ty + 0.4) * TILE, PCOL[BLOCK_OF[key]] || '#fff', false);
     tone(520, 0.06, 'sine', 0, 0.035, 760);
     if (!quiet) showWord(key);
-    if (collides(player.x, player.y)) player.y -= TILE;
+    if (!fill && collides(player.x, player.y) && !collides(player.x, player.y - TILE)) player.y -= TILE;
     updateQuest();
     saveSoon();
     return true;
@@ -4649,13 +4651,18 @@ function validConversation(value, p) {
   }
   function paintFillCell(h, tx, ty) {
     var key = activePlaceKey(), id = tx + ',' + ty;
-    if (!key || !h.filled || h.filled[id]) return;
+    if (h.blocked || !key || !h.filled || h.filled[id]) return;
     if (placeStock(key) <= 0) {
       if (!h.spokeBad) { h.spokeBad = true; showToast('Use some materials first!', 1.6); }
       return;
     }
     if (!fillCellOpen(key, tx, ty) || !solid(get(tx, ty + 1))) return;
-    if (!liftForFill(tx, ty)) return;
+    if (!liftForFill(tx, ty)) {
+      if (!h.spokeBad) { h.spokeBad = true; showToast('No room!', 1.6); }
+      h.blocked = true;
+      return;
+    }
+    if (h.blocked) return;
     if (tryPlace(tx, ty, true, true)) {
       h.filled[id] = 1;
       h.placedN++;
@@ -4663,12 +4670,33 @@ function validConversation(value, p) {
     }
   }
   function liftForFill(tx, ty) {
-    if (!overlapsPlayer(tx, ty)) return true;
+    if (!overlapsPlayer(tx, ty)) return !collides(player.x, player.y);
     if (!solid(get(tx, ty + 1))) return false;
-    player.y = ty * TILE - 0.01;
+    var savedX = player.x, savedY = player.y, foot = ty * TILE - 0.01;
+    var spots = [{ x: (tx + 0.5) * TILE, y: foot }];
+    var step, dir, nx;
+    for (step = 1; step <= 3; step++) {
+      for (dir = -1; dir <= 1; dir += 2) {
+        nx = tx + dir * step;
+        if (nx < 1 || nx >= W - 1) continue;
+        if (!solid(get(nx, ty))) continue;
+        spots.push({ x: (nx + 0.5) * TILE, y: foot });
+      }
+    }
+    var i, s;
+    for (i = 0; i < spots.length; i++) {
+      s = spots[i];
+      if (collides(s.x, s.y)) continue;
+      player.x = s.x;
+      player.y = s.y;
+      player.vy = 0;
+      onGround = true;
+      if (!overlapsPlayer(tx, ty) && !collides(player.x, player.y)) return true;
+    }
+    player.x = savedX;
+    player.y = savedY;
     player.vy = 0;
-    onGround = true;
-    return !overlapsPlayer(tx, ty);
+    return false;
   }
   function dragPaint(h) {
     if (!isMultiPlace(activePlaceKey())) return;
@@ -4739,7 +4767,8 @@ function validConversation(value, p) {
     return { sx: sx, sy: sy, wx: w.x, wy: w.y, tx: Math.floor(w.x / TILE), ty: ty, fy: w.y / TILE - ty };
   }
   function tapWorld(wx, wy, sx, sy, fy) {
-    if (ropeHit(wx, wy)) { climbRope(); return; }
+    var ropeTx = Math.floor(wx / TILE), ropeTy = Math.floor(wy / TILE), ropeId = get(ropeTx, ropeTy);
+    if (!(ropeId !== AIR && mineable(ropeId)) && ropeHit(wx, wy)) { climbRope(); return; }
     if(interactObject(wx,wy))return;
     if (boat) {
       var bdx = wx - boat.x, bdy = wy - (boat.y - 8);
