@@ -20,7 +20,16 @@ engine-drive.ogg — while the car is actually moving, after the rev.
   https://creativecommons.org/publicdomain/zero/1.0/
   A steady cruise from inside the car (about 6s–14s of the take), high-passed at 75 Hz so the engine and road stay audible instead of a sub-bass rumble. 7.91 second loopable mono Ogg. Not a race-car rev. Volume 0.36.
 
-Getting out, opening a panel, blocking chat, leaving the page, or turning SFX off stops the rev and the cruise immediately. Stopping the car does too, so a parked car stays quiet.
+engine-horn.ogg — one honk when the child double-taps the car while seated.
+  Source: Freesound "Nissan Altima car horn honk (raw)" by ChrisReierson.
+  Page: https://freesound.org/people/ChrisReierson/sounds/433578/
+  License: CC0 1.0.
+  Attribution: Nissan Altima car horn honk by ChrisReierson (Freesound), CC0.
+  https://creativecommons.org/publicdomain/zero/1.0/
+  About 2 seconds, played once. Not a loop. A single tap does not honk.
+  Getting out is the Get out button, not a second tap.
+
+Getting out, opening a panel, blocking chat, leaving the page, or turning SFX off stops the rev, the cruise, and a honk in progress. Stopping the car stops the rev and the cruise, so a parked car stays quiet. A honk that already started can finish while the car is parked and the child is still seated.
 
 engine-idle.ogg is the previous Mixkit idle. The game no longer plays it.
 engine.ogg is the older UX51 Mixkit "Cars starting" slice. The game no longer plays it.

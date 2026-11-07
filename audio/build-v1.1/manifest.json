@@ -2,7 +2,7 @@
   "license": "CC0-1.0",
   "external_samples": true,
   "voice": false,
-  "total_bytes": 347230,
+  "total_bytes": 365800,
   "assets": [
     {
       "file": "audio/build-v1.1/garden-loop.ogg",
@@ -100,6 +100,15 @@
       "seconds": 7.91,
       "bytes": 66308,
       "loop": true,
+      "recorded": true
+    },
+    {
+      "file": "audio/build-v1.1/engine-horn.ogg",
+      "source": "Recording: Freesound \"Nissan Altima car horn honk (raw)\" by ChrisReierson, CC0. https://freesound.org/people/ChrisReierson/sounds/433578/",
+      "license": "CC0-1.0",
+      "seconds": 1.99,
+      "bytes": 18570,
+      "loop": false,
       "recorded": true
     },
     {
@@ -210,5 +219,5 @@
     }
   ],
   "cry_note": "cry-*.ogg are real recordings listed in CRIES.txt. They are not synthesized.",
-  "engine_note": "Sitting still is silent. Starting to drive plays engine-throttle.ogg once (Beetlemuse, CC0). Steady driving loops engine-drive.ogg (jc144940, CC0). See ENGINE.txt. engine-idle.ogg is not played."
+  "engine_note": "Sitting still is silent. Starting to drive plays engine-throttle.ogg once (Beetlemuse, CC0). Steady driving loops engine-drive.ogg (jc144940, CC0). A double-tap on the car while seated plays engine-horn.ogg once (ChrisReierson, CC0). See ENGINE.txt."
 }

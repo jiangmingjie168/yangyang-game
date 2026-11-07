@@ -579,7 +579,7 @@
   <canvas id="view" width="800" height="400"></canvas>
   <div id="hud">
     <span id="hunger-hint" hidden></span>
-    <span id="build-version" aria-label="Build version">build cd91b62+ux54</span>
+    <span id="build-version" aria-label="Build version">build cd91b62+ux55</span>
     <div class="topbar">
       <button id="quest" type="button">
         <canvas id="quest-icon" width="128" height="128"></canvas>
@@ -2341,7 +2341,16 @@ function validConversation(value, p) {
   }
   function interactObject(wx,wy) {
     var b=craftableAt(wx/TILE,wy/TILE);
-    if(drivingCar){if(b===drivingCar&&chatClock-hornAt>.6){hornAt=chatClock;playSfx('horn');}return true;}
+    // Single tap while seated does not get out (that is the Get out button) and does not honk.
+    // A second tap on the car within a short beat is the horn.
+    if(drivingCar){
+      if(b===drivingCar&&!panelOpen()&&!chatBlocked()){
+        var now=performance.now();
+        if(carHornTap&&now-carHornTap<420){carHornTap=0;honkCar();}
+        else carHornTap=now;
+      }
+      return true;
+    }
     // A just-placed, now-empty whole tool opens its object immediately. Explicit
     // removal and stocked placement still take priority over object interaction.
     if(buildMode&&(!b||buildTool!==b.item||(inv[buildTool]||0)>0))return false;
@@ -6816,9 +6825,9 @@ function validConversation(value, p) {
   // Optional local sound pack: lazy HTMLAudio loads never block starting play.
   // Speech has its own existing switch/path; these settings control music/SFX.
   var musicOn=true,sfxOn=true,packUnlocked=false,packSuspended=false,carMoving=false;
-  var packPlayers={},packWanted={},packRequests={},packPlayed={},hornAt=-100;
+  var packPlayers={},packWanted={},packRequests={},packPlayed={},hornAt=-100,carHornTap=0;
   function packAudio(key,loop) {
-    if(!packPlayers[key]){var a=new Audio('audio/build-v1.1/'+key+'.ogg');a.preload='none';a.loop=!!loop;a.volume=key==='garden-loop'?.30:key==='engine-drive'?0:key==='engine-throttle'?.46:key.indexOf('cry-')===0?.8:.42;packPlayers[key]=a;}
+    if(!packPlayers[key]){var a=new Audio('audio/build-v1.1/'+key+'.ogg');a.preload='none';a.loop=!!loop;a.volume=key==='garden-loop'?.30:key==='engine-drive'?0:key==='engine-throttle'?.46:key==='engine-horn'?.55:key.indexOf('cry-')===0?.8:.42;packPlayers[key]=a;}
     return packPlayers[key];
   }
   function dropLoop(key) {
@@ -6865,6 +6874,21 @@ function validConversation(value, p) {
     }catch(err){if(loop){dropLoop(key);loopRetryAt[key]=Date.now()+900;}}
   }
   function playSfx(key){packPlay(key,false);}
+  function stopOneShot(key) {
+    var a = packPlayers[key];
+    if (!a) return;
+    try { a.pause(); } catch (err) { /* optional */ }
+    try { a.currentTime = 0; } catch (err) { /* optional */ }
+  }
+  function hornAllowed() {
+    return packUnlocked && !packSuspended && !document.hidden && started && sfxOn && !!drivingCar && !panelOpen() && !chatBlocked();
+  }
+  function honkCar() {
+    if (!hornAllowed() || chatClock - hornAt < 0.45) return;
+    hornAt = chatClock;
+    stopOneShot('engine-horn');
+    playSfx('engine-horn');
+  }
   var animalSfxAt = {}, animalVoiceAt = 0;
   function dropCry(key) {
     var old = packPlayers[key];
@@ -6949,6 +6973,7 @@ function validConversation(value, p) {
     try { a.currentTime = 0; } catch (err) { /* optional */ }
   }
   function syncEngine() {
+    if (!hornAllowed()) stopOneShot('engine-horn');
     var audible = packUnlocked && !packSuspended && !document.hidden;
     var driving = audible && started && sfxOn && !!drivingCar && !!carMoving && !panelOpen() && !chatBlocked();
     if (!driving) {
