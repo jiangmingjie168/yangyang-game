@@ -4095,8 +4095,8 @@ function validConversation(value, p) {
         drawPlayer(g);
         g.restore();
       }
-      drawSleepZzz(g, R.bed.x + R.bed.w * 0.62, R.bed.y - 8);
-      drawChildLine(g, R.bed.x - 8, R.bed.y - 46);
+      var zzzBox = drawSleepZzz(g, R.bed.x + R.bed.w * 0.62, R.bed.y - 8);
+      drawChildLine(g, R.bed.x - 8, R.bed.y - 46, zzzBox);
     } else {
       g.translate(feet.x, feet.y);
       g.scale(1.35, 1.35);
@@ -4143,8 +4143,9 @@ function validConversation(value, p) {
       g.fillText('z', lx, ly);
     }
     g.restore();
+    return { x: bx, y: by, w: bw, h: bh };
   }
-  function drawChildLine(g, x, y) {
+  function drawChildLine(g, x, y, avoid) {
     var text = CHILD_REST_LINE;
     g.save();
     g.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -4153,6 +4154,13 @@ function validConversation(value, p) {
     var w = Math.ceil(g.measureText(text).width) + 24;
     var bx = Math.max(10, Math.min(viewW - w - 10, x));
     var by = Math.max(50, y);
+    if (avoid) {
+      // Keep the spoken line clear of the Zzz bubble: sit left of it, else above it.
+      if (bx < avoid.x + avoid.w && bx + w > avoid.x && by < avoid.y + avoid.h && by + 34 > avoid.y) {
+        bx = avoid.x - 10 - w;
+        if (bx < 10) { bx = Math.max(10, Math.min(viewW - w - 10, avoid.x + avoid.w - w)); by = Math.max(50, avoid.y - 42); }
+      }
+    }
     inkBox(g, bx, by, w, 34, '#fffaf2', 14);
     g.beginPath();
     g.moveTo(bx + 28, by + 34);
@@ -4970,7 +4978,7 @@ function validConversation(value, p) {
       return;
     }
     if (h.blocked) return;
-    if (tryPlace(tx, ty, true, true)) {
+    if (buildMode ? buildTap(tx, ty, 0.5, true) : tryPlace(tx, ty, true, true)) {
       h.filled[id] = 1;
       h.placedN++;
       if (!h.saidItem) { h.saidItem = true; showWord(buildMode ? buildMaterial() : key); }
@@ -5144,6 +5152,13 @@ function validConversation(value, p) {
   function armPlaceHold() {
     var h = placeHold;
     if (!h || h.armed || chatBlocked() || panelOpen() || !started || bedRest > 0) return;
+    var placeKey = activePlaceKey();
+    // A hold only means "place" when something can actually be placed.
+    // With nothing placeable in hand (or no indoor spot for it), leave the
+    // press unarmed so endHold falls through to the tap path (pet, mine,
+    // door, rope, bed) instead of silently swallowing the tap.
+    if (!h.indoor && !placeKey) return;
+    if (h.indoor && !indoorPlaceSpots().length) return;
     h.armed = true;
     h.seen = {};
     h.placedN = 0;
@@ -5151,7 +5166,6 @@ function validConversation(value, p) {
     h.saidItem = false;
     h.lastTx = null;
     h.filled = {};
-    var placeKey = activePlaceKey();
     h.spots = h.indoor ? indoorPlaceSpots() : (isMultiPlace(placeKey) ? collectFillSpots(placeKey) : collectPlaceSpots(h.tx, h.ty));
     var armSurf = surfaceCell(h.tx, h.ty);
     h.aim = h.indoor ? indoorAim(h.sx, h.sy) : (isMultiPlace(placeKey) ? { x: armSurf.tx, y: armSurf.ty, w: 1, h: 1 } : evalSpot(placeKey, h.tx, h.ty, h.fy));
@@ -5189,6 +5203,7 @@ function validConversation(value, p) {
     animalVoiceAt = Date.now();
   }
   function tapWorld(wx, wy, sx, sy, fy) {
+    var i;
     var tapTx = Math.floor(wx / TILE), tapTy = Math.floor(wy / TILE), tapId = get(tapTx, tapTy);
     // Wheat stays tappable when a pet stands on it. The animal body is checked next, before gifts.
     if (!riding && !drivingCar && (tapId === WHEAT1 || tapId === WHEAT2 || tapId === WHEAT3)) {
