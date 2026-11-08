@@ -579,7 +579,7 @@
   <canvas id="view" width="800" height="400"></canvas>
   <div id="hud">
     <span id="hunger-hint" hidden></span>
-    <span id="build-version" aria-label="Build version">build cd91b62+ux57</span>
+    <span id="build-version" aria-label="Build version">build cd91b62+ux59</span>
     <div class="topbar">
       <button id="quest" type="button">
         <canvas id="quest-icon" width="128" height="128"></canvas>
@@ -861,8 +861,13 @@ const BRAIN_TIMEOUT_MS = 6500;
     star: 'It shines at night.', cloud: 'It floats in the sky.', rain: 'Water from the sky.',
     home: 'Your starting place.', follow: 'Come with me.', hello: '', jump: ''
   };
-  // Stackable ground and fill. One-at-a-time specials stay off this list.
-  var MULTI_PLACE = { grass: 1, dirt: 1, sand: 1, stone: 1, wood: 1, leaves: 1, planks: 1, house: 1, water: 1 };
+  // Stackable crafted blocks only. Raw terrain and materials stay in the pack for crafting.
+  var MULTI_PLACE = { planks: 1, house: 1 };
+  var RAW_BLOCK = { grass: 1, dirt: 1, sand: 1, stone: 1, wood: 1, leaves: 1, water: 1 };
+  var KNOCK_COOLDOWN_MS = 3000;
+  var DIG_COOLDOWN_MS = 10 * 60 * 1000;
+  // Same list the trail gifts already pay out. Dig spots do not add new loot.
+  var DIG_MATERIALS = ['wood', 'stone', 'planks', 'wool', 'seed'];
   var ANIMALS = { cow: 1, pig: 1, sheep: 1, chicken: 1, cat: 1, dog: 1, duck: 1, horse: 1, rabbit: 1 };
   var SKY_KEYS = [
     { t: 0.00, top: [255, 186, 150], hor: [255, 228, 190] },
@@ -907,6 +912,7 @@ const BRAIN_TIMEOUT_MS = 6500;
   var BED_NAP = 6;
   var swimPhase = 0, wasSwim = false, splashT = 0;
   var crops = [], boat = null, riding = false, fishing = null, boatPhase = 0, packSeen = false;
+  var digSpots = [], knockUntil = {};
   var sunPos = { x: 0, y: 0 }, moonPos = { x: 0, y: 0 }, sunOn = false, moonOn = false, starPos = [], cloudPos = [];
   var rainOn = false, rainTimer = 26, rainbowLeft = 0, nightWeatherCount = 0;
   var fps = 0, fpsN = 0, fpsT = 0, frameErr = '';
@@ -2466,14 +2472,15 @@ function validConversation(value, p) {
   }
   function buildMaterial() { return buildTool === 'roof' ? 'house' : buildTool; }
   function buildStock() { return inv[buildMaterial()] || 0; }
-  function selectBuildTool(key) { buildTool = key; buildAction('select'); renderBuildTools(); }
+  function selectBuildTool(key) { if (RAW_BLOCK[key]) return; buildTool = key; buildAction('select'); renderBuildTools(); }
   function renderBuildTools() {
     if (!buildMode) return;
     var root = document.getElementById('build-tools'); root.replaceChildren();
     var show=document.createElement('button'); show.id='build-show'; show.type='button'; show.setAttribute('aria-label','Show');
     show.innerHTML='<svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 2 3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1z" fill="#ffc23d" stroke="#986c25"/></svg><span>Show</span>';
     show.onclick=function(){requestManualShow('button');}; root.appendChild(show); updateShowButton();
-    ['houseKit','pen','car','remove','planks','stone','wood','fence','door','roof','window'].forEach(function (key) {
+    if (RAW_BLOCK[buildTool]) buildTool = 'planks';
+    ['houseKit','pen','car','remove','planks','fence','door','roof','window'].forEach(function (key) {
       var b = document.createElement('button'); b.type = 'button'; b.dataset.build = key;
       b.setAttribute('aria-pressed', String(buildTool === key));
       b.textContent = key === 'remove' ? 'Remove' : WORD[key][0];
@@ -2570,6 +2577,7 @@ function validConversation(value, p) {
   }
   function buildTap(x,y,fy,quiet) {
     if(drivingCar)return false;
+    if (buildTool !== 'remove' && RAW_BLOCK[buildMaterial()]) { if (!quiet) showWord(buildMaterial()); return false; }
     buildAction(quiet ? 'paint' : 'tap');
     var r=resolveBuildTarget(x,y,fy);x=r.x;y=r.y;
     if(!r.ok){if(!quiet){if(r.reason==='stock'){buildShort(buildMaterial());logBuildResult(x,y,'fail:stock');}else placementFailure(x,y,r.reason,r.block);}return false;}
@@ -3451,6 +3459,8 @@ function validConversation(value, p) {
     // Guaranteed clear, level 5-column pad beside spawn; saved modifications still apply.
     for(x=origin+6;x<=origin+10;x++)fillLand(x,GROUND,GRASS);
     cells = new Uint8Array(base);
+    knockUntil = {};
+    buildDigSpots();
     animals = [];
     addAnimal('dog', origin + 1);
     addAnimal('sheep', origin + 4);
@@ -4452,6 +4462,173 @@ function validConversation(value, p) {
     chime();
     if (completed) { tone(1047, 0.18, 'sine', 0.25, 0.035); tone(1319, 0.22, 'sine', 0.36, 0.03); }
   }
+  function staysWhenHit(id) {
+    return id === GRASS || id === DIRT || id === SAND || id === STONE || id === WATER || id === WOOD || id === LEAVES;
+  }
+  function knockDropKey(id) {
+    if (id === GRASS) return 'dirt';
+    if (id === WOOD || id === LEAVES || id === STONE || id === SAND) return KEY_OF[id];
+    return '';
+  }
+  function hitFeedback(tx, ty, id, light) {
+    var x = (tx + 0.5) * TILE, y = (ty + 0.5) * TILE, i;
+    if (light) {
+      for (i = 0; i < 3; i++) {
+        if (parts.length >= 90) parts.shift();
+        parts.push({
+          x: x, y: y, vx: (Math.random() - 0.5) * 36, vy: -12 - Math.random() * 22,
+          life: 0.2, age: 0, color: PCOL[id] || '#fff', s: 2, heart: false
+        });
+      }
+      tone(240, 0.03, 'triangle', 0, 0.015, 30);
+      return;
+    }
+    playSfx('harvest');
+    burst(x, y, PCOL[id] || '#fff', false);
+    tone(180, 0.07, 'triangle', 0, 0.04, 80);
+  }
+  function giveKnock(id) {
+    var src = KEY_OF[id], drop = knockDropKey(id);
+    if (!drop) return;
+    var treeFirst = !quiz && (id === WOOD || id === LEAVES) && !progress.tree;
+    if (!quiz) {
+      if (treeFirst) progress.tree = 1;
+      if (src) progress.mined[src] = 1;
+      if (drop !== src) progress.mined[drop] = 1;
+    }
+    addItem(drop, 1, true);
+    // Grass already dropped one seed every time. That rate stays.
+    if (id === GRASS) addItem('seed', 1, true);
+    if (src) learn(src);
+    learn(drop);
+    if (treeFirst) { learn('tree'); showWord('tree'); chime(); }
+    else showWord(drop);
+    if (quiz && !quizMatch(drop) && !(src && quizMatch(src))) quizWrong();
+    updateQuest();
+    saveSoon();
+  }
+  function digSurface(tx) {
+    var y, id;
+    for (y = 2; y < H - 1; y++) {
+      id = get(tx, y);
+      if (id !== GRASS && id !== SAND && id !== DIRT) continue;
+      if (get(tx, y - 1) !== AIR) return 0;
+      return y;
+    }
+    return 0;
+  }
+  function buildDigSpots() {
+    var p0 = Math.min(W - 16, origin + 50);
+    var anchors = [
+      { tx: origin + 8, zone: 'home' },
+      { tx: p0 - 2, zone: 'beach' },
+      { tx: p0 + 13, zone: 'pond' },
+      { tx: origin + 12, zone: 'home' },
+      { tx: p0 - 1, zone: 'beach' },
+      { tx: p0 + 15, zone: 'pond' },
+      { tx: origin + 7, zone: 'home' },
+      { tx: origin + 11, zone: 'home' },
+      { tx: p0 + 14, zone: 'pond' },
+      { tx: p0 - 3, zone: 'beach' }
+    ];
+    var n = 3 + Math.floor(hash2(seed, 41, 9) * 3);
+    var next = [], used = [];
+    function take(tx, zone) {
+      if (next.length >= n || tx < 2 || tx >= W - 2) return;
+      if (used.some(function (x) { return Math.abs(x - tx) < 2; })) return;
+      var ty = digSurface(tx);
+      if (!ty) return;
+      used.push(tx);
+      next.push({ tx: tx, ty: ty, until: 0, zone: zone });
+    }
+    anchors.forEach(function (a) { take(a.tx, a.zone); });
+    digSpots = next;
+  }
+  function restoreDigSpots(saved) {
+    var untilBy = {};
+    if (Array.isArray(saved)) saved.forEach(function (row) {
+      if (!row || !isFinite(row[0]) || !isFinite(row[1])) return;
+      untilBy[(row[0] | 0) + ':' + (row[1] | 0)] = Math.max(0, Number(row[2]) || 0);
+    });
+    buildDigSpots();
+    digSpots.forEach(function (s) {
+      if (untilBy[s.tx + ':' + s.ty]) s.until = untilBy[s.tx + ':' + s.ty];
+    });
+  }
+  function digSpotOpen(s) {
+    if (!s || s.until > Date.now()) return false;
+    var ground = get(s.tx, s.ty);
+    return (ground === GRASS || ground === SAND || ground === DIRT) && get(s.tx, s.ty - 1) === AIR;
+  }
+  function digSpotHere(tx, ty) {
+    var i, s;
+    for (i = 0; i < digSpots.length; i++) {
+      s = digSpots[i];
+      if (s.tx !== tx || (s.ty !== ty && s.ty - 1 !== ty)) continue;
+      if (digSpotOpen(s)) return s;
+    }
+    return null;
+  }
+  function grantDigMaterial(n, surprise) {
+    var key = DIG_MATERIALS[Math.floor(Math.random() * DIG_MATERIALS.length)];
+    addItem(key, n, true);
+    showWord(key);
+    showToast((surprise ? '★ ' : '') + '+' + n + ' ' + WORD[key][0], 2.2);
+    rememberEvent('found', key);
+    updateQuest();
+  }
+  function grantDigDiscovery(spot) {
+    var open = null, i;
+    for (i = 0; i < trailSpots.length; i++) if (!trail.found[trailSpots[i].id]) { open = trailSpots[i]; break; }
+    if (!open) return false;
+    var pool = chatWords(), collected = Object.keys(trail.found).map(function (id) { return trail.found[id]; });
+    var fresh = pool.filter(function (key) { return collected.indexOf(key) < 0; });
+    var sticker = oldWord(fresh.length ? fresh : pool, '', true);
+    trail.found[open.id] = sticker || true;
+    celebrate((spot.tx + 0.5) * TILE, (spot.ty - 0.4) * TILE, false);
+    showToast('★ A discovery!', 2.2);
+    if (sticker) { showWord(sticker); queueChat('scene', sticker); rememberEvent('found', sticker); }
+    var completed = completeTrailRound();
+    updateTrailCount();
+    if (completed) showToast('Seven gifts! New hiding places await!', 3);
+    return true;
+  }
+  function digMound(spot) {
+    var x = (spot.tx + 0.5) * TILE, y = (spot.ty - 0.45) * TILE;
+    playSfx('harvest');
+    burst(x, y, '#e2b15a', false);
+    tone(520, 0.08, 'sine', 0, 0.04, 700);
+    // 40% star from the discovery pool, 35% one gift-table material, 25% a small gift-table bundle.
+    var roll = Math.random();
+    if (roll < 0.40) { if (!grantDigDiscovery(spot)) grantDigMaterial(1, false); }
+    else if (roll < 0.75) grantDigMaterial(1, false);
+    else grantDigMaterial(1 + Math.floor(Math.random() * 3), true);
+    spot.until = Date.now() + DIG_COOLDOWN_MS;
+    addFatigue(8);
+    saveSoon();
+  }
+  function drawDigMounds(g, sec) {
+    var i, s, px, py, bob, sp;
+    for (i = 0; i < digSpots.length; i++) {
+      s = digSpots[i];
+      if (!digSpotOpen(s)) continue;
+      px = s.tx * TILE;
+      py = s.ty * TILE;
+      bob = Math.sin(sec * 3 + s.tx) * 1.2;
+      g.drawImage(glowSprite('mound', 26, 2, 'rgba(255, 214, 80, 0.9)', 'rgba(255, 214, 80, 0)'), px + 16 - 26, py - 28 + bob);
+      sp = spr(DIRT, 0);
+      g.save();
+      g.translate(px + 16, py - 8 + bob);
+      if (sp) {
+        g.drawImage(sp, -12, -12, 24, 14);
+        g.drawImage(sp, -7, -18, 14, 10);
+      }
+      g.fillStyle = '#fff6c0';
+      g.fillRect(-1, -20, 3, 3);
+      g.fillRect(6, -14, 2, 2);
+      g.restore();
+    }
+  }
   function giveMined(id) {
     var key = KEY_OF[id];
     if (!key) return;
@@ -4493,11 +4670,19 @@ function validConversation(value, p) {
   }
   function mine(tx, ty, fromBreak, loose) {
     var id = get(tx, ty);
-    // Rod/boat on water: tap-to-use only. Break always digs so water leaves a mark.
+    // Rod and boat still use water. Digging it no longer leaves a hole.
     if (id === WATER && !fromBreak) {
       var sk = selectedKey();
       if (sk === 'rod') { if (inReach(tx, ty)) startFishing(tx, ty); else showToast('Move a little closer!', 1.6); return; }
       if (sk === 'boat') { if (inReach(tx, ty)) placeBoat(tx, ty); else showToast('Move a little closer!', 1.6); return; }
+    }
+    if (!loose) {
+      var spot = digSpotHere(tx, ty);
+      if (spot) {
+        if (!inReach(tx, ty) && !inReach(spot.tx, spot.ty)) { showWord('dirt'); return; }
+        digMound(spot);
+        return;
+      }
     }
     if (!mineable(id) || (!loose && !inReach(tx, ty))) {
       var key = KEY_OF[id];
@@ -4505,22 +4690,38 @@ function validConversation(value, p) {
       return;
     }
     if (id === WHEAT1 || id === WHEAT2 || id === WHEAT3) { harvestWheat(tx, ty, id); return; }
-    if (buildOwned(tx,ty)) {
-      var returned=KEY_OF[id]; if(returned && (inv[returned]||0)>=99)return;
-      buildAction('remove'); placedThisRun.delete(idx(tx,ty)); buildSession.removed++; buildDirty=true;
+    // Ground, water, trees, and rocks stay put. A floating leftover can still be picked up.
+    if (!loose && staysWhenHit(id)) {
+      var at = idx(tx, ty);
+      if ((knockUntil[at] || 0) > Date.now()) { hitFeedback(tx, ty, id, true); return; }
+      knockUntil[at] = Date.now() + KNOCK_COOLDOWN_MS;
+      hitFeedback(tx, ty, id, false);
+      if (knockDropKey(id)) {
+        giveKnock(id);
+        rememberEvent('found', knockDropKey(id));
+        addFatigue(8);
+      } else {
+        var word = KEY_OF[id];
+        if (word) showWord(word);
+        if (id === WATER && !quiz && !progress.water) {
+          progress.water = 1;
+          learn('water');
+          updateQuest();
+          saveSoon();
+        }
+      }
+      return;
     }
-    playSfx(buildOwned(tx,ty)?'remove':'harvest');setCell(tx, ty, AIR);
-    // Lasting dig marks: water must not look like an untouched sandy shore;
-    // sand under water opens the surface so the pond shows a crater.
-    if (id === WATER) {
-      if (get(tx, ty + 1) === SAND) setCell(tx, ty + 1, DIRT);
-    } else if (id === SAND) {
-      if (get(tx, ty - 1) === WATER) setCell(tx, ty - 1, AIR);
+    if (buildOwned(tx, ty)) {
+      var returned = KEY_OF[id]; if (returned && (inv[returned] || 0) >= 99) return;
+      buildAction('remove'); placedThisRun.delete(idx(tx, ty)); buildSession.removed++; buildDirty = true;
     }
+    playSfx(buildOwned(tx, ty) ? 'remove' : 'harvest');
+    setCell(tx, ty, AIR);
     burst((tx + 0.5) * TILE, (ty + 0.5) * TILE, PCOL[id] || '#fff', false);
     tone(180, 0.07, 'triangle', 0, 0.04, 80);
     giveMined(id);
-    rememberEvent(id===WINDOW?'built':'found', KEY_OF[id]);
+    rememberEvent(id === WINDOW ? 'built' : 'found', KEY_OF[id]);
     addFatigue(10);
   }
   function groundSupport(id) {
@@ -4574,6 +4775,7 @@ function validConversation(value, p) {
   function tryPlace(tx, ty, quiet, fill) {
     var key = selectedKey();
     if (!key) return false;
+    if (RAW_BLOCK[key]) { if (!quiet) showWord(key); return false; }
     if (CRAFTABLES[key]) {
       var prior = buildTool;
       buildTool = key;
@@ -4644,6 +4846,7 @@ function validConversation(value, p) {
   }
   function doPlace() {
     if (riding || drivingCar) return;
+    if (RAW_BLOCK[selectedKey()]) { showWord(selectedKey()); return; }
     if (selectedKey() === 'boat') {
       var bfx = Math.floor(player.x / TILE) + player.dir;
       var bfy = Math.floor((player.y - 12) / TILE);
@@ -4844,16 +5047,17 @@ function validConversation(value, p) {
   }
   function activePlaceKey() {
     if (drivingCar || riding || ropeClimb) return null;
-    if (buildMode) return buildTool === 'remove' ? null : buildTool;
+    if (buildMode) return buildTool === 'remove' || RAW_BLOCK[buildMaterial()] ? null : buildTool;
     var key = selectedKey();
-    if (!key) return null;
+    if (!key || RAW_BLOCK[key]) return null;
     if (CRAFTABLES[key] || BLOCK_OF[key] || key === 'seed' || key === 'boat') return key;
     return null;
   }
   function isMultiPlace(key) {
-    if (!key || CRAFTABLES[key] || key === 'bed' || key === 'table' || key === 'door' || key === 'window' || key === 'fence' || key === 'flower' || key === 'torch' || key === 'seed' || key === 'boat') return false;
+    if (!key || RAW_BLOCK[key] || CRAFTABLES[key] || key === 'bed' || key === 'table' || key === 'door' || key === 'window' || key === 'fence' || key === 'flower' || key === 'torch' || key === 'seed' || key === 'boat') return false;
     if (buildMode && buildTool === 'roof') return false;
     var mat = buildMode ? buildMaterial() : key;
+    if (RAW_BLOCK[mat]) return false;
     return !!MULTI_PLACE[mat];
   }
   function footprintSupported(x, y, w) {
@@ -5305,6 +5509,14 @@ function validConversation(value, p) {
     if (id === WATER && heldKey === 'boat') {
       lock = { tx: tx, ty: ty }; lockAge = 0;
       if (inReach(tx, ty)) placeBoat(tx, ty); else seekMine(tx, ty, false);
+      return;
+    }
+    var mound = digSpotHere(tx, ty);
+    if (mound) {
+      lock = { tx: mound.tx, ty: mound.ty };
+      lockAge = 0;
+      if (inReach(mound.tx, mound.ty)) mine(mound.tx, mound.ty, true);
+      else seekMine(mound.tx, mound.ty, true);
       return;
     }
     if (id !== AIR) {
@@ -6388,6 +6600,7 @@ function validConversation(value, p) {
         if (sp) g.drawImage(sp, px, py, TILE, TILE);
       }
     }
+    drawDigMounds(g, sec);
   }
   function drawHighlight(g) {
     if (placeHold && placeHold.armed && !placeHold.indoor) {
@@ -7893,7 +8106,7 @@ function validConversation(value, p) {
       tapButton(b, function () {
         if (key === 'bread') { eatBread(); return; }
         var i = hotbar.indexOf(key); if (i >= 0) sel = i; invSig = '';
-        if (buildMode && (BLOCK_OF[key] || CRAFTABLES[key])) { buildTool = key; renderBuildTools(); }
+        if (buildMode && !RAW_BLOCK[key] && (BLOCK_OF[key] || CRAFTABLES[key])) { buildTool = key; renderBuildTools(); }
         closeChest(); showWord(key, false, true); renderHotbar();
       });
       root.appendChild(b);
@@ -7964,6 +8177,7 @@ function validConversation(value, p) {
       audio_settings:{music:musicOn,sfx:sfxOn},
       px: player.x, py: player.y, dir: player.dir,
       mods: mods, inv: inv, hotbar: hotbar, sel: sel,
+      dig_spots: digSpots.map(function (s) { return [s.tx, s.ty, s.until > Date.now() ? s.until : 0]; }),
       words: learned, stars: quizStars, progress: progress, intros: intros, zh: zhOn,
       crops: crops.map(function (c) { return [c.tx, c.ty, Math.round(c.age * 10) / 10]; }),
       adventure: trail, child_name: cleanName(childName), last_greeting: lastGreeting,
@@ -8088,6 +8302,7 @@ function validConversation(value, p) {
     packSeen = hasPack();
     camReady = false;
     invSig = '';
+    restoreDigSpots(data.dig_spots);
     settleLooseCars();
   }
   function freshGame(newSeed) {
@@ -8664,11 +8879,35 @@ function validConversation(value, p) {
         return best;
       },
       hideCard: hideCard,
+      cell: function (tx, ty) { return get(tx, ty); },
+      digSpots: function () {
+        return digSpots.map(function (s) {
+          return { tx: s.tx, ty: s.ty, until: s.until, open: !!digSpotOpen(s), zone: s.zone };
+        });
+      },
+      stand: function (tx) {
+        player.x = (tx + 0.5) * TILE;
+        player.y = GROUND * TILE - 0.01;
+        player.vx = 0; player.vy = 0; player.dir = 1;
+        onGround = true; camReady = false;
+      },
+      tapCell: function (tx, ty, dig) { mine(tx | 0, ty | 0, dig !== false); return get(tx | 0, ty | 0); },
       place: function (key, tx, ty) {
-        if (!BLOCK_OF[key]) return false;
         if (!inv[key]) addItem(key, 1, true);
         sel = hotbar.indexOf(key);
         invSig = '';
+        if (key === 'seed') { tryPlace(tx, ty); return get(tx, ty) === WHEAT1; }
+        if (CRAFTABLES[key]) {
+          var wasMode = buildMode, wasTool = buildTool;
+          buildMode = true; buildTool = key;
+          var placedKit = !!buildTap(tx, ty, 0.2, true);
+          buildMode = wasMode; buildTool = wasTool;
+          document.getElementById('btn-build').setAttribute('aria-pressed', String(buildMode));
+          document.getElementById('build-tools').hidden = !buildMode;
+          document.getElementById('build-status').hidden = !buildMode;
+          return placedKit;
+        }
+        if (!BLOCK_OF[key]) return false;
         tryPlace(tx, ty);
         return get(tx, ty) === BLOCK_OF[key];
       },
