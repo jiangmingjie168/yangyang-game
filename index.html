@@ -579,7 +579,7 @@
   <canvas id="view" width="800" height="400"></canvas>
   <div id="hud">
     <span id="hunger-hint" hidden></span>
-    <span id="build-version" aria-label="Build version">build cd91b62+ux58</span>
+    <span id="build-version" aria-label="Build version">build cd91b62+ux61</span>
     <div class="topbar">
       <button id="quest" type="button">
         <canvas id="quest-icon" width="128" height="128"></canvas>
@@ -809,7 +809,7 @@ const BRAIN_TIMEOUT_MS = 6500;
     { out: 'house', label: 'Roof blocks', n: 4, need: { stone: 1, planks: 2 } },
     { out: 'fence', n: 2, need: { planks: 2, stick: 1 } },
     { out: 'rod', n: 1, need: { stick: 2, wool: 1 } },
-    { out: 'boat', n: 1, need: { planks: 5 } },
+    { out: 'boat', n: 1, need: { planks: 5, wool: 1 } },
     { out: 'bread', n: 1, need: { wheat: 1 } },
     { out: 'window', n: 2, need: { planks: 2, sand: 1 } }
   ];
@@ -865,7 +865,26 @@ const BRAIN_TIMEOUT_MS = 6500;
   var MULTI_PLACE = { planks: 1, house: 1 };
   var RAW_BLOCK = { grass: 1, dirt: 1, sand: 1, stone: 1, wood: 1, leaves: 1, water: 1 };
   var KNOCK_COOLDOWN_MS = 3000;
+  var TREE_HIT_GAP_MS = 500;
+  var TREE_REGROW_MS = 75000;
+  // Hunger slowdown hook. Full is 5 swings; hungry takes more and waits longer.
+  var TREE_HITS = { full: 5, hungry: 7 };
+  // L2 scene drops do not respawn. L3 cap counts inventory plus what is already placed.
+  // No separate axe or pick id: those rows map onto rod and the other mid-tier pickups.
+  var SUPPLY_DEF = {
+    rod: { tier: 2, n: 3 },
+    wheel: { tier: 2, n: 4 },
+    fence: { tier: 2, n: 5 },
+    door: { tier: 2, n: 4 },
+    window: { tier: 2, n: 4 },
+    house: { tier: 2, n: 4 },
+    car: { tier: 3, n: 1, cap: 2 },
+    houseKit: { tier: 3, n: 1, cap: 2 },
+    boat: { tier: 3, n: 1, cap: 2 }
+  };
   var DIG_COOLDOWN_MS = 10 * 60 * 1000;
+  // Duck is the swimmer. Pig, rabbit, dog, cow, and the other land animals stay on the bank.
+  var SWIMS = { duck: 1 };
   // Same list the trail gifts already pay out. Dig spots do not add new loot.
   var DIG_MATERIALS = ['wood', 'stone', 'planks', 'wool', 'seed'];
   var ANIMALS = { cow: 1, pig: 1, sheep: 1, chicken: 1, cat: 1, dog: 1, duck: 1, horse: 1, rabbit: 1 };
@@ -912,7 +931,8 @@ const BRAIN_TIMEOUT_MS = 6500;
   var BED_NAP = 6;
   var swimPhase = 0, wasSwim = false, splashT = 0;
   var crops = [], boat = null, riding = false, fishing = null, boatPhase = 0, packSeen = false;
-  var digSpots = [], knockUntil = {};
+  var digSpots = [], knockUntil = {}, trees = [], treeByCell = {}, supplies = [];
+  var chew = null;
   var sunPos = { x: 0, y: 0 }, moonPos = { x: 0, y: 0 }, sunOn = false, moonOn = false, starPos = [], cloudPos = [];
   var rainOn = false, rainTimer = 26, rainbowLeft = 0, nightWeatherCount = 0;
   var fps = 0, fpsN = 0, fpsT = 0, frameErr = '';
@@ -1992,6 +2012,8 @@ function validConversation(value, p) {
     // Jumping or walking through a gift collects it, even when the gift is off the ground.
     var gi;
     for (gi = 0; gi < trailSpots.length; gi++) if (giftOverlapsPlayer(trailSpots[gi])) claimTrailGift(trailSpots[gi]);
+    var supplyWalk = supplyNear(22);
+    if (supplyWalk && Math.abs(player.y - supplyWalk.y) < 42) takeSupply(supplyWalk);
     if(drivingCar)return;
     var moving = !!seek || !!enAudio || axis() !== 0 || !onGround || riding || inWater() || fishing || jumpBuf > 0;
     var safe = !moving && !quiz && !(window.speechSynthesis && speechSynthesis.speaking) && chatClock - chatLastInput > 0.9;
@@ -2243,6 +2265,7 @@ function validConversation(value, p) {
     for (i = 0; i < cols.length; i++) {
       for (yy = y; yy < y + b.h; yy++) {
         id = get(cols[i], yy);
+        if (id === WOOD || id === LEAVES) continue;
         if (solid(id) || id === WATER || id === DOOR) return true;
       }
     }
@@ -2263,7 +2286,7 @@ function validConversation(value, p) {
       cols = carColumns(b, b.x);
       blocked = false;
       for (yy = ny; yy < ny + b.h && !blocked; yy++) {
-        for (i = 0; i < cols.length; i++) if (solid(get(cols[i], yy))) blocked = true;
+        for (i = 0; i < cols.length; i++) if (blocksBody(get(cols[i], yy))) blocked = true;
       }
       if (blocked) break;
       b.y = ny;
@@ -2281,7 +2304,7 @@ function validConversation(value, p) {
   }
   // Drive pose: every column needs dry ground within one block of the current
   // floor (level, or a single step). The car rests on the highest of those.
-  // Water, trees, fences and a deeper drop return null so the old edge-stop stays.
+  // Trees are driven through. Water, doors, fences, and a deeper drop still stop the car.
   function carDriveY(b, x) {
     var floor = b.y + b.h, cols = carColumns(b, x), i, yy, id, surface, highest = null, ny;
     if (x < 1 || x + b.w >= W) return null;
@@ -2290,7 +2313,8 @@ function validConversation(value, p) {
       // Two rows of slack: a 3-block car spans a rise of two on a one-step ramp.
       for (yy = floor - 2; yy <= floor + 2; yy++) {
         id = get(cols[i], yy);
-        if (id === WATER || id === DOOR || id === WOOD || id === LEAVES || id === FENCE) return null;
+        if (id === WATER || id === DOOR || id === FENCE) return null;
+        if (id === WOOD || id === LEAVES) continue;
         if (carDryFloor(id)) { surface = yy; break; }
       }
       if (surface == null) return null;
@@ -3157,6 +3181,8 @@ function validConversation(value, p) {
   }
   function idx(x, y) { return y * W + x; }
   function solid(id) { return !!SOLID[id]; }
+  // Trees are soft for walking and driving. Fences, stone, buildings, and cliffs stay solid.
+  function blocksBody(id) { return solid(id) && id !== WOOD && id !== LEAVES; }
   function mineable(id) { return id !== AIR && id !== BEDROCK; }
   function get(x, y) {
     if (x < 0 || x >= W || y >= H) return BEDROCK;
@@ -3383,6 +3409,165 @@ function validConversation(value, p) {
     }
     return false;
   }
+  function catalogTrees() {
+    var x, y, ys, i, t, trunks = [], li, dx, best, bd;
+    trees = [];
+    treeByCell = {};
+    for (x = 1; x < W - 1; x++) {
+      ys = [];
+      for (y = 1; y < H - 1; y++) if (base[idx(x, y)] === WOOD) ys.push(y);
+      if (ys.length < 2) continue;
+      var stacked = true;
+      for (i = 1; i < ys.length; i++) if (ys[i] !== ys[0] + i) stacked = false;
+      if (!stacked) continue;
+      var gy = ys[ys.length - 1] + 1;
+      var under = base[idx(x, gy)];
+      if (under !== GRASS && under !== DIRT && under !== SAND && under !== STONE) continue;
+      t = { x: x, groundY: gy, top: ys[0], hits: 0, stumpUntil: 0, cells: [] };
+      for (i = 0; i < ys.length; i++) t.cells.push({ x: x, y: ys[i], id: WOOD });
+      trunks.push(t);
+    }
+    for (y = 1; y < H - 1; y++) {
+      for (x = 1; x < W - 1; x++) {
+        if (base[idx(x, y)] !== LEAVES) continue;
+        best = null;
+        bd = 99;
+        for (i = 0; i < trunks.length; i++) {
+          t = trunks[i];
+          dx = Math.abs(t.x - x);
+          if (dx > 2 || y < t.top - 1 || y > t.top + 2) continue;
+          if (dx < bd) { bd = dx; best = t; }
+        }
+        if (best) best.cells.push({ x: x, y: y, id: LEAVES });
+      }
+    }
+    trees = trunks;
+    for (i = 0; i < trees.length; i++) {
+      t = trees[i];
+      for (li = 0; li < t.cells.length; li++) treeByCell[idx(t.cells[li].x, t.cells[li].y)] = i;
+    }
+  }
+  function treeAt(tx, ty) {
+    if (tx < 0 || ty < 0 || tx >= W || ty >= H) return null;
+    var n = treeByCell[idx(tx, ty)];
+    if (n == null) return null;
+    var t = trees[n], i, c, trunk = false, id = get(tx, ty);
+    for (i = 0; i < t.cells.length; i++) {
+      c = t.cells[i];
+      if (c.x === tx && c.y === ty) { trunk = c.id === WOOD; break; }
+    }
+    if (id === WOOD || id === LEAVES) return t;
+    if (trunk && id === AIR && t.stumpUntil > Date.now()) return t;
+    return null;
+  }
+  function trunkBlocked(t) {
+    var i, c;
+    for (i = 0; i < t.cells.length; i++) {
+      c = t.cells[i];
+      if (c.id !== WOOD) continue;
+      if (overlapsPlayer(c.x, c.y) || cellHasAnimal(c.x, c.y)) return true;
+    }
+    return false;
+  }
+  function applyTreeForm(t) {
+    var i, c, cur, stump = t.stumpUntil > Date.now();
+    for (i = 0; i < t.cells.length; i++) {
+      c = t.cells[i];
+      cur = get(c.x, c.y);
+      if (stump) { if (cur === c.id) setCell(c.x, c.y, AIR); }
+      else if (cur === AIR) setCell(c.x, c.y, c.id);
+    }
+  }
+  function growTrees() {
+    var now = Date.now(), i, t, grown = false;
+    for (i = 0; i < trees.length; i++) {
+      t = trees[i];
+      if (!t.stumpUntil || t.stumpUntil > now) continue;
+      if (trunkBlocked(t)) continue;
+      t.stumpUntil = 0;
+      t.hits = 0;
+      applyTreeForm(t);
+      grown = true;
+    }
+    if (grown) saveSoon();
+  }
+  function treeHitsNeeded() {
+    return hungerStageNow() === 'hungry' ? TREE_HITS.hungry : TREE_HITS.full;
+  }
+  function laborMs(ms) {
+    return hungerStageNow() === 'hungry' ? Math.round(ms * 1.8) : ms;
+  }
+  function noteTreeFound() {
+    if (quiz || progress.tree) return;
+    progress.tree = 1;
+    learn('tree');
+    showWord('tree');
+    chime();
+    updateQuest();
+    saveSoon();
+  }
+  function giveTreeWood(hitId, n) {
+    var i;
+    if (!quiz) {
+      progress.mined.wood = 1;
+      if (hitId === LEAVES) progress.mined.leaves = 1;
+    }
+    for (i = 0; i < n; i++) addItem('wood', 1, true);
+    if (hitId === LEAVES) learn('leaves');
+    learn('wood');
+    learn('tree');
+    showWord('wood');
+    if (quiz && !quizMatch('wood') && !(hitId === LEAVES && quizMatch('leaves'))) quizWrong();
+    rememberEvent('found', 'wood');
+    updateQuest();
+    addFatigue(8);
+    saveSoon();
+  }
+  function chopTree(t, tx, ty, id) {
+    var now = Date.now();
+    if (t.stumpUntil > now) { hitFeedback(tx, ty, WOOD, true); return; }
+    if ((t.swingUntil || 0) > now) { hitFeedback(tx, ty, WOOD, true); return; }
+    var need = treeHitsNeeded();
+    t.hits += 1;
+    var gap = laborMs(TREE_HIT_GAP_MS);
+    t.swingUntil = now + gap;
+    t.shakeUntil = now + gap;
+    if (id === LEAVES) learn('leaves');
+    if (t.hits < need) {
+      hitFeedback(tx, ty, id === LEAVES ? LEAVES : WOOD, false);
+      noteTreeFound();
+      return;
+    }
+    t.hits = need;
+    t.stumpUntil = now + TREE_REGROW_MS;
+    hitFeedback(tx, ty, WOOD, false);
+    noteTreeFound();
+    giveTreeWood(id, 1 + ((Math.random() * 2) | 0));
+    applyTreeForm(t);
+  }
+  function restoreTrees(saved) {
+    var byX = {}, i, t, row;
+    if (Array.isArray(saved)) {
+      for (i = 0; i < saved.length; i++) {
+        row = saved[i];
+        if (!row || !isFinite(row[0])) continue;
+        byX[row[0] | 0] = { hits: row[1] | 0, until: +row[2] || 0 };
+      }
+    }
+    for (i = 0; i < trees.length; i++) {
+      t = trees[i];
+      row = byX[t.x];
+      if (!row) continue;
+      if (row.until > Date.now()) {
+        t.hits = treeHitsNeeded();
+        t.stumpUntil = row.until;
+      } else if (row.until) {
+        t.hits = 0;
+        t.stumpUntil = 0;
+      } else t.hits = Math.max(0, Math.min(TREE_HITS.hungry - 1, row.hits));
+      applyTreeForm(t);
+    }
+  }
   function buildNatural(x) {
     var h = surfaceAt(x);
     fillLand(x, h, hash2(x, 6, seed) > 0.9 ? SAND : GRASS);
@@ -3460,7 +3645,9 @@ function validConversation(value, p) {
     for(x=origin+6;x<=origin+10;x++)fillLand(x,GROUND,GRASS);
     cells = new Uint8Array(base);
     knockUntil = {};
+    catalogTrees();
     buildDigSpots();
+    buildSupplies();
     animals = [];
     addAnimal('dog', origin + 1);
     addAnimal('sheep', origin + 4);
@@ -3493,7 +3680,7 @@ function validConversation(value, p) {
     var y0 = Math.floor(t / TILE), y1 = Math.floor((b - 0.001) / TILE);
     var x, y;
     for (y = y0; y <= y1; y++) {
-      for (x = x0; x <= x1; x++) if (solid(get(x, y))) return true;
+      for (x = x0; x <= x1; x++) if (blocksBody(get(x, y))) return true;
     }
     return false;
   }
@@ -3535,9 +3722,27 @@ function validConversation(value, p) {
           }
         }
         if (!climbed) return;
+      } else if (onGround && player.vy >= 0 && footSupport(player.x, player.y) === 'deep') {
+        // A one-block step or the pond is fine. A sheer drop is not a walking path.
+        player.x -= sign * step;
+        return;
       }
       left -= step;
     }
+  }
+  // Ground under the feet: solid soil, shallow water to swim, a single step down, or a deep lip.
+  function footSupport(px, py) {
+    var x0 = Math.floor((px - PW) / TILE), x1 = Math.floor((px + PW - 0.001) / TILE);
+    var y = Math.floor((py + 0.5) / TILE);
+    var x, id, below, step = false;
+    for (x = x0; x <= x1; x++) {
+      id = get(x, y);
+      if (blocksBody(id)) return 'ground';
+      if (id === WATER) return 'water';
+      below = get(x, y + 1);
+      if (blocksBody(below) || below === WATER) step = true;
+    }
+    return step ? 'step' : 'deep';
   }
   // Original ground in this column (grass, sand, or pond), ignoring trees and dug cells.
   function columnCap(tx) {
@@ -4267,7 +4472,56 @@ function validConversation(value, p) {
     }
     if (ax && onGround) { player.anim += dt * 11; addFatigue(dt * 0.55); }
     else player.anim += dt * 2;
+    if (inWater() && player.vy >= 0) {
+      // Shallow pond: rest in the water on the sand, and never drop through into a pit.
+      var wtx = Math.floor(player.x / TILE);
+      var wrow = Math.floor((player.y - 4) / TILE);
+      if (get(wtx, wrow) === WATER && !blocksBody(get(wtx, wrow + 1)) && get(wtx, wrow + 1) !== WATER) {
+        player.y = (wrow + 1) * TILE - 0.01;
+        player.vy = 0;
+        onGround = true;
+      }
+    }
     if (player.y > H * TILE) player.y = homeY;
+  }
+  function animalSwims(a) { return !!(a && SWIMS[a.type]); }
+  function animalShoreX(a) {
+    var tx = Math.floor(a.x / TILE), gy = Math.floor((a.y + 2) / TILE);
+    var i, dir, nx, id;
+    for (i = 0; i <= 12; i++) {
+      for (dir = -1; dir <= 1; dir += 2) {
+        nx = tx + dir * (i || 0);
+        if (i === 0 && dir > 0) continue;
+        id = get(nx, gy);
+        if (blocksBody(id) && get(nx, gy - 1) !== WATER && get(nx, gy) !== WATER) return (nx + 0.5) * TILE;
+      }
+    }
+    return null;
+  }
+  function animalPassage(a, x, y) {
+    var tx = Math.floor(x / TILE);
+    var under = Math.floor((y + 2) / TILE);
+    var body = Math.floor((y - 10) / TILE);
+    var belowId = get(tx, under);
+    var canSwim = animalSwims(a);
+    if (!canSwim && (belowId === WATER || get(tx, under + 1) === WATER)) return false;
+    var swimHere = canSwim && (belowId === WATER || get(tx, under + 1) === WATER);
+    if (!(blocksBody(belowId) || swimHere)) return false;
+    if (blocksBody(get(tx, body))) return false;
+    if (x <= TILE || x >= (W - 1) * TILE) return false;
+    return true;
+  }
+  // A one-block fence can be stepped past. A house or a closed corner cannot.
+  function animalAdvance(a, nx) {
+    if (animalPassage(a, nx, a.y)) { a.x = nx; return true; }
+    var dir = nx >= a.x ? 1 : -1;
+    var tx = Math.floor((a.x + dir * 14) / TILE);
+    var body = Math.floor((a.y - 10) / TILE);
+    if (!blocksBody(get(tx, body)) || blocksBody(get(tx, body - 1))) return false;
+    var beyond = (tx + dir + 0.5) * TILE;
+    if (!animalPassage(a, beyond, a.y)) return false;
+    a.x = beyond;
+    return true;
   }
   function animalStep(a, dt) {
     if (a.ropeRide || (ropeClimb && ropeClimb.pets)) {
@@ -4292,11 +4546,26 @@ function validConversation(value, p) {
     }
     if(drivingCar&&a.tamed){a.vx=0;return;}
     if (Math.abs(a.x - player.x) > 1100 && !a.tamed) return;
+    if (!animalSwims(a)) {
+      var wetX = Math.floor(a.x / TILE);
+      var wetY = Math.floor((a.y + 2) / TILE);
+      if (get(wetX, wetY) === WATER || get(wetX, Math.floor((a.y - 8) / TILE)) === WATER) {
+        var shore = animalShoreX(a);
+        if (shore != null) a.x = shore;
+        var gy0 = Math.floor((a.y + 2) / TILE);
+        if (blocksBody(get(Math.floor(a.x / TILE), gy0))) a.y = gy0 * TILE - 0.01;
+        a.vx = 0;
+        a.swim = false;
+        return;
+      }
+    }
     var previousX = a.x, previousY = a.y;
     a.phase += dt * 6;
+    if (a.fuss > 0) a.fuss -= dt;
     if (a.pet > 0) a.pet -= dt;
     if (a.wait > 0) a.wait -= dt;
-    if (a.tamed) {
+    if (a.yield > 0) a.yield -= dt;
+    else if (a.tamed) {
       var homeRegion = buildRegions.find(function(r) { return r.inside.includes(idx(Math.floor(player.x/TILE),Math.floor((player.y-10)/TILE))); });
       var petTarget = homeRegion ? (homeRegion.building.x + homeRegion.building.w/2 + Math.sin(a.phase/8)*Math.max(0,homeRegion.building.w/2-.6)) * TILE : player.x;
       var dxp = petTarget - a.x;
@@ -4315,26 +4584,44 @@ function validConversation(value, p) {
       }
     }
     if (a.vx) a.dir = a.vx > 0 ? 1 : -1;
-    var nx = a.x + a.vx * dt;
-    var tx = Math.floor(nx / TILE);
-    var under = Math.floor((a.y + 2) / TILE);
-    var ahead = Math.floor((nx + a.dir * 12) / TILE);
-    var body = Math.floor((a.y - 10) / TILE);
-    var belowId = get(tx, under);
-    var canSwim = a.tamed || a.type === 'duck' || a.type === 'dog' || a.type === 'cat';
-    var floorOk = solid(belowId) || (belowId === WATER && canSwim);
-    var blocked = solid(get(ahead, body));
-    // Open air is not a path. Dogs and cats used to walk off the lip and fall back in.
-    if (floorOk && !blocked && nx > TILE && nx < (W - 1) * TILE) a.x = nx;
-    else if (a.tamed && blocked) {
-      if (!solid(get(ahead, body - 1)) && !solid(get(tx, body - 1))) { a.y = body * TILE - 0.01; a.x = nx; }
+    var wanted = Math.abs(a.vx) > 1;
+    var moved = false;
+    if (wanted) moved = animalAdvance(a, a.x + a.vx * dt);
+    if (wanted && !moved) {
+      if (!a.stuckX) a.stuckX = a.x;
+      a.blockedFor = (a.blockedFor || 0) + dt;
+      if (!(a.yield > 0)) a.vx = 0;
+      if (a.blockedFor > 0.4 && chatClock >= (a.turnedAt || 0)) {
+        a.vx = -(a.dir || 1) * (22 + Math.random() * 16);
+        a.dir = a.vx > 0 ? 1 : -1;
+        a.yield = 1.15;
+        a.timer = 1.15;
+        a.turnedAt = chatClock + 1.15;
+      }
+    } else if (!wanted && a.blockedFor > 0) {
+      a.blockedFor += dt;
+    } else if (moved && Math.abs(a.x - (a.stuckX || a.x)) > 28) {
+      a.blockedFor = 0;
+      a.stuckX = 0;
     }
-    else if (!a.tamed) { a.vx = -a.vx; a.timer = 0.7; }
+    if (a.blockedFor >= 5 && chatClock - (a.fussAt || -99) >= 6) {
+      a.fussAt = chatClock;
+      a.fussed = (a.fussed || 0) + 1;
+      a.fuss = 0.8;
+      animalCry(a.type);
+      a.vx = -(a.dir || 1) * (28 + Math.random() * 14);
+      a.dir = a.vx > 0 ? 1 : -1;
+      a.yield = 1.4;
+      a.timer = 1.4;
+      a.turnedAt = chatClock + 1.4;
+      a.blockedFor = 0.4;
+    }
     var underId2 = get(Math.floor(a.x / TILE), Math.floor((a.y + 2) / TILE));
+    var canSwim = animalSwims(a);
     var inWaterBody = underId2 === WATER || get(Math.floor(a.x / TILE), Math.floor((a.y - 8) / TILE)) === WATER;
     if (inWaterBody && canSwim) {
       var waterRow = underId2 === WATER ? Math.floor((a.y + 2) / TILE) : Math.floor((a.y - 8) / TILE);
-      a.y = waterRow * TILE - 0.01 + Math.sin(a.phase * 2.2) * 2.5;
+      a.y = waterRow * TILE - 0.01 + Math.sin(a.phase * 2.2) * 1.2;
       a.swim = true;
     } else if (!solid(underId2)) {
       a.swim = false;
@@ -4382,7 +4669,7 @@ function validConversation(value, p) {
     var i;
     for (i = 0; i < opts.length; i++) {
       var c = opts[i];
-      if (c && inReach(c.tx, c.ty) && mineable(get(c.tx, c.ty))) return c;
+      if (c && inReach(c.tx, c.ty) && (mineable(get(c.tx, c.ty)) || treeAt(c.tx, c.ty))) return c;
     }
     return null;
   }
@@ -4516,6 +4803,137 @@ function validConversation(value, p) {
       return y;
     }
     return 0;
+  }
+  function supplyOccupied(key) {
+    var n = inv[key] || 0, i;
+    for (i = 0; i < buildObjects.length; i++) if (buildObjects[i].item === key) n++;
+    if (key === 'boat' && boat) n++;
+    return n;
+  }
+  function supplyUnpicked(key) {
+    var n = 0, i;
+    for (i = 0; i < supplies.length; i++) if (supplies[i].key === key && !supplies[i].taken) n++;
+    return n;
+  }
+  function supplyLeft(key) {
+    var def = SUPPLY_DEF[key];
+    if (!def) return null;
+    if (def.tier === 2) return { n: supplyUnpicked(key), cap: def.n };
+    return { n: Math.max(0, def.cap - supplyOccupied(key)), cap: def.cap };
+  }
+  function supplyGate(key) {
+    if (key === 'car') {
+      if (progress.tree || (inv.wood || 0) >= 5) return '';
+      return 'Find a tree first!';
+    }
+    if (key === 'houseKit') {
+      var placed = progress.placed || {};
+      if (progress.crafted && progress.crafted.fence) return '';
+      if (placed.fence || (inv.fence || 0) > 0) return '';
+      var pk;
+      for (pk in placed) if (placed[pk]) return '';
+      return 'Place a fence first!';
+    }
+    if (key === 'boat') {
+      if ((progress.fish || 0) >= 1 || progress.water) return '';
+      return 'Find water first!';
+    }
+    return '';
+  }
+  function supplyBlockReason(key, add) {
+    var def = SUPPLY_DEF[key];
+    if (!def || def.tier < 3) return '';
+    var gate = supplyGate(key);
+    if (gate) return gate;
+    var left = supplyLeft(key);
+    if (left && left.n < (add || 1)) return 'Left 0/' + left.cap;
+    return '';
+  }
+  function buildSupplies() {
+    var list = [], keys = ['rod', 'wheel', 'fence', 'door', 'window', 'house', 'car', 'houseKit', 'boat'];
+    keys.forEach(function (key) {
+      var i;
+      for (i = 0; i < SUPPLY_DEF[key].n; i++) list.push(key);
+    });
+    var spots = [], x = origin + 3, n = 0, guard = 0, y, gy, id, tree, dig, used;
+    while (n < list.length && guard++ < W * 2) {
+      if (x >= W - 3) x = 3;
+      gy = 0;
+      for (y = 2; y < H - 1; y++) {
+        id = get(x, y);
+        if ((id === GRASS || id === SAND || id === DIRT) && get(x, y - 1) === AIR) { gy = y; break; }
+      }
+      tree = gy && (get(x, gy - 1) === WOOD || get(x, gy - 2) === WOOD);
+      dig = digSpots.some(function (s) { return s.tx === x; });
+      used = spots.some(function (s) { return Math.abs(s.tx - x) < 2; });
+      if (gy && !tree && !dig && !used) {
+        spots.push({ id: n, key: list[n], tx: x, x: (x + 0.5) * TILE, y: gy * TILE - 12, taken: false });
+        n++;
+        x += 3;
+      } else x += 1;
+    }
+    supplies = spots;
+  }
+  function restoreSupplies(saved) {
+    var taken = {};
+    if (Array.isArray(saved)) saved.forEach(function (row) {
+      if (row && row[1]) taken[row[0] | 0] = 1;
+    });
+    // Old saves have no drop list. Leave the new drops, but a full L3 cap still blocks pickup.
+    supplies.forEach(function (s) { if (taken[s.id]) s.taken = true; });
+  }
+  function takeSupply(s) {
+    if (!s || s.taken) return false;
+    var def = SUPPLY_DEF[s.key];
+    if (def && def.tier === 3 && supplyOccupied(s.key) >= def.cap) {
+      showToast('Left 0/' + def.cap, 1.4);
+      return false;
+    }
+    s.taken = true;
+    addItem(s.key, 1, true);
+    if (CRAFTABLES[s.key]) craftedObjects.push(newCraftable(s.key));
+    showWord(s.key);
+    var left = supplyLeft(s.key);
+    if (left) showToast('Left ' + left.n + '/' + left.cap, 1.5, true);
+    saveSoon();
+    return true;
+  }
+  function supplyNear(maxDist) {
+    var best = null, bd = maxDist || 4.2 * TILE, i, s, d;
+    for (i = 0; i < supplies.length; i++) {
+      s = supplies[i];
+      if (s.taken) continue;
+      d = Math.abs(s.x - player.x);
+      if (d < bd && Math.abs(s.y - player.y) < 3.2 * TILE) { bd = d; best = s; }
+    }
+    return best;
+  }
+  function drawSupplies(g) {
+    var i, s, near, left, icon;
+    for (i = 0; i < supplies.length; i++) {
+      s = supplies[i];
+      if (s.taken || Math.abs(s.x - drawCamX) > 1400) continue;
+      g.save();
+      g.translate(s.x, s.y + Math.sin(Date.now() / 280 + s.id) * 2);
+      g.fillStyle = 'rgba(255,244,210,0.55)';
+      g.beginPath(); g.arc(0, 0, 16, 0, 6.3); g.fill();
+      g.translate(-11, -11);
+      icon = s.key === 'houseKit' ? 'house' : (s.key === 'house' ? 'roof' : s.key);
+      specialIcon(g, icon, 22);
+      g.restore();
+      near = Math.abs(s.x - player.x) < 4.2 * TILE && Math.abs(s.y - player.y) < 3.2 * TILE;
+      if (!near) continue;
+      left = supplyLeft(s.key);
+      if (!left) continue;
+      g.save();
+      g.font = 'bold 11px sans-serif';
+      g.textAlign = 'center';
+      g.fillStyle = 'rgba(255,250,240,0.92)';
+      g.fillRect(s.x - 28, s.y - 34, 56, 14);
+      g.fillStyle = '#3a2a1c';
+      g.fillText('Left ' + left.n + '/' + left.cap, s.x, s.y - 23);
+      g.restore();
+    }
   }
   function buildDigSpots() {
     var p0 = Math.min(W - 16, origin + 50);
@@ -4690,11 +5108,17 @@ function validConversation(value, p) {
       return;
     }
     if (id === WHEAT1 || id === WHEAT2 || id === WHEAT3) { harvestWheat(tx, ty, id); return; }
-    // Ground, water, trees, and rocks stay put. A floating leftover can still be picked up.
+    var standing = !loose && treeAt(tx, ty);
+    if (standing) {
+      if (!inReach(tx, ty)) { showWord('tree'); return; }
+      chopTree(standing, tx, ty, id);
+      return;
+    }
+    // Ground, water, and rocks stay put. A floating leftover can still be picked up.
     if (!loose && staysWhenHit(id)) {
       var at = idx(tx, ty);
       if ((knockUntil[at] || 0) > Date.now()) { hitFeedback(tx, ty, id, true); return; }
-      knockUntil[at] = Date.now() + KNOCK_COOLDOWN_MS;
+      knockUntil[at] = Date.now() + laborMs(KNOCK_COOLDOWN_MS);
       hitFeedback(tx, ty, id, false);
       if (knockDropKey(id)) {
         giveKnock(id);
@@ -5009,7 +5433,7 @@ function validConversation(value, p) {
     seek = target;
     seekStep(0);
     if (seek) {
-      var key = target.kind === 'pet' ? target.animal.type : KEY_OF[get(target.tx, target.ty)];
+      var key = target.kind === 'pet' ? target.animal.type : (KEY_OF[get(target.tx, target.ty)] || (treeAt(target.tx, target.ty) ? 'tree' : ''));
       // A pet walk-toast used to call speakEn and cancel the name that the tap just started.
       showToast('Walking to ' + (WORD[key] ? WORD[key][0].toLowerCase() : 'the block') + '!', 1.8, target.kind === 'pet');
     }
@@ -5022,7 +5446,7 @@ function validConversation(value, p) {
   function seekStep(dt) {
     var s = seek; s.left -= dt;
     if (s.left <= 0) { seek = null; showToast('Try moving closer!', 2); return 0; }
-    if (s.kind === 'mine' && !mineable(get(s.tx, s.ty))) { seek = null; return 0; }
+    if (s.kind === 'mine' && !mineable(get(s.tx, s.ty)) && !treeAt(s.tx, s.ty)) { seek = null; return 0; }
     var reached = s.kind === 'pet' ? petReach(s.animal) : inReach(s.tx, s.ty);
     if (reached) {
       seek = null;
@@ -5041,8 +5465,16 @@ function validConversation(value, p) {
       if (rise <= 5 * TILE) {
         s.jumpSpeed = Math.max(JUMP, Math.sqrt(2 * GRAV * (rise + 10)));
         jumpBuf = 0.16;
+        s.stuck = 0;
+      } else {
+        s.stuck = (s.stuck || 0) + dt;
+        if (s.stuck < 0.35) return 0;
+        if (s.stuck < 1.05) return -(x > player.x ? 1 : -1);
+        seek = null;
+        showToast('Try moving closer!', 2);
+        return 0;
       }
-    }
+    } else s.stuck = 0;
     return x > player.x ? 1 : -1;
   }
   function activePlaceKey() {
@@ -5466,6 +5898,13 @@ function validConversation(value, p) {
         return;
       }
     }
+    var supplyTap = null, si, sd, sbest = 34 * 34;
+    for (si = 0; si < supplies.length; si++) {
+      if (supplies[si].taken) continue;
+      sd = (wx - supplies[si].x) * (wx - supplies[si].x) + (wy - supplies[si].y) * (wy - supplies[si].y);
+      if (sd < sbest) { sbest = sd; supplyTap = supplies[si]; }
+    }
+    if (supplyTap && Math.abs(supplyTap.x - player.x) < 5 * TILE) { takeSupply(supplyTap); return; }
     var present = giftAtPoint(wx, wy);
     if (present) {
       if (giftTapReach(present)) claimTrailGift(present);
@@ -5519,10 +5958,13 @@ function validConversation(value, p) {
       else seekMine(mound.tx, mound.ty, true);
       return;
     }
-    if (id !== AIR) {
+    if (id !== AIR || treeAt(tx, ty)) {
       lock = { tx: tx, ty: ty };
       lockAge = 0;
-      if (mineable(id)) seekMine(tx, ty, true);
+      if (mineable(id) || treeAt(tx, ty)) {
+        if (inReach(tx, ty)) mine(tx, ty, true);
+        else seekMine(tx, ty, true);
+      }
       return;
     }
     if (sy < viewH * 0.48) {
@@ -6614,10 +7056,222 @@ function validConversation(value, p) {
           continue;
         }
         var sp = spr(id, (hash2(x, y, 3) * 3) | 0);
-        if (sp) g.drawImage(sp, px, py, TILE, TILE);
+        var wobble = (id === WOOD || id === LEAVES) ? treeWobble(x, y) : 0;
+        if (sp) g.drawImage(sp, px + wobble, py, TILE, TILE);
       }
     }
+    drawOrganicPonds(g, sec);
+    drawLandCurves(g);
+    drawStumps(g);
     drawDigMounds(g, sec);
+  }
+  function treeWobble(tx, ty) {
+    if (tx < 0 || ty < 0 || tx >= W || ty >= H) return 0;
+    var n = treeByCell[idx(tx, ty)];
+    if (n == null) return 0;
+    var t = trees[n];
+    if (!t || !(t.shakeUntil > Date.now())) return 0;
+    return Math.round(Math.sin(Date.now() / 28) * 3);
+  }
+  function terrainInk(id) {
+    if (id === GRASS) return { body: '#c98448', cap: '#67c84a', lite: '#9adf78', rim: '#2f7a32' };
+    if (id === SAND) return { body: '#e8c56e', cap: '#f8e4ad', lite: '#fff3c8', rim: '#d7b15e' };
+    if (id === DIRT) return { body: '#c98448', cap: '#e2b06a', lite: '#f0d0a0', rim: '#a56a38' };
+    if (id === STONE) return { body: '#b7c2cc', cap: '#d5dee6', lite: '#eef4f8', rim: '#8b98a4' };
+    return { body: '#c98448', cap: '#67c84a', lite: '#9adf78', rim: '#2f7a32' };
+  }
+  function landSurface(tx) {
+    var y, id;
+    if (tx < 0 || tx >= W) return null;
+    for (y = 1; y < H - 1; y++) {
+      id = get(tx, y);
+      if (id === WOOD || id === LEAVES || id === FLOWER || id === WHEAT1 || id === WHEAT2 || id === WHEAT3 || id === TORCH || id === FENCE || id === DOOR || id === AIR) continue;
+      if (id === STONE && (get(tx, y + 1) === GRASS || get(tx, y + 1) === DIRT || get(tx, y + 1) === SAND)) continue;
+      if (id === GRASS || id === SAND || id === DIRT || id === STONE || id === WATER) return { x: tx, y: y, id: id };
+      return null;
+    }
+    return null;
+  }
+  function columnOpen(tx, y0, y1) {
+    var y, id;
+    for (y = y0; y < y1; y++) {
+      id = get(tx, y);
+      if (id !== AIR) return false;
+    }
+    return true;
+  }
+  function drawStumps(g) {
+    var i, t, px, py, now = Date.now();
+    for (i = 0; i < trees.length; i++) {
+      t = trees[i];
+      if (!(t.stumpUntil > now)) continue;
+      px = t.x * TILE;
+      py = (t.groundY - 1) * TILE;
+      g.fillStyle = '#6e3e1c';
+      g.fillRect(px + 9, py + 16, 14, 16);
+      g.fillStyle = '#c4843e';
+      g.fillRect(px + 11, py + 16, 10, 16);
+      g.fillStyle = '#e8c48a';
+      g.fillRect(px + 13, py + 17, 6, 14);
+      g.fillStyle = '#f3ddb4';
+      g.fillRect(px + 10, py + 15, 12, 4);
+      g.fillStyle = '#a86430';
+      g.fillRect(px + 14, py + 16, 4, 2);
+    }
+  }
+  function buryPondBox(g, x0, x1, y) {
+    var x, dy, bank, id, sp;
+    for (x = x0; x <= x1; x++) {
+      bank = (x - x0) <= (x1 - x) ? x0 - 1 : x1 + 1;
+      for (dy = 0; dy <= 3; dy++) {
+        id = get(bank, y + dy);
+        if (id === AIR || id === WATER || id === WOOD || id === LEAVES || id === FLOWER || id === WHEAT1 || id === WHEAT2 || id === WHEAT3) {
+          id = dy === 0 ? (get(bank, y) === GRASS ? GRASS : SAND) : (dy < 3 ? DIRT : STONE);
+        }
+        sp = spr(id, (hash2(x, y + dy, 3) * 3) | 0);
+        if (sp) g.drawImage(sp, x * TILE, (y + dy) * TILE, TILE, TILE);
+      }
+    }
+  }
+  function tracePond(g, left, right, top) {
+    var w = Math.max(TILE, right - left);
+    var mid = (left + right) / 2;
+    var rx = w / 2 + Math.min(28, w * 0.12);
+    var crown = top + 2;
+    var bed = top + Math.min(TILE * 2.7, TILE * 1.15 + w * 0.18);
+    var ry = Math.max(TILE * 0.9, (bed - crown) / 2);
+    var cy = crown + ry;
+    g.beginPath();
+    g.ellipse(mid, cy, rx, ry, 0, 0, Math.PI * 2);
+    g.closePath();
+  }
+  function drawOrganicPonds(g, sec) {
+    var x0 = Math.max(0, Math.floor(drawCamX / TILE) - 2);
+    var x1 = Math.min(W - 1, Math.floor((drawCamX + viewW / (tileScreen / TILE)) / TILE) + 2);
+    var seen = {}, xi, mark, s, run, left, right, top, w, inkL, inkR;
+    for (xi = x0; xi <= x1; xi++) {
+      if (seen[xi]) continue;
+      s = landSurface(xi);
+      if (!s || s.id !== WATER) continue;
+      run = { x0: xi, x1: xi, y: s.y };
+      while (run.x0 > 0) {
+        s = landSurface(run.x0 - 1);
+        if (!s || s.id !== WATER || s.y !== run.y) break;
+        run.x0--;
+      }
+      while (run.x1 < W - 1) {
+        s = landSurface(run.x1 + 1);
+        if (!s || s.id !== WATER || s.y !== run.y) break;
+        run.x1++;
+      }
+      for (mark = run.x0; mark <= run.x1; mark++) seen[mark] = 1;
+      buryPondBox(g, run.x0, run.x1, run.y);
+      left = run.x0 * TILE;
+      right = (run.x1 + 1) * TILE;
+      top = run.y * TILE;
+      w = right - left;
+      g.save();
+      tracePond(g, left, right, top);
+      g.clip();
+      g.fillStyle = '#e7c56a';
+      g.fillRect(left - 40, top + TILE * 0.62, w + 80, TILE * 2.4);
+      g.fillStyle = '#f6de9a';
+      g.fillRect(left - 40, top + TILE * 0.62, w + 80, 12);
+      var spec;
+      for (spec = 0; spec < Math.max(4, (w / 28) | 0); spec++) {
+        g.fillStyle = spec % 2 ? '#f8e7b4' : '#d7b15e';
+        g.fillRect(left + ((hash2(run.x0, spec, 6) * (w - 8)) | 0), top + TILE + ((hash2(spec, run.y, 4) * TILE) | 0), 3, 2);
+      }
+      g.fillStyle = '#3ec6e0';
+      g.fillRect(left - 48, top - 8, w + 96, TILE * 0.95);
+      g.fillStyle = '#8fe7f2';
+      g.beginPath();
+      g.ellipse((left + right) / 2, top + 8 + Math.sin(sec * 2.2 + run.x0) * 1.2, Math.max(18, w * 0.36), 5, 0, 0, Math.PI * 2);
+      g.fill();
+      g.fillStyle = 'rgba(255,255,255,0.45)';
+      g.beginPath();
+      g.ellipse((left + right) / 2 - w * 0.12, top + 10, Math.max(12, w * 0.16), 2.4, 0, 0, Math.PI * 2);
+      g.fill();
+      g.fillStyle = 'rgba(16,110,150,0.22)';
+      g.fillRect(left - 20, top + TILE * 0.7, w + 40, 14);
+      g.restore();
+      inkL = terrainInk(get(run.x0 - 1, run.y) === GRASS ? GRASS : SAND);
+      inkR = terrainInk(get(run.x1 + 1, run.y) === GRASS ? GRASS : SAND);
+      g.save();
+      g.beginPath();
+      g.rect(left - 40, top - 10, w + 80, TILE * 0.85);
+      g.clip();
+      tracePond(g, left, right, top);
+      var rim = g.createLinearGradient(left, top, right, top);
+      rim.addColorStop(0, inkL.cap);
+      rim.addColorStop(0.5, '#f6e7b4');
+      rim.addColorStop(1, inkR.cap);
+      g.strokeStyle = rim;
+      g.lineWidth = 6;
+      g.stroke();
+      g.restore();
+    }
+  }
+  function drawBankSpan(g, high, low) {
+    var dir = low.x >= high.x ? 1 : -1;
+    var x0 = dir > 0 ? (high.x + 1) * TILE : high.x * TILE;
+    var x1 = dir > 0 ? (low.x + 1) * TILE : low.x * TILE;
+    var y0 = high.y * TILE, y1 = low.y * TILE, span = x1 - x0;
+    if (!span) return;
+    var ink = terrainInk(high.id);
+    var cover = 16;
+    g.beginPath();
+    g.moveTo(x0, y0 + 2);
+    g.quadraticCurveTo(x0 + span * 0.62, y0 + 6, x1, y1 + 4);
+    g.lineTo(x1, y1 + cover);
+    g.lineTo(x0, y1 + cover);
+    g.closePath();
+    g.fillStyle = ink.body;
+    g.fill();
+    g.beginPath();
+    g.moveTo(x0, y0 + 2);
+    g.quadraticCurveTo(x0 + span * 0.62, y0 + 6, x1, y1 + 4);
+    g.strokeStyle = ink.cap;
+    g.lineWidth = 16;
+    g.lineCap = 'round';
+    g.lineJoin = 'round';
+    g.stroke();
+    g.strokeStyle = ink.lite;
+    g.lineWidth = 5;
+    g.stroke();
+  }
+  function drawLandCurves(g) {
+    var zoom = tileScreen / TILE;
+    var x0 = Math.max(1, Math.floor(drawCamX / TILE) - 1);
+    var x1 = Math.min(W - 2, Math.floor((drawCamX + viewW / zoom) / TILE) + 1);
+    var cols = [], x, i, a, b, dir, step, j, open;
+    for (x = x0 - 1; x <= x1 + 1; x++) cols.push(landSurface(x));
+    i = 0;
+    while (i < cols.length - 1) {
+      a = cols[i];
+      b = cols[i + 1];
+      if (!a || !b || a.id === WATER || b.id === WATER || a.y === b.y) { i++; continue; }
+      dir = b.y > a.y ? 1 : -1;
+      j = i;
+      while (j + 1 < cols.length) {
+        a = cols[j];
+        b = cols[j + 1];
+        if (!a || !b || a.id === WATER || b.id === WATER) break;
+        step = b.y - a.y;
+        if (dir > 0 && (step < 1 || step > 2)) break;
+        if (dir < 0 && (step > -1 || step < -2)) break;
+        open = dir > 0 ? columnOpen(b.x, a.y, b.y) : columnOpen(a.x, b.y, a.y);
+        if (!open) break;
+        j++;
+      }
+      if (j > i) {
+        a = cols[i];
+        b = cols[j];
+        if (a.y < b.y) drawBankSpan(g, a, b);
+        else drawBankSpan(g, b, a);
+        i = j;
+      } else i++;
+    }
   }
   function drawHighlight(g) {
     if (placeHold && placeHold.armed && !placeHold.indoor) {
@@ -6720,6 +7374,45 @@ function validConversation(value, p) {
     var wy = b.y * TILE + 64;
     g.drawImage(glowSprite('hearth', 22, 1, 'rgba(255, 186, 90, 0.55)', 'rgba(255, 186, 90, 0)'), wx - 22, wy - 22);
   }
+  function drawSkyBirds(g, sec) {
+    var i, span = viewW + 220, x, y, flap, dir, body, wing;
+    for (i = 0; i < 4; i++) {
+      dir = (i & 1) ? -1 : 1;
+      x = ((hash2(i, 11, 4) * span + sec * (14 + i * 4)) % span + span) % span - 36;
+      if (dir < 0) x = viewW - x;
+      y = 48 + (i * 26) % Math.max(70, viewH * 0.26) + Math.sin(sec * 0.65 + i * 1.4) * 5;
+      flap = Math.sin(sec * 5.5 + i) > 0 ? -10 : 2;
+      g.save();
+      g.translate(x | 0, y | 0);
+      g.scale(dir * 1.35, 1.35);
+      body = i % 2 ? '#f6d98a' : '#9fd4ef';
+      wing = i % 2 ? '#e2a85c' : '#6aadd4';
+      g.fillStyle = wing;
+      g.beginPath();
+      g.moveTo(-2, 0);
+      g.lineTo(-12, flap);
+      g.lineTo(4, 2);
+      g.closePath();
+      g.fill();
+      g.fillStyle = body;
+      g.fillRect(-8, -4, 16, 8);
+      g.fillStyle = '#f2a05a';
+      g.fillRect(8, -1, 4, 3);
+      g.fillStyle = '#3a2a1c';
+      g.fillRect(3, -3, 2, 2);
+      g.restore();
+    }
+  }
+  function drawChew(g) {
+    if (!chew || Date.now() >= chew.until) return;
+    var bob = Math.abs(Math.sin(Date.now() / 80)) * 3;
+    g.save();
+    g.translate(player.x, player.y - 62 - bob);
+    specialIcon(g, 'bread', 20);
+    g.fillStyle = '#3a2a1c';
+    g.fillRect(-2, 16, 5, 1);
+    g.restore();
+  }
   function drawFrame(sec) {
     var z = tileScreen / TILE;
     var sky = skyColors(timeOfDay);
@@ -6808,6 +7501,7 @@ function validConversation(value, p) {
       ctx.fill();
       ctx.globalAlpha = 1;
     }
+    drawSkyBirds(ctx, sec);
     drawRainbow(ctx);
     var hill = mixc([112, 186, 104], [30, 48, 64], night);
     var hill2 = mixc([168, 214, 140], [46, 64, 84], night);
@@ -6836,7 +7530,7 @@ function validConversation(value, p) {
       var an = animals[ai];
       if (an.x < drawCamX - 40 || an.x > drawCamX + viewW / z + 40) continue;
       ctx.save();
-      ctx.translate(an.x, an.y);
+      ctx.translate(an.x, an.y + (an.swim ? 8 : 0) - (an.fuss > 0 ? Math.abs(Math.sin(an.phase * 22)) * 6 : 0));
       var squash = an.pet > 0 ? 0.1 : 0;
       var size=ANIMAL_SCALE[an.type]||[1,1];ctx.scale(an.dir * (1 + squash)*size[0], (1 - squash)*size[1]);
       var shade = an.type === 'pig' ? 16 : (an.type === 'rabbit' ? 12 : 10);
@@ -6865,6 +7559,7 @@ function validConversation(value, p) {
     }
     drawRescueRope(ctx);
     if(drivingCar){ctx.save();ctx.beginPath();var cx=drivingCar.dir===-1?(drivingCar.x*TILE+drivingCar.w*TILE-65):(drivingCar.x*TILE+26);ctx.rect(cx,drivingCar.y*TILE+8,39,27);ctx.clip();drawPlayer(ctx);ctx.restore();}else drawPlayer(ctx);
+    drawChew(ctx);
     if (fishing) {
       var fbob = Math.sin(sec * 5) * 1.6;
       ctx.strokeStyle = 'rgba(255,255,255,0.65)';
@@ -6940,6 +7635,7 @@ function validConversation(value, p) {
     }
     ctx.setTransform(dpr * z, 0, 0, dpr * z, -drawCamX * dpr * z, -drawCamY * dpr * z);
     drawTrail(ctx, sec);
+    drawSupplies(ctx);
     if (started && !panelOpen() && !drivingCar) {drawBuildOverlay(ctx);drawHighlight(ctx);}
     drawParticles(ctx,true);
     if (rainOn) {
@@ -7807,7 +8503,8 @@ function validConversation(value, p) {
   function canCraft(r) {
     var k;
     for (k in r.need) if ((inv[k] || 0) < r.need[k]) return false;
-    return (inv[r.out]||0)+r.n<=99;
+    if ((inv[r.out]||0)+r.n>99) return false;
+    return !supplyBlockReason(r.out, r.n);
   }
   function renderRecipes() {
     var root = document.getElementById('recipes');
@@ -7842,6 +8539,13 @@ function validConversation(value, p) {
       paintIcon(ocv, r.out);
       var nm = document.createElement('b');
       nm.textContent = (r.label || WORD[r.out][0]) + (r.n > 1 ? ' ×' + r.n : '');
+      var leftNote = supplyLeft(r.out);
+      if (leftNote) {
+        var leftEl = document.createElement('em');
+        leftEl.dataset.supply = r.out;
+        leftEl.textContent = 'Left ' + leftNote.n + '/' + leftNote.cap;
+        out.appendChild(leftEl);
+      }
       out.appendChild(ocv); out.appendChild(nm);
       tapButton(out, function () { showWord(r.out, false, true); });
       var btn = document.createElement('button');
@@ -7859,8 +8563,8 @@ function validConversation(value, p) {
     Array.prototype.forEach.call(ems, function (em) {
       var have = inv[em.dataset.need] || 0;
       var n = +em.dataset.n;
-      em.textContent = have + '/' + n;
-      em.classList.toggle('ok', have >= n);
+      em.textContent = em.dataset.supply ? ('Left ' + (supplyLeft(em.dataset.supply) || { n: 0, cap: 0 }).n + '/' + (supplyLeft(em.dataset.supply) || { cap: 0 }).cap) : (have + '/' + n);
+      em.classList.toggle('ok', em.dataset.supply ? true : have >= n);
     });
     var cards = document.querySelectorAll('#recipes .recipe');
     Array.prototype.forEach.call(cards, function (card, i) {
@@ -7869,6 +8573,8 @@ function validConversation(value, p) {
   }
   function doCraft(r) {
     if (!canCraft(r)) {
+      var gate = supplyBlockReason(r.out, r.n);
+      if (gate) { showToast(gate, 1.8); return; }
       var missing = null, k;
       for (k in r.need) if ((inv[k] || 0) < r.need[k]) { missing = k; break; }
       if (missing) showWord(missing);
@@ -7983,7 +8689,7 @@ function validConversation(value, p) {
   // Play seconds since the last meal. Peckish at 100s, hungry at 200s.
   var hungerTime = 0, hungerStage = 'full', hungerRemind = 0;
   function hungerLabel(stage) {
-    return stage === 'hungry' ? "I'm hungry!" : stage === 'peckish' ? 'I want bread!' : '';
+    return stage === 'hungry' ? "I'm hungry." : stage === 'peckish' ? 'I want bread!' : '';
   }
   function hungerStageNow() {
     return hungerTime >= 200 ? 'hungry' : hungerTime >= 100 ? 'peckish' : 'full';
@@ -8059,25 +8765,31 @@ function validConversation(value, p) {
     hungerRemind += dt;
     if (hungerRemind < 150) return;
     hungerRemind = 0;
-    sayNeed("I'm hungry!");
+    sayNeed("I'm hungry.");
   }
   function eatBread() {
     if (!(inv.bread > 0)) return false;
+    if (chew && chew.until > Date.now()) return false;
     var wasHungry = hungerTime >= 100;
     consume('bread');
     hungerTime = 0;
     hungerRemind = 0;
     hungerStage = 'full';
     paintNeeds();
-    burst(player.x, player.y - 28, '#f2c14e', true);
-    chime();
-    showToast(wasHungry ? "I'm full!" : 'Yum! Bread.', 2.2);
+    // Chew first. The line is spoken only after the bite, and only because bread was tapped.
+    chew = { until: Date.now() + 1200, line: wasHungry ? "I'm full!" : 'Yum! Bread.', spoke: false };
     invSig = '';
     renderHotbar();
     if (!document.getElementById('chest-panel').hidden) renderChest();
     updateQuest();
     saveSoon();
     return true;
+  }
+  function updateChew() {
+    if (!chew || chew.spoke || Date.now() < chew.until) return;
+    chew.spoke = true;
+    showToast(chew.line, 2.2);
+    chime();
   }
   // Badge + panel share the same kind list (every hotbar key with stock).
   // CHEST_STASH still marks bulk blocks that skip the one-slot quick bar.
@@ -8195,6 +8907,8 @@ function validConversation(value, p) {
       px: player.x, py: player.y, dir: player.dir,
       mods: mods, inv: inv, hotbar: hotbar, sel: sel,
       dig_spots: digSpots.map(function (s) { return [s.tx, s.ty, s.until > Date.now() ? s.until : 0]; }),
+      tree_chops: trees.filter(function (t) { return t.hits || t.stumpUntil; }).map(function (t) { return [t.x, t.hits, t.stumpUntil || 0]; }),
+      supplies: supplies.map(function (s) { return [s.id, s.taken ? 1 : 0]; }),
       words: learned, stars: quizStars, progress: progress, intros: intros, zh: zhOn,
       crops: crops.map(function (c) { return [c.tx, c.ty, Math.round(c.age * 10) / 10]; }),
       adventure: trail, child_name: cleanName(childName), last_greeting: lastGreeting,
@@ -8320,6 +9034,8 @@ function validConversation(value, p) {
     camReady = false;
     invSig = '';
     restoreDigSpots(data.dig_spots);
+    restoreSupplies(data.supplies);
+    restoreTrees(data.tree_chops);
     settleLooseCars();
   }
   function freshGame(newSeed) {
@@ -8677,6 +9393,8 @@ function validConversation(value, p) {
   }
 
   function tick(dt, sec) {
+    growTrees();
+    updateChew();
     lockAge += dt;
     if (cardLeft > 0) {
       cardLeft -= dt;
@@ -8966,6 +9684,100 @@ function validConversation(value, p) {
             return { x: b.x, y: b.y, door: { x: d.x, y: d.y, w: d.w, h: d.h }, furn: b.furn || null };
           })
         };
+      },
+      trees: function () {
+        return trees.map(function (t) {
+          return { x: t.x, groundY: t.groundY, hits: t.hits, need: treeHitsNeeded(), stump: t.stumpUntil > Date.now(), until: t.stumpUntil,
+            wood: t.cells.filter(function (c) { return c.id === WOOD && get(c.x, c.y) === WOOD; }).length };
+        });
+      },
+      treeHits: function () { return { full: TREE_HITS.full, hungry: TREE_HITS.hungry, now: treeHitsNeeded(), stage: hungerStageNow() }; },
+      support: function (px, py) { return footSupport(px == null ? player.x : px, py == null ? player.y : py); },
+      bodyBlocked: function (tx, ty) { return blocksBody(get(tx, ty)); },
+      ripenStumps: function () {
+        var i;
+        for (i = 0; i < trees.length; i++) if (trees[i].stumpUntil) trees[i].stumpUntil = Date.now() - 1;
+        growTrees();
+        return trees.filter(function (t) { return t.stumpUntil > Date.now(); }).length;
+      },
+      block: function (tx, ty, id) { setCell(tx | 0, ty | 0, id | 0); return get(tx | 0, ty | 0); },
+      supplies: function () {
+        return supplies.filter(function (s) { return !s.taken; }).map(function (s) {
+          var left = supplyLeft(s.key);
+          return { key: s.key, tx: s.tx, n: left ? left.n : 0, cap: left ? left.cap : 0 };
+        });
+      },
+      putAnimal: function (type, tx, vx) {
+        var i, a;
+        for (i = 0; i < animals.length; i++) if (animals[i].type === type) {
+          a = animals[i];
+          a.x = (tx + 0.5) * TILE;
+          a.y = GROUND * TILE - 0.01;
+          a.vx = vx || 0;
+          a.timer = 99;
+          a.wait = 0;
+          a.swim = false;
+          a.blockedFor = 0;
+          a.fuss = 0;
+          a.fussAt = 0;
+          a.fussed = 0;
+          a.yield = 0;
+          return { x: a.x, y: a.y, swim: !!a.swim };
+        }
+        return null;
+      },
+      stepAnimals: function (dt, n) {
+        var i, k, out = [];
+        for (k = 0; k < (n || 1); k++) for (i = 0; i < animals.length; i++) animalStep(animals[i], dt || 0.05);
+        for (i = 0; i < animals.length; i++) out.push({ type: animals[i].type, x: Math.round(animals[i].x), y: Math.round(animals[i].y), swim: !!animals[i].swim, vx: animals[i].vx, fuss: animals[i].fussed || 0, blocked: Math.round((animals[i].blockedFor || 0) * 10) / 10 });
+        return out;
+      },
+      spawnCar: function (tx) {
+        var b = newCraftable('car');
+        b.x = tx;
+        b.y = GROUND - b.h;
+        b.dir = 1;
+        b.id = 'object:ux60:' + tx;
+        buildObjects.push(b);
+        return { x: b.x, y: b.y, w: b.w, h: b.h };
+      },
+      probeDrive: function (dir, tiles) {
+        var b = null, i, guard = 0, start, stopped = false;
+        for (i = 0; i < buildObjects.length; i++) if (buildObjects[i].kind === 'car') b = buildObjects[i];
+        if (!b) return { ok: false };
+        start = b.x;
+        b.dir = dir || 1;
+        while (guard++ < 900 && Math.abs(b.x - start) < (tiles || 8)) {
+          var nx = b.x + b.dir * 0.05, ny = carDriveY(b, nx);
+          if (ny == null) { stopped = true; break; }
+          b.x = nx;
+          b.y = ny;
+        }
+        return { start: Math.round(start * 100) / 100, end: Math.round(b.x * 100) / 100, y: b.y, stopped: stopped, water: get(Math.floor(b.x + b.w), GROUND) === WATER || get(Math.floor(b.x + (b.dir > 0 ? b.w : -0.2)), GROUND) === WATER };
+      },
+      drop: function () {
+        var i;
+        onGround = false;
+        if (player.vy < 40) player.vy = 40;
+        for (i = 0; i < 48; i++) {
+          moveY(Math.min(10, player.vy * 0.02));
+          if (collides(player.x, player.y + 1.2)) { player.vy = 0; onGround = true; break; }
+          player.vy = Math.min(inWater() ? 110 : 280, player.vy + 28);
+        }
+        return { y: Math.round(player.y), water: inWater(), support: footSupport(player.x, player.y) };
+      },
+      probeWalk: function (dir, tiles) {
+        var start = player.x, guard = 0, prev;
+        onGround = true;
+        player.vy = 0;
+        while (guard++ < 1200 && Math.abs(player.x - start) < (tiles || 6) * TILE) {
+          prev = player.x;
+          moveX((dir || 1) * 3);
+          moveY(8);
+          if (player.vy === 0) onGround = true;
+          if (player.x === prev && guard > 3) break;
+        }
+        return { start: Math.round(start), end: Math.round(player.x), y: Math.round(player.y), water: inWater(), support: footSupport(player.x, player.y) };
       }
     };
   }
