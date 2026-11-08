@@ -579,7 +579,7 @@
   <canvas id="view" width="800" height="400"></canvas>
   <div id="hud">
     <span id="hunger-hint" hidden></span>
-    <span id="build-version" aria-label="Build version">build cd91b62+ux59</span>
+    <span id="build-version" aria-label="Build version">build cd91b62+ux58</span>
     <div class="topbar">
       <button id="quest" type="button">
         <canvas id="quest-icon" width="128" height="128"></canvas>
@@ -5630,142 +5630,175 @@ function validConversation(value, p) {
     g.fill();
     g.restore();
   }
-  var INK = '#1a120c', PINK = '#fcc0c0', SNOUT = '#f7a4b4', EARIN = '#ee8498', BLUSH = '#fc9aab', NOSTRIL = '#d86b86';
-  var FUR = '#fffdf8', REAR = '#f7b4be', RBLUSH = '#f7a4b6';
-  var OUT = 1.72;
+  var INK = '#1a1a1a';
+  var PINK = '#f8c6d2';
+  var SNOUTC = '#f0aebc';
+  var FUR = '#ffffff';
+  var EARPINK = '#eea1af';
+  var BLUSH = '#f6c9d2';
+  var OUT = 1.15;
   function drawPig(g, phase) {
     g.save();
     var bob = reducedMotion ? 0 : Math.sin(phase * 2.1) * 0.55;
-    var wag = reducedMotion ? 0 : Math.sin(phase * 3.2) * 1.4;
+    var wag = reducedMotion ? 0 : Math.sin(phase * 3.2) * 0.85;
     var blink = !reducedMotion && (phase % 28) > 26.6;
     g.translate(0, bob);
     g.lineJoin = 'round';
     g.lineCap = 'round';
     g.strokeStyle = INK;
     g.lineWidth = OUT;
-    var bx = -0.6, by = -18.6, brx = 15.4, bry = 9.8;
-    var hx = 11.2, hy = -26.2, hr = 9.5;
-
+  
+    var bx = -1.6, by = -16.2, brx = 14.4, bry = 10.5;
+    var hx = 8.0, hy = -27.4, hr = 12.1;
+  
+    function outsideHead(x, y) {
+      var dx = x - hx, dy = y - hy;
+      return dx * dx + dy * dy > (hr - 0.05) * (hr - 0.05);
+    }
+    function outsideBody(x, y) {
+      var dx = (x - bx) / brx, dy = (y - by) / bry;
+      return dx * dx + dy * dy > 0.992;
+    }
+    function chain(cx, cy, rx, ry, outside) {
+      var n = 180, pts = [], i, a, x, y;
+      for (i = 0; i < n; i++) {
+        a = (i / n) * Math.PI * 2;
+        x = cx + Math.cos(a) * rx;
+        y = cy + Math.sin(a) * ry;
+        pts.push({ x: x, y: y, out: outside(x, y) });
+      }
+      var runs = [], start = -1;
+      for (i = 0; i < n; i++) {
+        if (pts[i].out) { if (start < 0) start = i; }
+        else if (start >= 0) { runs.push(pts.slice(start, i)); start = -1; }
+      }
+      if (start >= 0) runs.push(pts.slice(start));
+      if (runs.length >= 2 && pts[0].out && pts[n - 1].out) {
+        var tail = runs.pop();
+        runs[0] = tail.concat(runs[0]);
+      }
+      runs.sort(function (a, b) { return b.length - a.length; });
+      return runs[0] || [];
+    }
+    function dist2(a, b) { var dx = a.x - b.x, dy = a.y - b.y; return dx * dx + dy * dy; }
+  
     g.save();
-    g.translate(-16.6 + wag * 0.1, -22.2);
-    g.rotate(-0.2 + wag * 0.05);
-    g.lineWidth = 1.45;
+    g.translate(-19.4 + wag * 0.12, -11.6);
+    g.rotate(-0.15 + wag * 0.18);
+    g.lineWidth = OUT;
     g.beginPath();
-    g.arc(0, 0, 3.55, 0.2, 5.15);
-    g.stroke();
-    g.beginPath();
-    g.arc(-1.05, -1.15, 1.7, 0.1, 4.2);
+    var i, t, a, rad;
+    for (i = 0; i <= 28; i++) {
+      t = i / 28;
+      a = 0.4 + t * Math.PI * 2 * 1.28;
+      rad = 3.7 - t * 2.55;
+      if (i) g.lineTo(Math.cos(a) * rad, Math.sin(a) * rad);
+      else g.moveTo(Math.cos(a) * rad, Math.sin(a) * rad);
+    }
     g.stroke();
     g.restore();
-    g.lineWidth = OUT;
-
-    function ear(x, y, rot, rx, ry) {
+  
+    var bodyChain = chain(bx, by, brx, bry, outsideHead);
+    var headChain = chain(hx, hy, hr, hr, outsideBody);
+    if (bodyChain.length && headChain.length && dist2(bodyChain[bodyChain.length - 1], headChain[headChain.length - 1]) < dist2(bodyChain[bodyChain.length - 1], headChain[0])) {
+      headChain.reverse();
+    }
+    g.beginPath();
+    if (bodyChain.length) g.moveTo(bodyChain[0].x, bodyChain[0].y);
+    bodyChain.forEach(function (p) { g.lineTo(p.x, p.y); });
+    headChain.forEach(function (p) { g.lineTo(p.x, p.y); });
+    g.closePath();
+    g.fillStyle = PINK;
+    g.fill();
+    g.stroke();
+  
+    function ear(x, y, rot, len, wid) {
       g.save();
       g.translate(x, y);
       g.rotate(rot);
       g.beginPath();
-      g.ellipse(0, 0, rx, ry, 0, 0, Math.PI * 2);
+      g.moveTo(-wid * 0.55, 0.15);
+      g.quadraticCurveTo(-wid * 0.9, -len * 0.22, -wid * 0.22, -len * 0.68);
+      g.quadraticCurveTo(0, -len * 0.92, wid * 0.28, -len * 0.64);
+      g.quadraticCurveTo(wid * 0.95, -len * 0.16, wid * 0.48, 0.35);
+      g.quadraticCurveTo(0, 1.15, -wid * 0.55, 0.15);
+      g.closePath();
       g.fillStyle = PINK;
       g.fill();
       g.stroke();
-      g.beginPath();
-      g.ellipse(0.05, 0.45, rx * 0.55, ry * 0.58, 0, 0, Math.PI * 2);
-      g.fillStyle = EARIN;
-      g.fill();
-      g.lineWidth = 1.05;
-      g.stroke();
       g.restore();
-      g.lineWidth = OUT;
-      g.strokeStyle = INK;
     }
-    ear(3.2, -32.6, -0.95, 5.0, 6.3);
-    ear(16.2, -33.8, 0.95, 5.3, 6.7);
-
-    g.beginPath();
-    g.ellipse(bx, by, brx, bry, 0, 0, Math.PI * 2);
-    g.fillStyle = PINK;
-    g.fill();
-    g.beginPath();
-    g.arc(hx, hy, hr, 0, Math.PI * 2);
-    g.fill();
-    g.beginPath();
-    g.ellipse(bx, by, brx, bry, 0, 0, Math.PI * 2);
-    g.stroke();
-    g.save();
-    g.beginPath();
-    g.rect(-40, -60, 90, 70);
-    g.ellipse(bx, by, brx, bry, 0, 0, Math.PI * 2);
-    g.clip('evenodd');
-    g.beginPath();
-    g.arc(hx, hy, hr, 0, Math.PI * 2);
-    g.stroke();
-    g.restore();
-
-    function bellyAt(x) {
+    ear(4.2, -34.2, -0.95, 7.2, 6.6);
+    ear(12.8, -35.2, 0.9, 7.4, 6.7);
+  
+    function bellyY(x) {
       var nx = (x - bx) / brx;
       if (nx > 1) nx = 1;
       if (nx < -1) nx = -1;
       return by + bry * Math.sqrt(Math.max(0, 1 - nx * nx));
     }
-    function leg(cx, w) {
-      var bottom = -1.05;
+    function leg(x, w) {
+      var bottom = -1.15;
       var r = w / 2;
-      var top = -15.5;
-      var belly = bellyAt(cx) + 0.15;
+      var top = bellyY(x) - 0.55;
+      var hoofTop = -1.82;
       g.beginPath();
-      g.moveTo(cx - r, top);
-      g.lineTo(cx - r, bottom + r * 0.55);
-      g.quadraticCurveTo(cx - r, bottom, cx, bottom);
-      g.quadraticCurveTo(cx + r, bottom, cx + r, bottom + r * 0.55);
-      g.lineTo(cx + r, top);
+      g.moveTo(x - r, top);
+      g.lineTo(x - r, bottom + r * 0.55);
+      g.quadraticCurveTo(x - r, bottom, x, bottom);
+      g.quadraticCurveTo(x + r, bottom, x + r, bottom + r * 0.55);
+      g.lineTo(x + r, top);
       g.closePath();
       g.fillStyle = PINK;
       g.fill();
       g.beginPath();
-      g.moveTo(cx - r, belly);
-      g.lineTo(cx - r, bottom + r * 0.55);
-      g.quadraticCurveTo(cx - r, bottom, cx, bottom);
-      g.quadraticCurveTo(cx + r, bottom, cx + r, bottom + r * 0.55);
-      g.lineTo(cx + r, belly);
-      g.stroke();
-      var ht = bottom - 2.35;
-      g.beginPath();
-      g.moveTo(cx - r + 0.15, ht);
-      g.lineTo(cx - r + 0.15, bottom + r * 0.45);
-      g.quadraticCurveTo(cx - r, bottom + 0.25, cx, bottom + 0.25);
-      g.quadraticCurveTo(cx + r, bottom + 0.25, cx + r - 0.15, bottom + r * 0.45);
-      g.lineTo(cx + r - 0.15, ht);
+      g.moveTo(x - r + 0.08, hoofTop);
+      g.lineTo(x - r, bottom + r * 0.5);
+      g.quadraticCurveTo(x - r, bottom, x, bottom);
+      g.quadraticCurveTo(x + r, bottom, x + r, bottom + r * 0.5);
+      g.lineTo(x + r - 0.08, hoofTop);
       g.closePath();
       g.fillStyle = INK;
       g.fill();
-      g.strokeStyle = PINK;
-      g.lineWidth = 1.05;
+      var y0 = bellyY(x) + 0.05;
+      var cap = g.lineCap;
+      g.lineCap = 'butt';
       g.beginPath();
-      g.moveTo(cx, ht + 0.35);
-      g.lineTo(cx, bottom + 1.15);
+      g.moveTo(x - r, y0);
+      g.lineTo(x - r, bottom + r * 0.55);
+      g.quadraticCurveTo(x - r, bottom, x, bottom);
+      g.quadraticCurveTo(x + r, bottom, x + r, bottom + r * 0.55);
+      g.lineTo(x + r, y0);
       g.stroke();
-      g.strokeStyle = INK;
-      g.lineWidth = OUT;
+      g.lineCap = cap;
     }
-    leg(-11.4, 6.2);
-    leg(-4.0, 6.3);
-    leg(3.6, 6.2);
-    leg(10.8, 6.3);
-
+    leg(-9.6, 4.45);
+    leg(-4.4, 4.3);
+    leg(1.2, 4.45);
+    leg(6.4, 4.3);
+  
+    g.lineWidth = OUT * 0.92;
     g.beginPath();
-    g.ellipse(19.6, -25.2, 4.7, 3.75, 0.04, 0, Math.PI * 2);
-    g.fillStyle = SNOUT;
+    g.moveTo(0.4, -23.2);
+    g.quadraticCurveTo(2.8, -21.0, 4.8, -23.8);
+    g.stroke();
+    g.lineWidth = OUT;
+  
+    var sx = 11.6, sy = -23.4;
+    g.beginPath();
+    g.ellipse(sx, sy, 5.5, 3.85, 0.03, 0, Math.PI * 2);
+    g.fillStyle = SNOUTC;
     g.fill();
     g.stroke();
-    g.fillStyle = NOSTRIL;
-    g.beginPath(); g.ellipse(18.3, -25.35, 0.62, 0.95, 0.08, 0, Math.PI * 2); g.fill();
-    g.beginPath(); g.ellipse(20.8, -25.15, 0.62, 0.95, -0.04, 0, Math.PI * 2); g.fill();
-
+    g.fillStyle = INK;
+    g.beginPath(); g.ellipse(sx - 1.45, sy + 0.12, 0.52, 1.02, 0.06, 0, Math.PI * 2); g.fill();
+    g.beginPath(); g.ellipse(sx + 1.45, sy + 0.08, 0.52, 1.02, -0.05, 0, Math.PI * 2); g.fill();
+  
     function eye(x, y, r) {
       if (blink) {
-        g.lineWidth = 1.15;
+        g.lineWidth = 1.05;
         g.beginPath();
-        g.arc(x, y, r * 0.8, 0.2, Math.PI - 0.2);
+        g.arc(x, y, r * 0.9, 0.25, Math.PI - 0.25);
         g.stroke();
         g.lineWidth = OUT;
         return;
@@ -5774,52 +5807,56 @@ function validConversation(value, p) {
       g.arc(x, y, r, 0, Math.PI * 2);
       g.fillStyle = INK;
       g.fill();
-      g.beginPath();
-      g.arc(x - r * 0.32, y - r * 0.34, r * 0.36, 0, Math.PI * 2);
-      g.fillStyle = '#fff';
-      g.fill();
     }
-    eye(8.4, -28.2, 2.35);
-    eye(14.2, -28.8, 2.5);
-    g.lineWidth = 1.05;
-    g.beginPath(); g.arc(8.3, -31.2, 2.3, Math.PI * 1.22, Math.PI * 1.62); g.stroke();
-    g.beginPath(); g.arc(14.2, -31.8, 2.4, Math.PI * 1.25, Math.PI * 1.68); g.stroke();
-    g.fillStyle = BLUSH;
-    g.beginPath(); g.ellipse(7.4, -25.2, 1.85, 1.15, -0.1, 0, Math.PI * 2); g.fill();
-    g.beginPath(); g.ellipse(13.6, -25.4, 1.95, 1.2, 0.12, 0, Math.PI * 2); g.fill();
-    g.strokeStyle = INK;
-    g.lineWidth = 1.15;
+    eye(2.6, -31.2, 1.52);
+    eye(14.2, -31.6, 1.58);
+  
+    g.lineWidth = 0.95;
     g.beginPath();
-    g.moveTo(17.8, -23.6);
-    g.quadraticCurveTo(19.8, -22.15, 22.0, -23.7);
+    g.moveTo(sx - 1.25, sy + 4.7);
+    g.quadraticCurveTo(sx, sy + 3.85, sx + 1.25, sy + 4.7);
     g.stroke();
     g.restore();
   }
-
+  
   function drawRabbit(g, phase) {
     g.save();
     var bob = reducedMotion ? 0 : Math.sin(phase * 2.4) * 0.4;
-    var twitch = reducedMotion ? 0 : Math.sin(phase * 1.8) * 0.05;
+    var twitch = reducedMotion ? 0 : Math.sin(phase * 1.7) * 0.06;
     var blink = !reducedMotion && (phase % 26) > 24.7;
     g.translate(0, bob);
     g.lineJoin = 'round';
     g.lineCap = 'round';
     g.strokeStyle = INK;
     g.lineWidth = OUT;
-    var bodyX = -2.4, bodyY = -13.0, bodyRx = 12.2, bodyRy = 9.2;
-    var headX = 7.2, headY = -23.0, headR = 8.4;
-
-    function puff(x, y, r) {
-      g.beginPath();
-      g.arc(x, y, r, 0, Math.PI * 2);
-      g.fillStyle = FUR;
-      g.fill();
-      g.stroke();
+  
+    function pom(x, y) {
+      var bits = [[0.1, 0.15, 2.7], [-1.8, -1.0, 1.95], [1.85, -1.05, 2.0], [-1.35, 1.55, 1.8], [1.55, 1.45, 1.85], [0.2, -2.15, 1.6], [2.7, 0.65, 1.55]];
+      bits.forEach(function (b) {
+        g.beginPath();
+        g.arc(x + b[0], y + b[1], b[2], 0, Math.PI * 2);
+        g.fillStyle = FUR;
+        g.fill();
+        g.stroke();
+      });
     }
-    puff(-15.2, -10.6, 3.15);
-    puff(-12.4, -13.2, 2.95);
-    puff(-16.6, -13.4, 2.4);
-
+    pom(10.2, -12.6);
+  
+    g.beginPath();
+    g.moveTo(0, -4.8);
+    g.bezierCurveTo(6.6, -4.2, 11.4, -7.4, 11.3, -13.0);
+    g.bezierCurveTo(11.2, -17.6, 8.6, -20.0, 7.2, -22.0);
+    g.bezierCurveTo(9.8, -22.6, 10.6, -26.0, 9.8, -29.6);
+    g.bezierCurveTo(8.8, -34.2, 4.8, -36.6, 0, -36.6);
+    g.bezierCurveTo(-4.8, -36.6, -8.8, -34.2, -9.8, -29.6);
+    g.bezierCurveTo(-10.6, -26.0, -9.8, -22.6, -7.0, -21.8);
+    g.bezierCurveTo(-8.6, -20.0, -11.2, -17.6, -11.3, -13.0);
+    g.bezierCurveTo(-11.4, -7.4, -6.6, -4.2, 0, -4.8);
+    g.closePath();
+    g.fillStyle = FUR;
+    g.fill();
+    g.stroke();
+  
     function ear(x, y, rot, rx, ry) {
       g.save();
       g.translate(x, y);
@@ -5830,109 +5867,89 @@ function validConversation(value, p) {
       g.fill();
       g.stroke();
       g.beginPath();
-      g.ellipse(0.05, -0.15, rx * 0.52, ry * 0.7, 0, 0, Math.PI * 2);
-      g.fillStyle = REAR;
+      g.ellipse(0.02, -0.55, rx * 0.62, ry * 0.7, 0, 0, Math.PI * 2);
+      g.fillStyle = EARPINK;
       g.fill();
-      g.lineWidth = 1.05;
       g.stroke();
       g.restore();
-      g.lineWidth = OUT;
-      g.strokeStyle = INK;
     }
-    ear(-0.4, -30.4, -0.18 + twitch, 4.55, 10.8);
-    ear(5.8, -31.2, 0.16 - twitch, 4.75, 11.2);
-
-    g.beginPath();
-    g.ellipse(bodyX, bodyY, bodyRx, bodyRy, -0.16, 0, Math.PI * 2);
-    g.fillStyle = FUR;
-    g.fill();
-    g.beginPath();
-    g.arc(headX, headY, headR, 0, Math.PI * 2);
-    g.fill();
-    g.beginPath();
-    g.ellipse(bodyX, bodyY, bodyRx, bodyRy, -0.16, 0, Math.PI * 2);
-    g.stroke();
-    g.save();
-    g.beginPath();
-    g.rect(-40, -60, 80, 70);
-    g.ellipse(bodyX, bodyY, bodyRx, bodyRy, -0.16, 0, Math.PI * 2);
-    g.clip('evenodd');
-    g.beginPath();
-    g.arc(headX, headY, headR, 0, Math.PI * 2);
-    g.stroke();
-    g.restore();
-
-    function foot(x, y, rx, ry) {
+    ear(-5.45, -40.4, -0.11 + twitch, 3.7, 7.6);
+    ear(5.55, -40.7, 0.12 - twitch, 3.8, 7.8);
+  
+    function paw(x, y, rx, ry) {
       g.beginPath();
       g.ellipse(x, y, rx, ry, 0, 0, Math.PI * 2);
       g.fillStyle = FUR;
       g.fill();
       g.stroke();
-      g.lineWidth = 1.05;
-      [-0.34, 0.02, 0.38].forEach(function (t) {
-        g.beginPath();
-        g.moveTo(x + rx * t, y - ry * 0.05);
-        g.lineTo(x + rx * t, y + ry * 0.55);
-        g.stroke();
-      });
-      g.lineWidth = OUT;
     }
-    foot(-6.0, -3.85, 5.7, 2.25);
-    foot(3.2, -3.45, 4.5, 2.05);
-
+    paw(-7.1, -2.55, 3.45, 1.85);
+    paw(6.7, -2.45, 3.3, 1.75);
+    paw(-1.85, -1.85, 2.15, 2.0);
+    paw(1.95, -1.85, 2.15, 2.0);
+  
+    g.lineWidth = 0.85;
     g.beginPath();
-    g.ellipse(6.8, -15.2, 2.85, 3.55, 0.35, 0, Math.PI * 2);
-    g.fillStyle = FUR;
-    g.fill();
+    g.moveTo(-7.2, -18.2);
+    g.quadraticCurveTo(-9.4, -13.6, -6.4, -8.6);
     g.stroke();
-    g.lineWidth = 1.05;
     g.beginPath();
-    g.moveTo(5.9, -14.2); g.lineTo(5.75, -12.8);
-    g.moveTo(7.5, -14.6); g.lineTo(7.7, -13.0);
-    g.stroke();
-    g.lineWidth = OUT;
-
-    g.lineWidth = 1.15;
-    g.beginPath();
-    g.moveTo(-0.4, -16.6);
-    g.quadraticCurveTo(-6.8, -15.0, -8.0, -8.2);
+    g.moveTo(-4.8, -15.2);
+    g.quadraticCurveTo(-4.0, -13.8, -4.7, -12.4);
     g.stroke();
     g.lineWidth = OUT;
-
-    var ex = 9.4, ey = -24.4, er = 2.25;
-    if (blink) {
-      g.lineWidth = 1.15;
+  
+    g.fillStyle = BLUSH;
+    g.beginPath(); g.ellipse(-6.4, -26.6, 1.85, 1.1, -0.2, 0, Math.PI * 2); g.fill();
+    g.beginPath(); g.ellipse(6.5, -26.6, 1.85, 1.1, 0.2, 0, Math.PI * 2); g.fill();
+  
+    function eye(x, y) {
+      if (blink) {
+        g.lineWidth = 0.95;
+        g.beginPath();
+        g.moveTo(x - 1.55, y);
+        g.quadraticCurveTo(x, y + 0.85, x + 1.55, y);
+        g.stroke();
+        g.lineWidth = OUT;
+        return;
+      }
       g.beginPath();
-      g.arc(ex, ey, er * 0.8, 0.2, Math.PI - 0.15);
-      g.stroke();
-    } else {
-      g.beginPath();
-      g.arc(ex, ey, er, 0, Math.PI * 2);
+      g.ellipse(x, y, 1.85, 2.4, 0, 0, Math.PI * 2);
       g.fillStyle = INK;
       g.fill();
+    }
+    eye(-4.55, -29.2);
+    eye(4.65, -29.2);
+  
+    g.fillStyle = EARPINK;
+    g.beginPath();
+    g.moveTo(-1.15, -25.7);
+    g.quadraticCurveTo(0, -25.95, 1.15, -25.7);
+    g.quadraticCurveTo(0.3, -24.25, 0, -24.1);
+    g.quadraticCurveTo(-0.3, -24.25, -1.15, -25.7);
+    g.fill();
+  
+    g.strokeStyle = INK;
+    g.lineWidth = 0.9;
+    g.beginPath();
+    g.moveTo(-1.65, -23.35);
+    g.quadraticCurveTo(-0.8, -22.5, 0, -23.45);
+    g.quadraticCurveTo(0.8, -22.5, 1.65, -23.35);
+    g.stroke();
+  
+    g.lineWidth = 0.62;
+    function whisk(x1, y1, x2, y2, c) {
       g.beginPath();
-      g.arc(ex - 0.65, ey - 0.7, 0.78, 0, Math.PI * 2);
-      g.fillStyle = '#fff';
-      g.fill();
-      g.lineWidth = 1.05;
-      g.beginPath();
-      g.arc(ex + 0.15, ey - 2.9, 2.35, Math.PI * 1.2, Math.PI * 1.7);
+      g.moveTo(x1, y1);
+      g.quadraticCurveTo((x1 + x2) / 2, (y1 + y2) / 2 + c, x2, y2);
       g.stroke();
     }
-    g.fillStyle = RBLUSH;
-    g.beginPath();
-    g.ellipse(11.8, -21.5, 1.9, 1.15, 0.12, 0, Math.PI * 2);
-    g.fill();
-    g.fillStyle = INK;
-    g.beginPath();
-    g.ellipse(15.15, -22.15, 1.35, 1.0, 0.08, 0, Math.PI * 2);
-    g.fill();
-    g.strokeStyle = INK;
-    g.lineWidth = 1.15;
-    g.beginPath();
-    g.moveTo(13.3, -20.5);
-    g.quadraticCurveTo(14.8, -19.25, 16.05, -20.55);
-    g.stroke();
+    whisk(-2.1, -26.3, -12.2, -28.6, -0.25);
+    whisk(-2.2, -25.5, -12.6, -25.6, 0.1);
+    whisk(-2.0, -24.7, -11.4, -23.1, 0.25);
+    whisk(2.1, -26.3, 12.4, -28.6, -0.25);
+    whisk(2.2, -25.5, 12.8, -25.6, 0.1);
+    whisk(2.0, -24.7, 11.6, -23.1, 0.25);
     g.restore();
   }
   function drawAnimal(g, type, phase) {
@@ -6822,7 +6839,7 @@ function validConversation(value, p) {
       ctx.translate(an.x, an.y);
       var squash = an.pet > 0 ? 0.1 : 0;
       var size=ANIMAL_SCALE[an.type]||[1,1];ctx.scale(an.dir * (1 + squash)*size[0], (1 - squash)*size[1]);
-      var shade = an.type === 'pig' ? 15 : (an.type === 'rabbit' ? 11 : 10);
+      var shade = an.type === 'pig' ? 16 : (an.type === 'rabbit' ? 12 : 10);
       ctx.fillStyle = 'rgba(40,30,20,0.16)';
       ctx.beginPath(); ctx.ellipse(an.type === 'pig' ? 1 : 0, -1, shade, 3.2, 0, 0, 6.3); ctx.fill();
       drawAnimal(ctx, an.type, an.phase);
