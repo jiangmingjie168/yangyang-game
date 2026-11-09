@@ -920,6 +920,9 @@ const BRAIN_TIMEOUT_MS = 6500;
   var joyX = 0, joyY = 0, joyJumpLatch = false;
   var keys = {};
   var parts = [];
+  // Magic egg (hidden): double-tap the player for a tiny magic trick. No menu,
+  // tutorial, gallery or question-bank entry mentions it; that secrecy is the design.
+  var magicTap = 0, magicEggAt = -999, magicShowUntil = 0, magicBowUntil = 0, magicRainUntil = 0, magicHatUntil = 0, magicHatPet = null, magicButterfly = null;
   var audioCtx = null, speechOn = false, cardKey = '', cardLeft = 0, cardFlyChest = false, cardFlyTimer = null;
   var queuedQuest = '', queuedHint = '', lastPromptSpoken = '', promptLock = false, lastBuildHint = '';
   var ttsToken = 0, speechArm = 0, ttsLive = false, ttsLiveSince = 0, promptPlaying = '', lastQuestSpoken = '', liveUtterance = null;
@@ -5878,6 +5881,90 @@ function validConversation(value, p) {
     a.audioPrimed = Date.now();
     animalVoiceAt = Date.now();
   }
+  // Magic egg: the player takes out a magic hat and wand, waves once, and one
+  // of three tricks happens at random. Only tricks that can happen here are
+  // in the draw: the pet hat needs a following pet, the butterfly needs a
+  // flower nearby, and the star rain always works. The one bubble line is
+  // feedback, not a question: it never enters the question bank, asks nothing
+  // and spends no quota.
+  function nearestMagicFlower() {
+    var pcx = Math.floor(player.x / TILE), pcy = Math.floor(player.y / TILE), best = null, bd = Infinity, x, y, dx, dy, d;
+    for (y = Math.max(0, pcy - 7); y <= Math.min(H - 1, pcy + 7); y++) {
+      for (x = Math.max(0, pcx - 7); x <= Math.min(W - 1, pcx + 7); x++) {
+        if (get(x, y) !== FLOWER) continue;
+        dx = (x + 0.5) * TILE - player.x; dy = (y + 0.5) * TILE - player.y; d = dx * dx + dy * dy;
+        if (d < bd) { bd = d; best = { tx: x, ty: y }; }
+      }
+    }
+    return best;
+  }
+  function triggerMagicEgg() {
+    if (chatClock - magicEggAt < 60) return;
+    magicEggAt = chatClock;
+    magicShowUntil = chatClock + 1.1;
+    var pet = animals.filter(function (a) { return a.tamed; })[0] || null;
+    var flower = nearestMagicFlower();
+    var options = ['stars'];
+    if (flower) options.push('flower');
+    if (pet) options.push('hat');
+    var pick = options[Math.floor(Math.random() * options.length)];
+    if (pick === 'hat') {
+      magicHatPet = pet;
+      magicHatUntil = chatClock + 10;
+    } else if (pick === 'flower') {
+      setCell(flower.tx, flower.ty, AIR); saveSoon();
+      magicButterfly = { x: (flower.tx + 0.5) * TILE, y: (flower.ty + 0.5) * TILE, vx: (Math.random() < 0.5 ? -1 : 1) * 26, born: chatClock };
+    } else {
+      magicRainUntil = chatClock + 1.2;
+      magicBowUntil = chatClock + 1.6;
+    }
+    playSfx('confetti');
+    buildFeedback('Abracadabra! Wow! Magic!', 'magic_trick');
+  }
+  function drawMagicHat(g, type) {
+    var by = { horse: -41, pig: -42, rabbit: -46 }[type] || -37;
+    g.save(); inkStyle(g);
+    g.fillStyle = '#5b3a8c';
+    g.beginPath(); g.ellipse(8, by, 9, 2.4, 0, 0, 6.3); g.fill(); g.stroke();
+    g.beginPath(); g.ellipse(8, by - 3.5, 5.5, 4, 0, 0, 6.3); g.fill(); g.stroke();
+    g.fillStyle = '#ffd94d'; g.fillRect(2.5, by - 4.5, 11, 2);
+    g.fillStyle = '#fff3a0';
+    g.beginPath(); g.arc(8, by - 8, 1.5, 0, 6.3); g.fill();
+    g.restore();
+  }
+  function drawMagicButterfly(g) {
+    var mb = magicButterfly;
+    if (!mb) return;
+    var flap = Math.sin((chatClock - mb.born) * 18) * 0.7;
+    g.save(); g.translate(mb.x, mb.y); inkStyle(g);
+    g.fillStyle = '#ff9f43';
+    g.beginPath(); g.ellipse(-5, -2, 6, 4.5 - flap * 2, -0.5 - flap * 0.3, 0, 6.3); g.fill(); g.stroke();
+    g.beginPath(); g.ellipse(5, -2, 6, 4.5 - flap * 2, 0.5 + flap * 0.3, 0, 6.3); g.fill(); g.stroke();
+    g.fillStyle = '#8d67ef';
+    g.beginPath(); g.ellipse(-5, -2, 2.5, 2, 0, 0, 6.3); g.fill();
+    g.beginPath(); g.ellipse(5, -2, 2.5, 2, 0, 0, 6.3); g.fill();
+    g.strokeStyle = '#51493c'; g.lineWidth = 1.2;
+    g.beginPath(); g.moveTo(0, -6); g.lineTo(0, 5); g.stroke();
+    g.beginPath(); g.moveTo(0, -6); g.quadraticCurveTo(-2, -10, -4, -11); g.stroke();
+    g.beginPath(); g.moveTo(0, -6); g.quadraticCurveTo(2, -10, 4, -11); g.stroke();
+    g.restore();
+  }
+  function drawMagicFlourish(g) {
+    g.save();
+    g.strokeStyle = '#5b3a8c'; g.lineWidth = 2; g.lineCap = 'round';
+    g.beginPath(); g.moveTo(7, -18); g.lineTo(15, -33); g.stroke();
+    g.fillStyle = '#ffd94d';
+    var sx = 16, sy = -35, sr = 3.2, i, r, a;
+    g.beginPath();
+    for (i = 0; i < 10; i++) { r = i % 2 ? sr * 0.45 : sr; a = i * Math.PI / 5 - Math.PI / 2; g.lineTo(sx + Math.cos(a) * r, sy + Math.sin(a) * r); }
+    g.closePath(); g.fill();
+    g.rotate(-0.25);
+    g.fillStyle = '#5b3a8c';
+    g.beginPath(); g.ellipse(-16, -26, 7, 2.2, 0, 0, 6.3); g.fill();
+    g.fillRect(-20.5, -33, 9, 7.5);
+    g.fillStyle = '#ffd94d'; g.fillRect(-20.5, -27.5, 9, 1.8);
+    g.restore();
+  }
   function tapWorld(wx, wy, sx, sy, fy) {
     var i;
     var tapTx = Math.floor(wx / TILE), tapTy = Math.floor(wy / TILE), tapId = get(tapTx, tapTy);
@@ -5895,6 +5982,16 @@ function validConversation(value, p) {
         if (!petReach(petHit)) primeAnimalAudio(petHit);
         seek = null;
         beginSeek({ kind: 'pet', animal: petHit });
+        return;
+      }
+    }
+    // Magic egg (hidden): a double-tap on the player. Like the car horn, the
+    // first tap is swallowed so it cannot also start a mine or a sky word.
+    if (!riding && !drivingCar && !inWater() && !dialogue && !quiz && !nameFlow && !welcome) {
+      if (Math.abs(wx - player.x) <= 28 && wy >= player.y - 52 && wy <= player.y + 8) {
+        var tapNow = performance.now();
+        if (magicTap && tapNow - magicTap < 420) { magicTap = 0; triggerMagicEgg(); }
+        else magicTap = tapNow;
         return;
       }
     }
@@ -6744,9 +6841,11 @@ function validConversation(value, p) {
     g.save();
     g.translate(player.x, player.y - bob);
     g.scale(player.dir, 1);
+    if (magicBowUntil > chatClock) g.rotate(0.26);
     drawChildFrame(g, frame, 0, 0, 48);
     if (hasPack()) drawKidPack(g, -22, -28);
     if (hasHat()) drawKidHat(g, 0, -44);
+    if (magicShowUntil > chatClock) drawMagicFlourish(g);
     if (rainOn && !indoors) drawUmbrella(g, 14, -50, -20);
     g.restore();
     return true;
@@ -6930,6 +7029,7 @@ function validConversation(value, p) {
     var step = onGround ? walk * 1.4 : 0;
     g.fillStyle = 'rgba(40,30,20,0.18)';
     g.beginPath(); g.ellipse(0, -1, 9, 3, 0, 0, 6.3); g.fill();
+    if (magicBowUntil > chatClock) g.rotate(0.26);
     if (hasPack()) {
       inkBox(g, -14.5, -25 - bob, 7.5, 15, '#2ea8a0', 3);
       g.fillStyle = '#1f7a74';
@@ -6989,6 +7089,7 @@ function validConversation(value, p) {
       g.fillStyle = '#fff3a0';
       g.beginPath(); g.arc(2.4, -40.4 - bob, 1.6, 0, 6.3); g.fill();
     }
+    if (magicShowUntil > chatClock) drawMagicFlourish(g);
     if (rainOn && !indoors) drawUmbrella(g, 9, -45 - bob, -18 - bob);
     g.restore();
   }
@@ -7537,6 +7638,7 @@ function validConversation(value, p) {
       ctx.fillStyle = 'rgba(40,30,20,0.16)';
       ctx.beginPath(); ctx.ellipse(an.type === 'pig' ? 1 : 0, -1, shade, 3.2, 0, 0, 6.3); ctx.fill();
       drawAnimal(ctx, an.type, an.phase);
+      if (magicHatPet === an && magicHatUntil > chatClock) drawMagicHat(ctx, an.type);
       ctx.restore();
       if (an.pet > 0) {
         ctx.save(); ctx.fillStyle = '#ed4978'; ctx.font = 'bold 20px sans-serif';
@@ -7551,6 +7653,7 @@ function validConversation(value, p) {
       ctx.beginPath(); ctx.ellipse(targetX, targetY - 2, 22, 7, 0, 0, Math.PI * 2); ctx.stroke(); ctx.restore();
     }
     drawParticles(ctx,false);
+    if (magicButterfly) drawMagicButterfly(ctx);
     if (boat && !riding) {
       ctx.save();
       ctx.translate(boat.x, boat.y + Math.sin(sec * 2 + 1) * 1.3);
@@ -9441,6 +9544,26 @@ function validConversation(value, p) {
         p.y += p.vy * dt;
         if (!p.still) p.vy += 80 * dt;
         if (p.age >= p.life) parts.splice(i, 1);
+      }
+      // Magic egg: star rain falls around the player; the butterfly flies up and away.
+      if (magicRainUntil > chatClock) {
+        var rainN = reducedMotion ? 1 : 2, ri;
+        for (ri = 0; ri < rainN; ri++) {
+          if (parts.length >= 90) break;
+          parts.push({ x: player.x + (Math.random() - 0.5) * 150, y: player.y - 110 - Math.random() * 50,
+            vx: (Math.random() - 0.5) * 24, vy: 26 + Math.random() * 40,
+            life: 0.9 + Math.random() * 0.5, age: 0,
+            color: ['#ffd94d', '#fff3a0', '#ffb84d'][ri % 3], s: 3.5 + Math.random() * 2.5,
+            star: true, confetti: false, heart: false, still: false });
+        }
+      }
+      if (magicButterfly) {
+        var mbAge = chatClock - magicButterfly.born;
+        if (mbAge > 3.5) magicButterfly = null;
+        else {
+          magicButterfly.x += magicButterfly.vx * dt;
+          magicButterfly.y += (-34 + Math.sin(mbAge * 6) * 10) * dt;
+        }
       }
       if (fishing) {
         fishing.t += dt;
