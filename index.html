@@ -630,7 +630,7 @@
   <canvas id="view" width="800" height="400"></canvas>
   <div id="hud">
     <span id="hunger-hint" hidden></span>
-    <span id="build-version" aria-label="Build version">build cd91b62+mc-grow</span>
+    <span id="build-version" aria-label="Build version">build cd91b62+mc-door</span>
     <div class="topbar">
       <button id="quest" type="button">
         <canvas id="quest-icon" width="128" height="128"></canvas>
@@ -2199,7 +2199,7 @@ function validConversation(value, p) {
     (Array.isArray(data.build_objects)?data.build_objects:[]).slice(0,64).forEach(function(raw){
       if(!raw||!CRAFTABLES[raw.item]||!(raw.item==='car'?Number.isFinite(raw.x):Number.isInteger(raw.x))||!Number.isInteger(raw.y))return;
       var b=newCraftable(raw.item,raw);b.x=raw.x;b.y=raw.y;b.dir=raw.dir===-1?-1:1;
-      if(['stone','roof','flower','window'].includes(raw.showWord)&&b.kind==='house')b.showWord=raw.showWord;
+      if(['stone','roof','flower','window','door'].includes(raw.showWord)&&b.kind==='house')b.showWord=raw.showWord;
       if(b.showWord&&raw.partQuestion===b.showWord)b.partQuestion=raw.partQuestion;
       if(b.x<1||b.y<1||b.x+b.w>=W||b.y+b.h>=H||buildObjects.some(function(o){return b.x<o.x+o.w&&b.x+b.w>o.x&&b.y<o.y+o.h&&b.y+b.h>o.y;}))return;
       Object.assign(b,{id:'object:'+b.x+':'+b.y,createdAt:Number(raw.createdAt)||Date.now(),roofed:b.kind==='house',shown:!!raw.shown,closed:!!raw.closed,autoOffered:!!raw.autoOffered,invited:false,roofPraise:true});
@@ -2301,8 +2301,31 @@ function validConversation(value, p) {
       for(var row=0;row<10;row++){var x=43-row*4,y=9+row*4,w=10+row*8;box(x-2,y,w+4,6,'#704534');box(x,y,w,4,roof);box(x,y,w,1,roofHi);for(var tx=x+8+(row%2)*4;tx<x+w;tx+=12)box(tx,y+1,1,3,'#914e3d');}
       }else{box(9,35,78,12,'#684733');box(7,34,82,4,'#efc788');box(11,39,74,6,'#bc854b');for(var rx=15;rx<85;rx+=12){box(rx,38,1,7,'#8d603c');box(rx+2,39,8,1,'#dba76a');}}
       box(5,47,86,4,'#5c4236');box(8,47,80,1,'#e4ae72');
-      // Recessed door, two glazed windows with highlights and window boxes.
-      box(49,57,20,26,dark);box(51,59,16,23,'#a3673e');box(52,60,2,21,'#d6a56a');box(58,60,1,21,'#825231');box(63,70,2,2,'#ffe49c');
+      // Recessed door. A crafted Door (tier 2) is a finished door in the same opening.
+      if (b.parts.door && b.parts.door.tier >= 2) {
+        box(49,56,20,27,'#3d2618');
+        box(51,58,16,24,'#6b3a24');
+        box(52,59,14,22,'#e2a45c');
+        box(52,60,6,8,'#f2c48a');
+        box(52,70,6,10,'#d4924c');
+        box(59,60,6,8,'#c9843e');
+        box(59,70,6,10,'#b56e32');
+        box(58,59,1,22,'#5a341c');
+        box(52,69,12,1,'#5a341c');
+        box(53,61,4,5,'#8fd4ea');
+        box(54,62,2,2,'#ffffff');
+        box(60,62,4,4,'#b7e4f2');
+        box(61,63,1,1,'#ffffff');
+        box(63,72,3,3,'#ffe08a');
+        box(64,72,1,1,'#fff8d0');
+        box(54,55,8,2,'#3d8a48');
+        box(53,56,2,2,'#3d8a48');
+        box(61,56,2,2,'#3d8a48');
+        box(56,54,4,2,'#e25b6a');
+        box(57,54,2,1,'#ffe08a');
+      } else {
+        box(49,57,20,26,dark);box(51,59,16,23,'#a3673e');box(52,60,2,21,'#d6a56a');box(58,60,1,21,'#825231');box(63,70,2,2,'#ffe49c');
+      }
       [21,70].forEach(function(x){var w=x===21?17:9;box(x-2,55,w+4,18,dark);box(x,57,w,13,b.parts.window.tier>=2?'#75cde1':'#8d7858');box(x+1,57,w-2,3,b.parts.window.tier>=2?'#defbf3':'#bea67b');if(b.parts.window.tier>=2){box(x+2,61,3,3,'#ffffff');box(x+5,65,2,3,'#b2eced');}box(x+Math.floor(w/2),56,2,16,'#f5dcb3');box(x,63,w,2,'#f5dcb3');box(x-2,72,w+4,3,mid);});
       box(48,85,24,4,'#c9c8b7');box(50,89,20,4,'#e0d4b3');
       if(b.parts.yard.tier>=2){
@@ -2493,6 +2516,12 @@ function validConversation(value, p) {
       }
       return true;
     }
+    // A held Door fits the front door before build-mode placement can swallow the tap.
+    if (b && b.kind === 'house' && pointInDoor(b, wx, wy) && doorReadyToInstall(b)) {
+      if (!buildReach(Math.floor(wx / TILE), Math.floor(wy / TILE)) && !playerHitsDoor(b)) { showToast('Move a little closer!', 2); return true; }
+      applyHouseUpgrade(b, 'door');
+      return true;
+    }
     // A just-placed, now-empty whole tool opens its object immediately. Explicit
     // removal and stocked placement still take priority over object interaction.
     if(buildMode&&(!b||buildTool!==b.item||(inv[buildTool]||0)>0))return false;
@@ -2500,14 +2529,17 @@ function validConversation(value, p) {
     if(b.kind==='car'){boardCar(b);return true;}
     if(b.kind==='house'){
       if(!buildReach(Math.floor(wx/TILE),Math.floor(wy/TILE)) && !playerHitsDoor(b)){showToast('Move a little closer!',2);return true;}
-      if(pointInDoor(b, wx, wy)){enterHouse(b);return true;}
+      if(pointInDoor(b, wx, wy)){
+        if (doorReadyToInstall(b)) { applyHouseUpgrade(b, 'door'); return true; }
+        enterHouse(b);return true;
+      }
       openUpgrade(b);return true;
     }
     return false;
   }
   function objectQuestion(b) {
     var key=b.showWord||(b.kind==='house'?'house':b.kind==='car'?'car':'fence');
-    return {key:key,options:b.showWord?[key,key==='stone'?'wood':key==='flower'?'stone':key==='roof'?'window':'roof']:b.kind==='car'?['car','wheel']:['house','fence'],upgrade:!!b.showWord};
+    return {key:key,options:b.showWord?[key,key==='stone'||key==='door'?'wood':key==='flower'?'stone':key==='roof'?'window':'roof']:b.kind==='car'?['car','wheel']:['house','fence'],upgrade:!!b.showWord};
   }
   function requestObjectShow(b) {
     if(drivingCar)return;
@@ -2520,8 +2552,20 @@ function validConversation(value, p) {
     wall:{label:'Wall',cost:'stone',material:'stone',word:'stone',change:'Wood → Stone',praise:'Strong stone walls!'},
     roof:{label:'Roof',cost:'planks',material:'planks',word:'roof',change:'Flat → Tiled',praise:'A lovely tiled roof!'},
     yard:{label:'Yard',cost:'flower',material:'flower',word:'flower',change:'Grass → Flower bed',praise:'Flowers in our yard!'},
-    window:{label:'Window',cost:'sand',material:'glass',word:'window',change:'Wood → Bright glass',praise:'A bright glass window!'}
+    window:{label:'Window',cost:'sand',material:'glass',word:'window',change:'Wood → Bright glass',praise:'A bright glass window!'},
+    door:{label:'Door',cost:'door',n:1,material:'wood',word:'door',change:'Plain → Finished door',praise:'A proper front door!'}
   };
+  function houseNeedingDoor() {
+    var i, b;
+    for (i = 0; i < buildObjects.length; i++) {
+      b = buildObjects[i];
+      if (b.kind === 'house' && b.parts && b.parts.door && b.parts.door.tier < 2) return b;
+    }
+    return null;
+  }
+  function doorReadyToInstall(b) {
+    return !!(b && b.kind === 'house' && b.parts && b.parts.door && b.parts.door.tier < 2 && selectedKey() === 'door' && (inv.door || 0) >= 1);
+  }
   function openUpgrade(b) {
     if(b.partQuestion){partQuestionAt=chatClock;return;} // Finish the pending part before another remodel.
     if(quiz||dialogue||nameFlow||buildShowActive())return;
@@ -2534,23 +2578,31 @@ function validConversation(value, p) {
     var b=upgradeHouse;if(!b)return;
     var cv=document.getElementById('upgrade-preview'),g=cv.getContext('2d');g.clearRect(0,0,192,192);g.imageSmoothingEnabled=false;g.drawImage(craftableSprite(b),0,0,192,192);
     var root=document.getElementById('upgrade-parts');root.replaceChildren();
-    Object.keys(HOUSE_UPGRADES).forEach(function(part){var u=HOUSE_UPGRADES[part],done=b.parts[part].tier>=2,missing=Math.max(0,2-(inv[u.cost]||0));
+    Object.keys(HOUSE_UPGRADES).forEach(function(part){var u=HOUSE_UPGRADES[part],need=u.n||2,done=b.parts[part].tier>=2,missing=Math.max(0,need-(inv[u.cost]||0));
       var btn=document.createElement('button');btn.type='button';btn.dataset.upgrade=part;btn.disabled=done||missing>0;btn.setAttribute('aria-pressed',String(upgradePart===part));
-      btn.textContent=u.label+' · '+WORD[u.cost][0]+' ×2';var info=document.createElement('span');info.textContent=done?'Finished!':missing?'Need '+missing+' more '+WORD[u.cost][0]:u.change;btn.appendChild(info);
+      btn.textContent=u.label+' · '+(need===1?('1 '+WORD[u.cost][0]):(WORD[u.cost][0]+' ×'+need));var info=document.createElement('span');info.textContent=done?'Finished!':missing?'Need '+missing+' more '+WORD[u.cost][0]:u.change;btn.appendChild(info);
       btn.onclick=function(){upgradePart=part;renderUpgrades();};root.appendChild(btn);
     });
     document.getElementById('upgrade-confirm').hidden=!upgradePart;
-    document.getElementById('upgrade-confirm-text').textContent=upgradePart?'Use 2 '+WORD[HOUSE_UPGRADES[upgradePart].cost][0]+' for the '+HOUSE_UPGRADES[upgradePart].label.toLowerCase()+'?':'';
+    var chosen=upgradePart?HOUSE_UPGRADES[upgradePart]:null,chosenNeed=chosen?(chosen.n||2):2;
+    document.getElementById('upgrade-confirm-text').textContent=chosen?('Use '+chosenNeed+' '+WORD[chosen.cost][0]+' for the '+chosen.label.toLowerCase()+'?'):'';
+  }
+  function applyHouseUpgrade(b, part) {
+    var u=HOUSE_UPGRADES[part], need=u?u.n||2:2, i;
+    if(!b||!u||!buildObjects.includes(b)||!b.parts[part]||b.parts[part].tier>=2||(inv[u.cost]||0)<need)return false;
+    for(i=0;i<need;i++)consume(u.cost);
+    b.parts[part]={material:u.material,tier:2};b.level=Math.max(2,b.level||1);
+    if(part==='door'&&!quiz){progress.placed.door=1;rememberEvent('built','door');}
+    learn(u.word);b.showWord=u.word;b.partQuestion=u.word;b.shown=false;b.autoOffered=true;b.invited=false;b.closed=true;
+    playSfx('place');
+    closeUpgrade();closeAmbient();buildSession.lastObjectId=b.id;buildSession.lastActionAt=chatClock;buildSession.active=true;buildQueue=[];manualShowPending=null;
+    detectBuilds();celebrateBuild(b);buildFeedback(u.praise+' You made this!','house_upgrade');
+    updateQuest();save();renderHotbar();renderBuildTools();
+    partQuestionAt=chatClock+1.6;
+    return true;
   }
   function confirmUpgrade() {
-    var b=upgradeHouse,part=upgradePart,u=HOUSE_UPGRADES[part];
-    if(!b||!u||!buildObjects.includes(b)||b.parts[part].tier>=2||(inv[u.cost]||0)<2)return;
-    consume(u.cost);consume(u.cost);b.parts[part]={material:u.material,tier:2};b.level=2;
-    learn(u.word);b.showWord=u.word;b.partQuestion=u.word;b.shown=false;b.autoOffered=true;b.invited=false;b.closed=true;
-    closeUpgrade();closeAmbient();buildSession.lastObjectId=b.id;buildSession.lastActionAt=chatClock;buildSession.active=true;buildQueue=[];manualShowPending=null;
-    detectBuilds();celebrateBuild(b);buildFeedback(u.praise+' You made this!','house_upgrade');save();renderHotbar();renderBuildTools();
-    partQuestionAt=chatClock+1.6;
-
+    applyHouseUpgrade(upgradeHouse, upgradePart);
   }
   function newBuildSession() { return { active:false, placed:0, removed:0, lastActionAt:-100, selectedAt:-100, startedAt:0, asked:0, praised:0, closed:0, lastBubbleAt:-100, lastQuestionAt:-100, lastPraiseAt:-100, plan:null, firstDone:false, shorts:{}, roomAt:0, revisit:false }; }
   function resetBuildDay() {
@@ -2725,6 +2777,7 @@ function validConversation(value, p) {
   }
   function buildTap(x,y,fy,quiet) {
     if(drivingCar)return false;
+    if (buildTool !== 'remove' && buildMaterial() === 'door' && houseNeedingDoor()) { if (!quiet) showToast('The door goes on the house!', 2.2); return false; }
     if (buildTool !== 'remove' && RAW_BLOCK[buildMaterial()]) { if (!quiet) showWord(buildMaterial()); return false; }
     buildAction(quiet ? 'paint' : 'tap');
     var r=resolveBuildTarget(x,y,fy);x=r.x;y=r.y;
@@ -3167,7 +3220,7 @@ function validConversation(value, p) {
     if(drivingCar)return;
     var pendingPart=buildObjects.find(function(b){return b.partQuestion;});
     if(pendingPart&&chatClock>=partQuestionAt&&!panelOpen()&&!welcome&&!nameFlow&&!dialogue&&!quiz&&!buildShowActive()){
-      var key=pendingPart.partQuestion,other=learned.find(function(k){return k!==key&&['stone','wood','flower','roof','window','planks','sand'].includes(k);});
+      var key=pendingPart.partQuestion,other=learned.find(function(k){return k!==key&&['stone','wood','flower','roof','window','planks','sand','door'].includes(k);});
       if(other){closeAmbient();showBuildQuestion({event:'house_part',building:pendingPart,key:key,options:[key,other],upgrade:true,deferSpeech:true});saveSoon();}
     }
     if(buildLastPosition && Math.hypot(player.x-buildLastPosition.x,player.y-buildLastPosition.y)<.5)buildStill+=dt;else buildStill=0;
@@ -4534,7 +4587,7 @@ function validConversation(value, p) {
     else if (key === 'torch') showToast('The torch goes on the wall!', 2);
     else if (key === 'flower') showToast('The flower goes outside!', 2.2);
     else if (key === 'fence') showToast('The fence goes outside!', 2.2);
-    else if (key === 'door') showToast('The door goes outside!', 2.2);
+    else if (key === 'door') showToast(houseNeedingDoor() ? 'The door goes on the house!' : 'The door goes outside!', 2.2);
     else if (key === 'window') showToast('The window goes outside!', 2.2);
   }
   function indoorPhysics(dt) {
@@ -4628,7 +4681,14 @@ function validConversation(value, p) {
     g.moveTo(winX + ww / 2, winY + 2); g.lineTo(winX + ww / 2, winY + wh - 2);
     g.moveTo(winX + 2, winY + wh / 2); g.lineTo(winX + ww - 2, winY + wh / 2);
     g.stroke();
-    inkBox(g, R.door.x, R.door.y, R.door.w, R.door.h, '#e2b06a', 5);
+    var fancyDoor = b.parts && b.parts.door && b.parts.door.tier >= 2;
+    inkBox(g, R.door.x, R.door.y, R.door.w, R.door.h, fancyDoor ? '#c4843e' : '#e2b06a', 5);
+    if (fancyDoor) {
+      g.fillStyle = '#8fd4ea';
+      g.fillRect(R.door.x + 8, R.door.y + 10, 16, 14);
+      g.fillStyle = '#ffffff';
+      g.fillRect(R.door.x + 10, R.door.y + 12, 5, 4);
+    }
     g.fillStyle = '#ffe08a';
     g.beginPath(); g.arc(R.door.x + R.door.w - 12, R.door.y + R.door.h * 0.55, 4, 0, 6.3); g.fill();
     inkBox(g, R.table.x - 10, R.floor - 8, R.table.w + 20, 16, '#f4b4c4', 7);
@@ -5597,6 +5657,7 @@ function validConversation(value, p) {
   }
   // Where a crafted item is allowed to sit. Empty string means the spot is fine.
   function specialPlaceLine(key, tx, ty) {
+    if (key === 'door' && houseNeedingDoor()) return 'The door goes on the house!';
     if (indoors && (key === 'flower' || key === 'fence' || key === 'door' || key === 'window')) return 'The ' + key + ' goes outside!';
     if (key === 'flower') {
       var soil = get(tx, ty + 1);
@@ -5617,6 +5678,7 @@ function validConversation(value, p) {
   function tryPlace(tx, ty, quiet, fill) {
     var key = selectedKey();
     if (!key) return false;
+    if (key === 'door' && houseNeedingDoor()) { if (!quiet) showToast('The door goes on the house!', 2.2); return false; }
     if (RAW_BLOCK[key]) { if (!quiet) showWord(key); return false; }
     if (CRAFTABLES[key]) {
       var prior = buildTool;
@@ -5920,6 +5982,7 @@ function validConversation(value, p) {
     if (key === 'bed' || (buildMode && buildMaterial() === 'bed')) return 'The bed goes in the house!';
     if (key === 'table' || (buildMode && buildMaterial() === 'table')) return 'The table goes in the house!';
     var mat = buildMode ? buildMaterial() : key;
+    if (mat === 'door' && houseNeedingDoor()) return 'The door goes on the house!';
     if (indoors && (mat === 'flower' || mat === 'fence' || mat === 'door' || mat === 'window')) return 'The ' + mat + ' goes outside!';
     var line = specialPlaceLine(mat, tx, ty);
     if (line) return line;
