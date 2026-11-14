@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#fff6dc">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%90%B6%3C/text%3E%3C/svg%3E">
+<title>Animal Park</title>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
+html,body{margin:0;height:100%;font-family:ui-rounded,"SF Pro Rounded","Avenir Next","Helvetica Neue",Arial,sans-serif;background:#fff6dc;color:#3a2a14;overflow:hidden;touch-action:manipulation;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+html{color-scheme:light}
+button{font:inherit;color:inherit;border:0;cursor:pointer;padding:0;background:none}
+button:focus-visible{outline:3px solid #ff8a3d;outline-offset:3px}
+.scr{position:fixed;left:0;right:0;top:0;margin:0 auto;width:min(100%,540px);height:100%;height:100svh;max-height:100svh;display:none;flex-direction:column;align-items:center;overflow:hidden;padding:calc(8px + env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) calc(10px + env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left))}
+.scr.on{display:flex}
+.big{font-size:30px;font-weight:800;padding:18px 44px;border-radius:999px;background:#ff8a3d;color:#fff;box-shadow:0 6px 0 #c95f1c;min-height:64px;letter-spacing:.01em}
+.big:active{transform:translateY(4px);box-shadow:0 2px 0 #c95f1c}
+.soft{font-size:22px;font-weight:800;padding:14px 28px;border-radius:999px;background:#fff;box-shadow:0 4px 0 #e2cf9a;min-height:52px;border:2px solid #fff}
+.soft:active{transform:translateY(3px);box-shadow:0 1px 0 #e2cf9a}
+/* ---------- home ---------- */
+#home{justify-content:center;gap:16px;text-align:center}
+.hero{width:168px;height:168px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 42%, #c8ecff 0 57%, #8fd66b 58% 100%);box-shadow:0 8px 0 #e2cf9a, inset 0 0 0 4px rgba(255,255,255,.7);flex:0 0 auto}
+#home h1{font-size:42px;margin:0;letter-spacing:-.03em;line-height:1}
+.tag{margin:0;font-size:22px;font-weight:800;color:#c95f1c}
+.logo{font-size:58px;line-height:1}
+.logo span{display:inline-block;animation:bob 2.4s ease-in-out infinite}
+.logo span:nth-child(2){animation-delay:.3s}.logo span:nth-child(3){animation-delay:.6s}
+#nomic{display:none;font-size:18px;font-weight:800;line-height:1.35;background:#fff;border-radius:16px;padding:12px 16px;box-shadow:0 4px 0 #e2cf9a;max-width:320px}
+#gear{position:absolute;right:max(8px, env(safe-area-inset-right));top:calc(6px + env(safe-area-inset-top));font-size:26px;min-width:44px;min-height:44px;opacity:.55}
+/* ---------- play ---------- */
+#bar{width:100%;display:flex;align-items:center;justify-content:space-between;height:48px;flex:0 0 auto}
+#exit{font-size:22px;font-weight:800;color:#8a6d3b;min-width:44px;min-height:44px}
+#dots{display:flex;gap:6px;align-items:center}
+#dots i{width:9px;height:9px;border-radius:50%;background:#c9ad72;box-shadow:inset 0 0 0 1px rgba(255,255,255,.35)}
+#dots i.done{background:#ff8a3d}
+#bookIco{font-size:30px;min-width:44px;min-height:44px;display:flex;align-items:center;justify-content:center}
+#stage{position:relative;width:100%;flex:1 1 auto;min-height:132px;border-radius:28px;overflow:hidden;box-shadow:inset 0 0 0 4px rgba(255,255,255,.72), 0 8px 0 #e2cf9a;transition:background .8s;font-size:60px}
+#stage.enter{animation:stageIn .4s ease-out}
+.bg-grass{background:linear-gradient(#9fdcff 0 55%,#8fd66b 55% 100%)}
+.bg-pond{background:linear-gradient(#9fdcff 0 45%,#8fd66b 45% 62%,#4db4e8 62% 100%)}
+.bg-sky{background:linear-gradient(#58b8ff,#c8ecff)}
+.bg-sea{background:linear-gradient(#2c8fd6,#0d4f8f)}
+.bg-ice{background:linear-gradient(#cfeaff 0 55%,#f4fbff 55% 100%)}
+.bg-night{background:linear-gradient(#1b2452,#48407a)}
+.bg-dawn{background:linear-gradient(#ffc27a 0 55%,#8fd66b 55% 100%)}
+.bg-party{background:linear-gradient(#ffb3d9,#ffe08a)}
+.actor{position:absolute;line-height:1;transform:translate(-50%,-50%) rotate(var(--r,0deg));transition:left var(--d,.7s) ease-in-out,top var(--d,.7s) ease-in-out,font-size var(--d,.7s) ease,opacity .4s,transform var(--d,.7s) ease,filter .6s;will-change:left,top}
+.actor .in{display:inline-block;position:relative;z-index:1}
+.actor::after{content:"";position:absolute;z-index:0;left:50%;bottom:0;width:.85em;height:.2em;transform:translateX(-50%);background:rgba(40,30,10,.16);border-radius:50%;pointer-events:none}
+.actor.pop .in{animation:pop .4s ease-out}
+.bub{position:absolute;left:50%;bottom:100%;translate:-50% 0;background:#fff;border-radius:16px;padding:4px 12px;font-size:22px;font-weight:800;white-space:nowrap;color:#3a2a14;animation:pop .3s ease-out;z-index:5;box-shadow:0 3px 0 rgba(226,207,154,.85)}
+#cap{position:absolute;left:10px;right:10px;top:10px;background:rgba(255,255,255,.96);border-radius:16px;padding:8px 12px;font-size:20px;font-weight:800;line-height:1.25;text-align:center;display:none;z-index:9;box-shadow:0 3px 0 rgba(226,207,154,.9)}
+.an-jump{animation:jump .6s ease-out 2}
+.an-shake{animation:shake .5s linear 2}
+.an-spin{animation:spin .8s ease-in-out}
+.an-wob{animation:wob .9s ease-in-out}
+.an-bounce{animation:jump .45s ease-out 5}
+.an-pulse{animation:pulse .5s ease-in-out 3}
+.an-sit{animation:sit 1.6s ease-in-out}
+.an-talk{animation:talk .32s ease-in-out infinite}
+.an-dance{animation:dance .6s ease-in-out infinite}
+.an-rainbow{animation:rainbow 1.2s linear infinite}
+.an-wave{animation:wob .5s ease-in-out 4}
+@keyframes bob{50%{transform:translateY(-8px)}}
+@keyframes pop{0%{transform:scale(.6)}60%{transform:scale(1.12)}100%{transform:scale(1)}}
+@keyframes stageIn{from{transform:scale(.98);opacity:.55}to{transform:none;opacity:1}}
+@keyframes jump{0%,100%{transform:translateY(0)}45%{transform:translateY(-70%) scaleY(1.08)}}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-12%)}75%{transform:translateX(12%)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes wob{0%,100%{transform:rotate(0)}30%{transform:rotate(-18deg)}70%{transform:rotate(14deg)}}
+@keyframes pulse{50%{transform:scale(1.18)}}
+@keyframes sit{0%,100%{transform:scaleY(1)}20%,80%{transform:scaleY(.72) translateY(18%)}}
+@keyframes talk{50%{transform:scaleY(1.08) translateY(-3%)}}
+@keyframes dance{0%,100%{transform:rotate(-12deg) translateY(0)}50%{transform:rotate(12deg) translateY(-16%)}}
+@keyframes rainbow{from{filter:sepia(1) saturate(8) hue-rotate(0deg)}to{filter:sepia(1) saturate(8) hue-rotate(360deg)}}
+@keyframes ring{from{transform:scale(1);opacity:.7}to{transform:scale(1.38);opacity:0}}
+@keyframes shimmer{from{background-position:0% 50%}to{background-position:200% 50%}}
+.conf{position:absolute;top:-12%;font-size:.45em;animation:fall 1.8s ease-in forwards;pointer-events:none}
+@keyframes fall{to{transform:translateY(640%) rotate(360deg);opacity:.15}}
+#hint{min-height:8px;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:8px;flex-wrap:wrap;flex:0 0 auto}
+#hint:empty{margin-top:0}
+#hint .ic{font-size:32px;background:#fff;border-radius:16px;padding:4px 10px;box-shadow:0 3px 0 #e2cf9a;animation:pop .35s ease-out}
+#hint .ic.demo{outline:4px solid #ff8a3d}
+#hint .crib{font-size:22px;font-weight:800;background:#fff;border-radius:16px;padding:8px 14px;box-shadow:0 3px 0 #e2cf9a}
+#status{flex:0 0 auto;min-height:28px;margin-top:4px;font-size:20px;font-weight:800;letter-spacing:.01em;text-align:center}
+#status.wait{color:#8a6d3b}
+#status.ready{color:#c95f1c}
+#status.live{color:#c81e1e}
+#status.ask{color:#8a3b12}
+#ctl{display:grid;grid-template-columns:64px minmax(96px,1fr) 64px;align-items:center;justify-items:center;width:100%;margin-top:2px;flex:0 0 auto}
+#exit,#gear,#mic,#again{display:inline-flex;align-items:center;justify-content:center}
+#mic{grid-column:2;position:relative;width:104px;height:104px;border-radius:50%;font-size:48px;background:#ff8a3d;color:#fff;box-shadow:0 6px 0 #c95f1c;transition:background .2s,transform .05s}
+#mic:active:not([disabled]){transform:translateY(4px);box-shadow:0 2px 0 #c95f1c}
+#mic.wait{background:#ffe0c2;color:#c95f1c;box-shadow:0 6px 0 #e2cf9a}
+#mic.ready::before,#mic.live::before,#mic.live::after{content:"";position:absolute;inset:-8px;border-radius:50%;border:3px solid rgba(255,138,61,.55);animation:ring 1.25s ease-out infinite;pointer-events:none}
+#mic.live{background:#e23b3b;box-shadow:0 6px 0 #a32020}
+#mic.live::before,#mic.live::after{border-color:rgba(226,59,59,.55)}
+#mic.live::after{animation-delay:.45s}
+#again{grid-column:1;font-size:28px;width:64px;height:64px;border-radius:50%;background:#fff;box-shadow:0 4px 0 #e2cf9a}
+#again:active:not([disabled]){transform:translateY(3px);box-shadow:0 1px 0 #e2cf9a}
+#again[disabled]{opacity:.35}
+#keys{display:none;gap:10px;margin-top:8px;width:100%;justify-content:center;flex:0 0 auto}
+#keys.on{display:flex;flex-wrap:wrap}
+#skip,#heard{min-height:52px;flex:1 1 140px;font-weight:800}
+#skip{font-size:18px;padding:12px 16px;border-radius:999px;background:#fff;box-shadow:0 4px 0 #e2cf9a}
+#skip:active{transform:translateY(3px);box-shadow:0 1px 0 #e2cf9a}
+#heard{position:relative;overflow:hidden;font-size:17px;padding:12px 14px;border-radius:999px;background:#d9f2d0;box-shadow:0 4px 0 #8fca78;touch-action:none}
+#heard:active{transform:translateY(3px)}
+#heard b{position:absolute;left:0;top:0;bottom:0;width:0;background:rgba(46,140,60,.42)}
+#heard.hold b{width:100%;transition:width 1s linear}
+#heard span{position:relative}
+#fly{position:fixed;font-size:64px;z-index:50;pointer-events:none;display:none;line-height:1}
+/* ---------- book / end / parent ---------- */
+#book,#end{text-align:center;gap:10px}
+#book{justify-content:flex-start}
+#book h2,#end h2{margin:2px 0 0;font-size:32px;letter-spacing:-.02em}
+#bookCount{margin:0;font-size:16px;font-weight:800;color:#6b5224}
+#grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;width:100%;flex:1 1 auto;min-height:0;overflow:auto;-webkit-overflow-scrolling:touch;padding:4px 2px 8px;align-content:start}
+#grid div{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:32px;background:#fff;border-radius:16px;box-shadow:inset 0 0 0 2px #f0e6cc;filter:grayscale(1);opacity:.38}
+#grid div.lit{filter:none;opacity:1;box-shadow:0 3px 0 #e2cf9a}
+#grid div.shiny{background:linear-gradient(120deg,#fff3b0,#ffe08a,#fff,#ffd166,#fff3b0);background-size:200% 100%;animation:shimmer 2.8s linear infinite;box-shadow:0 0 0 2px #ffd166, 0 3px 0 #e2b43a}
+#closeBook{flex:0 0 auto;margin-top:4px}
+#end{justify-content:center}
+.end-mark{font-size:64px;line-height:1;animation:pop .5s ease-out}
+.stats{display:flex;gap:10px;width:100%;justify-content:center}
+.stat{flex:1 1 0;background:#fff;border-radius:18px;padding:8px 10px 10px;box-shadow:0 4px 0 #e2cf9a;font-size:15px;font-weight:800;color:#6b5224;line-height:1.2}
+.stat b{display:block;font-size:36px;color:#c95f1c;line-height:1.05}
+#endRow{width:100%;min-height:64px;background:#fff;border-radius:20px;box-shadow:0 4px 0 #e2cf9a;padding:8px;font-size:34px;display:flex;flex-wrap:wrap;gap:4px;justify-content:center;align-items:center}
+#endRow .new{animation:pulse 1.1s ease-in-out infinite}
+#parent{position:fixed;inset:0;background:rgba(40,24,8,.46);display:none;align-items:center;justify-content:center;z-index:99;padding:calc(12px + env(safe-area-inset-top)) 16px calc(12px + env(safe-area-inset-bottom))}
+#parent.on{display:flex}
+#parent .box{background:#fffdf6;border-radius:22px;padding:18px;width:min(92vw,380px);max-height:100%;overflow:auto;-webkit-overflow-scrolling:touch;display:flex;flex-direction:column;gap:10px;font-size:17px;box-shadow:0 10px 0 rgba(0,0,0,.12)}
+#parent .box b{font-size:20px}
+#pMic{margin:0;padding:10px 12px;background:#fff3d6;border-radius:14px;font-size:14px;font-weight:700;line-height:1.45;color:#5c4314}
+#parent .box button,#pProbe{padding:14px;border-radius:14px;background:#f1ead6;font-weight:800;font-size:17px;min-height:48px;text-align:center;text-decoration:none;color:inherit}
+#parent .box button:active,#pProbe:active{transform:translateY(2px)}
+#parent .box #pClose{background:#ff8a3d;color:#fff;box-shadow:0 4px 0 #c95f1c}
+#parent textarea{width:100%;height:110px;display:none;font-size:11px;-webkit-user-select:text;user-select:text}
+#pmsg{min-height:18px;font-size:14px;font-weight:700;color:#2a7d2a}
+@media (max-height:680px){
+  .hero{width:120px;height:120px}
+  .logo{font-size:46px}
+  #home h1{font-size:34px}
+  #home{gap:10px}
+  .big{font-size:26px;padding:14px 32px;min-height:56px}
+  #mic{width:84px;height:84px;font-size:40px}
+  #stage{min-height:108px}
+  .end-mark{font-size:48px}
+  .stat b{font-size:28px}
+}
+</style>
+</head>
+<body>
+
+<!-- home -->
+<section id="home" class="scr on">
+  <button id="gear" aria-label="Parents">⚙️</button>
+  <div class="hero" aria-hidden="true"><div class="logo"><span>🐶</span><span>🤠</span><span>🐘</span></div></div>
+  <h1>Animal Park</h1>
+  <p class="tag">Say it!</p>
+  <button id="start" class="big">▶ Start</button>
+  <button id="openBook" class="soft">📒 Stickers</button>
+  <div id="nomic">This phone can't hear yet. Play with a grown-up!</div>
+</section>
+
+<!-- play -->
+<section id="play" class="scr">
+  <div id="bar"><button id="exit" aria-label="Exit">✖</button><div id="dots"></div><div id="bookIco">📒</div></div>
+  <div id="stage" class="bg-grass"><div id="cap"></div></div>
+  <div id="hint"></div>
+  <div id="status" role="status" aria-live="polite"></div>
+  <div id="ctl">
+    <button id="again" aria-label="Hear it again">🔊</button>
+    <button id="mic" aria-label="Talk" disabled>🎤</button>
+  </div>
+  <div id="keys">
+    <button id="skip">⏭ Skip</button>
+    <button id="heard"><b></b><span>👂 Hold: I heard it</span></button>
+  </div>
+</section>
+
+<!-- sticker book -->
+<section id="book" class="scr">
+  <h2>📒 My Stickers</h2>
+  <p id="bookCount">Play to earn stickers!</p>
+  <div id="grid"></div>
+  <button id="closeBook" class="soft">⬅ Back</button>
+</section>
+
+<!-- end -->
+<section id="end" class="scr">
+  <div class="end-mark" aria-hidden="true">🎉</div>
+  <h2>Great job!</h2>
+  <div class="stats">
+    <div class="stat"><b id="nSpoke">0</b>times you spoke</div>
+    <div class="stat"><b id="nStick">0</b>stickers</div>
+  </div>
+  <div id="endRow"></div>
+  <button id="replay" class="big">▶ Play again</button>
+  <button id="toHome" class="soft">🏠 Home</button>
+</section>
+
+<!-- parent menu (二级菜单，中文) -->
+<div id="parent"><div class="box">
+  <b>家长菜单</b>
+  <p id="pMic"></p>
+  <button id="pCopy">📋 复制日志</button>
+  <button id="pReset">🗑 重置进度（贴纸清空）</button>
+  <a id="pProbe" href="probe.html">🧪 打开单词摸底</a>
+  <div id="pmsg"></div>
+  <textarea id="pText" readonly></textarea>
+  <button id="pClose">关闭</button>
+</div></div>
+<div id="fly"></div>
+
+<script>
+'use strict';
+/* =====================================================================
+   Animal Park — speaking cards prototype (single file, no dependencies)
+   Flow: home → draw deck → say prompt → mic → tier (A/B/C) → result
+         animation → reply → sticker → next card → end
+   ===================================================================== */
+
+// ---------- small helpers ----------
+const $ = id => document.getElementById(id);
+const rnd = n => Math.floor(Math.random() * n);
+const pick = a => a[rnd(a.length)];
+const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = rnd(i + 1); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const sleep = ms => new Promise(r => timers.push(setTimeout(r, ms)));
+let timers = [];                       // every pending timeout, cleared on exit
+const clearTimers = () => { timers.forEach(clearTimeout); timers = []; };
+
+// ---------- storage (never throws: private mode / quota) ----------
+const store = {
+  get(k, d) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+};
+const K_PROG = 'sc_prog_v1', K_LOG = 'sc_log_v1';
+// prog: st = stickers {cardId: 1 lit | 2 shiny}, last = last outcome key per card, plays = pass count per card
+let prog = store.get(K_PROG, null) || { st: {}, last: {}, plays: {} };
+const saveProg = () => store.set(K_PROG, prog);
+
+// ---------- local log: one line per attempt ----------
+function logTry(card, tier, heard, ms, res) {
+  const log = store.get(K_LOG, []);
+  log.push({ t: new Date().toISOString(), card, tier, said: heard[0] || '', alts: heard.slice(1), ms, res: res || '' });
+  store.set(K_LOG, log.slice(-3000));
+}
+function logText() {
+  const log = store.get(K_LOG, []);
+  const head = 'time\tcard\ttier\ttranscript\talternatives\tms\tresult';
+  return [head].concat(log.map(e => [e.t, e.card, e.tier, e.said, (e.alts || []).join(' | '), e.ms, e.res].join('\t'))).join('\n');
+}
+
+// ---------- matching: case-insensitive, punctuation ignored, synonyms ----------
+/* --- match: start --- */
+const SYN = {
+  bunny: 'rabbit', bunnies: 'rabbit', kitty: 'cat', kitten: 'cat', kitties: 'cat',
+  doggy: 'dog', doggie: 'dog', puppy: 'dog', puppies: 'dog', mice: 'mouse',
+  butterflies: 'butterfly', wolves: 'wolf', birdie: 'bird', chick: 'chicken',
+  lamb: 'sheep', tigger: 'tiger', meow: 'cat', mew: 'cat', woof: 'dog', ruff: 'dog',
+  oink: 'pig', piglet: 'pig', baa: 'sheep', bah: 'sheep', baah: 'sheep', hallo: 'hello', hullo: 'hello',
+  sat: 'sit', ran: 'run', byebye: 'bye', octopi: 'octopus', wawa: 'water', wata: 'water',
+  wadder: 'water', flew: 'fly', fishy: 'fish',
+  bigger: 'big', biggest: 'big', taller: 'tall', tallest: 'tall', longer: 'long', longest: 'long',
+  faster: 'fast', fastest: 'fast', cleaner: 'clean', smaller: 'little',
+  greener: 'green', redder: 'red', bluer: 'blue', pinker: 'pink'
+};
+// per-card ASR mis-hears that would otherwise block a correct answer.
+// Only tokens that are not themselves answers. "baa" is a real synonym (SYN), not a mis-hear.
+const WHITELIST = {
+  1: { set: 'sit', seat: 'sit' },
+  3: { watch: 'wash' },
+  11: { crack: 'quack', quak: 'quack', kwack: 'quack', qwack: 'quack', whack: 'quack', quark: 'quack' },
+  13: { mou: 'moo', move: 'moo', mood: 'moo', moon: 'moo', mow: 'moo', mu: 'moo', boo: 'moo' },
+  14: { ship: 'sheep', shep: 'sheep', seep: 'sheep', cheap: 'sheep', cheep: 'sheep', maa: 'sheep', mah: 'sheep' },
+  30: { ya: 'you', seeya: 'goodbye', cya: 'goodbye', goodby: 'goodbye' }
+};
+const tighten = t => t.replace(/([aeiou])\1{2,}/g, '$1$1'); // mooo → moo, baaa → baa
+function stemForms(w) {
+  const out = new Set([w]);
+  if (w.length > 4 && w.endsWith('ies')) out.add(w.slice(0, -3) + 'y');
+  if (w.length > 4 && w.endsWith('es')) out.add(w.slice(0, -2));
+  if (w.length > 3 && w.endsWith('s') && !w.endsWith('ss')) out.add(w.slice(0, -1));
+  if (w.length >= 5 && w.endsWith('ing')) {
+    const b = w.slice(0, -3);
+    out.add(b); out.add(b + 'e');
+    if (b.length >= 3 && b[b.length - 1] === b[b.length - 2]) out.add(b.slice(0, -1));
+  }
+  if (w.length >= 5 && w.endsWith('ed')) {
+    const b = w.slice(0, -2);
+    out.add(b);
+    if (b.endsWith('i') && b.length > 1) out.add(b.slice(0, -1) + 'y');
+    if (b.length >= 3 && b[b.length - 1] === b[b.length - 2]) out.add(b.slice(0, -1));
+  }
+  return out;
+}
+function mapToken(raw, al) {
+  const t = tighten(raw);
+  const hit = x => (al && al[x]) || SYN[x] || null;
+  const direct = hit(t);
+  if (direct) return direct;
+  for (const f of stemForms(t)) {
+    if (f === t) continue;
+    const m = hit(f);
+    if (m) return m;
+  }
+  return t;
+}
+const norm = (s, al) => String(s || '').toLowerCase().replace(/[^a-z' ]+/g, ' ').replace(/'/g, '').trim().split(/\s+/).filter(Boolean).map(t => mapToken(t, al));
+const squash1 = t => t.replace(/([aeiou])\1+/g, '$1');
+// token vs keyword: exact, plural either way, -ing (coming / running), -ed, stretched vowels
+function tokIs(t, k) {
+  if (t === k) return true;
+  const tf = stemForms(t);
+  if (tf.has(k)) return true;
+  for (const f of tf) if (stemForms(k).has(f)) return true;
+  if (k.length >= 3 && t.length > k.length && t.length - k.length <= 4 && squash1(t) === squash1(k)) return true;
+  return false;
+}
+function hasKw(toks, kw) {
+  const ks = kw.split(' ');
+  for (let i = 0; i + ks.length <= toks.length; i++) {
+    if (ks.every((k, j) => tokIs(toks[i + j], k))) return true;
+  }
+  return false;
+}
+function findKws(heard, kws, al) {
+  const hits = [];
+  heard.forEach(h => {
+    const toks = norm(h, al);
+    kws.filter(k => hasKw(toks, k))
+       .sort((a, b) => toks.findIndex(t => tokIs(t, a.split(' ')[0])) - toks.findIndex(t => tokIs(t, b.split(' ')[0])))
+       .forEach(k => { if (!hits.includes(k)) hits.push(k); });
+  });
+  return hits;
+}
+/* --- match: end --- */
+
+// ---------- TTS: en-US, rate 0.9; resolves when finished (or failed) ----------
+const synth = window.speechSynthesis || null;
+let ttsFailed = !synth || typeof window.SpeechSynthesisUtterance !== 'function';
+let ttsKick = 0;
+function stopKick() { if (ttsKick) { clearInterval(ttsKick); ttsKick = 0; } }
+function enVoice() {
+  if (!synth) return null;
+  try { return (synth.getVoices() || []).find(v => /^en[-_]US/i.test(v.lang)) || null; } catch (e) { return null; }
+}
+if (synth) {
+  try { synth.getVoices(); } catch (e) {}
+  if (synth.addEventListener) synth.addEventListener('voiceschanged', () => { try { synth.getVoices(); } catch (e) {} });
+}
+function unlockTTS() {                 // iOS: first speak must sit inside a tap
+  if (ttsFailed) return;
+  try { synth.speak(new SpeechSynthesisUtterance(' ')); } catch (e) { ttsFailed = true; }
+}
+function speak(text, o) {
+  o = o || {};
+  showCap(ttsFailed ? text : '');      // caption only when there is no voice
+  if (ttsFailed) return sleep(900 + text.length * 55);
+  return new Promise(res => {
+    let done = false;
+    const fin = bad => { if (done) return; done = true; stopKick(); if (bad) showCap(text); res(); };
+    try {
+      stopKick();
+      if (synth.speaking || synth.pending) synth.cancel();
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = 'en-US'; u.rate = o.rate || 0.9; u.pitch = o.pitch || 1;
+      const v = enVoice();
+      if (v) u.voice = v;
+      u.onend = () => fin(false);
+      u.onerror = ev => fin(ev && ev.error !== 'interrupted' && ev.error !== 'canceled');
+      synth.speak(u);
+      // iOS pauses long utterances unless resume() is nudged
+      ttsKick = setInterval(() => { try { if (synth.speaking) synth.resume(); } catch (e) {} }, 4000);
+      timers.push(setTimeout(() => fin(false), 2500 + text.length * 110));
+    } catch (e) { ttsFailed = true; fin(true); }
+  });
+}
+const hush = () => { stopKick(); try { if (synth) synth.cancel(); } catch (e) {} };
+
+// ---------- speech recognition: tap to start, silence ends it ----------
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition || null;
+let micOK = !!SR;                      // false → whole round runs on parent confirm
+let micReason = SR ? '' : 'nosr';      // nosr | denied | failed | ''
+let micPrimed = false;
+let rec = null;
+/* listen(isMatch, waitAll, onSpeech) → Promise<{heard, err}>
+   heard = every alternative of every result, newest top hypothesis first, deduped.
+   Ends on: keyword match (+0.6 s grace), 1.6 s silence after speech,
+   5 s with no speech at all, a second tap, or a 12 s hard cap.
+   WebKit often fires onend / no-speech early; restart until one of those deadlines.
+   Both the short final and the longer interim are kept (truncated finals). */
+function listen(isMatch, waitAll, onSpeech) {
+  return new Promise(res => {
+    const heard = [];
+    let done = false, stopping = false, err = '', spoke = false;
+    let tSil = 0, tHit = 0, tRestart = 0, restarts = 0;
+    const myGen = game.gen;
+    let r;
+    const fin = why => {
+      if (done) return;
+      done = true; stopping = true;
+      if (why && !err) err = why;
+      [tNone, tCap, tSil, tHit, tRestart].forEach(clearTimeout);
+      try { r.onresult = r.onerror = r.onend = null; r.abort(); } catch (e) {}
+      rec = null;
+      res({ heard, err });
+    };
+    const stop = () => {
+      stopping = true;
+      try { r.stop(); } catch (e) {}
+      timers.push(setTimeout(() => fin(), 800));
+    };
+    try {
+      r = new SR();
+      r.lang = 'en-US'; r.continuous = false; r.interimResults = true; r.maxAlternatives = 5;
+    } catch (e) { return res({ heard, err: 'unavailable' }); }
+    const tNone = setTimeout(() => fin(), 5000);
+    const tCap = setTimeout(stop, 12000);
+    timers.push(tNone, tCap);
+    r.onresult = ev => {
+      try {
+        for (let i = 0; i < ev.results.length; i++) for (let j = 0; j < ev.results[i].length; j++) {
+          const s = (ev.results[i][j].transcript || '').trim();
+          if (s && !heard.includes(s)) (j === 0 ? heard.unshift(s) : heard.push(s));
+        }
+      } catch (e) {}
+      if (!heard.length) return;
+      if (!spoke) { spoke = true; try { if (onSpeech) onSpeech(); } catch (e) {} }
+      clearTimeout(tNone); clearTimeout(tSil);
+      tSil = setTimeout(stop, 1600); timers.push(tSil);
+      if (!waitAll && !tHit && isMatch(heard)) { tHit = setTimeout(stop, 600); timers.push(tHit); }
+    };
+    r.onerror = ev => {
+      const code = (ev && ev.error) || 'error';
+      if (code === 'no-speech' || code === 'aborted') return;   // onend restarts until the 5 s mark
+      err = code;
+      if (code === 'network' && restarts < 1) return;
+      fin();
+    };
+    r.onend = () => {
+      if (done || stopping) return fin();
+      if (restarts >= 20 || myGen !== game.gen) return fin();
+      restarts++;
+      tRestart = setTimeout(() => {
+        if (done || stopping || myGen !== game.gen) return;
+        try { r.start(); } catch (e) { fin('unavailable'); }
+      }, 180);
+      timers.push(tRestart);
+    };
+    try { r.start(); rec = { abort: () => fin('aborted') }; }
+    catch (e) { fin('unavailable'); }
+  });
+}
+const stopRec = () => { if (rec) rec.abort(); };
+// iOS shows the mic prompt only inside a tap. Ask on Start, before the first card.
+function primeMic() {
+  if (micPrimed) return;
+  micPrimed = true;
+  const md = navigator.mediaDevices;
+  if (!md || typeof md.getUserMedia !== 'function') return;
+  let p;
+  try { p = md.getUserMedia({ audio: true }); } catch (e) { return; }
+  p.then(stream => { try { stream.getTracks().forEach(t => t.stop()); } catch (e) {} }).catch(e => {
+    const name = ((e && e.name) || '') + ' ' + ((e && e.message) || '');
+    if (!/NotAllowed|PermissionDenied|SecurityError/i.test(name)) return;
+    micOK = false; micReason = 'denied';
+    if (game.state === 'home') showHomeMic();
+    else if (game.state === 'ready') ready(false);
+  });
+}
+
+// ---------- stage: emoji actors moved by CSS ----------
+const stage = $('stage'), cap = $('cap');
+const MARIO = '🤠';
+let actors = {};
+function showCap(t) { cap.textContent = t || ''; cap.style.display = t ? 'block' : 'none'; }
+function fitStage() { stage.style.fontSize = Math.max(34, Math.min(stage.clientWidth, stage.clientHeight * 1.3) * 0.14) + 'px'; }
+// cast entry: [emoji, x%, y%, size(em), cssFilter]
+function addActor(k, e, x, y, s, f, pop) {
+  if (actors[k]) actors[k].remove();
+  const el = document.createElement('div');
+  el.className = 'actor' + (pop ? ' pop' : '');
+  el.style.left = x + '%'; el.style.top = y + '%'; el.style.fontSize = (s || 1) + 'em';
+  if (f) el.style.filter = f;
+  const i = document.createElement('span'); i.className = 'in'; i.textContent = e;
+  el.appendChild(i); stage.appendChild(el); actors[k] = el;
+}
+function setStage(card) {
+  stage.querySelectorAll('.actor,.conf').forEach(n => n.remove());
+  actors = {};
+  stage.className = 'bg-' + (card.bg || 'grass');
+  const cast = Object.assign({ m: [MARIO, 14, 74, 1.15] }, card.cast);
+  for (const k in cast) if (cast[k]) addActor(k, ...cast[k]);
+  fitStage();
+  stage.classList.add('enter');
+  requestAnimationFrame(fitStage);
+}
+function bubble(el, t) {
+  const b = document.createElement('span'); b.className = 'bub'; b.textContent = t;
+  el.appendChild(b); timers.push(setTimeout(() => b.remove(), 1500));
+}
+function rain(chars) {                 // falling emoji effect, e.g. '💧💦' or '🎉✨'
+  const set = Array.from(chars);
+  for (let i = 0; i < 14; i++) {
+    const c = document.createElement('span'); c.className = 'conf'; c.textContent = pick(set);
+    c.style.left = (4 + rnd(92)) + '%'; c.style.animationDelay = (rnd(6) / 10) + 's';
+    stage.appendChild(c); timers.push(setTimeout(() => c.remove(), 2600));
+  }
+}
+/* one step = any subset of: at(ms) k(actor) x y s(size) r(rotate) o(opacity)
+   f(filter) e(swap emoji) an(keyframe) bub(text) add[emoji,x,y,s] bg fx d(ms) */
+function applyStep(st) {
+  if (st.bg) stage.className = 'bg-' + st.bg;
+  if (st.fx) rain(st.fx);
+  if (!st.k) return;
+  if (st.add) return addActor(st.k, st.add[0], st.add[1], st.add[2], st.add[3], '', true);
+  const el = actors[st.k]; if (!el) return;
+  if (st.d) el.style.setProperty('--d', st.d + 'ms');
+  if (st.x != null) el.style.left = st.x + '%';
+  if (st.y != null) el.style.top = st.y + '%';
+  if (st.s != null) el.style.fontSize = st.s + 'em';
+  if (st.r != null) el.style.setProperty('--r', st.r + 'deg');
+  if (st.o != null) el.style.opacity = st.o;
+  if (st.f != null) el.style.filter = st.f;
+  if (st.e) el.firstChild.textContent = st.e;
+  if (st.an) { const i = el.firstChild; i.className = 'in'; void i.offsetWidth; i.className = 'in an-' + st.an; }
+  if (st.bub) bubble(el, st.bub);
+}
+const stepsLen = steps => steps.reduce((m, st) => Math.max(m, (st.at || 0) + (st.d || 800)), 0) + 500;
+function playSteps(steps) {
+  steps.forEach(st => timers.push(setTimeout(() => applyStep(st), st.at || 0)));
+  return sleep(stepsLen(steps));
+}
+const anim = (k, an) => applyStep({ k, an });
+
+// step builders (keep the card table short)
+const A = (k, an, at = 0) => ({ k, an, at });                       // keyframe animation
+const M = (k, x, y, at = 0, d = 700) => ({ k, x, y, at, d });       // move
+const P = (k, e, x, y, s = 1, at = 0) => ({ k, add: [e, x, y, s], at }); // pop in a new actor
+const B = (k, bub, at = 0) => ({ k, bub, at });                     // little bubble (sound effect / emoji only)
+const X = (k, at = 0) => ({ k, o: 0, at });                         // vanish
+const Z = (k, s, at = 0, d = 600) => ({ k, s, at, d });             // resize
+const R = (k, r, at = 0) => ({ k, r, at });                         // rotate
+const FL = (k, f, at = 0) => ({ k, f, at });                        // css filter
+const G = (bg, at = 0) => ({ bg, at });                             // background
+const F = (fx, at = 0) => ({ fx, at });                             // emoji rain
+
+/* =====================================================================
+   CARDS — revised 30-card table (review round 2, section 3).
+   say = Mario's spoken prompt, kw = keywords, r = Mario's reply (per card,
+   or per outcome when the outcome needs its own line).
+   pick: 'word' → outcome chosen by what the child said (map: keyword → outcome)
+         'rand' → random outcome, never the same as last time
+   rare: ~10%. {r,s} replaces the outcome; {plus:[...]} is added on top of it.
+   rareKey: a word-triggered outcome that counts as rare (shiny sticker).
+   both: two options said together → both outcomes play in a row.
+   opts: icons shown at the 2nd miss [icon, word to demo]. lv: review / new.
+   ===================================================================== */
+const DIRTY = 'sepia(1) saturate(2.2) brightness(.55)';
+const washed = at => [FL('a', 'none', at), X('mu', at), X('mv', at), A('a', 'jump', at + 400), B('a', '✨', at + 400)];
+const CARDS = [
+{ id: 1, w: 'dog', t: 'T', lv: 'review', icon: '🐶', say: 'The dog is waiting. Tell it what to do!',
+  kw: ['sit', 'run', 'jump', 'sleep'], opts: [['🪑', 'sit'], ['🏃', 'run'], ['⬆️', 'jump'], ['💤', 'sleep']],
+  cast: { a: ['🐕', 60, 68, 1.9] }, pick: 'word',
+  out: {
+    sit: { r: 'Wow! The dog is sitting!', s: [A('a', 'sit'), B('a', '🦴', 500)] },
+    run: { r: 'Wow! The dog is running!', s: [M('a', 92, 68, 0, 450), F('💨', 100), M('a', 32, 68, 550, 450), M('a', 60, 68, 1100, 450)] },
+    jump: { r: 'Wow! The dog is jumping!', s: [A('a', 'bounce'), { at: 0, d: 2200 }] },
+    sleep: { r: 'Wow! The dog is sleeping!', s: [R('a', -90), M('a', 60, 74), B('a', '💤', 600), B('a', '💤', 1500)] } },
+  rare: { plus: [P('p', '🐩', 84, 72, 1.1), A('p', 'bounce', 300), F('✨', 200), { at: 0, d: 2200 }] } },
+
+{ id: 2, w: 'cat', t: 'X', lv: 'review', icon: '🐱', say: 'Look! A dog!', r: "Oops! You're right. A cat!",
+  kw: ['cat', 'kitty'], opts: [['🐱', 'cat']],
+  cast: { a: ['🐱', 64, 62, 1.9], pt: ['👉', 36, 72, .9] }, pick: 'rand',
+  out: {
+    eyes: { s: [X('pt'), B('a', '🙄'), A('a', 'wob'), A('m', 'shake', 600)] },
+    meow: { s: [X('pt'), B('a', 'MEOW!'), A('a', 'pulse'), A('m', 'jump', 500)] },
+    head: { s: [X('pt'), M('a', 14, 52, 200, 900), Z('a', 1.2, 200), A('m', 'shake', 1200)] } },
+  rare: { s: [X('pt'), P('d', '🐶', 86, 68, 1.5, 200), B('d', '❓', 800), B('a', '🙄', 1100), A('m', 'shake', 1300)] } },
+
+{ id: 3, w: 'pig', t: 'T', lv: 'review', icon: '🐷', say: 'Uh-oh, a dirty pig! What do we do?', r: 'So clean! Thank you!',
+  kw: ['wash', 'water', 'bath', 'clean'], opts: [['🧽', 'wash'], ['💧', 'water'], ['🛁', 'bath']],
+  cast: { a: ['🐷', 60, 60, 2, DIRTY], mu: ['🟤', 50, 80, .5], mv: ['🟤', 72, 78, .4] }, pick: 'word',
+  out: {
+    wash: { s: [P('t', '🧽', 60, 48, 1), A('t', 'shake', 300), X('t', 1400)].concat(washed(1000)) },
+    water: { s: [F('💧💦'), F('💧💦', 500)].concat(washed(1000)) },
+    bath: { s: [P('t', '🛁', 60, 76, 2.3), M('a', 60, 56, 300), F('💧', 600)].concat(washed(1300)) },
+    clean: { s: [P('t', '🚿', 60, 26, 1.4), F('💧', 400)].concat(washed(1200)) } },
+  rare: { plus: [P('cr', '👑', 60, 36, .9), F('✨', 200)] } },
+
+{ id: 4, w: 'rabbit', t: 'C', lv: 'review', icon: '🐰', say: 'The rabbit is hungry! Carrot or cake?', r: 'Yum! Happy rabbit!',
+  kw: ['carrot', 'cake'], opts: [['🥕', 'carrot'], ['🍰', 'cake']], both: true,
+  cast: { a: ['🐰', 60, 56, 1.9], c1: ['🥕', 40, 86, 1], c2: ['🍰', 84, 86, 1] }, pick: 'word',
+  out: {
+    carrot: { s: [M('c1', 60, 68, 0, 500), A('a', 'shake', 500), B('a', 'CRUNCH!', 600), Z('c1', .5, 800), X('c1', 1400)] },
+    cake: { s: [M('c2', 60, 54, 0, 500), Z('c2', 1.7, 500), A('a', 'wob', 800), B('a', '😋', 1400), Z('c2', .2, 1600), X('c2', 2000)] } },
+  rare: { plus: [Z('a', 3.4, 0, 900), F('✨', 300), A('m', 'jump', 700)] } },
+
+{ id: 5, w: 'bird / fish', t: 'C', lv: 'review', icon: '🐦', bg: 'pond', say: "Let's go! Up with the bird, or down with the fish?", r: 'Whee! Here we go!',
+  kw: ['bird', 'fish', 'up', 'down'], map: { up: 'bird', down: 'fish' }, opts: [['🐦', 'bird'], ['🐟', 'fish']], both: true,
+  cast: { b: ['🐦', 40, 30, 1.3], f: ['🐟', 76, 84, 1.3] }, pick: 'word',
+  out: {
+    bird: { s: [G('sky'), X('f'), M('b', 56, 30, 0, 900), M('m', 44, 50, 0, 900), P('c1', '☁️', 20, 70, 1.6, 300), P('c2', '☁️', 82, 22, 1.6, 500),
+                 M('c1', 20, 96, 900, 1500), M('c2', 82, 62, 900, 1500), A('b', 'bounce', 900)] },
+    fish: { s: [G('sea'), X('b'), M('f', 60, 44, 0, 900), M('m', 38, 60, 0, 900), P('o1', '⚪', 30, 84, .3, 300), M('o1', 30, 8, 500, 1600),
+                 P('o2', '⚪', 70, 90, .25, 600), M('o2', 70, 10, 800, 1500), P('k', '🐠', 86, 72, 1, 700), P('q', '🐙', 82, 88, 1.2, 1000), A('f', 'wob', 1100)] } },
+  rare: { plus: [G('night'), P('rk', '🚀', 72, 66, 1.5), M('rk', 72, 14, 300, 1300), P('st', '🌟', 26, 20, 1, 500), P('mo', '🌙', 88, 20, 1.2, 800)] } },
+
+{ id: 6, w: 'fish', t: 'X', lv: 'review', icon: '🐟', bg: 'pond', say: "I'll put the fish in the tree!", r: 'Oh! Fish live in water. Thanks!',
+  kw: ['water', 'sea', 'swim'], opts: [['💧', 'water'], ['🌊', 'sea']],
+  cast: { tr: ['🌳', 80, 34, 2.4], a: ['🐟', 28, 60, 1.1] }, pre: [M('a', 72, 28, 600, 1400)], pick: 'word',
+  out: {
+    water: { s: [M('a', 56, 14, 0, 400), M('a', 46, 86, 400, 600), F('💦', 900), A('a', 'wob', 1100), A('m', 'jump', 1000)] },
+    swim: { s: [M('a', 46, 86, 0, 700), F('💦', 600), M('a', 88, 86, 800, 700), M('a', 22, 90, 1500, 900)] },
+    sea: { s: [P('wv', '🌊', 96, 80, 2.6), M('a', 52, 76, 300, 600), M('wv', 52, 74, 100, 800), M('wv', -12, 82, 1200, 900), M('a', -12, 84, 1200, 900), A('m', 'shake', 900)] } },
+  rare: { plus: [P('wh', '🐳', 60, 84, 2.2), B('wh', '💦', 500), A('wh', 'jump', 500)] } },
+
+{ id: 7, w: 'elephant', t: 'T', lv: 'new', icon: '🐘', say: "I'm so hot! Tell the elephant to help!", r: 'Ahh! So cool!',
+  kw: ['water', 'splash', 'elephant', 'shower'], opts: [['💦', 'splash'], ['🐘', 'elephant'], ['🚿', 'shower']],
+  cast: { a: ['🐘', 68, 60, 2.2], sun: ['☀️', 20, 16, 1.3], sw: ['💦', 22, 60, .45] }, pick: 'rand',
+  out: {
+    spray: { s: [A('a', 'pulse'), X('sw'), P('w', '💦', 46, 58, 1.3, 300), M('w', 20, 68, 400, 500), A('m', 'shake', 800), X('w', 1500)] },
+    rainbow: { s: [A('a', 'pulse'), X('sw'), F('💧', 300), P('rb', '🌈', 44, 26, 2.6, 1000), A('m', 'jump', 1300)] },
+    flowers: { s: [A('a', 'pulse'), X('sw'), F('💧', 300), P('f1', '🌸', 30, 90, .9, 900), P('f2', '🌼', 48, 92, .9, 1100), P('f3', '🌷', 88, 90, .9, 1300), A('m', 'jump', 1400)] } },
+  rare: { s: [A('a', 'pulse'), X('sw'), F('💧', 200), P('ic', '🍦', 48, 58, 1.2, 800), M('ic', 24, 68, 1100, 600), B('m', '😋', 1800)] } },
+
+{ id: 8, w: 'monkey', t: 'C', lv: 'new', icon: '🐵', say: 'A snack for the monkey! Banana or apple?', r: 'Ha! Funny monkey!',
+  kw: ['banana', 'apple'], opts: [['🍌', 'banana'], ['🍎', 'apple']], both: true,
+  cast: { a: ['🐵', 64, 48, 1.9], c1: ['🍌', 44, 88, 1], c2: ['🍎', 86, 88, 1] }, pick: 'word',
+  out: {
+    banana: { s: [M('c1', 64, 58, 0, 500), A('a', 'shake', 500), M('c1', 36, 90, 1100, 400), M('m', 40, 76, 1600, 500), R('m', -90, 2100), B('m', '💫', 2200), B('a', '😂', 2300)] },
+    apple: { s: [M('c2', 64, 24, 0, 500), A('c2', 'spin', 600), A('a', 'dance', 600), P('x1', '🍎', 50, 28, .7, 900), P('x2', '🍎', 78, 28, .7, 1100), A('x1', 'bounce', 1000), A('x2', 'bounce', 1200), { at: 0, d: 3000 }] } },
+  rare: { plus: [P('co', '🥥', 64, 36, 1), M('co', 14, 58, 300, 600), A('m', 'shake', 900), B('m', '💫', 900)] } },
+
+{ id: 9, w: 'tiger', t: 'X', lv: 'new', icon: '🐯', say: 'Here, kitty! A cute little cat!', r: 'Whoa! A tiger! You saved me!',
+  kw: ['tiger'], opts: [['🐯', 'tiger']],
+  cast: { a: ['🐯', 68, 60, 2.1], h: ['✋', 26, 70, .8] }, pre: [M('m', 30, 74, 600, 1200), M('h', 46, 66, 600, 1200)], pick: 'rand',
+  out: {
+    jump: { s: [B('a', 'ROAR!'), A('a', 'pulse'), X('h', 100), M('m', 8, 40, 200, 300), M('m', 8, 74, 600, 400), A('m', 'shake', 1100)] },
+    tree: { s: [B('a', 'ROAR!'), A('a', 'pulse'), X('h', 100), P('t', '🌳', 10, 56, 2.4), M('m', 10, 36, 300, 500), A('t', 'shake', 900)] },
+    hat: { s: [B('a', 'ROAR!'), A('a', 'pulse'), X('h', 100), P('ht', '👒', 30, 58, .8, 200), M('ht', 44, 10, 300, 500), M('m', 8, 74, 300, 400), M('ht', 8, 60, 1000, 700)] } },
+  rare: { s: [X('h'), Z('a', .9, 0, 500), B('a', 'mew?', 600), P('big', '🐅', 86, 58, 2.6, 1200), B('big', 'ROAR!', 1600), M('m', 5, 74, 1600, 300), A('m', 'shake', 1900)] } },
+
+{ id: 10, w: 'bear', t: 'C', lv: 'new', icon: '🐻', say: 'One pot of honey. Big bear or little bear?', r: 'Mmm! Sweet honey!',
+  kw: ['big', 'little', 'both'], opts: [['🐻', 'big', 1.5], ['🐻', 'little', .7]], rareKey: 'both',
+  cast: { m: [MARIO, 8, 84, .9], b1: ['🐻', 36, 50, 2.4], b2: ['🐻', 80, 66, 1.2], h: ['🍯', 58, 86, 1] }, pick: 'word',
+  out: {
+    big: { s: [M('h', 36, 64, 0, 600), A('b1', 'shake', 600), B('b1', '😋', 700), Z('h', .4, 1000), A('b2', 'wob', 1000)] },
+    little: { s: [M('h', 80, 74, 0, 600), A('b2', 'shake', 600), B('b2', '😋', 700), Z('h', .4, 1000), A('b1', 'wob', 1000)] },
+    both: { s: [M('b1', 44, 54, 0, 600), M('b2', 72, 66, 0, 600), M('h', 60, 68, 0, 600), A('b1', 'shake', 700), A('b2', 'shake', 700), B('h', '💖', 900), F('✨', 900)] } } },
+
+{ id: 11, w: 'duck', t: 'R', lv: 'new', icon: '🦆', bg: 'pond', say: 'You are Mama Duck. Your babies are lost! Call them!', r: 'They heard you, Mama Duck!',
+  kw: ['quack', 'come', 'baby', 'ducks'], opts: [['🦆', 'quack'], ['🐥', 'come']], crib: 'Quack, quack!',
+  cast: { m: [MARIO, 12, 54, 1.1], a: ['🦆', 74, 84, 1.7] }, pick: 'rand',
+  out: {
+    line: { s: [P('d1', '🐥', -6, 88, .8), M('d1', 56, 88, 100, 900), P('d2', '🐥', -6, 88, .8, 300), M('d2', 44, 88, 400, 900), P('d3', '🐥', -6, 88, .8, 600), M('d3', 32, 88, 700, 900), A('a', 'jump', 1700)] },
+    pond: { s: [F('💦'), P('d1', '🐥', 30, 94, .8, 200), P('d2', '🐥', 46, 96, .8, 600), P('d3', '🐥', 18, 92, .8, 1000), M('d1', 56, 88, 1400, 600), M('d2', 44, 88, 1400, 600), M('d3', 32, 88, 1400, 600), A('a', 'jump', 2100)] },
+    bush: { s: [P('bu', '🌿', 40, 54, 2), A('bu', 'shake', 300), P('d1', '🐥', 40, 56, .8, 700), M('d1', 56, 88, 900, 700), P('d2', '🐥', 40, 56, .8, 1100), M('d2', 44, 88, 1300, 700), P('d3', '🐥', 40, 56, .8, 1500), M('d3', 32, 88, 1700, 700), A('a', 'jump', 2500)] } },
+  rare: { s: [P('d1', '🐥', -6, 88, .8), M('d1', 58, 88, 100, 900), P('d2', '🐥', -6, 88, .8, 250), M('d2', 48, 88, 350, 900), P('d3', '🐥', -6, 88, .8, 500), M('d3', 38, 88, 600, 900),
+              P('d4', '🐥', -6, 88, .8, 750), M('d4', 28, 88, 850, 900), P('sw', '🦢', -8, 86, 1.2, 1100), M('sw', 14, 86, 1200, 900), B('sw', '❓', 2200), A('a', 'jump', 2200)] } },
+
+{ id: 12, w: 'horse', t: 'T', lv: 'new', icon: '🐴', say: "I'm on the horse! Make it go!", r: 'Yee-haw! Faster!',
+  kw: ['go', 'run', 'fast', 'jump', 'stop'], map: { fast: 'run' }, opts: [['▶️', 'go'], ['💨', 'fast'], ['⬆️', 'jump'], ['✋', 'stop']],
+  cast: { a: ['🐎', 44, 68, 2.2], m: [MARIO, 44, 46, 1] }, pick: 'word',
+  out: {
+    go: { s: [M('a', 80, 68, 0, 1200), M('m', 80, 46, 0, 1200), A('a', 'bounce'), M('a', 44, 68, 1400, 900), M('m', 44, 46, 1400, 900)] },
+    run: { s: [F('💨'), M('a', 112, 68, 0, 450), M('m', 112, 46, 0, 450), { k: 'a', x: -12, y: 68, at: 550, d: 1 }, { k: 'm', x: -12, y: 46, at: 550, d: 1 },
+                F('💨', 650), M('a', 44, 68, 650, 450), M('m', 44, 46, 650, 450)] },
+    jump: { s: [P('fe', '🚧', 72, 76, 1.2), M('a', 72, 30, 300, 500), M('m', 72, 8, 300, 500), M('a', 92, 68, 800, 500), M('m', 92, 46, 800, 500)] },
+    stop: { r: 'Whoa! We stopped!', s: [M('a', 68, 68, 0, 500), M('m', 68, 46, 0, 500), A('a', 'sit', 500), M('m', 94, 28, 600, 300), M('m', 94, 76, 900, 400), R('m', 180, 900), B('m', '💫', 1400)] } },
+  rare: { plus: [{ k: 'a', e: '🦄', at: 0 }, F('✨'), P('rb', '🌈', 50, 20, 2.2, 300)] } },
+
+{ id: 13, w: 'cow', t: 'X', lv: 'new', icon: '🐮', say: 'The cow says quack, quack!', r: 'Moo! Silly me!',
+  kw: ['moo'], opts: [['🐮', 'moo']],
+  // fallback from the review: if "moo" fails the probe, set USE_COW_ALT = true
+  alt: { say: 'Look! A horse!', kw: ['cow'], opts: [['🐮', 'cow']] },
+  cast: { a: ['🐮', 64, 60, 2.1] }, pick: 'rand',
+  out: {
+    loud: { s: [B('a', 'MOO!'), A('a', 'pulse'), Z('a', 2.9, 200, 400), M('m', 3, 74, 400, 400), R('m', -40, 400), Z('a', 2.1, 1300, 400)] },
+    duck: { s: [B('a', 'MOO!'), A('a', 'pulse'), P('d', '🦆', 104, 84, 1, 300), M('d', 40, 84, 400, 1200), B('d', '❓', 1700), A('m', 'shake', 1700)] },
+    milk: { s: [B('a', 'MOO!'), A('a', 'pulse'), P('mk', '🥛', 50, 86, 1, 700), M('mk', 26, 78, 1100, 600), B('m', '😋', 1800)] } },
+  rare: { s: [B('a', 'MOO!'), G('night', 300), P('mo', '🌙', 50, 24, 1.6, 300), M('a', 24, 30, 700, 600), M('a', 50, 4, 1300, 500), M('a', 82, 30, 1800, 500), M('a', 64, 60, 2300, 600), F('✨', 1300)] } },
+
+{ id: 14, w: 'sheep', t: 'T', lv: 'new', icon: '🐑', say: 'The gate is closed. The sheep want out!', r: 'Run, sheep, run!',
+  kw: ['open', 'go', 'out', 'sheep'], opts: [['🔓', 'open'], ['🐑', 'sheep']],
+  cast: { g: ['🚧', 56, 68, 2], s1: ['🐑', 78, 62, 1.5], s2: ['🐑', 90, 74, 1.3] }, pick: 'rand',
+  out: {
+    one: { s: [R('g', -75), X('g', 400), M('s1', 30, 72, 500, 900), A('s1', 'bounce', 500), A('s2', 'wob', 1000), A('m', 'jump', 1400)] },
+    three: { s: [R('g', -75), X('g', 400), M('s1', 30, 72, 500, 900), M('s2', 44, 82, 800, 900), P('s3', '🐑', 96, 64, 1.4, 700), M('s3', 60, 70, 1100, 900), A('m', 'jump', 1600)] },
+    flock: { s: [R('g', -75), X('g', 400), F('💨', 500), M('s1', 26, 66, 500, 800), M('s2', 40, 84, 650, 800), P('s3', '🐑', 98, 60, 1.4, 600), M('s3', 52, 68, 800, 800),
+                  P('s4', '🐑', 98, 80, 1.3, 800), M('s4', 62, 86, 1000, 800), P('s5', '🐑', 98, 66, 1.5, 1000), M('s5', 74, 70, 1200, 800), P('s6', '🐑', 98, 84, 1.2, 1200), M('s6', 86, 84, 1400, 800), A('m', 'shake', 1300)] } },
+  rare: { s: [R('g', -75), X('g', 400), P('b1', '🎈', 78, 44, 1, 300), M('s1', 60, 22, 700, 1500), M('b1', 60, 4, 700, 1500), P('b2', '🎈', 90, 56, 1, 500), M('s2', 32, 26, 900, 1500), M('b2', 32, 8, 900, 1500), B('m', '❗', 1500)] } },
+
+{ id: 15, w: 'butterfly', t: 'T', lv: 'new', icon: '🦋', say: 'A butterfly! Call it over!', r: 'It likes you!',
+  kw: ['butterfly', 'come', 'here', 'hello'], opts: [['🦋', 'butterfly'], ['👋', 'hello']],
+  cast: { m: [MARIO, 30, 66, 2], a: ['🦋', 84, 20, 1.1], fl: ['🌸', 86, 86, 1] }, pick: 'rand',
+  out: {
+    nose: { s: [M('a', 56, 40, 0, 500), M('a', 30, 68, 500, 700), Z('a', .8, 500), A('a', 'wob', 1300), A('m', 'wob', 1500)] },
+    hat: { s: [M('a', 52, 30, 0, 500), M('a', 30, 46, 500, 700), A('a', 'wob', 1300)] },
+    edge: { s: [M('a', 52, 30, 0, 600), M('a', 86, 84, 600, 800), Z('a', 2.4, 600, 800), A('a', 'wob', 1500)] } },
+  rare: { s: [M('a', 30, 46, 0, 900), F('🌸', 300), P('b1', '🦋', 10, 40, .8, 400), P('b2', '🦋', 52, 44, .9, 600), P('b3', '🦋', 16, 84, .7, 800), P('b4', '🦋', 48, 86, .8, 1000),
+              P('b5', '🦋', 30, 24, .9, 1200), A('b1', 'dance', 1300), A('b2', 'dance', 1300), A('b5', 'dance', 1300), { at: 0, d: 2400 }] } },
+
+{ id: 16, w: 'bee', t: 'T', lv: 'new', icon: '🐝', say: 'Help! A bee on my nose!', r: 'Phew! Thank you!',
+  kw: ['go', 'away', 'fly', 'shoo', 'bee'], opts: [['👋', 'shoo'], ['🐝', 'bee']],
+  cast: { m: [MARIO, 40, 62, 2.4], a: ['🐝', 41, 64, .7], fl: ['🌻', 88, 80, 1.3] }, pre: [A('m', 'shake', 200)], pick: 'rand',
+  out: {
+    away: { s: [A('a', 'spin'), M('a', 70, 30, 300, 500), M('a', 112, 4, 800, 700), A('m', 'jump', 1300)] },
+    hat: { s: [M('a', 62, 44, 0, 400), M('a', 40, 34, 400, 600), A('a', 'wob', 1100), B('m', '😅', 1300)] },
+    flower: { s: [M('a', 62, 44, 0, 500), M('a', 88, 70, 500, 800), A('fl', 'wob', 1400), A('m', 'jump', 1500)] } },
+  rare: { s: [M('a', 112, 30, 0, 700), P('hn', '🍯', 112, 44, 1.1, 800), M('a', 72, 50, 1000, 800), M('hn', 70, 64, 1000, 800), F('✨', 1800), B('m', '😋', 1900)] } },
+
+{ id: 17, w: 'frog', t: 'T', lv: 'new', icon: '🐸', bg: 'pond', say: 'The frog wants to cross the pond. Tell it how!', r: 'Boing! It made it!',
+  kw: ['jump', 'hop', 'swim', 'go'], map: { hop: 'jump' }, opts: [['⬆️', 'jump'], ['🏊', 'swim']],
+  cast: { m: [MARIO, 12, 52, 1.1], r1: ['🪨', 10, 90, 1.3], r2: ['🪨', 90, 90, 1.3], l1: ['🟢', 30, 90, .9], l2: ['🟢', 50, 90, .9], l3: ['🟢', 70, 90, .9], a: ['🐸', 10, 80, 1.2] }, pick: 'word',
+  out: {
+    jump: { s: [M('a', 20, 62, 0, 200), M('a', 30, 82, 200, 200), M('a', 40, 62, 500, 200), M('a', 50, 82, 700, 200), M('a', 60, 62, 1000, 200), M('a', 70, 82, 1200, 200),
+                 M('a', 80, 62, 1500, 200), M('a', 90, 80, 1700, 200), A('a', 'jump', 2000), { at: 0, d: 2800 }] },
+    swim: { s: [M('a', 20, 94, 0, 400), F('💦', 200), M('a', 80, 94, 400, 1400), A('a', 'wob', 600), M('a', 90, 80, 1800, 400), A('a', 'jump', 2200)] },
+    go: { s: [P('tu', '🐢', 12, 96, 1.3), M('a', 12, 88, 300, 300), M('tu', 84, 96, 700, 1500), M('a', 84, 88, 700, 1500), M('a', 90, 80, 2300, 300), A('a', 'jump', 2600)] } },
+  rare: { plus: [{ k: 'a', e: '🤴', at: 300 }, F('✨', 200), B('a', '💖', 600)] } },
+
+{ id: 18, w: 'lion', t: 'T', lv: 'new', icon: '🦁', say: 'Psst! Look behind Mario! Warn him!', r: 'A lion! Thanks, buddy!',
+  kw: ['lion', 'run', 'look', 'hide'], map: { look: 'lion' }, opts: [['🦁', 'lion'], ['🏃', 'run'], ['🙈', 'hide']],
+  cast: { m: [MARIO, 46, 72, 1.3], a: ['🦁', 96, 62, 1.8] }, pre: [M('a', 76, 64, 800, 1500)], pick: 'word',
+  out: {
+    run: { s: [B('m', '❗'), M('m', -12, 72, 200, 600), M('a', 56, 66, 500, 800), B('a', '❓', 1400)] },
+    hide: { s: [P('bk', '🛢️', 20, 74, 1.9), M('m', 20, 58, 200, 500), M('m', 20, 76, 700, 300), X('m', 900), M('a', 46, 66, 600, 900), B('a', '❓', 1600)] },
+    lion: { s: [B('m', '❗'), A('m', 'jump'), P('t', '🌳', 14, 52, 2.6, 200), M('m', 14, 28, 600, 500), M('a', 38, 66, 700, 800), A('t', 'shake', 1600)] } },
+  rare: { s: [M('a', 60, 70, 0, 600), B('a', '💖', 700), A('m', 'wob', 800), F('💖', 1000)] } },
+
+{ id: 19, w: 'giraffe', t: 'X', lv: 'new', icon: '🦒', say: 'Wow, the giraffe is so short!', r: 'Oh! So tall!',
+  kw: ['tall', 'long', 'big'], opts: [['🦒', 'tall']],
+  cast: { a: ['🦒', 64, 64, 1.7] }, pick: 'rand',
+  out: {
+    grow: { s: [Z('a', 5.2, 0, 1200), M('a', 64, 38, 0, 1200), A('m', 'jump', 1200)] },
+    tree: { s: [P('t', '🌴', 90, 40, 3), Z('a', 3.2, 300, 900), M('a', 62, 52, 300, 900), A('t', 'shake', 1300), B('a', '😋', 1500)] },
+    lift: { s: [Z('a', 3, 0, 900), M('a', 52, 56, 0, 900), M('m', 40, 14, 900, 700), B('m', '❗', 1700)] } },
+  rare: { s: [G('night'), Z('a', 4.6, 0, 1200), M('a', 64, 44, 0, 1200), P('mo', '🌙', 40, 12, 1.4, 600), B('mo', '💖', 1500), F('✨', 1400)] } },
+
+{ id: 20, w: 'panda', t: 'C', lv: 'new', icon: '🐼', say: 'The panda is bored. Eat or sleep?',
+  kw: ['eat', 'sleep'], opts: [['🎋', 'eat'], ['💤', 'sleep']], both: true,
+  cast: { a: ['🐼', 62, 60, 2.1], c1: ['🎋', 90, 60, 1.4] }, pick: 'word',
+  out: {
+    eat: { r: 'Crunch, crunch! Hungry panda!', s: [M('c1', 72, 62, 0, 500), A('a', 'shake', 500), B('a', 'CRUNCH!', 600), Z('c1', .7, 900), A('a', 'shake', 1500), B('a', 'CRUNCH!', 1500), Z('c1', .2, 1900)] },
+    sleep: { r: 'Shh… sleepy panda.', s: [R('a', -90), M('a', 62, 70), B('a', '💤', 600), A('a', 'pulse', 1200), F('💨', 1300), M('m', -16, 60, 1400, 700), R('m', -120, 1400), B('a', '💤', 2000)] } },
+  rare: { plus: [A('a', 'spin'), M('a', 22, 74, 0, 900), F('✨', 300)] } },
+
+{ id: 21, w: 'penguin', t: 'C', lv: 'new', icon: '🐧', bg: 'ice', say: 'The penguin wants to play. Slide or swim?', r: 'Whee! Go, penguin!',
+  kw: ['slide', 'swim'], opts: [['🛷', 'slide'], ['🏊', 'swim']], both: true,
+  cast: { a: ['🐧', 42, 56, 1.8], wv: ['🌊', 88, 90, 2] }, pick: 'word',
+  out: {
+    slide: { s: [R('a', 90), M('a', 42, 64, 0, 300), F('✨', 400), M('a', 94, 64, 400, 900), M('a', 32, 64, 1400, 900), A('m', 'jump', 2200), R('a', 0, 2400)] },
+    swim: { s: [M('a', 70, 46, 0, 400), M('a', 88, 88, 400, 500), F('💦', 800), X('a', 900), { k: 'a', o: 1, at: 1700 }, M('a', 80, 68, 1700, 400), P('fi', '🐟', 92, 58, .8, 1800), A('a', 'jump', 2100)] } },
+  rare: { plus: [P('sn', '⛄', 90, 40, 1.5), M('a', 86, 44, 300, 600), R('sn', 80, 900), B('sn', '💫', 1000), F('✨', 900)] } },
+
+{ id: 22, w: 'snake', t: 'X', lv: 'new', icon: '🐍', say: "Oh, a nice rope! I'll take it.", r: 'Yikes! A snake!',
+  kw: ['snake', 'stop'], opts: [['🐍', 'snake'], ['✋', 'stop']],
+  cast: { a: ['🐍', 68, 72, 1.8], h: ['✋', 26, 70, .8] }, pre: [M('m', 30, 74, 600, 1200), M('h', 48, 70, 600, 1200)], pick: 'rand',
+  out: {
+    hiss: { s: [B('a', 'Sssss!'), A('a', 'wob'), X('h', 100), M('m', 8, 74, 300, 300), A('m', 'shake', 700)] },
+    sway: { s: [Z('a', 2.6, 0, 500), M('a', 68, 56, 0, 500), A('a', 'dance', 500), B('a', 'Sssss!', 500), X('h', 300), M('m', -12, 74, 700, 600), { at: 0, d: 2200 }] },
+    away: { s: [X('h', 100), B('a', 'Sssss!'), M('a', 114, 74, 400, 1200), A('m', 'wob', 700), B('m', '😅', 1500)] } },
+  rare: { s: [X('h'), B('a', 'Sssss!'), P('bs', '🧺', 68, 82, 1.8, 300), M('a', 68, 54, 600, 600), A('a', 'dance', 1200), P('nt', '🎵', 86, 36, .9, 1200), M('m', 14, 74, 600, 400), A('m', 'dance', 1400), { at: 0, d: 2800 }] } },
+
+{ id: 23, w: 'mouse / rabbit', t: 'C', lv: 'review', icon: '🐭', say: 'Ready, set… a race! Who is your pick?', r: 'Go, go, go!',
+  kw: ['mouse', 'rabbit'], opts: [['🐭', 'mouse'], ['🐰', 'rabbit']],
+  cast: { m: [MARIO, 10, 22, .9], mouse: ['🐭', 10, 50, 1.1], rabbit: ['🐰', 10, 74, 1.1], fin: ['🏁', 93, 62, 1.6] },
+  // the pick decides who gets the star; win / lose is random (and flips if it would repeat last time); both names → a tie
+  dyn(hits, last) {
+    const Y = { mouse: 50, rabbit: 74 }, go = [A('mouse', 'bounce', 300), A('rabbit', 'bounce', 300)];
+    if (hits.includes('mouse') && hits.includes('rabbit'))
+      return { key: 'tie', s: go.concat([M('mouse', 84, 50, 300, 1600), M('rabbit', 84, 74, 300, 1600), P('tr', '🏆', 84, 62, .9, 1900), F('🎉✨', 1900), { at: 0, d: 2800 }]) };
+    const me = hits[0] || pick(['mouse', 'rabbit']), ot = me === 'mouse' ? 'rabbit' : 'mouse';
+    let win = Math.random() < .5; if (me + (win ? '-win' : '-lose') === last) win = !win;
+    const w = win ? me : ot, l = win ? ot : me;
+    return { key: me + (win ? '-win' : '-lose'), s: go.concat([B(me, '⭐'), M(w, 84, Y[w], 300, 1500), M(l, 60, Y[l], 300, 1900), P('tr', '🏆', 84, Y[w] - 16, .9, 1900), A(w, 'jump', 1900), F(win ? '🎉✨' : '💨', 1900), { at: 0, d: 2800 }]) };
+  },
+  rare: { s: [P('tu', '🐢', 10, 92, 1.1), A('mouse', 'bounce', 300), A('rabbit', 'bounce', 300), M('tu', 86, 92, 300, 1100), M('mouse', 68, 50, 300, 1900), M('rabbit', 62, 74, 300, 1900),
+              P('tr', '🏆', 86, 78, .9, 1500), B('mouse', '❓', 2200), B('rabbit', '❓', 2200), F('🎉✨', 1500)] } },
+
+{ id: 24, w: 'chicken', t: 'R', lv: 'new', icon: '🐓', bg: 'night', say: 'You are the rooster. Everyone is asleep! Wake them up!', r: 'Good morning, everyone!',
+  kw: ['wake', 'morning', 'get up', 'hello'], opts: [['⏰', 'wake'], ['☀️', 'morning']], crib: 'Wake up!',
+  cast: { m: [MARIO, 90, 52, 1], a: ['🐓', 50, 32, 1.6], z1: ['🐷', 22, 78, 1.3], z2: ['🐮', 50, 80, 1.4], z3: ['🐑', 78, 80, 1.3] },
+  pre: [R('z1', -90), R('z2', -90), R('z3', -90), R('m', -90), B('z2', '💤', 500)], pick: 'rand',
+  out: {
+    row: { s: [A('a', 'pulse'), B('a', '🎵'), G('dawn', 300), P('sun', '☀️', 14, 16, 1.4, 400), R('z1', 0, 800), A('z1', 'jump', 900), R('z2', 0, 1300), A('z2', 'jump', 1400),
+                R('z3', 0, 1800), A('z3', 'jump', 1900), R('m', 0, 2300), A('m', 'jump', 2400), { at: 0, d: 3200 }] },
+    all: { s: [A('a', 'pulse'), B('a', '🎵'), G('dawn', 300), R('z1', 0, 500), R('z2', 0, 500), R('z3', 0, 500), R('m', 0, 500), M('z1', 22, 50, 500, 300), M('z2', 50, 54, 500, 300), M('z3', 78, 52, 500, 300),
+                B('z2', '❗', 600), M('z1', 22, 78, 900, 300), M('z2', 50, 80, 900, 300), M('z3', 78, 80, 900, 300), P('sun', '☀️', 14, 16, 1.4, 1000), A('m', 'jump', 1000)] },
+    bed: { s: [A('a', 'pulse'), B('a', '🎵'), G('dawn', 300), P('sun', '☀️', 14, 16, 1.4, 400), R('z1', 0, 700), R('z2', 0, 900), R('z3', 0, 1100), A('z2', 'wob', 1000),
+                M('m', 90, 84, 1300, 300), R('m', -180, 1300), B('m', '💫', 1700), R('m', 0, 2300), A('m', 'jump', 2500), { at: 0, d: 3200 }] } },
+  rare: { s: [P('ow', '🦉', 84, 18, 1.2), A('a', 'pulse'), B('a', '🎵'), G('dawn', 300), P('sun', '☀️', 14, 16, 1.4, 400), R('z1', 0, 800), A('z1', 'jump', 900), R('z2', 0, 1100), A('z2', 'jump', 1200),
+              R('z3', 0, 1400), A('z3', 'jump', 1500), R('m', 0, 1700), R('ow', -90, 2100), B('ow', '💤', 2300), { at: 0, d: 3200 }] } },
+
+{ id: 25, w: 'I like ___.', t: 'R', lv: 'new', icon: '💖', say: 'I like pigs! And you?', r: 'Me too! I like them!',
+  kwOf: 'animal', opts: [['🐶', 'dog'], ['🐱', 'cat'], ['🐰', 'rabbit']], crib: 'I like ___.',
+  cast: { pg: ['🐷', 32, 80, 1], ht: ['💖', 24, 56, .6] },
+  dyn(hits) {                           // the animal the child named walks on stage for a hug
+    const an = hits[0] || pick(['dog', 'cat', 'rabbit', 'panda']);
+    return { key: an, s: [P('x', ANIMALS[an], 112, 66, 1.9), M('x', 34, 68, 200, 1000), B('x', '💖', 1300), A('m', 'wob', 1300), F('💖', 1400)] };
+  },
+  rare: { plus: [Z('x', 3.2, 0, 800), F('💖', 300), A('m', 'jump', 800)] } },
+
+{ id: 26, w: 'cat', t: 'C', lv: 'review', icon: '🎨', say: "Let's paint the cat! What color?",
+  kwOf: 'color', opts: [['🔴', 'red'], ['🔵', 'blue'], ['🟢', 'green']], rareKey: 'rainbow',
+  cast: { a: ['🐱', 62, 56, 2.2], br: ['🖌️', 36, 70, 1], pa: ['🎨', 88, 86, 1.2] },
+  dyn(hits) {                           // the cat turns the colour the child said
+    const c = hits[0] || pick(['red', 'blue', 'green', 'pink']);
+    const dab = [M('br', 62, 46, 0, 500), A('br', 'shake', 500), M('br', 36, 70, 1500, 500)];
+    if (c === 'rainbow') return { key: c, r: 'A rainbow cat! Cool!', s: dab.concat([A('a', 'rainbow', 800), F('✨', 900), { at: 0, d: 2600 }]) };
+    return { key: c, r: 'A ' + c + ' cat! Cool!', s: dab.concat([FL('a', COLORS[c][1], 800), B('a', COLORS[c][0], 900), A('a', 'jump', 1200)]) };
+  },
+  rare: { r: 'A rainbow cat! Cool!', s: [M('br', 62, 46, 0, 500), A('br', 'shake', 500), M('br', 36, 70, 1500, 500), A('a', 'rainbow', 800), F('✨', 900), { at: 0, d: 2600 }] } },
+
+{ id: 27, w: 'parrot', t: 'T', lv: 'new', icon: '🦜', say: 'This parrot copies you. Say anything!',
+  any: true, kw: [], opts: [['👋', 'hello']],
+  cast: { a: ['🦜', 62, 52, 2.1] },
+  dyn(hits, last, heard) {              // any non-empty transcript passes; the parrot says it back in a squeaky voice (audio only)
+    const mv = pick(['dance', 'spin', 'bounce'].filter(k => k !== last));
+    return { key: mv, echo: heard[0] || 'Hello! Hello!', s: [A('a', mv), B('a', '🎵', 200), { at: 0, d: 1000 }] };
+  },
+  rare: { plus: [P('p2', '🦜', 88, 36, 1.3), A('p2', 'dance', 300), B('p2', '🎵', 500), F('✨', 300)] } },
+
+{ id: 28, w: 'egg', t: 'E', lv: 'new', icon: '🥚', say: 'A giant egg! Tell it to open!', r: 'Surprise!',
+  kw: ['open', 'hello', 'come out', 'egg'], opts: [['🥚', 'egg'], ['🔓', 'open']],
+  cast: { a: ['🥚', 60, 58, 2.8] }, pick: 'rand',
+  out: {
+    chick: { s: [A('a', 'shake'), { k: 'a', e: '🐣', at: 1100 }, F('✨', 1100), A('a', 'jump', 1200)] },
+    dino: { s: [A('a', 'shake'), { k: 'a', e: '🦖', at: 1100 }, A('a', 'pulse', 1200), B('a', 'ROAR!', 1400), M('m', 4, 74, 1400, 300)] },
+    turtle: { s: [A('a', 'shake'), { k: 'a', e: '🐢', at: 1100 }, Z('a', 1.5, 1100), M('a', 90, 72, 1600, 1500)] } },
+  rare: { s: [A('a', 'shake'), { k: 'a', e: MARIO, at: 1100 }, Z('a', .8, 1100), F('🎉✨', 1200), A('a', 'dance', 1300), B('m', '❓', 1500), { at: 0, d: 2600 }] } },
+
+{ id: 29, w: 'party', t: 'E', lv: 'new', icon: '🎉', bg: 'party', say: 'Party time! Call any animal!', r: 'Welcome to the party!',
+  kwOf: 'animal', waitAll: true, opts: [['🐶', 'dog'], ['🐱', 'cat'], ['🐷', 'pig']],
+  cast: { ba: ['🎈', 12, 20, 1.2], ck: ['🎂', 90, 86, 1.2] },
+  dyn(hits) {                           // every animal named comes in and joins the dancing line
+    const list = (hits.length ? hits : [pick(['dog', 'cat', 'pig'])]).slice(0, 5), s = [F('🎉✨'), A('m', 'dance', 600)];
+    list.forEach((an, i) => s.push(P('g' + i, ANIMALS[an], 112, 62, 1.4, i * 350), M('g' + i, 32 + i * 13, 60 + (i % 2) * 10, i * 350 + 100, 800), A('g' + i, 'dance', i * 350 + 900)));
+    s.push({ at: 0, d: list.length * 350 + 2200 });
+    return { key: list.join('+'), s };
+  },
+  rare: { plus: [P('fw', '🎆', 50, 18, 1.8), F('🎉✨', 300), P('e1', '🐘', 20, 36, 1.2, 300), P('e2', '🦒', 80, 34, 1.2, 500), A('e1', 'dance', 600), A('e2', 'dance', 800), { at: 0, d: 2400 }] } },
+
+{ id: 30, w: 'Goodbye', t: 'R', lv: 'new', icon: '👋', say: 'Time to go home. Say goodbye to the animals!', r: 'Goodbye! See you tomorrow!',
+  kw: ['bye', 'goodbye', 'see you'], opts: [['👋', 'bye']], crib: 'Goodbye!',
+  cast: { z1: ['🐶', 34, 62, 1.3], z2: ['🐱', 52, 70, 1.3], z3: ['🐷', 70, 62, 1.3], z4: ['🐰', 88, 70, 1.2] }, pick: 'rand',
+  out: {
+    wave: { s: [P('w1', '👋', 34, 44, .8), P('w2', '👋', 52, 52, .8, 200), P('w3', '👋', 70, 44, .8, 400), P('w4', '👋', 88, 52, .8, 600),
+                 A('w1', 'wave', 500), A('w2', 'wave', 700), A('w3', 'wave', 900), A('w4', 'wave', 1100), A('m', 'wave', 600), { at: 0, d: 2800 }] },
+    walk: { s: [B('z4', '👋'), M('z4', 116, 70, 300, 700), B('z3', '👋', 500), M('z3', 116, 62, 800, 800), B('z2', '👋', 1000), M('z2', 116, 70, 1300, 900), B('z1', '👋', 1500), M('z1', 116, 62, 1800, 1000), A('m', 'wave', 800)] },
+    moon: { s: [G('night', 300), P('mo', '🌙', 16, 16, 1.3, 500), P('st', '⭐', 80, 14, .8, 800), B('z1', '👋', 900), B('z2', '👋', 1100), B('z3', '👋', 1300), B('z4', '👋', 1500),
+                 A('z1', 'jump', 900), A('z3', 'jump', 1300), A('m', 'wave', 1000), { at: 0, d: 2800 }] } },
+  rare: { s: [G('night'), F('🎆🎇✨', 300), P('f1', '🎆', 30, 22, 1.8, 400), P('f2', '🎇', 70, 18, 1.8, 900), F('🎆🎇✨', 1300), B('z1', '👋', 600), B('z2', '👋', 900), B('z3', '👋', 1200), B('z4', '👋', 1500),
+              A('m', 'wave', 1000), { at: 0, d: 3200 }] } }
+];
+
+// word lists for the "any animal" / "any colour" cards
+const ANIMALS = { dog: '🐶', cat: '🐱', pig: '🐷', rabbit: '🐰', bird: '🐦', fish: '🐟', elephant: '🐘', monkey: '🐵', tiger: '🐯', bear: '🐻', duck: '🦆', horse: '🐴',
+  cow: '🐮', sheep: '🐑', butterfly: '🦋', bee: '🐝', frog: '🐸', lion: '🦁', giraffe: '🦒', panda: '🐼', penguin: '🐧', snake: '🐍', mouse: '🐭', chicken: '🐔', parrot: '🦜',
+  turtle: '🐢', dinosaur: '🦖', zebra: '🦓', fox: '🦊', whale: '🐳', dolphin: '🐬', shark: '🦈', wolf: '🐺', koala: '🐨', owl: '🦉', goat: '🐐', dragon: '🐉', unicorn: '🦄',
+  kangaroo: '🦘', crocodile: '🐊', hippo: '🦛', spider: '🕷️', snail: '🐌', octopus: '🐙', crab: '🦀', rooster: '🐓' };
+// colour → [dot shown in the bubble, css filter that tints the cat emoji]
+const tint = (h, sat, br) => 'sepia(1) saturate(' + sat + ') hue-rotate(' + h + 'deg) brightness(' + (br || 1) + ')';
+const COLORS = { red: ['🔴', tint(-45, 9)], orange: ['🟠', tint(-15, 9)], yellow: ['🟡', tint(10, 9, 1.2)], green: ['🟢', tint(60, 7)], blue: ['🔵', tint(170, 9)],
+  purple: ['🟣', tint(220, 8)], pink: ['🌸', tint(280, 6, 1.25)], black: ['⚫', 'grayscale(1) brightness(.3)'], white: ['⚪', 'grayscale(1) brightness(1.7)'],
+  brown: ['🟤', 'sepia(1) saturate(3) brightness(.6)'], gray: ['⚪', 'grayscale(1)'], grey: ['⚪', 'grayscale(1)'], rainbow: ['🌈', ''] };
+CARDS.forEach(c => { if (c.kwOf) c.kw = Object.keys(c.kwOf === 'animal' ? ANIMALS : COLORS); });
+
+// card 13 fallback from the review (flip after the probe if "moo" is not recognised)
+const USE_COW_ALT = false;
+const byId = {}; CARDS.forEach(c => byId[c.id] = c);
+if (USE_COW_ALT) Object.assign(byId[13], byId[13].alt);
+
+/* =====================================================================
+   GAME — state machine
+   home → (startRound) → busy:prompt → ready → listen → A: result → next
+                                         ↑        ├ B: hint ladder ─┘ (back to ready)
+                                         └────────┴ C: re-read prompt
+   Every await is followed by a `gen` check, so exiting mid-card can never
+   leave a stale callback running.
+   ===================================================================== */
+const game = { gen: 0, state: 'home', deck: [], i: 0, card: null, miss: 0, sil: 0, t0: 0, spoke: 0, got: [] };
+const mic = $('mic'), again = $('again'), hintEl = $('hint'), keysEl = $('keys'), heardBtn = $('heard'), statusEl = $('status');
+function setPhase(phase) {
+  mic.classList.remove('ready', 'live', 'wait');
+  let label = '', micLabel = 'Talk', cls = phase || '';
+  if (phase === 'wait') { mic.classList.add('wait'); label = 'Listen…'; micLabel = 'Wait'; }
+  else if (phase === 'ready' && micOK) { mic.classList.add('ready'); label = 'Your turn!'; micLabel = 'Your turn. Tap to talk'; }
+  else if (phase === 'ready') { mic.classList.add('wait'); cls = 'ask'; label = 'Ask a grown-up!'; micLabel = 'Mic is off'; }
+  else if (phase === 'live') { mic.classList.add('live'); label = 'Listening…'; micLabel = 'Listening. Tap to stop'; }
+  else if (phase === 'hear') { mic.classList.add('live'); label = 'I hear you!'; micLabel = 'Listening. Tap to stop'; }
+  else if (phase === 'yay') { mic.classList.add('wait'); cls = 'ready'; label = 'Yay!'; }
+  statusEl.className = cls;
+  statusEl.textContent = label;
+  mic.setAttribute('aria-label', micLabel);
+}
+const show = id => document.querySelectorAll('.scr').forEach(s => s.classList.toggle('on', s.id === id));
+const showKeys = on => keysEl.classList.toggle('on', on !== false);
+const passes = (card, heard) => card.any ? heard.length > 0 : findKws(heard, card.kw, WHITELIST[card.id]).length > 0;
+const lead = () => ['a', 'b', 'b1', 's1', 'mouse', 'pg', 'z1', 'm'].find(k => actors[k]);   // the actor that reacts to a miss
+
+// ---- deck: T 3–4, C 2–3, X 2, R 1; no 3 of a type in a row; E ~15%; card 30 always last ----
+function drawDeck() {
+  // least-passed cards first (with jitter); a skipped card was never counted, so it stays in the pool
+  const take = (t, n) => CARDS.filter(c => c.t === t && c.id !== 30)
+    .map(c => [c, (prog.plays[c.id] || 0) + Math.random() * 1.5]).sort((a, b) => a[1] - b[1]).slice(0, n).map(x => x[0]);
+  let deck = [].concat(take('T', 3 + rnd(2)), take('C', 2 + rnd(2)), take('X', 2), take('R', 1));
+  const ok = d => !d.some((c, i) => i > 1 && c.t === d[i - 1].t && c.t === d[i - 2].t);
+  for (let n = 0; n < 200; n++) { deck = shuffle(deck); if (ok(deck)) break; }
+  if (Math.random() < 0.15) deck.splice(1 + rnd(deck.length - 1), 0, take('E', 1)[0]);
+  deck.push(byId[30]);
+  return deck;
+}
+function renderDots() {
+  $('dots').innerHTML = game.deck.map((c, i) => '<i class="' + (i < game.i ? 'done' : '') + '"></i>').join('');
+}
+
+function startRound() {
+  unlockTTS();
+  primeMic();                       // permission prompt on this tap, before the first card
+  game.gen++; clearTimers();
+  Object.assign(game, { deck: drawDeck(), i: 0, spoke: 0, got: [] });
+  show('play'); nextCard();
+}
+function nextCard() {
+  if (game.i >= game.deck.length) return endRound();
+  const card = game.card = game.deck[game.i];
+  game.miss = 0; game.sil = 0;
+  hintEl.innerHTML = ''; showKeys(false); renderDots();
+  setStage(card);
+  if (card.pre) playSteps(card.pre);         // staging that happens while Mario talks
+  sayPrompt(true);
+}
+// Mario reads the prompt; the mic only becomes available after TTS has finished
+async function sayPrompt(fresh) {
+  const gen = game.gen;
+  game.state = 'busy'; mic.disabled = again.disabled = true;
+  setPhase('wait');
+  anim('m', 'talk');
+  await speak(game.card.say);
+  if (gen !== game.gen) return;
+  ready(fresh);
+}
+function ready(fresh) {
+  game.state = 'ready';
+  if (fresh) game.t0 = Date.now();
+  if (actors.m && actors.m.firstChild) actors.m.firstChild.className = 'in';
+  mic.disabled = !micOK; again.disabled = false;
+  setPhase('ready');
+  if (!micOK) showKeys();                    // no microphone: the whole round runs on parent confirm
+}
+
+// ---- mic: one tap starts, silence ends (a second tap also ends) ----
+mic.onclick = async () => {
+  if (game.state === 'listen') return stopRec();
+  if (game.state !== 'ready' || !micOK) return;
+  const gen = game.gen, card = game.card;
+  game.state = 'listen'; setPhase('live'); again.disabled = true; hush(); showCap('');
+  const { heard, err } = await listen(h => passes(card, h), card.waitAll || card.any, () => {
+    if (gen === game.gen) setPhase('hear');
+  });
+  if (gen !== game.gen) return;
+  const ms = Date.now() - game.t0;
+  if (err && err !== 'no-speech' && err !== 'aborted' && !heard.length) {      // recogniser broken / blocked → degrade, never dead-end
+    if (err === 'not-allowed' || err === 'service-not-allowed') { micOK = false; micReason = 'denied'; }
+    else if (err !== 'network') { micOK = false; micReason = 'failed'; }
+    else micReason = 'failed';
+    logTry(card.id, 'C', [], ms, 'err:' + err);
+    showKeys(); return ready();
+  }
+  if (!heard.length) return tierC(card, ms);
+  if (passes(card, heard)) return pass(card, heard, 'A', ms);
+  tierB(card, heard, ms);
+};
+again.onclick = () => { if (game.state === 'ready') sayPrompt(false); };
+
+// C — silence: not counted; the 5 s wait already happened inside listen(), so just re-read the prompt
+function tierC(card, ms) {
+  logTry(card.id, 'C', [], ms, '');
+  if (++game.sil >= 3) showKeys();           // safety net so a silent child is never stuck (see BUILD-NOTES)
+  sayPrompt(false);
+}
+// B — spoke but no keyword: 1) light reaction 2) icons + one demo word 3) the two keys
+async function tierB(card, heard, ms) {
+  const gen = game.gen; game.miss++; game.state = 'busy'; mic.disabled = true; setPhase('wait');
+  logTry(card.id, 'B', heard, ms, '');
+  anim(lead(), 'wob'); anim('m', 'talk');
+  if (game.miss === 2) {
+    const d = pick(card.opts);
+    hintEl.innerHTML = '';
+    card.opts.forEach(o => {
+      const el = document.createElement('span'); el.className = 'ic' + (o === d ? ' demo' : ''); el.textContent = o[0];
+      if (o[2]) el.style.fontSize = 36 * o[2] + 'px';
+      hintEl.appendChild(el);
+    });
+    let demo = d[1];
+    if (card.crib) {                         // R cards: the crib line appears only now, as the 2nd hint
+      const el = document.createElement('span'); el.className = 'crib'; el.textContent = card.crib; hintEl.appendChild(el);
+      demo = card.crib.replace('___.', d[1] + 's!');
+    }
+    await speak('You can say: ' + demo);
+  } else {
+    if (game.miss >= 3) showKeys();
+    const justNo = card.t === 'X' && norm(heard[0]).includes('no');           // X cards: "no" alone is not enough
+    await speak(justNo ? 'No? Tell me!' : 'Hmm?');
+  }
+  if (gen !== game.gen) return;
+  ready();
+}
+
+// ---- outcome: by the child's word, or random without repeating last time; ~10% rare ----
+function choose(card, hits, heard) {
+  const last = prog.last[card.id];
+  let key, parts, r = card.r, rare = false, echo = '';
+  if (card.dyn) {
+    const o = card.dyn(hits, last, heard);
+    key = o.key; parts = [o.s]; r = o.r || r; echo = o.echo || '';
+  } else {
+    const ks = [];
+    if (card.pick === 'word') hits.forEach(h => { const k = (card.map && card.map[h]) || h; if (card.out[k] && !ks.includes(k)) ks.push(k); });
+    if (ks.length > 1 && card.out.both) key = 'both';
+    else if (ks.length > 1 && card.both) key = ks[0] + '+' + ks[1];
+    else if (ks.length) key = ks[0];
+    else {                                   // random card, or parent confirm on a word card
+      const all = Object.keys(card.out).filter(k => k !== card.rareKey), pool = all.filter(k => k !== last);
+      key = pick(pool.length ? pool : all);
+    }
+    const seq = key.split('+').filter(k => card.out[k]);
+    parts = seq.map(k => card.out[k].s);
+    r = card.out[seq[seq.length - 1]].r || r;
+  }
+  if (card.rareKey === key) rare = true;
+  let plus = null;
+  if (!rare && card.rare && Math.random() < 0.1) {
+    rare = true;
+    if (card.rare.plus) plus = card.rare.plus;
+    else { parts = [card.rare.s]; r = card.rare.r || r; key = 'rare'; }
+  }
+  return { key, parts, plus, r, rare, echo };
+}
+
+// ---- A tier or parent confirm: full result animation → reply → sticker → next ----
+async function pass(card, heard, via, ms) {
+  const gen = game.gen;
+  game.state = 'busy'; mic.disabled = again.disabled = true; setPhase('yay');
+  hintEl.innerHTML = ''; showKeys(false); showCap('');
+  const o = choose(card, via === 'A' ? findKws(heard, card.kw, WHITELIST[card.id]) : [], heard);
+  logTry(card.id, via, heard, ms, o.key + (o.rare ? '*' : ''));
+  const isNew = !prog.st[card.id];
+  prog.last[card.id] = o.key;
+  prog.plays[card.id] = (prog.plays[card.id] || 0) + 1;
+  prog.st[card.id] = Math.max(prog.st[card.id] || 0, o.rare ? 2 : 1);
+  saveProg();
+  game.spoke++; game.got.push({ icon: card.icon, isNew, shiny: o.rare });
+
+  for (let i = 0; i < o.parts.length; i++) {
+    if (i) setStage(card);                   // "both": second outcome starts from a fresh stage
+    await playSteps(o.parts[i]);
+    if (gen !== game.gen) return;
+  }
+  if (o.plus) { await playSteps(o.plus); if (gen !== game.gen) return; }
+  if (o.echo) { anim('a', 'talk'); await speak(o.echo, { pitch: 1.9, rate: 1.05 }); }   // parrot card
+  else { anim('m', 'talk'); await speak(o.r); }
+  if (gen !== game.gen) return;
+  await flySticker(card, o.rare);
+  if (gen !== game.gen) return;
+  game.i++; nextCard();
+}
+async function flySticker(card, shiny) {
+  const f = $('fly'), a = stage.getBoundingClientRect(), b = $('bookIco').getBoundingClientRect();
+  f.textContent = card.icon + (shiny ? '✨' : '');
+  f.style.cssText = 'display:block;transition:none;opacity:1;transform:scale(1.5);left:' + (a.left + a.width / 2 - 32) + 'px;top:' + (a.top + a.height / 2 - 32) + 'px';
+  await sleep(450);
+  f.style.transition = 'left .7s ease-in,top .7s ease-in,transform .7s ease-in,opacity .2s linear .55s';
+  f.style.left = b.left + 'px'; f.style.top = b.top + 'px'; f.style.transform = 'scale(.4)'; f.style.opacity = '0';
+  await sleep(800);
+  f.style.display = 'none';
+}
+
+// ---- the two fallback keys ----
+// child's Skip: no result, no sticker, card goes back to the pool, nothing recorded as a failure
+$('skip').onclick = () => {
+  if (game.state !== 'ready') return;
+  logTry(game.card.id, 'skip', [], Date.now() - game.t0, '');
+  game.i++; nextCard();
+};
+// grown-up holds 1 s: counts as a pass, logged as "parent"
+let holdT = 0;
+const holdEnd = () => { clearTimeout(holdT); holdT = 0; heardBtn.classList.remove('hold'); };
+heardBtn.addEventListener('pointerdown', ev => {
+  ev.preventDefault();
+  if (game.state !== 'ready' || holdT) return;
+  try { heardBtn.setPointerCapture(ev.pointerId); } catch (e) {}   // a small finger drift must not cancel the 1 s hold
+  heardBtn.classList.add('hold');
+  holdT = setTimeout(() => { holdEnd(); if (game.state === 'ready') pass(game.card, [], 'parent', Date.now() - game.t0); }, 1000);
+});
+document.addEventListener('pointerup', holdEnd);
+document.addEventListener('pointercancel', holdEnd);
+document.addEventListener('contextmenu', ev => {
+  const t = ev.target;
+  if (t && t.closest && t.closest('textarea, #parent')) return;   // parent log still needs long-press copy
+  ev.preventDefault();
+});
+
+// ---- leaving / ending ----
+function stopAll() { game.gen++; holdEnd(); clearTimers(); stopRec(); hush(); showCap(''); $('fly').style.display = 'none'; }
+function endRound() {
+  stopAll(); game.state = 'end';
+  $('nSpoke').textContent = game.spoke;      // A tier + parent confirm only
+  $('nStick').textContent = game.got.length;
+  $('endRow').innerHTML = '';
+  game.got.forEach(g => { const s = document.createElement('span'); s.textContent = g.icon + (g.shiny ? '✨' : ''); if (g.isNew || g.shiny) s.className = 'new'; $('endRow').appendChild(s); });
+  show('end');
+  speak('Great job!');
+}
+function showHomeMic() {
+  const el = $('nomic');
+  if (micOK) { el.style.display = 'none'; return; }
+  el.style.display = 'block';
+  el.textContent = micReason === 'denied' ? 'The mic is off. Ask a grown-up!' : "This phone can't hear yet. Play with a grown-up!";
+}
+function parentMicText() {
+  if (!SR || micReason === 'nosr') return '这个浏览器不能语音识别。请用 iPhone 自带的 Safari 打开。在微信里点右上角，选「在 Safari 中打开」。';
+  if (!micOK || micReason === 'denied') return '麦克风或听写没开。到 iPhone「设置 → Safari → 麦克风」选允许。还不行就打开「设置 → 通用 → 键盘 → 启用听写」，然后重新打开本页。';
+  if (micReason === 'failed') return '刚才没听成。可以再开一局。如果还是不行，孩子说完后按住绿色「Hold: I heard it」一秒钟，算通过。';
+  return '听写可用。手机没听出来时，按住绿色按钮一秒钟，记为家长确认，算通过。跳过不算失败。';
+}
+function goHome() { stopAll(); game.state = 'home'; showHomeMic(); show('home'); }
+$('exit').onclick = () => (game.spoke ? endRound() : goHome());
+$('start').onclick = $('replay').onclick = startRound;
+$('toHome').onclick = $('closeBook').onclick = goHome;
+
+// ---- sticker book: lit / unlit / shiny, no numbers ----
+$('openBook').onclick = () => {
+  $('grid').innerHTML = '';
+  let n = 0, shiny = 0;
+  CARDS.forEach(c => {
+    const d = document.createElement('div'); d.textContent = c.icon;
+    d.className = prog.st[c.id] === 2 ? 'lit shiny' : prog.st[c.id] ? 'lit' : '';
+    if (prog.st[c.id]) n++; if (prog.st[c.id] === 2) shiny++;
+    $('grid').appendChild(d);
+  });
+  $('bookCount').textContent = n ? (n + ' / ' + CARDS.length + (shiny ? '  ·  ' + shiny + ' shiny' : '')) : 'Play to earn stickers!';
+  show('book');
+};
+
+// ---- parent menu (second level): reset progress, copy log ----
+const pmsg = $('pmsg'), pText = $('pText');
+$('gear').onclick = () => { pmsg.textContent = ''; pText.style.display = 'none'; $('pMic').textContent = parentMicText(); $('parent').classList.add('on'); };
+$('pClose').onclick = () => $('parent').classList.remove('on');
+$('pReset').onclick = () => {
+  if (!window.confirm('清空全部贴纸和进度？（日志保留）')) return;
+  prog = { st: {}, last: {}, plays: {} }; saveProg(); pmsg.textContent = '已重置。';
+};
+$('pCopy').onclick = async () => {
+  const t = logText(), n = t.split('\n').length - 1;
+  let ok = false;
+  try { await navigator.clipboard.writeText(t); ok = true; } catch (e) {}
+  pText.value = t; pText.style.display = 'block';
+  if (!ok) { try { pText.focus(); pText.select(); ok = document.execCommand('copy'); } catch (e) {} }
+  pmsg.textContent = ok ? '已复制 ' + n + ' 条日志。' : '自动复制失败，请长按下方文本框全选复制（共 ' + n + ' 条）。';
+};
+
+// ---- boot ----
+window.addEventListener('resize', fitStage);
+document.addEventListener('visibilitychange', () => { if (document.hidden) { stopRec(); hush(); } });
+showHomeMic();
+</script>
+</body>
+</html>
