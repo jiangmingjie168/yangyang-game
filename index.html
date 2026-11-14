@@ -630,7 +630,7 @@
   <canvas id="view" width="800" height="400"></canvas>
   <div id="hud">
     <span id="hunger-hint" hidden></span>
-    <span id="build-version" aria-label="Build version">build cd91b62+mc-door</span>
+    <span id="build-version" aria-label="Build version">build cd91b62+mc-lot</span>
     <div class="topbar">
       <button id="quest" type="button">
         <canvas id="quest-icon" width="128" height="128"></canvas>
@@ -2216,10 +2216,21 @@ function validConversation(value, p) {
   function craftableAt(x,y){return buildObjects.find(function(b){return x>=b.x&&x<b.x+b.w&&y>=b.y&&y<b.y+b.h;});}
   function craftableCells(b){var a=[];for(var y=Math.floor(b.y);y<Math.ceil(b.y+b.h);y++)for(var x=Math.floor(b.x);x<Math.ceil(b.x+b.w);x++)a.push(idx(x,y));return a;}
   function craftableRegion(b){return {building:b,inside:[],members:craftableCells(b),ready:!b.shown&&!b.autoOffered,near:true};}
+  function homesteadOpen() {
+    var x0 = origin + 8, i, b;
+    for (i = 0; i < buildObjects.length; i++) {
+      b = buildObjects[i];
+      if (b.kind === 'house' && b.x < x0 + 3 && b.x + b.w > x0) return false;
+    }
+    return true;
+  }
   function craftableTarget(item,x,y) {
     var d=CRAFTABLES[item];
-    // The clicked empty cell is the lower-left anchor; tapping ground uses its top.
-    if([GRASS,DIRT,SAND,STONE].includes(get(x,y))&&!buildOwned(x,y)){var floorY=y;while(floorY>1&&y-floorY<3&&[GRASS,DIRT,SAND,STONE].includes(get(x,floorY-1)))floorY--;y=floorY-1;}
+    // Near home, a free lot takes the house. A house already there leaves other ground open.
+    if (item === 'houseKit' && Math.abs(x - (origin + 9)) <= 6 && homesteadOpen()) {
+      x = origin + 8;
+      y = GROUND - 1;
+    } else if([GRASS,DIRT,SAND,STONE].includes(get(x,y))&&!buildOwned(x,y)){var floorY=y;while(floorY>1&&y-floorY<3&&[GRASS,DIRT,SAND,STONE].includes(get(x,floorY-1)))floorY--;y=floorY-1;}
     else if(solid(get(x,y)))y--;
     var r={x:x,y:y-d.h+1,w:d.w,h:d.h,ok:false};
     if(!(inv[item]>0)){r.reason='stock';return r;}
@@ -2229,6 +2240,12 @@ function validConversation(value, p) {
     var supports=0;
     for(var xx=x;xx<x+d.w;xx++){var floor=get(xx,y+1);if(solid(floor)&&![WOOD,LEAVES,FENCE,DOOR].includes(floor))supports++;else if(item==='car'){r.reason=floor===WATER?'water':'ground';return r;}}
     if(!supports){r.reason='ground';return r;}
+    if (item === 'houseKit') {
+      for (var hx = x; hx < x + d.w; hx++) {
+        var soil = get(hx, y + 1);
+        if (soil !== GRASS && soil !== DIRT && soil !== SAND) { r.reason = 'yard'; return r; }
+      }
+    }
     r.ok=true;return r;
   }
   function placeCraftable(item,r) {
@@ -2743,7 +2760,7 @@ function validConversation(value, p) {
   }
   function placementFailure(x,y,reason,block) {
     if(block)buildSession.blockHint={x:block.x,y:block.y,until:chatClock+.8};
-    var lines={tree:'A tree is in the way!',rock:'A rock is in the way!',building:'A building is in the way!',water:'Choose dry land!',fence:'A fence is in the way!',flower:'A flower is in the way!',block:'A block is in the way!',space:'Find a clear '+(CRAFTABLES[buildTool]?CRAFTABLES[buildTool].w+' by '+CRAFTABLES[buildTool].h:'')+' space!',ground:'Choose flat ground!',limit:'Remove a building first!',reach:'Move a little closer!',sight:'Move around the wall!',owned:'Tap a block you built!',occupied:'Choose empty squares!',animal:'Choose empty squares!',full:'Use some materials first!'};
+    var lines={tree:'A tree is in the way!',rock:'A rock is in the way!',building:'A building is in the way!',water:'Choose dry land!',fence:'A fence is in the way!',flower:'A flower is in the way!',block:'A block is in the way!',space:'Find a clear '+(CRAFTABLES[buildTool]?CRAFTABLES[buildTool].w+' by '+CRAFTABLES[buildTool].h:'')+' space!',ground:'Choose flat ground!',yard:'The house goes on empty ground!',limit:'Remove a building first!',reach:'Move a little closer!',sight:'Move around the wall!',owned:'Tap a block you built!',occupied:'Choose empty squares!',animal:'Choose empty squares!',full:'Use some materials first!'};
     document.getElementById('toast').style.visibility='';showToast(lines[reason]||'Choose empty squares!',1.5);
     logBuildResult(x,y,'fail:'+reason+(block?'@('+block.x+','+block.y+')':''));
   }
@@ -3967,7 +3984,7 @@ function validConversation(value, p) {
       if (base[idx(ax + 2, sy + 2)] === STONE) base[idx(ax + 2, sy + 2)] = DIRT;
       return true;
     }
-    var anchors = [origin + 24, origin + 32, origin - 18, origin + 78, 14, W - 28];
+    var anchors = [origin + 42, origin - 18, origin + 78, 14, W - 28];
     var ai;
     for (ai = 0; ai < anchors.length && made < 2; ai++) {
       if (anchors[ai] < 3 || anchors[ai] > W - 10) continue;
@@ -3987,13 +4004,8 @@ function validConversation(value, p) {
     for (x = p0 - 3; x < p0; x++) fillLand(x, GROUND, SAND);
     for (x = p0; x <= Math.min(W - 3, p0 + 12); x++) fillPond(x, GROUND);
     for (x = p0 + 13; x <= Math.min(W - 3, p0 + 18); x++) fillLand(x, GROUND, GRASS);
-    plantTree(origin + 17, GROUND);
+    plantTree(origin + 28, GROUND);
     plantTree(origin + 36, GROUND);
-    if (base[idx(origin + 14, GROUND - 1)] === AIR) base[idx(origin + 14, GROUND - 1)] = STONE;
-    [3, 6, 10, 21, 27, 33, 41].forEach(function (dx) {
-      var fx = origin + dx;
-      if (fx > 1 && fx < W - 1 && base[idx(fx, GROUND - 1)] === AIR) base[idx(fx, GROUND - 1)] = FLOWER;
-    });
     ramp(left, -1, GROUND);
     ramp(Math.min(W - 4, p0 + 18), 1, GROUND);
     for (x = 8; x < W - 8; x += 17) {
@@ -4002,8 +4014,13 @@ function validConversation(value, p) {
       var h = surfaceAt(x);
       fillPond(x, h); fillPond(x + 1, h); fillPond(x + 2, h);
     }
-    // Guaranteed clear, level 5-column pad beside spawn; saved modifications still apply.
-    for(x=origin+6;x<=origin+10;x++)fillLand(x,GROUND,GRASS);
+    // Level grass for a 3-wide house, with four tiles of open yard on each side.
+    for (x = origin + 4; x <= origin + 14; x++) fillLand(x, GROUND, GRASS);
+    if (base[idx(origin + 16, GROUND - 1)] === AIR) base[idx(origin + 16, GROUND - 1)] = STONE;
+    [2, 20, 23, 33, 41].forEach(function (dx) {
+      var fx = origin + dx;
+      if (fx > 1 && fx < W - 1 && base[idx(fx, GROUND - 1)] === AIR) base[idx(fx, GROUND - 1)] = FLOWER;
+    });
     carvePockets();
     cells = new Uint8Array(base);
     knockUntil = {};
@@ -4012,11 +4029,11 @@ function validConversation(value, p) {
     buildSupplies();
     animals = [];
     addAnimal('dog', origin + 1);
-    addAnimal('sheep', origin + 4);
-    addAnimal('cow', origin + 11);
+    addAnimal('sheep', origin + 2);
+    addAnimal('cow', origin + 18);
     addAnimal('cat', origin + 24);
-    addAnimal('chicken', origin + 28);
-    addAnimal('rabbit', origin + 19);
+    addAnimal('chicken', origin + 32);
+    addAnimal('rabbit', origin + 20);
     addAnimal('horse', origin + 33);
     addAnimal('duck', origin + 47);
     addAnimal('pig', origin + 44);
@@ -5294,9 +5311,10 @@ function validConversation(value, p) {
       var i;
       for (i = 0; i < SUPPLY_DEF[key].n; i++) list.push(key);
     });
-    var spots = [], x = origin + 3, n = 0, guard = 0, y, gy, id, tree, dig, used;
+    var spots = [], x = origin + 20, n = 0, guard = 0, y, gy, id, tree, dig, used;
     while (n < list.length && guard++ < W * 2) {
       if (x >= W - 3) x = 3;
+      if (x >= origin + 4 && x <= origin + 14) { x = origin + 20; continue; }
       gy = 0;
       for (y = 2; y < H - 1; y++) {
         id = get(x, y);
@@ -5987,6 +6005,10 @@ function validConversation(value, p) {
     var line = specialPlaceLine(mat, tx, ty);
     if (line) return line;
     if (mat === 'seed') return 'The seed goes on dirt!';
+    if (mat === 'houseKit') {
+      var houseSpot = craftableTarget('houseKit', tx, ty);
+      if (!houseSpot.ok && houseSpot.reason !== 'reach' && houseSpot.reason !== 'sight' && houseSpot.reason !== 'stock' && houseSpot.reason !== 'limit') return 'The house goes on empty ground!';
+    }
     if (buildMode ? !buildReach(tx, ty) : !placementReach(tx, ty)) return 'Move a little closer!';
     return 'Choose empty squares!';
   }
