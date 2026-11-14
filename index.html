@@ -630,7 +630,7 @@
   <canvas id="view" width="800" height="400"></canvas>
   <div id="hud">
     <span id="hunger-hint" hidden></span>
-    <span id="build-version" aria-label="Build version">build cd91b62+mc-look</span>
+    <span id="build-version" aria-label="Build version">build cd91b62+mc-polish</span>
     <div class="topbar">
       <button id="quest" type="button">
         <canvas id="quest-icon" width="128" height="128"></canvas>
@@ -666,7 +666,7 @@
 
   <div id="build-tools" hidden aria-label="Building tools"></div>
   <div id="build-status" hidden role="status"></div>
-  <div id="trail-count" aria-label="Discoveries">★ 0 / 7</div>
+  <div id="trail-count" aria-label="Discoveries">Found ★ 0/7</div>
   <section id="welcome" hidden aria-label="Welcome">
     <canvas id="welcome-face" width="128" height="128" aria-hidden="true"></canvas>
     <p id="welcome-line" role="status" aria-live="polite"></p>
@@ -817,7 +817,7 @@ const BRAIN_TIMEOUT_MS = 6500;
     wood: ['Wood'], leaves: ['Leaves'], sand: ['Sand'],
     water: ['Water'], flower: ['Flower'], planks: ['Planks'],
     stick: ['Stick'], rope: ['Rope'], table: ['Table'], door: ['Door'],
-    torch: ['Torch'], bed: ['Bed'], house: ['House'],
+    torch: ['Torch'], bed: ['Bed'], house: ['Roof'], houseKit: ['House'],
     wool: ['Wool'], tree: ['Tree'],
     cow: ['Cow'], pig: ['Pig'], sheep: ['Sheep'],
     chicken: ['Chicken'], cat: ['Cat'], dog: ['Dog'],
@@ -830,7 +830,7 @@ const BRAIN_TIMEOUT_MS = 6500;
     car: ['Car'], wheel: ['Wheel'], follow: ['Follow'], wall: ['Wall'], roof: ['Roof'], window: ['Window'], room: ['Room'], gate: ['Gate']
   };
   // Inventory aliases reuse learned words; they are not extra vocabulary.
-  Object.defineProperties(WORD, {houseKit:{value:['House']},pen:{value:['Pen']}});
+  Object.defineProperties(WORD, {pen:{value:['Pen']}});
   var BLOCK_OF = {
     grass: GRASS, dirt: DIRT, stone: STONE, wood: WOOD, leaves: LEAVES, sand: SAND,
     water: WATER, flower: FLOWER, planks: PLANKS, torch: TORCH, door: DOOR,
@@ -857,7 +857,7 @@ const BRAIN_TIMEOUT_MS = 6500;
     { out: 'pen', n: 1, need: { fence: 4 } },
     { out: 'wheel', n: 2, need: { planks: 2 } },
     { out: 'car', n: 1, need: { wheel: 4, planks: 4 } },
-    { out: 'house', label: 'Roof blocks', n: 4, need: { stone: 1, planks: 2 } },
+    { out: 'house', label: 'Roof', n: 4, need: { stone: 1, planks: 2 } },
     { out: 'fence', n: 2, need: { planks: 2, stick: 1 } },
     { out: 'rod', n: 1, need: { stick: 2, wool: 1 } },
     { out: 'boat', n: 1, need: { planks: 5, wool: 1 } },
@@ -865,7 +865,7 @@ const BRAIN_TIMEOUT_MS = 6500;
     { out: 'window', n: 2, need: { planks: 2, sand: 1 } }
   ];
   var QUESTS = [
-    { en: 'Find a tree!', icon: 'tree', done: function (p) { return p.tree; } },
+    { en: 'Find a tree!', icon: 'tree', done: function (p) { return p.chopped; } },
     { en: 'Mine stone!', icon: 'stone', done: function (p) { return p.mined.stone; } },
     { en: 'Find water!', icon: 'water', done: function (p) { return p.water; } },
     { en: 'Tap a sheep!', icon: 'sheep', done: function (p) { return p.tapped.sheep; } },
@@ -876,8 +876,8 @@ const BRAIN_TIMEOUT_MS = 6500;
     { en: 'Craft a table!', icon: 'table', done: function (p) { return p.crafted.table; } },
     { en: 'Tap a cow!', icon: 'cow', done: function (p) { return p.tapped.cow; } },
     { en: 'Tap a chicken!', icon: 'chicken', done: function (p) { return p.tapped.chicken; } },
-    { en: 'Place a door!', icon: 'door', done: function (p) { return p.placed.door; } },
-    { en: 'Craft a house!', icon: 'house', done: function (p) { return p.crafted.house; } },
+    { en: 'Put the door on the house!', icon: 'door', done: function (p) { return p.placed.door; } },
+    { en: 'Craft a house!', icon: 'houseKit', done: function (p) { return p.crafted.houseKit; } },
     { en: 'Place a fence!', icon: 'fence', done: function (p) { return p.placed.fence; } },
     { en: 'Place a torch at night!', icon: 'torch', done: function (p) { return p.nightTorch; } },
     { en: 'Tap a duck!', icon: 'duck', done: function (p) { return p.tapped.duck; } },
@@ -899,7 +899,7 @@ const BRAIN_TIMEOUT_MS = 6500;
     water: 'Cool water.', flower: 'It grows outside.', planks: 'From wood.',
     stick: 'A thin piece of wood.', rope: 'Climb up!', table: 'Put it in the house.',
     door: 'Open it to go inside.', torch: 'It gives light.', bed: 'Sleep in the house.',
-    house: 'Go inside the door.', houseKit: 'Go inside the door.', wool: 'From a sheep.',
+    house: 'Tiles for a roof.', houseKit: 'Go inside the door.', wool: 'From a sheep.',
     tree: 'It grows tall.', fence: 'Put it outside.', pen: 'A yard for animals.',
     seed: 'Plant it outside.', wheat: 'A yellow plant.', bread: 'You can eat it.', fish: 'From the water.',
     rod: 'Use it on water.', boat: 'Ride on the water.', pet: 'A friend who follows.',
@@ -929,12 +929,12 @@ const BRAIN_TIMEOUT_MS = 6500;
   // L2 scene drops do not respawn. L3 cap counts inventory plus what is already placed.
   // No separate axe or pick id: those rows map onto rod and the other mid-tier pickups.
   var SUPPLY_DEF = {
-    rod: { tier: 2, n: 3 },
-    wheel: { tier: 2, n: 4 },
-    fence: { tier: 2, n: 5 },
-    door: { tier: 2, n: 4 },
-    window: { tier: 2, n: 4 },
-    house: { tier: 2, n: 4 },
+    rod: { tier: 2, n: 1 },
+    wheel: { tier: 2, n: 1 },
+    fence: { tier: 2, n: 1 },
+    door: { tier: 2, n: 1 },
+    window: { tier: 2, n: 1 },
+    house: { tier: 2, n: 1 },
     car: { tier: 3, n: 1, cap: 2 },
     houseKit: { tier: 3, n: 1, cap: 2 },
     boat: { tier: 3, n: 1, cap: 2 }
@@ -981,7 +981,7 @@ const BRAIN_TIMEOUT_MS = 6500;
   var queuedQuest = '', queuedHint = '', lastPromptSpoken = '', promptLock = false, lastBuildHint = '';
   var ttsToken = 0, speechArm = 0, ttsLive = false, ttsLiveSince = 0, promptPlaying = '', lastQuestSpoken = '', liveUtterance = null;
   var placeHold = null, deepWarned = false;
-  var quiz = null, quizStars = {}, lastQuizKey = '', toastLeft = 0, wrongAt = 0;
+  var quiz = null, quizStars = {}, lastQuizKey = '', toastLeft = 0, wrongAt = 0, deferredWord = null, supplyCarryUntil = 0;
   var saveIn = 0, dirtySave = false;
   var pitTime = 0, ropeShown = false, ropeAnnounced = false, ropeAnchor = null, ropeClimb = null;
   var indoors = null, indoorX = 0.42, houseGrace = 0, bedRest = 0, sleepPhase = 0;
@@ -1590,7 +1590,7 @@ function validConversation(value, p) {
     updateTrailCount();
   }
   function updateTrailCount() {
-    document.getElementById('trail-count').textContent = '★ ' + Object.keys(trail.found).length + ' / ' + trailSpots.length;
+    document.getElementById('trail-count').textContent = 'Found ★ ' + Object.keys(trail.found).length + '/' + trailSpots.length;
   }
   function renderTrailAlbum() {
     var album = document.getElementById('trail-album');
@@ -2099,7 +2099,7 @@ function validConversation(value, p) {
     var supplyWalk = supplyNear(22);
     if (supplyWalk && Math.abs(player.y - supplyWalk.y) < 42) takeSupply(supplyWalk);
     if(drivingCar)return;
-    var moving = !!seek || !!enAudio || axis() !== 0 || !onGround || riding || inWater() || fishing || jumpBuf > 0;
+    var moving = !!seek || !!enAudio || axis() !== 0 || !onGround || riding || inWater() || fishing || jumpBuf > 0 || laborBusy();
     var safe = !moving && !quiz && !(window.speechSynthesis && speechSynthesis.speaking) && chatClock - chatLastInput > 0.9;
     chatIdle = safe ? chatIdle + dt : 0;
     // Unanswered dialogue is dismissed only by an answer or explicit parent skip.
@@ -2160,6 +2160,8 @@ function validConversation(value, p) {
       }
     }
     prevDx = dxNow;
+    flushDeferredWord();
+    guideHints();
     // Gift pickup runs at the start of this step, including while the child is in the air.
     // Keep exploration events long enough to survive a short stand-still after walking.
     chatQueue = chatQueue.filter(function (e) { return chatClock - e.at < 40; });
@@ -3359,7 +3361,7 @@ function validConversation(value, p) {
   }
 
   function blankProgress() {
-    return { mined: {}, crafted: {}, placed: {}, tapped: {}, tree: 0, water: 0, nightTorch: 0, fish: 0, wheatRipe: 0, boatRide: 0, pet: 0 };
+    return { mined: {}, crafted: {}, placed: {}, tapped: {}, tree: 0, chopped: 0, water: 0, nightTorch: 0, fish: 0, wheatRipe: 0, boatRide: 0, pet: 0 };
   }
   function chapter1Done(p) {
     var i;
@@ -3737,7 +3739,8 @@ function validConversation(value, p) {
     return hungerStageNow() === 'hungry' ? Math.round(ms * 1.8) : ms;
   }
   function noteTreeFound() {
-    if (quiz || progress.tree) return;
+    if (quiz || progress.chopped) return;
+    progress.chopped = 1;
     progress.tree = 1;
     learn('tree');
     showWord('tree');
@@ -5094,7 +5097,7 @@ function validConversation(value, p) {
     return k;
   }
   function learn(key) {
-    key=key==='houseKit'?'house':key==='pen'?'fence':key;
+    if (key === 'pen') key = 'fence';
     if (!WORD[key]) return;
     if (learned.indexOf(key) < 0) learned.push(key);
   }
@@ -5183,6 +5186,16 @@ function validConversation(value, p) {
     crackMarks.push({ tx: tx, ty: ty, stage: stage, until: Date.now() + ms });
     if (crackMarks.length > 28) crackMarks.shift();
   }
+  function laborBusy() {
+    var now = Date.now(), i, t;
+    if (breakJobs.length || fishing || (placeHold && placeHold.armed)) return true;
+    if (supplyCarryUntil > now) return true;
+    for (i = 0; i < trees.length; i++) {
+      t = trees[i];
+      if ((t.swingUntil || 0) > now || (t.breakAt || 0) > now) return true;
+    }
+    return false;
+  }
   function breakBusy(tx, ty) {
     var i;
     for (i = 0; i < breakJobs.length; i++) if (breakJobs[i].tx === tx && breakJobs[i].ty === ty) return true;
@@ -5236,9 +5249,7 @@ function validConversation(value, p) {
   function giveKnock(id) {
     var src = KEY_OF[id], drop = knockDropKey(id);
     if (!drop) return;
-    var treeFirst = !quiz && (id === WOOD || id === LEAVES) && !progress.tree;
     if (!quiz) {
-      if (treeFirst) progress.tree = 1;
       if (src) progress.mined[src] = 1;
       if (drop !== src) progress.mined[drop] = 1;
     }
@@ -5247,8 +5258,7 @@ function validConversation(value, p) {
     if (id === GRASS) addItem('seed', 1, true);
     if (src) learn(src);
     learn(drop);
-    if (treeFirst) { learn('tree'); showWord('tree'); chime(); }
-    else showWord(drop);
+    showWord(drop);
     if (quiz && !quizMatch(drop) && !(src && quizMatch(src))) quizWrong();
     updateQuest();
     saveSoon();
@@ -5314,10 +5324,10 @@ function validConversation(value, p) {
       var i;
       for (i = 0; i < SUPPLY_DEF[key].n; i++) list.push(key);
     });
-    var spots = [], x = origin + 20, n = 0, guard = 0, y, gy, id, tree, dig, used;
+    var spots = [], x = origin + 40, n = 0, guard = 0, y, gy, id, tree, dig, used;
     while (n < list.length && guard++ < W * 2) {
       if (x >= W - 3) x = 3;
-      if (x >= origin + 4 && x <= origin + 14) { x = origin + 20; continue; }
+      if (x >= origin + 2 && x <= origin + 18) { x = origin + 40; continue; }
       gy = 0;
       for (y = 2; y < H - 1; y++) {
         id = get(x, y);
@@ -5325,11 +5335,11 @@ function validConversation(value, p) {
       }
       tree = gy && (get(x, gy - 1) === WOOD || get(x, gy - 2) === WOOD);
       dig = digSpots.some(function (s) { return s.tx === x; });
-      used = spots.some(function (s) { return Math.abs(s.tx - x) < 2; });
+      used = spots.some(function (s) { return Math.abs(s.tx - x) < 7; });
       if (gy && !tree && !dig && !used) {
         spots.push({ id: n, key: list[n], tx: x, x: (x + 0.5) * TILE, y: gy * TILE - 12, taken: false });
         n++;
-        x += 3;
+        x += 8;
       } else x += 1;
     }
     supplies = spots;
@@ -5350,6 +5360,7 @@ function validConversation(value, p) {
       return false;
     }
     s.taken = true;
+    supplyCarryUntil = Date.now() + 900;
     addItem(s.key, 1, true);
     if (CRAFTABLES[s.key]) craftedObjects.push(newCraftable(s.key));
     showWord(s.key);
@@ -5537,17 +5548,14 @@ function validConversation(value, p) {
   function giveMined(id) {
     var key = KEY_OF[id];
     if (!key) return;
-    var treeFirst = !quiz && (key === 'wood' || key === 'leaves') && !progress.tree;
     if (!quiz) {
-      if (treeFirst) progress.tree = 1;
       progress.mined[key] = 1;
       if (key === 'water') progress.water = 1;
     }
     addItem(key, 1, true);
     if (key === 'grass') addItem('seed', 1, true);
     learn(key);
-    if (treeFirst) { learn('tree'); showWord('tree'); chime(); }
-    else showWord(key);
+    showWord(key);
     if (quiz && !quizMatch(key)) quizWrong();
     updateQuest();
     saveSoon();
@@ -6900,95 +6908,146 @@ function validConversation(value, p) {
     whisk(2.0, -24.7, 11.6, -23.1, 0.25);
     g.restore();
   }
+  function palFrame(g, phase, paint) {
+    g.save();
+    g.translate(0, reducedMotion ? 0 : Math.sin(phase * 2.2) * 0.45);
+    g.lineJoin = 'round';
+    g.lineCap = 'round';
+    g.strokeStyle = INK;
+    g.lineWidth = OUT;
+    function blob(x, y, rx, ry, color, rot) {
+      g.beginPath();
+      g.ellipse(x, y, rx, ry, rot || 0, 0, Math.PI * 2);
+      g.fillStyle = color;
+      g.fill();
+      g.stroke();
+    }
+    function eye(x, y) {
+      if (!reducedMotion && phase % 24 > 22.8) {
+        g.beginPath(); g.moveTo(x - 1.5, y); g.lineTo(x + 1.5, y); g.stroke();
+        return;
+      }
+      g.fillStyle = '#1a1a1a';
+      g.beginPath(); g.arc(x, y, 1.15, 0, Math.PI * 2); g.fill();
+      g.fillStyle = '#fff';
+      g.beginPath(); g.arc(x + 0.35, y - 0.4, 0.38, 0, Math.PI * 2); g.fill();
+    }
+    paint(blob, eye);
+    g.restore();
+  }
+  function drawCow(g, phase) {
+    palFrame(g, phase, function (blob, eye) {
+      blob(-11, -8, 2.2, 5.5, '#5c4638');
+      blob(8, -8, 2.2, 5.5, '#5c4638');
+      blob(-2, -18, 13, 8.2, '#fff8ee');
+      blob(-6, -20, 3.2, 2.4, '#3a322c');
+      blob(4, -16, 2.4, 1.8, '#3a322c');
+      blob(11, -26, 6.4, 5.6, '#fff8ee');
+      blob(6.5, -31, 1.3, 2.4, '#f3e2c4', -0.4);
+      blob(14.5, -31, 1.3, 2.4, '#f3e2c4', 0.4);
+      blob(15.6, -25, 3.4, 2.4, '#f3b7c4');
+      g.fillStyle = '#c47d8a';
+      g.beginPath(); g.arc(14.4, -25, 0.55, 0, 6.3); g.fill();
+      g.beginPath(); g.arc(16.8, -25, 0.55, 0, 6.3); g.fill();
+      eye(12.2, -27.2);
+      blob(-14, -16, 1.6, 4.2, '#5c4638', 0.8);
+    });
+  }
+  function drawSheep(g, phase) {
+    palFrame(g, phase, function (blob, eye) {
+      blob(-8, -7, 1.8, 4.6, '#3a322c');
+      blob(6, -7, 1.8, 4.6, '#3a322c');
+      [[-6, -16], [2, -18], [-2, -22], [6, -15], [-8, -20]].forEach(function (p) { blob(p[0], p[1], 5.2, 4.4, '#fffdf8'); });
+      blob(12, -24, 5.2, 4.6, '#3a322c');
+      blob(14.5, -22.5, 2.2, 1.6, '#f3b7c4');
+      eye(13.2, -25.2);
+      blob(-12, -18, 2.2, 2.2, '#fffdf8');
+    });
+  }
+  function drawChicken(g, phase) {
+    palFrame(g, phase, function (blob, eye) {
+      var step = reducedMotion ? 0 : Math.sin(phase * 3) * 1.2;
+      blob(-4, -4 + step, 1.3, 3.2, '#e08a2a');
+      blob(3, -4 - step, 1.3, 3.2, '#e08a2a');
+      blob(0, -14, 8, 6.2, '#f6d15a');
+      blob(7.5, -20, 4.6, 4.2, '#f6d15a');
+      blob(6.2, -24.2, 1.5, 2.2, '#e05050');
+      blob(8.6, -24.6, 1.6, 2.4, '#e05050');
+      g.beginPath();
+      g.moveTo(11.2, -19.4);
+      g.quadraticCurveTo(15.4, -18.6, 14.2, -16.8);
+      g.quadraticCurveTo(12.2, -17.6, 11, -18.2);
+      g.closePath();
+      g.fillStyle = '#f08a1a';
+      g.fill();
+      g.stroke();
+      eye(8.4, -21);
+      blob(-7, -16, 4.2, 2.4, '#f0c14a', -0.4);
+    });
+  }
+  function drawCat(g, phase) {
+    palFrame(g, phase, function (blob, eye) {
+      var wag = reducedMotion ? 0 : Math.sin(phase * 2.4) * 3;
+      g.beginPath();
+      g.moveTo(-8, -16);
+      g.quadraticCurveTo(-16, -18 - wag, -14, -28 - wag);
+      g.quadraticCurveTo(-8, -24, -8, -18);
+      g.stroke();
+      blob(-1, -16, 10, 6.4, '#e7b06a');
+      blob(9, -24, 5.4, 4.8, '#e7b06a');
+      blob(6.2, -29.5, 1.6, 2.6, '#e7b06a', -0.5);
+      blob(12.2, -29.5, 1.6, 2.6, '#e7b06a', 0.5);
+      blob(6.6, -28.6, 0.7, 1.3, '#f3b7c4');
+      blob(11.8, -28.6, 0.7, 1.3, '#f3b7c4');
+      blob(13.4, -23, 1.5, 1.1, '#f3b7c4');
+      eye(10.2, -24.6);
+      g.strokeStyle = INK;
+      g.lineWidth = 0.9;
+      g.beginPath();
+      g.moveTo(13.5, -22.4); g.lineTo(17.5, -23.2);
+      g.moveTo(13.5, -21.4); g.lineTo(17.5, -21.2);
+      g.stroke();
+    });
+  }
+  function drawDog(g, phase) {
+    palFrame(g, phase, function (blob, eye) {
+      var wag = reducedMotion ? 0 : Math.sin(phase * 3) * 4;
+      blob(-12, -20 - wag * 0.15, 2.2, 4.2, '#c49a6a', 0.7);
+      blob(0, -15, 11, 6.6, '#e2c4a2');
+      blob(10, -23, 5.6, 5, '#e2c4a2');
+      blob(6.4, -24, 2.2, 4.4, '#b58862', 0.35);
+      blob(14.6, -22, 2.8, 2.1, '#fff6ea');
+      blob(15.4, -21.6, 1.2, 0.9, '#3a322c');
+      blob(8, -14, 2.4, 1.1, '#e23b3b');
+      eye(11.2, -24.2);
+      blob(-7, -8, 1.8, 4.2, '#c49a6a');
+      blob(5, -8, 1.8, 4.2, '#c49a6a');
+    });
+  }
+  function drawHorse(g, phase) {
+    palFrame(g, phase, function (blob, eye) {
+      var wag = reducedMotion ? 0 : Math.sin(phase * 2) * 2;
+      blob(-14, -18, 2.4, 6, '#6d5344', 0.5 + wag * 0.02);
+      blob(-1, -16, 13, 7.2, '#c99a6a');
+      blob(12, -26, 4.2, 7.4, '#c99a6a');
+      blob(13, -30, 2.2, 4.6, '#6d5344');
+      blob(16.4, -24, 4.2, 2.6, '#ddc2a4');
+      blob(18.6, -23.6, 0.8, 0.6, '#3a322c');
+      eye(13.4, -28);
+      blob(-8, -7, 1.8, 5.2, '#6d5344');
+      blob(6, -7, 1.8, 5.2, '#6d5344');
+    });
+  }
   function drawAnimal(g, type, phase) {
     if (type === 'duck') { drawDuck(g, phase); return; }
     if (type === 'pig') { drawPig(g, phase); return; }
     if (type === 'rabbit') { drawRabbit(g, phase); return; }
-    g.save(); inkStyle(g);
-    var frame = reducedMotion ? 1 : Math.floor(phase * 1.5) % 8;
-    var wag = Math.sin(frame * Math.PI / 4) * 3;
-    var blink = !reducedMotion && phase % 25 > 24;
-    var bird = type === 'chicken' || type === 'duck';
-    var color = { cow: '#fff9e8', sheep: '#fffdf6', chicken: '#f6d487',
-      cat: '#eab776', dog: '#e2c4a2', duck: '#fffdf8', horse: '#c99d7b' }[type] || '#dfc198';
-    var hoof = type === 'sheep' ? '#3c342e' : (type === 'cow' || type === 'horse' ? '#6d5848' : color);
-    function eye(x, y) {
-      if (blink) { inkPath(g, [[x - 1.7, y], [x + 1.7, y]]); return; }
-      g.fillStyle = '#fffdf8'; g.beginPath(); g.arc(x, y, 1.65, 0, 6.3); g.fill();
-      g.strokeStyle = '#51493c'; g.lineWidth = 1; g.stroke();
-      g.fillStyle = '#51493c'; g.beginPath(); g.arc(x + 0.35, y + 0.1, 0.82, 0, 6.3); g.fill();
-      g.fillStyle = '#fff'; g.beginPath(); g.arc(x - 0.35, y - 0.45, 0.32, 0, 6.3); g.fill();
-      inkStyle(g);
-    }
-    function blot(x, y, rx, ry, c) {
-      g.beginPath(); g.ellipse(x, y, rx, ry, 0, 0, 6.3); g.fillStyle = c; g.fill();
-    }
-    // Tail sits behind the body and still wags while the animal stands.
-    if (type === 'cat') {
-      g.beginPath(); g.moveTo(-12, -18); g.quadraticCurveTo(-22, -16 - wag * 0.3, -18, -28 - wag); g.quadraticCurveTo(-10, -26, -12, -20);
-      g.fillStyle = color; g.fill(); g.stroke();
-    } else if (type === 'dog') inkEllipse(g, -11, -30 - wag * 0.15, 3.2, 5.2, '#c49e77', 0.9);
-    else if (type === 'horse') inkPath(g, [[-12, -22], [-20, -18 - wag], [-16, -30 - wag], [-10, -24]], '#6d5344');
-    else if (!bird) {
-      g.beginPath(); g.moveTo(-12, -20); g.quadraticCurveTo(-22, -22 - wag, -16, -30 - wag); g.stroke();
-    }
-    if (bird) {
-      inkPath(g, [[-5, -12], [-5, -2], [-8, -1]]); inkPath(g, [[3, -12], [3, -2], [6, -1]]);
-      blot(-7, -1.2, 1.6, 0.7, '#edbf71'); blot(5, -1.2, 1.6, 0.7, '#edbf71');
-    } else {
-      var legTop = type === 'dog' ? -11 : -14, legH = type === 'dog' ? 9 : 12;
-      inkBox(g, -10, legTop, 5, legH, hoof === color ? color : hoof); inkBox(g, 4, legTop, 5, legH, hoof === color ? color : hoof);
-      if (type === 'sheep') { inkBox(g, -10, -14, 5, 8, '#51493c', 1.2); inkBox(g, 4, -14, 5, 8, '#51493c', 1.2); }
-      blot(-7.5, -3.2, 2.1, 1.1, '#3a322c'); blot(6.5, -3.2, 2.1, 1.1, '#3a322c');
-    }
-    inkEllipse(g, type === 'dog' ? 0 : -1, type === 'dog' ? -18 : -21, type === 'dog' ? 12 : (bird ? 11 : 14), type === 'dog' ? 8 : (bird ? 8 : 9), type === 'sheep' ? '#fffdf8' : color);
-    if (type === 'sheep') {
-      [[-10, -24], [-2, -28], [6, -24], [-6, -18], [3, -16]].forEach(function (p) { inkEllipse(g, p[0], p[1], 5.2, 4.6, '#fffdf8'); });
-    } else if (type === 'cow') {
-      blot(-8, -24, 3.2, 2.2, '#51493c'); blot(2, -18, 2.4, 1.8, '#51493c'); blot(-4, -22, 1.5, 1.2, '#51493c');
-    }
-    if (bird) inkEllipse(g, -2, -20 + (frame < 4 ? 0 : 0.8), 5.5, 3.6, type === 'duck' ? '#d5e4c4' : '#edbf71', -0.25);
-    if (type === 'horse') {
-      inkBox(g, 6, -34, 7, 16, color, 3);
-      inkPath(g, [[7, -33], [5, -28], [8, -22], [10, -30]], '#6d5344');
-    }
-    var hx = bird ? 10 : 12, hy = type === 'horse' ? -33 : -28;
-    inkEllipse(g, hx, hy, type === 'horse' ? 8.2 : 7.2, type === 'horse' ? 6.4 : 6.6, type === 'sheep' ? '#51493c' : color);
-    if (type === 'cat') {
-      inkPath(g, [[6, -32], [5, -40], [12, -33]], color); inkPath(g, [[12, -33], [16, -40], [18, -31]], color);
-      blot(7.2, -36, 1.3, 1.6, '#f0b8b4'); blot(15.2, -36, 1.3, 1.6, '#f0b8b4');
-    } else if (type === 'dog') inkEllipse(g, 8.5, -23, 2.7, 6.6, '#b58862', 0.2);
-    else if (type === 'cow') {
-      inkPath(g, [[7, -33], [6, -39], [11, -33]], '#fff9e8'); inkPath(g, [[13, -33], [16, -39], [17, -32]], '#fff9e8');
-      blot(8.2, -36.5, 0.7, 1.3, '#dfc198'); blot(15.2, -36.2, 0.7, 1.3, '#dfc198');
-    } else if (type === 'horse') {
-      inkPath(g, [[8, -36], [9, -43], [13, -36]], color);
-      inkPath(g, [[9.2, -40], [10.2, -36]], '#6d5344');
-    } else if (type === 'chicken') {
-      inkEllipse(g, 8, -36, 2.2, 2.6, '#e07070'); inkEllipse(g, 12, -37, 2.4, 3.1, '#e07070');
-      blot(10, -32.5, 1.3, 1.6, '#e07070');
-    }
-    if (type === 'duck') inkPath(g, [[15, -28], [23, -27], [15, -25]], '#f0a05a');
-    else if (type === 'chicken') inkPath(g, [[16, -28], [21, -27], [16, -26]], '#edbf71');
-    else if (type === 'cow') {
-      inkEllipse(g, 18, hy + 3, 5.2, 3.4, '#f3b7c0');
-      blot(16.6, hy + 3.2, 0.55, 0.75, '#c47d8a'); blot(19.4, hy + 3.2, 0.55, 0.75, '#c47d8a');
-    } else if (type === 'dog') {
-      inkEllipse(g, 16.6, hy + 1.5, 3.3, 2.5, '#fff6ea');
-      blot(17.6, hy + 1.4, 1.35, 1.05, '#51493c');
-      if (!blink) blot(17.2, hy + 3.6, 1.5, 0.85, '#e07070');
-    } else if (type === 'horse') {
-      inkEllipse(g, 19.2, hy + 2.4, 5.4, 2.3, '#ddc2a4');
-      blot(21.6, hy + 2.3, 0.85, 0.6, '#51493c');
-    } else if (type === 'cat') {
-      blot(16.5, hy + 2.2, 0.7, 0.55, '#e07070');
-      g.strokeStyle = '#51493c'; g.lineWidth = 0.9;
-      [[15, -25], [22, -26], [15, -23], [22, -22]].forEach(function (p, i) { inkPath(g, [[14, p[1]], p]); });
-    }
-    eye(hx + (bird ? 0.4 : 1.2), hy - 1.3);
-    if (!bird && type !== 'horse') eye(hx - 2.2, hy - 1.1);
-    if (type === 'dog') { inkPath(g, [[6, -18], [13, -18]]); blot(9.5, -17.2, 1.1, 1.1, '#ffd36a'); }
-    g.restore();
+    if (type === 'cow') { drawCow(g, phase); return; }
+    if (type === 'sheep') { drawSheep(g, phase); return; }
+    if (type === 'chicken') { drawChicken(g, phase); return; }
+    if (type === 'cat') { drawCat(g, phase); return; }
+    if (type === 'dog') { drawDog(g, phase); return; }
+    if (type === 'horse') drawHorse(g, phase);
   }
   function drawAnimalIcon(g, type, S, phase) {
     g.save(); g.translate(S * 0.50, S * 0.89); g.scale(S / 60, S / 60);
@@ -7170,6 +7229,7 @@ function validConversation(value, p) {
   function paintIcon(canvasEl, key, phase) {
     var g = canvasEl.getContext('2d'), S = canvasEl.width;
     g.clearRect(0, 0, S, S);
+    if (key === 'house') key = 'roof';
     if(CRAFTABLES[key]){var b=newCraftable(key),art=craftableSprite(b),scale=S/Math.max(art.width,art.height);g.imageSmoothingEnabled=false;g.drawImage(art,0,(S-art.height*scale)/2,art.width*scale,art.height*scale);}
     else if(key==='wheel'){g.save();g.imageSmoothingEnabled=false;g.scale(S/32,S/32);drawWheelArt(g);g.restore();}
     else if (ANIMALS[key]) drawAnimalIcon(g, key, S, phase);
@@ -7537,6 +7597,21 @@ function validConversation(value, p) {
     }
     for (i = 0; i < crackMarks.length; i++) paintCracks(g, crackMarks[i].tx, crackMarks[i].ty, crackMarks[i].stage);
   }
+  function bodyHitsTile(px, py, tx, ty, tall) {
+    var left = px - 16, right = px + 16, top = py - tall, bot = py + 2;
+    var x0 = tx * TILE, y0 = ty * TILE;
+    return right > x0 && left < x0 + TILE && bot > y0 && top < y0 + TILE;
+  }
+  function canopyAlpha(tx, ty) {
+    if (bodyHitsTile(player.x, player.y, tx, ty, 52)) return 0.32;
+    var i, a;
+    for (i = 0; i < animals.length; i++) {
+      a = animals[i];
+      if (Math.abs(a.x - (tx + 0.5) * TILE) > 70) continue;
+      if (bodyHitsTile(a.x, a.y, tx, ty, 42)) return 0.38;
+    }
+    return 1;
+  }
   function drawWorld(g, sec) {
     var smooth = g.imageSmoothingEnabled;
     g.imageSmoothingEnabled = false;
@@ -7604,7 +7679,13 @@ function validConversation(value, p) {
         }
         var sp = spr(id, (hash2(x, y, 3) * 3) | 0);
         var wobble = (id === WOOD || id === LEAVES) ? treeWobble(x, y) : 0;
-        if (sp) g.drawImage(sp, px + wobble, py, TILE, TILE);
+        var cover = (id === LEAVES || id === WOOD) ? canopyAlpha(x, y) : 1;
+        if (sp && cover < 1) {
+          g.save();
+          g.globalAlpha = cover;
+          g.drawImage(sp, px + wobble, py, TILE, TILE);
+          g.restore();
+        } else if (sp) g.drawImage(sp, px + wobble, py, TILE, TILE);
         if (sp && (id === DIRT || id === STONE || id === SAND)) softenSoilEdge(g, id, x, y, px, py);
       }
     }
@@ -8382,15 +8463,19 @@ function validConversation(value, p) {
 
   function itemSpeakLine(key) {
     var hint = ITEM_HINT[key] || '';
-    var shown = key === 'houseKit' ? 'house' : key === 'pen' ? 'fence' : key;
+    var shown = key === 'pen' ? 'fence' : key;
     var w = WORD[shown] || WORD[key];
     if (!w) return '';
     if (!hint) hint = ITEM_HINT[shown] || '';
     return hint ? (w[0] + '. ' + hint) : w[0];
   }
   function showWord(key, reward, replay, quiet) {
+    if (!replay && laborBusy()) {
+      deferredWord = { key: key, reward: reward, quiet: !!quiet };
+      return;
+    }
     var hintKey = key;
-    key=key==='houseKit'?'house':key==='pen'?'fence':key;
+    if (key === 'pen') key = 'fence';
     var w = WORD[key];
     if (!w) return;
     var hint = ITEM_HINT[hintKey] || ITEM_HINT[key] || '';
@@ -8415,7 +8500,7 @@ function validConversation(value, p) {
     document.getElementById('card-en').textContent = w[0];
     var cardHint = document.getElementById('card-hint');
     if (cardHint) cardHint.textContent = hint;
-    paintIcon(document.getElementById('card-icon'), key);
+    paintIcon(document.getElementById('card-icon'), key === 'house' ? 'roof' : key);
     // Sticky Continue only for legacy reward===true; quiz rewards fly to Chest.
     cardLeft = reward === true ? 3600 : (cardFlyChest ? 1.35 : 2.15);
     document.getElementById('card-continue').hidden = reward !== true;
@@ -8754,6 +8839,40 @@ function validConversation(value, p) {
   function speakTask() {
     if (dialogue) { if (!dialogue.pending && dialogue.question) speakEn(dialogue.question, { force: true, audio_url: !dialogue.reveal ? dialogue.audio_url : undefined }); return; }
     speakPrompt(questSpeechLine(), 'quest', true);
+  }
+  function flushDeferredWord() {
+    if (!deferredWord || laborBusy() || chatIdle < 0.45) return;
+    var d = deferredWord;
+    deferredWord = null;
+    showWord(d.key, d.reward, false, d.quiet);
+  }
+  function hintOnce(key, line) {
+    if (!started || intros[key] || toastLeft > 0 || laborBusy() || dialogue || quiz) return;
+    intros[key] = 1;
+    showToast(line, 2.8);
+    saveSoon();
+  }
+  function nearDarkPocket() {
+    var tx = Math.floor(player.x / TILE);
+    var ty = Math.floor((player.y - 4) / TILE);
+    var x, y, air, id;
+    for (x = tx - 3; x <= tx + 4; x++) {
+      air = 0;
+      for (y = ty; y < ty + 4 && y < H - 1; y++) {
+        id = get(x, y);
+        if (id === AIR || id === TORCH) air++;
+        else break;
+      }
+      if (air >= 2 && (get(x, ty + air) === DIRT || get(x, ty + air) === STONE)) return true;
+    }
+    return false;
+  }
+  function guideHints() {
+    if (!started || toastLeft > 0 || laborBusy() || dialogue || quiz) return;
+    if (!intros.bed && nightFactor(timeOfDay) >= 0.6 && buildObjects.some(function (b) {
+      return b.kind === 'house' && b.furn && b.furn.bed && Math.abs((b.x + 1.5) * TILE - player.x) < 6 * TILE;
+    })) hintOnce('bed', 'Sleep in the bed until morning.');
+    if (!intros.torch && nearDarkPocket()) hintOnce('torch', 'A torch helps in the dark.');
   }
   function showToast(en, secs, quiet) {
     document.getElementById('toast-en').textContent = en;
@@ -9175,7 +9294,7 @@ function validConversation(value, p) {
     if (bar) bar.replaceChildren();
     invSig = sig;
     var key = selectedKey();
-    var heldName = key && WORD[key] ? (key === 'house' ? 'Roof blocks' : WORD[key][0]) : '';
+    var heldName = key && WORD[key] ? WORD[key][0] : '';
     var heldEn = document.getElementById('held-en');
     if (heldEn) heldEn.textContent = heldName || 'Tap a block';
     var btn = document.getElementById('btn-chest');
@@ -9585,6 +9704,7 @@ function validConversation(value, p) {
     if (chatBlocked()) return;
     closeBook();
     document.getElementById('craft').hidden = false;
+    hintOnce('craft', 'Put pieces in the square to craft.');
     updateRecipeCounts();
     speak('Craft');
   }
@@ -9749,6 +9869,7 @@ function validConversation(value, p) {
       progress.placed = data.progress.placed || {};
       progress.tapped = data.progress.tapped || {};
       progress.tree = data.progress.tree ? 1 : 0;
+      progress.chopped = data.progress.chopped ? 1 : (data.progress.tree ? 1 : 0);
       progress.water = data.progress.water ? 1 : 0;
       progress.nightTorch = data.progress.nightTorch ? 1 : 0;
       progress.fish = data.progress.fish | 0;
