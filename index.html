@@ -315,20 +315,61 @@
   }
   .back:active { transform: translateY(3px); }
   .panel-body { flex: 1; min-height: 0; overflow: auto; -webkit-overflow-scrolling: touch; touch-action: pan-y; padding-bottom: 8px; }
-  #recipes { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; align-content: start; }
+  #recipes { display: grid; grid-template-columns: 1fr; gap: 8px; align-content: start; }
+  @media (min-width: 760px) { #recipes { grid-template-columns: 1fr 1fr; } }
   .recipe {
-    display: flex; align-items: center; gap: 6px;
-    background: #fff; border-radius: 16px; padding: 8px;
-    min-height: 92px;
-    box-shadow: 0 3px 0 rgba(58,42,28,0.06);
+    display: flex; align-items: center; gap: 8px;
+    background: #e7c48a;
+    border: 3px solid #8d5a28;
+    border-radius: 14px;
+    padding: 8px;
+    min-height: 0;
+    box-shadow: inset 0 2px 0 rgba(255,255,255,0.35), 0 3px 0 rgba(88,52,20,0.16);
   }
-  .needs { display: flex; gap: 4px; flex: 1; min-width: 0; }
-  .ing, .out { display: flex; flex-direction: column; align-items: center; min-width: 58px; }
-  .ing canvas, .out canvas { width: 44px; height: 44px; }
-  .ing b, .out b { font-size: 16px; line-height: 1.1; text-align: center; }
-  .ing em { font-style: normal; font-size: 16px; font-weight: 800; color: #c4503a; }
-  .ing em.ok { color: #207a38; }
-  .arrow { font-size: 22px; font-weight: 900; color: #c4a27a; flex: 0 0 auto; }
+  .craft-side { display: flex; flex-direction: column; align-items: center; gap: 3px; flex: 0 0 auto; }
+  .craft-grid {
+    display: grid;
+    grid-template-columns: 46px 46px;
+    grid-template-rows: 46px 46px;
+    gap: 3px;
+    padding: 4px;
+    background: #c4955a;
+    border-radius: 8px;
+    box-shadow: inset 0 0 0 2px #8d5a28;
+  }
+  .craft-slot {
+    position: relative;
+    display: flex; align-items: center; justify-content: center;
+    background: #fffaf2;
+    border: 2px solid #6e4324;
+    border-radius: 6px;
+    min-width: 0;
+  }
+  .craft-slot.empty { background: #f3e0c0; box-shadow: inset 0 2px 0 rgba(90,50,20,0.08); }
+  .craft-slot canvas { width: 32px; height: 32px; image-rendering: pixelated; }
+  .craft-slot em {
+    position: absolute; right: 1px; bottom: 0;
+    font-style: normal; font-size: 11px; font-weight: 800; line-height: 1.15;
+    background: #fff; border-radius: 6px; padding: 0 2px; color: #c4503a;
+  }
+  .craft-slot em.ok { color: #207a38; }
+  .craft-names { font-size: 12px; font-weight: 800; color: #4d3827; max-width: 108px; text-align: center; line-height: 1.1; }
+  .craft-arrow { font-size: 22px; font-weight: 900; color: #6e4324; flex: 0 0 auto; }
+  .craft-out {
+    width: 92px; flex: 0 0 auto;
+    display: flex; flex-direction: column; align-items: center;
+    background: #fffaf2; border: 2px solid #6e4324; border-radius: 8px; padding: 4px 4px 5px;
+  }
+  .craft-out canvas { width: 40px; height: 40px; image-rendering: pixelated; }
+  .craft-out b { font-size: 13px; line-height: 1.1; text-align: center; }
+  .craft-out em { font-style: normal; font-size: 11px; font-weight: 800; color: #207a38; }
+  @media (max-height: 420px) {
+    .craft-grid { grid-template-columns: 40px 40px; grid-template-rows: 40px 40px; }
+    .craft-slot canvas { width: 26px; height: 26px; }
+    .craft-out { width: 68px; }
+    .craft-out canvas { width: 32px; height: 32px; }
+    .craftbtn { min-width: 72px; min-height: 52px; font-size: 16px; }
+  }
   .craftbtn {
     min-width: 84px; min-height: 64px; padding: 6px 8px;
     border-radius: 16px; background: #e7d7c4; color: #6d5a48;
@@ -523,7 +564,17 @@
   #buddy-chat.build-done #buddy-line { font-size:20px; line-height:20px; }
   #buddy-chat.build-done #buddy-line::before { content:''; display:inline-block; width:20px; height:20px; vertical-align:bottom; margin-right:5px; background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='m12 2 3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1z' fill='%23ffc23d' stroke='%23986c25'/%3E%3C/svg%3E") center/contain no-repeat; }
   #build-version { position:absolute; z-index:16; left:8px; bottom:calc(3px + var(--sab)); padding:2px 5px; border-radius:4px; background:#fff8eee6; color:#4c493f; font:10px/1.2 monospace; pointer-events:none; }
-  #hunger-hint { position:absolute; z-index:16; left:8px; bottom:calc(20px + var(--sab)); padding:3px 8px; border-radius:10px; background:#fff3d6; color:#8a4b12; font:700 13px/1.2 "Avenir Next", sans-serif; pointer-events:none; }
+  #hunger-hint {
+    position: absolute; z-index: 16;
+    top: calc(172px + var(--sat)); right: calc(12px + var(--sar));
+    max-width: min(42vw, 240px);
+    padding: 4px 10px; border-radius: 12px; border: 2px solid #e2b15a;
+    background: #fff6d8; color: #8a4b12; text-align: center;
+    font: 800 14px/1.25 "Avenir Next", sans-serif; pointer-events: none;
+    box-shadow: 0 2px 0 rgba(58,42,28,0.1);
+  }
+  #hunger-hint.is-evening { background: #ffd0a8; border-color: #e08a4a; color: #7a3418; }
+  #hunger-hint.is-night { background: #2c3868; border-color: #9eb0e8; color: #fff4c8; }
   #build-debug { position:absolute; z-index:45; left:8px; bottom:115px; max-width:calc(100% - 16px); background:#152030e8; color:#fff; padding:6px; font:11px/1.3 monospace; white-space:pre-wrap; pointer-events:none; }
   #build-tools small { display:block; font-size:12px; }
   #build-status { position:absolute; left:10px; top:112px; width:max-content; max-width:min(72vw,320px); font-size:12px; line-height:1.25; pointer-events:none; background:#fff8eedd; border-radius:6px; padding:2px 6px; box-shadow:0 1px 0 #0001; }
@@ -579,7 +630,7 @@
   <canvas id="view" width="800" height="400"></canvas>
   <div id="hud">
     <span id="hunger-hint" hidden></span>
-    <span id="build-version" aria-label="Build version">build cd91b62+ux61</span>
+    <span id="build-version" aria-label="Build version">build cd91b62+mc-polish</span>
     <div class="topbar">
       <button id="quest" type="button">
         <canvas id="quest-icon" width="128" height="128"></canvas>
@@ -615,7 +666,7 @@
 
   <div id="build-tools" hidden aria-label="Building tools"></div>
   <div id="build-status" hidden role="status"></div>
-  <div id="trail-count" aria-label="Discoveries">★ 0 / 7</div>
+  <div id="trail-count" aria-label="Discoveries">Found ★ 0/7</div>
   <section id="welcome" hidden aria-label="Welcome">
     <canvas id="welcome-face" width="128" height="128" aria-hidden="true"></canvas>
     <p id="welcome-line" role="status" aria-live="polite"></p>
@@ -766,7 +817,7 @@ const BRAIN_TIMEOUT_MS = 6500;
     wood: ['Wood'], leaves: ['Leaves'], sand: ['Sand'],
     water: ['Water'], flower: ['Flower'], planks: ['Planks'],
     stick: ['Stick'], rope: ['Rope'], table: ['Table'], door: ['Door'],
-    torch: ['Torch'], bed: ['Bed'], house: ['House'],
+    torch: ['Torch'], bed: ['Bed'], house: ['Roof'], houseKit: ['House'],
     wool: ['Wool'], tree: ['Tree'],
     cow: ['Cow'], pig: ['Pig'], sheep: ['Sheep'],
     chicken: ['Chicken'], cat: ['Cat'], dog: ['Dog'],
@@ -779,7 +830,7 @@ const BRAIN_TIMEOUT_MS = 6500;
     car: ['Car'], wheel: ['Wheel'], follow: ['Follow'], wall: ['Wall'], roof: ['Roof'], window: ['Window'], room: ['Room'], gate: ['Gate']
   };
   // Inventory aliases reuse learned words; they are not extra vocabulary.
-  Object.defineProperties(WORD, {houseKit:{value:['House']},pen:{value:['Pen']}});
+  Object.defineProperties(WORD, {pen:{value:['Pen']}});
   var BLOCK_OF = {
     grass: GRASS, dirt: DIRT, stone: STONE, wood: WOOD, leaves: LEAVES, sand: SAND,
     water: WATER, flower: FLOWER, planks: PLANKS, torch: TORCH, door: DOOR,
@@ -806,7 +857,7 @@ const BRAIN_TIMEOUT_MS = 6500;
     { out: 'pen', n: 1, need: { fence: 4 } },
     { out: 'wheel', n: 2, need: { planks: 2 } },
     { out: 'car', n: 1, need: { wheel: 4, planks: 4 } },
-    { out: 'house', label: 'Roof blocks', n: 4, need: { stone: 1, planks: 2 } },
+    { out: 'house', label: 'Roof', n: 4, need: { stone: 1, planks: 2 } },
     { out: 'fence', n: 2, need: { planks: 2, stick: 1 } },
     { out: 'rod', n: 1, need: { stick: 2, wool: 1 } },
     { out: 'boat', n: 1, need: { planks: 5, wool: 1 } },
@@ -814,7 +865,7 @@ const BRAIN_TIMEOUT_MS = 6500;
     { out: 'window', n: 2, need: { planks: 2, sand: 1 } }
   ];
   var QUESTS = [
-    { en: 'Find a tree!', icon: 'tree', done: function (p) { return p.tree; } },
+    { en: 'Find a tree!', icon: 'tree', done: function (p) { return p.chopped; } },
     { en: 'Mine stone!', icon: 'stone', done: function (p) { return p.mined.stone; } },
     { en: 'Find water!', icon: 'water', done: function (p) { return p.water; } },
     { en: 'Tap a sheep!', icon: 'sheep', done: function (p) { return p.tapped.sheep; } },
@@ -825,8 +876,8 @@ const BRAIN_TIMEOUT_MS = 6500;
     { en: 'Craft a table!', icon: 'table', done: function (p) { return p.crafted.table; } },
     { en: 'Tap a cow!', icon: 'cow', done: function (p) { return p.tapped.cow; } },
     { en: 'Tap a chicken!', icon: 'chicken', done: function (p) { return p.tapped.chicken; } },
-    { en: 'Place a door!', icon: 'door', done: function (p) { return p.placed.door; } },
-    { en: 'Craft a house!', icon: 'house', done: function (p) { return p.crafted.house; } },
+    { en: 'Put the door on the house!', icon: 'door', done: function (p) { return p.placed.door; } },
+    { en: 'Craft a house!', icon: 'houseKit', done: function (p) { return p.crafted.houseKit; } },
     { en: 'Place a fence!', icon: 'fence', done: function (p) { return p.placed.fence; } },
     { en: 'Place a torch at night!', icon: 'torch', done: function (p) { return p.nightTorch; } },
     { en: 'Tap a duck!', icon: 'duck', done: function (p) { return p.tapped.duck; } },
@@ -848,7 +899,7 @@ const BRAIN_TIMEOUT_MS = 6500;
     water: 'Cool water.', flower: 'It grows outside.', planks: 'From wood.',
     stick: 'A thin piece of wood.', rope: 'Climb up!', table: 'Put it in the house.',
     door: 'Open it to go inside.', torch: 'It gives light.', bed: 'Sleep in the house.',
-    house: 'Go inside the door.', houseKit: 'Go inside the door.', wool: 'From a sheep.',
+    house: 'Tiles for a roof.', houseKit: 'Go inside the door.', wool: 'From a sheep.',
     tree: 'It grows tall.', fence: 'Put it outside.', pen: 'A yard for animals.',
     seed: 'Plant it outside.', wheat: 'A yellow plant.', bread: 'You can eat it.', fish: 'From the water.',
     rod: 'Use it on water.', boat: 'Ride on the water.', pet: 'A friend who follows.',
@@ -866,18 +917,24 @@ const BRAIN_TIMEOUT_MS = 6500;
   var RAW_BLOCK = { grass: 1, dirt: 1, sand: 1, stone: 1, wood: 1, leaves: 1, water: 1 };
   var KNOCK_COOLDOWN_MS = 3000;
   var TREE_HIT_GAP_MS = 500;
-  var TREE_REGROW_MS = 75000;
+  // Stump, sapling, then small tree. Each lasts a minute. Mature at 3 minutes.
+  var TREE_STUMP_MS = 60000;
+  var TREE_SAPLING_MS = 60000;
+  var TREE_SMALL_MS = 60000;
+  var TREE_MATURE_MS = TREE_STUMP_MS + TREE_SAPLING_MS + TREE_SMALL_MS;
+  // Older saves stored the moment a 75-second regrow would finish.
+  var TREE_LEGACY_REGROW_MS = 75000;
   // Hunger slowdown hook. Full is 5 swings; hungry takes more and waits longer.
   var TREE_HITS = { full: 5, hungry: 7 };
   // L2 scene drops do not respawn. L3 cap counts inventory plus what is already placed.
   // No separate axe or pick id: those rows map onto rod and the other mid-tier pickups.
   var SUPPLY_DEF = {
-    rod: { tier: 2, n: 3 },
-    wheel: { tier: 2, n: 4 },
-    fence: { tier: 2, n: 5 },
-    door: { tier: 2, n: 4 },
-    window: { tier: 2, n: 4 },
-    house: { tier: 2, n: 4 },
+    rod: { tier: 2, n: 1 },
+    wheel: { tier: 2, n: 1 },
+    fence: { tier: 2, n: 1 },
+    door: { tier: 2, n: 1 },
+    window: { tier: 2, n: 1 },
+    house: { tier: 2, n: 1 },
     car: { tier: 3, n: 1, cap: 2 },
     houseKit: { tier: 3, n: 1, cap: 2 },
     boat: { tier: 3, n: 1, cap: 2 }
@@ -924,7 +981,7 @@ const BRAIN_TIMEOUT_MS = 6500;
   var queuedQuest = '', queuedHint = '', lastPromptSpoken = '', promptLock = false, lastBuildHint = '';
   var ttsToken = 0, speechArm = 0, ttsLive = false, ttsLiveSince = 0, promptPlaying = '', lastQuestSpoken = '', liveUtterance = null;
   var placeHold = null, deepWarned = false;
-  var quiz = null, quizStars = {}, lastQuizKey = '', toastLeft = 0, wrongAt = 0;
+  var quiz = null, quizStars = {}, lastQuizKey = '', toastLeft = 0, wrongAt = 0, deferredWord = null, supplyCarryUntil = 0;
   var saveIn = 0, dirtySave = false;
   var pitTime = 0, ropeShown = false, ropeAnnounced = false, ropeAnchor = null, ropeClimb = null;
   var indoors = null, indoorX = 0.42, houseGrace = 0, bedRest = 0, sleepPhase = 0;
@@ -1533,7 +1590,7 @@ function validConversation(value, p) {
     updateTrailCount();
   }
   function updateTrailCount() {
-    document.getElementById('trail-count').textContent = '★ ' + Object.keys(trail.found).length + ' / ' + trailSpots.length;
+    document.getElementById('trail-count').textContent = 'Found ★ ' + Object.keys(trail.found).length + '/' + trailSpots.length;
   }
   function renderTrailAlbum() {
     var album = document.getElementById('trail-album');
@@ -2042,7 +2099,7 @@ function validConversation(value, p) {
     var supplyWalk = supplyNear(22);
     if (supplyWalk && Math.abs(player.y - supplyWalk.y) < 42) takeSupply(supplyWalk);
     if(drivingCar)return;
-    var moving = !!seek || !!enAudio || axis() !== 0 || !onGround || riding || inWater() || fishing || jumpBuf > 0;
+    var moving = !!seek || !!enAudio || axis() !== 0 || !onGround || riding || inWater() || fishing || jumpBuf > 0 || laborBusy();
     var safe = !moving && !quiz && !(window.speechSynthesis && speechSynthesis.speaking) && chatClock - chatLastInput > 0.9;
     chatIdle = safe ? chatIdle + dt : 0;
     // Unanswered dialogue is dismissed only by an answer or explicit parent skip.
@@ -2103,6 +2160,8 @@ function validConversation(value, p) {
       }
     }
     prevDx = dxNow;
+    flushDeferredWord();
+    guideHints();
     // Gift pickup runs at the start of this step, including while the child is in the air.
     // Keep exploration events long enough to survive a short stand-still after walking.
     chatQueue = chatQueue.filter(function (e) { return chatClock - e.at < 40; });
@@ -2142,7 +2201,7 @@ function validConversation(value, p) {
     (Array.isArray(data.build_objects)?data.build_objects:[]).slice(0,64).forEach(function(raw){
       if(!raw||!CRAFTABLES[raw.item]||!(raw.item==='car'?Number.isFinite(raw.x):Number.isInteger(raw.x))||!Number.isInteger(raw.y))return;
       var b=newCraftable(raw.item,raw);b.x=raw.x;b.y=raw.y;b.dir=raw.dir===-1?-1:1;
-      if(['stone','roof','flower','window'].includes(raw.showWord)&&b.kind==='house')b.showWord=raw.showWord;
+      if(['stone','roof','flower','window','door'].includes(raw.showWord)&&b.kind==='house')b.showWord=raw.showWord;
       if(b.showWord&&raw.partQuestion===b.showWord)b.partQuestion=raw.partQuestion;
       if(b.x<1||b.y<1||b.x+b.w>=W||b.y+b.h>=H||buildObjects.some(function(o){return b.x<o.x+o.w&&b.x+b.w>o.x&&b.y<o.y+o.h&&b.y+b.h>o.y;}))return;
       Object.assign(b,{id:'object:'+b.x+':'+b.y,createdAt:Number(raw.createdAt)||Date.now(),roofed:b.kind==='house',shown:!!raw.shown,closed:!!raw.closed,autoOffered:!!raw.autoOffered,invited:false,roofPraise:true});
@@ -2159,10 +2218,21 @@ function validConversation(value, p) {
   function craftableAt(x,y){return buildObjects.find(function(b){return x>=b.x&&x<b.x+b.w&&y>=b.y&&y<b.y+b.h;});}
   function craftableCells(b){var a=[];for(var y=Math.floor(b.y);y<Math.ceil(b.y+b.h);y++)for(var x=Math.floor(b.x);x<Math.ceil(b.x+b.w);x++)a.push(idx(x,y));return a;}
   function craftableRegion(b){return {building:b,inside:[],members:craftableCells(b),ready:!b.shown&&!b.autoOffered,near:true};}
+  function homesteadOpen() {
+    var x0 = origin + 8, i, b;
+    for (i = 0; i < buildObjects.length; i++) {
+      b = buildObjects[i];
+      if (b.kind === 'house' && b.x < x0 + 3 && b.x + b.w > x0) return false;
+    }
+    return true;
+  }
   function craftableTarget(item,x,y) {
     var d=CRAFTABLES[item];
-    // The clicked empty cell is the lower-left anchor; tapping ground uses its top.
-    if([GRASS,DIRT,SAND,STONE].includes(get(x,y))&&!buildOwned(x,y)){var floorY=y;while(floorY>1&&y-floorY<3&&[GRASS,DIRT,SAND,STONE].includes(get(x,floorY-1)))floorY--;y=floorY-1;}
+    // Near home, a free lot takes the house. A house already there leaves other ground open.
+    if (item === 'houseKit' && Math.abs(x - (origin + 9)) <= 6 && homesteadOpen()) {
+      x = origin + 8;
+      y = GROUND - 1;
+    } else if([GRASS,DIRT,SAND,STONE].includes(get(x,y))&&!buildOwned(x,y)){var floorY=y;while(floorY>1&&y-floorY<3&&[GRASS,DIRT,SAND,STONE].includes(get(x,floorY-1)))floorY--;y=floorY-1;}
     else if(solid(get(x,y)))y--;
     var r={x:x,y:y-d.h+1,w:d.w,h:d.h,ok:false};
     if(!(inv[item]>0)){r.reason='stock';return r;}
@@ -2172,6 +2242,12 @@ function validConversation(value, p) {
     var supports=0;
     for(var xx=x;xx<x+d.w;xx++){var floor=get(xx,y+1);if(solid(floor)&&![WOOD,LEAVES,FENCE,DOOR].includes(floor))supports++;else if(item==='car'){r.reason=floor===WATER?'water':'ground';return r;}}
     if(!supports){r.reason='ground';return r;}
+    if (item === 'houseKit') {
+      for (var hx = x; hx < x + d.w; hx++) {
+        var soil = get(hx, y + 1);
+        if (soil !== GRASS && soil !== DIRT && soil !== SAND) { r.reason = 'yard'; return r; }
+      }
+    }
     r.ok=true;return r;
   }
   function placeCraftable(item,r) {
@@ -2244,8 +2320,31 @@ function validConversation(value, p) {
       for(var row=0;row<10;row++){var x=43-row*4,y=9+row*4,w=10+row*8;box(x-2,y,w+4,6,'#704534');box(x,y,w,4,roof);box(x,y,w,1,roofHi);for(var tx=x+8+(row%2)*4;tx<x+w;tx+=12)box(tx,y+1,1,3,'#914e3d');}
       }else{box(9,35,78,12,'#684733');box(7,34,82,4,'#efc788');box(11,39,74,6,'#bc854b');for(var rx=15;rx<85;rx+=12){box(rx,38,1,7,'#8d603c');box(rx+2,39,8,1,'#dba76a');}}
       box(5,47,86,4,'#5c4236');box(8,47,80,1,'#e4ae72');
-      // Recessed door, two glazed windows with highlights and window boxes.
-      box(49,57,20,26,dark);box(51,59,16,23,'#a3673e');box(52,60,2,21,'#d6a56a');box(58,60,1,21,'#825231');box(63,70,2,2,'#ffe49c');
+      // Recessed door. A crafted Door (tier 2) is a finished door in the same opening.
+      if (b.parts.door && b.parts.door.tier >= 2) {
+        box(49,56,20,27,'#3d2618');
+        box(51,58,16,24,'#6b3a24');
+        box(52,59,14,22,'#e2a45c');
+        box(52,60,6,8,'#f2c48a');
+        box(52,70,6,10,'#d4924c');
+        box(59,60,6,8,'#c9843e');
+        box(59,70,6,10,'#b56e32');
+        box(58,59,1,22,'#5a341c');
+        box(52,69,12,1,'#5a341c');
+        box(53,61,4,5,'#8fd4ea');
+        box(54,62,2,2,'#ffffff');
+        box(60,62,4,4,'#b7e4f2');
+        box(61,63,1,1,'#ffffff');
+        box(63,72,3,3,'#ffe08a');
+        box(64,72,1,1,'#fff8d0');
+        box(54,55,8,2,'#3d8a48');
+        box(53,56,2,2,'#3d8a48');
+        box(61,56,2,2,'#3d8a48');
+        box(56,54,4,2,'#e25b6a');
+        box(57,54,2,1,'#ffe08a');
+      } else {
+        box(49,57,20,26,dark);box(51,59,16,23,'#a3673e');box(52,60,2,21,'#d6a56a');box(58,60,1,21,'#825231');box(63,70,2,2,'#ffe49c');
+      }
       [21,70].forEach(function(x){var w=x===21?17:9;box(x-2,55,w+4,18,dark);box(x,57,w,13,b.parts.window.tier>=2?'#75cde1':'#8d7858');box(x+1,57,w-2,3,b.parts.window.tier>=2?'#defbf3':'#bea67b');if(b.parts.window.tier>=2){box(x+2,61,3,3,'#ffffff');box(x+5,65,2,3,'#b2eced');}box(x+Math.floor(w/2),56,2,16,'#f5dcb3');box(x,63,w,2,'#f5dcb3');box(x-2,72,w+4,3,mid);});
       box(48,85,24,4,'#c9c8b7');box(50,89,20,4,'#e0d4b3');
       if(b.parts.yard.tier>=2){
@@ -2436,6 +2535,12 @@ function validConversation(value, p) {
       }
       return true;
     }
+    // A held Door fits the front door before build-mode placement can swallow the tap.
+    if (b && b.kind === 'house' && pointInDoor(b, wx, wy) && doorReadyToInstall(b)) {
+      if (!buildReach(Math.floor(wx / TILE), Math.floor(wy / TILE)) && !playerHitsDoor(b)) { showToast('Move a little closer!', 2); return true; }
+      applyHouseUpgrade(b, 'door');
+      return true;
+    }
     // A just-placed, now-empty whole tool opens its object immediately. Explicit
     // removal and stocked placement still take priority over object interaction.
     if(buildMode&&(!b||buildTool!==b.item||(inv[buildTool]||0)>0))return false;
@@ -2443,14 +2548,17 @@ function validConversation(value, p) {
     if(b.kind==='car'){boardCar(b);return true;}
     if(b.kind==='house'){
       if(!buildReach(Math.floor(wx/TILE),Math.floor(wy/TILE)) && !playerHitsDoor(b)){showToast('Move a little closer!',2);return true;}
-      if(pointInDoor(b, wx, wy)){enterHouse(b);return true;}
+      if(pointInDoor(b, wx, wy)){
+        if (doorReadyToInstall(b)) { applyHouseUpgrade(b, 'door'); return true; }
+        enterHouse(b);return true;
+      }
       openUpgrade(b);return true;
     }
     return false;
   }
   function objectQuestion(b) {
     var key=b.showWord||(b.kind==='house'?'house':b.kind==='car'?'car':'fence');
-    return {key:key,options:b.showWord?[key,key==='stone'?'wood':key==='flower'?'stone':key==='roof'?'window':'roof']:b.kind==='car'?['car','wheel']:['house','fence'],upgrade:!!b.showWord};
+    return {key:key,options:b.showWord?[key,key==='stone'||key==='door'?'wood':key==='flower'?'stone':key==='roof'?'window':'roof']:b.kind==='car'?['car','wheel']:['house','fence'],upgrade:!!b.showWord};
   }
   function requestObjectShow(b) {
     if(drivingCar)return;
@@ -2463,8 +2571,20 @@ function validConversation(value, p) {
     wall:{label:'Wall',cost:'stone',material:'stone',word:'stone',change:'Wood → Stone',praise:'Strong stone walls!'},
     roof:{label:'Roof',cost:'planks',material:'planks',word:'roof',change:'Flat → Tiled',praise:'A lovely tiled roof!'},
     yard:{label:'Yard',cost:'flower',material:'flower',word:'flower',change:'Grass → Flower bed',praise:'Flowers in our yard!'},
-    window:{label:'Window',cost:'sand',material:'glass',word:'window',change:'Wood → Bright glass',praise:'A bright glass window!'}
+    window:{label:'Window',cost:'sand',material:'glass',word:'window',change:'Wood → Bright glass',praise:'A bright glass window!'},
+    door:{label:'Door',cost:'door',n:1,material:'wood',word:'door',change:'Plain → Finished door',praise:'A proper front door!'}
   };
+  function houseNeedingDoor() {
+    var i, b;
+    for (i = 0; i < buildObjects.length; i++) {
+      b = buildObjects[i];
+      if (b.kind === 'house' && b.parts && b.parts.door && b.parts.door.tier < 2) return b;
+    }
+    return null;
+  }
+  function doorReadyToInstall(b) {
+    return !!(b && b.kind === 'house' && b.parts && b.parts.door && b.parts.door.tier < 2 && selectedKey() === 'door' && (inv.door || 0) >= 1);
+  }
   function openUpgrade(b) {
     if(b.partQuestion){partQuestionAt=chatClock;return;} // Finish the pending part before another remodel.
     if(quiz||dialogue||nameFlow||buildShowActive())return;
@@ -2477,23 +2597,31 @@ function validConversation(value, p) {
     var b=upgradeHouse;if(!b)return;
     var cv=document.getElementById('upgrade-preview'),g=cv.getContext('2d');g.clearRect(0,0,192,192);g.imageSmoothingEnabled=false;g.drawImage(craftableSprite(b),0,0,192,192);
     var root=document.getElementById('upgrade-parts');root.replaceChildren();
-    Object.keys(HOUSE_UPGRADES).forEach(function(part){var u=HOUSE_UPGRADES[part],done=b.parts[part].tier>=2,missing=Math.max(0,2-(inv[u.cost]||0));
+    Object.keys(HOUSE_UPGRADES).forEach(function(part){var u=HOUSE_UPGRADES[part],need=u.n||2,done=b.parts[part].tier>=2,missing=Math.max(0,need-(inv[u.cost]||0));
       var btn=document.createElement('button');btn.type='button';btn.dataset.upgrade=part;btn.disabled=done||missing>0;btn.setAttribute('aria-pressed',String(upgradePart===part));
-      btn.textContent=u.label+' · '+WORD[u.cost][0]+' ×2';var info=document.createElement('span');info.textContent=done?'Finished!':missing?'Need '+missing+' more '+WORD[u.cost][0]:u.change;btn.appendChild(info);
+      btn.textContent=u.label+' · '+(need===1?('1 '+WORD[u.cost][0]):(WORD[u.cost][0]+' ×'+need));var info=document.createElement('span');info.textContent=done?'Finished!':missing?'Need '+missing+' more '+WORD[u.cost][0]:u.change;btn.appendChild(info);
       btn.onclick=function(){upgradePart=part;renderUpgrades();};root.appendChild(btn);
     });
     document.getElementById('upgrade-confirm').hidden=!upgradePart;
-    document.getElementById('upgrade-confirm-text').textContent=upgradePart?'Use 2 '+WORD[HOUSE_UPGRADES[upgradePart].cost][0]+' for the '+HOUSE_UPGRADES[upgradePart].label.toLowerCase()+'?':'';
+    var chosen=upgradePart?HOUSE_UPGRADES[upgradePart]:null,chosenNeed=chosen?(chosen.n||2):2;
+    document.getElementById('upgrade-confirm-text').textContent=chosen?('Use '+chosenNeed+' '+WORD[chosen.cost][0]+' for the '+chosen.label.toLowerCase()+'?'):'';
+  }
+  function applyHouseUpgrade(b, part) {
+    var u=HOUSE_UPGRADES[part], need=u?u.n||2:2, i;
+    if(!b||!u||!buildObjects.includes(b)||!b.parts[part]||b.parts[part].tier>=2||(inv[u.cost]||0)<need)return false;
+    for(i=0;i<need;i++)consume(u.cost);
+    b.parts[part]={material:u.material,tier:2};b.level=Math.max(2,b.level||1);
+    if(part==='door'&&!quiz){progress.placed.door=1;rememberEvent('built','door');}
+    learn(u.word);b.showWord=u.word;b.partQuestion=u.word;b.shown=false;b.autoOffered=true;b.invited=false;b.closed=true;
+    playSfx('place');
+    closeUpgrade();closeAmbient();buildSession.lastObjectId=b.id;buildSession.lastActionAt=chatClock;buildSession.active=true;buildQueue=[];manualShowPending=null;
+    detectBuilds();celebrateBuild(b);buildFeedback(u.praise+' You made this!','house_upgrade');
+    updateQuest();save();renderHotbar();renderBuildTools();
+    partQuestionAt=chatClock+1.6;
+    return true;
   }
   function confirmUpgrade() {
-    var b=upgradeHouse,part=upgradePart,u=HOUSE_UPGRADES[part];
-    if(!b||!u||!buildObjects.includes(b)||b.parts[part].tier>=2||(inv[u.cost]||0)<2)return;
-    consume(u.cost);consume(u.cost);b.parts[part]={material:u.material,tier:2};b.level=2;
-    learn(u.word);b.showWord=u.word;b.partQuestion=u.word;b.shown=false;b.autoOffered=true;b.invited=false;b.closed=true;
-    closeUpgrade();closeAmbient();buildSession.lastObjectId=b.id;buildSession.lastActionAt=chatClock;buildSession.active=true;buildQueue=[];manualShowPending=null;
-    detectBuilds();celebrateBuild(b);buildFeedback(u.praise+' You made this!','house_upgrade');save();renderHotbar();renderBuildTools();
-    partQuestionAt=chatClock+1.6;
-
+    applyHouseUpgrade(upgradeHouse, upgradePart);
   }
   function newBuildSession() { return { active:false, placed:0, removed:0, lastActionAt:-100, selectedAt:-100, startedAt:0, asked:0, praised:0, closed:0, lastBubbleAt:-100, lastQuestionAt:-100, lastPraiseAt:-100, plan:null, firstDone:false, shorts:{}, roomAt:0, revisit:false }; }
   function resetBuildDay() {
@@ -2634,7 +2762,7 @@ function validConversation(value, p) {
   }
   function placementFailure(x,y,reason,block) {
     if(block)buildSession.blockHint={x:block.x,y:block.y,until:chatClock+.8};
-    var lines={tree:'A tree is in the way!',rock:'A rock is in the way!',building:'A building is in the way!',water:'Choose dry land!',fence:'A fence is in the way!',flower:'A flower is in the way!',block:'A block is in the way!',space:'Find a clear '+(CRAFTABLES[buildTool]?CRAFTABLES[buildTool].w+' by '+CRAFTABLES[buildTool].h:'')+' space!',ground:'Choose flat ground!',limit:'Remove a building first!',reach:'Move a little closer!',sight:'Move around the wall!',owned:'Tap a block you built!',occupied:'Choose empty squares!',animal:'Choose empty squares!',full:'Use some materials first!'};
+    var lines={tree:'A tree is in the way!',rock:'A rock is in the way!',building:'A building is in the way!',water:'Choose dry land!',fence:'A fence is in the way!',flower:'A flower is in the way!',block:'A block is in the way!',space:'Find a clear '+(CRAFTABLES[buildTool]?CRAFTABLES[buildTool].w+' by '+CRAFTABLES[buildTool].h:'')+' space!',ground:'Choose flat ground!',yard:'The house goes on empty ground!',limit:'Remove a building first!',reach:'Move a little closer!',sight:'Move around the wall!',owned:'Tap a block you built!',occupied:'Choose empty squares!',animal:'Choose empty squares!',full:'Use some materials first!'};
     document.getElementById('toast').style.visibility='';showToast(lines[reason]||'Choose empty squares!',1.5);
     logBuildResult(x,y,'fail:'+reason+(block?'@('+block.x+','+block.y+')':''));
   }
@@ -2652,10 +2780,23 @@ function validConversation(value, p) {
     if(hit){document.getElementById('build-status').style.visibility='hidden';document.getElementById('toast').style.visibility='hidden';if(ambient&&ambient.build&&ambient.build.feedback)closeAmbient();}
   }
   function placementPulse(x,y,w) {
-    buildSession.pulse={x:x,y:y,w:w,until:chatClock+1.2}; revealBuildPlacement(x,y,w);
+    buildSession.pulse={x:x,y:y,w:w||1,until:chatClock+0.45}; revealBuildPlacement(x,y,w);
+    var i, cx = (x + (w || 1) / 2) * TILE, cy = (y + 0.5) * TILE;
+    for (i = 0; i < 6; i++) {
+      if (parts.length >= 90) parts.shift();
+      parts.push({
+        x: cx, y: cy,
+        vx: (Math.random() - 0.5) * 150,
+        vy: -50 - Math.random() * 90,
+        life: 0.32, age: 0,
+        color: i % 2 ? '#fff6d0' : '#ffe08a',
+        s: 4, heart: false
+      });
+    }
   }
   function buildTap(x,y,fy,quiet) {
     if(drivingCar)return false;
+    if (buildTool !== 'remove' && buildMaterial() === 'door' && houseNeedingDoor()) { if (!quiet) showToast('The door goes on the house!', 2.2); return false; }
     if (buildTool !== 'remove' && RAW_BLOCK[buildMaterial()]) { if (!quiet) showWord(buildMaterial()); return false; }
     buildAction(quiet ? 'paint' : 'tap');
     var r=resolveBuildTarget(x,y,fy);x=r.x;y=r.y;
@@ -3098,7 +3239,7 @@ function validConversation(value, p) {
     if(drivingCar)return;
     var pendingPart=buildObjects.find(function(b){return b.partQuestion;});
     if(pendingPart&&chatClock>=partQuestionAt&&!panelOpen()&&!welcome&&!nameFlow&&!dialogue&&!quiz&&!buildShowActive()){
-      var key=pendingPart.partQuestion,other=learned.find(function(k){return k!==key&&['stone','wood','flower','roof','window','planks','sand'].includes(k);});
+      var key=pendingPart.partQuestion,other=learned.find(function(k){return k!==key&&['stone','wood','flower','roof','window','planks','sand','door'].includes(k);});
       if(other){closeAmbient();showBuildQuestion({event:'house_part',building:pendingPart,key:key,options:[key,other],upgrade:true,deferSpeech:true});saveSoon();}
     }
     if(buildLastPosition && Math.hypot(player.x-buildLastPosition.x,player.y-buildLastPosition.y)<.5)buildStill+=dt;else buildStill=0;
@@ -3202,7 +3343,15 @@ function validConversation(value, p) {
     var flash=buildSession.flash;
     if(flash&&chatClock<flash.until){var b=flash.building;g.save();g.fillStyle=b.item?'rgba(255,236,150,.08)':'rgba(255,236,150,.35)';g.strokeStyle='#ffc23d';g.lineWidth=3;g.fillRect(b.x*TILE-4,b.y*TILE-4,b.w*TILE+8,b.h*TILE+8);g.strokeRect(b.x*TILE-4,b.y*TILE-4,b.w*TILE+8,b.h*TILE+8);g.restore();}
     var pulse=buildSession.pulse;
-    if(pulse&&chatClock<pulse.until){g.save();g.globalAlpha=Math.min(1,(pulse.until-chatClock)/1.2);g.fillStyle='#ffffff88';g.strokeStyle='#ffc23d';g.lineWidth=3;g.fillRect(pulse.x*TILE,pulse.y*TILE,pulse.w*TILE,TILE);g.strokeRect(pulse.x*TILE,pulse.y*TILE,pulse.w*TILE,TILE);g.restore();}
+    if(pulse&&chatClock<pulse.until){
+      var life=(pulse.until-chatClock)/0.45, u=1-Math.max(0,Math.min(1,life));
+      var pop=1+Math.sin(Math.min(1,u)*Math.PI)*0.16;
+      g.save();g.globalAlpha=Math.max(0,life);
+      g.translate((pulse.x+pulse.w/2)*TILE,(pulse.y+0.5)*TILE);g.scale(pop,pop);
+      g.translate(-(pulse.w/2)*TILE,-0.5*TILE);
+      g.fillStyle='#fff8';g.strokeStyle='#ffc23d';g.lineWidth=3;
+      g.fillRect(0,0,pulse.w*TILE,TILE);g.strokeRect(1,1,pulse.w*TILE-2,TILE-2);g.restore();
+    }
     var hint=buildSession.blockHint;
     if(hint&&chatClock<hint.until){g.save();g.strokeStyle='#ed3737';g.lineWidth=3;g.strokeRect(hint.x*TILE,hint.y*TILE,TILE,TILE);g.restore();}
   }
@@ -3212,7 +3361,7 @@ function validConversation(value, p) {
   }
 
   function blankProgress() {
-    return { mined: {}, crafted: {}, placed: {}, tapped: {}, tree: 0, water: 0, nightTorch: 0, fish: 0, wheatRipe: 0, boatRide: 0, pet: 0 };
+    return { mined: {}, crafted: {}, placed: {}, tapped: {}, tree: 0, chopped: 0, water: 0, nightTorch: 0, fish: 0, wheatRipe: 0, boatRide: 0, pet: 0 };
   }
   function chapter1Done(p) {
     var i;
@@ -3285,102 +3434,122 @@ function validConversation(value, p) {
     var c = document.createElement('canvas');
     c.width = 64; c.height = 64;
     var g = c.getContext('2d');
+    g.imageSmoothingEnabled = false;
     g.scale(2, 2);
     draw(g);
     return c;
   }
   function buildSprites() {
-    function shade(g) {
-      g.fillStyle = 'rgba(255,255,255,0.22)';
-      g.fillRect(0, 0, 32, 4);
-      g.fillStyle = 'rgba(0,0,0,0.10)';
-      g.fillRect(0, 28, 32, 4);
+    // Crisp cube face: light top, shaded right and bottom, 1px rim.
+    function cubeFace(g) {
+      g.fillStyle = 'rgba(255,255,255,0.38)';
+      g.fillRect(1, 1, 26, 5);
+      g.fillStyle = 'rgba(255,255,255,0.16)';
+      g.fillRect(1, 6, 4, 20);
+      g.fillStyle = 'rgba(0,0,0,0.24)';
+      g.fillRect(27, 1, 4, 30);
+      g.fillStyle = 'rgba(0,0,0,0.30)';
+      g.fillRect(1, 27, 26, 4);
+      g.fillStyle = 'rgba(36,24,14,0.72)';
+      g.fillRect(0, 0, 32, 1);
+      g.fillRect(0, 31, 32, 1);
+      g.fillRect(0, 0, 1, 32);
+      g.fillRect(31, 0, 1, 32);
+    }
+    // Grass keeps a soft top sheen. A full rim turns the turf into a plastic grid.
+    function turfSheen(g) {
+      g.fillStyle = 'rgba(255,255,255,0.16)';
+      g.fillRect(0, 0, 32, 3);
+    }
+    function px(g, color, spots) {
+      var i;
+      g.fillStyle = color;
+      for (i = 0; i < spots.length; i++) g.fillRect(spots[i][0], spots[i][1], spots[i][2], spots[i][3]);
     }
     sprites[GRASS] = [0, 1, 2].map(function (v) {
       return makeSprite(function (g) {
-        g.fillStyle = '#c98448'; g.fillRect(0, 0, 32, 32);
-        g.fillStyle = '#e2b06a'; g.fillRect(4 + v * 3, 18, 4, 2); g.fillRect(20, 24, 3, 2);
-        g.fillStyle = '#67c84a'; g.fillRect(0, 0, 32, 13);
-        g.fillStyle = '#8ed86a'; g.fillRect(0, 0, 32, 4);
-        g.fillStyle = '#3f9e34'; g.fillRect(0, 11, 32, 3);
-        g.fillStyle = '#2f8a2c';
-        var i;
-        for (i = 0; i < 5; i++) g.fillRect(2 + i * 6 + v, 1 + (i % 2), 2, 7);
-        g.fillStyle = '#d7f5a4'; g.fillRect(8 + v, 3, 2, 4);
-        if (v === 0) { g.fillStyle = '#ff8aa8'; g.fillRect(22, 4, 3, 3); g.fillStyle = '#ffe08a'; g.fillRect(23, 5, 1, 1); }
-        shade(g);
+        g.fillStyle = '#b8743c'; g.fillRect(0, 0, 32, 32);
+        px(g, '#8d5430', [[6 + v, 18, 4, 3], [18, 22, 4, 3], [10, 26, 3, 2]]);
+        px(g, '#d7a36a', [[22, 20, 3, 2], [4, 24, 2, 2]]);
+        g.fillStyle = '#2f7a28'; g.fillRect(0, 0, 32, 12);
+        g.fillStyle = '#4aaa3c'; g.fillRect(0, 0, 32, 8);
+        g.fillStyle = '#7ed45a'; g.fillRect(0, 0, 32, 4);
+        px(g, '#246824', [[2 + v, 2, 2, 6], [8, 1, 2, 5], [14 + v, 3, 2, 6], [20, 2, 2, 5], [26, 1, 2, 6]]);
+        px(g, '#d7f5a4', [[9 + v, 3, 2, 3], [21, 4, 2, 2]]);
+        if (v === 0) px(g, '#ff8aa8', [[24, 5, 3, 3]]);
+        if (v === 0) px(g, '#ffe08a', [[25, 6, 1, 1]]);
+        turfSheen(g);
       });
     });
     sprites[DIRT] = [0, 1, 2].map(function (v) {
       return makeSprite(function (g) {
-        g.fillStyle = '#d09252'; g.fillRect(0, 0, 32, 32);
-        g.fillStyle = '#b67a3e';
-        g.fillRect(5 + v, 7, 5, 3); g.fillRect(18, 12 + v, 6, 3); g.fillRect(9, 21, 4, 3);
-        g.fillStyle = '#8d5a32'; g.fillRect(14, 8, 3, 2); g.fillRect(7, 16, 2, 3);
-        g.fillStyle = '#e7c096'; g.fillRect(21, 22, 3, 2); g.fillRect(4, 24, 2, 2);
-        shade(g);
+        g.fillStyle = '#c98448'; g.fillRect(0, 0, 32, 32);
+        px(g, '#a56a34', [[4 + v, 8, 5, 3], [16, 14, 6, 3], [8, 22, 4, 3]]);
+        px(g, '#7a4a28', [[14, 9, 3, 2], [6, 16, 3, 3], [22, 20, 3, 2]]);
+        px(g, '#e7c096', [[20, 8, 3, 2], [11, 18, 2, 2], [24, 24, 3, 2]]);
       });
     });
     sprites[STONE] = [0, 1, 2].map(function (v) {
       return makeSprite(function (g) {
-        g.fillStyle = '#c5ced6'; g.fillRect(0, 0, 32, 32);
-        g.fillStyle = '#9aa7b2';
-        g.fillRect(3 + v, 5, 10, 7); g.fillRect(17, 14, 9, 7); g.fillRect(8, 20, 7, 5);
-        g.fillStyle = '#7e8c98'; g.fillRect(6, 8, 6, 2); g.fillRect(19, 17, 5, 2);
-        g.fillStyle = '#eef4f8'; g.fillRect(5, 6, 3, 2); g.fillRect(20, 15, 2, 2);
-        shade(g);
+        g.fillStyle = '#b7c0c8'; g.fillRect(0, 0, 32, 32);
+        px(g, '#8e9aa6', [[4 + v, 8, 8, 4], [16, 16, 8, 4], [8, 22, 6, 3]]);
+        px(g, '#6e7c88', [[6, 12, 5, 2], [18, 20, 5, 2]]);
+        px(g, '#e8eef3', [[5, 7, 3, 2], [19, 15, 3, 2], [12, 24, 2, 2]]);
       });
     });
-    sprites[WOOD] = [0, 1].map(function () {
+    sprites[WOOD] = [0, 1].map(function (v) {
       return makeSprite(function (g) {
-        g.fillStyle = '#8d5428'; g.fillRect(0, 0, 32, 32);
-        g.fillStyle = '#c4843e'; g.fillRect(3, 0, 26, 32);
-        g.fillStyle = '#e8c48a'; g.fillRect(7, 0, 18, 32);
-        g.fillStyle = '#f3ddb4'; g.beginPath(); g.arc(16, 16, 6, 0, 6.3); g.fill();
-        g.fillStyle = '#e2b56a'; g.beginPath(); g.arc(16, 16, 3.5, 0, 6.3); g.fill();
-        g.fillStyle = '#a86430'; g.beginPath(); g.arc(16, 16, 1.6, 0, 6.3); g.fill();
-        g.fillStyle = '#6e3e1c'; g.fillRect(2, 6, 2, 4); g.fillRect(28, 18, 2, 5);
-        shade(g);
+        g.fillStyle = '#6b3c1c'; g.fillRect(0, 0, 32, 32);
+        g.fillStyle = '#a86430'; g.fillRect(4, 0, 24, 32);
+        g.fillStyle = '#d09a58'; g.fillRect(10, 0, 8, 32);
+        g.fillStyle = '#f0d7a4'; g.fillRect(13, 0, 3, 32);
+        px(g, '#4e2c12', [[1, 6 + v, 3, 4], [27, 14, 4, 4], [2, 22, 3, 4], [26, 5, 3, 3]]);
+        cubeFace(g);
       });
     });
     sprites[LEAVES] = [0, 1, 2].map(function (v) {
       return makeSprite(function (g) {
-        g.fillStyle = v === 2 ? '#2f8a40' : '#3eae52'; g.fillRect(0, 0, 32, 32);
-        g.fillStyle = '#6ed25f';
-        g.beginPath(); g.arc(9, 10, 8, 0, 6.3); g.fill();
-        g.beginPath(); g.arc(22, 12, 7, 0, 6.3); g.fill();
-        g.beginPath(); g.arc(16, 18, 8, 0, 6.3); g.fill();
-        g.fillStyle = '#2c8a40';
-        g.beginPath(); g.arc(15, 24, 6, 0, 6.3); g.fill();
-        g.fillStyle = '#d7f5a4'; g.fillRect(8 + v, 8, 2, 5); g.fillRect(18, 14, 4, 2);
-        shade(g);
+        g.fillStyle = v === 2 ? '#2a7a38' : '#348c44'; g.fillRect(0, 0, 32, 32);
+        px(g, '#4cb454', [[2, 2, 10, 8], [16, 4, 12, 8], [6, 14, 12, 8], [18, 18, 10, 8]]);
+        px(g, '#8ee06a', [[6 + v, 4, 4, 4], [20, 8, 4, 3], [10, 18, 4, 3]]);
+        px(g, '#1f6430', [[22, 20, 6, 4], [4, 22, 5, 4]]);
+        cubeFace(g);
       });
     });
     sprites[SAND] = [0, 1].map(function (v) {
       return makeSprite(function (g) {
-        g.fillStyle = '#f3d48a'; g.fillRect(0, 0, 32, 32);
-        g.fillStyle = '#f8e4ad'; g.fillRect(0, 0, 32, 6);
-        g.fillStyle = '#e0bc68';
-        var i; for (i = 0; i < 7; i++) g.fillRect((i * 8 + v * 5) % 28 + 1, (i * 6 + 4) % 24 + 4, 2, 2);
-        g.fillStyle = '#f7f1e4'; g.beginPath(); g.ellipse(22, 20, 4, 2.2, 0.4, 0, 6.3); g.fill();
-        g.fillStyle = '#e7d3b0'; g.beginPath(); g.ellipse(22, 20, 2, 1, 0.4, 0, 6.3); g.fill();
-        shade(g);
+        g.fillStyle = '#f0d08a'; g.fillRect(0, 0, 32, 32);
+        g.fillStyle = '#f8e4ad'; g.fillRect(0, 0, 32, 8);
+        px(g, '#e0bc68', [[4 + v, 10, 3, 2], [14, 16, 3, 2], [22, 12, 2, 2], [8, 22, 3, 2], [18, 24, 3, 2], [26, 20, 2, 2]]);
+        px(g, '#fff6d4', [[10, 14, 2, 2], [20, 18, 2, 2]]);
+        turfSheen(g);
       });
     });
-    sprites[PLANKS] = [makeSprite(function (g) {
-      g.fillStyle = '#e7b56a'; g.fillRect(0, 0, 32, 32);
-      g.fillStyle = '#f6e0b0'; g.fillRect(0, 0, 32, 9);
-      g.fillStyle = '#d7a45a'; g.fillRect(0, 10, 32, 10);
-      g.fillStyle = '#c48a3e'; g.fillRect(0, 9, 32, 2); g.fillRect(0, 20, 32, 2);
-      g.fillStyle = '#8d5a28'; g.fillRect(6, 4, 2, 2); g.fillRect(22, 14, 2, 2); g.fillRect(12, 25, 2, 2);
-      shade(g);
+    sprites[PLANKS] = [0, 1].map(function (v) {
+      return makeSprite(function (g) {
+        var bands = ['#f3d7a4', '#e2b56e', '#d09a52', '#c4843c'], row;
+        for (row = 0; row < 4; row++) {
+          g.fillStyle = bands[row];
+          g.fillRect(0, row * 8, 32, 7);
+          g.fillStyle = '#7a4e22';
+          g.fillRect(0, row * 8 + 7, 32, 1);
+          g.fillRect(8 + ((row + v) % 3) * 6, row * 8 + 2, 2, 2);
+        }
+        cubeFace(g);
+      });
+    });
+    sprites[BEDROCK] = [makeSprite(function (g) {
+      g.fillStyle = '#3a4048'; g.fillRect(0, 0, 32, 32);
+      px(g, '#22262c', [[4, 6, 8, 4], [16, 14, 10, 4], [6, 22, 8, 4]]);
+      px(g, '#6a727c', [[6, 8, 3, 2], [18, 16, 3, 2]]);
+      cubeFace(g);
     })];
     sprites[WATER] = [makeSprite(function (g) {
       g.fillStyle = '#3ec6e0'; g.fillRect(0, 0, 32, 32);
       g.fillStyle = '#7fe3ef'; g.fillRect(0, 0, 32, 8);
       g.fillStyle = 'rgba(255,255,255,0.65)'; g.fillRect(2, 6, 12, 3); g.fillRect(18, 16, 10, 3);
       g.fillStyle = 'rgba(16,110,150,0.28)'; g.fillRect(0, 22, 32, 10);
-      shade(g);
+      g.fillStyle = 'rgba(255,255,255,0.28)'; g.fillRect(0, 0, 32, 4);
     })];
     sprites[WHEAT1] = [makeSprite(function (g) {
       g.strokeStyle = '#4fae4a'; g.lineWidth = 2; g.lineCap = 'round';
@@ -3478,7 +3647,7 @@ function validConversation(value, p) {
       var gy = ys[ys.length - 1] + 1;
       var under = base[idx(x, gy)];
       if (under !== GRASS && under !== DIRT && under !== SAND && under !== STONE) continue;
-      t = { x: x, groundY: gy, top: ys[0], hits: 0, stumpUntil: 0, cells: [] };
+      t = { x: x, groundY: gy, top: ys[0], hits: 0, growStart: 0, shownStage: 'mature', cells: [] };
       for (i = 0; i < ys.length; i++) t.cells.push({ x: x, y: ys[i], id: WOOD });
       trunks.push(t);
     }
@@ -3502,18 +3671,23 @@ function validConversation(value, p) {
       for (li = 0; li < t.cells.length; li++) treeByCell[idx(t.cells[li].x, t.cells[li].y)] = i;
     }
   }
+  function treeStage(t, now) {
+    if (!t || !t.growStart) return 'mature';
+    var age = (now || Date.now()) - t.growStart;
+    if (age < TREE_STUMP_MS) return 'stump';
+    if (age < TREE_STUMP_MS + TREE_SAPLING_MS) return 'sapling';
+    if (age < TREE_MATURE_MS) return 'small';
+    return 'small';
+  }
   function treeAt(tx, ty) {
     if (tx < 0 || ty < 0 || tx >= W || ty >= H) return null;
     var n = treeByCell[idx(tx, ty)];
     if (n == null) return null;
-    var t = trees[n], i, c, trunk = false, id = get(tx, ty);
-    for (i = 0; i < t.cells.length; i++) {
-      c = t.cells[i];
-      if (c.x === tx && c.y === ty) { trunk = c.id === WOOD; break; }
-    }
-    if (id === WOOD || id === LEAVES) return t;
-    if (trunk && id === AIR && t.stumpUntil > Date.now()) return t;
-    return null;
+    var t = trees[n], stage = treeStage(t), id = get(tx, ty);
+    if (stage === 'mature') return (id === WOOD || id === LEAVES) ? t : null;
+    if (tx !== t.x) return null;
+    if (stage === 'small') return (ty === t.groundY - 1 || ty === t.groundY - 2) ? t : null;
+    return ty === t.groundY - 1 ? t : null;
   }
   function trunkBlocked(t) {
     var i, c;
@@ -3525,24 +3699,36 @@ function validConversation(value, p) {
     return false;
   }
   function applyTreeForm(t) {
-    var i, c, cur, stump = t.stumpUntil > Date.now();
+    var stage = t.growStart ? treeStage(t) : 'mature', i, c, cur;
     for (i = 0; i < t.cells.length; i++) {
       c = t.cells[i];
       cur = get(c.x, c.y);
-      if (stump) { if (cur === c.id) setCell(c.x, c.y, AIR); }
-      else if (cur === AIR) setCell(c.x, c.y, c.id);
+      if (stage === 'mature') { if (cur === AIR) setCell(c.x, c.y, c.id); }
+      else if (cur === c.id) setCell(c.x, c.y, AIR);
     }
   }
   function growTrees() {
-    var now = Date.now(), i, t, grown = false;
+    var now = Date.now(), i, t, stage, grown = false;
     for (i = 0; i < trees.length; i++) {
       t = trees[i];
-      if (!t.stumpUntil || t.stumpUntil > now) continue;
-      if (trunkBlocked(t)) continue;
-      t.stumpUntil = 0;
-      t.hits = 0;
-      applyTreeForm(t);
-      grown = true;
+      if (!t.growStart) continue;
+      if (now - t.growStart >= TREE_MATURE_MS) {
+        if (trunkBlocked(t)) continue;
+        t.growStart = 0;
+        t.hits = 0;
+        t.shownStage = 'mature';
+        applyTreeForm(t);
+        burst((t.x + 0.5) * TILE, (t.groundY - 1.2) * TILE, '#67c84a', false);
+        grown = true;
+        continue;
+      }
+      stage = treeStage(t, now);
+      if (t.shownStage !== stage) {
+        if (t.shownStage && t.shownStage !== 'mature') burst((t.x + 0.5) * TILE, (t.groundY - 0.6) * TILE, '#8ed86a', false);
+        t.shownStage = stage;
+        applyTreeForm(t);
+        grown = true;
+      }
     }
     if (grown) saveSoon();
   }
@@ -3553,7 +3739,8 @@ function validConversation(value, p) {
     return hungerStageNow() === 'hungry' ? Math.round(ms * 1.8) : ms;
   }
   function noteTreeFound() {
-    if (quiz || progress.tree) return;
+    if (quiz || progress.chopped) return;
+    progress.chopped = 1;
     progress.tree = 1;
     learn('tree');
     showWord('tree');
@@ -3580,7 +3767,22 @@ function validConversation(value, p) {
   }
   function chopTree(t, tx, ty, id) {
     var now = Date.now();
-    if (t.stumpUntil > now) { hitFeedback(tx, ty, WOOD, true); return; }
+    var stage = treeStage(t, now);
+    if (stage === 'stump' || stage === 'sapling') {
+      t.shakeUntil = now + 280;
+      hitFeedback(tx, ty, stage === 'sapling' ? LEAVES : WOOD, true);
+      return;
+    }
+    if (stage === 'small') {
+      if ((t.swingUntil || 0) > now) { hitFeedback(tx, ty, WOOD, true); return; }
+      t.swingUntil = now + 450;
+      t.shakeUntil = now + 450;
+      hitFeedback(tx, ty, WOOD, false);
+      if (Math.random() < 0.125) addItem('wood', 1, true);
+      showToast('Too small!', 1.6);
+      noteTreeFound();
+      return;
+    }
     if ((t.swingUntil || 0) > now) { hitFeedback(tx, ty, WOOD, true); return; }
     var need = treeHitsNeeded();
     t.hits += 1;
@@ -3590,36 +3792,65 @@ function validConversation(value, p) {
     if (id === LEAVES) learn('leaves');
     if (t.hits < need) {
       hitFeedback(tx, ty, id === LEAVES ? LEAVES : WOOD, false);
+      chipAt(tx, ty, id === LEAVES ? LEAVES : WOOD, 4);
       noteTreeFound();
       return;
     }
     t.hits = need;
-    t.stumpUntil = now + TREE_REGROW_MS;
+    t.breakStart = now;
+    t.breakAt = now + breakWind(260);
+    t.breakId = id;
     hitFeedback(tx, ty, WOOD, false);
+    chipAt(tx, ty, WOOD, 6);
     noteTreeFound();
-    giveTreeWood(id, 1 + ((Math.random() * 2) | 0));
-    applyTreeForm(t);
+  }
+  function flushTreeBreaks() {
+    var now = Date.now(), i, t, hitId;
+    for (i = 0; i < trees.length; i++) {
+      t = trees[i];
+      if (!t.breakAt || t.breakAt > now) continue;
+      hitId = t.breakId || WOOD;
+      t.breakAt = 0;
+      t.growStart = now;
+      t.shownStage = 'stump';
+      t.hits = 0;
+      giveTreeWood(hitId, 1 + ((Math.random() * 2) | 0));
+      applyTreeForm(t);
+    }
   }
   function restoreTrees(saved) {
-    var byX = {}, i, t, row;
+    var byX = {}, i, t, row, start;
     if (Array.isArray(saved)) {
       for (i = 0; i < saved.length; i++) {
         row = saved[i];
         if (!row || !isFinite(row[0])) continue;
-        byX[row[0] | 0] = { hits: row[1] | 0, until: +row[2] || 0 };
+        byX[row[0] | 0] = { hits: row[1] | 0, until: +row[2] || 0, fresh: row[3] ? 1 : 0 };
       }
     }
     for (i = 0; i < trees.length; i++) {
       t = trees[i];
       row = byX[t.x];
       if (!row) continue;
-      if (row.until > Date.now()) {
-        t.hits = treeHitsNeeded();
-        t.stumpUntil = row.until;
+      t.growStart = 0;
+      if (row.fresh && row.until) {
+        start = row.until;
+        if (start > Date.now()) start = Date.now();
+        if (Date.now() - start < TREE_MATURE_MS) t.growStart = start;
+      } else if (!row.fresh && row.until > Date.now()) {
+        start = row.until - TREE_LEGACY_REGROW_MS;
+        if (start > Date.now()) start = Date.now();
+        t.growStart = start;
+      }
+      if (t.growStart) {
+        t.hits = 0;
+        t.shownStage = treeStage(t);
       } else if (row.until) {
         t.hits = 0;
-        t.stumpUntil = 0;
-      } else t.hits = Math.max(0, Math.min(TREE_HITS.hungry - 1, row.hits));
+        t.shownStage = 'mature';
+      } else {
+        t.hits = Math.max(0, Math.min(TREE_HITS.hungry - 1, row.hits));
+        t.shownStage = 'mature';
+      }
       applyTreeForm(t);
     }
   }
@@ -3668,6 +3899,104 @@ function validConversation(value, p) {
       pet: 0, tamed: 0, love: 0
     });
   }
+  function columnTop(x) {
+    var y, id;
+    if (x < 1 || x >= W - 1) return -1;
+    for (y = 1; y < H - 4; y++) {
+      id = base[idx(x, y)];
+      if (id === WATER) return -1;
+      if (id === GRASS || id === SAND) {
+        var above = y > 0 ? base[idx(x, y - 1)] : AIR;
+        if (above !== AIR && above !== WOOD && above !== LEAVES && above !== FLOWER && above !== TORCH) return -1;
+        return y;
+      }
+    }
+    return -1;
+  }
+  // Walk-in pockets where a hill drops. Floor stays level with the low ground, so nothing is trapped.
+  function carvePockets() {
+    var made = 0, x, k, hi, lo, tx, y, top, ok, p0, rooms, id, mouthAir;
+    p0 = Math.min(W - 16, origin + 50);
+    function pocketBlocked(px) {
+      if (px > origin - 2 && px < origin + 22) return true;
+      if (px > p0 - 4 && px < p0 + 18) return true;
+      return false;
+    }
+    function canDig(px, py) {
+      id = base[idx(px, py)];
+      return id === DIRT || id === STONE || id === SAND || id === GRASS;
+    }
+    for (x = 2; x < W - 8 && made < 5; x++) {
+      hi = columnTop(x);
+      if (hi < 2) continue;
+      for (k = 3; k <= 6; k++) {
+        lo = columnTop(x + k);
+        if (lo < hi + 2 || lo >= H - 2) continue;
+        if (pocketBlocked(x) || pocketBlocked(x + k)) continue;
+        ok = true;
+        rooms = [];
+        for (tx = x; tx < x + k && ok; tx++) {
+          top = columnTop(tx);
+          if (top < 0) { ok = false; break; }
+          if (top < lo - 1) {
+            for (y = top + 1; y < lo; y++) {
+              if (!canDig(tx, y)) { ok = false; break; }
+              rooms.push({ x: tx, y: y, torch: false });
+            }
+            if (!canDig(tx, lo)) ok = false;
+          } else if (top === lo - 1 && base[idx(tx, top - 1)] !== WOOD && (base[idx(tx, top)] === GRASS || base[idx(tx, top)] === SAND)) {
+            rooms.push({ x: tx, y: top, torch: false });
+          } else ok = false;
+        }
+        if (!ok || rooms.length < 2) continue;
+        mouthAir = false;
+        for (y = hi; y < lo; y++) {
+          if (base[idx(x + k, y)] !== AIR) continue;
+          for (tx = 0; tx < rooms.length; tx++) if (rooms[tx].x === x + k - 1 && rooms[tx].y === y) mouthAir = true;
+        }
+        if (!mouthAir) continue;
+        for (tx = 0; tx < rooms.length; tx++) {
+          if (rooms[tx].x === x && rooms[tx].y === lo - 1) rooms[tx].torch = true;
+          base[idx(rooms[tx].x, rooms[tx].y)] = rooms[tx].torch ? TORCH : AIR;
+        }
+        if (base[idx(x, lo)] === DIRT) base[idx(x, lo)] = STONE;
+        if (base[idx(x + k - 1, lo)] === STONE) base[idx(x + k - 1, lo)] = DIRT;
+        made++;
+        x += k + 3;
+        break;
+      }
+    }
+    // Flat meadows still get a low shelter with one-block steps, so every world has a pocket.
+    function forceFlatPocket(ax) {
+      var sy = columnTop(ax), i, tx, id;
+      if (sy < 2 || sy > H - 5) return false;
+      for (i = 0; i < 5; i++) {
+        if (columnTop(ax + i) !== sy || pocketBlocked(ax + i)) return false;
+      }
+      if (base[idx(ax + 1, sy - 1)] === WOOD || base[idx(ax + 2, sy - 1)] === WOOD) return false;
+      for (i = 1; i <= 4; i++) {
+        tx = ax + i;
+        id = base[idx(tx, sy)];
+        if (i >= 3 && id !== GRASS && id !== SAND) return false;
+        if (i <= 2 && id !== GRASS && id !== SAND) return false;
+        if (!canDig(tx, sy + 1) || !canDig(tx, sy + 2)) return false;
+      }
+      base[idx(ax + 1, sy)] = AIR;
+      base[idx(ax + 2, sy)] = AIR;
+      base[idx(ax + 2, sy + 1)] = AIR;
+      base[idx(ax + 3, sy + 1)] = AIR;
+      base[idx(ax + 4, sy + 1)] = TORCH;
+      if (base[idx(ax + 4, sy + 2)] === DIRT) base[idx(ax + 4, sy + 2)] = STONE;
+      if (base[idx(ax + 2, sy + 2)] === STONE) base[idx(ax + 2, sy + 2)] = DIRT;
+      return true;
+    }
+    var anchors = [origin + 42, origin - 18, origin + 78, 14, W - 28];
+    var ai;
+    for (ai = 0; ai < anchors.length && made < 2; ai++) {
+      if (anchors[ai] < 3 || anchors[ai] > W - 10) continue;
+      if (forceFlatPocket(anchors[ai])) made++;
+    }
+  }
   function generate(newSeed) {
     seed = newSeed | 0;
     origin = 28 + (Math.abs(seed) % 60);
@@ -3681,13 +4010,8 @@ function validConversation(value, p) {
     for (x = p0 - 3; x < p0; x++) fillLand(x, GROUND, SAND);
     for (x = p0; x <= Math.min(W - 3, p0 + 12); x++) fillPond(x, GROUND);
     for (x = p0 + 13; x <= Math.min(W - 3, p0 + 18); x++) fillLand(x, GROUND, GRASS);
-    plantTree(origin + 17, GROUND);
+    plantTree(origin + 28, GROUND);
     plantTree(origin + 36, GROUND);
-    if (base[idx(origin + 14, GROUND - 1)] === AIR) base[idx(origin + 14, GROUND - 1)] = STONE;
-    [3, 6, 10, 21, 27, 33, 41].forEach(function (dx) {
-      var fx = origin + dx;
-      if (fx > 1 && fx < W - 1 && base[idx(fx, GROUND - 1)] === AIR) base[idx(fx, GROUND - 1)] = FLOWER;
-    });
     ramp(left, -1, GROUND);
     ramp(Math.min(W - 4, p0 + 18), 1, GROUND);
     for (x = 8; x < W - 8; x += 17) {
@@ -3696,8 +4020,14 @@ function validConversation(value, p) {
       var h = surfaceAt(x);
       fillPond(x, h); fillPond(x + 1, h); fillPond(x + 2, h);
     }
-    // Guaranteed clear, level 5-column pad beside spawn; saved modifications still apply.
-    for(x=origin+6;x<=origin+10;x++)fillLand(x,GROUND,GRASS);
+    // Level grass for a 3-wide house, with four tiles of open yard on each side.
+    for (x = origin + 4; x <= origin + 14; x++) fillLand(x, GROUND, GRASS);
+    if (base[idx(origin + 16, GROUND - 1)] === AIR) base[idx(origin + 16, GROUND - 1)] = STONE;
+    [2, 20, 23, 33, 41].forEach(function (dx) {
+      var fx = origin + dx;
+      if (fx > 1 && fx < W - 1 && base[idx(fx, GROUND - 1)] === AIR) base[idx(fx, GROUND - 1)] = FLOWER;
+    });
+    carvePockets();
     cells = new Uint8Array(base);
     knockUntil = {};
     catalogTrees();
@@ -3705,11 +4035,11 @@ function validConversation(value, p) {
     buildSupplies();
     animals = [];
     addAnimal('dog', origin + 1);
-    addAnimal('sheep', origin + 4);
-    addAnimal('cow', origin + 11);
+    addAnimal('sheep', origin + 2);
+    addAnimal('cow', origin + 18);
     addAnimal('cat', origin + 24);
-    addAnimal('chicken', origin + 28);
-    addAnimal('rabbit', origin + 19);
+    addAnimal('chicken', origin + 32);
+    addAnimal('rabbit', origin + 20);
     addAnimal('horse', origin + 33);
     addAnimal('duck', origin + 47);
     addAnimal('pig', origin + 44);
@@ -4254,6 +4584,14 @@ function validConversation(value, p) {
     bedRest = 0;
     return true;
   }
+  function finishNap() {
+    var wasNight = nightFactor(timeOfDay) >= 0.35 || timeOfDay >= 0.55;
+    if (wasNight) timeOfDay = 0.18;
+    nightNoted = false;
+    paintNeeds();
+    showToast(wasNight ? 'Good morning!' : 'I feel rested.', 2.4);
+    saveSoon();
+  }
   function indoorTap(sx, sy) {
     if (!indoors) return;
     if (bedRest > 0) {
@@ -4272,7 +4610,7 @@ function validConversation(value, p) {
     else if (key === 'torch') showToast('The torch goes on the wall!', 2);
     else if (key === 'flower') showToast('The flower goes outside!', 2.2);
     else if (key === 'fence') showToast('The fence goes outside!', 2.2);
-    else if (key === 'door') showToast('The door goes outside!', 2.2);
+    else if (key === 'door') showToast(houseNeedingDoor() ? 'The door goes on the house!' : 'The door goes outside!', 2.2);
     else if (key === 'window') showToast('The window goes outside!', 2.2);
   }
   function indoorPhysics(dt) {
@@ -4283,8 +4621,10 @@ function validConversation(value, p) {
     if (bedRest > 0) {
       if (ax) bedRest = 0;
       else {
+        var napLeft = bedRest;
         bedRest = Math.max(0, bedRest - dt);
         sleepPhase += dt;
+        if (napLeft > 0 && bedRest === 0) finishNap();
         return;
       }
     }
@@ -4364,7 +4704,14 @@ function validConversation(value, p) {
     g.moveTo(winX + ww / 2, winY + 2); g.lineTo(winX + ww / 2, winY + wh - 2);
     g.moveTo(winX + 2, winY + wh / 2); g.lineTo(winX + ww - 2, winY + wh / 2);
     g.stroke();
-    inkBox(g, R.door.x, R.door.y, R.door.w, R.door.h, '#e2b06a', 5);
+    var fancyDoor = b.parts && b.parts.door && b.parts.door.tier >= 2;
+    inkBox(g, R.door.x, R.door.y, R.door.w, R.door.h, fancyDoor ? '#c4843e' : '#e2b06a', 5);
+    if (fancyDoor) {
+      g.fillStyle = '#8fd4ea';
+      g.fillRect(R.door.x + 8, R.door.y + 10, 16, 14);
+      g.fillStyle = '#ffffff';
+      g.fillRect(R.door.x + 10, R.door.y + 12, 5, 4);
+    }
     g.fillStyle = '#ffe08a';
     g.beginPath(); g.arc(R.door.x + R.door.w - 12, R.door.y + R.door.h * 0.55, 4, 0, 6.3); g.fill();
     inkBox(g, R.table.x - 10, R.floor - 8, R.table.w + 20, 16, '#f4b4c4', 7);
@@ -4750,7 +5097,7 @@ function validConversation(value, p) {
     return k;
   }
   function learn(key) {
-    key=key==='houseKit'?'house':key==='pen'?'fence':key;
+    if (key === 'pen') key = 'fence';
     if (!WORD[key]) return;
     if (learned.indexOf(key) < 0) learned.push(key);
   }
@@ -4812,6 +5159,76 @@ function validConversation(value, p) {
     if (id === WOOD || id === LEAVES || id === STONE || id === SAND) return KEY_OF[id];
     return '';
   }
+  var breakJobs = [];
+  var crackMarks = [];
+  function breakWind(ms) {
+    if (reducedMotion) return 90;
+    return laborMs(ms);
+  }
+  function chipAt(tx, ty, id, n) {
+    var x = (tx + 0.5) * TILE, y = (ty + 0.5) * TILE, i;
+    for (i = 0; i < n; i++) {
+      if (parts.length >= 90) parts.shift();
+      parts.push({
+        x: x + (Math.random() - 0.5) * 12,
+        y: y + (Math.random() - 0.5) * 8,
+        vx: (Math.random() - 0.5) * 120,
+        vy: -36 - Math.random() * 80,
+        life: 0.32 + Math.random() * 0.2,
+        age: 0,
+        color: PCOL[id] || '#fff',
+        s: 3 + ((Math.random() * 2) | 0),
+        heart: false
+      });
+    }
+  }
+  function markCrack(tx, ty, stage, ms) {
+    crackMarks.push({ tx: tx, ty: ty, stage: stage, until: Date.now() + ms });
+    if (crackMarks.length > 28) crackMarks.shift();
+  }
+  function laborBusy() {
+    var now = Date.now(), i, t;
+    if (breakJobs.length || fishing || (placeHold && placeHold.armed)) return true;
+    if (supplyCarryUntil > now) return true;
+    for (i = 0; i < trees.length; i++) {
+      t = trees[i];
+      if ((t.swingUntil || 0) > now || (t.breakAt || 0) > now) return true;
+    }
+    return false;
+  }
+  function breakBusy(tx, ty) {
+    var i;
+    for (i = 0; i < breakJobs.length; i++) if (breakJobs[i].tx === tx && breakJobs[i].ty === ty) return true;
+    return false;
+  }
+  function startBreak(tx, ty, id, ms, finish) {
+    if (breakBusy(tx, ty)) { chipAt(tx, ty, id, 3); return; }
+    var dur = breakWind(ms);
+    breakJobs.push({ tx: tx, ty: ty, id: id, t0: Date.now(), dur: dur, finish: finish });
+    chipAt(tx, ty, id, 6);
+    tone(150, 0.05, 'triangle', 0, 0.025, 50);
+  }
+  function flushDigBreaks() {
+    var now = Date.now(), i, s;
+    for (i = 0; i < digSpots.length; i++) {
+      s = digSpots[i];
+      if (!s.breakAt || s.breakAt > now) continue;
+      s.breakAt = 0;
+      openDigMound(s);
+    }
+  }
+  function updateBreaks() {
+    var now = Date.now(), i, job;
+    for (i = crackMarks.length - 1; i >= 0; i--) if (crackMarks[i].until <= now) crackMarks.splice(i, 1);
+    for (i = breakJobs.length - 1; i >= 0; i--) {
+      job = breakJobs[i];
+      if (now < job.t0 + job.dur) continue;
+      breakJobs.splice(i, 1);
+      if (get(job.tx, job.ty) === job.id) job.finish();
+    }
+    flushTreeBreaks();
+    flushDigBreaks();
+  }
   function hitFeedback(tx, ty, id, light) {
     var x = (tx + 0.5) * TILE, y = (ty + 0.5) * TILE, i;
     if (light) {
@@ -4832,9 +5249,7 @@ function validConversation(value, p) {
   function giveKnock(id) {
     var src = KEY_OF[id], drop = knockDropKey(id);
     if (!drop) return;
-    var treeFirst = !quiz && (id === WOOD || id === LEAVES) && !progress.tree;
     if (!quiz) {
-      if (treeFirst) progress.tree = 1;
       if (src) progress.mined[src] = 1;
       if (drop !== src) progress.mined[drop] = 1;
     }
@@ -4843,8 +5258,7 @@ function validConversation(value, p) {
     if (id === GRASS) addItem('seed', 1, true);
     if (src) learn(src);
     learn(drop);
-    if (treeFirst) { learn('tree'); showWord('tree'); chime(); }
-    else showWord(drop);
+    showWord(drop);
     if (quiz && !quizMatch(drop) && !(src && quizMatch(src))) quizWrong();
     updateQuest();
     saveSoon();
@@ -4910,9 +5324,10 @@ function validConversation(value, p) {
       var i;
       for (i = 0; i < SUPPLY_DEF[key].n; i++) list.push(key);
     });
-    var spots = [], x = origin + 3, n = 0, guard = 0, y, gy, id, tree, dig, used;
+    var spots = [], x = origin + 40, n = 0, guard = 0, y, gy, id, tree, dig, used;
     while (n < list.length && guard++ < W * 2) {
       if (x >= W - 3) x = 3;
+      if (x >= origin + 2 && x <= origin + 18) { x = origin + 40; continue; }
       gy = 0;
       for (y = 2; y < H - 1; y++) {
         id = get(x, y);
@@ -4920,11 +5335,11 @@ function validConversation(value, p) {
       }
       tree = gy && (get(x, gy - 1) === WOOD || get(x, gy - 2) === WOOD);
       dig = digSpots.some(function (s) { return s.tx === x; });
-      used = spots.some(function (s) { return Math.abs(s.tx - x) < 2; });
+      used = spots.some(function (s) { return Math.abs(s.tx - x) < 7; });
       if (gy && !tree && !dig && !used) {
         spots.push({ id: n, key: list[n], tx: x, x: (x + 0.5) * TILE, y: gy * TILE - 12, taken: false });
         n++;
-        x += 3;
+        x += 8;
       } else x += 1;
     }
     supplies = spots;
@@ -4945,6 +5360,7 @@ function validConversation(value, p) {
       return false;
     }
     s.taken = true;
+    supplyCarryUntil = Date.now() + 900;
     addItem(s.key, 1, true);
     if (CRAFTABLES[s.key]) craftedObjects.push(newCraftable(s.key));
     showWord(s.key);
@@ -4991,30 +5407,30 @@ function validConversation(value, p) {
     }
   }
   function buildDigSpots() {
+    var home = origin + 9;
     var p0 = Math.min(W - 16, origin + 50);
-    var anchors = [
-      { tx: origin + 8, zone: 'home' },
-      { tx: p0 - 2, zone: 'beach' },
-      { tx: p0 + 13, zone: 'pond' },
-      { tx: origin + 12, zone: 'home' },
-      { tx: p0 - 1, zone: 'beach' },
-      { tx: p0 + 15, zone: 'pond' },
-      { tx: origin + 7, zone: 'home' },
-      { tx: origin + 11, zone: 'home' },
-      { tx: p0 + 14, zone: 'pond' },
-      { tx: p0 - 3, zone: 'beach' }
-    ];
-    var n = 3 + Math.floor(hash2(seed, 41, 9) * 3);
+    var WANT = 2;
+    var MIN_GAP = 24;
+    var HOME_CLEAR = 10;
     var next = [], used = [];
     function take(tx, zone) {
-      if (next.length >= n || tx < 2 || tx >= W - 2) return;
-      if (used.some(function (x) { return Math.abs(x - tx) < 2; })) return;
+      if (next.length >= WANT || tx < 2 || tx >= W - 2) return;
+      if (Math.abs(tx - home) < HOME_CLEAR) return;
+      if (used.some(function (x) { return Math.abs(x - tx) < MIN_GAP; })) return;
       var ty = digSurface(tx);
       if (!ty) return;
       used.push(tx);
       next.push({ tx: tx, ty: ty, until: 0, zone: zone });
     }
-    anchors.forEach(function (a) { take(a.tx, a.zone); });
+    [
+      { tx: origin + 30, zone: 'home' },
+      { tx: p0 + 16, zone: 'pond' },
+      { tx: origin - 20, zone: 'home' },
+      { tx: origin + 52, zone: 'beach' },
+      { tx: Math.min(W - 12, origin + 78), zone: 'pond' }
+    ].forEach(function (a) { take(a.tx, a.zone); });
+    var x;
+    for (x = 4; x < W - 4 && next.length < WANT; x += 8) take(x, 'home');
     digSpots = next;
   }
   function restoreDigSpots(saved) {
@@ -5068,6 +5484,13 @@ function validConversation(value, p) {
     return true;
   }
   function digMound(spot) {
+    if (spot.breakAt) { chipAt(spot.tx, spot.ty, DIRT, 3); return; }
+    spot.breakStart = Date.now();
+    spot.breakAt = spot.breakStart + breakWind(320);
+    chipAt(spot.tx, spot.ty, DIRT, 6);
+    tone(220, 0.04, 'triangle', 0, 0.02, 40);
+  }
+  function openDigMound(spot) {
     var x = (spot.tx + 0.5) * TILE, y = (spot.ty - 0.45) * TILE;
     playSfx('harvest');
     burst(x, y, '#e2b15a', false);
@@ -5125,17 +5548,14 @@ function validConversation(value, p) {
   function giveMined(id) {
     var key = KEY_OF[id];
     if (!key) return;
-    var treeFirst = !quiz && (key === 'wood' || key === 'leaves') && !progress.tree;
     if (!quiz) {
-      if (treeFirst) progress.tree = 1;
       progress.mined[key] = 1;
       if (key === 'water') progress.water = 1;
     }
     addItem(key, 1, true);
     if (key === 'grass') addItem('seed', 1, true);
     learn(key);
-    if (treeFirst) { learn('tree'); showWord('tree'); chime(); }
-    else showWord(key);
+    showWord(key);
     if (quiz && !quizMatch(key)) quizWrong();
     updateQuest();
     saveSoon();
@@ -5177,24 +5597,26 @@ function validConversation(value, p) {
         return;
       }
     }
+    var standingEarly = !loose && treeAt(tx, ty);
+    if (standingEarly) {
+      if (!inReach(tx, ty)) { showWord('tree'); return; }
+      chopTree(standingEarly, tx, ty, id);
+      return;
+    }
     if (!mineable(id) || (!loose && !inReach(tx, ty))) {
       var key = KEY_OF[id];
       if (key) showWord(key);
       return;
     }
     if (id === WHEAT1 || id === WHEAT2 || id === WHEAT3) { harvestWheat(tx, ty, id); return; }
-    var standing = !loose && treeAt(tx, ty);
-    if (standing) {
-      if (!inReach(tx, ty)) { showWord('tree'); return; }
-      chopTree(standing, tx, ty, id);
-      return;
-    }
     // Ground, water, and rocks stay put. A floating leftover can still be picked up.
     if (!loose && staysWhenHit(id)) {
       var at = idx(tx, ty);
       if ((knockUntil[at] || 0) > Date.now()) { hitFeedback(tx, ty, id, true); return; }
       knockUntil[at] = Date.now() + laborMs(KNOCK_COOLDOWN_MS);
       hitFeedback(tx, ty, id, false);
+      markCrack(tx, ty, 0.55, 420);
+      chipAt(tx, ty, id, 4);
       if (knockDropKey(id)) {
         giveKnock(id);
         rememberEvent('found', knockDropKey(id));
@@ -5213,15 +5635,23 @@ function validConversation(value, p) {
     }
     if (buildOwned(tx, ty)) {
       var returned = KEY_OF[id]; if (returned && (inv[returned] || 0) >= 99) return;
-      buildAction('remove'); placedThisRun.delete(idx(tx, ty)); buildSession.removed++; buildDirty = true;
     }
-    playSfx(buildOwned(tx, ty) ? 'remove' : 'harvest');
-    setCell(tx, ty, AIR);
-    burst((tx + 0.5) * TILE, (ty + 0.5) * TILE, PCOL[id] || '#fff', false);
-    tone(180, 0.07, 'triangle', 0, 0.04, 80);
-    giveMined(id);
-    rememberEvent(id === WINDOW ? 'built' : 'found', KEY_OF[id]);
-    addFatigue(10);
+    var owned = buildOwned(tx, ty);
+    startBreak(tx, ty, id, 280, function () {
+      if (get(tx, ty) !== id) return;
+      if (owned) {
+        var back = KEY_OF[id];
+        if (back && (inv[back] || 0) >= 99) return;
+        buildAction('remove'); placedThisRun.delete(idx(tx, ty)); buildSession.removed++; buildDirty = true;
+      }
+      playSfx(owned ? 'remove' : 'harvest');
+      setCell(tx, ty, AIR);
+      burst((tx + 0.5) * TILE, (ty + 0.5) * TILE, PCOL[id] || '#fff', false);
+      tone(180, 0.07, 'triangle', 0, 0.04, 80);
+      giveMined(id);
+      rememberEvent(id === WINDOW ? 'built' : 'found', KEY_OF[id]);
+      addFatigue(10);
+    });
   }
   function groundSupport(id) {
     return id === GRASS || id === DIRT || id === SAND || id === STONE || id === PLANKS;
@@ -5235,6 +5665,8 @@ function validConversation(value, p) {
   function blockIsFloating(tx, ty) {
     var id = get(tx, ty);
     if (!RECLAIM_FLOAT[id]) return false;
+    // Generated roofs over a pocket stay. Only a block the child placed can be picked back up.
+    if (base && cells[idx(tx, ty)] === base[idx(tx, ty)]) return false;
     if (solid(get(tx, ty + 1))) return false;
     if (id === WINDOW && (wallSupport(get(tx - 1, ty)) || wallSupport(get(tx + 1, ty)))) return false;
     return true;
@@ -5254,6 +5686,7 @@ function validConversation(value, p) {
   }
   // Where a crafted item is allowed to sit. Empty string means the spot is fine.
   function specialPlaceLine(key, tx, ty) {
+    if (key === 'door' && houseNeedingDoor()) return 'The door goes on the house!';
     if (indoors && (key === 'flower' || key === 'fence' || key === 'door' || key === 'window')) return 'The ' + key + ' goes outside!';
     if (key === 'flower') {
       var soil = get(tx, ty + 1);
@@ -5274,6 +5707,7 @@ function validConversation(value, p) {
   function tryPlace(tx, ty, quiet, fill) {
     var key = selectedKey();
     if (!key) return false;
+    if (key === 'door' && houseNeedingDoor()) { if (!quiet) showToast('The door goes on the house!', 2.2); return false; }
     if (RAW_BLOCK[key]) { if (!quiet) showWord(key); return false; }
     if (CRAFTABLES[key]) {
       var prior = buildTool;
@@ -5577,10 +6011,15 @@ function validConversation(value, p) {
     if (key === 'bed' || (buildMode && buildMaterial() === 'bed')) return 'The bed goes in the house!';
     if (key === 'table' || (buildMode && buildMaterial() === 'table')) return 'The table goes in the house!';
     var mat = buildMode ? buildMaterial() : key;
+    if (mat === 'door' && houseNeedingDoor()) return 'The door goes on the house!';
     if (indoors && (mat === 'flower' || mat === 'fence' || mat === 'door' || mat === 'window')) return 'The ' + mat + ' goes outside!';
     var line = specialPlaceLine(mat, tx, ty);
     if (line) return line;
     if (mat === 'seed') return 'The seed goes on dirt!';
+    if (mat === 'houseKit') {
+      var houseSpot = craftableTarget('houseKit', tx, ty);
+      if (!houseSpot.ok && houseSpot.reason !== 'reach' && houseSpot.reason !== 'sight' && houseSpot.reason !== 'stock' && houseSpot.reason !== 'limit') return 'The house goes on empty ground!';
+    }
     if (buildMode ? !buildReach(tx, ty) : !placementReach(tx, ty)) return 'Move a little closer!';
     return 'Choose empty squares!';
   }
@@ -6469,95 +6908,146 @@ function validConversation(value, p) {
     whisk(2.0, -24.7, 11.6, -23.1, 0.25);
     g.restore();
   }
+  function palFrame(g, phase, paint) {
+    g.save();
+    g.translate(0, reducedMotion ? 0 : Math.sin(phase * 2.2) * 0.45);
+    g.lineJoin = 'round';
+    g.lineCap = 'round';
+    g.strokeStyle = INK;
+    g.lineWidth = OUT;
+    function blob(x, y, rx, ry, color, rot) {
+      g.beginPath();
+      g.ellipse(x, y, rx, ry, rot || 0, 0, Math.PI * 2);
+      g.fillStyle = color;
+      g.fill();
+      g.stroke();
+    }
+    function eye(x, y) {
+      if (!reducedMotion && phase % 24 > 22.8) {
+        g.beginPath(); g.moveTo(x - 1.5, y); g.lineTo(x + 1.5, y); g.stroke();
+        return;
+      }
+      g.fillStyle = '#1a1a1a';
+      g.beginPath(); g.arc(x, y, 1.15, 0, Math.PI * 2); g.fill();
+      g.fillStyle = '#fff';
+      g.beginPath(); g.arc(x + 0.35, y - 0.4, 0.38, 0, Math.PI * 2); g.fill();
+    }
+    paint(blob, eye);
+    g.restore();
+  }
+  function drawCow(g, phase) {
+    palFrame(g, phase, function (blob, eye) {
+      blob(-11, -8, 2.2, 5.5, '#5c4638');
+      blob(8, -8, 2.2, 5.5, '#5c4638');
+      blob(-2, -18, 13, 8.2, '#fff8ee');
+      blob(-6, -20, 3.2, 2.4, '#3a322c');
+      blob(4, -16, 2.4, 1.8, '#3a322c');
+      blob(11, -26, 6.4, 5.6, '#fff8ee');
+      blob(6.5, -31, 1.3, 2.4, '#f3e2c4', -0.4);
+      blob(14.5, -31, 1.3, 2.4, '#f3e2c4', 0.4);
+      blob(15.6, -25, 3.4, 2.4, '#f3b7c4');
+      g.fillStyle = '#c47d8a';
+      g.beginPath(); g.arc(14.4, -25, 0.55, 0, 6.3); g.fill();
+      g.beginPath(); g.arc(16.8, -25, 0.55, 0, 6.3); g.fill();
+      eye(12.2, -27.2);
+      blob(-14, -16, 1.6, 4.2, '#5c4638', 0.8);
+    });
+  }
+  function drawSheep(g, phase) {
+    palFrame(g, phase, function (blob, eye) {
+      blob(-8, -7, 1.8, 4.6, '#3a322c');
+      blob(6, -7, 1.8, 4.6, '#3a322c');
+      [[-6, -16], [2, -18], [-2, -22], [6, -15], [-8, -20]].forEach(function (p) { blob(p[0], p[1], 5.2, 4.4, '#fffdf8'); });
+      blob(12, -24, 5.2, 4.6, '#3a322c');
+      blob(14.5, -22.5, 2.2, 1.6, '#f3b7c4');
+      eye(13.2, -25.2);
+      blob(-12, -18, 2.2, 2.2, '#fffdf8');
+    });
+  }
+  function drawChicken(g, phase) {
+    palFrame(g, phase, function (blob, eye) {
+      var step = reducedMotion ? 0 : Math.sin(phase * 3) * 1.2;
+      blob(-4, -4 + step, 1.3, 3.2, '#e08a2a');
+      blob(3, -4 - step, 1.3, 3.2, '#e08a2a');
+      blob(0, -14, 8, 6.2, '#f6d15a');
+      blob(7.5, -20, 4.6, 4.2, '#f6d15a');
+      blob(6.2, -24.2, 1.5, 2.2, '#e05050');
+      blob(8.6, -24.6, 1.6, 2.4, '#e05050');
+      g.beginPath();
+      g.moveTo(11.2, -19.4);
+      g.quadraticCurveTo(15.4, -18.6, 14.2, -16.8);
+      g.quadraticCurveTo(12.2, -17.6, 11, -18.2);
+      g.closePath();
+      g.fillStyle = '#f08a1a';
+      g.fill();
+      g.stroke();
+      eye(8.4, -21);
+      blob(-7, -16, 4.2, 2.4, '#f0c14a', -0.4);
+    });
+  }
+  function drawCat(g, phase) {
+    palFrame(g, phase, function (blob, eye) {
+      var wag = reducedMotion ? 0 : Math.sin(phase * 2.4) * 3;
+      g.beginPath();
+      g.moveTo(-8, -16);
+      g.quadraticCurveTo(-16, -18 - wag, -14, -28 - wag);
+      g.quadraticCurveTo(-8, -24, -8, -18);
+      g.stroke();
+      blob(-1, -16, 10, 6.4, '#e7b06a');
+      blob(9, -24, 5.4, 4.8, '#e7b06a');
+      blob(6.2, -29.5, 1.6, 2.6, '#e7b06a', -0.5);
+      blob(12.2, -29.5, 1.6, 2.6, '#e7b06a', 0.5);
+      blob(6.6, -28.6, 0.7, 1.3, '#f3b7c4');
+      blob(11.8, -28.6, 0.7, 1.3, '#f3b7c4');
+      blob(13.4, -23, 1.5, 1.1, '#f3b7c4');
+      eye(10.2, -24.6);
+      g.strokeStyle = INK;
+      g.lineWidth = 0.9;
+      g.beginPath();
+      g.moveTo(13.5, -22.4); g.lineTo(17.5, -23.2);
+      g.moveTo(13.5, -21.4); g.lineTo(17.5, -21.2);
+      g.stroke();
+    });
+  }
+  function drawDog(g, phase) {
+    palFrame(g, phase, function (blob, eye) {
+      var wag = reducedMotion ? 0 : Math.sin(phase * 3) * 4;
+      blob(-12, -20 - wag * 0.15, 2.2, 4.2, '#c49a6a', 0.7);
+      blob(0, -15, 11, 6.6, '#e2c4a2');
+      blob(10, -23, 5.6, 5, '#e2c4a2');
+      blob(6.4, -24, 2.2, 4.4, '#b58862', 0.35);
+      blob(14.6, -22, 2.8, 2.1, '#fff6ea');
+      blob(15.4, -21.6, 1.2, 0.9, '#3a322c');
+      blob(8, -14, 2.4, 1.1, '#e23b3b');
+      eye(11.2, -24.2);
+      blob(-7, -8, 1.8, 4.2, '#c49a6a');
+      blob(5, -8, 1.8, 4.2, '#c49a6a');
+    });
+  }
+  function drawHorse(g, phase) {
+    palFrame(g, phase, function (blob, eye) {
+      var wag = reducedMotion ? 0 : Math.sin(phase * 2) * 2;
+      blob(-14, -18, 2.4, 6, '#6d5344', 0.5 + wag * 0.02);
+      blob(-1, -16, 13, 7.2, '#c99a6a');
+      blob(12, -26, 4.2, 7.4, '#c99a6a');
+      blob(13, -30, 2.2, 4.6, '#6d5344');
+      blob(16.4, -24, 4.2, 2.6, '#ddc2a4');
+      blob(18.6, -23.6, 0.8, 0.6, '#3a322c');
+      eye(13.4, -28);
+      blob(-8, -7, 1.8, 5.2, '#6d5344');
+      blob(6, -7, 1.8, 5.2, '#6d5344');
+    });
+  }
   function drawAnimal(g, type, phase) {
     if (type === 'duck') { drawDuck(g, phase); return; }
     if (type === 'pig') { drawPig(g, phase); return; }
     if (type === 'rabbit') { drawRabbit(g, phase); return; }
-    g.save(); inkStyle(g);
-    var frame = reducedMotion ? 1 : Math.floor(phase * 1.5) % 8;
-    var wag = Math.sin(frame * Math.PI / 4) * 3;
-    var blink = !reducedMotion && phase % 25 > 24;
-    var bird = type === 'chicken' || type === 'duck';
-    var color = { cow: '#fff9e8', sheep: '#fffdf6', chicken: '#f6d487',
-      cat: '#eab776', dog: '#e2c4a2', duck: '#fffdf8', horse: '#c99d7b' }[type] || '#dfc198';
-    var hoof = type === 'sheep' ? '#3c342e' : (type === 'cow' || type === 'horse' ? '#6d5848' : color);
-    function eye(x, y) {
-      if (blink) { inkPath(g, [[x - 1.7, y], [x + 1.7, y]]); return; }
-      g.fillStyle = '#fffdf8'; g.beginPath(); g.arc(x, y, 1.65, 0, 6.3); g.fill();
-      g.strokeStyle = '#51493c'; g.lineWidth = 1; g.stroke();
-      g.fillStyle = '#51493c'; g.beginPath(); g.arc(x + 0.35, y + 0.1, 0.82, 0, 6.3); g.fill();
-      g.fillStyle = '#fff'; g.beginPath(); g.arc(x - 0.35, y - 0.45, 0.32, 0, 6.3); g.fill();
-      inkStyle(g);
-    }
-    function blot(x, y, rx, ry, c) {
-      g.beginPath(); g.ellipse(x, y, rx, ry, 0, 0, 6.3); g.fillStyle = c; g.fill();
-    }
-    // Tail sits behind the body and still wags while the animal stands.
-    if (type === 'cat') {
-      g.beginPath(); g.moveTo(-12, -18); g.quadraticCurveTo(-22, -16 - wag * 0.3, -18, -28 - wag); g.quadraticCurveTo(-10, -26, -12, -20);
-      g.fillStyle = color; g.fill(); g.stroke();
-    } else if (type === 'dog') inkEllipse(g, -11, -30 - wag * 0.15, 3.2, 5.2, '#c49e77', 0.9);
-    else if (type === 'horse') inkPath(g, [[-12, -22], [-20, -18 - wag], [-16, -30 - wag], [-10, -24]], '#6d5344');
-    else if (!bird) {
-      g.beginPath(); g.moveTo(-12, -20); g.quadraticCurveTo(-22, -22 - wag, -16, -30 - wag); g.stroke();
-    }
-    if (bird) {
-      inkPath(g, [[-5, -12], [-5, -2], [-8, -1]]); inkPath(g, [[3, -12], [3, -2], [6, -1]]);
-      blot(-7, -1.2, 1.6, 0.7, '#edbf71'); blot(5, -1.2, 1.6, 0.7, '#edbf71');
-    } else {
-      var legTop = type === 'dog' ? -11 : -14, legH = type === 'dog' ? 9 : 12;
-      inkBox(g, -10, legTop, 5, legH, hoof === color ? color : hoof); inkBox(g, 4, legTop, 5, legH, hoof === color ? color : hoof);
-      if (type === 'sheep') { inkBox(g, -10, -14, 5, 8, '#51493c', 1.2); inkBox(g, 4, -14, 5, 8, '#51493c', 1.2); }
-      blot(-7.5, -3.2, 2.1, 1.1, '#3a322c'); blot(6.5, -3.2, 2.1, 1.1, '#3a322c');
-    }
-    inkEllipse(g, type === 'dog' ? 0 : -1, type === 'dog' ? -18 : -21, type === 'dog' ? 12 : (bird ? 11 : 14), type === 'dog' ? 8 : (bird ? 8 : 9), type === 'sheep' ? '#fffdf8' : color);
-    if (type === 'sheep') {
-      [[-10, -24], [-2, -28], [6, -24], [-6, -18], [3, -16]].forEach(function (p) { inkEllipse(g, p[0], p[1], 5.2, 4.6, '#fffdf8'); });
-    } else if (type === 'cow') {
-      blot(-8, -24, 3.2, 2.2, '#51493c'); blot(2, -18, 2.4, 1.8, '#51493c'); blot(-4, -22, 1.5, 1.2, '#51493c');
-    }
-    if (bird) inkEllipse(g, -2, -20 + (frame < 4 ? 0 : 0.8), 5.5, 3.6, type === 'duck' ? '#d5e4c4' : '#edbf71', -0.25);
-    if (type === 'horse') {
-      inkBox(g, 6, -34, 7, 16, color, 3);
-      inkPath(g, [[7, -33], [5, -28], [8, -22], [10, -30]], '#6d5344');
-    }
-    var hx = bird ? 10 : 12, hy = type === 'horse' ? -33 : -28;
-    inkEllipse(g, hx, hy, type === 'horse' ? 8.2 : 7.2, type === 'horse' ? 6.4 : 6.6, type === 'sheep' ? '#51493c' : color);
-    if (type === 'cat') {
-      inkPath(g, [[6, -32], [5, -40], [12, -33]], color); inkPath(g, [[12, -33], [16, -40], [18, -31]], color);
-      blot(7.2, -36, 1.3, 1.6, '#f0b8b4'); blot(15.2, -36, 1.3, 1.6, '#f0b8b4');
-    } else if (type === 'dog') inkEllipse(g, 8.5, -23, 2.7, 6.6, '#b58862', 0.2);
-    else if (type === 'cow') {
-      inkPath(g, [[7, -33], [6, -39], [11, -33]], '#fff9e8'); inkPath(g, [[13, -33], [16, -39], [17, -32]], '#fff9e8');
-      blot(8.2, -36.5, 0.7, 1.3, '#dfc198'); blot(15.2, -36.2, 0.7, 1.3, '#dfc198');
-    } else if (type === 'horse') {
-      inkPath(g, [[8, -36], [9, -43], [13, -36]], color);
-      inkPath(g, [[9.2, -40], [10.2, -36]], '#6d5344');
-    } else if (type === 'chicken') {
-      inkEllipse(g, 8, -36, 2.2, 2.6, '#e07070'); inkEllipse(g, 12, -37, 2.4, 3.1, '#e07070');
-      blot(10, -32.5, 1.3, 1.6, '#e07070');
-    }
-    if (type === 'duck') inkPath(g, [[15, -28], [23, -27], [15, -25]], '#f0a05a');
-    else if (type === 'chicken') inkPath(g, [[16, -28], [21, -27], [16, -26]], '#edbf71');
-    else if (type === 'cow') {
-      inkEllipse(g, 18, hy + 3, 5.2, 3.4, '#f3b7c0');
-      blot(16.6, hy + 3.2, 0.55, 0.75, '#c47d8a'); blot(19.4, hy + 3.2, 0.55, 0.75, '#c47d8a');
-    } else if (type === 'dog') {
-      inkEllipse(g, 16.6, hy + 1.5, 3.3, 2.5, '#fff6ea');
-      blot(17.6, hy + 1.4, 1.35, 1.05, '#51493c');
-      if (!blink) blot(17.2, hy + 3.6, 1.5, 0.85, '#e07070');
-    } else if (type === 'horse') {
-      inkEllipse(g, 19.2, hy + 2.4, 5.4, 2.3, '#ddc2a4');
-      blot(21.6, hy + 2.3, 0.85, 0.6, '#51493c');
-    } else if (type === 'cat') {
-      blot(16.5, hy + 2.2, 0.7, 0.55, '#e07070');
-      g.strokeStyle = '#51493c'; g.lineWidth = 0.9;
-      [[15, -25], [22, -26], [15, -23], [22, -22]].forEach(function (p, i) { inkPath(g, [[14, p[1]], p]); });
-    }
-    eye(hx + (bird ? 0.4 : 1.2), hy - 1.3);
-    if (!bird && type !== 'horse') eye(hx - 2.2, hy - 1.1);
-    if (type === 'dog') { inkPath(g, [[6, -18], [13, -18]]); blot(9.5, -17.2, 1.1, 1.1, '#ffd36a'); }
-    g.restore();
+    if (type === 'cow') { drawCow(g, phase); return; }
+    if (type === 'sheep') { drawSheep(g, phase); return; }
+    if (type === 'chicken') { drawChicken(g, phase); return; }
+    if (type === 'cat') { drawCat(g, phase); return; }
+    if (type === 'dog') { drawDog(g, phase); return; }
+    if (type === 'horse') drawHorse(g, phase);
   }
   function drawAnimalIcon(g, type, S, phase) {
     g.save(); g.translate(S * 0.50, S * 0.89); g.scale(S / 60, S / 60);
@@ -6739,6 +7229,7 @@ function validConversation(value, p) {
   function paintIcon(canvasEl, key, phase) {
     var g = canvasEl.getContext('2d'), S = canvasEl.width;
     g.clearRect(0, 0, S, S);
+    if (key === 'house') key = 'roof';
     if(CRAFTABLES[key]){var b=newCraftable(key),art=craftableSprite(b),scale=S/Math.max(art.width,art.height);g.imageSmoothingEnabled=false;g.drawImage(art,0,(S-art.height*scale)/2,art.width*scale,art.height*scale);}
     else if(key==='wheel'){g.save();g.imageSmoothingEnabled=false;g.scale(S/32,S/32);drawWheelArt(g);g.restore();}
     else if (ANIMALS[key]) drawAnimalIcon(g, key, S, phase);
@@ -7067,7 +7558,63 @@ function validConversation(value, p) {
     if (rainOn && !indoors) drawUmbrella(g, 9, -45 - bob, -18 - bob);
     g.restore();
   }
+  function paintCracks(g, tx, ty, stage) {
+    if (stage <= 0) return;
+    var px = tx * TILE, py = ty * TILE, id = get(tx, ty);
+    var wob = (id === WOOD || id === LEAVES) ? treeWobble(tx, ty) : 0;
+    var cuts = [
+      [8, 4, 2, 8], [10, 10, 8, 2], [16, 10, 2, 8], [14, 18, 8, 2],
+      [22, 6, 2, 10], [20, 16, 6, 2], [6, 20, 2, 8], [8, 24, 10, 2]
+    ];
+    var n = Math.max(1, Math.ceil(Math.min(1, stage) * cuts.length)), i;
+    g.save();
+    g.translate(px + wob, py);
+    g.fillStyle = 'rgba(28,20,14,0.86)';
+    for (i = 0; i < n; i++) g.fillRect(cuts[i][0], cuts[i][1], cuts[i][2], cuts[i][3]);
+    g.restore();
+  }
+  function drawCrackOverlay(g) {
+    var now = Date.now(), i, job, t, s, c, stage, u;
+    for (i = 0; i < breakJobs.length; i++) {
+      job = breakJobs[i];
+      u = (now - job.t0) / job.dur;
+      paintCracks(g, job.tx, job.ty, 0.3 + Math.max(0, Math.min(1, u)) * 0.7);
+    }
+    for (i = 0; i < trees.length; i++) {
+      t = trees[i];
+      if (t.breakAt) {
+        for (c = 0; c < t.cells.length; c++) paintCracks(g, t.cells[c].x, t.cells[c].y, 1);
+      } else if (t.hits > 0 && treeStage(t, now) === 'mature') {
+        stage = t.hits / treeHitsNeeded();
+        for (c = 0; c < t.cells.length; c++) if (get(t.cells[c].x, t.cells[c].y) === t.cells[c].id) paintCracks(g, t.cells[c].x, t.cells[c].y, stage);
+      }
+    }
+    for (i = 0; i < digSpots.length; i++) {
+      s = digSpots[i];
+      if (!s.breakAt || !s.breakStart) continue;
+      u = (now - s.breakStart) / Math.max(1, s.breakAt - s.breakStart);
+      paintCracks(g, s.tx, s.ty, Math.max(0.2, Math.min(1, u)));
+    }
+    for (i = 0; i < crackMarks.length; i++) paintCracks(g, crackMarks[i].tx, crackMarks[i].ty, crackMarks[i].stage);
+  }
+  function bodyHitsTile(px, py, tx, ty, tall) {
+    var left = px - 16, right = px + 16, top = py - tall, bot = py + 2;
+    var x0 = tx * TILE, y0 = ty * TILE;
+    return right > x0 && left < x0 + TILE && bot > y0 && top < y0 + TILE;
+  }
+  function canopyAlpha(tx, ty) {
+    if (bodyHitsTile(player.x, player.y, tx, ty, 52)) return 0.32;
+    var i, a;
+    for (i = 0; i < animals.length; i++) {
+      a = animals[i];
+      if (Math.abs(a.x - (tx + 0.5) * TILE) > 70) continue;
+      if (bodyHitsTile(a.x, a.y, tx, ty, 42)) return 0.38;
+    }
+    return 1;
+  }
   function drawWorld(g, sec) {
+    var smooth = g.imageSmoothingEnabled;
+    g.imageSmoothingEnabled = false;
     drawBuildGuide(g);
     var zoom = tileScreen / TILE;
     var x0 = Math.max(0, Math.floor(drawCamX / TILE) - 1);
@@ -7132,7 +7679,14 @@ function validConversation(value, p) {
         }
         var sp = spr(id, (hash2(x, y, 3) * 3) | 0);
         var wobble = (id === WOOD || id === LEAVES) ? treeWobble(x, y) : 0;
-        if (sp) g.drawImage(sp, px + wobble, py, TILE, TILE);
+        var cover = (id === LEAVES || id === WOOD) ? canopyAlpha(x, y) : 1;
+        if (sp && cover < 1) {
+          g.save();
+          g.globalAlpha = cover;
+          g.drawImage(sp, px + wobble, py, TILE, TILE);
+          g.restore();
+        } else if (sp) g.drawImage(sp, px + wobble, py, TILE, TILE);
+        if (sp && (id === DIRT || id === STONE || id === SAND)) softenSoilEdge(g, id, x, y, px, py);
       }
     }
     drawOrganicPonds(g, sec);
@@ -7140,6 +7694,8 @@ function validConversation(value, p) {
     drawStumps(g);
     drawDigMounds(g, sec);
     drawGateStars(g, sec);
+    drawCrackOverlay(g);
+    g.imageSmoothingEnabled = smooth;
   }
   function treeWobble(tx, ty) {
     if (tx < 0 || ty < 0 || tx >= W || ty >= H) return 0;
@@ -7150,11 +7706,31 @@ function validConversation(value, p) {
     return Math.round(Math.sin(Date.now() / 28) * 3);
   }
   function terrainInk(id) {
-    if (id === GRASS) return { body: '#c98448', cap: '#67c84a', lite: '#9adf78', rim: '#2f7a32' };
-    if (id === SAND) return { body: '#e8c56e', cap: '#f8e4ad', lite: '#fff3c8', rim: '#d7b15e' };
-    if (id === DIRT) return { body: '#c98448', cap: '#e2b06a', lite: '#f0d0a0', rim: '#a56a38' };
-    if (id === STONE) return { body: '#b7c2cc', cap: '#d5dee6', lite: '#eef4f8', rim: '#8b98a4' };
-    return { body: '#c98448', cap: '#67c84a', lite: '#9adf78', rim: '#2f7a32' };
+    if (id === GRASS) return { body: '#c98448', cap: '#3f9a34', lite: '#6ec456', rim: '#2f7a28' };
+    if (id === SAND) return { body: '#e8c56e', cap: '#f0d08a', lite: '#f8e4ad', rim: '#d7b15e' };
+    if (id === DIRT) return { body: '#c98448', cap: '#d09252', lite: '#e2b06a', rim: '#a56a38' };
+    if (id === STONE) return { body: '#b7c2cc', cap: '#c5ced6', lite: '#e8eef3', rim: '#8e9aa6' };
+    return { body: '#c98448', cap: '#3f9a34', lite: '#6ec456', rim: '#2f7a28' };
+  }
+  function bankInk(id) {
+    var ink = terrainInk(id);
+    return { soil: ink.body, cap: ink.cap, lite: ink.lite, blade: ink.rim };
+  }
+  function softenSoilEdge(g, id, x, y, px, py) {
+    var above = y > 0 ? get(x, y - 1) : AIR;
+    var side = id === STONE ? 'rgba(40,50,60,0.16)' : 'rgba(60,32,12,0.13)';
+    if (above === AIR) {
+      g.fillStyle = id === STONE ? 'rgba(255,255,255,0.20)' : 'rgba(255,255,255,0.16)';
+      g.fillRect(px, py, TILE, 4);
+    }
+    if (x > 0 && get(x - 1, y) === AIR) {
+      g.fillStyle = side;
+      g.fillRect(px, py, 3, TILE);
+    }
+    if (x + 1 < W && get(x + 1, y) === AIR) {
+      g.fillStyle = side;
+      g.fillRect(px + TILE - 3, py, 3, TILE);
+    }
   }
   function landSurface(tx) {
     var y, id;
@@ -7177,22 +7753,50 @@ function validConversation(value, p) {
     return true;
   }
   function drawStumps(g) {
-    var i, t, px, py, now = Date.now();
+    var i, t, px, py, stage, wob, bx, by;
     for (i = 0; i < trees.length; i++) {
       t = trees[i];
-      if (!(t.stumpUntil > now)) continue;
+      stage = treeStage(t);
+      if (stage === 'mature') continue;
       px = t.x * TILE;
       py = (t.groundY - 1) * TILE;
-      g.fillStyle = '#6e3e1c';
-      g.fillRect(px + 9, py + 16, 14, 16);
-      g.fillStyle = '#c4843e';
-      g.fillRect(px + 11, py + 16, 10, 16);
-      g.fillStyle = '#e8c48a';
-      g.fillRect(px + 13, py + 17, 6, 14);
-      g.fillStyle = '#f3ddb4';
-      g.fillRect(px + 10, py + 15, 12, 4);
-      g.fillStyle = '#a86430';
-      g.fillRect(px + 14, py + 16, 4, 2);
+      wob = t.shakeUntil > Date.now() ? Math.round(Math.sin(Date.now() / 28) * 3) : 0;
+      bx = px + 16 + wob;
+      by = py + 32;
+      if (stage === 'stump') {
+        g.fillStyle = '#6e3e1c';
+        g.fillRect(px + 9 + wob, py + 16, 14, 16);
+        g.fillStyle = '#c4843e';
+        g.fillRect(px + 11 + wob, py + 16, 10, 16);
+        g.fillStyle = '#e8c48a';
+        g.fillRect(px + 13 + wob, py + 17, 6, 14);
+        g.fillStyle = '#f3ddb4';
+        g.fillRect(px + 10 + wob, py + 15, 12, 4);
+        g.fillStyle = '#a86430';
+        g.fillRect(px + 14 + wob, py + 16, 4, 2);
+      } else if (stage === 'sapling') {
+        g.fillStyle = '#6e3e1c';
+        g.fillRect(bx - 1, by - 12, 2, 12);
+        g.fillStyle = '#2f8a40';
+        g.fillRect(bx - 7, by - 14, 5, 4);
+        g.fillRect(bx + 2, by - 13, 5, 4);
+        g.fillStyle = '#8ee06a';
+        g.fillRect(bx - 6, by - 14, 2, 2);
+        g.fillRect(bx + 3, by - 13, 2, 2);
+      } else {
+        g.fillStyle = '#6e3e1c';
+        g.fillRect(bx - 3, by - 22, 6, 22);
+        g.fillStyle = '#c4843e';
+        g.fillRect(bx - 1, by - 20, 2, 18);
+        g.fillStyle = '#2f8a40';
+        g.fillRect(bx - 10, by - 36, 20, 16);
+        g.fillStyle = '#4cb454';
+        g.fillRect(bx - 7, by - 34, 8, 8);
+        g.fillStyle = '#8ee06a';
+        g.fillRect(bx - 5, by - 32, 3, 3);
+        g.fillStyle = '#1f6430';
+        g.fillRect(bx + 2, by - 26, 5, 4);
+      }
     }
   }
   function buryPondBox(g, x0, x1, y) {
@@ -7212,14 +7816,26 @@ function validConversation(value, p) {
   function tracePond(g, left, right, top) {
     var w = Math.max(TILE, right - left);
     var mid = (left + right) / 2;
-    var rx = w / 2 + Math.min(28, w * 0.12);
-    var crown = top + 2;
-    var bed = top + Math.min(TILE * 2.7, TILE * 1.15 + w * 0.18);
-    var ry = Math.max(TILE * 0.9, (bed - crown) / 2);
-    var cy = crown + ry;
+    var bed = top + TILE * 1.2;
+    var lip = top + 14;
     g.beginPath();
-    g.ellipse(mid, cy, rx, ry, 0, 0, Math.PI * 2);
+    g.moveTo(left + w * 0.05, lip);
+    g.quadraticCurveTo(left + w * 0.1, top + 6, left + w * 0.24, top + 11);
+    g.quadraticCurveTo(mid, top + 18, right - w * 0.24, top + 11);
+    g.quadraticCurveTo(right - w * 0.1, top + 6, right - w * 0.05, lip);
+    g.quadraticCurveTo(right - w * 0.12, bed - 6, mid, bed);
+    g.quadraticCurveTo(left + w * 0.12, bed - 6, left + w * 0.05, lip);
     g.closePath();
+  }
+  function shoreShoulder(g, side, ink, edge, top) {
+    var s = side < 0 ? -1 : 1;
+    g.beginPath();
+    g.moveTo(edge + s * 2, top + 3);
+    g.quadraticCurveTo(edge - s * 4, top + 8, edge - s * 12, top + 16);
+    g.quadraticCurveTo(edge - s * 2, top + 12, edge + s * 6, top + 10);
+    g.closePath();
+    g.fillStyle = ink.cap;
+    g.fill();
   }
   function drawOrganicPonds(g, sec) {
     var x0 = Math.max(0, Math.floor(drawCamX / TILE) - 2);
@@ -7250,71 +7866,80 @@ function validConversation(value, p) {
       tracePond(g, left, right, top);
       g.clip();
       g.fillStyle = '#e7c56a';
-      g.fillRect(left - 40, top + TILE * 0.62, w + 80, TILE * 2.4);
+      g.fillRect(left - 20, top + TILE * 0.72, w + 40, TILE * 0.7);
       g.fillStyle = '#f6de9a';
-      g.fillRect(left - 40, top + TILE * 0.62, w + 80, 12);
-      var spec;
-      for (spec = 0; spec < Math.max(4, (w / 28) | 0); spec++) {
-        g.fillStyle = spec % 2 ? '#f8e7b4' : '#d7b15e';
-        g.fillRect(left + ((hash2(run.x0, spec, 6) * (w - 8)) | 0), top + TILE + ((hash2(spec, run.y, 4) * TILE) | 0), 3, 2);
-      }
+      g.fillRect(left - 20, top + TILE * 0.72, w + 40, 7);
       g.fillStyle = '#3ec6e0';
-      g.fillRect(left - 48, top - 8, w + 96, TILE * 0.95);
-      g.fillStyle = '#8fe7f2';
-      g.beginPath();
-      g.ellipse((left + right) / 2, top + 8 + Math.sin(sec * 2.2 + run.x0) * 1.2, Math.max(18, w * 0.36), 5, 0, 0, Math.PI * 2);
-      g.fill();
-      g.fillStyle = 'rgba(255,255,255,0.45)';
-      g.beginPath();
-      g.ellipse((left + right) / 2 - w * 0.12, top + 10, Math.max(12, w * 0.16), 2.4, 0, 0, Math.PI * 2);
-      g.fill();
-      g.fillStyle = 'rgba(16,110,150,0.22)';
-      g.fillRect(left - 20, top + TILE * 0.7, w + 40, 14);
+      g.fillRect(left - 16, top - 4, w + 32, TILE * 1.05);
+      g.fillStyle = '#7edff0';
+      g.fillRect(left, top + 4 + Math.sin(sec * 2.2 + run.x0) * 1.2, w, 5);
+      g.fillStyle = 'rgba(255,255,255,0.4)';
+      g.fillRect(left + w * 0.18, top + 8, w * 0.22, 3);
+      g.fillStyle = 'rgba(16,110,150,0.18)';
+      g.fillRect(left + w * 0.08, top + TILE * 0.72, w * 0.84, 8);
       g.restore();
-      inkL = terrainInk(get(run.x0 - 1, run.y) === GRASS ? GRASS : SAND);
-      inkR = terrainInk(get(run.x1 + 1, run.y) === GRASS ? GRASS : SAND);
-      g.save();
+      inkL = bankInk(get(run.x0 - 1, run.y) === GRASS ? GRASS : SAND);
+      inkR = bankInk(get(run.x1 + 1, run.y) === GRASS ? GRASS : SAND);
+      shoreShoulder(g, -1, inkL, left, top);
+      shoreShoulder(g, 1, inkR, right, top);
       g.beginPath();
-      g.rect(left - 40, top - 10, w + 80, TILE * 0.85);
-      g.clip();
-      tracePond(g, left, right, top);
-      var rim = g.createLinearGradient(left, top, right, top);
-      rim.addColorStop(0, inkL.cap);
-      rim.addColorStop(0.5, '#f6e7b4');
-      rim.addColorStop(1, inkR.cap);
-      g.strokeStyle = rim;
-      g.lineWidth = 6;
+      g.moveTo(left + w * 0.08, top + 12);
+      g.quadraticCurveTo((left + right) / 2, top + 20, right - w * 0.08, top + 12);
+      g.strokeStyle = 'rgba(255,255,255,0.45)';
+      g.lineWidth = 2;
+      g.lineCap = 'round';
       g.stroke();
-      g.restore();
     }
   }
-  function drawBankSpan(g, high, low) {
-    var dir = low.x >= high.x ? 1 : -1;
-    var x0 = dir > 0 ? (high.x + 1) * TILE : high.x * TILE;
-    var x1 = dir > 0 ? (low.x + 1) * TILE : low.x * TILE;
-    var y0 = high.y * TILE, y1 = low.y * TILE, span = x1 - x0;
-    if (!span) return;
-    var ink = terrainInk(high.id);
-    var cover = 16;
+  function roundBankStep(g, a, b) {
+    if (!a || !b || a.y === b.y) return;
+    var high = a.y < b.y ? a : b;
+    var low = a.y < b.y ? b : a;
+    var right = low.x > high.x;
+    var seam = (right ? high.x + 1 : high.x) * TILE;
+    var hy = high.y * TILE;
+    var ly = low.y * TILE;
+    var drop = ly - hy;
+    var lipId = high.id;
+    var back = landSurface(high.x + (right ? -1 : 1));
+    if (lipId !== GRASS && back && back.id === GRASS) lipId = GRASS;
+    var ink = bankInk(lipId);
+    var sign = right ? 1 : -1;
+    var midY = hy + drop * 0.55;
     g.beginPath();
-    g.moveTo(x0, y0 + 2);
-    g.quadraticCurveTo(x0 + span * 0.62, y0 + 6, x1, y1 + 4);
-    g.lineTo(x1, y1 + cover);
-    g.lineTo(x0, y1 + cover);
+    g.moveTo(seam - sign * 8, hy + 10);
+    g.quadraticCurveTo(seam + sign * 4, midY, seam + sign * 16, ly + 2);
+    g.lineTo(seam + sign * 14, ly + 12);
+    g.lineTo(seam - sign * 2, ly);
+    g.lineTo(seam - sign * 6, hy + 14);
     g.closePath();
-    g.fillStyle = ink.body;
+    g.fillStyle = ink.soil;
     g.fill();
     g.beginPath();
-    g.moveTo(x0, y0 + 2);
-    g.quadraticCurveTo(x0 + span * 0.62, y0 + 6, x1, y1 + 4);
-    g.strokeStyle = ink.cap;
-    g.lineWidth = 16;
+    g.moveTo(seam - sign * 14, hy + 1);
+    g.quadraticCurveTo(seam - sign * 1, hy + 7, seam + sign * 3, midY);
+    g.quadraticCurveTo(seam + sign * 10, ly - 3, seam + sign * 18, ly + 2);
+    g.lineTo(seam + sign * 12, ly + 8);
+    g.quadraticCurveTo(seam + sign * 2, midY + 7, seam - sign * 6, hy + 11);
+    g.closePath();
+    g.fillStyle = ink.cap;
+    g.fill();
+    g.beginPath();
+    g.moveTo(seam - sign * 12, hy + 3);
+    g.quadraticCurveTo(seam + sign * 2, hy + 8, seam + sign * 16, ly + 3);
+    g.strokeStyle = ink.lite;
+    g.lineWidth = 2.5;
     g.lineCap = 'round';
     g.lineJoin = 'round';
     g.stroke();
-    g.strokeStyle = ink.lite;
-    g.lineWidth = 5;
-    g.stroke();
+    if (lipId === GRASS) {
+      g.strokeStyle = ink.blade;
+      g.lineWidth = 1.5;
+      g.beginPath();
+      g.moveTo(seam - sign * 4, hy + 1);
+      g.quadraticCurveTo(seam - sign * 1, hy - 5, seam + sign * 2, hy - 6);
+      g.stroke();
+    }
   }
   function drawLandCurves(g) {
     var zoom = tileScreen / TILE;
@@ -7341,22 +7966,52 @@ function validConversation(value, p) {
         j++;
       }
       if (j > i) {
-        a = cols[i];
-        b = cols[j];
-        if (a.y < b.y) drawBankSpan(g, a, b);
-        else drawBankSpan(g, b, a);
+        var k;
+        for (k = i; k < j; k++) roundBankStep(g, cols[k], cols[k + 1]);
         i = j;
       } else i++;
     }
   }
+  function drawBlockGhost(g, key, x, y, w, h) {
+    if (!key || x == null || y == null) return;
+    w = w || 1; h = h || 1;
+    g.save();
+    g.globalAlpha = 0.5;
+    g.imageSmoothingEnabled = false;
+    if (CRAFTABLES[key]) g.drawImage(craftableSprite(newCraftable(key)), x * TILE, y * TILE, w * TILE, h * TILE);
+    else if (key === 'boat') { g.translate((x + 0.5) * TILE, y * TILE + 8); drawBoatShape(g); }
+    else if (BLOCK_OF[key] && spr(BLOCK_OF[key], 0)) g.drawImage(spr(BLOCK_OF[key], 0), x * TILE, y * TILE, TILE, TILE);
+    else { g.translate(x * TILE, y * TILE); specialIcon(g, key === 'house' ? 'roof' : key, TILE); }
+    g.restore();
+    g.save();
+    g.strokeStyle = 'rgba(255,255,255,0.95)';
+    g.lineWidth = 2;
+    g.strokeRect(x * TILE + 1.5, y * TILE + 1.5, w * TILE - 3, h * TILE - 3);
+    g.restore();
+  }
+  function previewSpot() {
+    var saved = sightBlock, key = activePlaceKey(), spot = null, surf, c;
+    if (key && !indoors && !riding && !drivingCar) {
+      if (placeHold && !placeHold.indoor) {
+        surf = surfaceCell(placeHold.tx, placeHold.ty);
+        spot = evalSpot(key, surf.tx, surf.ty, placeHold.fy == null ? 0.5 : placeHold.fy);
+      }
+      if (!spot) {
+        c = choosePlace();
+        if (c) spot = evalSpot(key, c.tx, c.ty, 0.5);
+      }
+    }
+    sightBlock = saved;
+    return { key: key, spot: spot };
+  }
   function drawHighlight(g) {
     if (placeHold && placeHold.armed && !placeHold.indoor) {
-      var spots = placeHold.spots || [], i, s, aim = placeHold.aim, hot;
+      var spots = placeHold.spots || [], i, s, aim = placeHold.aim, hot, ghostKey, ghostSpot;
       for (i = 0; i < spots.length; i++) {
         s = spots[i];
         hot = aim && aim.x < s.x + s.w && aim.x + (aim.w || 1) > s.x && aim.y < s.y + s.h && aim.y + (aim.h || 1) > s.y;
         g.save();
-        g.fillStyle = hot ? 'rgba(70,180,100,0.45)' : 'rgba(125,222,160,0.28)';
+        g.fillStyle = hot ? 'rgba(70,180,100,0.28)' : 'rgba(125,222,160,0.16)';
         g.fillRect(s.x * TILE, s.y * TILE, s.w * TILE, s.h * TILE);
         g.strokeStyle = hot ? '#178a42' : 'rgba(255,255,255,0.95)';
         g.lineWidth = hot ? 3 : 2;
@@ -7364,9 +8019,14 @@ function validConversation(value, p) {
         g.strokeRect(s.x * TILE + 2, s.y * TILE + 2, s.w * TILE - 4, s.h * TILE - 4);
         g.restore();
       }
+      ghostKey = activePlaceKey();
+      ghostSpot = (aim && aim.x != null) ? aim : spots[0];
+      if (ghostKey && ghostSpot) drawBlockGhost(g, ghostKey, ghostSpot.x, ghostSpot.y, ghostSpot.w, ghostSpot.h);
       return;
     }
     if (buildMode && buildTool === 'remove') { drawBuildHover(g); return; }
+    var preview = previewSpot();
+    if (preview.spot) drawBlockGhost(g, preview.key, preview.spot.x, preview.spot.y, preview.spot.w, preview.spot.h);
     var br = chooseBreak();
     if (br) {
       g.strokeStyle = '#ff6b57';
@@ -7450,32 +8110,74 @@ function validConversation(value, p) {
     var wy = b.y * TILE + 64;
     g.drawImage(glowSprite('hearth', 22, 1, 'rgba(255, 186, 90, 0.55)', 'rgba(255, 186, 90, 0)'), wx - 22, wy - 22);
   }
+  function drawSkyBird(g, flap, warm) {
+    var body = warm ? '#f0d48a' : '#c5e2f4';
+    var bodyHi = warm ? '#fff1c4' : '#f4fbff';
+    var wing = warm ? '#d4893a' : '#4f97c6';
+    var wingHi = warm ? '#f0c27a' : '#b7ddf2';
+    g.lineJoin = 'round';
+    g.lineCap = 'round';
+    g.strokeStyle = '#3a2e24';
+    g.lineWidth = 1.25;
+    function blob(x, y, rx, ry, color, rot) {
+      g.beginPath();
+      g.ellipse(x, y, rx, ry, rot || 0, 0, Math.PI * 2);
+      g.stroke();
+      g.fillStyle = color;
+      g.fill();
+    }
+    g.beginPath();
+    g.moveTo(-6.2, 0.4);
+    g.quadraticCurveTo(-11.5, -1.6 - flap * 1.4, -12.4, 1.1);
+    g.quadraticCurveTo(-10.2, 2.2, -5.6, 1.5);
+    g.closePath();
+    g.stroke();
+    g.fillStyle = wing;
+    g.fill();
+    g.save();
+    g.translate(-1.2, 0.2);
+    g.rotate(-flap * 0.85);
+    blob(-3.2, 0, 5.4, 2.05, wing, -0.05);
+    g.fillStyle = wingHi;
+    g.beginPath();
+    g.ellipse(-3.6, -0.7, 2.6, 0.85, -0.1, 0, Math.PI * 2);
+    g.fill();
+    g.restore();
+    blob(0.2, 1.15, 5.8, 3.05, body, -0.06);
+    g.fillStyle = bodyHi;
+    g.beginPath();
+    g.ellipse(-0.2, 0.35, 3.1, 1.15, -0.15, 0, Math.PI * 2);
+    g.fill();
+    blob(5.2, -1.15, 2.45, 2.25, body, 0);
+    g.beginPath();
+    g.moveTo(7.1, -1.35);
+    g.quadraticCurveTo(10.4, -0.95, 9.8, -0.15);
+    g.quadraticCurveTo(8.0, -0.35, 6.9, -0.55);
+    g.closePath();
+    g.stroke();
+    g.fillStyle = '#e07a32';
+    g.fill();
+    g.fillStyle = '#3a2e24';
+    g.beginPath();
+    g.arc(5.7, -1.7, 0.62, 0, Math.PI * 2);
+    g.fill();
+    g.fillStyle = '#fff';
+    g.beginPath();
+    g.arc(5.9, -1.88, 0.24, 0, Math.PI * 2);
+    g.fill();
+  }
   function drawSkyBirds(g, sec) {
-    var i, span = viewW + 220, x, y, flap, dir, body, wing;
+    var i, span = viewW + 220, x, y, flap, dir;
     for (i = 0; i < 4; i++) {
       dir = (i & 1) ? -1 : 1;
       x = ((hash2(i, 11, 4) * span + sec * (14 + i * 4)) % span + span) % span - 36;
       if (dir < 0) x = viewW - x;
       y = 48 + (i * 26) % Math.max(70, viewH * 0.26) + Math.sin(sec * 0.65 + i * 1.4) * 5;
-      flap = Math.sin(sec * 5.5 + i) > 0 ? -10 : 2;
+      flap = reducedMotion ? -0.28 : Math.sin(sec * 5.2 + i * 1.3);
       g.save();
       g.translate(x | 0, y | 0);
-      g.scale(dir * 1.35, 1.35);
-      body = i % 2 ? '#f6d98a' : '#9fd4ef';
-      wing = i % 2 ? '#e2a85c' : '#6aadd4';
-      g.fillStyle = wing;
-      g.beginPath();
-      g.moveTo(-2, 0);
-      g.lineTo(-12, flap);
-      g.lineTo(4, 2);
-      g.closePath();
-      g.fill();
-      g.fillStyle = body;
-      g.fillRect(-8, -4, 16, 8);
-      g.fillStyle = '#f2a05a';
-      g.fillRect(8, -1, 4, 3);
-      g.fillStyle = '#3a2a1c';
-      g.fillRect(3, -3, 2, 2);
+      g.scale(dir, 1);
+      drawSkyBird(g, flap, i % 2 === 1);
       g.restore();
     }
   }
@@ -7761,15 +8463,19 @@ function validConversation(value, p) {
 
   function itemSpeakLine(key) {
     var hint = ITEM_HINT[key] || '';
-    var shown = key === 'houseKit' ? 'house' : key === 'pen' ? 'fence' : key;
+    var shown = key === 'pen' ? 'fence' : key;
     var w = WORD[shown] || WORD[key];
     if (!w) return '';
     if (!hint) hint = ITEM_HINT[shown] || '';
     return hint ? (w[0] + '. ' + hint) : w[0];
   }
   function showWord(key, reward, replay, quiet) {
+    if (!replay && laborBusy()) {
+      deferredWord = { key: key, reward: reward, quiet: !!quiet };
+      return;
+    }
     var hintKey = key;
-    key=key==='houseKit'?'house':key==='pen'?'fence':key;
+    if (key === 'pen') key = 'fence';
     var w = WORD[key];
     if (!w) return;
     var hint = ITEM_HINT[hintKey] || ITEM_HINT[key] || '';
@@ -7794,7 +8500,7 @@ function validConversation(value, p) {
     document.getElementById('card-en').textContent = w[0];
     var cardHint = document.getElementById('card-hint');
     if (cardHint) cardHint.textContent = hint;
-    paintIcon(document.getElementById('card-icon'), key);
+    paintIcon(document.getElementById('card-icon'), key === 'house' ? 'roof' : key);
     // Sticky Continue only for legacy reward===true; quiz rewards fly to Chest.
     cardLeft = reward === true ? 3600 : (cardFlyChest ? 1.35 : 2.15);
     document.getElementById('card-continue').hidden = reward !== true;
@@ -8133,6 +8839,40 @@ function validConversation(value, p) {
   function speakTask() {
     if (dialogue) { if (!dialogue.pending && dialogue.question) speakEn(dialogue.question, { force: true, audio_url: !dialogue.reveal ? dialogue.audio_url : undefined }); return; }
     speakPrompt(questSpeechLine(), 'quest', true);
+  }
+  function flushDeferredWord() {
+    if (!deferredWord || laborBusy() || chatIdle < 0.45) return;
+    var d = deferredWord;
+    deferredWord = null;
+    showWord(d.key, d.reward, false, d.quiet);
+  }
+  function hintOnce(key, line) {
+    if (!started || intros[key] || toastLeft > 0 || laborBusy() || dialogue || quiz) return;
+    intros[key] = 1;
+    showToast(line, 2.8);
+    saveSoon();
+  }
+  function nearDarkPocket() {
+    var tx = Math.floor(player.x / TILE);
+    var ty = Math.floor((player.y - 4) / TILE);
+    var x, y, air, id;
+    for (x = tx - 3; x <= tx + 4; x++) {
+      air = 0;
+      for (y = ty; y < ty + 4 && y < H - 1; y++) {
+        id = get(x, y);
+        if (id === AIR || id === TORCH) air++;
+        else break;
+      }
+      if (air >= 2 && (get(x, ty + air) === DIRT || get(x, ty + air) === STONE)) return true;
+    }
+    return false;
+  }
+  function guideHints() {
+    if (!started || toastLeft > 0 || laborBusy() || dialogue || quiz) return;
+    if (!intros.bed && nightFactor(timeOfDay) >= 0.6 && buildObjects.some(function (b) {
+      return b.kind === 'house' && b.furn && b.furn.bed && Math.abs((b.x + 1.5) * TILE - player.x) < 6 * TILE;
+    })) hintOnce('bed', 'Sleep in the bed until morning.');
+    if (!intros.torch && nearDarkPocket()) hintOnce('torch', 'A torch helps in the dark.');
   }
   function showToast(en, secs, quiet) {
     document.getElementById('toast-en').textContent = en;
@@ -8554,7 +9294,7 @@ function validConversation(value, p) {
     if (bar) bar.replaceChildren();
     invSig = sig;
     var key = selectedKey();
-    var heldName = key && WORD[key] ? (key === 'house' ? 'Roof blocks' : WORD[key][0]) : '';
+    var heldName = key && WORD[key] ? WORD[key][0] : '';
     var heldEn = document.getElementById('held-en');
     if (heldEn) heldEn.textContent = heldName || 'Tap a block';
     var btn = document.getElementById('btn-chest');
@@ -8588,33 +9328,48 @@ function validConversation(value, p) {
     RECIPES.forEach(function (r) {
       var card = document.createElement('div');
       card.className = 'recipe';
-      var needs = document.createElement('div');
-      needs.className = 'needs';
-      Object.keys(r.need).forEach(function (k) {
-        var ing = document.createElement('div');
-        ing.className = 'ing';
-        var cv = document.createElement('canvas');
-        cv.width = 128; cv.height = 128;
-        paintIcon(cv, k);
-        var name = document.createElement('b');
-        name.textContent = WORD[k][0];
-        var ct = document.createElement('em');
-        ct.dataset.need = k;
-        ct.dataset.n = String(r.need[k]);
-        ing.appendChild(cv); ing.appendChild(name); ing.appendChild(ct);
-        tapButton(ing, function () { showWord(k, false, true); });
-        needs.appendChild(ing);
-      });
+      var side = document.createElement('div');
+      side.className = 'craft-side';
+      var grid = document.createElement('div');
+      grid.className = 'craft-grid';
+      var keys = Object.keys(r.need);
+      var slotIndex;
+      for (slotIndex = 0; slotIndex < 4; slotIndex++) {
+        var slot = document.createElement('div');
+        slot.className = 'craft-slot' + (slotIndex < keys.length ? '' : ' empty');
+        if (slotIndex < keys.length) {
+          (function (k) {
+            var cv = document.createElement('canvas');
+            cv.width = 64; cv.height = 64;
+            paintIcon(cv, k);
+            var ct = document.createElement('em');
+            ct.dataset.need = k;
+            ct.dataset.n = String(r.need[k]);
+            slot.appendChild(cv);
+            slot.appendChild(ct);
+            slot.setAttribute('aria-label', WORD[k][0]);
+            tapButton(slot, function () { showWord(k, false, true); });
+          })(keys[slotIndex]);
+        }
+        grid.appendChild(slot);
+      }
+      var names = document.createElement('div');
+      names.className = 'craft-names';
+      names.textContent = keys.map(function (k) { return WORD[k][0]; }).join(' + ');
+      side.appendChild(grid);
+      side.appendChild(names);
       var arrow = document.createElement('div');
-      arrow.className = 'arrow';
+      arrow.className = 'craft-arrow';
       arrow.textContent = '→';
       var out = document.createElement('div');
-      out.className = 'out';
+      out.className = 'craft-out';
       var ocv = document.createElement('canvas');
-      ocv.width = 128; ocv.height = 128;
+      ocv.width = 64; ocv.height = 64;
       paintIcon(ocv, r.out);
       var nm = document.createElement('b');
       nm.textContent = (r.label || WORD[r.out][0]) + (r.n > 1 ? ' ×' + r.n : '');
+      out.appendChild(ocv);
+      out.appendChild(nm);
       var leftNote = supplyLeft(r.out);
       if (leftNote) {
         var leftEl = document.createElement('em');
@@ -8622,14 +9377,16 @@ function validConversation(value, p) {
         leftEl.textContent = 'Left ' + leftNote.n + '/' + leftNote.cap;
         out.appendChild(leftEl);
       }
-      out.appendChild(ocv); out.appendChild(nm);
       tapButton(out, function () { showWord(r.out, false, true); });
       var btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'craftbtn';
       btn.textContent = 'Craft';
       tapButton(btn, function () { doCraft(r); });
-      card.appendChild(needs); card.appendChild(arrow); card.appendChild(out); card.appendChild(btn);
+      card.appendChild(side);
+      card.appendChild(arrow);
+      card.appendChild(out);
+      card.appendChild(btn);
       root.appendChild(card);
     });
     updateRecipeCounts();
@@ -8777,16 +9534,39 @@ function validConversation(value, p) {
   function fatigueLabel(stage) {
     return stage === 'tired' ? 'I need a rest.' : stage === 'weary' ? "I'm tired." : '';
   }
+  function dayPhaseName() {
+    if (nightFactor(timeOfDay) >= 0.6) return 'Night';
+    if (timeOfDay < 0.22) return 'Morning';
+    if (timeOfDay >= 0.55) return 'Evening';
+    return 'Day';
+  }
+  var nightNoted = false;
   function paintNeeds() {
     var el = document.getElementById('hunger-hint');
     if (!el) return;
-    var parts = [];
-    var hungry = hungerLabel(hungerStageNow());
-    var tired = fatigueLabel(fatigueStageNow());
-    if (hungry) parts.push(hungry);
-    if (tired) parts.push(tired);
-    el.hidden = !parts.length;
-    el.textContent = parts.join(' ');
+    if (!started) { el.hidden = true; return; }
+    var day = dayPhaseName();
+    var bits;
+    if (bedRest > 0) bits = ['Resting in bed'];
+    else {
+      bits = [day, hungerLabel(hungerStageNow()) || 'Full'];
+      var tired = fatigueLabel(fatigueStageNow());
+      if (tired) bits.push(tired);
+      if (day === 'Night') bits.push('Sleep in a bed.');
+    }
+    var text = bits.join(' · ');
+    if (el.textContent !== text) el.textContent = text;
+    el.hidden = false;
+    el.classList.toggle('is-night', day === 'Night' || bedRest > 0);
+    el.classList.toggle('is-evening', day === 'Evening' && !(bedRest > 0));
+  }
+  function noteDay(speak) {
+    var night = nightFactor(timeOfDay) >= 0.6;
+    if (night && !nightNoted) {
+      nightNoted = true;
+      if (speak && started) sayNeed('It is night.');
+    } else if (!night && nightFactor(timeOfDay) < 0.15) nightNoted = false;
+    paintNeeds();
   }
   function sayNeed(line) {
     if (chatClock - needSpokeAt < 12) return;
@@ -8924,6 +9704,7 @@ function validConversation(value, p) {
     if (chatBlocked()) return;
     closeBook();
     document.getElementById('craft').hidden = false;
+    hintOnce('craft', 'Put pieces in the square to craft.');
     updateRecipeCounts();
     speak('Craft');
   }
@@ -8983,7 +9764,7 @@ function validConversation(value, p) {
       px: player.x, py: player.y, dir: player.dir,
       mods: mods, inv: inv, hotbar: hotbar, sel: sel,
       dig_spots: digSpots.map(function (s) { return [s.tx, s.ty, s.until > Date.now() ? s.until : 0]; }),
-      tree_chops: trees.filter(function (t) { return t.hits || t.stumpUntil; }).map(function (t) { return [t.x, t.hits, t.stumpUntil || 0]; }),
+      tree_chops: trees.filter(function (t) { return t.hits || t.growStart; }).map(function (t) { return [t.x, t.growStart ? 0 : t.hits, t.growStart || 0, t.growStart ? 1 : 0]; }),
       supplies: supplies.map(function (s) { return [s.id, s.taken ? 1 : 0]; }),
       words: learned, stars: quizStars, progress: progress, intros: intros, zh: zhOn,
       crops: crops.map(function (c) { return [c.tx, c.ty, Math.round(c.age * 10) / 10]; }),
@@ -9088,6 +9869,7 @@ function validConversation(value, p) {
       progress.placed = data.progress.placed || {};
       progress.tapped = data.progress.tapped || {};
       progress.tree = data.progress.tree ? 1 : 0;
+      progress.chopped = data.progress.chopped ? 1 : (data.progress.tree ? 1 : 0);
       progress.water = data.progress.water ? 1 : 0;
       progress.nightTorch = data.progress.nightTorch ? 1 : 0;
       progress.fish = data.progress.fish | 0;
@@ -9152,6 +9934,7 @@ function validConversation(value, p) {
     }
     started = true; startedAt = Date.now(); loadVoiceIndex();syncSoundPack();
     document.getElementById('start').hidden = true;
+    paintNeeds();
     learn('hello');
     if (determineMode('gameLoad') === 'name_ask') openNameAsk(); else openGreeting();
     speakPrompt(quiz ? ('Find the ' + WORD[quiz.key][0] + '!') : (currentQuest() ? currentQuest().en : 'Level 3 Complete! Explore and play!'), 'quest');
@@ -9470,6 +10253,7 @@ function validConversation(value, p) {
 
   function tick(dt, sec) {
     growTrees();
+    updateBreaks();
     updateChew();
     lockAge += dt;
     if (cardLeft > 0) {
@@ -9500,6 +10284,7 @@ function validConversation(value, p) {
       }
       if (nightFactor(timeOfDay) >= 0.6 && rainOn) { changeRain(false); rainTimer = 24; }
       timeOfDay = (timeOfDay + dt / DAY_LEN) % 1;
+      noteDay(true);
       updateHunger(dt);
       updateFatigue(dt);
       var left = Math.min(dt, 0.05);
@@ -9763,7 +10548,8 @@ function validConversation(value, p) {
       },
       trees: function () {
         return trees.map(function (t) {
-          return { x: t.x, groundY: t.groundY, hits: t.hits, need: treeHitsNeeded(), stump: t.stumpUntil > Date.now(), until: t.stumpUntil,
+          return { x: t.x, groundY: t.groundY, hits: t.hits, need: treeHitsNeeded(), stage: treeStage(t), growStart: t.growStart || 0,
+            stump: treeStage(t) === 'stump', until: t.growStart ? t.growStart + TREE_MATURE_MS : 0,
             wood: t.cells.filter(function (c) { return c.id === WOOD && get(c.x, c.y) === WOOD; }).length };
         });
       },
@@ -9772,9 +10558,9 @@ function validConversation(value, p) {
       bodyBlocked: function (tx, ty) { return blocksBody(get(tx, ty)); },
       ripenStumps: function () {
         var i;
-        for (i = 0; i < trees.length; i++) if (trees[i].stumpUntil) trees[i].stumpUntil = Date.now() - 1;
+        for (i = 0; i < trees.length; i++) if (trees[i].growStart) trees[i].growStart = Date.now() - TREE_MATURE_MS - 1;
         growTrees();
-        return trees.filter(function (t) { return t.stumpUntil > Date.now(); }).length;
+        return trees.filter(function (t) { return !!t.growStart; }).length;
       },
       block: function (tx, ty, id) { setCell(tx | 0, ty | 0, id | 0); return get(tx | 0, ty | 0); },
       supplies: function () {
