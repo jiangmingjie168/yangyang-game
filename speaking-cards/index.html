@@ -4,32 +4,41 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#fff6dc">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%90%B6%3C/text%3E%3C/svg%3E">
 <title>Animal Park</title>
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
-html,body{margin:0;height:100%;font-family:-apple-system,"SF Pro Rounded","Helvetica Neue",Arial,sans-serif;background:#fff6dc;color:#3a2a14;overflow:hidden;touch-action:manipulation}
+html,body{margin:0;height:100%;font-family:ui-rounded,"SF Pro Rounded","Avenir Next","Helvetica Neue",Arial,sans-serif;background:#fff6dc;color:#3a2a14;overflow:hidden;touch-action:manipulation;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+html{color-scheme:light}
 button{font:inherit;color:inherit;border:0;cursor:pointer;padding:0;background:none}
-.scr{position:fixed;inset:0;display:none;flex-direction:column;align-items:center;padding:calc(10px + env(safe-area-inset-top)) 14px calc(14px + env(safe-area-inset-bottom));max-width:540px;margin:0 auto}
+button:focus-visible{outline:3px solid #ff8a3d;outline-offset:3px}
+.scr{position:fixed;left:0;right:0;top:0;margin:0 auto;width:min(100%,540px);height:100%;height:100svh;max-height:100svh;display:none;flex-direction:column;align-items:center;overflow:hidden;padding:calc(8px + env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) calc(10px + env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left))}
 .scr.on{display:flex}
-.big{font-size:30px;font-weight:800;padding:20px 46px;border-radius:999px;background:#ff8a3d;color:#fff;box-shadow:0 6px 0 #c95f1c}
+.big{font-size:30px;font-weight:800;padding:18px 44px;border-radius:999px;background:#ff8a3d;color:#fff;box-shadow:0 6px 0 #c95f1c;min-height:64px;letter-spacing:.01em}
 .big:active{transform:translateY(4px);box-shadow:0 2px 0 #c95f1c}
-.soft{font-size:22px;font-weight:700;padding:14px 28px;border-radius:999px;background:#fff;box-shadow:0 4px 0 #e2cf9a}
+.soft{font-size:22px;font-weight:800;padding:14px 28px;border-radius:999px;background:#fff;box-shadow:0 4px 0 #e2cf9a;min-height:52px;border:2px solid #fff}
+.soft:active{transform:translateY(3px);box-shadow:0 1px 0 #e2cf9a}
 /* ---------- home ---------- */
-#home{justify-content:center;gap:22px;text-align:center}
-#home h1{font-size:44px;margin:0}
-.logo{font-size:92px;line-height:1}
+#home{justify-content:center;gap:16px;text-align:center}
+.hero{width:168px;height:168px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 42%, #c8ecff 0 57%, #8fd66b 58% 100%);box-shadow:0 8px 0 #e2cf9a, inset 0 0 0 4px rgba(255,255,255,.7);flex:0 0 auto}
+#home h1{font-size:42px;margin:0;letter-spacing:-.03em;line-height:1}
+.tag{margin:0;font-size:22px;font-weight:800;color:#c95f1c}
+.logo{font-size:58px;line-height:1}
 .logo span{display:inline-block;animation:bob 2.4s ease-in-out infinite}
 .logo span:nth-child(2){animation-delay:.3s}.logo span:nth-child(3){animation-delay:.6s}
-#nomic{display:none;font-size:19px;font-weight:700;background:#fff;border-radius:16px;padding:10px 16px}
-#gear{position:absolute;right:14px;top:calc(10px + env(safe-area-inset-top));font-size:24px;opacity:.35;padding:10px}
+#nomic{display:none;font-size:18px;font-weight:800;line-height:1.35;background:#fff;border-radius:16px;padding:12px 16px;box-shadow:0 4px 0 #e2cf9a;max-width:320px}
+#gear{position:absolute;right:max(8px, env(safe-area-inset-right));top:calc(6px + env(safe-area-inset-top));font-size:26px;min-width:44px;min-height:44px;opacity:.55}
 /* ---------- play ---------- */
-#bar{width:100%;display:flex;align-items:center;justify-content:space-between;height:48px}
-#exit{font-size:24px;opacity:.4;padding:8px 12px}
-#dots{display:flex;gap:6px}
-#dots i{width:10px;height:10px;border-radius:50%;background:#e2cf9a}
+#bar{width:100%;display:flex;align-items:center;justify-content:space-between;height:48px;flex:0 0 auto}
+#exit{font-size:22px;font-weight:800;color:#8a6d3b;min-width:44px;min-height:44px}
+#dots{display:flex;gap:6px;align-items:center}
+#dots i{width:9px;height:9px;border-radius:50%;background:#c9ad72;box-shadow:inset 0 0 0 1px rgba(255,255,255,.35)}
 #dots i.done{background:#ff8a3d}
-#bookIco{font-size:32px;padding:4px 8px}
-#stage{position:relative;width:100%;flex:1 1 auto;min-height:230px;max-height:58vh;border-radius:28px;overflow:hidden;box-shadow:0 6px 0 #e2cf9a;transition:background .8s;font-size:60px}
+#bookIco{font-size:30px;min-width:44px;min-height:44px;display:flex;align-items:center;justify-content:center}
+#stage{position:relative;width:100%;flex:1 1 auto;min-height:132px;border-radius:28px;overflow:hidden;box-shadow:inset 0 0 0 4px rgba(255,255,255,.72), 0 8px 0 #e2cf9a;transition:background .8s;font-size:60px}
+#stage.enter{animation:stageIn .4s ease-out}
 .bg-grass{background:linear-gradient(#9fdcff 0 55%,#8fd66b 55% 100%)}
 .bg-pond{background:linear-gradient(#9fdcff 0 45%,#8fd66b 45% 62%,#4db4e8 62% 100%)}
 .bg-sky{background:linear-gradient(#58b8ff,#c8ecff)}
@@ -39,10 +48,11 @@ button{font:inherit;color:inherit;border:0;cursor:pointer;padding:0;background:n
 .bg-dawn{background:linear-gradient(#ffc27a 0 55%,#8fd66b 55% 100%)}
 .bg-party{background:linear-gradient(#ffb3d9,#ffe08a)}
 .actor{position:absolute;line-height:1;transform:translate(-50%,-50%) rotate(var(--r,0deg));transition:left var(--d,.7s) ease-in-out,top var(--d,.7s) ease-in-out,font-size var(--d,.7s) ease,opacity .4s,transform var(--d,.7s) ease,filter .6s;will-change:left,top}
-.actor .in{display:inline-block}
-.actor.pop .in{animation:pop .45s ease-out}
-.bub{position:absolute;left:50%;bottom:100%;translate:-50% 0;background:#fff;border-radius:16px;padding:4px 12px;font-size:22px;font-weight:800;white-space:nowrap;color:#3a2a14;animation:pop .3s ease-out;z-index:5}
-#cap{position:absolute;left:8px;right:8px;top:8px;background:rgba(255,255,255,.92);border-radius:16px;padding:8px 12px;font-size:20px;font-weight:700;text-align:center;display:none;z-index:9}
+.actor .in{display:inline-block;position:relative;z-index:1}
+.actor::after{content:"";position:absolute;z-index:0;left:50%;bottom:0;width:.85em;height:.2em;transform:translateX(-50%);background:rgba(40,30,10,.16);border-radius:50%;pointer-events:none}
+.actor.pop .in{animation:pop .4s ease-out}
+.bub{position:absolute;left:50%;bottom:100%;translate:-50% 0;background:#fff;border-radius:16px;padding:4px 12px;font-size:22px;font-weight:800;white-space:nowrap;color:#3a2a14;animation:pop .3s ease-out;z-index:5;box-shadow:0 3px 0 rgba(226,207,154,.85)}
+#cap{position:absolute;left:10px;right:10px;top:10px;background:rgba(255,255,255,.96);border-radius:16px;padding:8px 12px;font-size:20px;font-weight:800;line-height:1.25;text-align:center;display:none;z-index:9;box-shadow:0 3px 0 rgba(226,207,154,.9)}
 .an-jump{animation:jump .6s ease-out 2}
 .an-shake{animation:shake .5s linear 2}
 .an-spin{animation:spin .8s ease-in-out}
@@ -54,57 +64,93 @@ button{font:inherit;color:inherit;border:0;cursor:pointer;padding:0;background:n
 .an-dance{animation:dance .6s ease-in-out infinite}
 .an-rainbow{animation:rainbow 1.2s linear infinite}
 .an-wave{animation:wob .5s ease-in-out 4}
-@keyframes bob{50%{transform:translateY(-10px)}}
-@keyframes pop{0%{transform:scale(0)}70%{transform:scale(1.25)}100%{transform:scale(1)}}
+@keyframes bob{50%{transform:translateY(-8px)}}
+@keyframes pop{0%{transform:scale(.6)}60%{transform:scale(1.12)}100%{transform:scale(1)}}
+@keyframes stageIn{from{transform:scale(.98);opacity:.55}to{transform:none;opacity:1}}
 @keyframes jump{0%,100%{transform:translateY(0)}45%{transform:translateY(-70%) scaleY(1.08)}}
 @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-12%)}75%{transform:translateX(12%)}}
 @keyframes spin{to{transform:rotate(360deg)}}
-@keyframes wob{0%,100%{transform:rotate(0)}30%{transform:rotate(-22deg)}70%{transform:rotate(16deg)}}
-@keyframes pulse{50%{transform:scale(1.3)}}
+@keyframes wob{0%,100%{transform:rotate(0)}30%{transform:rotate(-18deg)}70%{transform:rotate(14deg)}}
+@keyframes pulse{50%{transform:scale(1.18)}}
 @keyframes sit{0%,100%{transform:scaleY(1)}20%,80%{transform:scaleY(.72) translateY(18%)}}
-@keyframes talk{50%{transform:scaleY(1.1) translateY(-4%)}}
-@keyframes dance{0%,100%{transform:rotate(-14deg) translateY(0)}50%{transform:rotate(14deg) translateY(-18%)}}
+@keyframes talk{50%{transform:scaleY(1.08) translateY(-3%)}}
+@keyframes dance{0%,100%{transform:rotate(-12deg) translateY(0)}50%{transform:rotate(12deg) translateY(-16%)}}
 @keyframes rainbow{from{filter:sepia(1) saturate(8) hue-rotate(0deg)}to{filter:sepia(1) saturate(8) hue-rotate(360deg)}}
-.conf{position:absolute;top:-12%;font-size:.45em;animation:fall 1.8s linear forwards;pointer-events:none}
-@keyframes fall{to{transform:translateY(700%) rotate(540deg);opacity:.2}}
-/* hint row: icons only (B2) + R-card crib */
-#hint{min-height:64px;display:flex;align-items:center;justify-content:center;gap:12px;margin-top:10px;flex-wrap:wrap}
-#hint .ic{font-size:36px;background:#fff;border-radius:18px;padding:6px 12px;box-shadow:0 3px 0 #e2cf9a;animation:pop .35s ease-out}
+@keyframes ring{from{transform:scale(1);opacity:.7}to{transform:scale(1.38);opacity:0}}
+@keyframes shimmer{from{background-position:0% 50%}to{background-position:200% 50%}}
+.conf{position:absolute;top:-12%;font-size:.45em;animation:fall 1.8s ease-in forwards;pointer-events:none}
+@keyframes fall{to{transform:translateY(640%) rotate(360deg);opacity:.15}}
+#hint{min-height:8px;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:8px;flex-wrap:wrap;flex:0 0 auto}
+#hint:empty{margin-top:0}
+#hint .ic{font-size:32px;background:#fff;border-radius:16px;padding:4px 10px;box-shadow:0 3px 0 #e2cf9a;animation:pop .35s ease-out}
 #hint .ic.demo{outline:4px solid #ff8a3d}
-#hint .crib{font-size:24px;font-weight:800;background:#fff;border-radius:16px;padding:8px 16px}
-#ctl{display:flex;align-items:center;justify-content:center;gap:22px;margin-top:6px;position:relative;width:100%}
-#mic{width:104px;height:104px;border-radius:50%;font-size:50px;background:#ff8a3d;box-shadow:0 6px 0 #c95f1c;transition:opacity .2s,background .2s}
-#mic[disabled]{opacity:.3}
-#mic.ready{animation:pulse 1.2s ease-in-out infinite}
-#mic.live{background:#e5383b;box-shadow:0 0 0 12px rgba(229,56,59,.25);animation:pulse .8s ease-in-out infinite}
-#again{font-size:30px;width:60px;height:60px;border-radius:50%;background:#fff;box-shadow:0 3px 0 #e2cf9a}
-#again[disabled]{opacity:.3}
-#keys{display:none;gap:12px;margin-top:10px;width:100%;justify-content:center}
-#keys.on{display:flex}
-#skip{font-size:20px;font-weight:800;padding:12px 22px;border-radius:999px;background:#fff;box-shadow:0 3px 0 #e2cf9a}
-#heard{position:relative;overflow:hidden;font-size:18px;font-weight:800;padding:12px 18px;border-radius:999px;background:#d9f2d0;box-shadow:0 3px 0 #a9d39a}
-#heard b{position:absolute;left:0;top:0;bottom:0;width:0;background:rgba(60,160,60,.4)}
+#hint .crib{font-size:22px;font-weight:800;background:#fff;border-radius:16px;padding:8px 14px;box-shadow:0 3px 0 #e2cf9a}
+#status{flex:0 0 auto;min-height:28px;margin-top:4px;font-size:20px;font-weight:800;letter-spacing:.01em;text-align:center}
+#status.wait{color:#8a6d3b}
+#status.ready{color:#c95f1c}
+#status.live{color:#c81e1e}
+#status.ask{color:#8a3b12}
+#ctl{display:grid;grid-template-columns:64px minmax(96px,1fr) 64px;align-items:center;justify-items:center;width:100%;margin-top:2px;flex:0 0 auto}
+#exit,#gear,#mic,#again{display:inline-flex;align-items:center;justify-content:center}
+#mic{grid-column:2;position:relative;width:104px;height:104px;border-radius:50%;font-size:48px;background:#ff8a3d;color:#fff;box-shadow:0 6px 0 #c95f1c;transition:background .2s,transform .05s}
+#mic:active:not([disabled]){transform:translateY(4px);box-shadow:0 2px 0 #c95f1c}
+#mic.wait{background:#ffe0c2;color:#c95f1c;box-shadow:0 6px 0 #e2cf9a}
+#mic.ready::before,#mic.live::before,#mic.live::after{content:"";position:absolute;inset:-8px;border-radius:50%;border:3px solid rgba(255,138,61,.55);animation:ring 1.25s ease-out infinite;pointer-events:none}
+#mic.live{background:#e23b3b;box-shadow:0 6px 0 #a32020}
+#mic.live::before,#mic.live::after{border-color:rgba(226,59,59,.55)}
+#mic.live::after{animation-delay:.45s}
+#again{grid-column:1;font-size:28px;width:64px;height:64px;border-radius:50%;background:#fff;box-shadow:0 4px 0 #e2cf9a}
+#again:active:not([disabled]){transform:translateY(3px);box-shadow:0 1px 0 #e2cf9a}
+#again[disabled]{opacity:.35}
+#keys{display:none;gap:10px;margin-top:8px;width:100%;justify-content:center;flex:0 0 auto}
+#keys.on{display:flex;flex-wrap:wrap}
+#skip,#heard{min-height:52px;flex:1 1 140px;font-weight:800}
+#skip{font-size:18px;padding:12px 16px;border-radius:999px;background:#fff;box-shadow:0 4px 0 #e2cf9a}
+#skip:active{transform:translateY(3px);box-shadow:0 1px 0 #e2cf9a}
+#heard{position:relative;overflow:hidden;font-size:17px;padding:12px 14px;border-radius:999px;background:#d9f2d0;box-shadow:0 4px 0 #8fca78;touch-action:none}
+#heard:active{transform:translateY(3px)}
+#heard b{position:absolute;left:0;top:0;bottom:0;width:0;background:rgba(46,140,60,.42)}
 #heard.hold b{width:100%;transition:width 1s linear}
 #heard span{position:relative}
 #fly{position:fixed;font-size:64px;z-index:50;pointer-events:none;display:none;line-height:1}
 /* ---------- book / end / parent ---------- */
-#book,#end{justify-content:flex-start;gap:14px;text-align:center}
-#grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;width:100%;overflow:auto;padding:4px}
-#grid div{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:34px;background:#fff;border-radius:16px;filter:grayscale(1);opacity:.28}
-#grid div.lit{filter:none;opacity:1}
-#grid div.shiny{background:linear-gradient(135deg,#fff3b0,#ffd166,#fff3b0);box-shadow:0 0 12px #ffc93c}
+#book,#end{text-align:center;gap:10px}
+#book{justify-content:flex-start}
+#book h2,#end h2{margin:2px 0 0;font-size:32px;letter-spacing:-.02em}
+#bookCount{margin:0;font-size:16px;font-weight:800;color:#6b5224}
+#grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;width:100%;flex:1 1 auto;min-height:0;overflow:auto;-webkit-overflow-scrolling:touch;padding:4px 2px 8px;align-content:start}
+#grid div{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:32px;background:#fff;border-radius:16px;box-shadow:inset 0 0 0 2px #f0e6cc;filter:grayscale(1);opacity:.38}
+#grid div.lit{filter:none;opacity:1;box-shadow:0 3px 0 #e2cf9a}
+#grid div.shiny{background:linear-gradient(120deg,#fff3b0,#ffe08a,#fff,#ffd166,#fff3b0);background-size:200% 100%;animation:shimmer 2.8s linear infinite;box-shadow:0 0 0 2px #ffd166, 0 3px 0 #e2b43a}
+#closeBook{flex:0 0 auto;margin-top:4px}
 #end{justify-content:center}
-#end h2{font-size:38px;margin:0}
-#endRow{font-size:38px;display:flex;flex-wrap:wrap;gap:6px;justify-content:center;min-height:46px}
-#endRow .new{animation:pulse 1s ease-in-out infinite}
-.stat{font-size:26px;font-weight:800}
-.stat b{font-size:44px;color:#ff8a3d}
-#parent{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;align-items:center;justify-content:center;z-index:99}
+.end-mark{font-size:64px;line-height:1;animation:pop .5s ease-out}
+.stats{display:flex;gap:10px;width:100%;justify-content:center}
+.stat{flex:1 1 0;background:#fff;border-radius:18px;padding:8px 10px 10px;box-shadow:0 4px 0 #e2cf9a;font-size:15px;font-weight:800;color:#6b5224;line-height:1.2}
+.stat b{display:block;font-size:36px;color:#c95f1c;line-height:1.05}
+#endRow{width:100%;min-height:64px;background:#fff;border-radius:20px;box-shadow:0 4px 0 #e2cf9a;padding:8px;font-size:34px;display:flex;flex-wrap:wrap;gap:4px;justify-content:center;align-items:center}
+#endRow .new{animation:pulse 1.1s ease-in-out infinite}
+#parent{position:fixed;inset:0;background:rgba(40,24,8,.46);display:none;align-items:center;justify-content:center;z-index:99;padding:calc(12px + env(safe-area-inset-top)) 16px calc(12px + env(safe-area-inset-bottom))}
 #parent.on{display:flex}
-#parent .box{background:#fff;border-radius:22px;padding:22px;width:min(88vw,360px);display:flex;flex-direction:column;gap:12px;font-size:17px}
-#parent .box button{padding:14px;border-radius:14px;background:#f1ead6;font-weight:700;font-size:17px}
+#parent .box{background:#fffdf6;border-radius:22px;padding:18px;width:min(92vw,380px);max-height:100%;overflow:auto;-webkit-overflow-scrolling:touch;display:flex;flex-direction:column;gap:10px;font-size:17px;box-shadow:0 10px 0 rgba(0,0,0,.12)}
+#parent .box b{font-size:20px}
+#pMic{margin:0;padding:10px 12px;background:#fff3d6;border-radius:14px;font-size:14px;font-weight:700;line-height:1.45;color:#5c4314}
+#parent .box button,#pProbe{padding:14px;border-radius:14px;background:#f1ead6;font-weight:800;font-size:17px;min-height:48px;text-align:center;text-decoration:none;color:inherit}
+#parent .box button:active,#pProbe:active{transform:translateY(2px)}
+#parent .box #pClose{background:#ff8a3d;color:#fff;box-shadow:0 4px 0 #c95f1c}
 #parent textarea{width:100%;height:110px;display:none;font-size:11px;-webkit-user-select:text;user-select:text}
-#pmsg{min-height:20px;font-size:14px;color:#2a7d2a}
+#pmsg{min-height:18px;font-size:14px;font-weight:700;color:#2a7d2a}
+@media (max-height:680px){
+  .hero{width:120px;height:120px}
+  .logo{font-size:46px}
+  #home h1{font-size:34px}
+  #home{gap:10px}
+  .big{font-size:26px;padding:14px 32px;min-height:56px}
+  #mic{width:84px;height:84px;font-size:40px}
+  #stage{min-height:108px}
+  .end-mark{font-size:48px}
+  .stat b{font-size:28px}
+}
 </style>
 </head>
 <body>
@@ -112,11 +158,12 @@ button{font:inherit;color:inherit;border:0;cursor:pointer;padding:0;background:n
 <!-- home -->
 <section id="home" class="scr on">
   <button id="gear" aria-label="Parents">⚙️</button>
-  <div class="logo"><span>🐶</span><span>🤠</span><span>🐘</span></div>
+  <div class="hero" aria-hidden="true"><div class="logo"><span>🐶</span><span>🤠</span><span>🐘</span></div></div>
   <h1>Animal Park</h1>
+  <p class="tag">Say it!</p>
   <button id="start" class="big">▶ Start</button>
   <button id="openBook" class="soft">📒 Stickers</button>
-  <div id="nomic">🎤❌ No microphone here.<br>Play with a grown-up!</div>
+  <div id="nomic">This phone can't hear yet. Play with a grown-up!</div>
 </section>
 
 <!-- play -->
@@ -124,29 +171,33 @@ button{font:inherit;color:inherit;border:0;cursor:pointer;padding:0;background:n
   <div id="bar"><button id="exit" aria-label="Exit">✖</button><div id="dots"></div><div id="bookIco">📒</div></div>
   <div id="stage" class="bg-grass"><div id="cap"></div></div>
   <div id="hint"></div>
+  <div id="status" role="status" aria-live="polite"></div>
   <div id="ctl">
-    <button id="again" aria-label="Listen again">🔊</button>
+    <button id="again" aria-label="Hear it again">🔊</button>
     <button id="mic" aria-label="Talk" disabled>🎤</button>
-    <span style="width:60px"></span>
   </div>
   <div id="keys">
     <button id="skip">⏭ Skip</button>
-    <button id="heard"><b></b><span>👂 I heard it (hold)</span></button>
+    <button id="heard"><b></b><span>👂 Hold: I heard it</span></button>
   </div>
 </section>
 
 <!-- sticker book -->
 <section id="book" class="scr">
-  <h2 style="margin:6px 0;font-size:32px">📒 My Stickers</h2>
+  <h2>📒 My Stickers</h2>
+  <p id="bookCount">Play to earn stickers!</p>
   <div id="grid"></div>
   <button id="closeBook" class="soft">⬅ Back</button>
 </section>
 
 <!-- end -->
 <section id="end" class="scr">
-  <h2>🎉 Great job!</h2>
-  <div class="stat">You spoke <b id="nSpoke">0</b> times!</div>
-  <div class="stat"><b id="nStick">0</b> stickers</div>
+  <div class="end-mark" aria-hidden="true">🎉</div>
+  <h2>Great job!</h2>
+  <div class="stats">
+    <div class="stat"><b id="nSpoke">0</b>times you spoke</div>
+    <div class="stat"><b id="nStick">0</b>stickers</div>
+  </div>
   <div id="endRow"></div>
   <button id="replay" class="big">▶ Play again</button>
   <button id="toHome" class="soft">🏠 Home</button>
@@ -155,8 +206,10 @@ button{font:inherit;color:inherit;border:0;cursor:pointer;padding:0;background:n
 <!-- parent menu (二级菜单，中文) -->
 <div id="parent"><div class="box">
   <b>家长菜单</b>
+  <p id="pMic"></p>
   <button id="pCopy">📋 复制日志</button>
   <button id="pReset">🗑 重置进度（贴纸清空）</button>
+  <a id="pProbe" href="probe.html">🧪 打开单词摸底</a>
   <div id="pmsg"></div>
   <textarea id="pText" readonly></textarea>
   <button id="pClose">关闭</button>
@@ -203,12 +256,71 @@ function logText() {
 }
 
 // ---------- matching: case-insensitive, punctuation ignored, synonyms ----------
-const SYN = { bunny: 'rabbit', bunnies: 'rabbit', kitty: 'cat', kitten: 'cat', doggy: 'dog', doggie: 'dog', puppy: 'dog' };
-// al = per-card misrecognition whitelist {misheardToken: keyword}, filled in from the probe page results
-const norm = (s, al) => String(s || '').toLowerCase().replace(/[^a-z' ]+/g, ' ').replace(/'/g, '').trim().split(/\s+/).filter(Boolean).map(t => SYN[t] || (al && al[t]) || t);
-// token vs keyword: exact, plural, -ing (jumping / running)
-const tokIs = (t, k) => t === k || t === k + 's' || t === k + 'es' || t === k + 'ing' || t === k + k.slice(-1) + 'ing';
-// does one normalized transcript contain keyword (single word or phrase like "get up")?
+/* --- match: start --- */
+const SYN = {
+  bunny: 'rabbit', bunnies: 'rabbit', kitty: 'cat', kitten: 'cat', kitties: 'cat',
+  doggy: 'dog', doggie: 'dog', puppy: 'dog', puppies: 'dog', mice: 'mouse',
+  butterflies: 'butterfly', wolves: 'wolf', birdie: 'bird', chick: 'chicken',
+  lamb: 'sheep', tigger: 'tiger', meow: 'cat', mew: 'cat', woof: 'dog', ruff: 'dog',
+  oink: 'pig', piglet: 'pig', baa: 'sheep', bah: 'sheep', baah: 'sheep', hallo: 'hello', hullo: 'hello',
+  sat: 'sit', ran: 'run', byebye: 'bye', octopi: 'octopus', wawa: 'water', wata: 'water',
+  wadder: 'water', flew: 'fly', fishy: 'fish',
+  bigger: 'big', biggest: 'big', taller: 'tall', tallest: 'tall', longer: 'long', longest: 'long',
+  faster: 'fast', fastest: 'fast', cleaner: 'clean', smaller: 'little',
+  greener: 'green', redder: 'red', bluer: 'blue', pinker: 'pink'
+};
+// per-card ASR mis-hears that would otherwise block a correct answer.
+// Only tokens that are not themselves answers. "baa" is a real synonym (SYN), not a mis-hear.
+const WHITELIST = {
+  1: { set: 'sit', seat: 'sit' },
+  3: { watch: 'wash' },
+  11: { crack: 'quack', quak: 'quack', kwack: 'quack', qwack: 'quack', whack: 'quack', quark: 'quack' },
+  13: { mou: 'moo', move: 'moo', mood: 'moo', moon: 'moo', mow: 'moo', mu: 'moo', boo: 'moo' },
+  14: { ship: 'sheep', shep: 'sheep', seep: 'sheep', cheap: 'sheep', cheep: 'sheep', maa: 'sheep', mah: 'sheep' },
+  30: { ya: 'you', seeya: 'goodbye', cya: 'goodbye', goodby: 'goodbye' }
+};
+const tighten = t => t.replace(/([aeiou])\1{2,}/g, '$1$1'); // mooo → moo, baaa → baa
+function stemForms(w) {
+  const out = new Set([w]);
+  if (w.length > 4 && w.endsWith('ies')) out.add(w.slice(0, -3) + 'y');
+  if (w.length > 4 && w.endsWith('es')) out.add(w.slice(0, -2));
+  if (w.length > 3 && w.endsWith('s') && !w.endsWith('ss')) out.add(w.slice(0, -1));
+  if (w.length >= 5 && w.endsWith('ing')) {
+    const b = w.slice(0, -3);
+    out.add(b); out.add(b + 'e');
+    if (b.length >= 3 && b[b.length - 1] === b[b.length - 2]) out.add(b.slice(0, -1));
+  }
+  if (w.length >= 5 && w.endsWith('ed')) {
+    const b = w.slice(0, -2);
+    out.add(b);
+    if (b.endsWith('i') && b.length > 1) out.add(b.slice(0, -1) + 'y');
+    if (b.length >= 3 && b[b.length - 1] === b[b.length - 2]) out.add(b.slice(0, -1));
+  }
+  return out;
+}
+function mapToken(raw, al) {
+  const t = tighten(raw);
+  const hit = x => (al && al[x]) || SYN[x] || null;
+  const direct = hit(t);
+  if (direct) return direct;
+  for (const f of stemForms(t)) {
+    if (f === t) continue;
+    const m = hit(f);
+    if (m) return m;
+  }
+  return t;
+}
+const norm = (s, al) => String(s || '').toLowerCase().replace(/[^a-z' ]+/g, ' ').replace(/'/g, '').trim().split(/\s+/).filter(Boolean).map(t => mapToken(t, al));
+const squash1 = t => t.replace(/([aeiou])\1+/g, '$1');
+// token vs keyword: exact, plural either way, -ing (coming / running), -ed, stretched vowels
+function tokIs(t, k) {
+  if (t === k) return true;
+  const tf = stemForms(t);
+  if (tf.has(k)) return true;
+  for (const f of tf) if (stemForms(k).has(f)) return true;
+  if (k.length >= 3 && t.length > k.length && t.length - k.length <= 4 && squash1(t) === squash1(k)) return true;
+  return false;
+}
 function hasKw(toks, kw) {
   const ks = kw.split(' ');
   for (let i = 0; i + ks.length <= toks.length; i++) {
@@ -216,7 +328,6 @@ function hasKw(toks, kw) {
   }
   return false;
 }
-// all keywords found, in order of appearance in each alternative (top alternative first)
 function findKws(heard, kws, al) {
   const hits = [];
   heard.forEach(h => {
@@ -227,10 +338,21 @@ function findKws(heard, kws, al) {
   });
   return hits;
 }
+/* --- match: end --- */
 
 // ---------- TTS: en-US, rate 0.9; resolves when finished (or failed) ----------
 const synth = window.speechSynthesis || null;
 let ttsFailed = !synth || typeof window.SpeechSynthesisUtterance !== 'function';
+let ttsKick = 0;
+function stopKick() { if (ttsKick) { clearInterval(ttsKick); ttsKick = 0; } }
+function enVoice() {
+  if (!synth) return null;
+  try { return (synth.getVoices() || []).find(v => /^en[-_]US/i.test(v.lang)) || null; } catch (e) { return null; }
+}
+if (synth) {
+  try { synth.getVoices(); } catch (e) {}
+  if (synth.addEventListener) synth.addEventListener('voiceschanged', () => { try { synth.getVoices(); } catch (e) {} });
+}
 function unlockTTS() {                 // iOS: first speak must sit inside a tap
   if (ttsFailed) return;
   try { synth.speak(new SpeechSynthesisUtterance(' ')); } catch (e) { ttsFailed = true; }
@@ -241,46 +363,63 @@ function speak(text, o) {
   if (ttsFailed) return sleep(900 + text.length * 55);
   return new Promise(res => {
     let done = false;
-    const fin = bad => { if (done) return; done = true; if (bad) showCap(text); res(); };
+    const fin = bad => { if (done) return; done = true; stopKick(); if (bad) showCap(text); res(); };
     try {
+      stopKick();
       if (synth.speaking || synth.pending) synth.cancel();
       const u = new SpeechSynthesisUtterance(text);
       u.lang = 'en-US'; u.rate = o.rate || 0.9; u.pitch = o.pitch || 1;
-      const v = (synth.getVoices() || []).find(v => /^en[-_]US/i.test(v.lang));
+      const v = enVoice();
       if (v) u.voice = v;
       u.onend = () => fin(false);
       u.onerror = ev => fin(ev && ev.error !== 'interrupted' && ev.error !== 'canceled');
       synth.speak(u);
-      timers.push(setTimeout(() => fin(false), 2500 + text.length * 110));   // watchdog: onend sometimes never fires on iOS
+      // iOS pauses long utterances unless resume() is nudged
+      ttsKick = setInterval(() => { try { if (synth.speaking) synth.resume(); } catch (e) {} }, 4000);
+      timers.push(setTimeout(() => fin(false), 2500 + text.length * 110));
     } catch (e) { ttsFailed = true; fin(true); }
   });
 }
-const hush = () => { try { if (synth) synth.cancel(); } catch (e) {} };
+const hush = () => { stopKick(); try { if (synth) synth.cancel(); } catch (e) {} };
 
 // ---------- speech recognition: tap to start, silence ends it ----------
 const SR = window.SpeechRecognition || window.webkitSpeechRecognition || null;
 let micOK = !!SR;                      // false → whole round runs on parent confirm
+let micReason = SR ? '' : 'nosr';      // nosr | denied | failed | ''
+let micPrimed = false;
 let rec = null;
-/* listen(isMatch, waitAll) → Promise<{heard:[...], err}>
-   heard = every alternative of every result, top first, deduped.
+/* listen(isMatch, waitAll, onSpeech) → Promise<{heard, err}>
+   heard = every alternative of every result, newest top hypothesis first, deduped.
    Ends on: keyword match (+0.6 s grace), 1.6 s silence after speech,
-   5 s with no speech at all, or a 12 s hard cap. */
-function listen(isMatch, waitAll) {
+   5 s with no speech at all, a second tap, or a 12 s hard cap.
+   WebKit often fires onend / no-speech early; restart until one of those deadlines.
+   Both the short final and the longer interim are kept (truncated finals). */
+function listen(isMatch, waitAll, onSpeech) {
   return new Promise(res => {
-    const heard = []; let done = false, err = '', tSil = 0, tHit = 0;
-    const fin = () => {
-      if (done) return; done = true;
-      [tNone, tCap, tSil, tHit].forEach(clearTimeout);
-      try { r.onresult = r.onerror = r.onend = null; r.abort(); } catch (e) {}
-      rec = null; res({ heard, err });
-    };
-    const stop = () => { try { r.stop(); } catch (e) {} timers.push(setTimeout(fin, 700)); };
+    const heard = [];
+    let done = false, stopping = false, err = '', spoke = false;
+    let tSil = 0, tHit = 0, tRestart = 0, restarts = 0;
+    const myGen = game.gen;
     let r;
+    const fin = why => {
+      if (done) return;
+      done = true; stopping = true;
+      if (why && !err) err = why;
+      [tNone, tCap, tSil, tHit, tRestart].forEach(clearTimeout);
+      try { r.onresult = r.onerror = r.onend = null; r.abort(); } catch (e) {}
+      rec = null;
+      res({ heard, err });
+    };
+    const stop = () => {
+      stopping = true;
+      try { r.stop(); } catch (e) {}
+      timers.push(setTimeout(() => fin(), 800));
+    };
     try {
       r = new SR();
       r.lang = 'en-US'; r.continuous = false; r.interimResults = true; r.maxAlternatives = 5;
     } catch (e) { return res({ heard, err: 'unavailable' }); }
-    const tNone = setTimeout(fin, 5000);        // tier C: silence
+    const tNone = setTimeout(() => fin(), 5000);
     const tCap = setTimeout(stop, 12000);
     timers.push(tNone, tCap);
     r.onresult = ev => {
@@ -291,16 +430,49 @@ function listen(isMatch, waitAll) {
         }
       } catch (e) {}
       if (!heard.length) return;
+      if (!spoke) { spoke = true; try { if (onSpeech) onSpeech(); } catch (e) {} }
       clearTimeout(tNone); clearTimeout(tSil);
       tSil = setTimeout(stop, 1600); timers.push(tSil);
       if (!waitAll && !tHit && isMatch(heard)) { tHit = setTimeout(stop, 600); timers.push(tHit); }
     };
-    r.onerror = ev => { err = (ev && ev.error) || 'error'; if (err !== 'no-speech' && err !== 'aborted') fin(); };
-    r.onend = fin;
-    try { r.start(); rec = { abort: fin }; } catch (e) { err = 'unavailable'; fin(); }
+    r.onerror = ev => {
+      const code = (ev && ev.error) || 'error';
+      if (code === 'no-speech' || code === 'aborted') return;   // onend restarts until the 5 s mark
+      err = code;
+      if (code === 'network' && restarts < 1) return;
+      fin();
+    };
+    r.onend = () => {
+      if (done || stopping) return fin();
+      if (restarts >= 20 || myGen !== game.gen) return fin();
+      restarts++;
+      tRestart = setTimeout(() => {
+        if (done || stopping || myGen !== game.gen) return;
+        try { r.start(); } catch (e) { fin('unavailable'); }
+      }, 180);
+      timers.push(tRestart);
+    };
+    try { r.start(); rec = { abort: () => fin('aborted') }; }
+    catch (e) { fin('unavailable'); }
   });
 }
 const stopRec = () => { if (rec) rec.abort(); };
+// iOS shows the mic prompt only inside a tap. Ask on Start, before the first card.
+function primeMic() {
+  if (micPrimed) return;
+  micPrimed = true;
+  const md = navigator.mediaDevices;
+  if (!md || typeof md.getUserMedia !== 'function') return;
+  let p;
+  try { p = md.getUserMedia({ audio: true }); } catch (e) { return; }
+  p.then(stream => { try { stream.getTracks().forEach(t => t.stop()); } catch (e) {} }).catch(e => {
+    const name = ((e && e.name) || '') + ' ' + ((e && e.message) || '');
+    if (!/NotAllowed|PermissionDenied|SecurityError/i.test(name)) return;
+    micOK = false; micReason = 'denied';
+    if (game.state === 'home') showHomeMic();
+    else if (game.state === 'ready') ready(false);
+  });
+}
 
 // ---------- stage: emoji actors moved by CSS ----------
 const stage = $('stage'), cap = $('cap');
@@ -325,6 +497,8 @@ function setStage(card) {
   const cast = Object.assign({ m: [MARIO, 14, 74, 1.15] }, card.cast);
   for (const k in cast) if (cast[k]) addActor(k, ...cast[k]);
   fitStage();
+  stage.classList.add('enter');
+  requestAnimationFrame(fitStage);
 }
 function bubble(el, t) {
   const b = document.createElement('span'); b.className = 'bub'; b.textContent = t;
@@ -696,13 +870,10 @@ const tint = (h, sat, br) => 'sepia(1) saturate(' + sat + ') hue-rotate(' + h + 
 const COLORS = { red: ['🔴', tint(-45, 9)], orange: ['🟠', tint(-15, 9)], yellow: ['🟡', tint(10, 9, 1.2)], green: ['🟢', tint(60, 7)], blue: ['🔵', tint(170, 9)],
   purple: ['🟣', tint(220, 8)], pink: ['🌸', tint(280, 6, 1.25)], black: ['⚫', 'grayscale(1) brightness(.3)'], white: ['⚪', 'grayscale(1) brightness(1.7)'],
   brown: ['🟤', 'sepia(1) saturate(3) brightness(.6)'], gray: ['⚪', 'grayscale(1)'], grey: ['⚪', 'grayscale(1)'], rainbow: ['🌈', ''] };
-Object.assign(SYN, { mice: 'mouse', butterflies: 'butterfly', puppies: 'dog', kitties: 'cat', wolves: 'wolf' });
 CARDS.forEach(c => { if (c.kwOf) c.kw = Object.keys(c.kwOf === 'animal' ? ANIMALS : COLORS); });
 
 // card 13 fallback from the review (flip after the probe if "moo" is not recognised)
 const USE_COW_ALT = false;
-// per-card misrecognition whitelist, filled in from the probe: { cardId: { misheardToken: 'keyword' } }
-const WHITELIST = { /* 13: { mou: 'moo', move: 'moo' } */ };
 const byId = {}; CARDS.forEach(c => byId[c.id] = c);
 if (USE_COW_ALT) Object.assign(byId[13], byId[13].alt);
 
@@ -715,7 +886,20 @@ if (USE_COW_ALT) Object.assign(byId[13], byId[13].alt);
    leave a stale callback running.
    ===================================================================== */
 const game = { gen: 0, state: 'home', deck: [], i: 0, card: null, miss: 0, sil: 0, t0: 0, spoke: 0, got: [] };
-const mic = $('mic'), again = $('again'), hintEl = $('hint'), keysEl = $('keys'), heardBtn = $('heard');
+const mic = $('mic'), again = $('again'), hintEl = $('hint'), keysEl = $('keys'), heardBtn = $('heard'), statusEl = $('status');
+function setPhase(phase) {
+  mic.classList.remove('ready', 'live', 'wait');
+  let label = '', micLabel = 'Talk', cls = phase || '';
+  if (phase === 'wait') { mic.classList.add('wait'); label = 'Listen…'; micLabel = 'Wait'; }
+  else if (phase === 'ready' && micOK) { mic.classList.add('ready'); label = 'Your turn!'; micLabel = 'Your turn. Tap to talk'; }
+  else if (phase === 'ready') { mic.classList.add('wait'); cls = 'ask'; label = 'Ask a grown-up!'; micLabel = 'Mic is off'; }
+  else if (phase === 'live') { mic.classList.add('live'); label = 'Listening…'; micLabel = 'Listening. Tap to stop'; }
+  else if (phase === 'hear') { mic.classList.add('live'); label = 'I hear you!'; micLabel = 'Listening. Tap to stop'; }
+  else if (phase === 'yay') { mic.classList.add('wait'); cls = 'ready'; label = 'Yay!'; }
+  statusEl.className = cls;
+  statusEl.textContent = label;
+  mic.setAttribute('aria-label', micLabel);
+}
 const show = id => document.querySelectorAll('.scr').forEach(s => s.classList.toggle('on', s.id === id));
 const showKeys = on => keysEl.classList.toggle('on', on !== false);
 const passes = (card, heard) => card.any ? heard.length > 0 : findKws(heard, card.kw, WHITELIST[card.id]).length > 0;
@@ -739,6 +923,7 @@ function renderDots() {
 
 function startRound() {
   unlockTTS();
+  primeMic();                       // permission prompt on this tap, before the first card
   game.gen++; clearTimers();
   Object.assign(game, { deck: drawDeck(), i: 0, spoke: 0, got: [] });
   show('play'); nextCard();
@@ -755,7 +940,8 @@ function nextCard() {
 // Mario reads the prompt; the mic only becomes available after TTS has finished
 async function sayPrompt(fresh) {
   const gen = game.gen;
-  game.state = 'busy'; mic.disabled = again.disabled = true; mic.className = '';
+  game.state = 'busy'; mic.disabled = again.disabled = true;
+  setPhase('wait');
   anim('m', 'talk');
   await speak(game.card.say);
   if (gen !== game.gen) return;
@@ -764,8 +950,9 @@ async function sayPrompt(fresh) {
 function ready(fresh) {
   game.state = 'ready';
   if (fresh) game.t0 = Date.now();
-  if (actors.m) actors.m.firstChild.className = 'in';
-  mic.disabled = !micOK; mic.className = micOK ? 'ready' : ''; again.disabled = false;
+  if (actors.m && actors.m.firstChild) actors.m.firstChild.className = 'in';
+  mic.disabled = !micOK; again.disabled = false;
+  setPhase('ready');
   if (!micOK) showKeys();                    // no microphone: the whole round runs on parent confirm
 }
 
@@ -774,13 +961,16 @@ mic.onclick = async () => {
   if (game.state === 'listen') return stopRec();
   if (game.state !== 'ready' || !micOK) return;
   const gen = game.gen, card = game.card;
-  game.state = 'listen'; mic.className = 'live'; again.disabled = true; hush(); showCap('');
-  const { heard, err } = await listen(h => passes(card, h), card.waitAll || card.any);
+  game.state = 'listen'; setPhase('live'); again.disabled = true; hush(); showCap('');
+  const { heard, err } = await listen(h => passes(card, h), card.waitAll || card.any, () => {
+    if (gen === game.gen) setPhase('hear');
+  });
   if (gen !== game.gen) return;
-  mic.className = '';
   const ms = Date.now() - game.t0;
   if (err && err !== 'no-speech' && err !== 'aborted' && !heard.length) {      // recogniser broken / blocked → degrade, never dead-end
-    if (err !== 'network') micOK = false;
+    if (err === 'not-allowed' || err === 'service-not-allowed') { micOK = false; micReason = 'denied'; }
+    else if (err !== 'network') { micOK = false; micReason = 'failed'; }
+    else micReason = 'failed';
     logTry(card.id, 'C', [], ms, 'err:' + err);
     showKeys(); return ready();
   }
@@ -798,7 +988,7 @@ function tierC(card, ms) {
 }
 // B — spoke but no keyword: 1) light reaction 2) icons + one demo word 3) the two keys
 async function tierB(card, heard, ms) {
-  const gen = game.gen; game.miss++; game.state = 'busy'; mic.disabled = true;
+  const gen = game.gen; game.miss++; game.state = 'busy'; mic.disabled = true; setPhase('wait');
   logTry(card.id, 'B', heard, ms, '');
   anim(lead(), 'wob'); anim('m', 'talk');
   if (game.miss === 2) {
@@ -858,7 +1048,7 @@ function choose(card, hits, heard) {
 // ---- A tier or parent confirm: full result animation → reply → sticker → next ----
 async function pass(card, heard, via, ms) {
   const gen = game.gen;
-  game.state = 'busy'; mic.disabled = again.disabled = true; mic.className = '';
+  game.state = 'busy'; mic.disabled = again.disabled = true; setPhase('yay');
   hintEl.innerHTML = ''; showKeys(false); showCap('');
   const o = choose(card, via === 'A' ? findKws(heard, card.kw, WHITELIST[card.id]) : [], heard);
   logTry(card.id, via, heard, ms, o.key + (o.rare ? '*' : ''));
@@ -906,11 +1096,17 @@ const holdEnd = () => { clearTimeout(holdT); holdT = 0; heardBtn.classList.remov
 heardBtn.addEventListener('pointerdown', ev => {
   ev.preventDefault();
   if (game.state !== 'ready' || holdT) return;
+  try { heardBtn.setPointerCapture(ev.pointerId); } catch (e) {}   // a small finger drift must not cancel the 1 s hold
   heardBtn.classList.add('hold');
   holdT = setTimeout(() => { holdEnd(); if (game.state === 'ready') pass(game.card, [], 'parent', Date.now() - game.t0); }, 1000);
 });
-['pointerup', 'pointerleave', 'pointercancel'].forEach(e => heardBtn.addEventListener(e, holdEnd));
-document.addEventListener('contextmenu', ev => ev.preventDefault());
+document.addEventListener('pointerup', holdEnd);
+document.addEventListener('pointercancel', holdEnd);
+document.addEventListener('contextmenu', ev => {
+  const t = ev.target;
+  if (t && t.closest && t.closest('textarea, #parent')) return;   // parent log still needs long-press copy
+  ev.preventDefault();
+});
 
 // ---- leaving / ending ----
 function stopAll() { game.gen++; holdEnd(); clearTimers(); stopRec(); hush(); showCap(''); $('fly').style.display = 'none'; }
@@ -923,7 +1119,19 @@ function endRound() {
   show('end');
   speak('Great job!');
 }
-function goHome() { stopAll(); game.state = 'home'; $('nomic').style.display = micOK ? 'none' : 'block'; show('home'); }
+function showHomeMic() {
+  const el = $('nomic');
+  if (micOK) { el.style.display = 'none'; return; }
+  el.style.display = 'block';
+  el.textContent = micReason === 'denied' ? 'The mic is off. Ask a grown-up!' : "This phone can't hear yet. Play with a grown-up!";
+}
+function parentMicText() {
+  if (!SR || micReason === 'nosr') return '这个浏览器不能语音识别。请用 iPhone 自带的 Safari 打开。在微信里点右上角，选「在 Safari 中打开」。';
+  if (!micOK || micReason === 'denied') return '麦克风或听写没开。到 iPhone「设置 → Safari → 麦克风」选允许。还不行就打开「设置 → 通用 → 键盘 → 启用听写」，然后重新打开本页。';
+  if (micReason === 'failed') return '刚才没听成。可以再开一局。如果还是不行，孩子说完后按住绿色「Hold: I heard it」一秒钟，算通过。';
+  return '听写可用。手机没听出来时，按住绿色按钮一秒钟，记为家长确认，算通过。跳过不算失败。';
+}
+function goHome() { stopAll(); game.state = 'home'; showHomeMic(); show('home'); }
 $('exit').onclick = () => (game.spoke ? endRound() : goHome());
 $('start').onclick = $('replay').onclick = startRound;
 $('toHome').onclick = $('closeBook').onclick = goHome;
@@ -931,13 +1139,20 @@ $('toHome').onclick = $('closeBook').onclick = goHome;
 // ---- sticker book: lit / unlit / shiny, no numbers ----
 $('openBook').onclick = () => {
   $('grid').innerHTML = '';
-  CARDS.forEach(c => { const d = document.createElement('div'); d.textContent = c.icon; d.className = prog.st[c.id] === 2 ? 'lit shiny' : prog.st[c.id] ? 'lit' : ''; $('grid').appendChild(d); });
+  let n = 0, shiny = 0;
+  CARDS.forEach(c => {
+    const d = document.createElement('div'); d.textContent = c.icon;
+    d.className = prog.st[c.id] === 2 ? 'lit shiny' : prog.st[c.id] ? 'lit' : '';
+    if (prog.st[c.id]) n++; if (prog.st[c.id] === 2) shiny++;
+    $('grid').appendChild(d);
+  });
+  $('bookCount').textContent = n ? (n + ' / ' + CARDS.length + (shiny ? '  ·  ' + shiny + ' shiny' : '')) : 'Play to earn stickers!';
   show('book');
 };
 
 // ---- parent menu (second level): reset progress, copy log ----
 const pmsg = $('pmsg'), pText = $('pText');
-$('gear').onclick = () => { pmsg.textContent = ''; pText.style.display = 'none'; $('parent').classList.add('on'); };
+$('gear').onclick = () => { pmsg.textContent = ''; pText.style.display = 'none'; $('pMic').textContent = parentMicText(); $('parent').classList.add('on'); };
 $('pClose').onclick = () => $('parent').classList.remove('on');
 $('pReset').onclick = () => {
   if (!window.confirm('清空全部贴纸和进度？（日志保留）')) return;
@@ -955,7 +1170,7 @@ $('pCopy').onclick = async () => {
 // ---- boot ----
 window.addEventListener('resize', fitStage);
 document.addEventListener('visibilitychange', () => { if (document.hidden) { stopRec(); hush(); } });
-$('nomic').style.display = micOK ? 'none' : 'block';
+showHomeMic();
 </script>
 </body>
 </html>

@@ -1,88 +1,172 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-Hans">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<title>Word Check 摸底</title>
+<meta name="theme-color" content="#fff6dc">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%90%B6%3C/text%3E%3C/svg%3E">
+<title>Word Check · Animal Park</title>
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;font-family:-apple-system,"SF Pro Rounded","Helvetica Neue",Arial,sans-serif;background:#fff6dc;color:#3a2a14}
-body{max-width:560px;margin:0 auto;padding:calc(12px + env(safe-area-inset-top)) 14px calc(20px + env(safe-area-inset-bottom))}
-h1{font-size:28px;margin:4px 0 2px}
-.sub{font-size:15px;line-height:1.5;margin:0 0 10px}
-#nosr{display:none;background:#ffe1de;border:2px solid #e5383b;border-radius:16px;padding:14px;font-size:17px;font-weight:700;margin:10px 0}
-#sum{position:sticky;top:0;z-index:5;background:#fff;border-radius:16px;box-shadow:0 3px 0 #e2cf9a;padding:10px 14px;font-size:16px;font-weight:700;margin-bottom:10px}
-#sum small{display:block;font-weight:400;font-size:13px;color:#8a6d3b;word-break:break-all}
+html,body{margin:0;font-family:ui-rounded,"SF Pro Rounded","Avenir Next","Helvetica Neue",Arial,sans-serif;background:#fff6dc;color:#3a2a14;-webkit-text-size-adjust:100%;color-scheme:light}
+body{max-width:560px;margin:0 auto;padding:calc(12px + env(safe-area-inset-top)) max(14px, env(safe-area-inset-right)) calc(24px + env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left))}
+.top{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.brand{width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 42%, #c8ecff 0 57%, #8fd66b 58% 100%);box-shadow:0 4px 0 #e2cf9a;font-size:22px;flex:none}
+.eye{margin:0;font-size:13px;font-weight:800;letter-spacing:.04em;color:#c95f1c;text-transform:uppercase}
+h1{font-size:28px;margin:0;letter-spacing:-.03em}
+.steps{margin:0 0 12px;padding:12px 12px 12px 32px;background:#fff;border-radius:18px;box-shadow:0 4px 0 #e2cf9a;font-size:15px;line-height:1.45;font-weight:700}
+.steps li{margin:6px 0}
+.steps b{color:#c95f1c}
+#nosr{display:none;background:#ffe1de;border:2px solid #e23b3b;border-radius:16px;padding:14px;font-size:16px;font-weight:800;line-height:1.4;margin:0 0 12px}
+#sum{position:sticky;top:env(safe-area-inset-top);z-index:5;background:#fff;border-radius:16px;box-shadow:0 3px 0 #e2cf9a;padding:10px 14px;font-size:16px;font-weight:800;margin-bottom:10px}
+#sum small{display:block;font-weight:700;font-size:13px;color:#6b5224;word-break:break-word;margin-top:2px}
 #sum .red{color:#c81e1e}
-.btns{display:flex;gap:10px;margin-bottom:12px}
-.btns button{flex:1;padding:12px;border-radius:14px;border:0;background:#fff;box-shadow:0 3px 0 #e2cf9a;font-size:16px;font-weight:700;cursor:pointer}
-h2{font-size:20px;margin:16px 0 8px}
-.row{display:flex;align-items:center;gap:10px;background:#fff;border-radius:16px;padding:10px 12px;margin-bottom:8px;box-shadow:0 2px 0 #e2cf9a}
-.row.testing{outline:3px solid #ff8a3d}
-.row.low{border:2px solid #e5383b}
-.row .w{font-size:22px;font-weight:800;min-width:96px;word-break:break-all}
-.row .w .star{font-size:14px;color:#e6a700}
-.row .say{flex:none;font-size:16px;font-weight:800;padding:10px 14px;border-radius:999px;border:0;background:#ff8a3d;color:#fff;cursor:pointer}
-.row .say[disabled]{opacity:.35}
-.row .res{flex:1;font-size:13px;line-height:1.45;min-width:0;word-break:break-word}
+.btns{display:flex;gap:10px;margin-bottom:8px}
+.btns button,.back{flex:1;padding:12px;border-radius:14px;border:0;background:#fff;box-shadow:0 3px 0 #e2cf9a;font-size:16px;font-weight:800;cursor:pointer;color:inherit;text-align:center;text-decoration:none;min-height:48px}
+.btns button:active,.back:active{transform:translateY(2px);box-shadow:0 1px 0 #e2cf9a}
+.back{display:flex;align-items:center;justify-content:center;margin-top:8px}
+h2{font-size:18px;margin:16px 0 8px}
+.focus{background:#fff4e4;border-radius:18px;padding:10px 10px 4px;box-shadow:inset 0 0 0 2px #ffd7a8}
+.row{display:flex;align-items:center;flex-wrap:wrap;gap:8px;background:#fff;border-radius:16px;padding:10px 12px;margin-bottom:8px;box-shadow:0 2px 0 #e2cf9a}
+.focus .row{background:#fffdf8}
+.row.testing{outline:3px solid #e23b3b}
+.row.armed{outline:3px solid #ff8a3d}
+.row.low{box-shadow:inset 0 0 0 2px #e23b3b, 0 2px 0 #e2cf9a}
+.row .w{font-size:20px;font-weight:800;flex:1;min-width:88px;word-break:break-word}
+.row .w .star{font-size:12px;color:#c95f1c;font-weight:800}
+.row button{flex:none;min-width:64px;min-height:48px;padding:8px 12px;border-radius:999px;border:0;font-size:16px;font-weight:800;cursor:pointer}
+.row .hear{background:#fff;box-shadow:0 3px 0 #e2cf9a;color:#3a2a14}
+.row .say{background:#ff8a3d;color:#fff;box-shadow:0 3px 0 #c95f1c}
+.row .say.live{background:#e23b3b;box-shadow:0 3px 0 #a32020}
+.row .say.go{box-shadow:0 0 0 3px #ff8a3d, 0 3px 0 #c95f1c}
+.row button:active:not([disabled]){transform:translateY(2px)}
+.row button[disabled]{opacity:.38}
+.row .res{flex:1 1 100%;font-size:13px;line-height:1.45;min-width:0;word-break:break-word}
 .row .res .att{margin:2px 0}
-.row .res .tr{color:#6b5a3e}
+.row .res .tr{color:#5c4314}
 .rate{font-weight:800;font-size:16px}
 .rate.ok{color:#2a7d2a}.rate.low{color:#c81e1e}
-.tag{font-size:12px;font-weight:700;color:#c81e1e}
-#pmsg{min-height:18px;font-size:13px;color:#2a7d2a;margin-top:4px}
-#copyText{width:100%;height:120px;display:none;font-size:11px;margin-top:6px;-webkit-user-select:text;user-select:text}
-.hint{font-size:13px;color:#8a6d3b;margin:2px 0 0}
+.tag{font-size:12px;font-weight:800;color:#c81e1e}
+#pmsg{min-height:18px;font-size:14px;font-weight:700;color:#2a7d2a;margin:4px 0}
+#copyText{width:100%;height:120px;display:none;font-size:12px;margin-top:6px;-webkit-user-select:text;user-select:text}
 </style>
 </head>
 <body>
-<h1>🎤 Word Check</h1>
-<p class="sub">说两遍，测一测 iPhone 听不听得懂。<br>Tap ▶, listen, then say the word. Two tries per word.<br>重点词置顶：moo、quack、sheep 最容易翻车，先测。</p>
-<div id="nosr">⚠️ 此浏览器不支持语音识别，请用 Safari 打开。<br>This browser can't do speech recognition. Please open in Safari.</div>
+<header class="top">
+  <div class="brand" aria-hidden="true">🐶🤠</div>
+  <div>
+    <p class="eye">Animal Park</p>
+    <h1>Word Check</h1>
+  </div>
+</header>
+<ol class="steps">
+  <li>用 iPhone 自带的 <b>Safari</b> 打开。在微信里点右上角，选「在 Safari 中打开」。</li>
+  <li>每个词先点 <b>听</b>，等读完，再点橙色 <b>说</b>。让孩子把这个词说两遍。</li>
+  <li>先测最上面三个：<b>moo、quack、sheep</b>。测完可以复制结果。</li>
+</ol>
+<div id="nosr">这个浏览器不能语音识别。请用 iPhone 自带的 Safari 打开本页。微信或其它 App 里请点右上角，选「在 Safari 中打开」。</div>
 <div id="sum">—<small></small></div>
 <div class="btns">
-  <button id="copyBtn">📋 复制结果 Copy results</button>
-  <button id="resetBtn">🗑 重置 Reset</button>
+  <button id="copyBtn" type="button">📋 复制结果</button>
+  <button id="resetBtn" type="button">🗑 重置</button>
 </div>
 <div id="pmsg"></div>
 <textarea id="copyText" readonly></textarea>
-<h2>⭐ 重点测 · Focus words</h2>
-<div id="plist"></div>
-<h2>全部关键词 · All words (<span id="totalN"></span>)</h2>
+<h2>重点测 · 先说这三个</h2>
+<div class="focus" id="plist"></div>
+<h2>全部关键词 · <span id="totalN"></span> 个</h2>
 <div id="list"></div>
+<a class="back" href="index.html">← 回到 Animal Park</a>
 
 <script>
 'use strict';
-/* Word Check — recognition probe for the speaking-cards prototype.
-   Word list = distinct `kw` values from the prototype's CARDS array
-   (including the kwOf animal/colour expansions), extracted 2026-11-14.
-   Matching logic is identical to the prototype (norm + synonyms + phrases),
-   so probe results predict prototype behaviour. */
+/* Word Check — recognition probe for Animal Park.
+   Word list = distinct kw values from the prototype CARDS (2026-11-14).
+   Matcher matches speaking-cards/index.html, including the mis-hear whitelist,
+   so a hit here is a hit on that card. Priority words stay first.
+   iPhone Safari only opens the mic inside a tap, so 听 and 说 are separate:
+   TTS must finish, then a new tap starts listening. */
 
-// ---------- word list (do not hand-edit: regenerate from CARDS if the table changes) ----------
 const WORDS = ["apple","away","baby","banana","bath","bear","bee","big","bird","black","blue","both","brown","butterfly","bye","cake","carrot","cat","chicken","clean","come","come out","cow","crab","crocodile","dinosaur","dog","dolphin","down","dragon","duck","ducks","eat","egg","elephant","fast","fish","fly","fox","frog","get up","giraffe","go","goat","goodbye","gray","green","grey","hello","here","hide","hippo","hop","horse","jump","kangaroo","kitty","koala","lion","little","long","look","monkey","moo","morning","mouse","octopus","open","orange","out","owl","panda","parrot","penguin","pig","pink","purple","quack","rabbit","rainbow","red","rooster","run","sea","see you","shark","sheep","shoo","shower","sit","sleep","slide","snail","snake","spider","splash","stop","swim","tall","tiger","turtle","unicorn","up","wake","wash","water","whale","white","wolf","yellow","zebra"];
 const PRIORITY = ['moo', 'quack', 'sheep'];
 
-// ---------- matching: identical to the prototype ----------
-const SYN = { bunny: 'rabbit', bunnies: 'rabbit', kitty: 'cat', kitten: 'cat', doggy: 'dog', doggie: 'dog', puppy: 'dog',
-  mice: 'mouse', butterflies: 'butterfly', puppies: 'dog', kitties: 'cat', wolves: 'wolf' };
-const norm = s => String(s || '').toLowerCase().replace(/[^a-z' ]+/g, ' ').replace(/'/g, '').trim().split(/\s+/).filter(Boolean).map(t => SYN[t] || t);
-const tokIs = (t, k) => t === k || t === k + 's' || t === k + 'es' || t === k + 'ing' || t === k + k.slice(-1) + 'ing';
+/* --- match: start --- */
+const SYN = {
+  bunny: 'rabbit', bunnies: 'rabbit', kitty: 'cat', kitten: 'cat', kitties: 'cat',
+  doggy: 'dog', doggie: 'dog', puppy: 'dog', puppies: 'dog', mice: 'mouse',
+  butterflies: 'butterfly', wolves: 'wolf', birdie: 'bird', chick: 'chicken',
+  lamb: 'sheep', tigger: 'tiger', meow: 'cat', mew: 'cat', woof: 'dog', ruff: 'dog',
+  oink: 'pig', piglet: 'pig', baa: 'sheep', bah: 'sheep', baah: 'sheep', hallo: 'hello', hullo: 'hello',
+  sat: 'sit', ran: 'run', byebye: 'bye', octopi: 'octopus', wawa: 'water', wata: 'water',
+  wadder: 'water', flew: 'fly', fishy: 'fish',
+  bigger: 'big', biggest: 'big', taller: 'tall', tallest: 'tall', longer: 'long', longest: 'long',
+  faster: 'fast', fastest: 'fast', cleaner: 'clean', smaller: 'little',
+  greener: 'green', redder: 'red', bluer: 'blue', pinker: 'pink'
+};
+// Union of the game's per-card WHITELIST. A mis-hear counts for the keyword it maps to.
+const MIS = {
+  set: 'sit', seat: 'sit', watch: 'wash',
+  crack: 'quack', quak: 'quack', kwack: 'quack', qwack: 'quack', whack: 'quack', quark: 'quack',
+  mou: 'moo', move: 'moo', mood: 'moo', moon: 'moo', mow: 'moo', mu: 'moo', boo: 'moo',
+  ship: 'sheep', shep: 'sheep', seep: 'sheep', cheap: 'sheep', cheep: 'sheep', maa: 'sheep', mah: 'sheep',
+  ya: 'you', seeya: 'goodbye', cya: 'goodbye', goodby: 'goodbye'
+};
+const tighten = t => t.replace(/([aeiou])\1{2,}/g, '$1$1');
+function stemForms(w) {
+  const out = new Set([w]);
+  if (w.length > 4 && w.endsWith('ies')) out.add(w.slice(0, -3) + 'y');
+  if (w.length > 4 && w.endsWith('es')) out.add(w.slice(0, -2));
+  if (w.length > 3 && w.endsWith('s') && !w.endsWith('ss')) out.add(w.slice(0, -1));
+  if (w.length >= 5 && w.endsWith('ing')) {
+    const b = w.slice(0, -3);
+    out.add(b); out.add(b + 'e');
+    if (b.length >= 3 && b[b.length - 1] === b[b.length - 2]) out.add(b.slice(0, -1));
+  }
+  if (w.length >= 5 && w.endsWith('ed')) {
+    const b = w.slice(0, -2);
+    out.add(b);
+    if (b.endsWith('i') && b.length > 1) out.add(b.slice(0, -1) + 'y');
+    if (b.length >= 3 && b[b.length - 1] === b[b.length - 2]) out.add(b.slice(0, -1));
+  }
+  return out;
+}
+function mapToken(raw, al) {
+  const t = tighten(raw);
+  const hit = x => (al && al[x]) || SYN[x] || null;
+  const direct = hit(t);
+  if (direct) return direct;
+  for (const f of stemForms(t)) {
+    if (f === t) continue;
+    const m = hit(f);
+    if (m) return m;
+  }
+  return t;
+}
+const norm = s => String(s || '').toLowerCase().replace(/[^a-z' ]+/g, ' ').replace(/'/g, '').trim().split(/\s+/).filter(Boolean).map(t => mapToken(t, MIS));
+const squash1 = t => t.replace(/([aeiou])\1+/g, '$1');
+function tokIs(t, k) {
+  if (t === k) return true;
+  const tf = stemForms(t);
+  if (tf.has(k)) return true;
+  for (const f of tf) if (stemForms(k).has(f)) return true;
+  if (k.length >= 3 && t.length > k.length && t.length - k.length <= 4 && squash1(t) === squash1(k)) return true;
+  return false;
+}
 function hasKw(toks, kw) {
   const ks = kw.split(' ');
   for (let i = 0; i + ks.length <= toks.length; i++) if (ks.every((k, j) => tokIs(toks[i + j], k))) return true;
   return false;
 }
 const heardHits = (heard, word) => heard.some(h => hasKw(norm(h), word));
+/* --- match: end --- */
 
-// ---------- storage ----------
 const store = {
   get(k, d) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } },
   set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
 };
 const K_WORDS = 'probe_words_v1', K_LOG = 'probe_log_v1';
-let words = store.get(K_WORDS, {});   // word -> [{t, said, alts, hit}]
+let words = store.get(K_WORDS, {});
 const saveWords = () => store.set(K_WORDS, words);
 function logAttempt(word, n, said, alts, hit) {
   const log = store.get(K_LOG, []);
@@ -90,15 +174,21 @@ function logAttempt(word, n, said, alts, hit) {
   store.set(K_LOG, log.slice(-3000));
 }
 
-// ---------- TTS (same shape as the prototype) ----------
 const synth = window.speechSynthesis || null;
 let ttsFailed = !synth || typeof window.SpeechSynthesisUtterance !== 'function';
+let ttsKick = 0;
+function stopKick() { if (ttsKick) { clearInterval(ttsKick); ttsKick = 0; } }
+if (synth) {
+  try { synth.getVoices(); } catch (e) {}
+  if (synth.addEventListener) synth.addEventListener('voiceschanged', () => { try { synth.getVoices(); } catch (e) {} });
+}
 function speak(text) {
   if (ttsFailed) return new Promise(r => setTimeout(r, 900 + text.length * 55));
   return new Promise(res => {
     let done = false;
-    const fin = () => { if (done) return; done = true; res(); };
+    const fin = () => { if (done) return; done = true; stopKick(); res(); };
     try {
+      stopKick();
       if (synth.speaking || synth.pending) synth.cancel();
       const u = new SpeechSynthesisUtterance(text);
       u.lang = 'en-US'; u.rate = 0.9;
@@ -106,30 +196,49 @@ function speak(text) {
       if (v) u.voice = v;
       u.onend = fin; u.onerror = fin;
       synth.speak(u);
+      ttsKick = setInterval(() => { try { if (synth.speaking) synth.resume(); } catch (e) {} }, 4000);
       setTimeout(fin, 2500 + text.length * 110);
     } catch (e) { ttsFailed = true; fin(); }
   });
 }
+const hush = () => { stopKick(); try { if (synth) synth.cancel(); } catch (e) {} };
 
-// ---------- recognition (same shape as the prototype's listen) ----------
 const SR = window.SpeechRecognition || window.webkitSpeechRecognition || null;
 const srOK = !!SR;
-function listen() {
+let rec = null, listenGen = 0, micPrimed = false;
+function primeMic() {
+  if (micPrimed) return;
+  micPrimed = true;
+  const md = navigator.mediaDevices;
+  if (!md || typeof md.getUserMedia !== 'function') return;
+  try {
+    md.getUserMedia({ audio: true }).then(stream => {
+      try { stream.getTracks().forEach(t => t.stop()); } catch (e) {}
+    }).catch(() => {});
+  } catch (e) {}
+}
+function listen(onSpeech) {
+  const my = ++listenGen;
   return new Promise(res => {
-    const heard = []; let done = false, err = '', tSil = 0;
+    const heard = [];
+    let done = false, stopping = false, err = '', spoke = false;
+    let tSil = 0, tHit = 0, tRestart = 0, restarts = 0;
     let r;
-    const fin = () => {
-      if (done) return; done = true;
-      [tNone, tCap, tSil].forEach(clearTimeout);
+    const fin = why => {
+      if (done) return;
+      done = true; stopping = true;
+      if (why && !err) err = why;
+      [tNone, tCap, tSil, tRestart].forEach(clearTimeout);
       try { r.onresult = r.onerror = r.onend = null; r.abort(); } catch (e) {}
+      if (rec && rec.gen === my) rec = null;
       res({ heard, err });
     };
-    const stop = () => { try { r.stop(); } catch (e) {} setTimeout(fin, 700); };
+    const stop = () => { stopping = true; try { r.stop(); } catch (e) {} setTimeout(() => fin(), 800); };
     try {
       r = new SR();
       r.lang = 'en-US'; r.continuous = false; r.interimResults = true; r.maxAlternatives = 5;
     } catch (e) { return res({ heard, err: 'unavailable' }); }
-    const tNone = setTimeout(fin, 5000);
+    const tNone = setTimeout(() => fin(), 5000);
     const tCap = setTimeout(stop, 12000);
     r.onresult = ev => {
       try {
@@ -139,18 +248,33 @@ function listen() {
         }
       } catch (e) {}
       if (!heard.length) return;
+      if (!spoke) { spoke = true; try { if (onSpeech) onSpeech(); } catch (e) {} }
       clearTimeout(tNone); clearTimeout(tSil);
       tSil = setTimeout(stop, 1600);
     };
-    r.onerror = ev => { err = (ev && ev.error) || 'error'; if (err !== 'no-speech' && err !== 'aborted') fin(); };
-    r.onend = fin;
-    try { r.start(); } catch (e) { err = 'unavailable'; fin(); }
+    r.onerror = ev => {
+      const code = (ev && ev.error) || 'error';
+      if (code === 'no-speech' || code === 'aborted') return;
+      err = code;
+      if (code === 'network' && restarts < 1) return;
+      fin();
+    };
+    r.onend = () => {
+      if (done || stopping) return fin();
+      if (restarts >= 20 || my !== listenGen) return fin();
+      restarts++;
+      tRestart = setTimeout(() => {
+        if (done || stopping || my !== listenGen) return;
+        try { r.start(); } catch (e) { fin('unavailable'); }
+      }, 180);
+    };
+    try { r.start(); rec = { gen: my, abort: () => fin('aborted') }; }
+    catch (e) { fin('unavailable'); }
   });
 }
 
-// ---------- UI ----------
 const $ = id => document.getElementById(id);
-let testing = null;   // word currently being tested (one at a time)
+let testing = null, hearing = null, armed = null;
 function rateOf(word) {
   const a = words[word] || [];
   if (!a.length) return null;
@@ -160,21 +284,25 @@ function rowEl(word, priority) {
   const row = document.createElement('div');
   row.className = 'row'; row.dataset.w = word;
   const w = document.createElement('div'); w.className = 'w';
-  w.innerHTML = (priority ? '<span class="star">★重点测</span><br>' : '') + word.replace(/</g, '&lt;');
-  const btn = document.createElement('button'); btn.className = 'say'; btn.textContent = '▶ 说';
-  btn.disabled = !srOK;
-  btn.onclick = () => testWord(word);
+  w.innerHTML = (priority ? '<span class="star">★ 先测</span><br>' : '') + word.replace(/</g, '&lt;');
+  const hear = document.createElement('button'); hear.type = 'button'; hear.className = 'hear'; hear.textContent = '听';
+  hear.onclick = () => hearWord(word);
+  const say = document.createElement('button'); say.type = 'button'; say.className = 'say'; say.textContent = '说';
+  say.disabled = !srOK;
+  say.onclick = () => testWord(word);
   const res = document.createElement('div'); res.className = 'res';
-  row.append(w, btn, res);
+  row.append(w, hear, say, res);
   return row;
 }
 function paintRow(word) {
   document.querySelectorAll('.row[data-w="' + CSS.escape(word) + '"]').forEach(row => {
     const a = words[word] || [];
-    const res = row.querySelector('.res'), btn = row.querySelector('.say');
-    row.classList.toggle('testing', testing === word);
+    const res = row.querySelector('.res'), say = row.querySelector('.say'), hear = row.querySelector('.hear');
     const done = a.length >= 2;
     const rate = rateOf(word);
+    const busyElse = (testing && testing !== word) || (hearing && hearing !== word);
+    row.classList.toggle('testing', testing === word);
+    row.classList.toggle('armed', armed === word && testing !== word);
     row.classList.toggle('low', done && rate !== null && rate < 0.7);
     res.innerHTML = '';
     a.forEach((x, i) => {
@@ -186,11 +314,15 @@ function paintRow(word) {
     if (done && rate !== null) {
       const r = document.createElement('div');
       r.innerHTML = '<span class="rate ' + (rate >= 0.7 ? 'ok' : 'low') + '">' + Math.round(rate * 100) + '%</span>' +
-        (rate < 0.7 ? ' <span class="tag">低于七成：换词或进白名单</span>' : '');
+        (rate < 0.7 ? ' <span class="tag">低于七成：换个说法，或记入白名单</span>' : '');
       res.appendChild(r);
     }
-    btn.textContent = testing === word ? '🎤 听着…' : done ? '↻ 重测' : a.length === 1 ? '▶ 再说一遍 (1/2)' : '▶ 说';
-    btn.disabled = !srOK || (testing !== null && testing !== word);
+    hear.textContent = hearing === word ? '读着…' : '听';
+    hear.disabled = !!(testing || (hearing && hearing !== word));
+    say.classList.toggle('live', testing === word);
+    say.classList.toggle('go', armed === word && testing !== word);
+    say.textContent = testing === word ? '听着…' : done ? '重测' : a.length === 1 ? '再说' : '说';
+    say.disabled = !srOK || busyElse || hearing === word;
   });
 }
 function paintAll() {
@@ -200,21 +332,36 @@ function paintAll() {
   const hits = WORDS.reduce((n, w) => n + (words[w] || []).filter(x => x.hit).length, 0);
   const total = WORDS.reduce((n, w) => n + (words[w] || []).length, 0);
   const low = tested.filter(w => rateOf(w) < 0.7);
-  $('sum').innerHTML = '已测 ' + done.length + '/' + WORDS.length + ' 词 · 完成两遍 ' + tested.length + ' 个 · 命中率 ' + (total ? Math.round(hits / total * 100) + '%' : '—') +
+  $('sum').innerHTML = '已测 ' + done.length + '/' + WORDS.length + ' 词 · 说完两遍 ' + tested.length + ' 个 · 命中 ' + (total ? Math.round(hits / total * 100) + '%' : '—') +
     (low.length ? ' · <span class="red">低于七成 ' + low.length + ' 个</span>' : '') +
-    '<small>' + (low.length ? '低于七成：' + low.join(', ') : '点 ▶ 开始，先测置顶的三个重点词。') + '</small>';
+    '<small>' + (low.length ? '低于七成：' + low.join('、') : '先点「听」，再点「说」。先测置顶的 moo、quack、sheep。') + '</small>';
+}
+async function hearWord(word) {
+  if (testing || hearing) return;
+  primeMic();
+  hearing = word; armed = null;
+  paintAll();
+  await speak(word);
+  if (hearing !== word) return;
+  hearing = null; armed = word;
+  $('pmsg').textContent = '读完了。现在点橙色「说」，让孩子说 ' + word + '。';
+  paintAll();
 }
 async function testWord(word) {
-  if (testing || !srOK) return;
-  if ((words[word] || []).length >= 2) words[word] = [];   // retest: start over
-  testing = word;
+  if (testing || hearing || !srOK) return;
+  if ((words[word] || []).length >= 2) words[word] = [];
+  testing = word; armed = null;
+  $('pmsg').textContent = '正在听。说完停一下，或等它自己停。';
   paintAll();
-  await speak(word);                                       // TTS first, mic only after it finishes
-  const { heard, err } = await listen();
+  const { heard, err } = await listen(() => {
+    if (testing === word) $('pmsg').textContent = '听到了，说完可以停一下。';
+  });
   testing = null;
+  if (document.hidden) { $('pmsg').textContent = '页面切到后台了，这次不计。回到本页再点「说」。'; paintAll(); return; }
   if (err && err !== 'no-speech' && err !== 'aborted' && !heard.length) {
-    // recogniser broken/blocked: do not record an attempt, say so plainly
-    $('pmsg').textContent = '识别出错（' + err + '），这次不计。检查麦克风权限或换 Safari 试试。';
+    $('pmsg').textContent = err === 'not-allowed' || err === 'service-not-allowed'
+      ? '没有麦克风权限。请到 iPhone「设置 → Safari → 麦克风」选允许，并打开「设置 → 通用 → 键盘 → 启用听写」，然后重新打开本页。'
+      : '识别出错（' + err + '），这次不计。请用 Safari，并允许麦克风。';
     paintAll();
     return;
   }
@@ -223,11 +370,10 @@ async function testWord(word) {
   (words[word] = words[word] || []).push({ t: new Date().toISOString(), said, alts, hit });
   saveWords();
   logAttempt(word, words[word].length, said, alts, hit);
-  $('pmsg').textContent = '';
+  $('pmsg').textContent = hit ? '听懂了。' : (said ? '没对上这个词。' : '没听到。再点「说」试一次。');
   paintAll();
 }
 
-// ---------- copy / reset ----------
 function resultText() {
   const lines = ['word\trate\tattempts'];
   WORDS.forEach(w => {
@@ -252,14 +398,16 @@ $('resetBtn').onclick = () => {
   $('pmsg').textContent = '已重置。'; paintAll();
 };
 
-// ---------- boot ----------
 $('totalN').textContent = WORDS.length;
 PRIORITY.forEach(w => $('plist').appendChild(rowEl(w, true)));
 WORDS.forEach(w => $('list').appendChild(rowEl(w, false)));
-if (!srOK) {
-  $('nosr').style.display = 'block';
-  document.querySelectorAll('.say').forEach(b => b.disabled = true);
-}
+if (!srOK) $('nosr').style.display = 'block';
+document.addEventListener('visibilitychange', () => {
+  if (!document.hidden) return;
+  listenGen++;
+  if (rec) { try { rec.abort(); } catch (e) {} }
+  hush();
+});
 paintAll();
 </script>
 </body>
