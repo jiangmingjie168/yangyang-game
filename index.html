@@ -7629,11 +7629,6 @@ function validConversation(value, p) {
         if (id === WATER) {
           g.fillStyle = '#3ec6e0';
           g.fillRect(px, py, TILE, TILE);
-          g.fillStyle = 'rgba(255,255,255,0.4)';
-          var wy = 6 + Math.sin(sec * 3 + x * 0.7) * 2;
-          g.fillRect(px, py + wy, TILE, 3);
-          g.fillStyle = '#2499b8';
-          g.fillRect(px, py + TILE - 8, TILE, 8);
           continue;
         }
         if (id === FLOWER) {
@@ -7794,10 +7789,25 @@ function validConversation(value, p) {
       }
     }
   }
+  function traceWaterBasin(g, left, right, top) {
+    var w = Math.max(TILE, right - left);
+    var mid = (left + right) / 2;
+    var y0 = top + 2;
+    var y1 = top + TILE + 4;
+    var bed = y1 + Math.min(28, 14 + w * 0.04);
+    g.beginPath();
+    g.moveTo(left, y0);
+    g.quadraticCurveTo(mid, top - 5, right, y0);
+    g.arc(right, (y0 + y1) / 2, (y1 - y0) / 2, -Math.PI / 2, Math.PI / 2, false);
+    g.bezierCurveTo(right - w * 0.18, y1, mid + w * 0.22, bed, mid, bed);
+    g.bezierCurveTo(mid - w * 0.22, bed, left + w * 0.18, y1, left, y1);
+    g.arc(left, (y0 + y1) / 2, (y1 - y0) / 2, Math.PI / 2, -Math.PI / 2, false);
+    g.closePath();
+  }
   function drawOrganicPonds(g, sec) {
     var x0 = Math.max(0, Math.floor(drawCamX / TILE) - 2);
     var x1 = Math.min(W - 1, Math.floor((drawCamX + viewW / (tileScreen / TILE)) / TILE) + 2);
-    var seen = {}, xi, mark, s, run, left, right, top, w, cap;
+    var seen = {}, xi, mark, s, run, left, right, top, w, mid;
     for (xi = x0; xi <= x1; xi++) {
       if (seen[xi]) continue;
       s = landSurface(xi);
@@ -7818,22 +7828,21 @@ function validConversation(value, p) {
       right = (run.x1 + 1) * TILE;
       top = run.y * TILE;
       w = right - left;
-      // Cover the whole water row, plus a few pixels of the bank, with water only.
-      cap = 6;
+      mid = (left + right) / 2;
+      g.save();
+      traceWaterBasin(g, left, right, top);
       g.fillStyle = '#3ec6e0';
-      g.beginPath();
-      g.moveTo(left - cap, top + 6);
-      g.quadraticCurveTo(left - cap, top - 1, left + 4, top);
-      g.lineTo(right - 4, top);
-      g.quadraticCurveTo(right + cap, top - 1, right + cap, top + 6);
-      g.lineTo(right + cap, top + TILE);
-      g.lineTo(left - cap, top + TILE);
-      g.closePath();
       g.fill();
-      g.fillStyle = '#2499b8';
-      g.fillRect(left, top + TILE * 0.62, w, TILE * 0.38);
-      g.fillStyle = 'rgba(255,255,255,0.42)';
-      g.fillRect(left + w * 0.14, top + 6 + Math.sin(sec * 2.2 + run.x0) * 1.1, w * 0.32, 3);
+      g.clip();
+      g.fillStyle = '#1f8eb0';
+      g.beginPath();
+      g.ellipse(mid, top + TILE * 0.78, Math.max(TILE * 1.4, w * 0.36), TILE * 0.46, 0, 0, Math.PI * 2);
+      g.fill();
+      g.fillStyle = 'rgba(255,255,255,0.4)';
+      g.beginPath();
+      g.ellipse(mid - w * 0.06, top + 9 + Math.sin(sec * 2.2 + run.x0) * 1.1, Math.max(18, w * 0.2), 3.1, 0, 0, Math.PI * 2);
+      g.fill();
+      g.restore();
     }
   }
   function roundBankStep(g, a, b) {
