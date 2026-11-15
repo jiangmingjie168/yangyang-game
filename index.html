@@ -618,7 +618,7 @@
   <canvas id="view" width="800" height="400"></canvas>
   <div id="hud">
     <span id="hunger-hint" hidden></span>
-    <span id="build-version" aria-label="Build version">build cd91b62+mc-yard</span>
+    <span id="build-version" aria-label="Build version">build cd91b62+mc-clear</span>
     <div class="topbar">
       <button id="quest" type="button">
         <canvas id="quest-icon" width="128" height="128"></canvas>
@@ -816,7 +816,8 @@ const BRAIN_TIMEOUT_MS = 6500;
     wheat: ['Wheat'], bread: ['Bread'], seed: ['Seed'], fish: ['Fish'],
     fire: ['Fire'], cookedFish: ['Cooked Fish'],
     rod: ['Fishing Rod'], boat: ['Boat'], pet: ['Pet'],
-    car: ['Car'], wheel: ['Wheel'], follow: ['Follow'], wall: ['Wall'], roof: ['Roof'], window: ['Window'], room: ['Room'], gate: ['Gate']
+    car: ['Car'], wheel: ['Wheel'], follow: ['Follow'], wall: ['Wall'], roof: ['Roof'], window: ['Window'], room: ['Room'], gate: ['Gate'],
+    diamond: ['Blue Diamond'], pinkDiamond: ['Pink Diamond'], yellowDiamond: ['Yellow Diamond']
   };
   // Inventory aliases reuse learned words; they are not extra vocabulary.
   Object.defineProperties(WORD, {pen:{value:['Pen']}});
@@ -933,11 +934,13 @@ const BRAIN_TIMEOUT_MS = 6500;
     houseKit: { tier: 3, n: 1, cap: 2 },
     boat: { tier: 3, n: 1, cap: 2 }
   };
-  var DIG_COOLDOWN_MS = 10 * 60 * 1000;
+  // A dug pit used to refill after 10 minutes. It now stays open 16 minutes.
+  var DIG_COOLDOWN_MS = 16 * 60 * 1000;
   // Duck is the swimmer. Pig, rabbit, dog, cow, and the other land animals stay on the bank.
   var SWIMS = { duck: 1 };
   // Same list the trail gifts already pay out. Dig spots do not add new loot.
   var DIG_MATERIALS = ['wood', 'stone', 'planks', 'wool', 'seed'];
+  var DIG_DIAMONDS = ['diamond', 'pinkDiamond', 'yellowDiamond'];
   var ANIMALS = { cow: 1, pig: 1, sheep: 1, chicken: 1, cat: 1, dog: 1, duck: 1, horse: 1, rabbit: 1 };
   var SKY_KEYS = [
     { t: 0.00, top: [255, 186, 150], hor: [255, 228, 190] },
@@ -2245,6 +2248,12 @@ function validConversation(value, p) {
         var soil = get(hx, y + 1);
         if (soil !== GRASS && soil !== DIRT && soil !== SAND) { r.reason = 'yard'; return r; }
       }
+      for (var tx2 = x - 2; tx2 < x + d.w + 2; tx2++) {
+        for (var ty2 = r.y - 1; ty2 <= y + 1; ty2++) {
+          var near = get(tx2, ty2);
+          if (near === WOOD || near === LEAVES) { r.reason = 'tree'; return r; }
+        }
+      }
     }
     r.ok=true;return r;
   }
@@ -2766,7 +2775,7 @@ function validConversation(value, p) {
     if(CRAFTABLES[buildTool])return craftableTarget(buildTool,x,y);
     var object=craftableAt(x,y);
     if(buildTool==='remove'&&object)return {x:object.x,y:object.y,w:object.w,h:object.h,object:object,ok:buildReach(x,y)&&(inv[object.item]||0)<99,reason:buildReach(x,y)?'full':'reach'};
-    var from=null, width=buildTool==='roof'?4:1;
+    var from=null, width=1;
     if(buildTool!=='remove' && solid(get(x,y)) && get(x,y-1)===AIR && (buildOwned(x,y)||fy<.4)){from={x:x,y:y};y--;}
     var r={x:x,y:y,w:width,ok:false,from:from};
     for(var i=0;i<width;i++) {
@@ -2776,7 +2785,8 @@ function validConversation(value, p) {
       if(buildTool==='remove') {
         if(!buildOwned(x,y)||!KEY_OF[get(x,y)]){r.reason='owned';return r;}
         if((inv[KEY_OF[get(x,y)]]||0)>=99){r.reason='full';return r;}
-      } else if(craftableAt(x+i,y)||get(x+i,y)!==AIR||overlapsPlayer(x+i,y)){r.reason='occupied';return r;}
+      } else if(buildTool==='roof' && !roofOnHouse(x+i,y)){r.reason='roof';return r;}
+      else if(craftableAt(x+i,y)||get(x+i,y)!==AIR||overlapsPlayer(x+i,y)){r.reason='occupied';return r;}
       else if(cellHasAnimal(x+i,y)){r.reason='animal';return r;}
     }
     r.ok=true;return r;
@@ -2788,7 +2798,7 @@ function validConversation(value, p) {
   }
   function placementFailure(x,y,reason,block) {
     if(block)buildSession.blockHint={x:block.x,y:block.y,until:chatClock+.8};
-    var lines={tree:'A tree is in the way!',rock:'A rock is in the way!',building:'A building is in the way!',water:'Choose dry land!',fence:'A fence is in the way!',flower:'A flower is in the way!',block:'A block is in the way!',space:'Find a clear '+(CRAFTABLES[buildTool]?CRAFTABLES[buildTool].w+' by '+CRAFTABLES[buildTool].h:'')+' space!',ground:'Choose flat ground!',yard:'The house goes on empty ground!',limit:'Remove a building first!',reach:'Move a little closer!',sight:'Move around the wall!',owned:'Tap a block you built!',occupied:'Choose empty squares!',animal:'Choose empty squares!',full:'Use some materials first!'};
+    var lines={tree:'A tree is in the way!',rock:'A rock is in the way!',building:'A building is in the way!',water:'Choose dry land!',fence:'A fence is in the way!',flower:'A flower is in the way!',block:'A block is in the way!',space:'Find a clear '+(CRAFTABLES[buildTool]?CRAFTABLES[buildTool].w+' by '+CRAFTABLES[buildTool].h:'')+' space!',ground:'Choose flat ground!',yard:'The house goes on empty ground!',roof:'The roof goes on the house!',limit:'Remove a building first!',reach:'Move a little closer!',sight:'Move around the wall!',owned:'Tap a block you built!',occupied:'Choose empty squares!',animal:'Choose empty squares!',full:'Use some materials first!'};
     document.getElementById('toast').style.visibility='';showToast(lines[reason]||'Choose empty squares!',1.5);
     logBuildResult(x,y,'fail:'+reason+(block?'@('+block.x+','+block.y+')':''));
   }
@@ -3703,6 +3713,40 @@ function validConversation(value, p) {
       t = trees[i];
       for (li = 0; li < t.cells.length; li++) treeByCell[idx(t.cells[li].x, t.cells[li].y)] = i;
     }
+    keepTreesOffHouses();
+  }
+  function treeHitsHouse(tx, ty) {
+    var i, b;
+    for (i = 0; i < buildObjects.length; i++) {
+      b = buildObjects[i];
+      if (b.kind !== 'house') continue;
+      if (tx >= b.x - 3 && tx < b.x + b.w + 3 && ty >= b.y - 2 && ty <= b.y + b.h) return true;
+    }
+    return false;
+  }
+  function keepTreesOffHouses() {
+    var i, t, c, kept, trunkNear;
+    if (!trees) return;
+    for (i = trees.length - 1; i >= 0; i--) {
+      t = trees[i];
+      trunkNear = treeHitsHouse(t.x, t.groundY - 1) || treeHitsHouse(t.x, t.groundY - 2) || treeHitsHouse(t.x, t.groundY - 3);
+      if (trunkNear) {
+        for (c = 0; c < t.cells.length; c++) {
+          if (get(t.cells[c].x, t.cells[c].y) === t.cells[c].id) setCell(t.cells[c].x, t.cells[c].y, AIR);
+          delete treeByCell[idx(t.cells[c].x, t.cells[c].y)];
+        }
+        trees.splice(i, 1);
+        continue;
+      }
+      kept = [];
+      for (c = 0; c < t.cells.length; c++) {
+        if (t.cells[c].id === LEAVES && treeHitsHouse(t.cells[c].x, t.cells[c].y)) {
+          if (get(t.cells[c].x, t.cells[c].y) === LEAVES) setCell(t.cells[c].x, t.cells[c].y, AIR);
+          delete treeByCell[idx(t.cells[c].x, t.cells[c].y)];
+        } else kept.push(t.cells[c]);
+      }
+      t.cells = kept;
+    }
   }
   function treeStage(t, now) {
     if (!t || !t.growStart) return 'mature';
@@ -3746,7 +3790,8 @@ function validConversation(value, p) {
       t = trees[i];
       if (!t.growStart) continue;
       if (now - t.growStart >= TREE_MATURE_MS) {
-        if (trunkBlocked(t)) continue;
+        if (trunkBlocked(t) || treeHitsHouse(t.x, t.groundY - 1)) continue;
+        t.cells = t.cells.filter(function (c) { return !(c.id === LEAVES && treeHitsHouse(c.x, c.y)); });
         t.growStart = 0;
         t.hits = 0;
         t.shownStage = 'mature';
@@ -4042,8 +4087,8 @@ function validConversation(value, p) {
     var p0 = Math.min(W - 16, origin + 50);
     for (x = p0; x <= Math.min(W - 3, p0 + 12); x++) fillPond(x, GROUND);
     for (x = p0 + 13; x <= Math.min(W - 3, p0 + 18); x++) fillLand(x, GROUND, GRASS);
-    plantTree(origin + 28, GROUND);
     plantTree(origin + 36, GROUND);
+    plantTree(origin + 48, GROUND);
     ramp(left, -1, GROUND);
     ramp(Math.min(W - 4, p0 + 18), 1, GROUND);
     for (x = 8; x < W - 8; x += 17) {
@@ -4535,12 +4580,18 @@ function validConversation(value, p) {
     return px + halfW > rect.x && px - halfW < rect.x + rect.w && py > rect.y && py - bodyH < rect.y + rect.h;
   }
   function penBlocks(px, py, halfW, bodyH) {
-    var i, b;
+    var i, b, yard, ground, atEdge;
+    // The child walks the ground in front of the pen. A shut gate holds animals, not the child.
+    if (bodyH >= 26) return false;
     for (i = 0; i < buildObjects.length; i++) {
       b = buildObjects[i];
-      if (b.kind !== 'pen') continue;
-      if (penOverlap(px, py, halfW, bodyH, penLocalRect(b, 100, -48, 28, 120))) return true;
-      if (!b.gateOpen && penOverlap(px, py, halfW, bodyH, penLocalRect(b, 4, -48, 48, 120))) return true;
+      if (b.kind !== 'pen' || b.gateOpen) continue;
+      ground = (b.y + b.h) * TILE;
+      if (Math.abs(py - ground) > 48) continue;
+      yard = penLocalRect(b, 52, 0, 46, 64);
+      if (px <= yard.x - halfW || px >= yard.x + yard.w + halfW) continue;
+      atEdge = px - halfW < yard.x + 6 || px + halfW > yard.x + yard.w - 6;
+      if (atEdge && penOverlap(px, py, halfW, bodyH, { x: yard.x, y: ground - 28, w: yard.w, h: 32 })) return true;
     }
     return false;
   }
@@ -4995,6 +5046,27 @@ function validConversation(value, p) {
     if (player.y > H * TILE) player.y = homeY;
   }
   function animalSwims(a) { return !!(a && SWIMS[a.type]); }
+  function waterAhead(a, dir) {
+    var tx = Math.floor((a.x + dir * 16) / TILE);
+    var under = Math.floor((a.y + 2) / TILE);
+    return get(tx, under) === WATER;
+  }
+  // First dry tile past a stretch of water, on the side the animal is facing.
+  function bankBeyond(a, dir) {
+    var under = Math.floor((a.y + 2) / TILE);
+    var body = Math.floor((a.y - 10) / TILE);
+    var x = Math.floor(a.x / TILE);
+    var n = 0, saw = get(x, under) === WATER;
+    while (n++ < 48) {
+      x += dir;
+      if (x < 2 || x >= W - 2) return null;
+      if (get(x, under) === WATER) { saw = true; continue; }
+      if (!saw) return null;
+      if (blocksBody(get(x, under)) && !blocksBody(get(x, body))) return (x + 0.5) * TILE;
+      return null;
+    }
+    return null;
+  }
   function animalShoreX(a) {
     var tx = Math.floor(a.x / TILE), gy = Math.floor((a.y + 2) / TILE);
     var i, dir, nx, id;
@@ -5014,7 +5086,7 @@ function validConversation(value, p) {
     var body = Math.floor((y - 10) / TILE);
     var belowId = get(tx, under);
     var canSwim = animalSwims(a);
-    if (!canSwim && (belowId === WATER || get(tx, under + 1) === WATER)) return false;
+    if (!canSwim && belowId === WATER) return false;
     var swimHere = canSwim && (belowId === WATER || get(tx, under + 1) === WATER);
     if (!(blocksBody(belowId) || swimHere)) return false;
     if (blocksBody(get(tx, body))) return false;
@@ -5062,13 +5134,19 @@ function validConversation(value, p) {
       var wetX = Math.floor(a.x / TILE);
       var wetY = Math.floor((a.y + 2) / TILE);
       if (get(wetX, wetY) === WATER || get(wetX, Math.floor((a.y - 8) / TILE)) === WATER) {
-        var shore = animalShoreX(a);
+        var outDir = player.x >= a.x ? 1 : -1;
+        var walkingOver = (a.tamed || foodLeads(a)) && bankBeyond(a, outDir);
+        var shore = walkingOver ? null : bankBeyond(a, outDir);
+        if (shore == null && !walkingOver) shore = animalShoreX(a);
         if (shore != null) a.x = shore;
         var gy0 = Math.floor((a.y + 2) / TILE);
         if (blocksBody(get(Math.floor(a.x / TILE), gy0))) a.y = gy0 * TILE - 0.01;
-        a.vx = 0;
         a.swim = false;
-        return;
+        a.shoreUntil = 0;
+        if (!walkingOver && get(Math.floor(a.x / TILE), Math.floor((a.y + 2) / TILE)) === WATER) {
+          a.vx = 0;
+          return;
+        }
       }
     }
     var previousX = a.x, previousY = a.y;
@@ -5098,6 +5176,32 @@ function validConversation(value, p) {
         else a.vx = (Math.random() < 0.5 ? -1 : 1) * (20 + Math.random() * 22);
       }
     }
+    }
+    if (!animalSwims(a)) {
+      var followDir = player.x > a.x + 36 ? 1 : (player.x < a.x - 36 ? -1 : 0);
+      var following = !!(a.tamed || foodLeads(a));
+      var onWater = get(Math.floor(a.x / TILE), Math.floor((a.y + 2) / TILE)) === WATER;
+      if (following && followDir && (onWater || waterAhead(a, followDir))) {
+        var bank = bankBeyond(a, followDir);
+        if (bank != null) {
+          var hop = followDir * Math.max(120, Math.abs(a.vx) || 120) * dt;
+          if (Math.abs(bank - a.x) <= Math.abs(hop)) a.x = bank;
+          else a.x += hop;
+          var gyBank = Math.floor((a.y + 2) / TILE);
+          a.y = gyBank * TILE - 0.01;
+          a.vx = followDir * 120;
+          a.dir = followDir;
+          a.blockedFor = 0;
+          a.swim = false;
+          a.shoreUntil = 0;
+          clampPenned(a);
+          notePenAnimal(a);
+          if (foodLeads(a)) hintOnce(selectedKey() === 'seed' ? 'seed-follow' : 'wheat-follow', feedLine(a.type));
+          if (a.tamed && (a.x !== previousX || a.y !== previousY)) saveSoon();
+          return;
+        }
+      }
+      if (a.vx && waterAhead(a, a.vx > 0 ? 1 : -1)) a.vx = -Math.sign(a.vx) * Math.max(40, Math.abs(a.vx));
     }
     if (a.vx) a.dir = a.vx > 0 ? 1 : -1;
     var wanted = Math.abs(a.vx) > 1;
@@ -5606,7 +5710,7 @@ function validConversation(value, p) {
   function buildDigSpots() {
     var home = origin + 9;
     var p0 = Math.min(W - 16, origin + 50);
-    var WANT = 2;
+    var WANT = 4;
     var MIN_GAP = 24;
     var HOME_CLEAR = 10;
     var next = [], used = [];
@@ -5655,6 +5759,14 @@ function validConversation(value, p) {
     }
     return null;
   }
+  function grantDigDiamond(spot) {
+    var key = DIG_DIAMONDS[Math.max(0, digSpots.indexOf(spot)) % DIG_DIAMONDS.length];
+    addItem(key, 1, true);
+    showWord(key);
+    showToast('You found a ' + WORD[key][0].toLowerCase() + '!', 2.4);
+    rememberEvent('found', key);
+    updateQuest();
+  }
   function grantDigMaterial(n, surprise) {
     var key = DIG_MATERIALS[Math.floor(Math.random() * DIG_MATERIALS.length)];
     addItem(key, n, true);
@@ -5694,9 +5806,10 @@ function validConversation(value, p) {
     tone(520, 0.08, 'sine', 0, 0.04, 700);
     // 40% star from the discovery pool, 35% one gift-table material, 25% a small gift-table bundle.
     var roll = Math.random();
-    if (roll < 0.40) { if (!grantDigDiscovery(spot)) grantDigMaterial(1, false); }
-    else if (roll < 0.75) grantDigMaterial(1, false);
-    else grantDigMaterial(1 + Math.floor(Math.random() * 3), true);
+    if (roll < 0.34) { if (!grantDigDiscovery(spot)) grantDigMaterial(1, false); }
+    else if (roll < 0.52) grantDigDiamond(spot);
+    else if (roll < 0.88) grantDigMaterial(1, false);
+    else grantDigMaterial(1, true);
     spot.until = Date.now() + DIG_COOLDOWN_MS;
     addFatigue(8);
     saveSoon();
@@ -5705,9 +5818,16 @@ function validConversation(value, p) {
     var i, s, px, py, bob, sp;
     for (i = 0; i < digSpots.length; i++) {
       s = digSpots[i];
-      if (!digSpotOpen(s)) continue;
       px = s.tx * TILE;
       py = s.ty * TILE;
+      if (s.until > Date.now()) {
+        g.fillStyle = '#5a3a24';
+        g.beginPath(); g.ellipse(px + 16, py + 18, 13, 7, 0, 0, 6.3); g.fill();
+        g.fillStyle = '#2a1a10';
+        g.beginPath(); g.ellipse(px + 16, py + 19, 8, 4, 0, 0, 6.3); g.fill();
+        continue;
+      }
+      if (!digSpotOpen(s)) continue;
       bob = Math.sin(sec * 3 + s.tx) * 1.2;
       g.drawImage(glowSprite('mound', 26, 2, 'rgba(255, 214, 80, 0.9)', 'rgba(255, 214, 80, 0)'), px + 16 - 26, py - 28 + bob);
       sp = spr(DIRT, 0);
@@ -5884,7 +6004,17 @@ function validConversation(value, p) {
     return inReach(tx, ty) || fillReach(tx, ty);
   }
   // Where a crafted item is allowed to sit. Empty string means the spot is fine.
+  function roofOnHouse(tx, ty) {
+    var i, b;
+    for (i = 0; i < buildObjects.length; i++) {
+      b = buildObjects[i];
+      if (b.kind !== 'house') continue;
+      if (tx >= b.x && tx < b.x + b.w && (ty === b.y || ty === b.y - 1)) return true;
+    }
+    return false;
+  }
   function specialPlaceLine(key, tx, ty) {
+    if (key === 'house' && !roofOnHouse(tx, ty)) return 'The roof goes on the house!';
     if (key === 'door' && houseNeedingDoor()) return 'The door goes on the house!';
     if (indoors && (key === 'flower' || key === 'fence' || key === 'door' || key === 'window')) return 'The ' + key + ' goes outside!';
     if (key === 'flower') {
@@ -5920,6 +6050,7 @@ function validConversation(value, p) {
       return placedKit;
     }
     if (key !== 'seed' && key !== 'boat' && !BLOCK_OF[key]) { if (!quiet) showWord(key); return false; }
+    if (key === 'house' && !roofOnHouse(tx, ty)) { if (!quiet) showToast('The roof goes on the house!', 2.2); return false; }
     if (key === 'bed' || key === 'table') {
       if (indoors) { placeIndoor(key); return true; }
       if (!quiet) showToast(key === 'bed' ? 'The bed goes in the house!' : 'The table goes in the house!', 2.2);
@@ -5939,7 +6070,7 @@ function validConversation(value, p) {
       return true;
     }
     if (key === 'fire' && get(tx, ty) === WATER) { if (!quiet) showToast('The fire goes on dry ground!', 2.2); return false; }
-    if (craftableAt(tx,ty) || get(tx,ty)!==AIR || overlapsPlayer(tx,ty)) { if (!quiet) placementFailure(tx,ty,'occupied'); return false; }
+    if (!(key === 'house' && roofOnHouse(tx, ty)) && (craftableAt(tx,ty) || get(tx,ty)!==AIR || overlapsPlayer(tx,ty))) { if (!quiet) placementFailure(tx,ty,'occupied'); return false; }
     if(cellHasAnimal(tx,ty)){ if (!quiet) placementFailure(tx,ty,'animal'); return false; }
     var spotLine = specialPlaceLine(key, tx, ty);
     if (spotLine) { if (!quiet) showToast(spotLine, 2.2); return false; }
@@ -7314,6 +7445,13 @@ function validConversation(value, p) {
         var ox = (row % 2) * 5;
         inkBox(g, 1 + ox + col * 10, 2 + row * 7, 9, 6, row % 2 ? '#e2b09a' : '#d08a78');
       }
+    } else if (key === 'diamond' || key === 'pinkDiamond' || key === 'yellowDiamond') {
+      var gem = key === 'pinkDiamond' ? '#f48fb1' : key === 'yellowDiamond' ? '#ffe082' : '#7fd4ff';
+      var gemHi = key === 'pinkDiamond' ? '#ffe4ef' : key === 'yellowDiamond' ? '#fff8dc' : '#e7fbff';
+      inkPath(g, [[16, 4], [26, 13], [16, 28], [6, 13]], gem);
+      g.strokeStyle = gemHi; g.lineWidth = 1.3;
+      g.beginPath(); g.moveTo(16, 6); g.lineTo(16, 26); g.moveTo(8, 13); g.lineTo(24, 13); g.stroke();
+      speck(13, 11, 1.3, '#fff');
     } else if (key === 'roof') {
       inkPath(g, [[2, 26], [16, 4], [30, 26]], '#d07058');
       g.strokeStyle = '#f0b090'; g.lineWidth = 1.2;
@@ -10454,6 +10592,7 @@ function validConversation(value, p) {
     restoreDigSpots(data.dig_spots);
     restoreSupplies(data.supplies);
     restoreTrees(data.tree_chops);
+    keepTreesOffHouses();
     settleLooseCars();
   }
   function freshGame(newSeed) {
