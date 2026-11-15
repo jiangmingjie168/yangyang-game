@@ -618,7 +618,7 @@
   <canvas id="view" width="800" height="400"></canvas>
   <div id="hud">
     <span id="hunger-hint" hidden></span>
-    <span id="build-version" aria-label="Build version">build cd91b62+mc-math</span>
+    <span id="build-version" aria-label="Build version">build cd91b62+mc-yard</span>
     <div class="topbar">
       <button id="quest" type="button">
         <canvas id="quest-icon" width="128" height="128"></canvas>
@@ -868,7 +868,8 @@ const BRAIN_TIMEOUT_MS = 6500;
     { en: 'Tap a chicken!', icon: 'chicken', done: function (p) { return p.tapped.chicken; } },
     { en: 'Put the door on the house!', icon: 'door', done: function (p) { return p.placed.door; } },
     { en: 'Craft a house!', icon: 'houseKit', done: function (p) { return p.crafted.houseKit; } },
-    { en: 'Place a fence!', icon: 'fence', done: function (p) { return p.placed.fence; } },
+    { en: 'Craft a pen!', icon: 'pen', done: function (p) { return !!(p.crafted && p.crafted.pen); } },
+    { en: 'Put a cow in the pen!', icon: 'cow', done: function (p) { return !!p.pennedCow; } },
     { en: 'Place a torch at night!', icon: 'torch', done: function (p) { return p.nightTorch; } },
     { en: 'Tap a duck!', icon: 'duck', done: function (p) { return p.tapped.duck; } },
     { en: 'Craft a fishing rod!', icon: 'rod', done: function (p) { return p.crafted.rod; } },
@@ -883,7 +884,7 @@ const BRAIN_TIMEOUT_MS = 6500;
     { en: 'Tame a pet!', icon: 'pet', done: function (p) { return p.pet; } }
   ];
   var CHAPTER1 = 8;
-  var CHAPTER2 = 16;
+  var CHAPTER2 = 17;
   // One short sentence after the name, spoken with the word card.
   var ITEM_HINT = {
     grass: 'Green ground.', dirt: 'Soft ground.', stone: 'Hard rock.',
@@ -3393,7 +3394,7 @@ function validConversation(value, p) {
   }
 
   function blankProgress() {
-    return { mined: {}, crafted: {}, placed: {}, tapped: {}, tree: 0, chopped: 0, water: 0, nightTorch: 0, fish: 0, cooked: 0, wheatRipe: 0, boatRide: 0, pet: 0 };
+    return { mined: {}, crafted: {}, placed: {}, tapped: {}, tree: 0, chopped: 0, water: 0, nightTorch: 0, fish: 0, cooked: 0, wheatRipe: 0, boatRide: 0, pet: 0, pennedCow: 0 };
   }
   function chapter1Done(p) {
     var i;
@@ -5147,7 +5148,34 @@ function validConversation(value, p) {
     } else a.swim = false;
     clampPenned(a);
     notePenAnimal(a);
+    if (foodLeads(a)) hintOnce(selectedKey() === 'seed' ? 'seed-follow' : 'wheat-follow', feedLine(a.type));
     if (a.tamed && (a.x !== previousX || a.y !== previousY)) saveSoon();
+  }
+  function likesFood(type, key) {
+    if (key === 'wheat') return type === 'cow' || type === 'sheep' || type === 'pig';
+    if (key === 'seed') return type === 'chicken';
+    return false;
+  }
+  function feedLine(type) {
+    return type === 'chicken' ? 'The chicken likes seeds.' : ('The ' + type + ' likes wheat.');
+  }
+  function foodLeads(a) {
+    var key = selectedKey();
+    if (!likesFood(a.type, key)) return false;
+    return Math.abs(a.x - player.x) < 8 * TILE && Math.abs(a.y - player.y) < 96;
+  }
+  function feedAnimal(a) {
+    var key = selectedKey();
+    if (!a || !likesFood(a.type, key) || !(inv[key] > 0) || !petReach(a)) return false;
+    consume(key);
+    intros[key === 'seed' ? 'seed-follow' : 'wheat-follow'] = 1;
+    showToast(feedLine(a.type), 2.2);
+    burst(a.x, a.y - 24, '#f2c14e', true);
+    a.wait = 0.45;
+    invSig = '';
+    renderHotbar();
+    saveSoon();
+    return true;
   }
   function penLeadVx(a, dt) {
     if (a.penTimer > 0) a.penTimer -= dt;
@@ -5158,6 +5186,13 @@ function validConversation(value, p) {
         a.penDir = Math.random() < 0.5 ? -18 : 18;
       }
       return a.penDir || 18;
+    }
+    if (foodLeads(a)) {
+      var dest = player.x - player.dir * 26;
+      var yard = actorInPen(player.x, player.y);
+      if (yard && yard.gateOpen) dest = penCenterX(yard);
+      if (Math.abs(dest - a.x) < 14) return 0;
+      return dest > a.x ? 76 : -76;
     }
     if (a.leadUntil > Date.now()) {
       var dest = player.x - player.dir * 24;
@@ -5182,7 +5217,17 @@ function validConversation(value, p) {
   function notePenAnimal(a) {
     var here = actorInPen(a.x, a.y);
     var id = here ? here.id : '';
-    if (here && a.inPenId !== id) hintOnce('penned-' + a.type, 'The ' + WORD[a.type][0].toLowerCase() + ' is in the pen!');
+    if (here && a.type === 'cow' && !progress.pennedCow) {
+      progress.pennedCow = 1;
+      updateQuest();
+      saveSoon();
+    }
+    if (here && a.inPenId !== id) {
+      var hintKey = 'penned-' + a.type;
+      var seen = intros[hintKey];
+      hintOnce(hintKey, 'The ' + WORD[a.type][0].toLowerCase() + ' is in the pen!');
+      if (!seen && !intros[hintKey]) return;
+    }
     a.inPenId = id;
   }
 
@@ -5259,7 +5304,8 @@ function validConversation(value, p) {
     if (!WORD[key]) return;
     inv[key] = Math.min(99, (inv[key] || 0) + n);
     if (hotbar.indexOf(key) < 0) hotbar.push(key);
-    if (sel < 0) sel = 0;
+    if (key === 'bread' || key === 'cookedFish') sel = hotbar.indexOf(key);
+    else if (sel < 0) sel = 0;
     learn(key);
     if (!silent) showWord(key);
   }
@@ -6122,7 +6168,7 @@ function validConversation(value, p) {
     if (seek) {
       var key = target.kind === 'pet' ? target.animal.type : (KEY_OF[get(target.tx, target.ty)] || (treeAt(target.tx, target.ty) ? 'tree' : ''));
       // A pet walk-toast used to call speakEn and cancel the name that the tap just started.
-      showToast('Walking to ' + (WORD[key] ? WORD[key][0].toLowerCase() : 'the block') + '!', 1.8, target.kind === 'pet');
+      showToast('Walking to ' + (WORD[key] ? WORD[key][0].toLowerCase() : 'the block') + '!', 1.8, target.kind === 'pet' || target.kind === 'feed');
     }
   }
   function seekMine(tx, ty, dig) {
@@ -6137,6 +6183,7 @@ function validConversation(value, p) {
     var reached = s.kind === 'pet' ? petReach(s.animal) : inReach(s.tx, s.ty);
     if (reached) {
       seek = null;
+      if (s.kind === 'feed') { feedAnimal(s.animal); return 0; }
       if (s.kind === 'pet') pet(s.animal); else mine(s.tx, s.ty, s.dig !== false);
       return 0;
     }
@@ -6590,6 +6637,11 @@ function validConversation(value, p) {
     if (!riding && !drivingCar) {
       var petHit = animalAtPoint(wx, wy);
       if (petHit) {
+        if (likesFood(petHit.type, selectedKey())) {
+          if (petReach(petHit)) feedAnimal(petHit);
+          else beginSeek({ kind: 'feed', animal: petHit });
+          return;
+        }
         // Play during this tap. A later arrival is no longer a user gesture, so play() would be rejected.
         if (!petReach(petHit)) primeAnimalAudio(petHit);
         seek = null;
@@ -9987,7 +10039,7 @@ function validConversation(value, p) {
     document.getElementById('brain-status').textContent = '本次伙伴回应：AI ' + brainStats.brain + '，模板 ' + brainStats.template + '，预生成音频 ' + brainStats.audio + '，合成回落 ' + brainStats.tts + '，来源未标注 ' + brainStats.unknown + '。最多每分钟 8 次、每个标签页会话 60 次请求（刷新不重置）；重试使用本地提示。';
     if (log) renderSpeakingLog();
   }
-  var CHEST_STASH = { grass:1, dirt:1, leaves:1, sand:1, flower:1, wool:1, seed:1, wheat:1, stone:1, bread:1 };
+  var CHEST_STASH = { grass:1, dirt:1, leaves:1, sand:1, flower:1, wool:1, seed:1, wheat:1, stone:1 };
   // Play seconds since the last meal. Peckish at 100s, hungry at 200s.
   var hungerTime = 0, hungerStage = 'full', hungerRemind = 0;
   function hungerLabel(stage) {
@@ -10055,6 +10107,12 @@ function validConversation(value, p) {
     hungerStage = next;
     hungerRemind = 0;
     sayNeed(hungerLabel(next));
+    offerFoodHint();
+  }
+  function offerFoodHint() {
+    if (hungerTime < 100) return;
+    if ((inv.bread || 0) > 0) hintOnce('eat-bread', 'Eat the bread.');
+    else if ((inv.cookedFish || 0) > 0) hintOnce('eat-fish', 'Eat the fish.');
   }
   function addFatigue(n) {
     var prev = fatigueStageNow();
@@ -10086,6 +10144,7 @@ function validConversation(value, p) {
     hungerTime += dt;
     var next = hungerStageNow();
     if (next !== hungerStage) { noteHunger(true); return; }
+    offerFoodHint();
     if (next !== 'hungry') return;
     hungerRemind += dt;
     if (hungerRemind < 150) return;
@@ -10376,6 +10435,7 @@ function validConversation(value, p) {
       progress.wheatRipe = data.progress.wheatRipe ? 1 : 0;
       progress.boatRide = data.progress.boatRide ? 1 : 0;
       progress.pet = data.progress.pet ? 1 : 0;
+      progress.pennedCow = data.progress.pennedCow ? 1 : 0;
     }
     childName = cleanName(data.child_name);
     restoreMemory(data);
@@ -10505,7 +10565,16 @@ function validConversation(value, p) {
     tapButton(document.getElementById('btn-words'), openBook);
     document.getElementById('btn-words').addEventListener('click', function (e) { if (e.detail === 0) openBook(); });
     tapButton(document.getElementById('chest-back'), closeChest);
-    (function () { var c = document.getElementById('btn-chest'); if (c) { paintIcon(c.querySelector('canvas'), 'table'); tapButton(c, openChest); c.addEventListener('click', function (e) { if (e.detail === 0) openChest(); }); } })();
+    (function () { var c = document.getElementById('btn-chest'); if (c) { paintIcon(c.querySelector('canvas'), 'table'); tapButton(c, function (e) {
+      var key = selectedKey();
+      var box = c.getBoundingClientRect();
+      var y = (e && e.clientY ? e.clientY : box.top + box.height * 0.3) - box.top;
+      if ((key === 'bread' || key === 'cookedFish') && y < box.height * 0.72) {
+        if (key === 'bread') eatBread(); else eatCookedFish();
+        return;
+      }
+      openChest();
+    }); c.addEventListener('click', function (e) { if (e.detail === 0) openChest(); }); } })();
     (function () { var h = document.getElementById('btn-home'); if (h) paintIcon(h.querySelector('canvas'), 'home'); })();
     setChestOpenUi(false);
     bindDialogue();
