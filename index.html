@@ -394,7 +394,7 @@
   #btn-speak:active { transform: translateY(3px); box-shadow: 0 1px 0 rgba(58,42,28,0.14); }
   #quest.quiz { background: #fff3c4; outline: 3px solid var(--sun); outline-offset: -3px; }
   #toast {
-    position: absolute; z-index: 55;
+    position: absolute; z-index: 90;
     left: 50%; bottom: calc(158px + var(--sab));
     transform: translateX(-50%);
     background: rgba(255,250,242,0.97);
@@ -618,7 +618,7 @@
   <canvas id="view" width="800" height="400"></canvas>
   <div id="hud">
     <span id="hunger-hint" hidden></span>
-    <span id="build-version" aria-label="Build version">build cd91b62+mc-pen</span>
+    <span id="build-version" aria-label="Build version">build cd91b62+mc-math</span>
     <div class="topbar">
       <button id="quest" type="button">
         <canvas id="quest-icon" width="128" height="128"></canvas>
@@ -5725,6 +5725,7 @@ function validConversation(value, p) {
       addItem('seed', 1, true);
       showWord('wheat');
       chime();
+      showToast('You got 2 wheat.', 2.2);
       if (!(inv.bread > 0)) breadHintDue = true;
     } else {
       addItem('seed', 1, true);
@@ -9840,13 +9841,43 @@ function validConversation(value, p) {
       card.querySelector('.craftbtn').classList.toggle('ready', canCraft(RECIPES[i]));
     });
   }
+  function countName(key, n, label) {
+    var raw = (label || (WORD[key] && WORD[key][0]) || key).toLowerCase();
+    if (raw === 'planks') return n === 1 ? 'plank' : 'planks';
+    if (raw === 'wheat' || raw === 'wood' || raw === 'wool' || raw === 'bread') return raw;
+    if (n === 1) return raw;
+    if (raw === 'fishing rod') return 'fishing rods';
+    if (raw === 'torch') return 'torches';
+    if (/ch$|sh$|s$|x$|z$/.test(raw)) return raw + 'es';
+    return raw + 's';
+  }
+  function craftShortLine(key, have, need) {
+    if (have > 0) return 'You need ' + (need - have) + ' more ' + countName(key, need - have) + '.';
+    return 'You have 0. You need ' + need + '.';
+  }
+  function craftMadeLine(r) {
+    var keys = Object.keys(r.need);
+    var outName = countName(r.out, r.n, r.label);
+    if (keys.length >= 2) return 'You made ' + r.n + ' ' + outName + '.';
+    var inKey = keys[0];
+    var inN = r.need[inKey];
+    return inN + ' ' + countName(inKey, inN) + (inN === 1 ? ' makes ' : ' make ') + r.n + ' ' + outName + '.';
+  }
+  function craftLeftLine(r) {
+    var left = supplyLeft(r.out);
+    if (!left || !(left.n > 0)) return '';
+    return 'You can make ' + left.n + ' more ' + countName(r.out, left.n, r.label) + '.';
+  }
   function doCraft(r) {
     if (!canCraft(r)) {
       var gate = supplyBlockReason(r.out, r.n);
       if (gate) { showToast(gate, 1.8); return; }
       var missing = null, k;
       for (k in r.need) if ((inv[k] || 0) < r.need[k]) { missing = k; break; }
-      if (missing) showWord(missing);
+      if (missing) {
+        showToast(craftShortLine(missing, inv[missing] || 0, r.need[missing]), 2.2);
+        showWord(missing);
+      }
       return;
     }
     Object.keys(r.need).forEach(function (k) {
@@ -9863,6 +9894,8 @@ function validConversation(value, p) {
     if(CRAFTABLES[r.out]){craftedObjects.push(newCraftable(r.out));progress.crafted[r.out==='houseKit'?'house':r.out==='pen'?'fence':r.out]=1;}
     if (r.out === 'window') recognizeBuildWord('window', 'made');
     else showWord(r.out);
+    var mathLine = r.n > 1 ? craftMadeLine(r) : craftLeftLine(r);
+    if (mathLine) showToast(mathLine, 2.2);
     chime();
     invSig = '';
     renderHotbar();
