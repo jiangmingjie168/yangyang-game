@@ -630,7 +630,7 @@
   <canvas id="view" width="800" height="400"></canvas>
   <div id="hud">
     <span id="hunger-hint" hidden></span>
-    <span id="build-version" aria-label="Build version">build cd91b62+mc-cook</span>
+    <span id="build-version" aria-label="Build version">build cd91b62+mc-scenes</span>
     <div class="topbar">
       <button id="quest" type="button">
         <canvas id="quest-icon" width="128" height="128"></canvas>
@@ -889,6 +889,7 @@ const BRAIN_TIMEOUT_MS = 6500;
     { en: 'Plant a seed!', icon: 'seed', done: function (p) { return p.placed.seed; } },
     { en: 'Wait for wheat to grow!', icon: 'wheat', done: function (p) { return p.wheatRipe; } },
     { en: 'Harvest the wheat!', icon: 'wheat', done: function (p) { return p.mined.wheat; } },
+    { en: 'Craft bread!', icon: 'bread', done: function (p) { return p.crafted.bread; } },
     { en: 'Craft a boat!', icon: 'boat', done: function (p) { return p.crafted.boat; } },
     { en: 'Ride the boat!', icon: 'boat', done: function (p) { return p.boatRide; } },
     { en: 'Tame a pet!', icon: 'pet', done: function (p) { return p.pet; } }
@@ -2552,6 +2553,22 @@ function validConversation(value, p) {
     // removal and stocked placement still take priority over object interaction.
     if(buildMode&&(!b||buildTool!==b.item||(inv[buildTool]||0)>0))return false;
     if(!b)return false;
+    if (b.kind === 'pen' && pointInPenGate(b, wx, wy)) {
+      var gateBox = penGateBox(b);
+      var nearGate = Math.hypot(player.x - (gateBox.x + gateBox.w / 2), player.y - (gateBox.y + gateBox.h / 2)) < 3.2 * TILE;
+      if (!nearGate) { showToast('Move a little closer!', 1.6); return true; }
+      if (!buildWords.gate) {
+        recognizeBuildWord('gate', 'built');
+        if (buildWordPending.gate) {
+          buildWords.gate = 1;
+          delete buildWordPending.gate;
+        }
+        buildShowingWord = true;
+        showWord('gate');
+        buildShowingWord = false;
+      } else showWord('gate', false, true);
+      return true;
+    }
     if(b.kind==='car'){boardCar(b);return true;}
     if(b.kind==='house'){
       if(!buildReach(Math.floor(wx/TILE),Math.floor(wy/TILE)) && !playerHitsDoor(b)){showToast('Move a little closer!',2);return true;}
@@ -2575,7 +2592,7 @@ function validConversation(value, p) {
     startShow(craftableRegion(b),'manual');
   }
   var HOUSE_UPGRADES={
-    wall:{label:'Wall',cost:'stone',material:'stone',word:'stone',change:'Wood → Stone',praise:'Strong stone walls!'},
+    wall:{label:'Wall',cost:'stone',material:'stone',word:'wall',change:'Wood → Stone',praise:'Strong stone walls!'},
     roof:{label:'Roof',cost:'planks',material:'planks',word:'roof',change:'Flat → Tiled',praise:'A lovely tiled roof!'},
     yard:{label:'Yard',cost:'flower',material:'flower',word:'flower',change:'Grass → Flower bed',praise:'Flowers in our yard!'},
     window:{label:'Window',cost:'sand',material:'glass',word:'window',change:'Wood → Bright glass',praise:'A bright glass window!'},
@@ -2620,6 +2637,7 @@ function validConversation(value, p) {
     b.parts[part]={material:u.material,tier:2};b.level=Math.max(2,b.level||1);
     if(part==='door'&&!quiz){progress.placed.door=1;rememberEvent('built','door');}
     learn(u.word);b.showWord=u.word;b.partQuestion=u.word;b.shown=false;b.autoOffered=true;b.invited=false;b.closed=true;
+    if (part === 'wall') recognizeBuildWord('wall', 'built');
     playSfx('place');
     closeUpgrade();closeAmbient();buildSession.lastObjectId=b.id;buildSession.lastActionAt=chatClock;buildSession.active=true;buildQueue=[];manualShowPending=null;
     detectBuilds();celebrateBuild(b);buildFeedback(u.praise+' You made this!','house_upgrade');
@@ -3246,7 +3264,7 @@ function validConversation(value, p) {
     if(drivingCar)return;
     var pendingPart=buildObjects.find(function(b){return b.partQuestion;});
     if(pendingPart&&chatClock>=partQuestionAt&&!panelOpen()&&!welcome&&!nameFlow&&!dialogue&&!quiz&&!buildShowActive()){
-      var key=pendingPart.partQuestion,other=learned.find(function(k){return k!==key&&['stone','wood','flower','roof','window','planks','sand','door'].includes(k);});
+      var key=pendingPart.partQuestion,other=learned.find(function(k){return k!==key&&['stone','wood','flower','roof','window','planks','sand','door','wall'].includes(k);});
       if(other){closeAmbient();showBuildQuestion({event:'house_part',building:pendingPart,key:key,options:[key,other],upgrade:true,deferSpeech:true});saveSoon();}
     }
     if(buildLastPosition && Math.hypot(player.x-buildLastPosition.x,player.y-buildLastPosition.y)<.5)buildStill+=dt;else buildStill=0;
@@ -3272,6 +3290,13 @@ function validConversation(value, p) {
       });
       if(returningVisit && buildSavedIds.has(b.id) && !buildSession.revisit && buildChat.revisits<1 && Math.abs(player.x-(b.x+b.w/2)*TILE)<14*TILE)queueBuild('build_revisit',Object.assign({building:b,manual:b.shown},objectQuestion(b)));
     });
+    if (!buildWords.gate && !buildWordPending.gate) {
+      buildObjects.forEach(function (pen) {
+        if (pen.kind !== 'pen' || buildWords.gate || buildWordPending.gate) return;
+        var gateBox = penGateBox(pen);
+        if (Math.hypot(player.x - (gateBox.x + gateBox.w / 2), (player.y - 12) - (gateBox.y + gateBox.h / 2)) < 2.4 * TILE) recognizeBuildWord('gate', 'built');
+      });
+    }
     if(quiet && !buildShowActive()) {var free=buildClusters.find(function(r){return r.ready&&!r.building.closed&&r.members.some(function(at){return placedThisRun.has(at);});});if(free)buildCompletion(free);}
     if(ambient && ambient.build && ambient.build.event==='build_plan' && !buildSession.planAnswered && chatClock-buildSession.planAt>=8)closeAmbient();
     if(quiet && ambient && ambient.build && ['build_closed','build_free'].includes(ambient.build.event) && chatClock-buildSession.completionAt>=1.5 && chatClock-buildSession.lastActionAt>=4)closeAmbient();
@@ -4471,6 +4496,16 @@ function validConversation(value, p) {
   function houseDoorBox(b) {
     return { x: b.x * TILE + 44, y: b.y * TILE + 54, w: 32, h: 42 };
   }
+  function penGateBox(b) {
+    var localX = 47, localY = 40, w = 33, h = 21, x;
+    if (b.dir === -1) x = (b.x + b.w) * TILE - localX - w;
+    else x = b.x * TILE + localX;
+    return { x: x, y: b.y * TILE + localY, w: w, h: h };
+  }
+  function pointInPenGate(b, wx, wy) {
+    var g = penGateBox(b);
+    return wx >= g.x - 8 && wx <= g.x + g.w + 8 && wy >= g.y - 8 && wy <= g.y + g.h + 12;
+  }
   function pointInDoor(b, wx, wy) {
     var d = houseDoorBox(b);
     return wx >= d.x - 8 && wx <= d.x + d.w + 8 && wy >= d.y - 8 && wy <= d.y + d.h + 10;
@@ -4647,6 +4682,14 @@ function validConversation(value, p) {
     if (houseGrace > 0) houseGrace = Math.max(0, houseGrace - dt);
     // Walking onto the door does not enter. A tap on the door does.
     if (indoors && buildObjects.indexOf(indoors) < 0) { indoors = null; bedRest = 0; }
+    if (indoors && indoors.kind === 'house') {
+      indoors.roomTime = (indoors.roomTime || 0) + dt;
+      if (indoors.roomTime >= 1.5 && !indoors.roomEntered) {
+        indoors.roomEntered = true;
+        recognizeBuildWord('room', 'made');
+      }
+      if (indoors.roomEntered) hintOnce('roomLook', 'This is a room.');
+    }
   }
   function drawRoomItem(g, key, box, filled) {
     g.save();
@@ -5195,7 +5238,7 @@ function validConversation(value, p) {
   }
   function laborBusy() {
     var now = Date.now(), i, t;
-    if (breakJobs.length || fishing || (placeHold && placeHold.armed)) return true;
+    if (breakJobs.length || fishing || (cook && Date.now() < cook.until) || (placeHold && placeHold.armed)) return true;
     if (supplyCarryUntil > now) return true;
     for (i = 0; i < trees.length; i++) {
       t = trees[i];
@@ -5581,6 +5624,7 @@ function validConversation(value, p) {
       addItem('seed', 1, true);
       showWord('wheat');
       chime();
+      if (!(inv.bread > 0)) breadHintDue = true;
     } else {
       addItem('seed', 1, true);
       showWord('seed');
@@ -8449,17 +8493,26 @@ function validConversation(value, p) {
     var mp = (timeOfDay + 0.5) % 1;
     moonPos = { x: viewW * (0.12 + 0.76 * mp), y: viewH * 0.18 - Math.sin(mp * Math.PI) * viewH * 0.07 };
     starPos = [];
-    if (night > 0.05) {
+    if (night > 0.2) {
       var si;
       for (si = 0; si < 28; si++) {
         var sx = hash2(si, 1, 5) * viewW;
         var sy = 12 + hash2(si, 2, 5) * viewH * 0.42;
-        var tw = 0.35 + 0.65 * (0.5 + 0.5 * Math.sin(sec * 2 + hash2(si, 4, 5) * 6));
-        ctx.globalAlpha = night * tw;
-        ctx.fillStyle = '#fff8d8';
+        var tw = 0.72 + 0.28 * (0.5 + 0.5 * Math.sin(sec * 2 + hash2(si, 4, 5) * 6));
+        var bright = hash2(si, 3, 5) > 0.72;
+        ctx.globalAlpha = Math.min(1, night * 1.15) * tw;
+        ctx.fillStyle = '#fffaf0';
         ctx.beginPath();
-        ctx.arc(sx, sy, hash2(si, 3, 5) > 0.82 ? 2.2 : 1.3, 0, 6.3);
+        ctx.arc(sx, sy, bright ? 3.4 : 2.2, 0, 6.3);
         ctx.fill();
+        if (bright) {
+          ctx.strokeStyle = '#fffaf0';
+          ctx.lineWidth = 1.6;
+          ctx.beginPath();
+          ctx.moveTo(sx - 7, sy); ctx.lineTo(sx + 7, sy);
+          ctx.moveTo(sx, sy - 7); ctx.lineTo(sx, sy + 7);
+          ctx.stroke();
+        }
         starPos.push({ x: sx, y: sy });
       }
       ctx.globalAlpha = 1;
@@ -8486,18 +8539,18 @@ function validConversation(value, p) {
       ctx.globalAlpha = 1;
     }
     if (moonOn) {
-      ctx.globalAlpha = Math.min(1, night + 0.15);
-      ctx.drawImage(glowSprite('moon', 46, 8, 'rgba(255, 244, 200, 0.55)', 'rgba(255, 244, 200, 0)'), moonPos.x - 46, moonPos.y - 46);
-      ctx.fillStyle = '#fff6d4';
-      ctx.beginPath(); ctx.arc(moonPos.x, moonPos.y, 18, 0, 6.3); ctx.fill();
+      ctx.globalAlpha = Math.min(1, night * 1.2 + 0.35);
+      ctx.drawImage(glowSprite('moon-bright', 70, 8, 'rgba(255, 250, 230, 0.9)', 'rgba(255, 250, 230, 0)'), moonPos.x - 70, moonPos.y - 70);
+      ctx.fillStyle = '#fffaf0';
+      ctx.beginPath(); ctx.arc(moonPos.x, moonPos.y, 24, 0, 6.3); ctx.fill();
       ctx.fillStyle = '#ffe7a8';
-      ctx.beginPath(); ctx.arc(moonPos.x - 5, moonPos.y - 2, 3, 0, 6.3); ctx.fill();
-      ctx.beginPath(); ctx.arc(moonPos.x + 5, moonPos.y + 4, 3.5, 0, 6.3); ctx.fill();
-      ctx.fillStyle = '#5b6484';
-      ctx.beginPath(); ctx.arc(moonPos.x - 4, moonPos.y - 1, 1.3, 0, 6.3); ctx.fill();
-      ctx.beginPath(); ctx.arc(moonPos.x + 4, moonPos.y - 1, 1.3, 0, 6.3); ctx.fill();
-      ctx.strokeStyle = '#5b6484'; ctx.lineWidth = 1.3;
-      ctx.beginPath(); ctx.arc(moonPos.x, moonPos.y + 3, 3.4, 0.25, Math.PI - 0.25); ctx.stroke();
+      ctx.beginPath(); ctx.arc(moonPos.x - 6, moonPos.y - 2, 4, 0, 6.3); ctx.fill();
+      ctx.beginPath(); ctx.arc(moonPos.x + 7, moonPos.y + 5, 4.6, 0, 6.3); ctx.fill();
+      ctx.fillStyle = '#4d5678';
+      ctx.beginPath(); ctx.arc(moonPos.x - 5, moonPos.y - 1, 1.7, 0, 6.3); ctx.fill();
+      ctx.beginPath(); ctx.arc(moonPos.x + 6, moonPos.y - 1, 1.7, 0, 6.3); ctx.fill();
+      ctx.strokeStyle = '#4d5678'; ctx.lineWidth = 1.8;
+      ctx.beginPath(); ctx.arc(moonPos.x, moonPos.y + 4, 4.2, 0.25, Math.PI - 0.25); ctx.stroke();
       ctx.globalAlpha = 1;
     }
     cloudPos = [];
@@ -8507,8 +8560,14 @@ function validConversation(value, p) {
       var cy = 28 + hash2(ci, 3, 8) * viewH * 0.22;
       var sc = 0.75 + hash2(ci, 4, 8) * 0.6;
       cloudPos.push({ x: cx, y: cy, scale: sc });
-      ctx.globalAlpha = (rainOn ? 0.75 : 0.92) - night * 0.72;
-      ctx.fillStyle = rainOn ? '#dfe8f2' : '#fff';
+      ctx.globalAlpha = rainOn ? 0.92 : Math.max(0.55, 1 - night * 0.4);
+      ctx.fillStyle = rainOn ? '#c5d0dc' : '#d5e2ee';
+      ctx.beginPath();
+      ctx.arc(cx, cy + 5, 16 * sc, 0, 6.3);
+      ctx.arc(cx + 18 * sc, cy + 8, 12 * sc, 0, 6.3);
+      ctx.arc(cx - 16 * sc, cy + 9, 11 * sc, 0, 6.3);
+      ctx.fill();
+      ctx.fillStyle = rainOn ? '#f4f7fb' : '#fff';
       ctx.beginPath();
       ctx.arc(cx, cy, 18 * sc, 0, 6.3);
       ctx.arc(cx + 20 * sc, cy + 4, 14 * sc, 0, 6.3);
@@ -9086,7 +9145,9 @@ function validConversation(value, p) {
     showWord(d.key, d.reward, false, d.quiet);
   }
   function hintOnce(key, line) {
+    var card = document.getElementById('wordcard');
     if (!started || intros[key] || toastLeft > 0 || laborBusy() || dialogue || quiz) return;
+    if (card && !card.hidden) return;
     intros[key] = 1;
     showToast(line, 2.8);
     saveSoon();
@@ -9113,6 +9174,22 @@ function validConversation(value, p) {
     })) hintOnce('bed', 'Sleep in the bed until morning.');
     if (!intros.torch && nearDarkPocket()) hintOnce('torch', 'A torch helps in the dark.');
     fishCookHint();
+    skyHints();
+    breadHint();
+  }
+  function skyHints() {
+    if (nightFactor(timeOfDay) >= 0.6) {
+      if (moonOn) hintOnce('moonLook', 'Look! The moon!');
+      else hintOnce('starLook', 'Look! A star!');
+    }
+    if (rainOn && !indoors) hintOnce('rainLook', 'Look! Rain!');
+  }
+  var breadHintDue = false;
+  function breadHint() {
+    if (!breadHintDue || (inv.bread > 0)) return;
+    if (!intros.makeBread && (toastLeft > 0 || laborBusy())) return;
+    hintOnce('makeBread', 'Make bread.');
+    if (intros.makeBread) breadHintDue = false;
   }
   function hasFireReady() {
     if (inv.fire > 0) return true;
