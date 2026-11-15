@@ -630,7 +630,7 @@
   <canvas id="view" width="800" height="400"></canvas>
   <div id="hud">
     <span id="hunger-hint" hidden></span>
-    <span id="build-version" aria-label="Build version">build cd91b62+mc-pond</span>
+    <span id="build-version" aria-label="Build version">build cd91b62+mc-fish</span>
     <div class="topbar">
       <button id="quest" type="button">
         <canvas id="quest-icon" width="128" height="128"></canvas>
@@ -963,6 +963,8 @@ const BRAIN_TIMEOUT_MS = 6500;
   var sprites = {};
   var base, cells, seed, origin;
   var animals = [];
+  var lakeFish = [];
+  var caughtFish = null;
   var player = { x: 0, y: 0, vx: 0, vy: 0, dir: 1, anim: 0 };
   var homeX = 0, homeY = 0;
   var onGround = true, coyote = 0, jumpBuf = 0;
@@ -4055,6 +4057,7 @@ function validConversation(value, p) {
     onGround = true;
     camReady = false;
     crops = []; boat = null; riding = false; fishing = null;
+    stockLakeFish();
     resetAdventure();
   }
 
@@ -5829,6 +5832,7 @@ function validConversation(value, p) {
       if (parts.length >= 90) parts.shift();
       parts.push({ x: fx + (Math.random() - 0.5) * 14, y: fy + 2, vx: (Math.random() - 0.5) * 90, vy: -50 - Math.random() * 80, life: 0.45, age: 0, color: Math.random() < 0.5 ? '#ffffff' : '#aee9ff', s: 2.5 + Math.random() * 2, heart: false });
     }
+    caughtFish = { x: fx, y: fy + 14, kind: Math.abs(Math.floor(fx / TILE)) % 3, until: Date.now() + 800, phase: 0 };
     addItem('fish', 1);
     queueChat('fish', 'fish');
     chime();
@@ -7789,6 +7793,153 @@ function validConversation(value, p) {
       }
     }
   }
+  function waterRuns() {
+    var runs = [], seen = {}, x, s, run, mark;
+    for (x = 1; x < W - 1; x++) {
+      if (seen[x]) continue;
+      s = landSurface(x);
+      if (!s || s.id !== WATER) continue;
+      run = { x0: x, x1: x, y: s.y };
+      while (run.x0 > 1) {
+        s = landSurface(run.x0 - 1);
+        if (!s || s.id !== WATER || s.y !== run.y) break;
+        run.x0--;
+      }
+      while (run.x1 < W - 2) {
+        s = landSurface(run.x1 + 1);
+        if (!s || s.id !== WATER || s.y !== run.y) break;
+        run.x1++;
+      }
+      for (mark = run.x0; mark <= run.x1; mark++) seen[mark] = 1;
+      run.w = run.x1 - run.x0 + 1;
+      runs.push(run);
+    }
+    runs.sort(function (a, b) { return b.w - a.w; });
+    return runs;
+  }
+  function pushLakeFish(list, run, i, n, kind) {
+    var span = Math.max(1, run.x1 - run.x0 - 1.2);
+    list.push({
+      kind: kind,
+      x: (run.x0 + 0.7 + span * ((i + 0.5) / n)) * TILE,
+      y: (run.y + 0.58) * TILE,
+      dir: i % 2 ? 1 : -1,
+      speed: 16 + (kind % 3) * 5,
+      phase: i * 1.8,
+      x0: (run.x0 + 0.55) * TILE,
+      x1: (run.x1 + 0.45) * TILE,
+      yTop: run.y * TILE + 12,
+      yBot: run.y * TILE + 26
+    });
+  }
+  function stockLakeFish() {
+    var runs = waterRuns(), next = [], i, run;
+    if (!runs.length) { lakeFish = []; return; }
+    run = runs[0];
+    var count = run.w >= 8 ? 5 : Math.min(3, Math.max(1, run.w - 1));
+    for (i = 0; i < count; i++) pushLakeFish(next, run, i, count, i % 3);
+    for (i = 1; i < runs.length && next.length < 7; i++) {
+      if (runs[i].w < 3) continue;
+      pushLakeFish(next, runs[i], 0, 1, (i + 1) % 3);
+    }
+    lakeFish = next;
+  }
+  function stepLakeFish(dt) {
+    var i, f, nx, tx, ty;
+    for (i = 0; i < lakeFish.length; i++) {
+      f = lakeFish[i];
+      f.phase += dt * 5.5;
+      nx = f.x + f.dir * f.speed * dt;
+      tx = Math.floor(nx / TILE);
+      ty = Math.floor((f.yTop + 4) / TILE);
+      if (nx < f.x0 || nx > f.x1 || get(tx, ty) !== WATER) {
+        f.dir *= -1;
+        nx = Math.max(f.x0, Math.min(f.x1, f.x));
+      }
+      f.x = nx;
+      f.y = (f.yTop + f.yBot) / 2 + Math.sin(f.phase * 0.65) * 2.5;
+      if (f.y < f.yTop) f.y = f.yTop;
+      if (f.y > f.yBot) f.y = f.yBot;
+    }
+  }
+  function drawLakeFishShape(g, kind, phase) {
+    var wag = Math.sin(phase * 6) * 0.5;
+    var body = kind === 1 ? '#3aa0d8' : (kind === 2 ? '#3cba8a' : '#f0a04a');
+    var belly = kind === 1 ? '#e7f7ff' : (kind === 2 ? '#e9fff6' : '#fff1cc');
+    var fin = kind === 1 ? '#1d6f9c' : (kind === 2 ? '#1d7a56' : '#d06720');
+    var slim = kind === 1;
+    var plump = kind === 2;
+    g.save();
+    g.scale(plump ? 1.18 : (slim ? 0.86 : 1), plump ? 1.12 : (slim ? 0.8 : 1));
+    g.lineJoin = 'round';
+    g.lineCap = 'round';
+    g.strokeStyle = '#3a2e24';
+    g.lineWidth = 1.15;
+    g.save();
+    g.translate(-10, 0);
+    g.rotate(wag);
+    g.beginPath();
+    if (slim) {
+      g.moveTo(1, 0);
+      g.quadraticCurveTo(-7, -6, -9, -3.5);
+      g.quadraticCurveTo(-5, 0, -9, 3.5);
+      g.quadraticCurveTo(-7, 6, 1, 0);
+    } else {
+      g.moveTo(2, 0);
+      g.quadraticCurveTo(-5, -8, -8, -4);
+      g.quadraticCurveTo(-3, 0, -8, 4);
+      g.quadraticCurveTo(-5, 8, 2, 0);
+    }
+    g.closePath();
+    g.fillStyle = fin;
+    g.fill();
+    g.stroke();
+    g.restore();
+    g.beginPath();
+    g.ellipse(1, 0.4, plump ? 11.5 : 9.2, slim ? 4 : 5.4, 0, 0, Math.PI * 2);
+    g.fillStyle = body;
+    g.fill();
+    g.stroke();
+    g.beginPath();
+    g.ellipse(2, 1.6, 5.2, 2.1, 0, 0, Math.PI * 2);
+    g.fillStyle = belly;
+    g.fill();
+    g.beginPath();
+    g.moveTo(-1, -3.6);
+    g.quadraticCurveTo(2.2, plump ? -9.5 : -7.2, 5.2, -3.2);
+    g.quadraticCurveTo(2, -3.6, -1, -3.6);
+    g.closePath();
+    g.fillStyle = fin;
+    g.fill();
+    g.stroke();
+    g.fillStyle = '#1a1a1a';
+    g.beginPath();
+    g.arc(6.4, -0.5, 1.15, 0, Math.PI * 2);
+    g.fill();
+    g.fillStyle = '#fff';
+    g.beginPath();
+    g.arc(6.75, -0.85, 0.38, 0, Math.PI * 2);
+    g.fill();
+    g.restore();
+  }
+  function drawLakeFish(g, sec) {
+    var i, f, now = Date.now();
+    for (i = 0; i < lakeFish.length; i++) {
+      f = lakeFish[i];
+      if (f.x < drawCamX - 40 || f.x > drawCamX + viewW / (tileScreen / TILE) + 40) continue;
+      g.save();
+      g.translate(f.x, f.y);
+      g.scale(f.dir, 1);
+      drawLakeFishShape(g, f.kind, f.phase);
+      g.restore();
+    }
+    if (caughtFish && caughtFish.until > now) {
+      g.save();
+      g.translate(caughtFish.x, caughtFish.y - (800 - (caughtFish.until - now)) * 0.02);
+      drawLakeFishShape(g, caughtFish.kind, sec * 6);
+      g.restore();
+    } else if (caughtFish) caughtFish = null;
+  }
   function traceWaterBasin(g, left, right, top) {
     var w = Math.max(TILE, right - left);
     var mid = (left + right) / 2;
@@ -8256,6 +8407,7 @@ function validConversation(value, p) {
     if (indoors) { drawInterior(ctx, sec); return; }
     ctx.setTransform(dpr * z, 0, 0, dpr * z, -drawCamX * dpr * z, -drawCamY * dpr * z);
     drawWorld(ctx, sec);
+    drawLakeFish(ctx, sec);
     buildObjects.forEach(function(b){if(!bboxOnScreen(b))return;ctx.save();ctx.translate((b.x+(b.dir===-1?b.w:0))*TILE,b.y*TILE);if(b.dir===-1)ctx.scale(-1,1);if(b.kind==='car'){ctx.drawImage(carBodySprite(b),0,0);drawCarWheels(ctx,b);}else ctx.drawImage(craftableSprite(b),0,0);ctx.restore();drawHouseLife(ctx,b,sec);drawCarExhaust(ctx,b,sec);});
     var ai;
     for (ai = 0; ai < animals.length; ai++) {
@@ -9753,6 +9905,7 @@ function validConversation(value, p) {
         if (at >= 0 && at < cells.length && id >= 0 && id <= WINDOW) cells[at] = id;
       }
     }
+    stockLakeFish();
     if (data.animals && data.animals.length) {
       var next = [];
       data.animals.forEach(function (row) {
@@ -10249,6 +10402,7 @@ function validConversation(value, p) {
       }
       var i;
       for (i = 0; i < animals.length; i++) animalStep(animals[i], dt);
+      stepLakeFish(dt);
       for (i = parts.length - 1; i >= 0; i--) {
         var p = parts[i];
         p.age += dt;
