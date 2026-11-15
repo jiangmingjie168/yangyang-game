@@ -4580,17 +4580,18 @@ function validConversation(value, p) {
     return px + halfW > rect.x && px - halfW < rect.x + rect.w && py > rect.y && py - bodyH < rect.y + rect.h;
   }
   function penBlocks(px, py, halfW, bodyH) {
-    var i, b, ground, top, span;
+    var i, b, yard, ground, atEdge;
+    // The child walks the ground in front of the pen. A shut gate holds animals, not the child.
+    if (bodyH >= 26) return false;
     for (i = 0; i < buildObjects.length; i++) {
       b = buildObjects[i];
       if (b.kind !== 'pen' || b.gateOpen) continue;
-      // One thin bar across the pen, only while the gate is shut.
-      // An open gate is clear, so the child can walk through and past both ways.
-      // The old post boxes hung below the path and stayed solid with the gate open.
       ground = (b.y + b.h) * TILE;
-      top = ground - 36;
-      span = { x: b.x * TILE + 6, y: top, w: b.w * TILE - 12, h: 40 };
-      if (penOverlap(px, py, halfW, bodyH, span)) return true;
+      if (Math.abs(py - ground) > 48) continue;
+      yard = penLocalRect(b, 52, 0, 46, 64);
+      if (px <= yard.x - halfW || px >= yard.x + yard.w + halfW) continue;
+      atEdge = px - halfW < yard.x + 6 || px + halfW > yard.x + yard.w - 6;
+      if (atEdge && penOverlap(px, py, halfW, bodyH, { x: yard.x, y: ground - 28, w: yard.w, h: 32 })) return true;
     }
     return false;
   }
@@ -5050,24 +5051,21 @@ function validConversation(value, p) {
     var under = Math.floor((a.y + 2) / TILE);
     return get(tx, under) === WATER;
   }
-  function shoreAround(a) {
+  // First dry tile past a stretch of water, on the side the animal is facing.
+  function bankBeyond(a, dir) {
     var under = Math.floor((a.y + 2) / TILE);
-    var tx = Math.floor(a.x / TILE);
-    var left = tx, right = tx, n = 0;
-    while (left > 2 && get(left - 1, under) === WATER && n++ < 48) left--;
-    n = 0;
-    while (right < W - 3 && get(right + 1, under) === WATER && n++ < 48) right++;
-    function land(dir) {
-      var nx = a.x + dir * 14;
-      return animalPassage(a, nx, a.y) && !waterAhead(a, dir);
+    var body = Math.floor((a.y - 10) / TILE);
+    var x = Math.floor(a.x / TILE);
+    var n = 0, saw = get(x, under) === WATER;
+    while (n++ < 48) {
+      x += dir;
+      if (x < 2 || x >= W - 2) return null;
+      if (get(x, under) === WATER) { saw = true; continue; }
+      if (!saw) return null;
+      if (blocksBody(get(x, under)) && !blocksBody(get(x, body))) return (x + 0.5) * TILE;
+      return null;
     }
-    var leftOk = land(-1), rightOk = land(1);
-    var preferLeft = Math.abs(player.x - (left - 1) * TILE) <= Math.abs(player.x - (right + 1) * TILE);
-    if (preferLeft && leftOk) return -1;
-    if (!preferLeft && rightOk) return 1;
-    if (leftOk) return -1;
-    if (rightOk) return 1;
-    return 0;
+    return null;
   }
   function animalShoreX(a) {
     var tx = Math.floor(a.x / TILE), gy = Math.floor((a.y + 2) / TILE);
@@ -5136,12 +5134,16 @@ function validConversation(value, p) {
       var wetX = Math.floor(a.x / TILE);
       var wetY = Math.floor((a.y + 2) / TILE);
       if (get(wetX, wetY) === WATER || get(wetX, Math.floor((a.y - 8) / TILE)) === WATER) {
-        var shore = animalShoreX(a);
+        var outDir = player.x >= a.x ? 1 : -1;
+        var walkingOver = (a.tamed || foodLeads(a)) && bankBeyond(a, outDir);
+        var shore = walkingOver ? null : bankBeyond(a, outDir);
+        if (shore == null && !walkingOver) shore = animalShoreX(a);
         if (shore != null) a.x = shore;
         var gy0 = Math.floor((a.y + 2) / TILE);
         if (blocksBody(get(Math.floor(a.x / TILE), gy0))) a.y = gy0 * TILE - 0.01;
         a.swim = false;
-        if (get(Math.floor(a.x / TILE), Math.floor((a.y + 2) / TILE)) === WATER) {
+        a.shoreUntil = 0;
+        if (!walkingOver && get(Math.floor(a.x / TILE), Math.floor((a.y + 2) / TILE)) === WATER) {
           a.vx = 0;
           return;
         }
@@ -5176,12 +5178,30 @@ function validConversation(value, p) {
     }
     }
     if (!animalSwims(a)) {
-      var intoWater = a.vx && waterAhead(a, a.vx > 0 ? 1 : -1);
-      if (intoWater && !(a.shoreUntil > Date.now())) {
-        a.shoreDir = shoreAround(a) || (waterAhead(a, 1) ? -1 : 1);
-        a.shoreUntil = Date.now() + 1600;
+      var followDir = player.x > a.x + 36 ? 1 : (player.x < a.x - 36 ? -1 : 0);
+      var following = !!(a.tamed || foodLeads(a));
+      var onWater = get(Math.floor(a.x / TILE), Math.floor((a.y + 2) / TILE)) === WATER;
+      if (following && followDir && (onWater || waterAhead(a, followDir))) {
+        var bank = bankBeyond(a, followDir);
+        if (bank != null) {
+          var hop = followDir * Math.max(120, Math.abs(a.vx) || 120) * dt;
+          if (Math.abs(bank - a.x) <= Math.abs(hop)) a.x = bank;
+          else a.x += hop;
+          var gyBank = Math.floor((a.y + 2) / TILE);
+          a.y = gyBank * TILE - 0.01;
+          a.vx = followDir * 120;
+          a.dir = followDir;
+          a.blockedFor = 0;
+          a.swim = false;
+          a.shoreUntil = 0;
+          clampPenned(a);
+          notePenAnimal(a);
+          if (foodLeads(a)) hintOnce(selectedKey() === 'seed' ? 'seed-follow' : 'wheat-follow', feedLine(a.type));
+          if (a.tamed && (a.x !== previousX || a.y !== previousY)) saveSoon();
+          return;
+        }
       }
-      if (a.shoreUntil > Date.now() && a.shoreDir) a.vx = a.shoreDir * Math.max(70, Math.abs(a.vx) || 70);
+      if (a.vx && waterAhead(a, a.vx > 0 ? 1 : -1)) a.vx = -Math.sign(a.vx) * Math.max(40, Math.abs(a.vx));
     }
     if (a.vx) a.dir = a.vx > 0 ? 1 : -1;
     var wanted = Math.abs(a.vx) > 1;
