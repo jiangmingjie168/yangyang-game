@@ -315,65 +315,53 @@
   }
   .back:active { transform: translateY(3px); }
   .panel-body { flex: 1; min-height: 0; overflow: auto; -webkit-overflow-scrolling: touch; touch-action: pan-y; padding-bottom: 8px; }
-  #recipes { display: grid; grid-template-columns: 1fr; gap: 8px; align-content: start; }
-  @media (min-width: 760px) { #recipes { grid-template-columns: 1fr 1fr; } }
-  .recipe {
-    display: flex; align-items: center; gap: 8px;
-    background: #e7c48a;
-    border: 3px solid #8d5a28;
-    border-radius: 14px;
-    padding: 8px;
-    min-height: 0;
-    box-shadow: inset 0 2px 0 rgba(255,255,255,0.35), 0 3px 0 rgba(88,52,20,0.16);
-  }
-  .craft-side { display: flex; flex-direction: column; align-items: center; gap: 3px; flex: 0 0 auto; }
-  .craft-grid {
+  #recipes {
     display: grid;
-    grid-template-columns: 46px 46px;
-    grid-template-rows: 46px 46px;
-    gap: 3px;
-    padding: 4px;
-    background: #c4955a;
-    border-radius: 8px;
-    box-shadow: inset 0 0 0 2px #8d5a28;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 14px;
+    align-content: start;
+    padding: 4px 2px 16px;
   }
+  .recipe {
+    display: flex; flex-direction: column; align-items: stretch; gap: 8px;
+    min-width: 0;
+    background: #fff4df;
+    border: 3px solid #8d5a28;
+    border-radius: 18px;
+    padding: 12px;
+    box-shadow: 0 3px 0 rgba(88,52,20,0.12);
+  }
+  .craft-need { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; min-width: 0; }
   .craft-slot {
-    position: relative;
-    display: flex; align-items: center; justify-content: center;
+    width: 84px; max-width: 100%; min-width: 0;
+    display: flex; flex-direction: column; align-items: center; gap: 2px;
     background: #fffaf2;
     border: 2px solid #6e4324;
-    border-radius: 6px;
-    min-width: 0;
+    border-radius: 12px;
+    padding: 6px 6px 4px;
   }
-  .craft-slot.empty { background: #f3e0c0; box-shadow: inset 0 2px 0 rgba(90,50,20,0.08); }
-  .craft-slot canvas { width: 32px; height: 32px; image-rendering: pixelated; }
-  .craft-slot em {
-    position: absolute; right: 1px; bottom: 0;
-    font-style: normal; font-size: 11px; font-weight: 800; line-height: 1.15;
-    background: #fff; border-radius: 6px; padding: 0 2px; color: #c4503a;
+  .craft-slot canvas { width: 40px; height: 40px; image-rendering: pixelated; }
+  .craft-slot b, .craft-out b {
+    display: block; max-width: 100%;
+    font-size: 14px; font-weight: 800; line-height: 1.15; text-align: center;
+    overflow-wrap: anywhere;
   }
-  .craft-slot em.ok { color: #207a38; }
-  .craft-names { font-size: 12px; font-weight: 800; color: #4d3827; max-width: 108px; text-align: center; line-height: 1.1; }
-  .craft-arrow { font-size: 22px; font-weight: 900; color: #6e4324; flex: 0 0 auto; }
+  .craft-slot em, .craft-out em {
+    font-style: normal; font-size: 14px; font-weight: 800; line-height: 1.15;
+    color: #c4503a; text-align: center;
+  }
+  .craft-slot em.ok, .craft-out em { color: #207a38; }
+  .craft-arrow { font-size: 22px; font-weight: 900; color: #6e4324; text-align: center; line-height: 1; }
   .craft-out {
-    width: 92px; flex: 0 0 auto;
-    display: flex; flex-direction: column; align-items: center;
-    background: #fffaf2; border: 2px solid #6e4324; border-radius: 8px; padding: 4px 4px 5px;
+    min-width: 0;
+    display: flex; flex-direction: column; align-items: center; gap: 2px;
+    background: #fffaf2; border: 2px solid #6e4324; border-radius: 12px; padding: 8px 8px 6px;
   }
-  .craft-out canvas { width: 40px; height: 40px; image-rendering: pixelated; }
-  .craft-out b { font-size: 13px; line-height: 1.1; text-align: center; }
-  .craft-out em { font-style: normal; font-size: 11px; font-weight: 800; color: #207a38; }
-  @media (max-height: 420px) {
-    .craft-grid { grid-template-columns: 40px 40px; grid-template-rows: 40px 40px; }
-    .craft-slot canvas { width: 26px; height: 26px; }
-    .craft-out { width: 68px; }
-    .craft-out canvas { width: 32px; height: 32px; }
-    .craftbtn { min-width: 72px; min-height: 52px; font-size: 16px; }
-  }
+  .craft-out canvas { width: 48px; height: 48px; image-rendering: pixelated; }
   .craftbtn {
-    min-width: 84px; min-height: 64px; padding: 6px 8px;
+    width: 100%; min-height: 54px; padding: 8px 10px;
     border-radius: 16px; background: #e7d7c4; color: #6d5a48;
-    font-size: 18px; font-weight: 900; flex: 0 0 auto;
+    font-size: 18px; font-weight: 900;
   }
   .craftbtn.ready { background: var(--leaf); color: #fff; box-shadow: 0 4px 0 var(--leaf-d); }
   .craftbtn:active { transform: translateY(2px); }
@@ -630,7 +618,7 @@
   <canvas id="view" width="800" height="400"></canvas>
   <div id="hud">
     <span id="hunger-hint" hidden></span>
-    <span id="build-version" aria-label="Build version">build cd91b62+mc-fence</span>
+    <span id="build-version" aria-label="Build version">build cd91b62+mc-craft</span>
     <div class="topbar">
       <button id="quest" type="button">
         <canvas id="quest-icon" width="128" height="128"></canvas>
@@ -9656,39 +9644,30 @@ function validConversation(value, p) {
     RECIPES.forEach(function (r) {
       var card = document.createElement('div');
       card.className = 'recipe';
-      var side = document.createElement('div');
-      side.className = 'craft-side';
-      var grid = document.createElement('div');
-      grid.className = 'craft-grid';
+      var need = document.createElement('div');
+      need.className = 'craft-need';
       var keys = Object.keys(r.need);
-      var slotIndex;
-      for (slotIndex = 0; slotIndex < 4; slotIndex++) {
+      keys.forEach(function (k) {
         var slot = document.createElement('div');
-        slot.className = 'craft-slot' + (slotIndex < keys.length ? '' : ' empty');
-        if (slotIndex < keys.length) {
-          (function (k) {
-            var cv = document.createElement('canvas');
-            cv.width = 64; cv.height = 64;
-            paintIcon(cv, k);
-            var ct = document.createElement('em');
-            ct.dataset.need = k;
-            ct.dataset.n = String(r.need[k]);
-            slot.appendChild(cv);
-            slot.appendChild(ct);
-            slot.setAttribute('aria-label', WORD[k][0]);
-            tapButton(slot, function () { showWord(k, false, true); });
-          })(keys[slotIndex]);
-        }
-        grid.appendChild(slot);
-      }
-      var names = document.createElement('div');
-      names.className = 'craft-names';
-      names.textContent = keys.map(function (k) { return WORD[k][0]; }).join(' + ');
-      side.appendChild(grid);
-      side.appendChild(names);
+        slot.className = 'craft-slot';
+        var cv = document.createElement('canvas');
+        cv.width = 64; cv.height = 64;
+        paintIcon(cv, k);
+        var label = document.createElement('b');
+        label.textContent = WORD[k][0];
+        var ct = document.createElement('em');
+        ct.dataset.need = k;
+        ct.dataset.n = String(r.need[k]);
+        slot.appendChild(cv);
+        slot.appendChild(label);
+        slot.appendChild(ct);
+        slot.setAttribute('aria-label', WORD[k][0]);
+        tapButton(slot, function () { showWord(k, false, true); });
+        need.appendChild(slot);
+      });
       var arrow = document.createElement('div');
       arrow.className = 'craft-arrow';
-      arrow.textContent = '→';
+      arrow.textContent = '↓';
       var out = document.createElement('div');
       out.className = 'craft-out';
       var ocv = document.createElement('canvas');
@@ -9711,7 +9690,7 @@ function validConversation(value, p) {
       btn.className = 'craftbtn';
       btn.textContent = 'Craft';
       tapButton(btn, function () { doCraft(r); });
-      card.appendChild(side);
+      card.appendChild(need);
       card.appendChild(arrow);
       card.appendChild(out);
       card.appendChild(btn);
