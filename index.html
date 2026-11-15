@@ -618,7 +618,7 @@
   <canvas id="view" width="800" height="400"></canvas>
   <div id="hud">
     <span id="hunger-hint" hidden></span>
-    <span id="build-version" aria-label="Build version">build cd91b62+mc-clear</span>
+    <span id="build-version" aria-label="Build version">build cd91b62+mc-guide</span>
     <div class="topbar">
       <button id="quest" type="button">
         <canvas id="quest-icon" width="128" height="128"></canvas>
@@ -1211,6 +1211,7 @@ function validConversation(value, p) {
   }
   function recastSpeech(said) {
     if (determineMode('speech') !== 'recast' || typeof said !== 'string' || !said.trim()) return false;
+    if (!speechExerciseOpen() && isChildQuestion(said)) return queueChildAnswer(said);
     var p = socialPayload('recast'); p.child_said = said.slice(0, 160);
     var count = (p.child_said.match(/[A-Za-z]+/g) || []).length; p.target_tier = count <= 1 ? 1 : count <= 3 ? 2 : 3;
     return showAmbient(p);
@@ -5196,7 +5197,6 @@ function validConversation(value, p) {
           a.shoreUntil = 0;
           clampPenned(a);
           notePenAnimal(a);
-          if (foodLeads(a)) hintOnce(selectedKey() === 'seed' ? 'seed-follow' : 'wheat-follow', feedLine(a.type));
           if (a.tamed && (a.x !== previousX || a.y !== previousY)) saveSoon();
           return;
         }
@@ -5252,7 +5252,6 @@ function validConversation(value, p) {
     } else a.swim = false;
     clampPenned(a);
     notePenAnimal(a);
-    if (foodLeads(a)) hintOnce(selectedKey() === 'seed' ? 'seed-follow' : 'wheat-follow', feedLine(a.type));
     if (a.tamed && (a.x !== previousX || a.y !== previousY)) saveSoon();
   }
   function likesFood(type, key) {
@@ -5273,6 +5272,7 @@ function validConversation(value, p) {
     if (!a || !likesFood(a.type, key) || !(inv[key] > 0) || !petReach(a)) return false;
     consume(key);
     intros[key === 'seed' ? 'seed-follow' : 'wheat-follow'] = 1;
+    intros[key === 'seed' ? 'give-seed' : ('give-wheat-' + a.type)] = 1;
     showToast(feedLine(a.type), 2.2);
     burst(a.x, a.y - 24, '#f2c14e', true);
     a.wait = 0.45;
@@ -9452,6 +9452,144 @@ function validConversation(value, p) {
     deferredWord = null;
     showWord(d.key, d.reward, false, d.quiet);
   }
+  function guideAudioBusy() {
+    var card = document.getElementById('wordcard');
+    if (card && !card.hidden) return true;
+    if (toastLeft > 0) return true;
+    if (speechLive()) return true;
+    if (enAudio && !enAudio.ended && !enAudio.paused) return true;
+    if (liveUtterance && speechLive()) return true;
+    if ((childAudio && !childAudio.ended && !childAudio.paused) || childUtterance) return true;
+    if (welcome || nameFlow || ambient || dialogue || quiz) return true;
+    return false;
+  }
+  function speechExerciseOpen() {
+    if (nameFlow || welcome || quiz || dialogue) return true;
+    if (!ambient) return false;
+    if (ambient.build) return true;
+    var ev = ambient.payload && ambient.payload.event;
+    return ev === 'small_talk' || ev === 'weather_chat' || ev === 'recast' || ev === 'name_ask';
+  }
+  function isChildQuestion(said) {
+    var text = String(said || '').trim();
+    if (!text) return false;
+    if (/[?？]/.test(text)) return true;
+    if (/什么|怎么|为什么|哪|这是|如何|能不能|吗|干什么/.test(text)) return true;
+    return /\b(what's|what is|what|how do|how|why|where|who|can i|can you|do i|is this)\b/i.test(text);
+  }
+  function nearbyFoodType(food) {
+    var i, a, best = '', bd = 8 * TILE, d;
+    for (i = 0; i < animals.length; i++) {
+      a = animals[i];
+      if (!likesFood(a.type, food)) continue;
+      d = Math.abs(a.x - player.x);
+      if (d < bd && Math.abs(a.y - player.y) < 96) { bd = d; best = a.type; }
+    }
+    return best;
+  }
+  function nearestAnimalType() {
+    var i, a, best = '', bd = 8 * TILE, d;
+    for (i = 0; i < animals.length; i++) {
+      a = animals[i];
+      d = Math.abs(a.x - player.x);
+      if (d < bd && Math.abs(a.y - player.y) < 96) { bd = d; best = a.type; }
+    }
+    return best;
+  }
+  function waterBeside() {
+    var tx = Math.floor(player.x / TILE), ty = Math.floor((player.y + 2) / TILE);
+    return get(tx, ty) === WATER || get(tx + 1, ty) === WATER || get(tx - 1, ty) === WATER;
+  }
+  function namedAsk(text) {
+    var blob = String(text || '');
+    var low = blob.toLowerCase();
+    var pairs = [
+      ['roof', /roof|屋顶|房顶/],
+      ['bread', /bread|面包/],
+      ['wheat', /wheat|小麦/],
+      ['seed', /seeds?|种子/],
+      ['fish', /fish|鱼/],
+      ['water', /water|水/],
+      ['tree', /\btree\b|树/],
+      ['house', /house|房子|屋/],
+      ['cow', /\bcow\b|牛/],
+      ['sheep', /\bsheep\b|羊/],
+      ['pig', /\bpig\b|猪/],
+      ['chicken', /\bchicken\b|鸡/],
+      ['dog', /\bdog\b|狗/],
+      ['cat', /\bcat\b|猫/],
+      ['fire', /\bfire\b|火/],
+      ['horse', /\bhorse\b|马/],
+      ['duck', /\bduck\b|鸭/],
+      ['rabbit', /\brabbit\b|兔/]
+    ];
+    var i;
+    for (i = 0; i < pairs.length; i++) if (pairs[i][1].test(low) || pairs[i][1].test(blob)) return pairs[i][0];
+    return '';
+  }
+  function askSentence(kind) {
+    var animals = { cow: 1, sheep: 1, pig: 1, chicken: 1, dog: 1, cat: 1, horse: 1, duck: 1, rabbit: 1 };
+    if (animals[kind]) return 'I see the ' + kind + '.';
+    if (kind === 'water' || kind === 'wheat') return 'This is ' + kind + '.';
+    if (kind === 'house') return 'This is a house.';
+    if (kind === 'tree') return 'This is a tree.';
+    if (kind === 'fire') return 'This is a fire.';
+    if (kind === 'bread') return 'This is bread.';
+    if (kind === 'fish') return 'This is a fish.';
+    return '';
+  }
+  function childAnswerLine(said) {
+    var text = String(said || '');
+    var low = text.toLowerCase();
+    var held = selectedKey();
+    var hungry = hungerStageNow() === 'hungry';
+    var asksCook = /cook/.test(low) || ((/怎么|如何/.test(text)) && /fish|鱼/.test(text));
+    if ((/fish|鱼/.test(text) || held === 'fish') && (asksCook || held === 'fish' || (cook && cook.until > Date.now()))) return 'Cook the fish on the fire.';
+    if (/roof|屋顶|房顶/.test(text) || held === 'house') return 'The roof goes on the house.';
+    if (hungry && (held === 'bread' || (/bread|面包/.test(text) && inv.bread > 0))) return 'Tap the bread to eat.';
+    if (hungry && held === 'cookedFish') return 'Tap the fish to eat.';
+    var wheatNear = nearbyFoodType('wheat');
+    var seedNear = nearbyFoodType('seed');
+    if ((held === 'wheat' || /wheat|小麦/.test(text)) && wheatNear) return 'Give the wheat to the ' + wheatNear + '.';
+    if ((held === 'seed' || /seed|种子/.test(low)) && seedNear) return 'Give the seeds to the chicken.';
+    var named = namedAsk(text);
+    if (named === 'bread' && (hungry || held === 'bread')) return 'Tap the bread to eat.';
+    var line = named ? askSentence(named) : '';
+    if (line) return line;
+    if (/what|this|这|什么/.test(low) || /这是|什么/.test(text)) {
+      var near = nearestAnimalType();
+      if (near) return 'I see the ' + near + '.';
+      if (waterBeside()) return 'This is water.';
+    }
+    return "I don't know. Let's play!";
+  }
+  var pendingChildAnswer = '';
+  function queueChildAnswer(said) {
+    pendingChildAnswer = childAnswerLine(said);
+    flushChildAnswer();
+    return true;
+  }
+  function flushChildAnswer() {
+    if (!pendingChildAnswer || !started) return;
+    if (guideAudioBusy()) return;
+    var line = pendingChildAnswer;
+    pendingChildAnswer = '';
+    showToast(line, 2.8);
+  }
+  function eatTapHint() {
+    if (hungerStageNow() !== 'hungry') return;
+    var held = selectedKey();
+    if (held === 'bread' && inv.bread > 0) hintOnce('tap-bread', 'Tap the bread to eat.');
+    else if (held === 'cookedFish' && inv.cookedFish > 0) hintOnce('tap-fish', 'Tap the fish to eat.');
+  }
+  function giveFoodHint() {
+    var key = selectedKey();
+    if (key !== 'wheat' && key !== 'seed') return;
+    var kind = nearbyFoodType(key);
+    if (!kind) return;
+    if (key === 'seed') hintOnce('give-seed', 'Give the seeds to the chicken.');
+    else hintOnce('give-wheat-' + kind, 'Give the wheat to the ' + kind + '.');
+  }
   function hintOnce(key, line) {
     var card = document.getElementById('wordcard');
     if (!started || intros[key] || toastLeft > 0 || laborBusy() || dialogue || quiz) return;
@@ -9476,7 +9614,13 @@ function validConversation(value, p) {
     return false;
   }
   function guideHints() {
-    if (!started || toastLeft > 0 || laborBusy() || dialogue || quiz) return;
+    flushChildAnswer();
+    if (!started || laborBusy() || dialogue || quiz) return;
+    if (!guideAudioBusy()) {
+      eatTapHint();
+      giveFoodHint();
+    }
+    if (toastLeft > 0) return;
     if (!intros.bed && nightFactor(timeOfDay) >= 0.6 && buildObjects.some(function (b) {
       return b.kind === 'house' && b.furn && b.furn.bed && Math.abs((b.x + 1.5) * TILE - player.x) < 6 * TILE;
     })) hintOnce('bed', 'Sleep in the bed until morning.');
@@ -10249,6 +10393,8 @@ function validConversation(value, p) {
   }
   function offerFoodHint() {
     if (hungerTime < 100) return;
+    var heldNow = selectedKey();
+    if (hungerStageNow() === 'hungry' && ((heldNow === 'bread' && inv.bread > 0) || (heldNow === 'cookedFish' && inv.cookedFish > 0))) return;
     if ((inv.bread || 0) > 0) hintOnce('eat-bread', 'Eat the bread.');
     else if ((inv.cookedFish || 0) > 0) hintOnce('eat-fish', 'Eat the fish.');
   }
