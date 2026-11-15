@@ -630,7 +630,7 @@
   <canvas id="view" width="800" height="400"></canvas>
   <div id="hud">
     <span id="hunger-hint" hidden></span>
-    <span id="build-version" aria-label="Build version">build cd91b62+mc-polish</span>
+    <span id="build-version" aria-label="Build version">build cd91b62+mc-pond</span>
     <div class="topbar">
       <button id="quest" type="button">
         <canvas id="quest-icon" width="128" height="128"></canvas>
@@ -3602,8 +3602,8 @@ function validConversation(value, p) {
     var y;
     for (y = 0; y < H; y++) base[idx(x, y)] = AIR;
     base[idx(x, surfaceY)] = WATER;
-    base[idx(x, surfaceY + 1)] = SAND;
-    base[idx(x, surfaceY + 2)] = SAND;
+    base[idx(x, surfaceY + 1)] = DIRT;
+    base[idx(x, surfaceY + 2)] = DIRT;
     for (y = surfaceY + 3; y < surfaceY + 5 && y < H - 1; y++) base[idx(x, y)] = DIRT;
     for (y = surfaceY + 5; y < H - 1; y++) base[idx(x, y)] = STONE;
     base[idx(x, H - 1)] = BEDROCK;
@@ -4007,7 +4007,6 @@ function validConversation(value, p) {
     var right = Math.min(W - 3, origin + 70);
     for (x = left; x <= right; x++) fillLand(x, GROUND, GRASS);
     var p0 = Math.min(W - 16, origin + 50);
-    for (x = p0 - 3; x < p0; x++) fillLand(x, GROUND, SAND);
     for (x = p0; x <= Math.min(W - 3, p0 + 12); x++) fillPond(x, GROUND);
     for (x = p0 + 13; x <= Math.min(W - 3, p0 + 18); x++) fillLand(x, GROUND, GRASS);
     plantTree(origin + 28, GROUND);
@@ -7629,16 +7628,12 @@ function validConversation(value, p) {
         var px = x * TILE, py = y * TILE;
         if (id === WATER) {
           g.fillStyle = '#3ec6e0';
-          g.globalAlpha = 0.92;
           g.fillRect(px, py, TILE, TILE);
-          g.globalAlpha = 1;
-          g.fillStyle = 'rgba(255,255,255,0.45)';
+          g.fillStyle = 'rgba(255,255,255,0.4)';
           var wy = 6 + Math.sin(sec * 3 + x * 0.7) * 2;
-          g.fillRect(px, py + wy, TILE, 4);
-          if (get(x, y + 1) !== WATER) {
-            g.fillStyle = 'rgba(16,100,140,0.18)';
-            g.fillRect(px, py + TILE - 6, TILE, 6);
-          }
+          g.fillRect(px, py + wy, TILE, 3);
+          g.fillStyle = '#2499b8';
+          g.fillRect(px, py + TILE - 8, TILE, 8);
           continue;
         }
         if (id === FLOWER) {
@@ -7799,48 +7794,10 @@ function validConversation(value, p) {
       }
     }
   }
-  function buryPondBox(g, x0, x1, y) {
-    var x, dy, bank, id, sp;
-    for (x = x0; x <= x1; x++) {
-      bank = (x - x0) <= (x1 - x) ? x0 - 1 : x1 + 1;
-      for (dy = 0; dy <= 3; dy++) {
-        id = get(bank, y + dy);
-        if (id === AIR || id === WATER || id === WOOD || id === LEAVES || id === FLOWER || id === WHEAT1 || id === WHEAT2 || id === WHEAT3) {
-          id = dy === 0 ? (get(bank, y) === GRASS ? GRASS : SAND) : (dy < 3 ? DIRT : STONE);
-        }
-        sp = spr(id, (hash2(x, y + dy, 3) * 3) | 0);
-        if (sp) g.drawImage(sp, x * TILE, (y + dy) * TILE, TILE, TILE);
-      }
-    }
-  }
-  function tracePond(g, left, right, top) {
-    var w = Math.max(TILE, right - left);
-    var mid = (left + right) / 2;
-    var bed = top + TILE * 1.2;
-    var lip = top + 14;
-    g.beginPath();
-    g.moveTo(left + w * 0.05, lip);
-    g.quadraticCurveTo(left + w * 0.1, top + 6, left + w * 0.24, top + 11);
-    g.quadraticCurveTo(mid, top + 18, right - w * 0.24, top + 11);
-    g.quadraticCurveTo(right - w * 0.1, top + 6, right - w * 0.05, lip);
-    g.quadraticCurveTo(right - w * 0.12, bed - 6, mid, bed);
-    g.quadraticCurveTo(left + w * 0.12, bed - 6, left + w * 0.05, lip);
-    g.closePath();
-  }
-  function shoreShoulder(g, side, ink, edge, top) {
-    var s = side < 0 ? -1 : 1;
-    g.beginPath();
-    g.moveTo(edge + s * 2, top + 3);
-    g.quadraticCurveTo(edge - s * 4, top + 8, edge - s * 12, top + 16);
-    g.quadraticCurveTo(edge - s * 2, top + 12, edge + s * 6, top + 10);
-    g.closePath();
-    g.fillStyle = ink.cap;
-    g.fill();
-  }
   function drawOrganicPonds(g, sec) {
     var x0 = Math.max(0, Math.floor(drawCamX / TILE) - 2);
     var x1 = Math.min(W - 1, Math.floor((drawCamX + viewW / (tileScreen / TILE)) / TILE) + 2);
-    var seen = {}, xi, mark, s, run, left, right, top, w, inkL, inkR;
+    var seen = {}, xi, mark, s, run, left, right, top, w, cap;
     for (xi = x0; xi <= x1; xi++) {
       if (seen[xi]) continue;
       s = landSurface(xi);
@@ -7857,38 +7814,26 @@ function validConversation(value, p) {
         run.x1++;
       }
       for (mark = run.x0; mark <= run.x1; mark++) seen[mark] = 1;
-      buryPondBox(g, run.x0, run.x1, run.y);
       left = run.x0 * TILE;
       right = (run.x1 + 1) * TILE;
       top = run.y * TILE;
       w = right - left;
-      g.save();
-      tracePond(g, left, right, top);
-      g.clip();
-      g.fillStyle = '#e7c56a';
-      g.fillRect(left - 20, top + TILE * 0.72, w + 40, TILE * 0.7);
-      g.fillStyle = '#f6de9a';
-      g.fillRect(left - 20, top + TILE * 0.72, w + 40, 7);
+      // Cover the whole water row, plus a few pixels of the bank, with water only.
+      cap = 6;
       g.fillStyle = '#3ec6e0';
-      g.fillRect(left - 16, top - 4, w + 32, TILE * 1.05);
-      g.fillStyle = '#7edff0';
-      g.fillRect(left, top + 4 + Math.sin(sec * 2.2 + run.x0) * 1.2, w, 5);
-      g.fillStyle = 'rgba(255,255,255,0.4)';
-      g.fillRect(left + w * 0.18, top + 8, w * 0.22, 3);
-      g.fillStyle = 'rgba(16,110,150,0.18)';
-      g.fillRect(left + w * 0.08, top + TILE * 0.72, w * 0.84, 8);
-      g.restore();
-      inkL = bankInk(get(run.x0 - 1, run.y) === GRASS ? GRASS : SAND);
-      inkR = bankInk(get(run.x1 + 1, run.y) === GRASS ? GRASS : SAND);
-      shoreShoulder(g, -1, inkL, left, top);
-      shoreShoulder(g, 1, inkR, right, top);
       g.beginPath();
-      g.moveTo(left + w * 0.08, top + 12);
-      g.quadraticCurveTo((left + right) / 2, top + 20, right - w * 0.08, top + 12);
-      g.strokeStyle = 'rgba(255,255,255,0.45)';
-      g.lineWidth = 2;
-      g.lineCap = 'round';
-      g.stroke();
+      g.moveTo(left - cap, top + 6);
+      g.quadraticCurveTo(left - cap, top - 1, left + 4, top);
+      g.lineTo(right - 4, top);
+      g.quadraticCurveTo(right + cap, top - 1, right + cap, top + 6);
+      g.lineTo(right + cap, top + TILE);
+      g.lineTo(left - cap, top + TILE);
+      g.closePath();
+      g.fill();
+      g.fillStyle = '#2499b8';
+      g.fillRect(left, top + TILE * 0.62, w, TILE * 0.38);
+      g.fillStyle = 'rgba(255,255,255,0.42)';
+      g.fillRect(left + w * 0.14, top + 6 + Math.sin(sec * 2.2 + run.x0) * 1.1, w * 0.32, 3);
     }
   }
   function roundBankStep(g, a, b) {
