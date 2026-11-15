@@ -630,7 +630,7 @@
   <canvas id="view" width="800" height="400"></canvas>
   <div id="hud">
     <span id="hunger-hint" hidden></span>
-    <span id="build-version" aria-label="Build version">build cd91b62+mc-fish</span>
+    <span id="build-version" aria-label="Build version">build cd91b62+mc-cook</span>
     <div class="topbar">
       <button id="quest" type="button">
         <canvas id="quest-icon" width="128" height="128"></canvas>
@@ -806,7 +806,7 @@ const BRAIN_TIMEOUT_MS = 6500;
 (function () {
   var AIR = 0, GRASS = 1, DIRT = 2, STONE = 3, WOOD = 4, LEAVES = 5, SAND = 6, WATER = 7;
   var FLOWER = 8, PLANKS = 9, TORCH = 10, DOOR = 11, BED = 12, TABLE = 13, HOUSE = 14, BEDROCK = 15, FENCE = 16;
-  var WHEAT1 = 17, WHEAT2 = 18, WHEAT3 = 19, WINDOW = 20;
+  var WHEAT1 = 17, WHEAT2 = 18, WHEAT3 = 19, WINDOW = 20, FIRE = 21;
   var TILE = 32, W = 240, H = 42, GROUND = 16;
   var PW = 8, PH = 28, MOVE = 116, JUMP = 520, GRAV = 1680;
   var SAVE_KEY = 'block-world-save-v1';
@@ -826,6 +826,7 @@ const BRAIN_TIMEOUT_MS = 6500;
     sun: ['Sun'], moon: ['Moon'], star: ['Star'],
     hello: ['Hello'], jump: ['Jump'], home: ['Home'],
     wheat: ['Wheat'], bread: ['Bread'], seed: ['Seed'], fish: ['Fish'],
+    fire: ['Fire'], cookedFish: ['Cooked Fish'],
     rod: ['Fishing Rod'], boat: ['Boat'], pet: ['Pet'],
     car: ['Car'], wheel: ['Wheel'], follow: ['Follow'], wall: ['Wall'], roof: ['Roof'], window: ['Window'], room: ['Room'], gate: ['Gate']
   };
@@ -834,7 +835,7 @@ const BRAIN_TIMEOUT_MS = 6500;
   var BLOCK_OF = {
     grass: GRASS, dirt: DIRT, stone: STONE, wood: WOOD, leaves: LEAVES, sand: SAND,
     water: WATER, flower: FLOWER, planks: PLANKS, torch: TORCH, door: DOOR,
-    bed: BED, table: TABLE, house: HOUSE, fence: FENCE, window: WINDOW
+    bed: BED, table: TABLE, house: HOUSE, fence: FENCE, window: WINDOW, fire: FIRE
   };
   var KEY_OF = {};
   Object.keys(BLOCK_OF).forEach(function (k) { KEY_OF[BLOCK_OF[k]] = k; });
@@ -843,7 +844,7 @@ const BRAIN_TIMEOUT_MS = 6500;
   var PCOL = {
     1: '#5cbe45', 2: '#d09252', 3: '#b7c2cc', 4: '#d8a15a', 5: '#4eb85a', 6: '#f0d08a',
     7: '#3ec4dc', 8: '#ff7aa2', 9: '#e7b56a', 10: '#ffb703', 11: '#d08648', 12: '#f4b4c4',
-    13: '#e0a15a', 14: '#f4e4c8', 16: '#c48a3e', 20: '#acd9e5'
+    13: '#e0a15a', 14: '#f4e4c8', 16: '#c48a3e', 20: '#acd9e5', 21: '#ff9a1f'
   };
   var RECIPES = [
     { out: 'planks', n: 4, need: { wood: 1 } },
@@ -851,6 +852,7 @@ const BRAIN_TIMEOUT_MS = 6500;
     { out: 'table', n: 1, need: { planks: 4 } },
     { out: 'door', n: 1, need: { planks: 6 } },
     { out: 'torch', n: 4, need: { stick: 1, wood: 1 } },
+    { out: 'fire', n: 1, need: { wood: 2 } },
     { out: 'bed', n: 1, need: { planks: 3, wool: 2 } },
     // Whole kits are distinct from the legacy four-block roof recipe.
     { out: 'houseKit', n: 1, need: { stone: 1, planks: 4 } },
@@ -883,6 +885,7 @@ const BRAIN_TIMEOUT_MS = 6500;
     { en: 'Tap a duck!', icon: 'duck', done: function (p) { return p.tapped.duck; } },
     { en: 'Craft a fishing rod!', icon: 'rod', done: function (p) { return p.crafted.rod; } },
     { en: 'Catch a fish!', icon: 'fish', done: function (p) { return p.fish; } },
+    { en: 'Cook a fish!', icon: 'cookedFish', done: function (p) { return p.cooked; } },
     { en: 'Plant a seed!', icon: 'seed', done: function (p) { return p.placed.seed; } },
     { en: 'Wait for wheat to grow!', icon: 'wheat', done: function (p) { return p.wheatRipe; } },
     { en: 'Harvest the wheat!', icon: 'wheat', done: function (p) { return p.mined.wheat; } },
@@ -902,6 +905,7 @@ const BRAIN_TIMEOUT_MS = 6500;
     house: 'Tiles for a roof.', houseKit: 'Go inside the door.', wool: 'From a sheep.',
     tree: 'It grows tall.', fence: 'Put it outside.', pen: 'A yard for animals.',
     seed: 'Plant it outside.', wheat: 'A yellow plant.', bread: 'You can eat it.', fish: 'From the water.',
+    fire: 'It cooks food.', cookedFish: 'You can eat it.',
     rod: 'Use it on water.', boat: 'Ride on the water.', pet: 'A friend who follows.',
     car: 'You can drive.', wheel: 'It goes on a car.', window: 'It goes on a wall.',
     wall: 'Part of a house.', roof: 'The top of a house.', room: 'Inside a house.',
@@ -992,6 +996,7 @@ const BRAIN_TIMEOUT_MS = 6500;
   var crops = [], boat = null, riding = false, fishing = null, boatPhase = 0, packSeen = false;
   var digSpots = [], knockUntil = {}, trees = [], treeByCell = {}, supplies = [];
   var chew = null;
+  var cook = null;
   var sunPos = { x: 0, y: 0 }, moonPos = { x: 0, y: 0 }, sunOn = false, moonOn = false, starPos = [], cloudPos = [];
   var rainOn = false, rainTimer = 26, rainbowLeft = 0, nightWeatherCount = 0;
   var fps = 0, fpsN = 0, fpsT = 0, frameErr = '';
@@ -3363,7 +3368,7 @@ function validConversation(value, p) {
   }
 
   function blankProgress() {
-    return { mined: {}, crafted: {}, placed: {}, tapped: {}, tree: 0, chopped: 0, water: 0, nightTorch: 0, fish: 0, wheatRipe: 0, boatRide: 0, pet: 0 };
+    return { mined: {}, crafted: {}, placed: {}, tapped: {}, tree: 0, chopped: 0, water: 0, nightTorch: 0, fish: 0, cooked: 0, wheatRipe: 0, boatRide: 0, pet: 0 };
   }
   function chapter1Done(p) {
     var i;
@@ -3389,7 +3394,7 @@ function validConversation(value, p) {
   function solid(id) { return !!SOLID[id]; }
   // Trees are soft for walking and driving. Fences, stone, buildings, and cliffs stay solid.
   function blocksBody(id) { return solid(id) && id !== WOOD && id !== LEAVES; }
-  function mineable(id) { return id !== AIR && id !== BEDROCK; }
+  function mineable(id) { return id !== AIR && id !== BEDROCK && id !== FIRE; }
   function get(x, y) {
     if (x < 0 || x >= W || y >= H) return BEDROCK;
     if (y < 0) return AIR;
@@ -3573,7 +3578,7 @@ function validConversation(value, p) {
       g.beginPath(); g.ellipse(19, 13, 4, 2, 0.7, 0, 6.3); g.fill();
       g.beginPath(); g.ellipse(13, 20, 4, 2, -0.7, 0, 6.3); g.fill();
     })];
-    ['table', 'bed', 'door', 'fence', 'flower', 'torch', 'house', 'window'].forEach(function (key) {
+    ['table', 'bed', 'door', 'fence', 'flower', 'torch', 'house', 'window', 'fire'].forEach(function (key) {
       sprites[BLOCK_OF[key]] = [makeSprite(function (g) { specialIcon(g, key, 32); })];
     });
     sprites[DOOR + 100] = [makeSprite(function (g) { g.translate(6, 0); g.scale(0.55, 1); specialIcon(g, 'door', 32); })];
@@ -5703,6 +5708,10 @@ function validConversation(value, p) {
     } else if (key === 'torch' && !indoors) {
       var held = groundSupport(get(tx, ty + 1)) || wallSupport(get(tx - 1, ty)) || wallSupport(get(tx + 1, ty));
       if (!held) return 'The torch goes on the ground!';
+    } else if (key === 'fire') {
+      if (indoors) return 'The fire goes outside!';
+      var ash = get(tx, ty + 1);
+      if (ash !== GRASS && ash !== DIRT && ash !== SAND) return 'The fire goes on dry ground!';
     }
     return '';
   }
@@ -5725,6 +5734,7 @@ function validConversation(value, p) {
       return false;
     }
     if (key === 'torch' && indoors) { placeIndoor('torch'); return true; }
+    if (key === 'fire' && indoors) { if (!quiet) showToast('The fire goes outside!', 2.2); return false; }
     if (fill) {
       if (!fillReach(tx, ty)) { if (!quiet) showToast('Move a little closer!', 1.6); return false; }
     } else {
@@ -5736,6 +5746,7 @@ function validConversation(value, p) {
       placeBoat(tx, ty);
       return true;
     }
+    if (key === 'fire' && get(tx, ty) === WATER) { if (!quiet) showToast('The fire goes on dry ground!', 2.2); return false; }
     if (craftableAt(tx,ty) || get(tx,ty)!==AIR || overlapsPlayer(tx,ty)) { if (!quiet) placementFailure(tx,ty,'occupied'); return false; }
     if(cellHasAnimal(tx,ty)){ if (!quiet) placementFailure(tx,ty,'animal'); return false; }
     var spotLine = specialPlaceLine(key, tx, ty);
@@ -5822,6 +5833,24 @@ function validConversation(value, p) {
       if (parts.length >= 90) parts.shift();
       parts.push({ x: fishing.x + (Math.random() - 0.5) * 10, y: fishing.y + 2, vx: (Math.random() - 0.5) * 40, vy: -30 - Math.random() * 40, life: 0.35, age: 0, color: '#aee9ff', s: 2.5, heart: false });
     }
+  }
+  function startCook(tx, ty) {
+    if (!(inv.fish > 0)) { showToast('Cook the fish on the fire!', 2.2); return; }
+    if (cook && Date.now() < cook.until) return;
+    if (get(tx, ty) !== FIRE) return;
+    cook = { tx: tx, ty: ty, until: Date.now() + 1600 };
+    tone(420, 0.07, 'triangle', 0, 0.04, 640);
+  }
+  function updateCook() {
+    if (!cook || Date.now() < cook.until) return;
+    var tx = cook.tx, ty = cook.ty;
+    cook = null;
+    if (get(tx, ty) !== FIRE || !(inv.fish > 0)) return;
+    consume('fish');
+    if (!quiz) progress.cooked = 1;
+    addItem('cookedFish', 1);
+    updateQuest();
+    saveSoon();
   }
   function catchFish() {
     var fx = fishing.x, fy = fishing.y;
@@ -6398,6 +6427,13 @@ function validConversation(value, p) {
   function tapWorld(wx, wy, sx, sy, fy) {
     var i;
     var tapTx = Math.floor(wx / TILE), tapTy = Math.floor(wy / TILE), tapId = get(tapTx, tapTy);
+    // A raw fish used on a fire cooks, even when an animal is standing close.
+    if (!riding && !drivingCar && tapId === FIRE && selectedKey() === 'fish') {
+      lock = { tx: tapTx, ty: tapTy }; lockAge = 0;
+      if (!inReach(tapTx, tapTy)) { showToast('Move a little closer!', 1.6); return; }
+      startCook(tapTx, tapTy);
+      return;
+    }
     // Wheat stays tappable when a pet stands on it. The animal body is checked next, before gifts.
     if (!riding && !drivingCar && (tapId === WHEAT1 || tapId === WHEAT2 || tapId === WHEAT3)) {
       lock = { tx: tapTx, ty: tapTy }; lockAge = 0;
@@ -6465,6 +6501,13 @@ function validConversation(value, p) {
     if (id === WATER && heldKey === 'boat') {
       lock = { tx: tx, ty: ty }; lockAge = 0;
       if (inReach(tx, ty)) placeBoat(tx, ty); else seekMine(tx, ty, false);
+      return;
+    }
+    if (id === FIRE) {
+      lock = { tx: tx, ty: ty }; lockAge = 0;
+      if (!inReach(tx, ty)) { showToast('Move a little closer!', 1.6); return; }
+      if (heldKey === 'fish') { startCook(tx, ty); return; }
+      showWord('fire');
       return;
     }
     var mound = digSpotHere(tx, ty);
@@ -7188,6 +7231,15 @@ function validConversation(value, p) {
     } else if (key === 'seed') {
       inkEllipse(g, 16, 20, 6, 8, wood, 0.2); g.fillStyle = '#f3ddb4'; g.beginPath(); g.ellipse(14, 18, 2, 3, 0.2, 0, 6.3); g.fill();
       inkPath(g, [[16, 13], [16, 6]]); inkEllipse(g, 13, 7, 3.5, 2, green, -0.6); inkEllipse(g, 19, 6, 3.2, 1.8, '#3eae52', 0.5);
+    } else if (key === 'fire') {
+      drawCampfire(g, 0, 0, phase || 0);
+    } else if (key === 'cookedFish') {
+      inkPath(g, [[21, 16], [29, 9], [29, 23]], '#c45a22');
+      inkEllipse(g, 14, 17, 10, 6.2, '#e8923a');
+      g.fillStyle = '#f6c56a'; g.beginPath(); g.ellipse(13, 15.2, 4.6, 2.1, 0.2, 0, 6.3); g.fill();
+      g.strokeStyle = '#a85a28'; g.lineWidth = 1.15;
+      g.beginPath(); g.moveTo(8, 15); g.quadraticCurveTo(14, 14, 20, 15); g.moveTo(8, 19); g.quadraticCurveTo(14, 18, 19, 18); g.stroke();
+      speck(9, 16, 0.7, '#fff1c4');
     } else if (key === 'fish') {
       var swish = reducedMotion ? 0 : Math.sin(Math.floor((phase || 0) * 2) * Math.PI / 4) * 2;
       inkPath(g, [[20, 16], [29, 8 + swish], [29, 24 - swish]], '#f0a05a');
@@ -7651,6 +7703,10 @@ function validConversation(value, p) {
           g.beginPath(); g.ellipse(px + 16, py + 10, 5, 7 * fl, 0, 0, 6.3); g.fill();
           g.fillStyle = '#fff4b0';
           g.beginPath(); g.ellipse(px + 16, py + 11, 2.4, 4 * fl, 0, 0, 6.3); g.fill();
+          continue;
+        }
+        if (id === FIRE) {
+          drawCampfire(g, px, py, sec + x * 0.3);
           continue;
         }
         if (id === HOUSE && buildOwned(x,y)) {
@@ -8286,12 +8342,88 @@ function validConversation(value, p) {
       g.restore();
     }
   }
+  function drawCampfire(g, px, py, sec) {
+    g.save();
+    g.translate(px, py);
+    inkStyle(g);
+    var stones = [[5, 22], [10, 26], [16, 28], [23, 26], [28, 21], [25, 16], [8, 16]];
+    stones.forEach(function (s, i) {
+      g.beginPath();
+      g.ellipse(s[0], s[1], 3.1, 2.3, i * 0.55, 0, Math.PI * 2);
+      g.fillStyle = i % 2 ? '#8e98a2' : '#d5dee6';
+      g.fill();
+      g.stroke();
+    });
+    g.save();
+    g.translate(15, 20);
+    g.rotate(-0.5);
+    g.beginPath(); g.ellipse(0, 0, 8, 2.3, 0, 0, Math.PI * 2);
+    g.fillStyle = '#a86430'; g.fill(); g.stroke();
+    g.fillStyle = '#e8c48a'; g.beginPath(); g.ellipse(-5, 0, 1.6, 1.3, 0, 0, Math.PI * 2); g.fill();
+    g.restore();
+    g.save();
+    g.translate(18, 21);
+    g.rotate(0.55);
+    g.beginPath(); g.ellipse(0, 0, 7, 2.1, 0, 0, Math.PI * 2);
+    g.fillStyle = '#dfbc8a'; g.fill(); g.stroke();
+    g.restore();
+    var flick = reducedMotion ? 1 : 0.78 + Math.sin(sec * 11) * 0.22;
+    var lean = reducedMotion ? 0 : Math.sin(sec * 7) * 1.4;
+    g.beginPath();
+    g.moveTo(11, 20);
+    g.quadraticCurveTo(8 + lean, 11, 16 + lean * 0.3, 3 + (1 - flick) * 5);
+    g.quadraticCurveTo(25 + lean, 12, 22, 20);
+    g.quadraticCurveTo(16, 15, 11, 20);
+    g.fillStyle = '#ff8a1a';
+    g.fill();
+    g.beginPath();
+    g.moveTo(13, 19);
+    g.quadraticCurveTo(12 + lean * 0.4, 12, 16 + lean * 0.2, 7 + (1 - flick) * 3);
+    g.quadraticCurveTo(21, 13, 19, 19);
+    g.quadraticCurveTo(16, 16, 13, 19);
+    g.fillStyle = '#ffe08a';
+    g.fill();
+    g.beginPath();
+    g.ellipse(16 + lean * 0.15, 13, 1.5, 2.4 * flick, 0, 0, Math.PI * 2);
+    g.fillStyle = '#fff8e0';
+    g.fill();
+    g.restore();
+  }
+  function drawCooking(g, sec) {
+    if (!cook || Date.now() >= cook.until) return;
+    var left = cook.until - Date.now();
+    var bob = reducedMotion ? 0 : Math.sin(sec * 9) * 2;
+    g.save();
+    g.translate(cook.tx * TILE + 3, cook.ty * TILE - 4 + bob);
+    specialIcon(g, left < 500 ? 'cookedFish' : 'fish', 26);
+    g.restore();
+    g.save();
+    g.strokeStyle = '#a86430';
+    g.lineWidth = 2;
+    g.lineCap = 'round';
+    g.beginPath();
+    g.moveTo((cook.tx + 0.2) * TILE, cook.ty * TILE + 6 + bob);
+    g.lineTo((cook.tx + 0.8) * TILE, cook.ty * TILE - 2 + bob);
+    g.stroke();
+    g.restore();
+    if (reducedMotion) return;
+    var i, rise;
+    for (i = 0; i < 3; i++) {
+      rise = ((sec * 1.4 + i / 3) % 1);
+      g.globalAlpha = 1 - rise;
+      g.fillStyle = i === 1 ? '#fff' : '#ffe08a';
+      g.beginPath();
+      g.arc((cook.tx + 0.35 + i * 0.15) * TILE, cook.ty * TILE + 8 - rise * 16, 1.4, 0, Math.PI * 2);
+      g.fill();
+    }
+    g.globalAlpha = 1;
+  }
   function drawChew(g) {
     if (!chew || Date.now() >= chew.until) return;
     var bob = Math.abs(Math.sin(Date.now() / 80)) * 3;
     g.save();
     g.translate(player.x, player.y - 62 - bob);
-    specialIcon(g, 'bread', 20);
+    specialIcon(g, chew.food || 'bread', 26);
     g.fillStyle = '#3a2a1c';
     g.fillRect(-2, 16, 5, 1);
     g.restore();
@@ -8444,6 +8576,7 @@ function validConversation(value, p) {
     drawRescueRope(ctx);
     if(drivingCar){ctx.save();ctx.beginPath();var cx=drivingCar.dir===-1?(drivingCar.x*TILE+drivingCar.w*TILE-65):(drivingCar.x*TILE+26);ctx.rect(cx,drivingCar.y*TILE+8,39,27);ctx.clip();drawPlayer(ctx);ctx.restore();}else drawPlayer(ctx);
     drawChew(ctx);
+    drawCooking(ctx, sec);
     if (fishing) {
       var fbob = Math.sin(sec * 5) * 1.6;
       ctx.strokeStyle = 'rgba(255,255,255,0.65)';
@@ -8476,9 +8609,9 @@ function validConversation(value, p) {
       for (ly = y0safe(); ly <= y1safe(); ly++) {
         for (lx = x0safe(); lx <= x1safe(); lx++) {
           var bid = cells[idx(lx, ly)];
-          if (bid !== TORCH && bid !== HOUSE) continue;
+          if (bid !== TORCH && bid !== HOUSE && bid !== FIRE) continue;
           var scn = worldToScreen((lx + 0.5) * TILE, (ly + 0.35) * TILE);
-          glow(lightCtx, scn.x, scn.y, bid === TORCH ? 150 : 84, 1);
+          glow(lightCtx, scn.x, scn.y, bid === TORCH ? 150 : bid === FIRE ? 120 : 84, 1);
         }
       }
       lightCtx.globalCompositeOperation = 'source-over';
@@ -8496,9 +8629,9 @@ function validConversation(value, p) {
       for (ly = y0safe(); ly <= y1safe(); ly++) {
         for (lx = x0safe(); lx <= x1safe(); lx++) {
           var wid = cells[idx(lx, ly)];
-          if (wid !== TORCH && wid !== HOUSE) continue;
+          if (wid !== TORCH && wid !== HOUSE && wid !== FIRE) continue;
           var wsc = worldToScreen((lx + 0.5) * TILE, (ly + 0.35) * TILE);
-          warm(wsc.x, wsc.y, wid === TORCH ? 110 : 60);
+          warm(wsc.x, wsc.y, wid === TORCH ? 110 : wid === FIRE ? 90 : 60);
         }
       }
       if (night > 0.25) {
@@ -8979,6 +9112,18 @@ function validConversation(value, p) {
       return b.kind === 'house' && b.furn && b.furn.bed && Math.abs((b.x + 1.5) * TILE - player.x) < 6 * TILE;
     })) hintOnce('bed', 'Sleep in the bed until morning.');
     if (!intros.torch && nearDarkPocket()) hintOnce('torch', 'A torch helps in the dark.');
+    fishCookHint();
+  }
+  function hasFireReady() {
+    if (inv.fire > 0) return true;
+    var i;
+    for (i = 0; i < cells.length; i++) if (cells[i] === FIRE) return true;
+    return false;
+  }
+  function fishCookHint() {
+    if (!(inv.fish > 0)) return;
+    if (!hasFireReady()) hintOnce('makeFire', 'Make a fire to cook.');
+    else hintOnce('cookFish', 'Cook the fish on the fire.');
   }
   function showToast(en, secs, quiet) {
     document.getElementById('toast-en').textContent = en;
@@ -9628,7 +9773,7 @@ function validConversation(value, p) {
   // Play seconds since the last meal. Peckish at 100s, hungry at 200s.
   var hungerTime = 0, hungerStage = 'full', hungerRemind = 0;
   function hungerLabel(stage) {
-    return stage === 'hungry' ? "I'm hungry." : stage === 'peckish' ? 'I want bread!' : '';
+    return stage === 'hungry' ? "I'm hungry." : stage === 'peckish' ? 'I want food!' : '';
   }
   function hungerStageNow() {
     return hungerTime >= 200 ? 'hungry' : hungerTime >= 100 ? 'peckish' : 'full';
@@ -9739,7 +9884,24 @@ function validConversation(value, p) {
     hungerStage = 'full';
     paintNeeds();
     // Chew first. The line is spoken only after the bite, and only because bread was tapped.
-    chew = { until: Date.now() + 1200, line: wasHungry ? "I'm full!" : 'Yum! Bread.', spoke: false };
+    chew = { until: Date.now() + 1200, line: wasHungry ? "I'm full!" : 'Yum! Bread.', spoke: false, food: 'bread' };
+    invSig = '';
+    renderHotbar();
+    if (!document.getElementById('chest-panel').hidden) renderChest();
+    updateQuest();
+    saveSoon();
+    return true;
+  }
+  function eatCookedFish() {
+    if (!(inv.cookedFish > 0)) return false;
+    if (chew && chew.until > Date.now()) return false;
+    var wasHungry = hungerTime >= 100;
+    consume('cookedFish');
+    hungerTime = 0;
+    hungerRemind = 0;
+    hungerStage = 'full';
+    paintNeeds();
+    chew = { until: Date.now() + 1200, line: wasHungry ? "I'm full!" : 'Yum! Fish!', spoke: false, food: 'cookedFish' };
     invSig = '';
     renderHotbar();
     if (!document.getElementById('chest-panel').hidden) renderChest();
@@ -9789,13 +9951,23 @@ function validConversation(value, p) {
     if (!keys.length) { var empty = document.createElement('p'); empty.textContent = 'Empty for now.'; root.appendChild(empty); return; }
     keys.forEach(function (key) {
       var b = document.createElement('button'); b.type = 'button'; b.className = 'chest-item';
-      b.setAttribute('aria-label', key === 'bread' ? 'Eat bread' : WORD[key][0]);
+      b.setAttribute('aria-label', key === 'bread' ? 'Eat bread' : key === 'cookedFish' ? 'Eat cooked fish' : WORD[key][0]);
       var cv = document.createElement('canvas'); cv.width = 96; cv.height = 96; cv.style.cssText = 'width:40px;height:40px;image-rendering:pixelated';
       paintIcon(cv, key); b.appendChild(cv);
       b.appendChild(document.createTextNode(WORD[key][0]));
-      var em = document.createElement('em'); em.textContent = key === 'bread' ? ('x' + inv[key] + ' · Eat') : ('x' + inv[key]); b.appendChild(em);
+      var em = document.createElement('em'); em.textContent = (key === 'bread' || key === 'cookedFish') ? ('x' + inv[key] + ' · Eat') : ('x' + inv[key]); b.appendChild(em);
       tapButton(b, function () {
         if (key === 'bread') { eatBread(); return; }
+        if (key === 'cookedFish') { eatCookedFish(); return; }
+        if (key === 'fish') {
+          var held = hotbar.indexOf(key);
+          if (held >= 0) sel = held;
+          invSig = '';
+          closeChest();
+          renderHotbar();
+          showToast('Cook the fish on the fire!', 2.4);
+          return;
+        }
         var i = hotbar.indexOf(key); if (i >= 0) sel = i; invSig = '';
         if (buildMode && !RAW_BLOCK[key] && (BLOCK_OF[key] || CRAFTABLES[key])) { buildTool = key; renderBuildTools(); }
         closeChest(); showWord(key, false, true); renderHotbar();
@@ -9902,7 +10074,7 @@ function validConversation(value, p) {
       var i;
       for (i = 0; i < data.mods.length; i += 2) {
         var at = data.mods[i], id = data.mods[i + 1];
-        if (at >= 0 && at < cells.length && id >= 0 && id <= WINDOW) cells[at] = id;
+        if (at >= 0 && at < cells.length && id >= 0 && id <= FIRE) cells[at] = id;
       }
     }
     stockLakeFish();
@@ -9980,6 +10152,7 @@ function validConversation(value, p) {
       progress.water = data.progress.water ? 1 : 0;
       progress.nightTorch = data.progress.nightTorch ? 1 : 0;
       progress.fish = data.progress.fish | 0;
+      progress.cooked = data.progress.cooked ? 1 : 0;
       progress.wheatRipe = data.progress.wheatRipe ? 1 : 0;
       progress.boatRide = data.progress.boatRide ? 1 : 0;
       progress.pet = data.progress.pet ? 1 : 0;
@@ -10362,6 +10535,7 @@ function validConversation(value, p) {
     growTrees();
     updateBreaks();
     updateChew();
+    updateCook();
     lockAge += dt;
     if (cardLeft > 0) {
       cardLeft -= dt;
@@ -10617,9 +10791,16 @@ function validConversation(value, p) {
       },
       questIndex: function () { return questIndex(); },
       hasHat: function () { return hasHat(); },
+      tap: function (tx, ty) {
+        tapWorld((+tx + 0.5) * TILE, (+ty + 0.5) * TILE, viewW * 0.5, viewH * 0.55, 0.5);
+        return get(tx | 0, ty | 0);
+      },
+      cookLeft: function () { return cook && cook.until > Date.now() ? cook.until - Date.now() : 0; },
+      needs: function () { var el = document.getElementById('hunger-hint'); return el ? el.textContent : ''; },
+      toastText: function () { return document.getElementById('toast').hidden ? '' : document.getElementById('toast-en').textContent; },
       ch3: function () {
         return {
-          qi: questIndex(), fish: progress.fish || 0, wheatRipe: progress.wheatRipe || 0,
+          qi: questIndex(), fish: progress.fish || 0, cooked: progress.cooked || 0, wheatRipe: progress.wheatRipe || 0,
           boatRide: progress.boatRide || 0, petFlag: progress.pet || 0, pack: hasPack(),
           pet: animals.filter(function (a) { return a.tamed; }).map(function (a) { return a.type; }),
           boat: boat ? { x: Math.round(boat.x), y: Math.round(boat.y) } : null,
